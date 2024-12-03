@@ -3,15 +3,15 @@
 A lightning-fast starter template combining Astro's performance with Shadcn's beautiful components.
 
 ### 🎨  Screenshots
-![Dark Mode](https://astro-shadcn.agentc.app/screenshots/screenshot-dark.png)
-![Light Mode](https://astro-shadcn.agentc.app/screenshots/screenshot-light.png)
+![Dark Mode](https://astro-shadcn.one.ie/screenshots/screenshot-dark.png)
+![Light Mode](https://astro-shadcn.one.ie/screenshots/screenshot-light.png)
 
 
 ## ⚡ Quick Start
 
 ```bash
 # Clone the repository
-git clone https://github.com/agentc-app/astro-shadcn.git
+git clone https://github.com/one-ie/astro-shadcn.git
 
 # Navigate to project
 cd astro-shadcn
@@ -186,8 +186,8 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 ## 📊 Performance & Screenshots
 
 ### ⚡ Lighthouse Scores
-![Desktop Performance](https://astro-shadcn.agentc.app/screenshots/lighthouse-desktop.png)
-![Mobile Performance](https://astro-shadcn.agentc.app/screenshots/lighthouse-mobile.png)
+![Desktop Performance](https://astro-shadcn.one.ie/screenshots/lighthouse-desktop.png)
+![Mobile Performance](https://astro-shadcn.one.ie/screenshots/lighthouse-mobile.png)
 
 Perfect scores across all metrics:
 - 🚀 Performance: 100
@@ -207,8 +207,8 @@ Perfect scores across all metrics:
 
 - Join [Astro Discord](https://astro.build/chat)
 - Check [Astro Documentation](https://docs.astro.build)
-- File an [Issue on GitHub](https://github.com/agentc-app/astro-shadcn/issues)
+- File an [Issue on GitHub](https://github.com/one-ie/astro-shadcn/issues)
 
 ---
 
-Built with 🚀 Astro and 🎨 Shadcn/UI by [AgentC](https://agentc.app)
+Built with 🚀 Astro and 🎨 Shadcn/UI by [ONE](https://one.ie)
