@@ -1,0 +1,104 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { Card } from "@/components/ui/card";
+import type { CollectionEntry } from 'astro:content';
+import type { StreamSchema } from '../../content/config';
+
+// Type the collection entry
+type StreamEntry = CollectionEntry<'stream'>;
+
+// Get and sort entries
+const entries = await getCollection('stream');
+const sortedEntries = entries.sort(
+	(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+);
+
+const pageData = {
+	title: "Stream",
+	description: "Latest updates and content",
+};
+
+function formatStreamDate(date: Date) {
+	return {
+		day: date.getDate(),
+		month: date.toLocaleString("default", { month: "short" }),
+		year: date.getFullYear(),
+	};
+}
+---
+
+<Layout title={pageData.title} description={pageData.description}>
+	<div class="max-w-4xl mx-auto px-4 sm:px-6">
+		<header class="mb-12">
+			<h1 class="text-4xl font-bold">Stream</h1>
+			<p class="mt-2 text-muted-foreground">
+				Latest updates, articles and resources
+			</p>
+		</header>
+
+		<div class="space-y-8">
+			{
+				sortedEntries.map((entry: StreamEntry) => {
+					const date = formatStreamDate(new Date(entry.data.date));
+
+					return (
+						<Card className="hover:shadow-md transition-shadow duration-200">
+							<a
+								href={`/stream/${entry.slug}`}
+								class="flex gap-6 p-6"
+							>
+								{/* Date Block */}
+								<div class="flex-shrink-0 w-16 text-center">
+									<div class="font-mono text-2xl font-bold text-primary">
+										{date.day}
+									</div>
+									<div class="text-sm text-muted-foreground uppercase tracking-wider">
+										{date.month}
+									</div>
+									<div class="text-xs text-muted-foreground/60 mt-1">
+										{date.year}
+									</div>
+								</div>
+
+								{/* Content */}
+								<div class="flex-1 min-w-0">
+									<div class="flex justify-between items-start gap-4">
+										<div>
+											<h2 class="text-xl font-semibold leading-tight line-clamp-2 hover:text-primary transition-colors">
+												{entry.data.title}
+											</h2>
+											<p class="mt-2 text-muted-foreground line-clamp-3">
+												{entry.data.description}
+											</p>
+										</div>
+
+										{entry.data.picture && (
+											<img
+												src={entry.data.picture}
+												alt=""
+												class="w-24 h-24 object-cover rounded-lg flex-shrink-0"
+												loading="lazy"
+											/>
+										)}
+									</div>
+								</div>
+							</a>
+						</Card>
+					);
+				})
+			}
+		</div>
+	</div>
+</Layout>
+
+<style>
+	/* Optional: Add hover effect to cards */
+	.card {
+		transition: transform 0.2s ease-in-out;
+	}
+	.card:hover {
+		transform: translateY(-2px);
+	}
+</style>
+

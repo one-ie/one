@@ -7,6 +7,7 @@ import {
   Scale,
   LayoutPanelTop,
   Menu,
+  Waves,
   type LucideIcon 
 } from 'lucide-react'
 import { useStore } from '@nanostores/react'
@@ -16,6 +17,7 @@ const icons: Record<string, LucideIcon> = {
   Home,
   FileText,
   Scale,
+  Waves,
 }
 
 interface SidebarProps {

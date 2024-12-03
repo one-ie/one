@@ -1,0 +1,53 @@
+---
+import Layout from './Layout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'stream'>;
+  children: any;
+}
+
+const { entry } = Astro.props;
+
+const pageData = {
+  title: entry.data.title,
+  description: entry.data.description,
+  image: entry.data.picture,
+  type: "article",
+};
+---
+
+<Layout {...pageData}>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6">
+    <header class="mb-8">
+      <h1 class="text-4xl font-bold mb-4">
+        {entry.data.title}
+      </h1>
+      {entry.data.description && (
+        <p class="text-xl text-muted-foreground mb-4">
+          {entry.data.description}
+        </p>
+      )}
+      {entry.data.picture && (
+        <img
+          src={entry.data.picture}
+          alt=""
+          class="w-full aspect-video object-cover rounded-lg"
+        />
+      )}
+    </header>
+    
+    <div class="prose dark:prose-invert max-w-none">
+      <slot />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .prose {
+    @apply prose-headings:scroll-mt-20;
+    @apply prose-a:text-primary hover:prose-a:text-primary/80;
+    @apply prose-code:bg-muted prose-code:p-1 prose-code:rounded;
+    @apply prose-pre:bg-muted;
+  }
+</style> 

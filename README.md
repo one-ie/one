@@ -64,28 +64,7 @@ your-project/
 └── tailwind.config.cjs  # Tailwind configuration
 ```
 
-## 🔧 Configuration
 
-### Astro is Setup
-```js
-// astro.config.mjs
-import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import react from '@astrojs/react';
-
-export default defineConfig({
-  integrations: [
-    tailwind(),
-    react(), // Required for Shadcn components
-  ],
-  // Error suppression
-  vite: {
-    build: {
-      suppressWarnings: true,
-    }
-  }
-});
-```
 
 ### Using Components
 
@@ -138,19 +117,6 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 ✅ **Path Aliases**: Pre-configured for easy imports
 ✅ **React Integration**: Properly set up for Shadcn
 
-### Quick Fixes
-
-1. **Clear Cache**
-   ```bash
-   rm -rf dist node_modules .astro
-   npm install
-   ```
-
-2. **Restart Dev Server**
-   ```bash
-   # Kill the dev server and restart
-   npm run dev
-   ```
 
 ## 💡 Pro Tips
 
