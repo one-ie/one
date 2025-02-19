@@ -42,9 +42,28 @@
   --one-border-nav: 0 0% 0%;
   
   /* Input elements */
-  --one-input: var(--one-dark);
+  --one-input: var(--one-dark);  
   --one-input-foreground: var(--one-white);
   --one-ring: var(--one-white);
+
+  /* Set Tailwind compatibilty vars */
+  --background: var(--one-background-main);
+  --foreground: var(--one-foreground);
+  --card: var(--one-card);
+  --card-foreground: var(--one-card-foreground);
+  --popover: var(--one-popover);
+  --popover-foreground: var(--one-popover-foreground);
+  --primary: var(--one-primary);
+  --primary-foreground: var(--one-primary-foreground);
+  --secondary: var(--one-secondary);
+  --secondary-foreground: var(--one-secondary-foreground);
+  --muted: var(--one-muted);
+  --muted-foreground: var(--one-muted-foreground);
+  --accent: var(--one-accent);
+  --accent-foreground: var(--one-accent-foreground);
+  --border: var(--one-border);
+  --input: var(--one-input);
+  --ring: var(--one-ring);
   
   /* Animation timings */
   --one-duration-fast: 150ms;

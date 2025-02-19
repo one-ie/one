@@ -1,9 +1,10 @@
 ---
 import "../styles/global.css";
+import "../styles/one.css";
 import ThemeInit from "../components/Theme.astro";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Left from "@/components/Left";
+import Left from "../components/Left";
 import Right from "../components/Right";
 import { ChatConfigSchema } from "../schema/chat";
 
@@ -48,7 +49,7 @@ const chatConfig = providedConfig || defaultChatConfig;
     <title>{title}</title>
     <ThemeInit />
   </head>
-  <body class="one-container">
+  <body>
     <div
       class="main-grid"
       id="main-grid"
@@ -77,8 +78,8 @@ const chatConfig = providedConfig || defaultChatConfig;
 <style>
   :global(body) {
     min-height: 100vh;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: hsl(var(--one-background-main));
+    color: hsl(var(--one-foreground));
   }
 
   .main-grid {
@@ -134,8 +135,8 @@ const chatConfig = providedConfig || defaultChatConfig;
     right: 0;
     bottom: 0;
     z-index: 9999;
-    background-color: hsl(var(--background));
-    border-left: 1px solid hsl(var(--border));
+    background-color: hsl(var(--one-background-nav));
+    border-left: 1px solid hsl(var(--one-border));
     display: flex;
     flex-direction: column;
     overflow-y: auto;
