@@ -4,7 +4,7 @@
  * Welcome to our Content Configuration!
  *
  * In this file, we define our content collections and their schemas using Zod.
- * We’re writing a story about our content: blog posts, documentation, and creative prompts.
+ * We're writing a story about our content: blog posts, documentation, and creative prompts.
  *
  * You can use this file to define the fields and types of your content. Notice that most fields are ...
  * - `.optional()` lets a field be omitted (i.e., it might not appear at all).
@@ -76,8 +76,8 @@ const DocsSchema = z.object({
 /**
  * Prompts Schema – Sparking Creativity
  *
- * Prompts are designed to ignite your creativity. They need a title and description,
- * and can be grouped with tags. The draft status is optional, so you can fine-tune them.
+ * Prompts are designed to ignite your creativity and guide AI interactions.
+ * They require essential metadata and can include additional organization details.
  */
 const PromptsSchema = z.object({
   // The spark that starts the creative fire—a catchy title.
@@ -86,7 +86,10 @@ const PromptsSchema = z.object({
   // A description that sets the stage for creative exploration.
   description: z.string(),
 
-  // Tags that help you find similar prompts; optional if you’re keeping it simple.
+  // The creation or last update date to track prompt evolution.
+  date: z.date().optional().nullable(),
+
+  // Tags that help you find similar prompts; optional if you're keeping it simple.
   tags: z.array(z.string()).optional().nullable(),
 
   // Indicates if the prompt is still in draft mode; optional to let you iterate.

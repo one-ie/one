@@ -1,8 +1,6 @@
 # 🚀 ONE - Build AI-Powered Businesses
 
-For Astro Shadcn starter kit switch to the astro-shadcn branch. 
-
-ONE is a powerful, modern web development framework that combines the blazing-fast performance of Astro with the elegant components of Shadcn/UI. This enterprise-ready starter kit empowers developers to build AI-powered applications with:
+ONE is a modern web and AI agent development framework that combines the blazing-fast performance of Astro with the elegant components of Shadcn/UI. This enterprise-class starter kit empowers developers to build AI-powered applications with:
 
 - ⚡ **High Performance**: Astro's partial hydration ensures minimal JavaScript
 - 🎨 **Beautiful UI**: Pre-configured Shadcn components with full TypeScript support
@@ -75,7 +73,9 @@ pnpm install
 
 ### 3. Configure Environment Variables
 
-Create a `.env` file in your project root:
+Make a copy  `.env.example` file in located at the top level of your project and call it `.env`
+
+Add the keys to 
 
 ```env
 OPENAI_API_KEY=your_api_key_here

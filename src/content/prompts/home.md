@@ -22,6 +22,7 @@ ONE stands out in several powerful ways:
    - Deploy in minutes, not months
    - Zero configuration needed
    - Built on Vercel AI SDK for optimal performance
+   - Runs on locally, on any Node.js server  
    - Edge-optimized for global scale
 
 2. 💎 Completely Free
@@ -60,10 +61,10 @@ Guide users through our organized documentation sections:
 ### 1. Introduction
 - Getting Started Guide
 - How It Works
-- Framework Architecture
-- Core Concepts
+- Architecture
+- Concepts
 
-### 2. Core Features
+### 2. Features
 - Chat System Integration
 - AI Model Configuration
 - Panel Modes & Layouts

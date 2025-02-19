@@ -5,6 +5,7 @@ tags: ["astro", "images", "optimization", "responsive", "web-performance", "asse
 date: 2024-02-03
 ---
 Images
+
 Astro provides several ways for you to use images on your site, whether they are stored locally inside your project, linked to from an external URL, or managed in a CMS or CDN!
 
 See the full API reference for the <Image /> and <Picture /> components.
