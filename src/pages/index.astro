@@ -158,14 +158,16 @@ const rightPanelMode = "half"; // You can change this to 'full', 'half', 'floati
   rightPanelMode={rightPanelMode}
 >
   <section
-    class="container mx-auto px-6 py-20 border-b border-neutral-800">
+    class="container mx-auto px-6 py-20 border-b border-border bg-background/50 backdrop-blur-sm">
     <div class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-8 text-center">
-      <h1 class="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tight text-neutral-100">
-        True <span class="text-blue-500">AI</span> <span class="text-neutral-100">Ownership</span>
+      <h1 class="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tight text-foreground one-animate-fade-in">
+        Sell Faster With <span class="text-accent">AI Agents</span>,
+        <span class="text-primary">Crypto</span> &
+        <span class="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">Astro</span>
       </h1>
       <div class="flex flex-col items-center gap-6 max-w-[800px]">
-        <p class="text-lg sm:text-xl md:text-2xl text-neutral-400 leading-relaxed tracking-wide max-w-2xl">
-          Build AI-powered solutions with complete freedom. Own your code, data, and infrastructure. Use any AI provider, deploy anywhere, and scale infinitely. Zero restrictions, zero platform fees, free forever.
+        <p class="text-lg sm:text-xl md:text-2xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in">
+          Build automated sales systems that work 24/7. Deploy AI agents that engage customers, process crypto payments, and close deals while you sleep. Zero platform fees, unlimited scale.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
           <a href="/docs/get-started" class="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
@@ -181,14 +183,14 @@ const rightPanelMode = "half"; // You can change this to 'full', 'half', 'floati
   </section>
 
   <!-- Download Section -->
-  <section class="container mx-auto px-6 py-16 border-b border-neutral-800">
+  <section class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm">
     <GitSection client:load />
   </section>
 
   <!-- Features Section -->
-  <section class="container mx-auto px-6 py-20 border-t">
+  <section class="container mx-auto px-6 py-20 border-t border-border bg-background/20 backdrop-blur-sm">
     <div class="w-full max-w-[1400px] mx-auto">
-      <h2 class="text-4xl font-bold mb-10 text-center">Build Anything with Complete Freedom</h2>
+      <h2 class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in">Build Anything with Complete Freedom</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <Card className="p-8">
           <div class="flex flex-col gap-4">
@@ -254,12 +256,14 @@ const rightPanelMode = "half"; // You can change this to 'full', 'half', 'floati
   </section>
 
   <!-- FAQs -->
-  <section class="container mx-auto px-6 py-20 border-t">
+  <section class="container mx-auto px-6 py-20 border-t border-border bg-background/10 backdrop-blur-sm">
     <div class="w-full max-w-[1400px] mx-auto">
-      <h2 class="text-4xl font-bold mb-10 text-center">
+      <h2 class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in">
         Frequently Asked Questions
       </h2>
-      <FaqAccordion client:idle faqs={faqs} />
+      <div class="one-animate-fade-in">
+        <FaqAccordion client:idle faqs={faqs} />
+      </div>
     </div>
   </section>
 

@@ -3,8 +3,9 @@ import { cn } from '../lib/utils';
 import { Button } from './ui/button';
 import { useStore } from '@nanostores/react';
 import { layoutStore } from '../stores/layout';
+import type { Theme } from '../types/theme';
 import {
-  Newspaper, Headphones, Download, FileText, Shield, Sun, Moon, Leaf, 
+  Newspaper, Headphones, Download, FileText, Shield, Sun, Moon, CircleDot, 
   type LucideIcon
 } from 'lucide-react';
 
@@ -35,7 +36,7 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
   const [mounted, setMounted] = useState(false);
   const [currentPath, setCurrentPath] = useState('/');
   const [sidebarState, setSidebarState] = useState<'closed' | 'open' | 'expanded'>('open');
-  const [theme, setTheme] = useState<'dark' | 'light' | 'earth'>('dark');
+  const [theme, setTheme] = useState<Theme>('dark');
   const layout = useStore(layoutStore);
 
   // Use the navigation prop or fall back to default navigation
@@ -43,12 +44,20 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
 
   const isMobileDevice = () => window.innerWidth < 640;
 
-  // Handle initial state and resize
   useEffect(() => {
     setMounted(true);
     const isMobile = isMobileDevice();
     setSidebarState(isMobile ? 'closed' : 'open');
 
+    if (typeof window !== 'undefined' && window.getThemePreference) {
+      setTheme(window.getThemePreference());
+    }
+
+    const handleThemeChange = (e: CustomEvent<Theme>) => {
+      setTheme(e.detail);
+    };
+
+    window.addEventListener('theme-change', handleThemeChange as EventListener);
     const handleResize = () => {
       const isMobile = isMobileDevice();
       if (isMobile && sidebarState !== 'closed') {
@@ -58,17 +67,20 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
     };
 
     window.addEventListener('resize', handleResize, { passive: true });
-    return () => window.removeEventListener('resize', handleResize);
+    setCurrentPath(window.location.pathname);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('theme-change', handleThemeChange as EventListener);
+    };
   }, [onOpenChange]);
 
-  // Sync with external isOpen prop
   useEffect(() => {
     if (isMobileDevice()) {
       setSidebarState(isOpen ? 'open' : 'closed');
     }
   }, [isOpen]);
 
-  // Handle hover behavior on desktop
   const handleMouseEnter = useCallback(() => {
     if (!isMobileDevice() && sidebarState === 'open') {
       setSidebarState('expanded');
@@ -82,29 +94,22 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
   }, [sidebarState]);
 
   const toggleTheme = useCallback(() => {
-    setTheme(current => {
-      if (current === 'dark') return 'light';
-      if (current === 'light') return 'earth';
-      return 'dark';
-    });
-  }, []);
-
-  useEffect(() => {
-    // Get the current path without query parameters
-    setCurrentPath(window.location.pathname);
-  }, []);
+    const next: Theme = theme === 'dark' ? 'light' : 
+                       theme === 'light' ? 'high-contrast' : 
+                       'dark';
+    if (typeof window !== 'undefined' && window.setTheme) {
+      window.setTheme(next);
+    }
+  }, [theme]);
 
   if (!mounted) return null;
-
-  // Hide the sidebar when right panel is in full mode
   if (layout.mode === 'Full') return null;
 
   return (
     <>
-      {/* Mobile backdrop with blur */}
       {isMobileDevice() && sidebarState !== 'closed' && (
         <div
-          className="fixed inset-0 bg-[#111111]/80 backdrop-blur-sm z-40 transition-opacity duration-300"
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 transition-opacity duration-300"
           onClick={() => {
             setSidebarState('closed');
             onOpenChange?.(false);
@@ -113,7 +118,6 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -121,7 +125,7 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
         aria-label="Main navigation"
         className={cn(
           "fixed left-0 top-0 h-screen z-40",
-          "bg-[#222222] border-r border-[#111111]",
+          "bg-[hsl(var(--one-background-nav))] border-r border-[hsl(var(--one-border-nav))]",
           "transition-all duration-300 ease-in-out will-change-transform",
           "transform",
           {
@@ -135,21 +139,19 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
           role="navigation"
           aria-label="Primary navigation"
           className={cn(
-            "h-full flex flex-col bg-[#040404]",
+            "h-full flex flex-col bg-[hsl(var(--one-background-nav))]",
             sidebarState === 'closed' && "invisible sm:visible"
           )}
         >
-          {/* Logo Section */}
-          <div className="flex items-center justify-center border-b">
+          {/* Logo Section with black background */}
+          <div className="flex items-center justify-center bg-[hsl(var(--one-background-logo))]">
             <Button
               variant="ghost"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : theme === 'earth' ? 'dark' : 'earth'} theme`}
-              aria-pressed={theme === 'dark'}
               className={cn(
                 "relative w-16 h-16 flex items-center justify-center rounded-none",
                 sidebarState === 'expanded' ? "w-full" : "",
-                currentPath === '/' ? "bg-white/10" : "hover:bg-white/5",
-                "transition-colors duration-200"
+                "transition-colors duration-200",
+                "hover:bg-[hsl(var(--one-background-nav))]"
               )}
               asChild
             >
@@ -164,7 +166,7 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
                   </div>
                 </div>
                 <span className={cn(
-                  "transition-all duration-200 text-white font-medium",
+                  "transition-all duration-200 text-foreground font-medium",
                   sidebarState === 'expanded' ? "opacity-100 pl-4" : "opacity-0 w-0",
                   "truncate"
                 )}>
@@ -175,40 +177,31 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
           </div>
 
           {/* Navigation Items */}
-          <div
-            className="flex-1 flex flex-col"
-            role="menu"
-            aria-label="Main navigation menu"
-          >
+          <div className="flex-1 flex flex-col" role="menu">
             {mainNavItems.map((item) => {
               const Icon = item.icon;
               return (
-                <div
-                  key={item.path}
-                  role="none"
-                >
+                <div key={item.path} role="none">
                   <Button
                     variant="ghost"
                     aria-current={currentPath === item.path ? 'page' : undefined}
                     aria-label={item.title}
                     className={cn(
-                      "relative w-16 h-16 flex items-center justify-center rounded-none",
+                      "relative w-16 h-16 flex items-center justify-center rounded-none one-nav-item",
                       sidebarState === 'expanded' ? "w-full" : "",
-                      currentPath === item.path ? "bg-white/10" : "hover:bg-white/5",
+                      currentPath === item.path ? 
+                        "bg-[hsl(var(--one-background-logo))]" : 
+                        "hover:bg-[hsl(var(--one-background-logo))]",
                       "transition-colors duration-200"
                     )}
                     asChild
                   >
-                    <a
-                      href={item.path}
-                      className="flex items-center gap-4"
-                      role="menuitem"
-                    >
+                    <a href={item.path} className="flex items-center gap-4" role="menuitem">
                       {Icon && (
                         <div className="absolute inset-0 flex items-center justify-center w-16 h-16">
                           <div className="w-8 h-8 flex items-center justify-center">
                             <Icon
-                              className="w-full h-full text-white"
+                              className="w-full h-full text-foreground"
                               strokeWidth={1.5}
                               aria-hidden="true"
                             />
@@ -216,7 +209,7 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
                         </div>
                       )}
                       <span className={cn(
-                        "transition-all duration-200 text-white",
+                        "transition-all duration-200 text-foreground",
                         sidebarState === 'expanded' ? "opacity-100 pl-4" : "opacity-0 w-0",
                         "truncate"
                       )}>
@@ -232,17 +225,17 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
           {/* Theme Toggle */}
           <div className={cn(
             "flex items-center justify-center",
-            sidebarState === 'expanded' ? "border-b border-white/10" : ""
+            "bg-[hsl(var(--one-background-logo))]"
           )}>
             <Button
               variant="ghost"
-              aria-label={`Switch to ${theme === 'dark' ? 'light' : theme === 'earth' ? 'dark' : 'earth'} theme`}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : theme === 'high-contrast' ? 'dark' : 'high-contrast'} theme`}
               aria-pressed={theme === 'dark'}
               className={cn(
                 "w-16 h-16 flex items-center justify-center rounded-none",
                 sidebarState === 'expanded' ? "w-full" : "",
-                "hover:bg-white/10",
-                "focus-visible:ring-1 focus-visible:ring-white",
+                "hover:bg-[hsl(var(--one-background-nav))]",
+                "focus-visible:ring-1 focus-visible:ring-ring",
                 "transition-colors duration-200"
               )}
               onClick={toggleTheme}
@@ -250,20 +243,20 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
               <div className="w-16 h-16 flex items-center justify-center flex-shrink-0">
                 <div className="w-10 h-10 flex items-center justify-center">
                   {theme === 'dark' ? (
-                    <Moon className="w-5 h-5 text-white" strokeWidth={1.5} aria-hidden="true" />
-                  ) : theme === 'earth' ? (
-                    <Leaf className="w-5 h-5 text-white" strokeWidth={1.5} aria-hidden="true" />
+                    <Moon className="w-5 h-5 text-foreground" strokeWidth={1.5} aria-hidden="true" />
+                  ) : theme === 'high-contrast' ? (
+                    <CircleDot className="w-5 h-5 text-foreground" strokeWidth={1.5} aria-hidden="true" />
                   ) : (
-                    <Sun className="w-5 h-5 text-white" strokeWidth={1.5} aria-hidden="true" />
+                    <Sun className="w-5 h-5 text-foreground" strokeWidth={1.5} aria-hidden="true" />
                   )}
                 </div>
               </div>
               <span className={cn(
-                "transition-all duration-200 text-white",
+                "transition-all duration-200 text-foreground",
                 sidebarState === 'expanded' ? "opacity-100 pl-4" : "opacity-0 w-0",
                 "truncate"
               )}>
-                {theme === 'dark' ? 'Light Mode' : theme === 'earth' ? 'Dark Mode' : 'Earth Mode'}
+                {theme === 'dark' ? 'Light Mode' : theme === 'high-contrast' ? 'Dark Mode' : 'High Contrast'}
               </span>
             </Button>
           </div>
