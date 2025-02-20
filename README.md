@@ -1,4 +1,4 @@
-# 🚀 ONE - Build AI-Powered Businesses
+# 🚀 ONE - Build Your AI Brand
 
 ONE is a modern web and AI agent development toolkit that combines the blazing-fast performance of Astro with the elegant components of Shadcn/UI. This enterprise-class starter kit empowers developers to build AI-powered applications with:
 
