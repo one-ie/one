@@ -1,6 +1,6 @@
 # 🚀 ONE - Build AI-Powered Businesses
 
-ONE is a modern web and AI agent development framework that combines the blazing-fast performance of Astro with the elegant components of Shadcn/UI. This enterprise-class starter kit empowers developers to build AI-powered applications with:
+ONE is a modern web and AI agent development toolkit that combines the blazing-fast performance of Astro with the elegant components of Shadcn/UI. This enterprise-class starter kit empowers developers to build AI-powered applications with:
 
 - ⚡ **High Performance**: Astro's partial hydration ensures minimal JavaScript
 - 🎨 **Beautiful UI**: Pre-configured Shadcn components with full TypeScript support
@@ -10,6 +10,8 @@ ONE is a modern web and AI agent development framework that combines the blazing
 - 🛠️ **Developer Experience**: Hot reloading, intuitive project structure, and comprehensive documentation
 
 Perfect for building modern web applications, from simple landing pages to complex AI-powered platforms.
+
+![ONE Screenshot](/screenshots/screenshot.png)
 
 ## ⚡ Quick Start
 
