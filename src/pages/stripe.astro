@@ -1,44 +1,126 @@
 ---
+import Layout from "../layouts/Layout.astro";
 import { Stripe as StripeClient } from "stripe";
+
+// Get form data if submitted
+const price_id = Astro.url.searchParams.get('price_id');
+const quantity = Astro.url.searchParams.get('quantity');
 
 let session;
 let error: string | null = null;
+let success = false;
 
-try {
-  const stripeKey = import.meta.env.STRIPE_SECRET_KEY;
-  if (!stripeKey) {
-    throw new Error('Stripe secret key is not configured');
+if (price_id) {
+  try {
+    const stripeKey = import.meta.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+      throw new Error('Stripe secret key is not configured');
+    }
+
+    const stripe = new StripeClient(stripeKey, {
+      apiVersion: '2025-01-27.acacia'
+    });
+    
+    const { origin } = Astro.url;
+    
+    session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      line_items: [
+        {
+          price: price_id,
+          quantity: parseInt(quantity || "1"),
+        },
+      ],
+      success_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/stripe`,
+    });
+
+    if (session.url) {
+      return Astro.redirect(session.url);
+    }
+  } catch (e) {
+    console.error('Stripe error:', e);
+    error = e instanceof Error ? e.message : 'An error occurred with the payment system';
   }
-
-  const stripe = new StripeClient(stripeKey, {
-    apiVersion: '2025-01-27.acacia' // Add explicit API version
-  });
-  
-  const { origin } = Astro.url;
-  console.log('Creating Stripe session with origin:', origin); // Debug log
-  
-  session = await stripe.checkout.sessions.create({
-    mode: "subscription",
-    line_items: [
-      {
-        price: "price_0MC5WIqs14Mpveu1bfwvrkq6",
-        quantity: 1,
-      },
-    ],
-    success_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/stripe`,
-  });
-
-  if (session.url) {
-    return Astro.redirect(session.url);
-  }
-} catch (e) {
-  console.error('Stripe error details:', {
-    error: e,
-    message: e instanceof Error ? e.message : 'Unknown error',
-    env: !!import.meta.env.STRIPE_SECRET_KEY ? 'Key exists' : 'Key missing'
-  });
-  error = e instanceof Error ? e.message : 'An error occurred with the payment system';
 }
 ---
-Update price to match the subscription plan you created in your Stripe Dashboard. The `success_url` and `cancel_url` are set to `/thankyou` and `/stripe` respectively. You can update these URLs to match your site's structure.
+
+<style>
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .button {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full;
+  }
+  .card {
+    @apply border rounded-lg p-6 bg-card text-card-foreground;
+  }
+</style>
+
+<Layout title="Stripe Configuration">
+  <div class="container mx-auto p-6">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-3xl font-bold mb-2">Stripe Payment Configuration</h1>
+      <p class="text-muted-foreground mb-6">
+        Configure your Stripe payment parameters below. Enter your price ID and quantity to test the checkout flow.
+      </p>
+
+      <div class="card">
+        <form method="get" class="space-y-4">
+          <div class="space-y-2">
+            <label class="text-sm font-medium block">
+              Price ID
+              <span class="text-muted-foreground ml-2 text-xs">
+                (from your Stripe Dashboard)
+              </span>
+            </label>
+            <input
+              type="text"
+              id="price_id"
+              name="price_id"
+              class="input"
+              placeholder="price_xxx..."
+              value="price_0MC5WIqs14Mpveu1bfwvrkq6"
+              required
+            />
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium block">
+              Quantity
+            </label>
+            <input
+              type="number"
+              id="quantity"
+              name="quantity"
+              class="input"
+              min="1"
+              value="1"
+              required
+            />
+          </div>
+
+          <button type="submit" class="button">
+            Test Checkout
+          </button>
+        </form>
+
+        {error && (
+          <div class="mt-4 border-l-4 border-destructive bg-destructive/10 p-4 text-destructive">
+            <p>{error}</p>
+          </div>
+        )}
+
+        <div class="mt-6 text-sm text-muted-foreground">
+          <p class="font-medium">Developer Notes:</p>
+          <ul class="list-disc list-inside space-y-1 mt-2">
+            <li>Set STRIPE_SECRET_KEY in your .env file</li>
+            <li>Update success_url and cancel_url as needed</li>
+            <li>Test mode is recommended for development</li>
+            <li>Check Stripe Dashboard for successful payments</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

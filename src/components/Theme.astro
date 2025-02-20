@@ -1,5 +1,6 @@
 ---
 // Theme.astro - Minimal Duotone Theme Initialization
+// @ts-nocheck - Astro directives are not recognized by TypeScript
 ---
 
 <script is:inline>
@@ -32,7 +33,7 @@
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
     const currentTheme = localStorage.getItem('theme');
     if (!currentTheme || currentTheme === 'system') {
-      setTheme('dark');
+      setTheme(e.matches ? 'dark' : 'light');
     }
   });
 
