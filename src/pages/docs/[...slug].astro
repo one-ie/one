@@ -21,7 +21,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<DocsPage entry={entry}>
+<DocsPage title={entry.title}>
   <div class="px-4 sm:px-6">
     <Content />
   </div>

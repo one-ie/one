@@ -193,6 +193,28 @@ const rightPanelMode = "quarter"; // You can change this to 'full', 'half', 'flo
   chatConfig={chatConfig}
   rightPanelMode={rightPanelMode}
 >
+<section class="container mx-auto px-6 py-12 border-b border-border bg-background/50 backdrop-blur-sm">
+  <div class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-6 text-center">
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground one-animate-fade-in">
+      Build Your <span class="text-accent">AI Brand</span> 
+    
+    </h1>
+    <div class="flex flex-col items-center gap-4 max-w-[800px]">
+      <p class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in">
+        ONE is a free toolkit to that generates content, courses, websites, and AI agents for your brand. ONE is free forever. You can use, brand, distribute, sell, resell ONE as you wish.    
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/docs/get-started" class="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
+          Start Building
+        </a>
+        <a href="https://github.com/one-ie/one" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md border border-input bg-background px-8 py-3 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+</section>
   <div class="relative flex h-[600px] w-full flex-col items-center justify-center overflow-hidden">
     {/* Orbit Paths */}
     <div class="absolute inset-0 flex items-center justify-center">
@@ -275,30 +297,7 @@ const rightPanelMode = "quarter"; // You can change this to 'full', 'half', 'flo
     ))}
   </div>
 
-  <section
-    class="container mx-auto px-6 py-20 border-b border-border bg-background/50 backdrop-blur-sm">
-    <div class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-8 text-center">
-      <h1 class="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tight text-foreground one-animate-fade-in">
-        Sell Faster With <span class="text-accent">AI Agents</span>,
-        <span class="text-primary">Crypto</span> &
-        <span class="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">Astro</span>
-      </h1>
-      <div class="flex flex-col items-center gap-6 max-w-[800px]">
-        <p class="text-lg sm:text-xl md:text-2xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in">
-          Build automated sales systems that work 24/7. Deploy AI agents that engage customers, process crypto payments, and close deals while you sleep. Zero platform fees, unlimited scale.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a href="/docs/get-started" class="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-            Start Building
-          </a>
-          <a href="https://github.com/one-ie/one" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md border border-input bg-background px-8 py-3 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-            View on GitHub
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-  </section>
+ 
 
   <!-- Download Section -->
   <section class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm">
