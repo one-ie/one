@@ -1,196 +1,354 @@
 ---
-import Layout from './Layout.astro';
-import TableOfContents from '../components/TableOfContents';
-import type { CollectionEntry } from 'astro:content';
-import type { MarkdownHeading } from 'astro';
-import { ChatConfigSchema } from '../schema/chat';
-
+import "../styles/global.css";
+import ThemeInit from "@/components/Theme.astro";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Left from "@/components/Left";
+import Right from "../components/Right";
+import { ChatConfigSchema } from "../schema/chat";
+  
 interface Props {
-  entry: CollectionEntry<'docs'>;
-  headings?: MarkdownHeading[];
+  title: string;
+  description?: string;
+  children: any;
+  header?: boolean;
+  footer?: boolean;
+  initialPanelMode?: "Quarter" | "Half" | "Full" | "Floating" | "Icon";
+  chatConfig?: any;
+  rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
+  content?: string;
 }
 
-const { entry } = Astro.props;
-const { headings } = await entry.render();
+const {
+  title,
+  description = "ONE",
+  initialPanelMode,
+  rightPanelMode = "half",
+  chatConfig: providedConfig,
+  content,
+} = Astro.props;
 
-// Get raw content from the slot
-const rawContent = await Astro.slots.render('default');
+const { header = true, footer = true } = Astro.props;
 
-// Create documentation-specific chat configuration
-const docsSpecificConfig = ChatConfigSchema.parse({
-  systemPrompt: [{
-    type: "text" as const,
-    text: 
-`You are an expert documentation assistant for the ONE framework. Your role is to help users understand and implement ONE effectively.
+// Default chat configuration
+const defaultChatConfig = ChatConfigSchema.parse({
+  provider: "mistral",
+  model: "mistral-large-latest",
+  systemPrompt: [
+    {
+      type: "text" as const,
+      text: `You are ONE's lead AI advocate, helping users understand how to build AI-powered businesses with our framework. Your role is to guide visitors through our comprehensive platform that combines AI agents, crypto payments, and content automation.
 
-Core Knowledge:
-1. Framework Architecture
-   - Astro-based static site generation
-   - React components for interactivity
-   - Assistant UI for chat interfaces
-   - Vercel AI SDK for model integration
-   - Edge runtime optimization
+Core Capabilities:
+1. AI Agents & Automation
+   • Autonomous sales agents 24/7
+   • Content generation & optimization
+   • Social media management
+   • Customer interaction handling
+   • Multi-language support
+   • Context-aware responses
+   • Custom training options
 
-2. Technical Capabilities
-   - AI-powered chat systems
-   - Real-time message streaming
-   - Markdown content processing
-   - Dynamic page layouts
-   - Edge computing features
-   - TypeScript/JavaScript development
+2. Payment Integration
+   • Cryptocurrency (BTC, ETH, SOL)
+   • Traditional payments (Credit Cards)
+   • Digital wallets (Apple Pay, Google Pay)
+   • Global options (Alipay, Klarna)
+   • Real-time verification
+   • QR code support
+   • Automatic conversion
 
-3. Chat System Features
-   - Multiple panel modes (quarter, half, full, floating, icon)
-   - System prompt configuration
-   - Welcome screen customization
-   - Message history and branching
-   - Voice synthesis capabilities
-   - Code syntax highlighting
+4. Content Automation
+   • Blog post generation
+   • Social media content
+   • Product descriptions
+   • Marketing materials
+   • Documentation
+   • Email campaigns
+   • SEO optimization
 
-4. Content Management
-   - Markdown-based documentation
-   - Blog system with multiple views
-   - Dynamic routing
-   - Asset optimization
-   - SEO configuration
+Technical Foundation:
+• Modern Stack
+  - Astro & React
+  - Edge Runtime
+  - TypeScript
+  - Vercel AI SDK
+  - WebSocket
+  - Shadcn/UI
+  - API-first
 
-5. Commercial Features
-   - Full commercial usage rights
-   - White-label options
-   - Enterprise support
-   - Custom deployment options
-   - No royalty fees
+• Enterprise Features
+  - Custom AI training
+  - Business logic integration
+  - Workflow automation
+  - Multi-channel deployment
+  - Analytics & tracking
+  - Security measures
+  - Scalability options
 
-Response Guidelines:
-1. Base responses primarily on the current page content
-2. Reference related documentation when relevant
-3. Provide practical code examples
-4. Include implementation steps
-5. Suggest best practices
-6. Address common issues
-7. Reference the official documentation
+Communication Style:
+• Be solution-focused
+• Highlight practical applications
+• Explain token benefits clearly
+• Share specific examples
+• Provide implementation steps
+• Address technical & business needs
+• Maintain professional enthusiasm
 
-Remember to:
-- Be accurate and technical
-- Provide working code examples
-- Consider performance implications
-- Suggest security best practices
-- Reference documentation sections
-- Stay within the technical scope
-- Maintain professional tone`
-  }],
+Key Points to Emphasize:
+• Complete business solution
+• Token-based white-labeling
+• Comprehensive payment options
+• AI agent capabilities
+• Content automation power
+• Easy implementation
+• Scalable architecture
+
+Your goal is to help users understand how ONE can transform their business with AI agents, automated content, and integrated payments while explaining our token-based system for accessing premium features.`,
+    },
+  ],
   welcome: {
-    message: "👋 I'm the ONE documentation assistant. How can I help you understand this section better?",
+    message:
+      "👋 Welcome! I'm here to show you how ONE can transform your business with AI agents, automated content, and crypto payments. What would you like to learn about?",
     avatar: "/icon.svg",
     suggestions: [
       {
-        label: "📚 Explain this page",
-        prompt: "Can you explain what this documentation page covers and how it fits into the overall framework?"
+        label: "🤖 AI Agents",
+        prompt:
+          "Tell me about ONE's AI agent capabilities for sales and automation",
       },
       {
-        label: "🔍 Key concepts",
-        prompt: "What are the key concepts and features covered in this section?"
+        label: "💳 Payment Options",
+        prompt: "What payment methods does ONE support, including crypto?",
       },
       {
-        label: "💻 Code examples",
-        prompt: "Can you show me code examples for the features discussed on this page?"
+        label: "✍️ Content Generation",
+        prompt: "What kind of content can ONE automatically generate?",
       },
       {
-        label: "🚀 Implementation",
-        prompt: "How do I implement these features in my project?"
+        label: "🚀 Quick Start",
+        prompt: "How can I deploy my first AI agent with ONE?",
       },
       {
-        label: "⚡ Best practices",
-        prompt: "What are the best practices and performance considerations for this feature?"
-      }
-    ]
-  }
+        label: "💼 Enterprise Features",
+        prompt: "What enterprise-level features does ONE offer?",
+      },
+    ],
+  },
 });
 
-const pageData = {
-  title: entry.data.title,
-  description: entry.data.description,
-  type: "documentation",
-  chatConfig: docsSpecificConfig,
-  rightPanelMode: 'quarter' as const,
-  content: rawContent
-};
+// Use provided config or fall back to default
+const chatConfig = providedConfig || defaultChatConfig;
 ---
 
-<script>
-  declare global {
-    interface Window {
-      handleTocVisibility: (isVisible: boolean) => void;
-    }
-  }
-  
-  document.addEventListener('astro:page-load', () => {
-    const main = document.querySelector('main');
-    const tocContainer = document.getElementById('toc-container');
-    
-    // Set initial TOC width
-    document.documentElement.style.setProperty('--toc-width', '16rem');
-    
-    window.handleTocVisibility = (isVisible: boolean) => {
-      // Update TOC container
-      if (tocContainer) {
-        tocContainer.style.width = isVisible ? 'var(--toc-width)' : '0';
-        tocContainer.style.opacity = isVisible ? '1' : '0';
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <ThemeInit />
+    <style>
+      :root {
+        --header-height: 60px;
       }
-      
-      // Update main content
-      if (main) {
-        // Ensure main content expands properly
-        main.style.width = isVisible ? 'calc(100% - var(--toc-width))' : '100%';
-        main.style.maxWidth = isVisible ? 'calc(100% - var(--toc-width))' : '100%';
+
+      .main-grid {
+        display: grid;
+        min-height: 100vh;
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
       }
-    };
-  });
-</script>
 
-<Layout {...pageData}>
-  <div class="lg:flex relative">
-    <!-- Main Content -->
-    <main class="flex-1 min-w-0 transition-all duration-300 ease-in-out w-full" transition:animate="none">
-      <article class="py-8">
-        <header class="mb-8">
-          <div class="space-y-2">
-            {entry.data.section && (
-              <p class="text-sm font-medium text-muted-foreground">
-                {entry.data.section}
-              </p>
-            )}
-            <h1 class="text-3xl font-bold sm:text-4xl md:text-5xl">
-              {entry.data.title}
-            </h1>
-            {entry.data.description && (
-              <p class="text-lg sm:text-xl text-muted-foreground max-w-[750px]">
-                {entry.data.description}
-              </p>
-            )}
-          </div>
-        </header>
-        
-        <div class="prose dark:prose-invert max-w-none">
-          <slot />
-        </div>
-      </article>
-    </main>
+      /* Initial states without transitions */
+      .main-grid[data-panel-mode="Quarter"] {
+        grid-template-columns: minmax(0, 75%);
+      }
 
-    <!-- Right Sidebar -->
+      .main-grid[data-panel-mode="Half"] {
+        grid-template-columns: minmax(0, 50%);
+      }
+
+      .main-grid[data-panel-mode="Full"] {
+        grid-template-columns: 0;
+      }
+
+      .main-grid[data-panel-mode="Floating"],
+      .main-grid[data-panel-mode="Icon"] {
+        grid-template-columns: 1fr;
+        padding-right: 0;
+      }
+
+      /* Add transitions after initial render */
+      .main-grid.transitions-enabled {
+        transition: grid-template-columns 0.3s ease;
+      }
+
+      .center-grid {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 100%;
+        margin-right: 0;
+        overflow: hidden;
+      }
+
+      /* Add left padding only on desktop and when not in full mode */
+      @media (min-width: 640px) {
+        .main-grid:not([data-panel-mode="Full"]) .center-grid {
+          padding-left: 60px;
+        }
+      }
+
+      /* Add styles for the right panel positioning */
+      :global(.right-panel) {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+        background-color: hsl(var(--background));
+        border-left: 1px solid hsl(var(--border));
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+
+      /* Enable transitions after initial render */
+      :global(.transitions-enabled .right-panel) {
+        transition: all 0.3s ease;
+      }
+
+      /* Adjust header padding to align with main header */
+      :global(.right-panel header) {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid hsl(var(--border) / 0.9);
+        margin-bottom: 2px;
+      }
+
+      /* Add border to chat window */
+      :global(.right-panel main) {
+        border-left: 1px solid hsl(var(--border) / 0.7);
+      }
+
+      :global(.right-panel[data-mode="Icon"]) {
+        width: 48px;
+        height: 48px;
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        border: none;
+        border-radius: 9999px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: hsl(var(--primary));
+      }
+
+      :global(.right-panel[data-mode="Quarter"]) {
+        width: 25%;
+        min-width: 320px;
+        background-color: hsl(var(--background));
+      }
+
+      :global(.right-panel[data-mode="Half"]) {
+        width: 50%;
+        background-color: hsl(var(--background));
+      }
+
+      :global(.right-panel[data-mode="Full"]) {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        position: fixed;
+        inset: 0;
+        background-color: hsl(var(--background));
+        border: none;
+        z-index: 9999;
+        overflow-y: auto;
+      }
+
+      :global(.right-panel[data-mode="Full"] main) {
+        border-left: none;
+      }
+
+      :global(.right-panel[data-mode="Floating"]) {
+        width: 400px;
+        height: 600px;
+        top: 50%;
+        right: 20px;
+        bottom: auto;
+        transform: translateY(-50%);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background-color: hsl(var(--background));
+      }
+
+      @media (max-width: 768px) {
+        :global(.right-panel[data-mode="Floating"]) {
+          width: calc(100% - 40px);
+          height: calc(100% - 120px);
+        }
+      }
+
+      /* Add smooth scrolling to the whole page */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Improve the scrollbar appearance */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
+      }
+    </style>
+    <script>
+      // Enable transitions after initial render
+      window.addEventListener("load", () => {
+        document
+          .querySelector(".main-grid")
+          ?.classList.add("transitions-enabled");
+      });
+    </script>
+  </head>
+  <body>
     <div
-      class="hidden lg:block flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden max-w-[240px]"
-      id="toc-container"
-      style="width: var(--toc-width)"
+      class="main-grid"
+      id="main-grid"
+      data-panel-mode={initialPanelMode || "Quarter"}
     >
-      <div class="pt-4">
-        <div class="pl-8 pr-4">
-          <TableOfContents 
-            headings={headings} 
-            client:media="(min-width: 1024px)" 
-          />
-        </div>
+      <Left client:idle />
+      <div class="center-grid" id="center-grid">
+        {header && <Header client:load />}
+
+        <main class="p-4">
+          <slot />
+        </main>
+
+        {footer && <Footer client:idle />}
       </div>
+      <Right
+        client:idle
+        chatConfig={chatConfig}
+        rightPanelMode={rightPanelMode}
+        content={content}
+      />
     </div>
-  </div>
-</Layout>
+  </body>
+</html>

@@ -16,7 +16,7 @@ interface Props {
   footer?: boolean;
   initialPanelMode?: "Quarter" | "Half" | "Full" | "Floating" | "Icon";
   chatConfig?: any;
-  rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
+  rightPanelMode?: "hidden" | "full" | "half" | "third" | "quarter" | "floating" | "icon";
   content?: string;
 }
 
@@ -24,7 +24,7 @@ const {
   title,
   description = "ONE",
   initialPanelMode,
-  rightPanelMode = "half",
+  rightPanelMode = "quarter",
   chatConfig: providedConfig,
   content,
 } = Astro.props;
@@ -93,7 +93,8 @@ const chatConfig = providedConfig || defaultChatConfig;
   }
 
   .main-grid[data-panel-mode="Quarter"] {
-    grid-template-columns: minmax(0, 75%);
+    /* Ensure main content takes remaining space while panel maintains minimum width */
+    grid-template-columns: minmax(0, calc(100% - 350px));
   }
 
   .main-grid[data-panel-mode="Half"] {
