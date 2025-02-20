@@ -11,7 +11,7 @@ ONE is a modern web and AI agent development toolkit that combines the blazing-f
 
 Perfect for building modern web applications, from simple landing pages to complex AI-powered platforms.
 
-![ONE Screenshot](/screenshots/screenshot.png)
+![ONE Screenshot](https://one.ie/screenshots/screenshot.png)
 
 ## ⚡ Quick Start
 
