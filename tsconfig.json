@@ -12,16 +12,14 @@
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "verbatimModuleSyntax": true,
-    "types": ["vite/client", "astro/client"],
-    "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "allowJs": true,
-    "skipLibCheck": true,
+    "esModuleInterop": true,
     "strict": true,
-    "noUncheckedIndexedAccess": true
+    "target": "ESNext",
+    "types": ["vite/client", "astro/client"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
-} 
+}

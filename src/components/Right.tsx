@@ -74,6 +74,7 @@ export default function Right({ rightPanelMode, chatConfig, content }: RightProp
       style={{
         ...styles,
         overflow: 'hidden',
+        backgroundColor: '#1A1A1A',
       }}
     >
       {isIcon ? (

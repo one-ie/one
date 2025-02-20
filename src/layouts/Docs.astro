@@ -338,7 +338,9 @@ const chatConfig = providedConfig || defaultChatConfig;
         {header && <Header client:load />}
 
         <main class="p-4">
-          <slot />
+          <article class="prose dark:prose-invert prose-slate max-w-none py-8">
+            <slot />
+          </article>
         </main>
 
         {footer && <Footer client:idle />}

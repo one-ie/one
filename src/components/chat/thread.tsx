@@ -144,7 +144,7 @@ export const MyThread: FC<MyThreadProps> = ({ welcome, onSuggestionClick }) => {
         </ThreadPrimitive.Viewport>
       </ScrollArea>
 
-      <div className="bg-gradient-to-t from-background from-50% to-transparent">
+      <div>
         <div className="px-6 pt-6 pb-4">
           <MyComposer />
         </div>

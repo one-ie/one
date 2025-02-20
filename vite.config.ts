@@ -19,4 +19,4 @@ export default defineConfig({
       '@radix-ui/react-primitive'
     ]
   }
-}); 
+});
