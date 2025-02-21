@@ -110,10 +110,23 @@ export function GitSection() {
                 size="lg"
                 className="group bg-primary/5 hover:bg-primary/10 text-foreground hover:text-foreground"
               >
-                <GitHubLogoIcon className="w-5 h-5 mr-2" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+                  />
+                </svg>
                 <span>Fork Repository</span>
-                <div className="ml-2 flex items-center gap-1.5 px-2 py-0.5 text-sm rounded-full bg-muted">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-yellow-500">
+                <div className="ml-2 flex items-center gap-1.5 px-2 py-0.5 text-sm rounded-full bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-600 dark:to-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-gray-600 dark:text-gray-300">
                     <path d="M15 3a2 2 0 0 1 2 2v2h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2V5a2 2 0 0 1 2-2h8zm0 2H7v2h8V5zm3 4H6v10h12V9z"/>
                   </svg>
                   <span className="font-semibold">{stats.forks}</span>
