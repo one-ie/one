@@ -4,7 +4,7 @@ import "../styles/one.css";
 import ThemeInit from "../components/Theme.astro";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Left from "../components/Left";
+import Sidebar from "../components/Sidebar.astro";
 import Right from "../components/Right";
 import { ChatConfigSchema } from "../schema/chat";
 
@@ -55,7 +55,7 @@ const chatConfig = providedConfig || defaultChatConfig;
       id="main-grid"
       data-panel-mode={initialPanelMode || "Quarter"}
     >
-      <Left client:idle />
+      <Sidebar />
       <div class="center-grid" id="center-grid">
         {header && <Header client:load />}
         

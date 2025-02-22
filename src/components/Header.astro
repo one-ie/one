@@ -1,0 +1,122 @@
+---
+import {
+  Home,
+  Newspaper,
+  Headphones,
+  Download,
+  FileText,
+  Shield,
+} from 'lucide-react';
+
+// Default navigation items
+const defaultNavigation = [
+  { title: 'Home', path: '/', icon: Home },
+  { title: 'Blog', path: '/blog', icon: Newspaper },
+  { title: 'Podcast', path: '/podcast', icon: Headphones },
+  { title: 'Download', path: '/download', icon: Download },
+  { title: 'Docs', path: '/docs', icon: FileText },
+  { title: 'License', path: '/free-license', icon: Shield }
+];
+
+const isMobile = false; // Will be handled by client script
+---
+
+<header class="grid grid-cols-3 items-center h-[65px] border-b bg-[hsl(var(--one-background-nav))] backdrop-blur relative">
+  <!-- Left column -->
+  <div>
+    {isMobile && (
+      <button
+        id="sidebar-toggle"
+        class="p-2 hover:bg-accent rounded-md focus:outline-none"
+        aria-label="Toggle Sidebar"
+      >
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+    )}
+  </div>
+  
+  <!-- Center column with Logo -->
+  <div class="flex justify-center">
+    <a href="/" class="flex items-center gap-2">
+      <img 
+        src="/logo.svg" 
+        alt="Logo"
+        class="h-10 w-auto"
+      />
+    </a>
+  </div>
+  
+  <!-- Right column -->
+  <div class="flex justify-end pr-4">
+    <a
+      href="/download"
+      class="group flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-all duration-300 ease-in-out"
+    >
+      <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
+      <span class="hidden sm:inline">Download</span>
+    </a>
+  </div>
+
+  <!-- Mobile Menu -->
+  {isMobile && (
+    <div
+      id="mobile-menu"
+      class="fixed inset-0 w-screen h-screen bg-zinc-50/95 dark:bg-zinc-900/95 backdrop-blur-sm transition-all z-[100000000] duration-300 opacity-0 pointer-events-none"
+    >
+      <div class="h-screen w-full flex items-center justify-center z-[100000000]">
+        <div class="flex flex-col items-center space-y-6 transition-all duration-300 transform relative z-[100000000] -translate-y-8">
+          {defaultNavigation.map(({ title, path, icon: Icon }) => (
+            <a
+              href={path}
+              class="flex items-center gap-2 text-xl font-medium hover:text-primary transition-colors"
+            >
+              <Icon className="h-6 w-6" />
+              <span>{title}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
+</header>
+
+<script>
+  let isMobile = window.innerWidth < 640;
+  let isSidebarOpen = false;
+  
+  const mobileMenu = document.getElementById('mobile-menu');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+
+  function updateMobileState() {
+    isMobile = window.innerWidth < 640;
+  }
+
+  function toggleSidebar() {
+    isSidebarOpen = !isSidebarOpen;
+    if (mobileMenu) {
+      mobileMenu.classList.toggle('opacity-0');
+      mobileMenu.classList.toggle('pointer-events-none');
+      const menuContent = mobileMenu.querySelector('div > div');
+      if (menuContent) {
+        menuContent.classList.toggle('-translate-y-8');
+        menuContent.classList.toggle('translate-y-0');
+      }
+    }
+  }
+
+  window.addEventListener('resize', updateMobileState);
+  sidebarToggle?.addEventListener('click', toggleSidebar);
+</script>

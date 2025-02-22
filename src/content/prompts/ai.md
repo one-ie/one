@@ -1,14 +1,125 @@
 ---
-title: "AI"
-description: ""
-tags: ["ai", "astro", "react", "shadcn-ui", "responsive", "performance"]
+title: "AI Integration System"
+description: "A comprehensive guide to ONE's AI integration and prompt hierarchy"
+tags: ["ai", "prompts", "configuration", "customization", "system-design"]
 date: 2024-02-03
 ---
-AI is fully integrated into the site very simply.
-src/1/1.md The system prompt explaining the features of the agents
-src/1/I.md This will be appended to the system prompt and it is a detailed description that is customised by the business. 
-/src/layouts/Layout.md contains instructions that can be added onto the prompt 
-/src/pages/page.astro falls back to the settings in layout if they are not overwritten. 
-/src/pages/page.md falls back to the values in Layout.astro if any entries are not present
-/src/layouts/Docs.astro falls back to Layout.astro if any information is not present. 
+
+# AI Integration Architecture
+
+ONE implements a sophisticated yet simple AI integration system through a hierarchical prompt and configuration structure. This architecture allows for flexible customization while maintaining consistent behavior across your application.
+
+## Prompt Hierarchy
+
+The system follows a cascading inheritance pattern where configurations and prompts flow from base to specific implementations:
+
+### 1. Base System Level (`src/1/1.md`)
+- Defines core system prompts and agent capabilities
+- Establishes fundamental AI behavior patterns
+- Contains base feature explanations and agent characteristics
+
+### 2. Business Customization (`src/1/I.md`)
+- Appends business-specific instructions and knowledge
+- Customizes AI behavior for specific use cases
+- Allows for domain-specific rules and responses
+
+### 3. Layout Level (`src/layouts/Layout.astro`)
+- Provides default chat configurations
+- Sets up standard UI components and behaviors
+- Establishes baseline prompt settings
+
+### 4. Page Level Configuration
+- `page.astro`: Override layout settings when needed
+- `page.md`: Custom content-specific configurations
+- `Docs.astro`: Documentation-specific settings
+
+## Configuration Flow
+
+```mermaid
+graph TD
+    A[Base System - 1.md] --> B[Business Custom - I.md]
+    B --> C[Layout.astro]
+    C --> D[Page Level]
+    D --> E[page.astro]
+    D --> F[page.md]
+    D --> G[Docs.astro]
+```
+
+## Implementation Details
+
+### 1. Base Configuration
+```typescript
+// Default chat configuration in Layout.astro
+const defaultChatConfig = ChatConfigSchema.parse({
+  provider: 'mistral',
+  model: 'mistral-large-latest',
+  systemPrompt: [{
+    type: 'text',
+    text: 'I am Agent ONE. How can I help you today?'
+  }]
+});
+```
+
+### 2. Page-Level Override
+```astro
+---
+const chatConfig = ChatConfigSchema.parse({
+  systemPrompt: [{
+    type: "text",
+    text: "Custom prompt for this page"
+  }],
+  welcome: {
+    message: "Welcome to this section!",
+    suggestions: []
+  }
+});
+---
+
+<Layout chatConfig={chatConfig}>
+  <!-- Page content -->
+</Layout>
+```
+
+## Best Practices
+
+1. **Modular Configuration**
+   - Keep base prompts focused and reusable
+   - Use business customization for specific domains
+   - Override only necessary settings at each level
+
+2. **Inheritance Management**
+   - Follow the configuration cascade
+   - Document overrides clearly
+   - Maintain consistent behavior patterns
+
+3. **Performance Optimization**
+   - Configure appropriate token limits
+   - Set temperature based on use case
+   - Choose suitable models for different scenarios
+
+## Advanced Usage
+
+### Custom Endpoints
+```typescript
+const config = {
+  provider: 'custom',
+  apiEndpoint: 'https://your-api.com',
+  apiKey: process.env.API_KEY
+};
+```
+
+### Runtime Selection
+```typescript
+const config = {
+  runtime: 'edge', // or 'node'
+  model: 'mistral-large-latest'
+};
+```
+
+## Next Steps
+
+1. Review the base system prompt in `src/1/1.md`
+2. Customize business rules in `src/1/I.md`
+3. Configure layout defaults in `Layout.astro`
+4. Implement page-specific overrides as needed
 

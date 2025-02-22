@@ -1,5 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "../layouts/1.astro";
 import { ChatConfigSchema } from "../schema/chat";
 import { Card } from "@/components/ui/card";
 import { GitSection } from "@/components/GitSection";
@@ -167,8 +167,6 @@ const rightPanelMode = "quarter"; // You can change this to 'full', 'half', 'flo
 
 <Layout
   title="ONE - Own Your AI Solutions Completely Free"
-  chatConfig={chatConfig}
-  rightPanelMode={rightPanelMode}
 >
   <main class="flex flex-col w-full">
     {/* Hero Section */}

@@ -1,0 +1,98 @@
+---
+import "../styles/global.css";
+import ThemeInit from "@/components/Theme.astro";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+interface Props {
+  title: string;
+  description?: string;
+  children: any;
+  header?: boolean;
+  footer?: boolean;
+}
+
+const { header = true, footer = true } = Astro.props;
+const { title, description = "ONE" } = Astro.props;
+
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <ThemeInit />
+    <style>
+      :root {
+        --header-height: 60px;
+      }
+
+      .main-grid {
+        display: grid;
+        min-height: 100vh;
+        position: relative;
+        z-index: 10;
+      }
+
+      .center-grid {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .content-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0; /* Important for nested scrolling */
+      }
+
+      /* Add smooth scrolling to the whole page */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Improve the scrollbar appearance */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
+      }
+
+      /* Mobile-first approach */
+      @media (min-width: 768px) {
+        .main-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-grid bg-background">
+      <div class="center-grid">
+        {header && <Header client:load />}
+        <div class="content-area">
+          <slot />
+        </div>
+        {footer && <Footer client:load />}
+      </div>
+    </div>
+  </body>
+</html>

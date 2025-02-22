@@ -1,0 +1,75 @@
+---
+import { Home, Newspaper, Headphones, Download, FileText, Shield } from 'lucide-react';
+
+// Default navigation items
+const defaultNavigation = [
+  { title: 'Home', path: '/crypto', icon: Home },
+  { title: 'Blog', path: '/blog', icon: Newspaper },
+  { title: 'Podcast', path: '/podcast', icon: Headphones },
+  { title: 'Download', path: '/download', icon: Download },
+  { title: 'Docs', path: '/docs', icon: FileText },
+  { title: 'License', path: '/free-license', icon: Shield }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<aside class="fixed left-0 top-0 h-screen z-40 w-[80px] shrink-0 bg-[hsl(var(--one-background-nav))] border-r border-[hsl(var(--one-border-nav))] transition-all duration-300 ease-in-out">
+  <nav class="h-full flex flex-col bg-[hsl(var(--one-background-nav))]">
+    <!-- Logo Section -->
+    <div class="flex items-center justify-center bg-[hsl(var(--one-background-logo))]">
+      <a href="/" class="w-[80px] h-16 flex items-center justify-center hover:bg-[hsl(var(--one-background-nav))] transition-colors duration-200">
+        <div class="w-8 h-8">
+          <img src="/icon.svg" alt="ONE Logo" class="w-full h-full" />
+        </div>
+      </a>
+    </div>
+
+    <!-- Navigation Items -->
+    <div class="flex-1 flex flex-col">
+      {defaultNavigation.map(({ title, path, icon: Icon }) => (
+        <a
+          href={path}
+          class:list={[
+            'w-[80px] h-16 flex items-center justify-center transition-colors duration-200',
+            'hover:bg-[hsl(var(--one-background-logo))]',
+            { 'bg-[hsl(var(--one-background-logo))]': currentPath === path }
+          ]}
+          aria-label={title}
+        >
+          <div class="w-8 h-8 flex items-center justify-center">
+            <Icon className="w-full h-full text-foreground" strokeWidth={1.5} />
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Theme Toggle -->
+    <div class="flex items-center justify-center bg-[hsl(var(--one-background-logo))]">
+      <button
+        id="theme-toggle"
+        class="w-[80px] h-16 flex items-center justify-center hover:bg-[hsl(var(--one-background-nav))] transition-colors duration-200"
+        aria-label="Toggle theme"
+      >
+        <div class="w-10 h-10 flex items-center justify-center">
+          <svg class="w-5 h-5 text-foreground dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg class="w-5 h-5 text-foreground hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </div>
+      </button>
+    </div>
+  </nav>
+</aside>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  themeToggle?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    document.documentElement.classList.toggle('dark', !isDark);
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  });
+</script>

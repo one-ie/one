@@ -1,0 +1,43 @@
+---
+import "../styles/global.css";
+import "../styles/one.css";
+import ThemeInit from "@/components/Theme.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import AppSidebar from "../components/Sidebar.astro";
+
+
+interface Props {
+    title: string;
+    description?: string;
+    children: any;
+    header?: boolean;
+    footer?: boolean;
+}
+
+const { header = false, footer = true } = Astro.props;
+const { title, description = "ONE" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <title>{title}</title>
+        <ThemeInit />
+    </head>
+    <body>
+        <div class="main-container bg-background flex">
+            <AppSidebar client:load />
+            <div class="content-wrapper flex-1">
+                  <div class="content-area">
+                    <slot />
+                </div>
+                {footer && <Footer />}
+            </div>
+        </div>
+       
+    </body>
+</html>
