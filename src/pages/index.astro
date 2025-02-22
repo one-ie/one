@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { ChatConfigSchema } from "../schema/chat";
 import { Card } from "@/components/ui/card";
 import { GitSection } from "@/components/GitSection";
+import OrgChart from "../components/OrgChart.tsx";
 import FaqAccordion from "../components/FaqAccordion";
 import OrbitingCircles from "../components/magicui/orbiting-circles";
 
@@ -201,15 +202,8 @@ const rightPanelMode = "quarter"; // You can change this to 'full', 'half', 'flo
     </h1>
     <div class="flex flex-col items-center gap-4 max-w-[800px]">
       <p class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in">
-        ONE is a free toolkit that generates content, courses, websites, and AI agents for your brand. Download, use, modify, distribute, sell and resell ONE as you wish. ONE is fast, lightweight, and you can host it for free.   
+        ONE is a free toolkit to generate content, courses, websites, and AI agents for your brand. Download, use, modify, distribute, sell and resell ONE as you wish. ONE is fast, lightweight, compliant and enterprise ready. You can host ONE for free, run it locally, on your own server, in the cloud or at the edge. 
       </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="/docs/get-started" class="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-          Start Building
-        </a>
-        <a href="https://github.com/one-ie/one" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md border border-input bg-background px-8 py-3 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-          View on GitHub
-        </a>
       </div>
     </div>
   </div>
@@ -299,10 +293,7 @@ const rightPanelMode = "quarter"; // You can change this to 'full', 'half', 'flo
 
  
 
-  <!-- Download Section -->
-  <section class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm">
-    <GitSection client:load />
-  </section>
+
 
   <!-- Features Section -->
   <section class="container mx-auto px-6 py-20 border-t border-border bg-background/20 backdrop-blur-sm">
@@ -371,6 +362,22 @@ const rightPanelMode = "quarter"; // You can change this to 'full', 'half', 'flo
       </div>
     </div>
   </section>
+  <div class="w-full max-w-6xl mx-auto">
+    <h2
+      class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center mb-4"
+    >
+      Meet Your Team
+    </h2>
+    <p class="text-xl text-primary text-center mb-12">
+      Learn how to build a dedicated AI team working 24/7 to scale your
+      business.
+    </p>
+  <OrgChart client:visible />
+
+    <!-- Download Section -->
+    <section class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm">
+      <GitSection client:load />
+    </section>
 
   <!-- FAQs -->
   <section class="container mx-auto px-6 py-20 border-t border-border bg-background/10 backdrop-blur-sm">
