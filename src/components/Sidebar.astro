@@ -14,7 +14,7 @@ const defaultNavigation = [
 const currentPath = Astro.url.pathname;
 ---
 
-<aside class="fixed left-0 top-0 h-screen z-40 w-[64px] shrink-0 bg-[hsl(var(--one-background-nav))] border-r border-[hsl(var(--one-border-nav))] transition-all duration-300 ease-in-out">
+<aside class="hidden sm:flex fixed left-0 top-0 h-screen z-40 w-[64px] shrink-0 bg-[hsl(var(--one-background-nav))] border-r border-[hsl(var(--one-border-nav))] transition-all duration-300 ease-in-out">
   <nav class="h-full flex flex-col bg-[hsl(var(--one-background-nav))]">
     <!-- Logo Section -->
     <div class="flex items-center justify-center bg-[hsl(var(--one-background-logo))]">
