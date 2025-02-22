@@ -37,54 +37,7 @@ export interface Department {
 }
 
 const departments: Department[] = [
-  {
-    id: 'content',
-    title: 'Director of Content',
-    description: 'Orchestrates AI content creation',
-    icon: FileText,
-    team: [
-      {
-        title: 'Content Strategist',
-        description: 'Plans AI-driven content roadmap',
-        icon: Brain
-      },
-      {
-        title: 'Editorial Manager',
-        description: 'Oversees AI content quality',
-        icon: Eye
-      },
-      {
-        title: 'Content Engineer',
-        description: 'Builds AI content systems',
-        icon: Bot
-      },
-      {
-        title: 'Knowledge Curator',
-        description: 'Manages AI learning data',
-        icon: FileSearch
-      },
-      {
-        title: 'Content Optimizer',
-        description: 'Enhances AI output quality',
-        icon: Zap
-      },
-      {
-        title: 'Content Analyst',
-        description: 'Analyzes content performance',
-        icon: TrendingUp
-      },
-      {
-        title: 'Localization Specialist',
-        description: 'Adapts content for global markets',
-        icon: Globe
-      },
-      {
-        title: 'Quality Assurance',
-        description: 'Ensures content excellence',
-        icon: Shield
-      }
-    ]
-  },
+  
   {
     id: 'marketing',
     title: 'Director of Marketing',
@@ -278,6 +231,54 @@ const departments: Department[] = [
     ]
   },
   {
+    id: 'content',
+    title: 'Director of Content',
+    description: 'Orchestrates AI content creation',
+    icon: FileText,
+    team: [
+      {
+        title: 'Content Strategist',
+        description: 'Plans AI-driven content roadmap',
+        icon: Brain
+      },
+      {
+        title: 'Editorial Manager',
+        description: 'Oversees AI content quality',
+        icon: Eye
+      },
+      {
+        title: 'Content Engineer',
+        description: 'Builds AI content systems',
+        icon: Bot
+      },
+      {
+        title: 'Knowledge Curator',
+        description: 'Manages AI learning data',
+        icon: FileSearch
+      },
+      {
+        title: 'Content Optimizer',
+        description: 'Enhances AI output quality',
+        icon: Zap
+      },
+      {
+        title: 'Content Analyst',
+        description: 'Analyzes content performance',
+        icon: TrendingUp
+      },
+      {
+        title: 'Localization Specialist',
+        description: 'Adapts content for global markets',
+        icon: Globe
+      },
+      {
+        title: 'Quality Assurance',
+        description: 'Ensures content excellence',
+        icon: Shield
+      }
+    ]
+  },
+  {
     id: 'engineering',
     title: 'Director of Engineering',
     description: 'Leads technical development',
@@ -327,17 +328,24 @@ const departments: Department[] = [
   }
 ];
 
+
 export default function OrgChart() {
   const [activeDepartment, setActiveDepartment] = useState<string>('');
   const [visibleStaff, setVisibleStaff] = useState<Set<string>>(new Set());
 
   return (
-    <div className="container mx-auto py-12">
-      <div className="grid grid-cols-1 gap-8 relative">
+    <div className="container mx-auto px-4 py-8 sm:py-12">
+      <div className="grid grid-cols-1 gap-8 sm:gap-12 relative">
         {/* Managing Director Card */}
-        <motion.div key="director" className="mb-8">
+        <motion.div 
+          key="director" 
+          className="mb-8 sm:mb-12 max-w-2xl mx-auto w-full"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <Card
-            className={`p-6 cursor-pointer transition-all duration-300 ${activeDepartment === 'director' ? 'bg-primary/10' : 'hover:bg-primary/5'}`}
+            className={`p-6 sm:p-8 cursor-pointer transition-all duration-300 transform hover:scale-105 ${activeDepartment === 'director' ? 'bg-primary/15 shadow-lg ring-2 ring-primary/20' : 'hover:bg-primary/5 hover:shadow-md'}`}
             onClick={() => {
               if (activeDepartment === 'director') {
                 setActiveDepartment('');
@@ -347,24 +355,30 @@ export default function OrgChart() {
               }
             }}
           >
-            <div className="flex items-center gap-4 justify-center">
-              <div className={`p-3 rounded-full transition-colors duration-300 ${activeDepartment === 'director' ? 'bg-primary/20' : 'bg-primary/10'}`}>
-                <Brain className={`w-8 h-8 transition-colors duration-300 ${activeDepartment === 'director' ? 'text-primary' : 'text-primary/70'}`} />
+            <div className="flex flex-col items-center gap-4 sm:gap-6 relative">
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-50 rounded-lg pointer-events-none" />
+              <div className={`p-3 sm:p-4 rounded-full transition-all duration-300 transform ${activeDepartment === 'director' ? 'bg-primary/20 scale-110' : 'bg-primary/10 hover:scale-105'}`}>
+                <Brain className={`w-8 h-8 sm:w-12 sm:h-12 transition-colors duration-300 ${activeDepartment === 'director' ? 'text-primary' : 'text-primary/70'}`} />
               </div>
               <div className="text-center">
-                <h3 className="font-semibold text-xl">Managing Director</h3>
-                <p className="text-sm text-muted-foreground">Orchestrates company vision and strategy</p>
+                <h3 className="font-bold text-xl sm:text-2xl mb-2 bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent">Managing Director</h3>
+                <p className="text-sm sm:text-base text-muted-foreground">Orchestrates company vision and strategy</p>
               </div>
             </div>
           </Card>
         </motion.div>
 
         {/* Department Grid */}
-        <div className="grid md:grid-cols-3 gap-8 relative">
-        {departments.map((dept) => (
-          <motion.div key={dept.id}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 relative">
+        {departments.map((dept, index) => (
+          <motion.div 
+            key={dept.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
             <Card
-              className={`p-6 cursor-pointer transition-all duration-300 ${activeDepartment === dept.id ? 'bg-primary/10' : 'hover:bg-primary/5'}`}
+              className={`p-4 sm:p-6 cursor-pointer transition-all duration-300 transform hover:scale-105 ${activeDepartment === dept.id ? 'bg-primary/15 shadow-lg ring-2 ring-primary/20' : 'hover:bg-primary/5 hover:shadow-md'}`}
               onClick={() => {
                 if (activeDepartment === dept.id) {
                   setActiveDepartment('');
@@ -375,17 +389,18 @@ export default function OrgChart() {
                 }
               }}
             >
-              <div className="flex items-center gap-4">
-                <div className={`p-3 rounded-full transition-colors duration-300 ${activeDepartment === dept.id ? 'bg-primary/20' : 'bg-primary/10'}`}>
-                  <dept.icon className={`w-6 h-6 transition-colors duration-300 ${activeDepartment === dept.id ? 'text-primary' : 'text-primary/70'}`} />
+              <div className="flex items-center gap-3 sm:gap-4 relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-30 rounded-lg pointer-events-none" />
+                <div className={`p-2 sm:p-3 rounded-full transition-all duration-300 transform ${activeDepartment === dept.id ? 'bg-primary/20 scale-110' : 'bg-primary/10 hover:scale-105'}`}>
+                  <dept.icon className={`w-5 h-5 sm:w-6 sm:h-6 transition-colors duration-300 ${activeDepartment === dept.id ? 'text-primary' : 'text-primary/70'}`} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">{dept.title}</h3>
-                  <p className="text-sm text-muted-foreground">{dept.description}</p>
+                  <h3 className="font-semibold text-base sm:text-lg bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent">{dept.title}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{dept.description}</p>
                 </div>
               </div>
             </Card>
-            <div className="mt-4">
+            <div className="mt-3 sm:mt-4">
               {dept.team.map((member, mIndex) => {
                 const staffId = `${dept.id}-${mIndex}`;
                 const isVisible = visibleStaff.has(staffId);
@@ -402,14 +417,14 @@ export default function OrgChart() {
                     transition={{ duration: 0.3 }}
                   >
                     <Card
-                      className={`p-4 mb-2 bg-background/50 backdrop-blur-sm transition-all duration-300 ${activeDepartment === dept.id ? 'hover:bg-primary/10 scale-105' : 'hover:bg-primary/5'}`}
+                      className={`p-3 sm:p-4 mb-2 bg-background/50 backdrop-blur-sm transition-all duration-300 ${activeDepartment === dept.id ? 'hover:bg-primary/10 scale-105' : 'hover:bg-primary/5'}`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-full transition-colors duration-300 ${activeDepartment === dept.id ? 'bg-primary/20' : 'bg-primary/10'}`}>
-                          <member.icon className={`w-5 h-5 transition-colors duration-300 ${activeDepartment === dept.id ? 'text-primary' : 'text-primary/70'}`} />
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className={`p-1.5 sm:p-2 rounded-full transition-colors duration-300 ${activeDepartment === dept.id ? 'bg-primary/20' : 'bg-primary/10'}`}>
+                          <member.icon className={`w-4 h-4 sm:w-5 sm:h-5 transition-colors duration-300 ${activeDepartment === dept.id ? 'text-primary' : 'text-primary/70'}`} />
                         </div>
                         <div>
-                          <h5 className="font-medium">{member.title}</h5>
+                          <h5 className="font-medium text-sm sm:text-base">{member.title}</h5>
                           <p className="text-xs text-muted-foreground">{member.description}</p>
                         </div>
                       </div>
@@ -420,9 +435,8 @@ export default function OrgChart() {
             </div>
           </motion.div>
         ))}
+        </div>
       </div>
-    </div>
-  );
     </div>
   );
 }

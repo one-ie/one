@@ -19,21 +19,21 @@ const outerStartAngles = [0, 45, 90, 135, 180, 225, 270, 315];
 
 // Define logo arrays for inner and outer circles
 const innerLogos = [
-    "/images/logos/logo-antrophic.svg",
-    "/images/logos/azure.svg",
-    "/images/logos/Google Icon.svg",
-    "/images/logos/logo-openai.svg",
+  "/images/logos/logo-antrophic.svg",
+  "/images/logos/azure.svg",
+  "/images/logos/Google Icon.svg",
+  "/images/logos/logo-openai.svg",
 ];
 
 const outerLogos = [
-    "/images/logos/discord.svg",
-    "/images/logos/instagram.svg",
-    "/images/logos/Messenger Logos.svg",
-    "/images/logos/whatsapp.svg",
-    "/images/logos/telegram.svg",
-    "/images/logos/logo-gmail.svg",
-    "/images/logos/logo-slack.svg",
-    "/images/logos/line.svg",
+  "/images/logos/discord.svg",
+  "/images/logos/instagram.svg",
+  "/images/logos/Messenger Logos.svg",
+  "/images/logos/whatsapp.svg",
+  "/images/logos/telegram.svg",
+  "/images/logos/logo-gmail.svg",
+  "/images/logos/logo-slack.svg",
+  "/images/logos/line.svg",
 ];
 
 // Use fixed values instead of random ones
@@ -43,7 +43,7 @@ const innerRadii = innerStartAngles.map(() => BASE_INNER_RADIUS);
 const outerRadii = outerStartAngles.map(() => BASE_OUTER_RADIUS);
 
 const faqs = [
-  // Core Features  
+  // Core Features
   {
     question: "What can I build with ONE?",
     answer:
@@ -154,7 +154,8 @@ Communication Style:
     },
   ],
   welcome: {
-    message: "👋 Hi! I'm your guide to building with ONE. Want to create AI solutions with complete ownership and zero restrictions? Let's explore how you can build anything you imagine - no limits, no fees, just pure creative freedom.",
+    message:
+      "👋 Hi! I'm your guide to building with ONE. Want to create AI solutions with complete ownership and zero restrictions? Let's explore how you can build anything you imagine - no limits, no fees, just pure creative freedom.",
     avatar: "/icon.svg",
     suggestions: [
       {
@@ -163,7 +164,8 @@ Communication Style:
       },
       {
         label: "🚀 Quick Start Guide",
-        prompt: "I want to start building right away. What's the fastest way to get started?",
+        prompt:
+          "I want to start building right away. What's the fastest way to get started?",
       },
       {
         label: "💡 Custom Solutions",
@@ -171,11 +173,13 @@ Communication Style:
       },
       {
         label: "🌐 Deployment Options",
-        prompt: "Where can I deploy my ONE solutions and how does scaling work?",
+        prompt:
+          "Where can I deploy my ONE solutions and how does scaling work?",
       },
       {
         label: "💰 Cost & Licensing",
-        prompt: "Tell me more about ONE being free forever and the licensing terms",
+        prompt:
+          "Tell me more about ONE being free forever and the licensing terms",
       },
       {
         label: "🤝 Join Community",
@@ -194,204 +198,342 @@ const rightPanelMode = "quarter"; // You can change this to 'full', 'half', 'flo
   chatConfig={chatConfig}
   rightPanelMode={rightPanelMode}
 >
-<section class="container mx-auto px-6 py-12 border-b border-border bg-background/50 backdrop-blur-sm">
-  <div class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-6 text-center">
-    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground one-animate-fade-in">
-      Build Your <span class="text-accent">AI Brand</span> 
-    
-    </h1>
-    <div class="flex flex-col items-center gap-4 max-w-[800px]">
-      <p class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in">
-        ONE is a free toolkit to generate content, courses, websites, and AI agents for your brand. Download, use, modify, distribute, sell and resell ONE as you wish. ONE is fast, lightweight, compliant and enterprise ready. You can host ONE for free, run it locally, on your own server, in the cloud or at the edge. 
-      </p>
-      </div>
-    </div>
-  </div>
-</section>
-</section>
-  <div class="relative flex h-[600px] w-full flex-col items-center justify-center overflow-hidden">
-    {/* Orbit Paths */}
-    <div class="absolute inset-0 flex items-center justify-center">
-      <svg class="absolute size-full" viewBox="0 0 600 600">
-        <circle
-          cx="300"
-          cy="300"
-          r={BASE_INNER_RADIUS}
-          fill="none"
-          stroke="currentColor"
-          stroke-opacity="0.2"
-          stroke-width={STROKE_WIDTH}
-          stroke-dasharray="6 4"
-        />
-        <circle
-          cx="300"
-          cy="300"
-          r={BASE_OUTER_RADIUS}
-          fill="none"
-          stroke="currentColor"
-          stroke-opacity="0.2"
-          stroke-width={STROKE_WIDTH}
-          stroke-dasharray="6 4"
-        />
-      </svg>
-    </div>
-
-    {/* Center Logo */}
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-      <img
-        src="/icon.svg"
-        alt="O Logo"
-        class="size-[76px] opacity-90"
-      />
-    </div>
-
-    {/* Inner Circle - AI Providers */}
-    {innerStartAngles.map((angle, i) => (
-      <OrbitingCircles
-        className="absolute left-1/2 top-1/2"
-        duration={innerDurations[i]}
-        startAngle={angle}
-        radius={innerRadii[i]}
-        path={false}
-        client:load
-      >
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div class="h-10 w-10 [&>svg]:h-full [&>svg]:w-full">
-            <img
-              src={innerLogos[i]}
-              alt="AI Provider"
-              class="h-full w-full opacity-60"
-            />
-          </div>
-        </div>
-      </OrbitingCircles>
-    ))}
-
-    {/* Outer Circle - Communication Channels */}
-    {outerStartAngles.map((angle, i) => (
-      <OrbitingCircles
-        className="absolute left-1/2 top-1/2"
-        radius={outerRadii[i]}
-        duration={outerDurations[i]}
-        startAngle={angle}
-        path={false}
-        reverse
-        client:load
-      >
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div class="h-10 w-10 [&>svg]:h-full [&>svg]:w-full">
-            <img
-              src={outerLogos[i]}
-              alt="Communication Channel"
-              class="h-full w-full opacity-60"
-            />
-          </div>
-        </div>
-      </OrbitingCircles>
-    ))}
-  </div>
-
- 
-
-
-
-  <!-- Features Section -->
-  <section class="container mx-auto px-6 py-20 border-t border-border bg-background/20 backdrop-blur-sm">
-    <div class="w-full max-w-[1400px] mx-auto">
-      <h2 class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in">Build Anything with Complete Freedom</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <Card className="p-8">
-          <div class="flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            </div>
-            <h3 class="text-xl font-semibold">AI Agents</h3>
-            <p class="text-muted-foreground">Build powerful enterprise-grade AI agents that handle sales, content generation, and autonomous transactions with multi-language support.</p>
-          </div>
-        </Card>
-
-        <Card className="p-8">
-          <div class="flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17.58A5 5 0 0018 8h-1.26A8 8 0 104 16.25"></path><line x1="8" y1="16" x2="8.01" y2="16"></line><line x1="8" y1="20" x2="8.01" y2="20"></line><line x1="12" y1="18" x2="12.01" y2="18"></line><line x1="12" y1="22" x2="12.01" y2="22"></line><line x1="16" y1="16" x2="16.01" y2="16"></line><line x1="16" y1="20" x2="16.01" y2="20"></line></svg>
-            </div>
-            <h3 class="text-xl font-semibold">AI Powered Website</h3>
-            <p class="text-muted-foreground">Create intelligent, dynamic websites that adapt and respond to user interactions using advanced AI technology.</p>
-          </div>
-        </Card>
-
-        <Card className="p-8">
-          <div class="flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-            </div>
-            <h3 class="text-xl font-semibold">Global Payments</h3>
-            <p class="text-muted-foreground">Accept payments worldwide with support for multiple currencies, payment methods, and crypto.</p>
-          </div>
-        </Card>
-
-        <Card className="p-8">
-          <div class="flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            </div>
-            <h3 class="text-xl font-semibold">Developer First</h3>
-            <p class="text-muted-foreground">Built with TypeScript, modern frameworks, and developer experience in mind for rapid development.</p>
-          </div>
-        </Card>
-
-        <Card className="p-8">
-          <div class="flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-            </div>
-            <h3 class="text-xl font-semibold">Customizable</h3>
-            <p class="text-muted-foreground">Fully customizable architecture allowing you to modify every aspect of your AI solution.</p>
-          </div>
-        </Card>
-
-        <Card className="p-8">
-          <div class="flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
-            </div>
-            <h3 class="text-xl font-semibold">High Performance</h3>
-            <p class="text-muted-foreground">Edge-optimized infrastructure ensuring fast response times and scalable performance.</p>
-          </div>
-        </Card>
-      </div>
-    </div>
-  </section>
-  <div class="w-full max-w-6xl mx-auto">
-    <h2
-      class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center mb-4"
+  <main class="flex flex-col w-full">
+    {/* Hero Section */}
+    <section
+      class="container mx-auto px-6 py-12 border-b border-border bg-background/50 backdrop-blur-sm"
     >
-      Meet Your Team
-    </h2>
-    <p class="text-xl text-primary text-center mb-12">
-      Learn how to build a dedicated AI team working 24/7 to scale your
-      business.
-    </p>
-  <OrgChart client:visible />
+      <div
+        class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-6 text-center"
+      >
+        <h1
+          class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground one-animate-fade-in"
+        >
+          Build Your <span class="text-accent">AI Brand</span>
+        </h1>
+        <div class="flex flex-col items-center gap-4 max-w-[800px]">
+          <p
+            class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in"
+          >
+            ONE is a free toolkit to generate content, courses, websites, and AI
+            agents for your brand. Download, use, modify, distribute, sell and
+            resell ONE as you wish. ONE is fast, lightweight, compliant and
+            enterprise ready. You can host ONE for free, run it locally, on your
+            own server, in the cloud or at the edge.
+          </p>
+        </div>
+      </div>
+    </section>
 
-    <!-- Download Section -->
-    <section class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm">
+    {/* Orbiting Circles Section */}
+    <section
+      class="relative flex h-[600px] w-full flex-col items-center justify-center overflow-hidden"
+    >
+      <div class="absolute inset-0 flex items-center justify-center">
+        <svg class="absolute size-full" viewBox="0 0 600 600">
+          <circle
+            cx="300"
+            cy="300"
+            r={BASE_INNER_RADIUS}
+            fill="none"
+            stroke="currentColor"
+            stroke-opacity="0.2"
+            stroke-width={STROKE_WIDTH}
+            stroke-dasharray="6 4"></circle>
+          <circle
+            cx="300"
+            cy="300"
+            r={BASE_OUTER_RADIUS}
+            fill="none"
+            stroke="currentColor"
+            stroke-opacity="0.2"
+            stroke-width={STROKE_WIDTH}
+            stroke-dasharray="6 4"></circle>
+        </svg>
+      </div>
+
+      <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <img src="/icon.svg" alt="O Logo" class="size-[76px] opacity-90" />
+      </div>
+
+      {/* Inner Circle - AI Providers */}
+      {
+        innerStartAngles.map((angle, i) => (
+          <OrbitingCircles
+            className="absolute left-1/2 top-1/2"
+            duration={innerDurations[i]}
+            startAngle={angle}
+            radius={innerRadii[i]}
+            path={false}
+            client:load
+          >
+            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div class="h-10 w-10 [&>svg]:h-full [&>svg]:w-full">
+                <img
+                  src={innerLogos[i]}
+                  alt="AI Provider"
+                  class="h-full w-full opacity-60"
+                />
+              </div>
+            </div>
+          </OrbitingCircles>
+        ))
+      }
+
+      {/* Outer Circle - Communication Channels */}
+      {
+        outerStartAngles.map((angle, i) => (
+          <OrbitingCircles
+            className="absolute left-1/2 top-1/2"
+            radius={outerRadii[i]}
+            duration={outerDurations[i]}
+            startAngle={angle}
+            path={false}
+            reverse
+            client:load
+          >
+            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div class="h-10 w-10 [&>svg]:h-full [&>svg]:w-full">
+                <img
+                  src={outerLogos[i]}
+                  alt="Communication Channel"
+                  class="h-full w-full opacity-60"
+                />
+              </div>
+            </div>
+          </OrbitingCircles>
+        ))
+      }
+    </section>
+
+    {/* Team Section */}
+    <section
+      class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm"
+    >
+      <div class="w-full max-w-6xl mx-auto">
+        <h2
+          class="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground one-animate-fade-in"
+        >
+          Meet Your Team
+        </h2>
+        <p class="text-xl text-primary text-center mb-12">
+          Learn how to build a dedicated AI team working 24/7 to scale your
+          business.
+        </p>
+        <OrgChart client:visible />
+      </div>
+    </section>
+
+    {/* Features Section */}
+    <section
+      class="container mx-auto px-6 py-20 border-t border-border bg-background/20 backdrop-blur-sm"
+    >
+      <div class="w-full max-w-[1400px] mx-auto">
+        <h2
+          class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in"
+        >
+          Build Anything with Complete Freedom
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Feature Cards */}
+          <Card className="p-8">
+            <div class="flex flex-col gap-4">
+              <div
+                class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6 text-primary"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                  ></path></svg
+                >
+              </div>
+              <h3 class="text-xl font-semibold">AI Agents</h3>
+              <p class="text-muted-foreground">
+                Build powerful enterprise-grade AI agents that handle sales,
+                content generation, and autonomous transactions with
+                multi-language support.
+              </p>
+            </div>
+          </Card>
+
+          <Card className="p-8">
+            <div class="flex flex-col gap-4">
+              <div
+                class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6 text-primary"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M20 17.58A5 5 0 0018 8h-1.26A8 8 0 104 16.25"
+                  ></path><line x1="8" y1="16" x2="8.01" y2="16"></line><line
+                    x1="8"
+                    y1="20"
+                    x2="8.01"
+                    y2="20"></line><line x1="12" y1="18" x2="12.01" y2="18"
+                  ></line><line x1="12" y1="22" x2="12.01" y2="22"></line><line
+                    x1="16"
+                    y1="16"
+                    x2="16.01"
+                    y2="16"></line><line x1="16" y1="20" x2="16.01" y2="20"
+                  ></line></svg
+                >
+              </div>
+              <h3 class="text-xl font-semibold">AI Powered Website</h3>
+              <p class="text-muted-foreground">
+                Create intelligent, dynamic websites that adapt and respond to
+                user interactions using advanced AI technology.
+              </p>
+            </div>
+          </Card>
+
+          <Card className="p-8">
+            <div class="flex flex-col gap-4">
+              <div
+                class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6 text-primary"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><circle cx="12" cy="12" r="10"></circle><line
+                    x1="2"
+                    y1="12"
+                    x2="22"
+                    y2="12"></line><path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                  ></path></svg
+                >
+              </div>
+              <h3 class="text-xl font-semibold">Global Payments</h3>
+              <p class="text-muted-foreground">
+                Accept payments worldwide with support for multiple currencies,
+                payment methods, and crypto.
+              </p>
+            </div>
+          </Card>
+
+          <Card className="p-8">
+            <div class="flex flex-col gap-4">
+              <div
+                class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6 text-primary"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><polyline points="16 18 22 12 16 6"></polyline><polyline
+                    points="8 6 2 12 8 18"></polyline></svg
+                >
+              </div>
+              <h3 class="text-xl font-semibold">Developer First</h3>
+              <p class="text-muted-foreground">
+                Built with TypeScript, modern frameworks, and developer
+                experience in mind for rapid development.
+              </p>
+            </div>
+          </Card>
+
+          <Card className="p-8">
+            <div class="flex flex-col gap-4">
+              <div
+                class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6 text-primary"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+                  ></path></svg
+                >
+              </div>
+              <h3 class="text-xl font-semibold">Customizable</h3>
+              <p class="text-muted-foreground">
+                Fully customizable architecture allowing you to modify every
+                aspect of your AI solution.
+              </p>
+            </div>
+          </Card>
+
+          <Card className="p-8">
+            <div class="flex flex-col gap-4">
+              <div
+                class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-6 h-6 text-primary"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg
+                >
+              </div>
+              <h3 class="text-xl font-semibold">High Performance</h3>
+              <p class="text-muted-foreground">
+                Edge-optimized infrastructure ensuring fast response times and
+                scalable performance.
+              </p>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    {/* Download Section */}
+    <section
+      class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm"
+    >
       <GitSection client:load />
     </section>
 
-  <!-- FAQs -->
-  <section class="container mx-auto px-6 py-20 border-t border-border bg-background/10 backdrop-blur-sm">
-    <div class="w-full max-w-[1400px] mx-auto">
-      <h2 class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in">
-        Frequently Asked Questions
-      </h2>
-      <div class="one-animate-fade-in">
-        <FaqAccordion client:idle faqs={faqs} />
+    {/* FAQs Section */}
+    <section
+      class="container mx-auto px-6 py-20 border-t border-border bg-background/10 backdrop-blur-sm"
+    >
+      <div class="w-full max-w-[1400px] mx-auto">
+        <h2
+          class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in"
+        >
+          Frequently Asked Questions
+        </h2>
+        <div class="one-animate-fade-in">
+          <FaqAccordion client:idle faqs={faqs} />
+        </div>
       </div>
-    </div>
-  </section>
-
-  <!-- GitHub Call-to-Action -->
+    </section>
+  </main>
 </Layout>
 
 <style>

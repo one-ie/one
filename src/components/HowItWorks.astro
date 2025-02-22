@@ -1,0 +1,253 @@
+---
+import { Card } from "../components/ui/card";
+import {
+    Target,
+    MessageSquare,
+    TrendingUp,
+    Server,
+    Bot,
+} from "lucide-react";
+---
+
+<section
+    class="w-full min-h-screen bg-gradient-to-b from-muted/30 to-background py-16"
+>
+    <h2 class="text-3xl font-bold text-center mb-4">How It Works</h2>
+    <p class="text-center text-muted-foreground mb-12">
+        Onboard Your AI Agent team in ONE Day ✨
+    </p>
+
+    <div class="container mx-auto">
+        {/* Morning Session */}
+        <div class="relative mb-16">
+            <div
+                class="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-primary/20 via-primary to-primary/20 transform -translate-y-1/2 hidden md:block"
+            >
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 relative">
+                {
+                    [
+                        {
+                            hour: "Hour 1",
+                            time: "10:00 AM",
+                            title: "Prepare",
+                            icon: Target,
+                            goal: "Understand AI's impact on your industry",
+                            tasks: [
+                                "Industry research complete",
+                                "Development environment ready",
+                                "Project scope defined",
+                                "Strategic roadmap created",
+                            ],
+                        },
+                        {
+                            hour: "Hour 2",
+                            time: "11:00 AM",
+                            title: "Start",
+                            icon: Server,
+                            goal: "Launch your AI command center",
+                            tasks: [
+                                "Server is online",
+                                "Domain is connected",
+                                "Database is running",
+                                "Security is hardened",
+                            ],
+                        },
+                        {
+                            hour: "Hour 3",
+                            time: "12:00 PM",
+                            title: "Generate",
+                            icon: Bot,
+                            goal: "Your AI assistant comes alive",
+                            tasks: [
+                                "AI model selected",
+                                "Training data prepared",
+                                "Knowledge base built",
+                                "First response generated",
+                            ],
+                        },
+                    ].map((phase) => (
+                        <div class="relative group">
+                            <Card className="p-6 border-primary/20 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative z-10 h-full">
+                                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                    <div class="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold">
+                                        {phase.hour}
+                                    </div>
+                                    <div class="text-xs text-muted-foreground text-center mt-1">
+                                        {phase.time}
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 flex flex-col h-full">
+                                    <div class="flex flex-col items-center mb-4">
+                                        <div class="p-2 rounded-full bg-primary/10 mb-2">
+                                            <phase.icon className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <h3 class="text-xl font-bold text-center group-hover:text-primary transition-colors">
+                                            {phase.title}
+                                        </h3>
+                                    </div>
+
+                                    <div class="bg-primary/5 rounded-lg p-3 mb-4">
+                                        <p class="text-sm text-center font-medium">
+                                            Goal: {phase.goal}
+                                        </p>
+                                    </div>
+
+                                    <ul class="space-y-2 text-sm text-muted-foreground flex-grow">
+                                        {phase.tasks.map((task, taskIndex) => (
+                                            <li
+                                                class="flex items-center gap-2 opacity-0 animate-fade-in"
+                                                style={`animation-delay: ${taskIndex * 0.5}s`}
+                                            >
+                                                <span
+                                                    class="text-emerald-500 text-lg animate-check-mark"
+                                                    style={`animation-delay: ${taskIndex * 0.5}s`}
+                                                >
+                                                    ✓
+                                                </span>
+                                                {task}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </Card>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+
+        {/* Lunch Break */}
+        <div class="relative mb-16">
+            <Card className="max-w-md mx-auto p-6 text-center border-primary">
+                <h3 class="text-xl font-bold mb-2">🍜 Lunch Break</h3>
+                <p class="text-muted-foreground">
+                    Recharge and prepare for the final push!
+                </p>
+            </Card>
+        </div>
+
+        {/* Afternoon Session */}
+        <div class="relative">
+            <div
+                class="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-primary/20 via-primary to-primary/20 transform -translate-y-1/2 hidden md:block"
+            >
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 relative">
+                {
+                    [
+                        {
+                            hour: "Hour 4",
+                            time: "2:00 PM",
+                            title: "Market",
+                            icon: MessageSquare,
+                            goal: "Your content machine goes live",
+                            tasks: [
+                                "Content strategy active",
+                                "Templates deployed",
+                                "Automation running",
+                                "Quality checks passed",
+                            ],
+                        },
+                        {
+                            hour: "Hour 5",
+                            time: "3:00 PM",
+                            title: "Understand",
+                            icon: TrendingUp,
+                            goal: "Your empire starts broadcasting",
+                            tasks: [
+                                "Distribution channels live",
+                                "Analytics tracking",
+                                "Marketing automated",
+                                "Launch sequence complete",
+                            ],
+                        },
+                    ].map((phase) => (
+                        <div class="relative group">
+                            <Card className="p-6 border-primary/20 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative z-10 h-full">
+                                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                    <div class="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold">
+                                        {phase.hour}
+                                    </div>
+                                    <div class="text-xs text-muted-foreground text-center mt-1">
+                                        {phase.time}
+                                    </div>
+                                </div>
+
+                                <div class="mt-6 flex flex-col h-full">
+                                    <div class="flex flex-col items-center mb-4">
+                                        <div class="p-2 rounded-full bg-primary/10 mb-2">
+                                            <phase.icon className="w-6 h-6 text-primary" />
+                                        </div>
+                                        <h3 class="text-xl font-bold text-center group-hover:text-primary transition-colors">
+                                            {phase.title}
+                                        </h3>
+                                    </div>
+
+                                    <div class="bg-primary/5 rounded-lg p-3 mb-4">
+                                        <p class="text-sm text-center font-medium">
+                                            Goal: {phase.goal}
+                                        </p>
+                                    </div>
+
+                                    <ul class="space-y-2 text-sm text-muted-foreground flex-grow">
+                                        {phase.tasks.map((task, taskIndex) => (
+                                            <li
+                                                class="flex items-center gap-2 opacity-0 animate-fade-in"
+                                                style={`animation-delay: ${taskIndex * 0.5}s`}
+                                            >
+                                                <span
+                                                    class="text-emerald-500 text-lg animate-check-mark"
+                                                    style={`animation-delay: ${taskIndex * 0.5}s`}
+                                                >
+                                                    ✓
+                                                </span>
+                                                {task}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </Card>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div class="mt-16 max-w-2xl mx-auto">
+            <Card className="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse"
+                        ></span>
+                        <span class="text-sm font-medium">
+                            Empire Construction Progress
+                        </span>
+                    </div>
+                    <span class="text-sm text-muted-foreground">
+                        5 Hours to Launch
+                    </span>
+                </div>
+
+                <div class="w-full h-3 bg-muted rounded-full overflow-hidden">
+                    <div
+                        class="h-full bg-gradient-to-r from-primary via-primary to-primary/50 animate-progress rounded-full"
+                    >
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-muted-foreground">
+                        Watch your empire rise - Each hour unlocks new
+                        capabilities
+                    </p>
+                </div>
+            </Card>
+        </div>
+    </div>
+</section>
