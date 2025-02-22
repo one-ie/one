@@ -14,11 +14,11 @@ const defaultNavigation = [
 const currentPath = Astro.url.pathname;
 ---
 
-<aside class="fixed left-0 top-0 h-screen z-40 w-[80px] shrink-0 bg-[hsl(var(--one-background-nav))] border-r border-[hsl(var(--one-border-nav))] transition-all duration-300 ease-in-out">
+<aside class="fixed left-0 top-0 h-screen z-40 w-[64px] shrink-0 bg-[hsl(var(--one-background-nav))] border-r border-[hsl(var(--one-border-nav))] transition-all duration-300 ease-in-out">
   <nav class="h-full flex flex-col bg-[hsl(var(--one-background-nav))]">
     <!-- Logo Section -->
     <div class="flex items-center justify-center bg-[hsl(var(--one-background-logo))]">
-      <a href="/" class="w-[80px] h-16 flex items-center justify-center hover:bg-[hsl(var(--one-background-nav))] transition-colors duration-200">
+      <a href="/" class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsl(var(--one-background-nav))] transition-colors duration-200">
         <div class="w-8 h-8">
           <img src="/icon.svg" alt="ONE Logo" class="w-full h-full" />
         </div>
@@ -31,13 +31,13 @@ const currentPath = Astro.url.pathname;
         <a
           href={path}
           class:list={[
-            'w-[80px] h-16 flex items-center justify-center transition-colors duration-200',
+            'w-[64px] h-16 flex items-center justify-center transition-colors duration-200',
             'hover:bg-[hsl(var(--one-background-logo))]',
             { 'bg-[hsl(var(--one-background-logo))]': currentPath === path }
           ]}
           aria-label={title}
         >
-          <div class="w-8 h-8 flex items-center justify-center">
+          <div class="w-6 h-6 flex items-center justify-center">
             <Icon className="w-full h-full text-foreground" strokeWidth={1.5} />
           </div>
         </a>
@@ -48,7 +48,7 @@ const currentPath = Astro.url.pathname;
     <div class="flex items-center justify-center bg-[hsl(var(--one-background-logo))]">
       <button
         id="theme-toggle"
-        class="w-[80px] h-16 flex items-center justify-center hover:bg-[hsl(var(--one-background-nav))] transition-colors duration-200"
+        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsl(var(--one-background-nav))] transition-colors duration-200"
         aria-label="Toggle theme"
       >
         <div class="w-10 h-10 flex items-center justify-center">
