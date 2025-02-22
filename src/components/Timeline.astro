@@ -1,0 +1,113 @@
+---
+import { Card } from "@/components/ui/card";
+import { Target, Server, Rocket } from "lucide-react";
+
+interface TimelinePhase {
+    hour: string;
+    time: string;
+    title: string;
+    icon: any;
+    goal: string;
+    tasks: string[];
+}
+
+const timelineData = {
+    title: "How It Works",
+    subtitle: "Onboard Your AI Agent team in ONE Day ✨",
+    phases: [
+        {
+            hour: "Hour 1",
+            time: "10:00 AM",
+            title: "Prepare",
+            icon: Target,
+            goal: "Understand AI's impact on your industry",
+            tasks: [
+                "Industry research complete",
+                "Development environment ready",
+                "Project scope defined",
+                "Strategic roadmap created",
+            ],
+        },
+        {
+            hour: "Hour 4",
+            time: "2:00 PM",
+            title: "Build",
+            icon: Server,
+            goal: "Deploy your first AI agent",
+            tasks: [
+                "Infrastructure setup",
+                "AI model integration",
+                "Testing complete",
+                "Initial deployment done",
+            ],
+        },
+        {
+            hour: "Hour 8",
+            time: "6:00 PM",
+            title: "Launch",
+            icon: Rocket,
+            goal: "Go live with your AI solution",
+            tasks: [
+                "Final testing passed",
+                "Documentation ready",
+                "Team training complete",
+                "Production deployment",
+            ],
+        },
+    ],
+};
+
+const { title, subtitle, phases } = timelineData;
+---
+
+<section class="w-full max-w-4xl mx-auto mb-16">
+    <h2 class="text-3xl font-bold text-center mb-4">{title}</h2>
+    <p class="text-center text-muted-foreground mb-8">{subtitle}</p>
+
+    <div class="relative">
+        <div class="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-primary/20 via-primary to-primary/20 transform -translate-y-1/2 hidden md:block"></div>
+
+        <div class="grid md:grid-cols-3 gap-8 relative">
+            {phases.map((phase) => (
+                <div class="relative group">
+                    <Card className="p-6 border-primary/20 hover:border-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative z-10 h-full">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                            <div class="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold">
+                                {phase.hour}
+                            </div>
+                            <div class="text-xs text-muted-foreground text-center mt-1">
+                                {phase.time}
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex flex-col h-full">
+                            <div class="flex flex-col items-center mb-4">
+                                <div class="p-2 rounded-full bg-primary/10 mb-2">
+                                    <phase.icon className="w-6 h-6 text-primary" />
+                                </div>
+                                <h3 class="text-xl font-bold text-center group-hover:text-primary transition-colors">
+                                    {phase.title}
+                                </h3>
+                            </div>
+
+                            <div class="bg-primary/5 rounded-lg p-3 mb-4">
+                                <p class="text-sm text-center font-medium">
+                                    Goal: {phase.goal}
+                                </p>
+                            </div>
+
+                            <ul class="space-y-2 text-sm text-muted-foreground flex-grow">
+                                {phase.tasks.map((task) => (
+                                    <li class="flex items-center gap-2">
+                                        <span class="text-emerald-500 text-lg">✓</span>
+                                        {task}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </Card>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,20 @@
+---
+import { Badge } from "@/components/ui/badge";
+
+// Define default hero content
+const badge = "AI Agents • 24/7 Work • Automation";
+const title = "Build Your";
+const subtitle = "Creator Empire";
+const description = "Empower your brand with AI agents that work 24/7 to grow your content, audience, and revenue";
+---
+
+<section class="py-12 text-center max-w-4xl mx-auto mb-12">
+    <Badge variant="outline" className="mb-4">{badge}</Badge>
+    <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+        {title}
+        <span class="block mt-2">{subtitle}</span>
+    </h1>
+    <p class="text-xl text-muted-foreground mb-8">
+        {description}
+    </p>
+</section>

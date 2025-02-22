@@ -1,0 +1,43 @@
+---
+import { Card } from "@/components/ui/card";
+import { Users, Zap, Globe, Clock } from "lucide-react";
+
+interface PowerStat {
+    value: string;
+    label: string;
+    Icon: any;
+}
+
+const stats = [
+    {
+        value: "24/7",
+        label: "Availability",
+        Icon: Clock
+    },
+    {
+        value: "100x",
+        label: "Productivity",
+        Icon: Zap
+    },
+    {
+        value: "Global",
+        label: "Reach",
+        Icon: Globe
+    },
+    {
+        value: "1000+",
+        label: "Users",
+        Icon: Users
+    }
+];
+---
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+    {stats.map(({ value, label, Icon }) => (
+        <Card className="p-6 flex flex-col items-center justify-center text-center hover:shadow-lg transition-shadow">
+            <Icon className="w-8 h-8 mb-2 text-primary" />
+            <div class="text-3xl font-bold mb-1">{value}</div>
+            <div class="text-sm text-muted-foreground">{label}</div>
+        </Card>
+    ))}
+</div>

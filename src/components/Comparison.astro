@@ -1,0 +1,49 @@
+---
+import { Card } from "@/components/ui/card";
+import { CheckIcon, XIcon } from "lucide-react";
+
+// Define default comparison data
+const before = [
+    "Manual content creation and scheduling",
+    "Limited reach and engagement",
+    "Time-consuming social media management",
+    "Inconsistent brand messaging",
+    "Scattered analytics and insights"
+];
+
+const after = [
+    "AI-powered content automation",
+    "24/7 audience engagement",
+    "Efficient multi-channel management",
+    "Consistent brand voice across platforms",
+    "Unified analytics dashboard"
+];
+---
+
+<section class="w-full max-w-4xl mx-auto mb-16">
+    <div class="grid md:grid-cols-2 gap-8">
+        <Card className="p-6 border-destructive/20">
+            <h3 class="text-xl font-bold mb-4 text-destructive">Before ONE</h3>
+            <ul class="space-y-3">
+                {before.map((item) => (
+                    <li class="flex items-center gap-2 text-muted-foreground">
+                        <XIcon className="w-5 h-5 text-destructive" />
+                        {item}
+                    </li>
+                ))}
+            </ul>
+        </Card>
+
+        <Card className="p-6 border-primary/20">
+            <h3 class="text-xl font-bold mb-4 text-primary">After ONE</h3>
+            <ul class="space-y-3">
+                {after.map((item) => (
+                    <li class="flex items-center gap-2 text-muted-foreground">
+                        <CheckIcon className="w-5 h-5 text-primary" />
+                        {item}
+                    </li>
+                ))}
+            </ul>
+        </Card>
+    </div>
+</section>

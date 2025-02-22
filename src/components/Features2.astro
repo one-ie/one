@@ -1,0 +1,68 @@
+---
+import { Bot, Globe, CreditCard, Code, Settings, Zap } from "lucide-react";
+
+const features = [
+  {
+    title: "AI Agents",
+    description: "Build powerful enterprise-grade AI agents that handle sales, content generation, and autonomous transactions with multi-language support.",
+    icon: Bot
+  },
+  {
+    title: "AI Powered Website",
+    description: "Create intelligent, dynamic websites that adapt and respond to user interactions using advanced AI technology.",
+    icon: Globe
+  },
+  {
+    title: "Global Payments",
+    description: "Accept payments worldwide with support for multiple currencies, payment methods, and crypto.",
+    icon: CreditCard
+  },
+  {
+    title: "Developer First",
+    description: "Built with TypeScript, modern frameworks, and developer experience in mind for rapid development.",
+    icon: Code
+  },
+  {
+    title: "Customizable",
+    description: "Fully customizable architecture allowing you to modify every aspect of your AI solution.",
+    icon: Settings
+  },
+  {
+    title: "High Performance",
+    description: "Edge-optimized infrastructure ensuring fast response times and scalable performance.",
+    icon: Zap
+  }
+];
+---
+
+<section class="container mx-auto px-6 py-20 border-b border-border bg-background/30 backdrop-blur-sm">
+  <div class="w-full max-w-[1400px] mx-auto">
+    <h2 class="text-4xl font-bold mb-12 text-center text-foreground one-animate-fade-in">
+      Build Anything with Complete Freedom
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 one-animate-fade-in">
+      {features.map((feature) => (
+        <div class="p-6 rounded-lg border border-border bg-card hover:bg-accent/5 transition-colors duration-200">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="p-2 rounded-lg bg-primary/10">
+              <feature.icon className="w-6 h-6 text-primary" />
+            </div>
+            <h3 class="text-xl font-semibold text-foreground">{feature.title}</h3>
+          </div>
+          <p class="text-muted-foreground leading-relaxed">{feature.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .one-animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

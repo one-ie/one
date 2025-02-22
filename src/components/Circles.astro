@@ -1,0 +1,125 @@
+---
+// Frontmatter must come first
+import OrbitingCircles from "../components/magicui/orbiting-circles";
+
+// Base constants
+const BASE_INNER_RADIUS = 140;
+const BASE_OUTER_RADIUS = 240;
+const BASE_INNER_DURATION = 45;
+const BASE_OUTER_DURATION = 30;
+const STROKE_WIDTH = 1.5;
+// Calculate angles for perfect distribution
+const innerStartAngles = [0, 90, 180, 270];
+const outerStartAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+
+// Define logo arrays for inner and outer circles
+const innerLogos = [
+    "/images/logos/logo-antrophic.svg",
+    "/images/logos/azure.svg",
+    "/images/logos/Google Icon.svg",
+    "/images/logos/logo-openai.svg",
+];
+
+const outerLogos = [
+    "/images/logos/discord.svg",
+    "/images/logos/instagram.svg",
+    "/images/logos/Messenger Logos.svg",
+    "/images/logos/whatsapp.svg",
+    "/images/logos/telegram.svg",
+    "/images/logos/logo-gmail.svg",
+    "/images/logos/logo-slack.svg",
+    "/images/logos/line.svg",
+];
+
+// Use fixed values instead of random ones
+const innerDurations = innerStartAngles.map(() => BASE_INNER_DURATION);
+const outerDurations = outerStartAngles.map(() => BASE_OUTER_DURATION);
+const innerRadii = innerStartAngles.map(() => BASE_INNER_RADIUS);
+const outerRadii = outerStartAngles.map(() => BASE_OUTER_RADIUS);
+---
+
+<div
+    class="relative flex h-[600px] w-full flex-col items-center justify-center overflow-hidden"
+>
+    {/* Orbit Paths */}
+    <div class="absolute inset-0 flex items-center justify-center">
+        <svg class="absolute size-full" viewBox="0 0 600 600">
+            <circle
+                cx="300"
+                cy="300"
+                r={BASE_INNER_RADIUS}
+                fill="none"
+                stroke="currentColor"
+                stroke-opacity="0.2"
+                stroke-width={STROKE_WIDTH}
+                stroke-dasharray="6 4"></circle>
+            <circle
+                cx="300"
+                cy="300"
+                r={BASE_OUTER_RADIUS}
+                fill="none"
+                stroke="currentColor"
+                stroke-opacity="0.2"
+                stroke-width={STROKE_WIDTH}
+                stroke-dasharray="6 4"></circle>
+        </svg>
+    </div>
+
+    {/* Center Logo */}
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <img
+            src="/icon.svg"
+            alt="O Logo"
+            class="size-[76px] opacity-90"
+        />
+    </div>
+
+    {/* Inner Circle - AI Providers */}
+    {
+        innerStartAngles.map((angle, i) => (
+            <OrbitingCircles
+                className="absolute left-1/2 top-1/2"
+                duration={innerDurations[i]}
+                startAngle={angle}
+                radius={innerRadii[i]}
+                path={false}
+                client:load
+            >
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <div class="h-10 w-10 [&>svg]:h-full [&>svg]:w-full">
+                        <img
+                            src={innerLogos[i]}
+                            alt="AI Provider"
+                            class="h-full w-full opacity-60"
+                        />
+                    </div>
+                </div>
+            </OrbitingCircles>
+        ))
+    }
+
+    {/* Outer Circle - Communication Channels */}
+    {
+        outerStartAngles.map((angle, i) => (
+            <OrbitingCircles
+                className="absolute left-1/2 top-1/2"
+                radius={outerRadii[i]}
+                duration={outerDurations[i]}
+                startAngle={angle}
+                path={false}
+                reverse
+                client:load
+            >
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <div class="h-10 w-10 [&>svg]:h-full [&>svg]:w-full">
+                        <img
+                            src={outerLogos[i]}
+                            alt="Communication Channel"
+                            class="h-full w-full opacity-60"
+                        />
+                    </div>
+                </div>
+            </OrbitingCircles>
+        ))
+    }
+</div>

@@ -1,0 +1,65 @@
+---
+import { Card } from "@/components/ui/card";
+import { CheckCircle } from "lucide-react";
+
+const benefits = [
+    {
+        title: "AI-Powered Growth",
+        description: "Leverage cutting-edge AI to automate and scale your business operations",
+        features: [
+            "24/7 automated customer service",
+            "Smart content generation",
+            "Predictive analytics",
+            "Personalized user experiences"
+        ]
+    },
+    {
+        title: "Seamless Integration",
+        description: "Easily integrate our AI solutions with your existing systems",
+        features: [
+            "Quick setup process",
+            "Compatible with major platforms",
+            "Flexible API access",
+            "Custom integration options"
+        ]
+    },
+    {
+        title: "Enterprise Security",
+        description: "Bank-grade security and compliance for your peace of mind",
+        features: [
+            "End-to-end encryption",
+            "Regular security audits",
+            "GDPR compliance",
+            "Data privacy controls"
+        ]
+    }
+];
+---
+
+<section class="py-16 bg-background">
+    <div class="container">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">Benefits</h2>
+            <p class="text-xl text-primary">Why Choose ONE</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {benefits.map((benefit) => (
+                <Card className="group hover:border-primary/50 transition-all duration-300">
+                    <div class="p-6 flex flex-col h-full">
+                        <h3 class="text-lg font-semibold mb-2">{benefit.title}</h3>
+                        <p class="text-muted-foreground mb-4">{benefit.description}</p>
+                        <ul class="space-y-2 text-sm mt-auto">
+                            {benefit.features.map((feature) => (
+                                <li class="flex items-center gap-2">
+                                    <CheckCircle className="w-4 h-4 text-primary" />
+                                    {feature}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </Card>
+            ))}
+        </div>
+    </div>
+</section>

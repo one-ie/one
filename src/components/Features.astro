@@ -1,0 +1,69 @@
+---
+import { Card } from "@/components/ui/card";
+import { CheckCircle } from "lucide-react";
+
+const sections = [
+    {
+        title: "AI Capabilities",
+        items: [
+            "Natural Language Processing",
+            "Machine Learning Models",
+            "Computer Vision",
+            "Predictive Analytics"
+        ]
+    },
+    {
+        title: "Content Creation",
+        items: [
+            "Blog Post Generation",
+            "Social Media Content",
+            "Email Marketing",
+            "SEO Optimization"
+        ]
+    },
+    {
+        title: "Business Tools",
+        items: [
+            "CRM Integration",
+            "Analytics Dashboard",
+            "Payment Processing",
+            "Team Collaboration"
+        ]
+    },
+    {
+        title: "Support & Security",
+        items: [
+            "24/7 Customer Support",
+            "Data Encryption",
+            "Regular Backups",
+            "Compliance Tools"
+        ]
+    }
+];
+---
+
+<section class="py-16 bg-background">
+    <div class="container">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">Features</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {sections.map((section) => (
+                <Card className="group hover:border-primary/50 transition-all duration-300">
+                    <div class="p-6 flex flex-col h-full">
+                        <h3 class="text-lg font-semibold mb-4">{section.title}</h3>
+                        <ul class="space-y-2 text-sm">
+                            {section.items.map((item) => (
+                                <li class="flex items-center gap-2">
+                                    <CheckCircle className="w-4 h-4 text-primary" />
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </Card>
+            ))}
+        </div>
+    </div>
+</section>

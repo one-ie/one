@@ -1,0 +1,44 @@
+---
+import { Card } from "@/components/ui/card";
+import { Brain, Code, Share } from "lucide-react";
+
+interface AgentSkill {
+    icon: any;
+    title: string;
+    description: string;
+}
+
+const skills = [
+    {
+        icon: Brain,
+        title: "Content Creation",
+        description: "Generate engaging content across multiple platforms automatically"
+    },
+    {
+        icon: Code,
+        title: "Smart Automation",
+        description: "Automate repetitive tasks and workflows with AI precision"
+    },
+    {
+        icon: Share,
+        title: "Audience Growth",
+        description: "Expand your reach with AI-driven engagement strategies"
+    }
+];
+---
+
+<section class="w-full max-w-4xl mx-auto mb-16">
+    <div class="grid md:grid-cols-3 gap-6">
+        {skills.map((skill) => (
+            <Card className="p-6 hover:shadow-lg transition-shadow">
+                <div class="flex flex-col items-center text-center">
+                    <div class="p-3 rounded-full bg-primary/10 mb-4">
+                        <skill.icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">{skill.title}</h3>
+                    <p class="text-sm text-muted-foreground">{skill.description}</p>
+                </div>
+            </Card>
+        ))}
+    </div>
+</section>

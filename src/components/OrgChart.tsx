@@ -5,7 +5,6 @@ import {
   Palette,
   FileText,
   Eye,
-  MessageCircle,
   Users,
   Globe,
   LifeBuoy,
@@ -356,12 +355,12 @@ export default function OrgChart() {
             }}
           >
             <div className="flex flex-col items-center gap-4 sm:gap-6 relative">
-              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-50 rounded-lg pointer-events-none" />
+
               <div className={`p-3 sm:p-4 rounded-full transition-all duration-300 transform ${activeDepartment === 'director' ? 'bg-primary/20 scale-110' : 'bg-primary/10 hover:scale-105'}`}>
                 <Brain className={`w-8 h-8 sm:w-12 sm:h-12 transition-colors duration-300 ${activeDepartment === 'director' ? 'text-primary' : 'text-primary/70'}`} />
               </div>
               <div className="text-center">
-                <h3 className="font-bold text-xl sm:text-2xl mb-2 bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent">Managing Director</h3>
+                <h3 className="font-bold text-xl sm:text-2xl mb-2 text-primary">Managing Director</h3>
                 <p className="text-sm sm:text-base text-muted-foreground">Orchestrates company vision and strategy</p>
               </div>
             </div>
@@ -390,12 +389,12 @@ export default function OrgChart() {
               }}
             >
               <div className="flex items-center gap-3 sm:gap-4 relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-30 rounded-lg pointer-events-none" />
+  
                 <div className={`p-2 sm:p-3 rounded-full transition-all duration-300 transform ${activeDepartment === dept.id ? 'bg-primary/20 scale-110' : 'bg-primary/10 hover:scale-105'}`}>
                   <dept.icon className={`w-5 h-5 sm:w-6 sm:h-6 transition-colors duration-300 ${activeDepartment === dept.id ? 'text-primary' : 'text-primary/70'}`} />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-base sm:text-lg bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent">{dept.title}</h3>
+                  <h3 className="font-semibold text-base sm:text-lg text-primary">{dept.title}</h3>
                   <p className="text-xs sm:text-sm text-muted-foreground">{dept.description}</p>
                 </div>
               </div>
