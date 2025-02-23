@@ -100,7 +100,7 @@ export function SidebarApp({ ...props }: ComponentProps<typeof Sidebar>) {
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Button size="icon" variant="ghost">
+                                <Button size="icon" variant="ghost" aria-label="Create New Chat">
                                     <SquarePen className="h-5 w-5" />
                                     <span className="sr-only">New Chat</span>
                                 </Button>
@@ -135,7 +135,7 @@ export function SidebarApp({ ...props }: ComponentProps<typeof Sidebar>) {
                         <SidebarMenu>
                             {data.lastWeekChats.map((chat) => (
                                 <SidebarMenuItem key={chat.title}>
-                                    <SidebarMenuButton className="w-full justify-start">
+                                    <SidebarMenuButton className="w-full justify-start" aria-label={`Open chat: ${chat.title}`}>
                                         <MessageCircle className="mr-2 h-4 w-4" />
                                         {chat.title}
                                     </SidebarMenuButton>

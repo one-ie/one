@@ -26,7 +26,7 @@ export default function Page() {
 							<BreadcrumbList>
 								<BreadcrumbItem>
 									<BreadcrumbPage className="line-clamp-1">
-										ONE
+										Agent ONE
 									</BreadcrumbPage>
 								</BreadcrumbItem>
 							</BreadcrumbList>

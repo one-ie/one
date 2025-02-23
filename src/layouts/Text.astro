@@ -21,7 +21,7 @@ const cleanContent = rawContent.replace(/^---[\s\S]*?---/, '').trim();
   chatConfig={frontmatter.chatConfig}
   content={cleanContent}
 >
-  <article class="prose dark:prose-invert prose-slate max-w-none py-8">
+  <article class="prose dark:prose-invert prose-slate max-w-1000 py-8 px-8 mx-auto container">
     <slot />
   </article>
 </Layout>
