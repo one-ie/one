@@ -69,13 +69,15 @@ export function ChatSimple({ className, ...props }: ComponentPropsWithoutRef<"di
     }, [messages, isLoading, isFocused]);
 
     return (
-        <div className={cn("flex flex-col h-full relative", className)} {...props}>
-            <div className="flex items-center justify-between px-4 py-2.5 border-b">
-                <div className="flex items-center space-x-2">
-                    <h2 className="text-sm font-medium">Chat</h2>
+        <div className={cn("flex flex-col h-[90%] relative max-w-[900px] mx-auto w-full", className)} {...props}>
+            <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+                <div className="flex items-center justify-between h-14 px-4">
+                    <div className="flex items-center gap-3">
+                        <h2 className="text-sm font-medium">Chat</h2>
+                    </div>
                 </div>
             </div>
-            <ScrollArea className="flex-1">
+            <ScrollArea className="flex-1 relative">
                 <div className="flex flex-col space-y-4 p-4 pb-6">
                     {messages.map((message) => {
                         if (message.role !== "user") {
