@@ -35,46 +35,40 @@ export default function Header() {
   };
 
   return (
-    <header className="grid grid-cols-3 items-center h-[65px] border-b bg-background/95 backdrop-blur relative">
+    <header className="flex items-center justify-between h-[65px] px-4 border-b bg-[hsl(var(--one-background-nav))] sm:bg-transparent backdrop-blur relative z-50">
       {/* Left column */}
-      <div className="mobilemenu">
-        {isMobile && (
-          <button
-            onClick={toggleSidebar}
-            className="p-2 hover:bg-accent rounded-md focus:outline-none"
-            aria-label="Toggle Sidebar"
+      <div className="sm:hidden">
+        <a
+          href="/menu"
+          className="p-2 hover:bg-accent/10 rounded-md focus:outline-none transition-colors duration-200 block"
+          aria-label="Menu"
+        >
+          <svg
+            className="h-5 w-5 text-muted-foreground/70 hover:text-foreground/90 transition-colors duration-200"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        )}
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.75"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </a>
       </div>
       
       {/* Center column with Logo */}
-      <div className="flex justify-center">
-        <a href="/" className="flex items-center gap-2">
-          <img 
-            src="/logo.svg" 
-            alt="Logo"
-            className="h-10 w-auto"
-          />
+      <div className="flex-1 flex items-center justify-center sm:ml-[80px]">
+        <a href="/" className="flex items-center justify-center">
+          <img src="/logo.svg" alt="Logo" className="h-10 w-auto" />
         </a>
       </div>
       
       {/* Right column */}
-      <div className="flex justify-end pr-4">
+      <div className="flex items-center justify-end">
         <a
           href="/download"
           className="group flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-all duration-300 ease-in-out"
@@ -83,48 +77,6 @@ export default function Header() {
           <span className="hidden sm:inline">Download</span>
         </a>
       </div>
-
-      {/* Mobile Menu */}
-      {isMobile && (
-        <div
-          className={`fixed inset-0 w-screen h-screen bg-zinc-50/95 dark:bg-zinc-900/95 backdrop-blur-sm transition-all z[100000000] duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        >
-          <div className="h-screen w-full flex items-center justify-center z-[100000000]">
-            <div className={`flex flex-col items-center space-y-6 transition-all duration-300 transform relative z-[100000000] ${isSidebarOpen ? 'translate-y-0' : '-translate-y-8'}`}>
-              {defaultNavigation.map(({ title, path, icon: Icon }) => (
-                <a
-                  key={path}
-                  href={path}
-                  className="flex items-center gap-2 text-xl font-medium hover:text-primary transition-colors"
-                >
-                  <Icon className="h-6 w-6" />
-                  <span>{title}</span>
-                </a>
-              ))}
-              <button
-                onClick={toggleSidebar}
-                className="mt-8 p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
-                aria-label="Close Menu"
-              >
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
