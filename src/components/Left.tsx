@@ -5,7 +5,7 @@ import { useStore } from '@nanostores/react';
 import { layoutStore } from '../stores/layout';
 import type { Theme } from '../types/theme';
 import {
-  Newspaper, Headphones, Download, FileText, Shield, Sun, Moon, CircleDot, 
+  Newspaper, Headphones, Download, FileText, Shield, Sun, Moon, CircleDot, CreditCard,
   type LucideIcon
 } from 'lucide-react';
 
@@ -16,6 +16,7 @@ const defaultNavigation = [
   { title: 'Download', path: '/download', icon: Download },
   { title: 'Docs', path: '/docs', icon: FileText },
   { title: 'Pages', path: '/pages', icon: FileText },
+  { title: 'Payments', path: '/payments', icon: CreditCard },
   { title: 'License', path: '/free-license', icon: Shield }
 ];
 
