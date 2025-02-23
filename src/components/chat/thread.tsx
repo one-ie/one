@@ -126,6 +126,7 @@ export const MyThread: FC<MyThreadProps> = ({ welcome, onSuggestionClick }) => {
                       variant="outline"
                       onClick={() => onSuggestionClick?.(suggestion.prompt)}
                       className="bg-muted hover:bg-blue-600/90 hover:text-white transition-colors"
+                      aria-label={`Use suggestion: ${suggestion.label}`}
                     >
                       {suggestion.label}
                     </Button>

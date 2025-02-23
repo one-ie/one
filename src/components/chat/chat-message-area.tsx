@@ -33,7 +33,8 @@ export function ScrollButton({
 				alignmentClasses[alignment],
 				className,
 			)}
-			onClick={onClick}
+            aria-label="Scroll to bottom of chat"
+            onClick={onClick}
 		>
 			<ChevronDown className="h-4 w-4" />
 		</Button>

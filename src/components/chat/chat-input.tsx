@@ -150,6 +150,7 @@ function ChatInputSubmit({
 					"shrink-0 rounded-full p-2 h-fit bg-primary hover:bg-primary/90 text-primary-foreground border-none",
 					className,
 				)}
+				aria-label="Stop Generation"
 				{...props}
 			>
 				<svg
