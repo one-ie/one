@@ -18,10 +18,10 @@ const defaultNavigation = [
   { title: 'License', path: '/free-license', icon: Shield }
 ];
 
-const isMobile = false; // Will be handled by client script
+let isMobile = false; // Will be handled by client script
 ---
 
-<header class="grid grid-cols-3 items-center h-[65px] border-b bg-[hsl(var(--one-background-nav))] backdrop-blur relative">
+<header class="grid grid-cols-3 items-center h-[65px] border-b bg-[hsl(var(--one-background-nav))] backdrop-blur relative z-50">
   <!-- Left column -->
   <div>
     {isMobile && (
@@ -74,10 +74,10 @@ const isMobile = false; // Will be handled by client script
   {isMobile && (
     <div
       id="mobile-menu"
-      class="fixed inset-0 w-screen h-screen bg-zinc-50/95 dark:bg-zinc-900/95 backdrop-blur-sm transition-all z-[100000000] duration-300 opacity-0 pointer-events-none"
+      class="fixed inset-0 w-screen h-screen bg-zinc-50/95 dark:bg-zinc-900/95 backdrop-blur-sm transition-all z-[9999999] duration-300 opacity-1 pointer-events-none"
     >
-      <div class="h-screen w-full flex items-center justify-center z-[100000000]">
-        <div class="flex flex-col items-center space-y-6 transition-all duration-300 transform relative z-[100000000] -translate-y-8">
+      <div class="h-screen w-full flex items-center justify-center">
+        <div class="flex flex-col items-center space-y-6 transition-all duration-300 transform relative -translate-y-8">
           {defaultNavigation.map(({ title, path, icon: Icon }) => (
             <a
               href={path}
@@ -99,9 +99,30 @@ const isMobile = false; // Will be handled by client script
   
   const mobileMenu = document.getElementById('mobile-menu');
   const sidebarToggle = document.getElementById('sidebar-toggle');
+  const mobileElements = document.querySelectorAll('[data-mobile]');
 
   function updateMobileState() {
+    const wasMobile = isMobile;
     isMobile = window.innerWidth < 640;
+    
+    if (wasMobile !== isMobile) {
+      mobileElements.forEach(el => {
+        if (isMobile) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+          // Reset mobile menu state when switching to desktop
+          if (mobileMenu) {
+            mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+            const menuContent = mobileMenu.querySelector('div > div');
+            if (menuContent) {
+              menuContent.classList.add('-translate-y-8');
+              menuContent.classList.remove('translate-y-0');
+            }
+          }
+        }
+      });
+    }
   }
 
   function toggleSidebar() {
@@ -117,6 +138,10 @@ const isMobile = false; // Will be handled by client script
     }
   }
 
+  // Initial state setup
+  updateMobileState();
+
+  // Event listeners
   window.addEventListener('resize', updateMobileState);
   sidebarToggle?.addEventListener('click', toggleSidebar);
 </script>

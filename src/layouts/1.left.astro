@@ -2,7 +2,6 @@
 import "../styles/global.css";
 import "../styles/one.css";
 import ThemeInit from "@/components/Theme.astro";
-import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import AppSidebar from "../components/Sidebar.astro";
 
@@ -15,7 +14,6 @@ interface Props {
     footer?: boolean;
 }
 
-const { header = false, footer = true } = Astro.props;
 const { title, description = "ONE" } = Astro.props;
 ---
 
@@ -35,7 +33,7 @@ const { title, description = "ONE" } = Astro.props;
                   <div class="content-area">
                     <slot />
                 </div>
-                {footer && <Footer />}
+               <Footer />
             </div>
         </div>
        

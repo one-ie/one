@@ -1,16 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { ChatConfigSchema } from "../schema/chat";
-import { Card } from "@/components/ui/card";
 import { GitSection } from "@/components/GitSection";
-import OrgChart from "../components/OrgChart.tsx";
 import FaqAccordion from "../components/FaqAccordion";
-import OrbitingCircles from "../components/magicui/orbiting-circles";
-import AgentSkills from "../components/AgentSkills.astro";
-import Comparison from "../components/Comparison.astro";
 import Circles from "../components/Circles.astro";
-import Benefits from "../components/Benefits.astro";
-import Features from "../components/Features.astro";
 import Features2 from "../components/Features2.astro";
 import MeetYourTeam from "../components/MeetYourTeam.astro";
 
@@ -138,9 +131,6 @@ Communication Style:
     ],
   },
 });
-
-// Set the desired right panel mode
-const rightPanelMode = "quarter"; // You can change this to 'full', 'half', 'floating', or 'icon'
 ---
 
 <Layout

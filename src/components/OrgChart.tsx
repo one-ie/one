@@ -17,7 +17,7 @@ import {
   ArrowUpRight,
   Zap
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export type IconComponent = typeof Brain | typeof Palette | typeof FileText; // etc...
 
