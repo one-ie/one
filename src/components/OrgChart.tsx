@@ -361,7 +361,7 @@ export default function OrgChart() {
               </div>
               <div className="text-center">
                 <h3 className="font-bold text-xl sm:text-2xl mb-2 text-primary">Managing Director</h3>
-                <p className="text-sm sm:text-base text-muted-foreground">Orchestrates company vision and strategy</p>
+                <p className="text-sm sm:text-base text-muted-foreground">Build your AI Director to orchestrate company vision and assemble a team of AI Directors</p>
               </div>
             </div>
           </Card>

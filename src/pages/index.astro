@@ -163,16 +163,18 @@ Communication Style:
             to build your AI brand. It's designed for engineers, creators,
             educators, enterprises and governments to generate content, courses,
             payments, websites, and AI agents without restrictions. ONE is 100%
-            free and open source. It's enterprise ready with SOC 2 Type 2 compliance. You can host it for free. Run it
-            locally, on your own server, in the cloud or at the edge. 
+            free and open source. It's enterprise ready with SOC 2 Type 2
+            compliance. You can host it for free. Run it locally, on your own
+            server, in the cloud or at the edge.
           </p>
         </div>
       </div>
     </section>
 
     <Circles />
-    <MeetYourTeam />
     <Features2 />
+
+    <MeetYourTeam />
 
     {/* Download Section */}
     <section
@@ -198,41 +200,3 @@ Communication Style:
     </section>
   </main>
 </Layout>
-
-<style>
-  .prose {
-    @apply mx-auto;
-  }
-
-  .prose pre {
-    @apply bg-muted;
-  }
-</style>
-
-<script>
-  // Handle copy functionality
-  document.addEventListener("DOMContentLoaded", () => {
-    const copyButton = document.getElementById("copyCloneCommand");
-    const copyMessage = document.getElementById("copyMessage");
-    const getStartedBtn = document.getElementById("getStartedBtn");
-
-    if (copyButton && copyMessage) {
-      copyButton.addEventListener("click", () => {
-        navigator.clipboard.writeText(
-          "git clone https://github.com/one-ie/one.git",
-        );
-        copyMessage.classList.remove("opacity-0");
-        setTimeout(() => copyMessage.classList.add("opacity-0"), 2000);
-      });
-    }
-
-    if (getStartedBtn) {
-      getStartedBtn.addEventListener("click", () => {
-        const installSection = document.querySelector(".container");
-        if (installSection) {
-          installSection.scrollIntoView({ behavior: "smooth" });
-        }
-      });
-    }
-  });
-</script>

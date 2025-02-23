@@ -54,6 +54,12 @@ export function GitSection() {
   return (
     <section className="w-full px-4 sm:px-6 py-12">
       <div className="w-full max-w-[1800px] mx-auto space-y-6">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold mb-4">Get Started</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Choose your preferred method to get ONE up and running. Download the ZIP for a quick start, or use Git for full version control and easy updates.
+          </p>
+        </div>
         <div className="grid md:grid-cols-2 gap-6">
           <Card className="p-6 flex flex-col justify-between">
             <div>
@@ -107,7 +113,7 @@ export function GitSection() {
               <GitHubLogoIcon className="w-[20px] h-[20px] mr-2" />
               <span>View on GitHub</span>
               <div className="ml-2 flex items-center gap-1 px-2 py-0.5 text-sm rounded-full bg-muted">
-                <span>{stats.stars}★</span>
+                <span>{stats.stars}<span className="text-yellow-500">★</span></span>
               </div>
             </Button>
           </a>
