@@ -12,7 +12,7 @@ date: 2024-02-03
 1. **Zero Layout Shifts**: Uses CSS grid + fixed positioning for stable render
 2. **Device-Specific Optimization**: 
    - Mobile: Full-width single column
-   - Tablet: Adaptive sidebars
+   - Fluid three-column layout
    - Desktop: Fluid three-column layout
 3. **Performance First**:
    - Astro Islands architecture
@@ -57,7 +57,6 @@ const Right = () => {
 // Layout.astro
 <Header client:load /> // Hydrate on load
 <Footer client:visible /> // Hydrate when scrolled into view
-<Right client:only="react" /> // Only in React-enabled sites
 ```
 
 ### Lighthouse 100% Strategy
@@ -269,7 +268,7 @@ The layout system uses CSS variables for consistent sizing:
 The layout includes an AI chat system that can be customized through the `chatConfig` prop. Here's the configuration structure:
 
 ```typescript
-interface ChatConfig {
+interface Chat {
   systemPrompt: {
     type: "text";
     text: string;

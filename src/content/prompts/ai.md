@@ -1,30 +1,35 @@
 ---
-title: "AI Integration System"
-description: "A comprehensive guide to ONE's AI integration and prompt hierarchy"
+title: "AI Everywhere"
+description: "How to add AI into your application"
 tags: ["ai", "prompts", "configuration", "customization", "system-design"]
 date: 2024-02-03
 ---
 
-# AI Integration Architecture
+# AI Everywhere
 
-ONE implements a sophisticated yet simple AI integration system through a hierarchical prompt and configuration structure. This architecture allows for flexible customization while maintaining consistent behavior across your application.
+ONE makes it easy to add AI into your app using markdown, yaml, and typescript. 
+Add AI to any type of content - pages, docs, blog posts, lessons, videos. You can use eternal data from anywhere like Shopify, Wordpress or Notion.
 
-## Prompt Hierarchy
+## Hierarchy
 
 The system follows a cascading inheritance pattern where configurations and prompts flow from base to specific implementations:
 
-### 1. Base System Level (`src/1/1.md`)
-- Defines core system prompts and agent capabilities
+### 1. Core System Level (`src/1/1.md`)
+- Here you will find the core system prompt to build the system
 - Establishes fundamental AI behavior patterns
 - Contains base feature explanations and agent characteristics
 
-### 2. Business Customization (`src/1/I.md`)
+### 2. I (`src/1/I.md`)
 - Appends business-specific instructions and knowledge
 - Customizes AI behavior for specific use cases
 - Allows for domain-specific rules and responses
 
+
+3. Chat src/components/Chat.tsx 
+Assembles prompt s
+
 ### 3. Layout Level (`src/layouts/Layout.astro`)
-- Provides default chat configurations
+- Provides default chat configurations that fall ba
 - Sets up standard UI components and behaviors
 - Establishes baseline prompt settings
 
