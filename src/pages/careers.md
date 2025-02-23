@@ -1,37 +1,20 @@
 ---
 layout: ../layouts/Text.astro
-title: "Careers at ONE"
-description: "Join us in building the future of AI-powered development"
+title: "Careers"
+description: "Join us to build AI apps aand agents"
 ---
 
 # Join Our Team
 
-We're always looking for exceptional people to join us in building the future of software development. At ONE, you'll work with cutting-edge technology while making a real impact in how developers build and deploy applications.
+We're always looking for exceptional people to join us in building AI apps and agents. 
 
 ## Our Tech Stack
-- **Frontend**: Astro, React, Tailwind CSS
-- **Backend**: Node.js, 
-- **AI/ML**: Custom LLM implementations, OpenAI, Anthropic
-- **Infrastructure**: Cloudflare Edge, Workers, Coolify
-- **Automation**: n8n, Eliza OS
+- **Frontend**: Astro, React, Shadcn UI, Tailwind CSS
+- **Backend**: Node.js
+- **Inference**: Deepseek, Anthropic, OpenAI, Replicate
+- **Infrastructure**: Cloudflare Edge, Workers, Vercel, Docker, Coolify
+- **Ai Automation**: n8n, Eliza OS
 - **DevOps**: GitHub Actions, Docker
-
-## Open Positions
-
-### Senior Full Stack Developer
-- Deep experience with modern JavaScript/TypeScript
-- Strong background in React and server-side frameworks
-- Experience with edge computing and serverless architectures
-- Understanding of AI/ML concepts and implementations
-
-
-### DevOps Engineer
-- Experience with cloud infrastructure and edge computing
-- Strong background in CI/CD pipelines
-- Knowledge of containerization and orchestration
-- Security-first mindset
-
-
 
 ## Why ONE?
 

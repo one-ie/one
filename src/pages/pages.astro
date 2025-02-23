@@ -28,11 +28,10 @@ function getFileExtension(filename: string): string {
 
 // Helper to get clean URL path
 function getCleanPath(path: string): string {
-    // Remove './' prefix and file extension
     return path
         .replace("./", "/") // Remove leading ./
         .replace(/\.(astro|md|mdx|svx)$/, "") // Remove file extension
-        .replace("/index", "/"); // Convert /index to /
+        .replace(/\/index$/, "/"); // Convert /index to /
 }
 
 // Helper to format dates

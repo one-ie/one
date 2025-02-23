@@ -30,7 +30,7 @@ chatConfig:
         prompt: "Guide me through the different business models and pricing strategies I can implement with ONE"
 ---
 # ONE License (Version 1.0)
-## Maximum Freedom, Minimum Restrictions.
+## Maximum Freedom, Zero Restrictions.
 
 This license empowers you with complete commercial freedom to use, reuse, modify, sell and resell the software, AI and data, at any price you wish.
 

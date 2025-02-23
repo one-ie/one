@@ -77,7 +77,7 @@ export function ChatSimple({ className, ...props }: ComponentPropsWithoutRef<"di
     return (
         <div className={cn("flex flex-col h-[90%] relative max-w-[900px] mx-auto w-full", className)} {...props}>
             <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-                <div className="flex items-center justify-between h-14 px-4">
+                <div className="flex items-center justify-between h-[3.5rem] px-4">
                     <div className="flex items-center gap-3">
                         <h2 className="text-sm font-medium">Chat</h2>
                     </div>
