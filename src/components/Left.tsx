@@ -14,9 +14,6 @@ const defaultNavigation = [
   { title: 'Blog', path: '/blog', icon: Newspaper },
   { title: 'Podcast', path: '/podcast', icon: Headphones },
   { title: 'Download', path: '/download', icon: Download },
-  { title: 'Docs', path: '/docs', icon: FileText },
-  { title: 'Pages', path: '/pages', icon: FileText },
-  { title: 'Payments', path: '/payments', icon: CreditCard },
   { title: 'License', path: '/free-license', icon: Shield }
 ];
 

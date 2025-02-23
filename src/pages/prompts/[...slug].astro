@@ -3,23 +3,31 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import type { CollectionEntry } from 'astro:content';
 import { Badge } from '@/components/ui/badge';
-import { Calendar } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
   const prompts = await getCollection('prompts');
-  return prompts.map((entry: CollectionEntry<'prompts'>) => ({
-    params: { slug: entry.slug },
-    props: { entry },
-  }));
+  const sortedPrompts = prompts.sort((a: CollectionEntry<'prompts'>, b: CollectionEntry<'prompts'>) => b.data.date.getTime() - a.data.date.getTime());
+  
+  return sortedPrompts.map((entry: CollectionEntry<'prompts'>, index: number) => {
+    const prev = index < sortedPrompts.length - 1 ? sortedPrompts[index + 1] : null;
+    const next = index > 0 ? sortedPrompts[index - 1] : null;
+    return {
+      params: { slug: entry.slug },
+      props: { entry, prev, next },
+    };
+  });
 }
 
 type Props = {
   entry: CollectionEntry<'prompts'>;
+  prev: CollectionEntry<'prompts'> | null;
+  next: CollectionEntry<'prompts'> | null;
 };
 
-const { entry } = Astro.props;
+const { entry, prev, next } = Astro.props;
 const { Content } = await entry.render();
 
 function formatDate(date: Date) {
@@ -35,7 +43,7 @@ function formatDate(date: Date) {
   title={`${entry.data.title} - Prompts`}
   description={entry.data.description}
 >
-  <div >
+  <div class="max-w-3xl mx-auto px-4">
     <article>
       <header class="mb-8">
         <div class="flex flex-wrap items-center gap-3 mb-4 text-sm">
@@ -49,12 +57,40 @@ function formatDate(date: Date) {
             ))}
           </div>
         </div>
-        <h1 class="text-4xl font-bold mb-4">{entry.data.title}</h1>
-        <p class="text-xl text-muted-foreground">{entry.data.description}</p>
       </header>
-      <div class="prose prose-slate dark:prose-invert max-w-none">
+      <div class="prose prose-neutral dark:prose-invert max-w-none [&_pre]:bg-muted">
         <Content />
       </div>
     </article>
+
+    <!-- Navigation Section -->
+    <nav class="mt-12 mb-8 border-t border-border pt-8">
+      <div class="flex justify-between items-center gap-4">
+        {prev && (
+          <a
+            href={`/prompts/${prev.slug}`}
+            class="group flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+            <div class="flex flex-col">
+              <span class="text-xs uppercase tracking-wider">Previous</span>
+              <span class="text-sm font-medium">{prev.data.title}</span>
+            </div>
+          </a>
+        )}
+        {next && (
+          <a
+            href={`/prompts/${next.slug}`}
+            class="group flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors ml-auto"
+          >
+            <div class="flex flex-col items-end">
+              <span class="text-xs uppercase tracking-wider">Next</span>
+              <span class="text-sm font-medium">{next.data.title}</span>
+            </div>
+            <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </a>
+        )}
+      </div>
+    </nav>
   </div>
 </Layout>

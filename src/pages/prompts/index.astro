@@ -55,7 +55,7 @@ function formatDate(date: Date) {
                 {entry.data.description}
               </p>
               <div class="flex flex-wrap gap-2">
-                {entry.data.tags.map((tag: string) => (
+                {entry.data.tags?.map((tag: string) => (
                   <Badge variant="secondary">{tag}</Badge>
                 ))}
               </div>
