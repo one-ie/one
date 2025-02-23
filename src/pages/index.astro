@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { ChatConfigSchema } from "../schema/chat";
 import { GitSection } from "@/components/GitSection";
+import { Chart } from "@/components/ChartClones";
 import FaqAccordion from "../components/FaqAccordion";
 import Circles from "../components/Circles.astro";
 import Features2 from "../components/Features2.astro";
@@ -185,6 +186,7 @@ Communication Style:
     <section
       class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm"
     >
+      <Chart client:load />
       <GitSection client:load />
     </section>
 

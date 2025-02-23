@@ -118,22 +118,9 @@ const chatConfig = ChatConfigSchema.parse({
   },
 });
 
-// Fetch GitHub stars count
-const getGitHubStats = async () => {
-  try {
-    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`);
-    const data = await response.json();
-    return {
-      stars: data.stargazers_count,
-      forks: data.forks_count,
-    };
-  } catch (error) {
-    console.error("Error fetching GitHub stats:", error);
-    return { stars: "14.2k", forks: "3.1k" }; // Fallback values
-  }
-};
+import { GitSection } from "@/components/GitSection";
 
-const stats = await getGitHubStats();
+// Remove the old stats fetching since GitSection handles it internally
 ---
 
 <Layout
@@ -157,105 +144,7 @@ const stats = await getGitHubStats();
       </p>
     </section>
 
-    <!-- Download Options Grid -->
-    <div class="grid md:grid-cols-2 gap-8 w-full max-w-4xl mb-12">
-      <!-- Direct Download Card -->
-      <Card
-        className="p-6 flex flex-col items-center hover:shadow-lg transition-shadow"
-      >
-        <h3 class="text-2xl font-bold mb-4">Quick Download</h3>
-        <p class="text-muted-foreground mb-6">
-          Download the latest stable release directly
-        </p>
-        <a href={DOWNLOAD_URL} class="w-full">
-          <Button size="lg" className="w-full">
-            <DownloadIcon className="mr-2 h-5 w-5" />
-            Download ZIP
-          </Button>
-        </a>
-      </Card>
-
-      <!-- Git Clone Card -->
-      <Card
-        className="p-6 flex flex-col items-center hover:shadow-lg transition-shadow"
-      >
-        <h3 class="text-2xl font-bold mb-4">Git Clone</h3>
-        <p class="text-muted-foreground mb-6">Clone the repository using Git</p>
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full group bg-background border-2 hover:border-primary hover:bg-primary/5 transition-all duration-300 text-foreground hover:text-foreground"
-          id="copyCloneCommand"
-        >
-          <CodeIcon className="w-5 h-5 mr-2 text-primary" />
-          <code class="font-mono text-sm">git clone {GITHUB_REPO}</code>
-        </Button>
-        <p
-          id="copyMessage"
-          class="mt-2 text-sm text-primary opacity-0 transition-opacity duration-200"
-        >
-          Copied to clipboard!
-        </p>
-      </Card>
-    </div>
-
-    <!-- Secondary Options -->
-    <div class="flex flex-wrap gap-4 justify-center mb-12">
-      <a href={URLS.codespace} class="inline-block">
-        <Button
-          variant="outline"
-          size="lg"
-          className="group bg-[#0D1117] hover:bg-[#161B22] border-2 border-[#30363D] hover:border-primary text-white hover:text-white transition-all duration-300"
-        >
-          <GitHubLogoIcon className="w-5 h-5 mr-2" />
-          <span>Open in Codespaces</span>
-        </Button>
-      </a>
-
-      <a href={GITHUB_URL} class="inline-block">
-        <Button
-          variant="outline"
-          size="lg"
-          className="group text-foreground hover:text-foreground"
-        >
-          <GitHubLogoIcon className="w-5 h-5 mr-2" />
-          <span>View Source</span>
-          <div
-            class="ml-2 px-2 py-0.5 bg-muted rounded-full text-xs font-medium"
-          >
-            {stats.stars} ⭐
-          </div>
-        </Button>
-      </a>
-
-      <a href={URLS.fork} class="inline-block">
-        <Button
-          variant="outline"
-          size="lg"
-          className="group text-foreground hover:text-foreground"
-        >
-          <svg
-            class="w-5 h-5 mr-2"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7 5C7 3.89543 7.89543 3 9 3C10.1046 3 11 3.89543 11 5C11 5.74028 10.5978 6.38663 10 6.73244V14.0396H14.7761C15.1132 13.4132 15.7859 13 16.5 13C17.6046 13 18.5 13.8954 18.5 15C18.5 16.1046 17.6046 17 16.5 17C15.7859 17 15.1132 16.5868 14.7761 15.9604H10V17.2676C10.5978 17.6134 11 18.2597 11 19C11 20.1046 10.1046 21 9 21C7.89543 21 7 20.1046 7 19C7 18.2597 7.40221 17.6134 8 17.2676V6.73244C7.40221 6.38663 7 5.74028 7 5Z"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </svg>
-          <span>Fork Project</span>
-          <div
-            class="ml-2 px-2 py-0.5 bg-muted rounded-full text-xs font-medium"
-          >
-            {stats.forks}
-          </div>
-        </Button>
-      </a>
-    </div>
+    <GitSection />
 
     <!-- System Requirements Section -->
     <section class="w-full max-w-4xl mx-auto mb-16">
@@ -321,105 +210,7 @@ const stats = await getGitHubStats();
       </Alert>
     </section>
 
-    <!-- Download Options Grid -->
-    <div class="grid md:grid-cols-2 gap-8 w-full max-w-4xl mb-12">
-      <!-- Direct Download Card -->
-      <Card
-        className="p-6 flex flex-col items-center hover:shadow-lg transition-shadow"
-      >
-        <h3 class="text-2xl font-bold mb-4">Quick Download</h3>
-        <p class="text-muted-foreground mb-6">
-          Download the latest stable release directly
-        </p>
-        <a href={DOWNLOAD_URL} class="w-full">
-          <Button size="lg" className="w-full">
-            <DownloadIcon className="mr-2 h-5 w-5" />
-            Download ZIP
-          </Button>
-        </a>
-      </Card>
-
-      <!-- Git Clone Card -->
-      <Card
-        className="p-6 flex flex-col items-center hover:shadow-lg transition-shadow"
-      >
-        <h3 class="text-2xl font-bold mb-4">Git Clone</h3>
-        <p class="text-muted-foreground mb-6">Clone the repository using Git</p>
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full group bg-background border-2 hover:border-primary hover:bg-primary/5 transition-all duration-300 text-foreground hover:text-foreground"
-          id="copyCloneCommand"
-        >
-          <CodeIcon className="w-5 h-5 mr-2 text-primary" />
-          <code class="font-mono text-sm">git clone {GITHUB_REPO}</code>
-        </Button>
-        <p
-          id="copyMessage"
-          class="mt-2 text-sm text-primary opacity-0 transition-opacity duration-200"
-        >
-          Copied to clipboard!
-        </p>
-      </Card>
-    </div>
-
-    <!-- Secondary Options -->
-    <div class="flex flex-wrap gap-4 justify-center mb-12">
-      <a href={URLS.codespace} class="inline-block">
-        <Button
-          variant="outline"
-          size="lg"
-          className="group bg-[#0D1117] hover:bg-[#161B22] border-2 border-[#30363D] hover:border-primary text-white hover:text-white transition-all duration-300"
-        >
-          <GitHubLogoIcon className="w-5 h-5 mr-2" />
-          <span>Open in Codespaces</span>
-        </Button>
-      </a>
-
-      <a href={GITHUB_URL} class="inline-block">
-        <Button
-          variant="outline"
-          size="lg"
-          className="group text-foreground hover:text-foreground"
-        >
-          <GitHubLogoIcon className="w-5 h-5 mr-2" />
-          <span>View Source</span>
-          <div
-            class="ml-2 px-2 py-0.5 bg-muted rounded-full text-xs font-medium"
-          >
-            {stats.stars} ⭐
-          </div>
-        </Button>
-      </a>
-
-      <a href={URLS.fork} class="inline-block">
-        <Button
-          variant="outline"
-          size="lg"
-          className="group text-foreground hover:text-foreground"
-        >
-          <svg
-            class="w-5 h-5 mr-2"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7 5C7 3.89543 7.89543 3 9 3C10.1046 3 11 3.89543 11 5C11 5.74028 10.5978 6.38663 10 6.73244V14.0396H14.7761C15.1132 13.4132 15.7859 13 16.5 13C17.6046 13 18.5 13.8954 18.5 15C18.5 16.1046 17.6046 17 16.5 17C15.7859 17 15.1132 16.5868 14.7761 15.9604H10V17.2676C10.5978 17.6134 11 18.2597 11 19C11 20.1046 10.1046 21 9 21C7.89543 21 7 20.1046 7 19C7 18.2597 7.40221 17.6134 8 17.2676V6.73244C7.40221 6.38663 7 5.74028 7 5Z"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </svg>
-          <span>Fork Project</span>
-          <div
-            class="ml-2 px-2 py-0.5 bg-muted rounded-full text-xs font-medium"
-          >
-            {stats.forks}
-          </div>
-        </Button>
-      </a>
-    </div>
+    <GitSection />
   </main>
 </Layout>
 
