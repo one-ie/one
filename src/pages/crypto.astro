@@ -6,40 +6,27 @@ import { Shield, Zap, Rocket } from "lucide-react";
 
 const plans = [
     {
-        name: "Starter",
-        price: 499,
-        description: "Perfect for getting started with crypto",
+        name: "Build Your First AI Agent",
+        price: 100,
+        description: "1-hour intensive session on April 1st",
         features: [
-            "Basic AI chat integration",
-            "Community management",
-            "Real-time price alerts",
-            "24/7 support",
+            "Hands-on AI agent development",
+            "Core concepts and best practices",
+            "Implementation guidance",
+            "Q&A session",
         ],
         icon: Shield,
     },
     {
-        name: "Pro",
-        price: 999,
-        description: "Advanced features for growing projects",
+        name: "Switch on Your AI Infrastructure",
+        price: 1000,
+        description: "Full-day comprehensive setup",
         features: [
-            "Advanced AI integration",
-            "Custom automation",
-            "Market analysis",
-            "Priority support",
-            "Multi-chain support",
-        ],
-        icon: Zap,
-    },
-    {
-        name: "Enterprise",
-        price: 2499,
-        description: "Full-scale infrastructure solution",
-        features: [
-            "Custom AI models",
-            "Dedicated infrastructure",
-            "White-label solution",
-            "24/7 priority support",
-            "Custom development",
+            "Complete infrastructure setup",
+            "Custom AI agent deployment",
+            "Integration with your systems",
+            "Performance optimization",
+            "Deployment strategy",
         ],
         icon: Rocket,
     },
@@ -52,13 +39,13 @@ const plans = [
 >
     <div class="container mx-auto px-4 py-16">
         <div class="text-center mb-16">
-            <h1 class="text-4xl font-bold mb-4">Choose Your Plan</h1>
+            <h1 class="text-4xl font-bold mb-4">Crypto Payments Demo</h1>
             <p class="text-xl text-muted-foreground">
                 Pay with your preferred cryptocurrency. This is an example only. DO NOT send real crypto to these addresses. 
             </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8 mb-16">
+        <div class="grid md:grid-cols-2 gap-8 mb-16">
             {
                 plans.map((plan) => (
                     <Card className="p-6 flex flex-col">
@@ -72,7 +59,7 @@ const plans = [
                                     ${plan.price}
                                 </span>
                                 <span class="text-muted-foreground">
-                                    /month
+                                    one-time
                                 </span>
                             </div>
                             <p class="text-muted-foreground mb-4">

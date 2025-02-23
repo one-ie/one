@@ -1,6 +1,6 @@
 ---
 layout: ../layouts/Text.astro
-title: Cookie Policy
+title: Enterprise License
 description: Transparent Cookie Usage
 ---
 # ONE Enterprise License (Version 1.0)
@@ -51,7 +51,7 @@ You receive:
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 9. Termination
-   While this license grants perpetual rights, it automatically terminates if you fail to maintain valid registration at https://one.ie/enterprise. Upon termination, you must cease using the Software. Re-registration will reinstate these rights in full.
+   While this license grants perpetual rights, it automatically terminates if you fail to maintain valid registration at https://one.ie/enterprise. Upon termination, you may continue to use the Software. Re-registration will reinstate these rights in full.
 
 10. Registration Requirement
     To use this license, you must be registered at https://one.ie/enterprise. Registration validates your enterprise license and provides access to support and updates.

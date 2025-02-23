@@ -79,20 +79,29 @@ export default function CryptoPayment({
   useEffect(() => {
     const getCryptoPrices = async () => {
       try {
-        // Simplified static prices for demo
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
+        const data = await response.json();
+        
         const newPrices: CryptoPrices = {
-          BTC: 45000,
-          ETH: 2500,
-          SOL: 100
+          BTC: data.bitcoin.usd,
+          ETH: data.ethereum.usd,
+          SOL: data.solana.usd
         };
+        
         setPrices(newPrices);
         const cryptoPrice = newPrices[selectedCrypto];
         setCryptoAmount((amount / cryptoPrice).toFixed(8));
       } catch (err) {
         setError("Failed to fetch crypto prices. Please try again.");
+        console.error('Price fetch error:', err);
       }
     };
+
     getCryptoPrices();
+    // Set up polling for price updates every 30 seconds
+    const interval = setInterval(getCryptoPrices, 30000);
+    
+    return () => clearInterval(interval);
   }, [selectedCrypto, amount]);
 
   const handleCopy = (text: string) => {
