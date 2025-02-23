@@ -37,7 +37,7 @@ export default function Header() {
   return (
     <header className="grid grid-cols-3 items-center h-[65px] border-b bg-background/95 backdrop-blur relative">
       {/* Left column */}
-      <div>
+      <div className="mobilemenu">
         {isMobile && (
           <button
             onClick={toggleSidebar}
@@ -87,7 +87,7 @@ export default function Header() {
       {/* Mobile Menu */}
       {isMobile && (
         <div
-          className={`fixed inset-0 w-screen h-screen bg-zinc-50/95 dark:bg-zinc-900/95 backdrop-blur-sm transition-all z-[100000000] duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          className={`fixed inset-0 w-screen h-screen bg-zinc-50/95 dark:bg-zinc-900/95 backdrop-blur-sm transition-all z[100000000] duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         >
           <div className="h-screen w-full flex items-center justify-center z-[100000000]">
             <div className={`flex flex-col items-center space-y-6 transition-all duration-300 transform relative z-[100000000] ${isSidebarOpen ? 'translate-y-0' : '-translate-y-8'}`}>
