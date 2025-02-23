@@ -15,6 +15,7 @@ const defaultNavigation = [
   { title: 'Podcast', path: '/podcast', icon: Headphones },
   { title: 'Download', path: '/download', icon: Download },
   { title: 'Docs', path: '/docs', icon: FileText },
+  { title: 'Pages', path: '/pages', icon: FileText },
   { title: 'License', path: '/free-license', icon: Shield }
 ];
 
@@ -201,7 +202,7 @@ export function Left({ navigation, isOpen, onOpenChange }: SidebarProps) {
                         <div className="absolute inset-0 flex items-center justify-center w-16 h-16">
                           <div className="w-8 h-8 flex items-center justify-center">
                             <Icon
-                              className="w-full h-full text-foreground"
+                              className="w-full h-full text-foreground/70 group-hover:text-foreground/90 transition-colors"
                               strokeWidth={1.5}
                               aria-hidden="true"
                             />
