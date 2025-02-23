@@ -81,11 +81,13 @@ interface PageModule {
         description?: string;
         pubDate?: string;
     };
+    default: () => Promise<unknown>;
 }
 
 // Get all files from pages directory using import.meta.glob
 const pageGlob = import.meta.glob<PageModule>(
     "./**/*.(astro|md|mdx|svx)",
+    { eager: true }
 );
 
 // Convert glob result to array of file data
@@ -93,7 +95,7 @@ const pages = await Promise.all(
     Object.entries(pageGlob)
         .filter(([path]) => !path.includes("/map.astro")) // Exclude current page
         .map(async ([path, resolver]) => {
-            const resolvedFile = await resolver();
+            const resolvedFile = resolver;
             return {
                 path,
                 basename: path.split("/").pop() || "",
