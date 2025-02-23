@@ -49,7 +49,7 @@ export function RightPanel({
                 }`}
             >
                 <div className="h-full flex flex-col">
-                    <div className="flex justify-between items-center p-4 border-b">
+                    <div className="flex justify-between items-center p-4 border-b bg-background/95 backdrop-blur sticky top-0 z-10">
                         <div className="flex gap-2">
                             <Button
                                 size="sm"
@@ -70,6 +70,7 @@ export function RightPanel({
                             size="sm"
                             variant="ghost"
                             onClick={() => setIsPanelOpen(false)}
+                            className="hover:bg-destructive/10"
                         >
                             ✕
                         </Button>

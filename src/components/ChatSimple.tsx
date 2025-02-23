@@ -54,18 +54,29 @@ export function ChatSimple({ className, ...props }: ComponentPropsWithoutRef<"di
     useEffect(() => {
         const scrollToBottom = () => {
             if (messagesEndRef.current) {
-                messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+                // Only use smooth scrolling for non-initial renders
+                const behavior = messages.length <= 2 ? "instant" : "smooth";
+                messagesEndRef.current.scrollIntoView({ behavior });
             }
         };
-        scrollToBottom();
-        const timeoutId = setTimeout(scrollToBottom, 100);
-        return () => clearTimeout(timeoutId);
+        
+        // Only scroll if we have more than initial messages or if loading/focused
+        if (messages.length > 2 || isLoading || isFocused) {
+            scrollToBottom();
+            const timeoutId = setTimeout(scrollToBottom, 100);
+            return () => clearTimeout(timeoutId);
+        }
     }, [messages, isLoading, isFocused]);
 
     return (
         <div className={cn("flex flex-col h-full relative", className)} {...props}>
-                    <ScrollArea className="flex-1">
-                        <div className="flex flex-col space-y-4 p-4 pb-6">
+            <div className="flex items-center justify-between px-4 py-2.5 border-b">
+                <div className="flex items-center space-x-2">
+                    <h2 className="text-sm font-medium">Chat</h2>
+                </div>
+            </div>
+            <ScrollArea className="flex-1">
+                <div className="flex flex-col space-y-4 p-4 pb-6">
                     {messages.map((message) => {
                         if (message.role !== "user") {
                             return (
