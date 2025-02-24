@@ -34,14 +34,20 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
+interface CloneData {
+    timestamp: string;
+    total: number;
+    uniques: number;
+}
+
 export function Chart() {
-    const [chartData, setChartData] = React.useState([])
-    const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("total")
+    const [chartData, setChartData] = React.useState<CloneData[]>([]);
+    const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("total");
 
     const total = React.useMemo(
         () => ({
-            total: chartData.reduce((acc, curr) => acc + curr.total, 0),
-            uniques: chartData.reduce((acc, curr) => acc + curr.uniques, 0),
+            total: chartData.reduce((acc: number, curr: CloneData) => acc + curr.total, 0),
+            uniques: chartData.reduce((acc: number, curr: CloneData) => acc + curr.uniques, 0),
         }),
         [chartData]
     )
@@ -76,8 +82,8 @@ export function Chart() {
                 const data = await response.json();
                 if (data && Array.isArray(data.clones)) {
                     const sortedClones = data.clones
-                        .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
-                        .map(clone => ({
+                        .sort((a: { timestamp: string }, b: { timestamp: string }) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+                        .map((clone: { timestamp: string; count: number; uniques: number }) => ({
                             timestamp: clone.timestamp,
                             total: clone.count,
                             uniques: clone.uniques
