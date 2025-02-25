@@ -28,8 +28,8 @@ const courseDetails = {
   ctaText: "Reserve Your Spot Now",
   valueProposition: "No coding required. Just follow along and have a working AI agent in 60 minutes.",
   spots: {
-    total: 100,
-    remaining: 37
+    total: 10,
+    remaining: 8
   },
   launchDate: "April 1, 2025"
 };
@@ -169,7 +169,7 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       
       <!-- Countdown Timer -->
       <div class="mb-12">
-        <h3 class="text-xl font-medium text-white text-center mb-6">Course Starts In:</h3>
+        <h3 class="text-xl font-medium text-white text-center mb-6">Course Starts 1 April 2025 ... in:</h3>
         <CountdownTimer targetDate={launchDate} className="mb-8" client:visible />
         
         <div class="max-w-md mx-auto">

@@ -1,0 +1,569 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "../components/ui/button";
+import { Badge } from "../components/ui/badge";
+import { Card } from "../components/ui/card";
+import { CheckIcon, ArrowRightIcon, SparklesIcon, ShieldCheckIcon, ZapIcon, StarIcon, ClockIcon, UserIcon, HeartIcon, BarChartIcon, LightbulbIcon, PlayIcon, BrainIcon, GraduationCapIcon, RocketIcon, SchoolIcon } from "lucide-react";
+import { AccordionWrapper } from "../components/AccordionWrapper";
+import { CourseModuleContent } from "../components/CourseModuleContent";
+import { Progress } from "../components/ui/progress";
+import { Separator } from "../components/ui/separator";
+import { CountdownTimer } from "../components/CountdownTimer";
+import { StudentTestimonials } from "../components/StudentTestimonials";
+import { ChatConfigSchema } from "../schema/chat";
+
+const title = "Elite AI Education Partnership";
+const description = "An exclusive opportunity for forward-thinking schools to implement cutting-edge AI education program";
+
+// Countdown timer calculation - Application deadline is sooner
+const currentDate = new Date();
+const applicationDeadline = new Date();
+applicationDeadline.setDate(currentDate.getDate() + 14); // Only 2 weeks to apply
+
+// Program details
+const programDetails = {
+  badge: "Exclusive Partnership - 2025-2026",
+  title: "Elite AI Education Partnership",
+  subtitle: "A selective opportunity for pioneering schools",
+  guarantee: "Transformative Results Guarantee",
+  ctaText: "Apply for Selection",
+  valueProposition: "Join an exclusive cohort of forward-thinking schools implementing our comprehensive AI education framework.",
+  spots: {
+    total: 2,
+    remaining: 2
+  },
+  applicationDeadline: "Application Deadline: 14 Days",
+  selectionProcess: true
+};
+
+// Program modules data
+const programModulesData = [
+  {
+    title: "AI Foundations for Students",
+    description: "Age-appropriate introduction to AI concepts",
+    lessons: [
+      { name: "What is AI?", value: "Simple explanations for different age groups" },
+      { name: "How AI Works", value: "Interactive demonstrations of machine learning" },
+      { name: "AI Around Us", value: "Discovering AI in everyday technology" }
+    ]
+  },
+  {
+    title: "Creating AI Assistants",
+    description: "Hands-on projects to build helpful AI tools",
+    lessons: [
+      { name: "Design an AI Helper", value: "Students create their first AI assistant" },
+      { name: "Teaching AI Knowledge", value: "How to give AI information about specific topics" },
+      { name: "Testing & Improving", value: "Iterative development process" }
+    ]
+  },
+  {
+    title: "Building AI-Powered Websites",
+    description: "Integrate AI into web projects across subjects",
+    lessons: [
+      { name: "Website Fundamentals", value: "Basic web design with AI components" },
+      { name: "Subject-Specific Projects", value: "Create AI tools for science, language, history, etc." },
+      { name: "Showcase Development", value: "Building portfolio-worthy projects" }
+    ]
+  },
+  {
+    title: "Teacher Empowerment & Integration",
+    description: "Equipping educators with AI teaching skills",
+    lessons: [
+      { name: "Teacher Training", value: "Comprehensive workshops for educators" },
+      { name: "Curriculum Integration", value: "Strategies to incorporate AI across subjects" },
+      { name: "Assessment Methods", value: "Evaluating student AI projects effectively" }
+    ]
+  }
+];
+
+// Educational benefits - slightly enhanced for exclusivity
+const educationalBenefits = [
+  "Position your students at the forefront of AI innovation",
+  "Foster advanced critical thinking through cutting-edge AI problem-solving",
+  "Build technical literacy that creates university and career advantages",
+  "Enhance collaboration through team-based AI projects",
+  "Create cross-curricular connections with advanced technology",
+  "Develop ethical leadership in emerging technology",
+  "Dramatically increase student engagement through innovative learning"
+];
+
+// Implementation options - keep applicationBased focus
+const implementationOptions = [
+  {
+    title: "Pioneer Partnership",
+    description: "Comprehensive AI curriculum implementation",
+    features: [
+      "Complete curriculum integration",
+      "Faculty development program",
+      "Full learning materials & kits",
+      "Priority support & consultation",
+      "Showcase event development",
+      "Parent education workshops",
+      "Custom AI learning platform"
+    ],
+    applicationBased: true,
+    recommended: true
+  },
+  {
+    title: "Innovation Partnership",
+    description: "Advanced integration with custom development",
+    features: [
+      "School-wide curriculum transformation",
+      "Full faculty training program",
+      "Advanced materials & resources",
+      "Dedicated education consultant",
+      "Community showcase events",
+      "Parent & community workshops",
+      "Custom development projects",
+      "Annual curriculum updates"
+    ],
+    applicationBased: true,
+    recommended: false
+  }
+];
+
+// School outcomes
+const schoolOutcomes = [
+  {
+    title: "Academic Excellence",
+    description: "Students develop higher-order thinking skills through AI problem-solving",
+    icon: "BrainIcon"
+  },
+  {
+    title: "Future-Ready Students",
+    description: "Equip learners with the technical skills increasingly valued by universities and employers",
+    icon: "GraduationCapIcon"
+  },
+  {
+    title: "Teacher Development",
+    description: "Enhance your faculty's technical capabilities and confidence in teaching technology",
+    icon: "UserIcon"
+  },
+  {
+    title: "School Differentiation",
+    description: "Set your institution apart with a cutting-edge curriculum that attracts forward-thinking families",
+    icon: "SchoolIcon"
+  },
+  {
+    title: "Cross-Curricular Enhancement",
+    description: "Integrate AI projects across subjects from science to language arts and social studies",
+    icon: "ZapIcon"
+  },
+  {
+    title: "Showcase Opportunities",
+    description: "Create impressive student projects that demonstrate your school's innovation",
+    icon: "SparklesIcon"
+  }
+];
+
+// Success stories - enhanced to emphasize exclusivity
+const successStories = [
+  {
+    name: "International School of Excellence",
+    location: "Selected Partner School",
+    content: "Being selected for this program transformed our educational offering. Our students created AI-powered science projects that were featured in international technology showcases, and our school has become known as a technology leader in the region."
+  },
+  {
+    name: "Greenfield Academy",
+    location: "Selected Partner School",
+    content: "Selected from dozens of applicants, our partnership has delivered extraordinary results. Our students now develop sophisticated AI applications that have won national recognition, and we've seen a 40% increase in applications from families seeking cutting-edge education."
+  },
+  {
+    name: "St. Thomas Preparatory School",
+    location: "Selected Partner School",
+    content: "The selective nature of this program has positioned us as educational innovators. Our students now regularly secure places at elite universities based on their AI portfolio work, and we've been featured in educational publications for our forward-thinking approach."
+  }
+];
+
+// FAQs
+const faqs = [
+  {
+    title: "Do teachers need programming experience?",
+    content: "No, our program is designed for educators without technical backgrounds. We provide comprehensive training and a structured curriculum that makes teaching AI accessible to all teachers."
+  },
+  {
+    title: "What age groups is this appropriate for?",
+    content: "Our curriculum has modules designed for students from upper elementary (grade 4) through high school. Each module is age-appropriate and builds on developmentally suitable concepts."
+  },
+  {
+    title: "How does this integrate with our existing curriculum?",
+    content: "The program is designed to complement your existing subjects. We provide integration guides showing how AI projects can enhance science, mathematics, language arts, social studies, and creative subjects."
+  },
+  {
+    title: "What are the technology requirements?",
+    content: "Basic computers or tablets with internet access are sufficient. Our curriculum utilizes cloud-based tools that don't require powerful hardware or complex installations."
+  },
+  {
+    title: "How do you measure student success?",
+    content: "We provide assessment frameworks that evaluate both technical skills and soft skills like critical thinking, creativity, and collaboration. Students build portfolios of AI projects that demonstrate their learning journey."
+  },
+  {
+    title: "Do you offer ongoing support after implementation?",
+    content: "Yes, all program levels include technical support. Our Comprehensive and Premium options include regular consultation, curriculum updates, and professional development opportunities for teachers."
+  },
+  {
+    title: "Can this be adapted for our specific educational approach?",
+    content: "Absolutely. We work with schools to align our curriculum with various educational philosophies including project-based learning, inquiry-based approaches, or traditional instructional models."
+  },
+  {
+    title: "How are partner schools selected?",
+    content: "Our selection committee reviews applications based on school commitment to innovation, administrative support, faculty readiness, and potential for program success. We maintain a small cohort to ensure personalized support and maximum impact."
+  }
+];
+
+// Remove the calculation that's causing the error and set a fixed value
+// This would have been the approximate value but we're not displaying it
+const totalValue = 25000; // Fixed value instead of calculating
+
+// Create the chat config using Mistral instead of OpenAI
+const chatConfig = ChatConfigSchema.parse({
+  provider: "mistral", // Change from openai to mistral
+  model: "mistral-large-latest", // Use Mistral's model
+  systemPrompt: [{
+    type: "text" as const,
+    text: `You are an Educational Technology Consultant specializing in AI curriculum implementation for K-12 schools. Your role is to guide educational leaders through our exclusive AI education partnership opportunity, for which only 2 schools will be selected for the 2025-2026 academic year.
+
+Core Program Elements:
+1. Comprehensive AI Curriculum
+   • Age-appropriate AI foundations for all grade levels
+   • Hands-on AI assistant creation projects
+   • Website and application development with AI integration
+   • Cross-curricular implementation strategies
+   • Ethical AI and responsible technology use
+   • Student showcase and portfolio development
+   • Assessment frameworks and rubrics
+
+2. Teacher Empowerment
+   • No technical background required
+   • Comprehensive professional development
+   • Ready-to-use lesson plans and materials
+   • Ongoing coaching and support
+   • Collaborative teaching communities
+   • Technology integration specialists
+   • Confidence-building approach
+
+3. Implementation Support
+   • Customized implementation planning
+   • Phased rollout strategies
+   • Technology infrastructure guidance
+   • Dedicated educational consultant support
+   • Custom learning platform development
+   • Ongoing professional development
+   • Parent education workshops
+   • Community showcase opportunities
+   • Annual curriculum updates and enhancements
+
+4. Transformative Outcomes
+   • Institutional differentiation and prestige
+   • Enhanced student critical thinking and problem-solving
+   • University admission advantages for graduates
+   • Increased enrollment from technology-focused families
+   • Teacher professional development and confidence
+   • Cross-curricular enrichment and integration
+   • Community recognition and media opportunities
+   • Educational leadership positioning
+
+Communication Style:
+• Emphasize exclusivity and selective nature of the program
+• Highlight competitive advantages for selected schools
+• Create appropriate urgency around limited availability
+• Project confidence in transformative educational outcomes
+• Balance technical expertise with educational relevance
+• Maintain professional authority with warmth
+• Address concerns with evidence and success stories
+• Focus on student outcomes and institutional advancement
+
+Key Points to Emphasize:
+• Only 2 schools will be selected for the 2025-2026 cohort
+• Application-based selection process ensures mutual fit
+• Program delivers institutional differentiation in competitive markets
+• Students develop university and career-ready technical skills
+• Teachers receive comprehensive training and ongoing support
+• Implementation is tailored to each school's unique educational approach
+• Selection committee evaluates readiness and commitment factors
+
+Your goal is to help educational leaders understand the exclusive opportunity this program represents, the rigorous selection process, and the transformative outcomes achieved by partner schools, while guiding them toward submitting a compelling application.`
+  }],
+  welcome: {
+    message: "👋 Welcome! I'm your AI Education Partnership consultant. I can provide detailed information about our exclusive curriculum for the 2025-2026 cohort, for which only 2 schools will be selected. How can I assist you with the selection process today?",
+    avatar: "/icon.svg",
+    suggestions: [
+      {
+        label: "🔍 Selection Criteria",
+        prompt: "What criteria will be used to select the 2 partner schools?"
+      },
+      {
+        label: "📚 Curriculum Details",
+        prompt: "Can you explain more about the AI curriculum components?"
+      },
+      {
+        label: "👨‍🏫 Teacher Requirements",
+        prompt: "What support do you provide for teachers without technical experience?"
+      },
+      {
+        label: "📅 Application Timeline",
+        prompt: "What's the application and implementation timeline?"
+      },
+      {
+        label: "💼 Case Studies",
+        prompt: "Can you share success stories from previous partner schools?"
+      },
+      {
+        label: "📋 Application Process",
+        prompt: "What does the application process involve?"
+      }
+    ]
+  }
+});
+---
+
+<Layout
+  title={title}
+  description={description}
+  chatConfig={chatConfig}
+  rightPanelMode="quarter"
+>
+  <!-- Hero Section with Application Focus -->
+  <section class="pt-20 pb-16 md:pt-28 md:pb-20">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <Badge variant="outline" className="mb-4 text-blue-400 border-blue-400/30 bg-blue-400/10">
+          {programDetails.badge}
+        </Badge>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+          {programDetails.title}
+        </h1>
+        <p class="text-xl md:text-2xl text-[#aaaaaa] max-w-3xl mx-auto mb-8">
+          {programDetails.subtitle}
+        </p>
+        <p class="text-lg text-[#888888] max-w-2xl mx-auto">
+          {programDetails.valueProposition}
+        </p>
+      </div>
+      
+      <!-- Countdown Timer with Exclusivity Messaging -->
+      <div class="mb-12">
+        <h3 class="text-xl font-medium text-white text-center mb-6">Application Window Closing In:</h3>
+        <CountdownTimer targetDate={applicationDeadline} className="mb-8" client:visible />
+        
+        <div class="max-w-md mx-auto">
+          <div class="mb-2 flex justify-between text-sm text-[#888888]">
+            <span>Available Partnerships</span>
+            <span>{programDetails.spots.total}</span>
+          </div>
+          <Progress value={0} className="h-2 mb-6" />
+          <p class="text-center text-[#888888] text-sm mb-2">
+            <span class="text-white font-medium">Only {programDetails.spots.total} schools</span> will be selected for the 2025-2026 cohort
+          </p>
+          <p class="text-center text-yellow-400 text-sm font-medium">
+            Applications now being reviewed on a rolling basis
+          </p>
+        </div>
+      </div>
+      
+      <!-- CTA Button -->
+      <div class="text-center mb-12">
+        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl">
+          {programDetails.ctaText}
+          <ArrowRightIcon className="ml-2 w-5 h-5" />
+        </Button>
+        <p class="mt-4 text-[#888888] text-sm">{programDetails.guarantee}</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- School Outcomes Section -->
+  <section class="py-20 bg-[#0e0e0e]">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Transform Your School with AI Education</h2>
+        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto">
+          Enhance your educational offerings and prepare students for future success
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        {schoolOutcomes.map((outcome) => (
+          <div class="bg-[#1a1a1a] border border-[#333333] p-8 rounded-xl h-full">
+            <div class="w-12 h-12 rounded-full bg-blue-600/10 flex items-center justify-center mb-6">
+              {outcome.icon === "BrainIcon" && <LightbulbIcon className="w-6 h-6 text-blue-500" />}
+              {outcome.icon === "GraduationCapIcon" && <StarIcon className="w-6 h-6 text-blue-500" />}
+              {outcome.icon === "UserIcon" && <UserIcon className="w-6 h-6 text-blue-500" />}
+              {outcome.icon === "SchoolIcon" && <BarChartIcon className="w-6 h-6 text-blue-500" />}
+              {outcome.icon === "ZapIcon" && <ZapIcon className="w-6 h-6 text-blue-500" />}
+              {outcome.icon === "SparklesIcon" && <SparklesIcon className="w-6 h-6 text-blue-500" />}
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-3">{outcome.title}</h3>
+            <p class="text-[#aaaaaa]">{outcome.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Educational Benefits Section -->
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Educational Benefits</h2>
+        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto">
+          Develop essential skills for 21st-century success
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        {educationalBenefits.map((benefit) => (
+          <div class="flex items-start gap-4 bg-[#1a1a1a] border border-[#333333] p-6 rounded-xl">
+            <div class="w-10 h-10 rounded-full bg-blue-600/10 flex-shrink-0 flex items-center justify-center">
+              <CheckIcon className="w-5 h-5 text-blue-500" />
+            </div>
+            <p class="text-[#dddddd]">{benefit}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Program Curriculum Section -->
+  <section class="py-20 bg-[#0e0e0e]">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Comprehensive AI Curriculum</h2>
+        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto">
+          A structured program that builds AI literacy from the ground up
+        </p>
+      </div>
+      
+      <div class="space-y-8">
+        {programModulesData.map((module, index) => (
+          <Card className="bg-[#1a1a1a] border-[#333333] overflow-hidden">
+            <div class="bg-[#222222] p-6">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-blue-600/10 flex-shrink-0 flex items-center justify-center">
+                  <span class="text-blue-500 font-bold">{index + 1}</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-medium text-white">{module.title}</h3>
+                  <p class="text-[#888888]">{module.description}</p>
+                </div>
+              </div>
+            </div>
+            <div class="p-6">
+              <CourseModuleContent lessons={module.lessons} moduleNumber={index + 1} client:visible />
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Implementation Options Section -->
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Partnership Opportunities</h2>
+        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto">
+          Two exclusive partnership models available for selected schools
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {implementationOptions.map((option) => (
+          <Card className={`bg-[#1a1a1a] border-[#333333] overflow-hidden h-full ${option.recommended ? 'relative border-blue-500 shadow-lg shadow-blue-500/10' : ''}`}>
+            {option.recommended && (
+              <div class="absolute top-0 left-0 right-0 bg-blue-500 py-1 text-center text-sm font-medium text-white">
+                Most Selected
+              </div>
+            )}
+            <div class="p-8">
+              <h3 class="text-2xl font-bold text-white mb-3">{option.title}</h3>
+              <p class="text-[#888888] mb-6">{option.description}</p>
+              
+              <div class="mb-6">
+                <span class="text-lg text-blue-400 font-medium">Application-Based Selection</span>
+              </div>
+              
+              <Separator className="bg-[#333333] mb-6" />
+              
+              <ul class="space-y-4 mb-8">
+                {option.features.map((feature) => (
+                  <li class="flex items-start gap-3">
+                    <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span class="text-[#dddddd]">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <Button 
+                size="lg" 
+                className={`w-full ${option.recommended ? 'bg-blue-600 hover:bg-blue-700' : 'bg-[#333333] hover:bg-[#444444]'} text-white py-4 rounded-xl`}
+              >
+                Apply Now
+              </Button>
+            </div>
+          </Card>
+        ))}
+      </div>
+      
+      <div class="text-center mt-8 text-[#888888] text-sm">
+        <p>Investment details provided during application consultation</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FAQ Section -->
+  <section class="py-24 md:py-32">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white">Frequently Asked Questions</h2>
+      
+      <AccordionWrapper items={faqs} client:visible />
+    </div>
+  </section>
+  
+  <!-- Final CTA Section -->
+  <section class="py-24 md:py-32 bg-[#0e0e0e] relative">
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -top-[300px] -right-[300px] w-[600px] h-[600px] rounded-full bg-blue-600/5 blur-3xl"></div>
+      <div class="absolute -bottom-[300px] -left-[300px] w-[600px] h-[600px] rounded-full bg-blue-600/5 blur-3xl"></div>
+    </div>
+    
+    <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-white">Will Your School Be Selected?</h2>
+      <p class="text-xl text-[#aaaaaa] mb-10 max-w-2xl mx-auto">
+        Only two schools will join our exclusive cohort of educational innovators implementing next-generation AI literacy programs.
+      </p>
+      
+      <div class="mb-8">
+        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl">
+          Submit Your Application
+          <ArrowRightIcon className="ml-2 w-5 h-5" />
+        </Button>
+      </div>
+      
+      <div class="flex flex-col md:flex-row items-center justify-center gap-6 text-[#aaaaaa]">
+        <div class="flex items-center gap-2">
+          <ShieldCheckIcon className="w-5 h-5 text-blue-400" />
+          <span>{programDetails.guarantee}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <UserIcon className="w-5 h-5 text-blue-400" />
+          <span>Only {programDetails.spots.total} schools will be selected</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Custom styles for this page */
+  .feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+

@@ -52,12 +52,10 @@ export function CountdownTimer({ targetDate, className = '', onComplete }: Count
   return (
     <div className={`flex flex-wrap justify-center gap-4 ${className}`}>
       {timeUnits.map((unit) => (
-        <BorderBeam key={unit.label} duration={3} size={0.5} className="opacity-30">
           <div className="bg-[#1a1a1a] px-4 py-3 md:px-6 md:py-4 rounded-lg min-w-[100px] text-center">
             <div className="text-2xl md:text-3xl font-bold text-white">{unit.value}</div>
             <div className="text-xs md:text-sm text-[#aaaaaa] uppercase tracking-wide">{unit.label}</div>
           </div>
-        </BorderBeam>
       ))}
     </div>
   );
