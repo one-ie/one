@@ -1,49 +1,25 @@
 import React from "react";
 import { CheckIcon } from "lucide-react";
 
-interface Lesson {
-  name: string;
-  value: string;
+export interface CourseModuleContentProps {
+  lessons: { name: string; value: string }[];
+  moduleNumber?: number;
 }
 
-interface CourseModuleContentProps {
-  title: string;
-  description: string;
-  lessons: Lesson[];
-  index: number;
-}
-
-export function CourseModuleContent({ 
-  title, 
-  description, 
-  lessons, 
-  index 
-}: CourseModuleContentProps) {
+export function CourseModuleContent({ lessons, moduleNumber = 0 }: CourseModuleContentProps) {
   return (
-    <div className="bg-[#1a1a1a] border border-[#333333] rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-black/20">
-      <div className="flex items-center mb-6">
-        <div className="w-12 h-12 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center text-white font-bold text-xl mr-4">
-          {index + 1}
+    <div className="space-y-4">
+      {lessons.map((lesson, index) => (
+        <div key={index} className="flex items-start gap-3">
+          <div className="w-6 h-6 rounded-full bg-blue-600/10 flex-shrink-0 flex items-center justify-center mt-0.5">
+            <CheckIcon className="w-3.5 h-3.5 text-blue-500" />
+          </div>
+          <div>
+            <h4 className="font-medium text-white">{lesson.name}</h4>
+            <p className="text-sm text-[#888888]">{lesson.value}</p>
+          </div>
         </div>
-        <div>
-          <h3 className="text-xl font-medium text-white">{title}</h3>
-          <p className="text-[#888888]">{description}</p>
-        </div>
-      </div>
-      
-      <ul className="space-y-4">
-        {lessons.map((lesson, i) => (
-          <li key={i} className="flex items-start">
-            <div className="w-5 h-5 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
-              <CheckIcon className="w-3 h-3 text-[#aaaaaa]" />
-            </div>
-            <div>
-              <p className="text-[#dddddd]">{lesson.name}</p>
-              <p className="text-sm text-[#777777]">{lesson.value}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      ))}
     </div>
   );
 } 

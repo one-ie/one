@@ -71,11 +71,10 @@ export function CourseModulesAccordion({ modules }: { modules: CourseModule[] })
             </div>
           </CustomAccordionTrigger>
           <CustomAccordionContent className="px-6 py-4 bg-[hsla(var(--one-white),0.03)]">
+            <div className="mb-4 text-[#888888]">{module.description}</div>
             <CourseModuleContent 
-              title={module.title}
-              description={module.description}
               lessons={module.lessons} 
-              index={module.moduleNumber - 1}
+              moduleNumber={module.moduleNumber}
             />
           </CustomAccordionContent>
         </Accordion.Item>
@@ -149,23 +148,44 @@ interface AccordionWrapperProps {
   items: {
     title: string;
     content: string;
+  }[] | {
+    title: string;
+    description: string;
+    lessons: { name: string; value: string; }[];
+    moduleNumber?: number;
   }[];
+  type?: "faq" | "module";
 }
 
 // This is the component we'll use in the course.astro page
-export function AccordionWrapper({ items }: AccordionWrapperProps) {
+export function AccordionWrapper({ items, type = "faq" }: AccordionWrapperProps) {
   return (
     <UiAccordion type="single" collapsible className="w-full">
-      {items.map((item, index) => (
-        <UiAccordionItem key={`item-${index}`} value={`item-${index}`}>
-          <UiAccordionTrigger className="text-left font-medium text-white">
-            {item.title}
-          </UiAccordionTrigger>
-          <UiAccordionContent className="text-[#aaaaaa]">
-            {item.content}
-          </UiAccordionContent>
-        </UiAccordionItem>
-      ))}
+      {items.map((item, index) => {
+        // Check if this is a module item with lessons
+        const isModule = 'lessons' in item;
+        
+        return (
+          <UiAccordionItem value={`item-${index}`} key={index}>
+            <UiAccordionTrigger className="text-left font-medium text-white">
+              {item.title}
+            </UiAccordionTrigger>
+            <UiAccordionContent className="text-[#aaaaaa]">
+              {isModule ? (
+                <>
+                  <p className="mb-4 text-[#888888]">{(item as any).description}</p>
+                  <CourseModuleContent 
+                    lessons={(item as any).lessons} 
+                    moduleNumber={index + 1}
+                  />
+                </>
+              ) : (
+                <p>{(item as any).content}</p>
+              )}
+            </UiAccordionContent>
+          </UiAccordionItem>
+        );
+      })}
     </UiAccordion>
   );
 } 
