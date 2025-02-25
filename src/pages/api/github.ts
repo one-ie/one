@@ -50,8 +50,17 @@ export const GET: APIRoute = async () => {
     });
   } catch (error) {
     console.error('Error in GitHub API endpoint:', error);
+    
+    // Safely handle the error message with proper type checking
+    const errorMessage = error instanceof Error 
+      ? error.message 
+      : 'Unknown error occurred';
+    
     return new Response(
-      JSON.stringify({ error: 'Internal server error', details: error.message }), 
+      JSON.stringify({ 
+        error: 'Internal server error', 
+        details: errorMessage 
+      }), 
       {
         status: 500,
         headers: {
