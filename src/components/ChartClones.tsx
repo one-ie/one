@@ -55,34 +55,21 @@ export function Chart() {
     React.useEffect(() => {
         const fetchCloneData = async () => {
             try {
-                const token = "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";
+                // Call our server-side API endpoint instead of GitHub directly
+                const response = await fetch('/api/github');
                 
-                if (!token) {
-                    console.error('Missing GitHub token');
+                if (!response.ok) {
+                    console.error(`API responded with status ${response.status}`);
                     setChartData([]);
                     return;
                 }
-                
-                const response = await fetch('https://api.github.com/repos/one-ie/one/traffic/clones', {
-                    headers: {
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                
-                if (!response.ok) {
-                    if (response.status === 403) {
-                        console.error('GitHub API rate limit exceeded or authentication required');
-                        setChartData([]);
-                        return;
-                    }
-                    throw new Error(`GitHub API responded with status ${response.status}: ${await response.text()}`)
-                }
 
                 const data = await response.json();
+                
                 if (data && Array.isArray(data.clones)) {
                     const sortedClones = data.clones
-                        .sort((a: { timestamp: string }, b: { timestamp: string }) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+                        .sort((a: { timestamp: string }, b: { timestamp: string }) => 
+                            new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
                         .map((clone: { timestamp: string; count: number; uniques: number }) => ({
                             timestamp: clone.timestamp,
                             total: clone.count,
@@ -90,7 +77,7 @@ export function Chart() {
                         }));
                     setChartData(sortedClones);
                 } else {
-                    console.error('Invalid response format from GitHub API');
+                    console.error('Invalid response format from API');
                     setChartData([]);
                 }
             } catch (error) {
@@ -99,10 +86,10 @@ export function Chart() {
             }
         };
 
-        fetchCloneData()
-        const interval = setInterval(fetchCloneData, 5 * 60 * 1000)
-        return () => clearInterval(interval)
-    }, [])
+        fetchCloneData();
+        const interval = setInterval(fetchCloneData, 5 * 60 * 1000); // Refresh every 5 minutes
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <Card>
