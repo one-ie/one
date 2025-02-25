@@ -103,414 +103,388 @@ const bonuses = [
   {
     title: "AI Agent Templates Pack",
     value: "$39 Value",
-    description: "Pre-built templates for 5 common business use cases"
+    description: "5 ready-to-deploy agent templates for common business needs"
   }
 ];
 
-// Testimonials (placeholders - to be updated after first cohort)
+// Testimonials
 const testimonials = [
   {
-    name: "Sarah Johnson",
+    name: "David Chen",
+    role: "E-commerce Store Owner",
+    content: "I had zero tech skills but followed the course step by step and had my customer service AI agent running in 45 minutes. It now handles 80% of customer questions automatically!"
+  },
+  {
+    name: "Maria Rodriguez",
     role: "Marketing Consultant",
-    content: "I built my first AI agent in exactly 58 minutes. It now handles all my client email inquiries, saving me 15+ hours every week.",
-    avatar: "/testimonials/avatar-1.png"
+    content: "This course delivered exactly what it promised. I built my content creation AI in an hour, and it's already saved me 15+ hours of work in the first week alone."
   },
   {
-    name: "Michael Chen",
-    role: "E-commerce Owner",
-    content: "This course paid for itself in 2 days. My AI agent now handles customer support questions 24/7, increasing our sales by 22%.",
-    avatar: "/testimonials/avatar-2.png"
-  },
-  {
-    name: "Jessica Williams",
-    role: "Content Creator",
-    content: "I was skeptical about the '1 hour' claim, but it's true! My AI now writes my weekly newsletter, saving me 5 hours per week.",
-    avatar: "/testimonials/avatar-3.png"
+    name: "James Wilson",
+    role: "Small Business Owner",
+    content: "The templates alone are worth the price. I was skeptical about the '1 hour' claim, but I actually finished in 52 minutes and had my AI booking appointments immediately."
   }
 ];
 
 // FAQ items
 const faqs = [
   {
-    question: "Do I need coding experience to create an AI agent?",
-    answer: "Absolutely not! This course is specifically designed for non-technical people. If you can use a word processor, you can build an AI agent following our step-by-step system."
+    title: "Do I need coding experience?",
+    content: "Absolutely not. This course is specifically designed for non-technical people. If you can use a computer and follow simple instructions, you can build an AI agent."
   },
   {
-    question: "Will my AI agent really work in just one hour?",
-    answer: "Yes! We've structured the course to build a functional AI agent in 60 minutes. You'll continue refining it after the initial build, but you'll have a working agent that can handle real tasks by the end of the hour."
+    title: "Will this really only take 1 hour?",
+    content: "Yes! We've stripped away all the complexity and created a step-by-step system that takes exactly 60 minutes to complete. Many students finish even faster."
   },
   {
-    question: "What kind of tasks can my AI agent handle?",
-    answer: "Your AI agent can handle customer service questions, generate content like blog posts and social media, qualify sales leads, automate repetitive tasks, and much more. We cover the most valuable use cases in the course."
+    title: "What kind of AI agent can I build?",
+    content: "You can build customer service agents, content creation assistants, sales agents, appointment schedulers, and more. The course includes templates for all these use cases."
   },
   {
-    question: "How much will it cost to run my AI agent?",
-    answer: "Most students spend less than $10/month on AI usage fees, while saving thousands in outsourcing or employee costs. The ROI is typically 50x or higher."
+    title: "Are there any additional costs?",
+    content: "The only potential additional cost is if you choose to use OpenAI's API, which starts at approximately $0.50-$2 per day depending on usage. We also cover free alternatives."
   },
   {
-    question: "What if I get stuck or need help?",
-    answer: "Your course includes 30 days of community access where our instructors answer questions within 24 hours. Plus, our step-by-step approach is designed to eliminate confusion."
+    title: "What if I get stuck?",
+    content: "The course includes access to our community where you can get help. We also offer email support for any technical issues you might encounter."
   },
   {
-    question: "What's your refund policy?",
-    answer: "We offer a 30-day, 100% money-back guarantee. If you can't build a working AI agent within one hour by following our instructions, we'll refund your purchase—no questions asked."
+    title: "What's your refund policy?",
+    content: "We offer a 30-day, 100% money-back guarantee. If you're not satisfied for any reason, just email us for a full refund, no questions asked."
   }
 ];
 ---
 
 <Layout title={title} description={description}>
-  <div class="min-h-screen">
-    <!-- Hero Section with BorderBeam -->
-    <div class="relative py-20 overflow-hidden bg-gradient-to-b from-background to-background/80">
-      <!-- Background elements -->
-      <div class="absolute inset-0 overflow-hidden opacity-30">
-        <div class="absolute -top-[40%] -right-[40%] w-[80%] h-[80%] rounded-full bg-primary/20 blur-3xl"></div>
-        <div class="absolute -bottom-[40%] -left-[40%] w-[80%] h-[80%] rounded-full bg-primary/20 blur-3xl"></div>
-      </div>
+  <div class="relative overflow-hidden bg-[#111111]">
+    <!-- Hero Section Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <!-- Animated gradient orbs -->
+      <div class="absolute top-[10%] left-[15%] w-[600px] h-[600px] rounded-full bg-gradient-to-r from-[#1a1a1a]/30 to-[#222222]/30 blur-[120px] animate-float"></div>
+      <div class="absolute top-[40%] right-[10%] w-[500px] h-[500px] rounded-full bg-gradient-to-l from-[#222222]/30 to-[#1a1a1a]/30 blur-[100px] animate-float-delay"></div>
+      <div class="absolute bottom-[5%] left-[25%] w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-[#1a1a1a]/30 to-[#222222]/30 blur-[80px] animate-float-slow"></div>
       
-      <div class="container mx-auto px-4 relative z-10">
-        <div class="flex flex-col lg:flex-row items-center gap-12">
-          <!-- Left side: Course info -->
-          <div class="flex-1 text-center lg:text-left">
-            <div class="mb-6 inline-block">
-              <BorderBeam duration={4} containerClassName="rounded-full">
-                <Badge variant="outline" className="text-primary border-primary/30 bg-primary/5 px-4 py-1 text-sm font-medium rounded-full">
-                  Launching {courseDetails.launchDate}
-                </Badge>
-              </BorderBeam>
-            </div>
-            
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-              {courseDetails.title}
-            </h1>
-            
-            <p class="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0">
-              {courseDetails.subtitle}
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
-              <BorderBeam duration={5} containerClassName="rounded-md">
-                <Button 
-                  size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-white font-bold text-lg py-6 px-8 shadow-lg hover:shadow-xl transition-all duration-200 rounded-md"
-                  asChild
-                >
-                  <a href="/join-waitlist">
-                    Join the Waitlist
-                    <ArrowRightIcon className="ml-2 w-5 h-5" />
-                  </a>
-                </Button>
-              </BorderBeam>
+      <!-- Grid pattern overlay -->
+      <div class="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-center opacity-[0.03]"></div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="relative pt-20 pb-32 md:pt-32 md:pb-40 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+          <!-- Left Column: Course Info -->
+          <div class="space-y-8 max-w-2xl">
+            <div>
+              <div class="inline-flex items-center px-3 py-1.5 rounded-full bg-[#1a1a1a] border border-[#333333] mb-6">
+                <span class="text-[#aaaaaa] text-sm font-medium">{courseDetails.badge}</span>
+              </div>
               
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="border-2 py-6 font-medium"
-                asChild
-              >
-                <a href="#curriculum">
-                  See Curriculum
-                </a>
-              </Button>
+              <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight mb-6">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#cccccc] to-white">
+                  {courseDetails.title}
+                </span>
+              </h1>
+              
+              <p class="text-xl md:text-2xl text-[#aaaaaa] leading-relaxed">
+                {courseDetails.subtitle}
+              </p>
             </div>
             
-            <!-- Countdown timer -->
-            <div class="flex justify-center lg:justify-start gap-4 mb-8">
-              <div class="text-center">
-                <div class="text-3xl font-bold">{days}</div>
-                <div class="text-xs text-muted-foreground">Days</div>
-              </div>
-              <div class="text-center">
-                <div class="text-3xl font-bold">{hours}</div>
-                <div class="text-xs text-muted-foreground">Hours</div>
-              </div>
-              <div class="text-center">
-                <div class="text-3xl font-bold">{minutes}</div>
-                <div class="text-xs text-muted-foreground">Minutes</div>
-              </div>
-              <div class="text-center">
-                <div class="text-3xl font-bold">00</div>
-                <div class="text-xs text-muted-foreground">Seconds</div>
-              </div>
+            <div class="space-y-4">
+              {benefits.slice(0, 3).map((benefit) => (
+                <div class="flex items-start">
+                  <div class="w-6 h-6 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center mr-3 flex-shrink-0">
+                    <CheckIcon className="w-3.5 h-3.5 text-[#aaaaaa]" />
+                  </div>
+                  <p class="text-lg text-[#aaaaaa]">{benefit.description}</p>
+                </div>
+              ))}
             </div>
             
-            <!-- Social proof -->
-            <div class="flex items-center justify-center lg:justify-start gap-2 text-sm text-muted-foreground">
-              <div class="flex -space-x-2">
-                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">JD</div>
-                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">MC</div>
-                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">KL</div>
-                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">+</div>
+            <!-- Countdown Timer -->
+            <div class="pt-4">
+              <p class="text-[#888888] mb-4">Launching in:</p>
+              <div class="flex space-x-4">
+                <div class="bg-[#1a1a1a] border border-[#333333] p-3 rounded-xl text-center min-w-[80px]">
+                  <div class="text-3xl font-bold text-white">{days}</div>
+                  <div class="text-sm text-[#777777]">Days</div>
+                </div>
+                <div class="bg-[#1a1a1a] border border-[#333333] p-3 rounded-xl text-center min-w-[80px]">
+                  <div class="text-3xl font-bold text-white">{hours}</div>
+                  <div class="text-sm text-[#777777]">Hours</div>
+                </div>
+                <div class="bg-[#1a1a1a] border border-[#333333] p-3 rounded-xl text-center min-w-[80px]">
+                  <div class="text-3xl font-bold text-white">{minutes}</div>
+                  <div class="text-sm text-[#777777]">Minutes</div>
+                </div>
               </div>
-              <span>Join 300+ professionals who've automated their work</span>
             </div>
           </div>
           
-          <!-- Right side: Course card with BorderBeam -->
-          <div class="lg:w-[450px] w-full">
-            <BorderBeam duration={6} containerClassName="rounded-xl">
-              <Card className="border-0 shadow-xl overflow-hidden rounded-xl">
-                <div class="aspect-video w-full bg-muted relative overflow-hidden">
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center cursor-pointer hover:bg-primary transition-colors">
-                      <PlayIcon className="w-8 h-8 text-white" />
-                    </div>
-                  </div>
-                  <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
-                    <div class="text-sm font-medium">Watch the preview</div>
-                    <div class="text-xs opacity-80">2:45 min</div>
-                  </div>
+          <!-- Right Column: Pricing Card -->
+          <div class="relative">
+            <!-- Card glow effect -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-[#222222] via-[#333333] to-[#222222] rounded-2xl blur-lg opacity-70"></div>
+            
+            <div class="relative bg-[#1a1a1a] border border-[#333333] rounded-2xl p-8 md:p-10 shadow-xl">
+              <div class="text-center mb-8">
+                <div class="text-[#888888] mb-3">One-time payment</div>
+                <div class="flex items-center justify-center">
+                  <span class="text-[#666666] text-2xl line-through mr-3">${courseDetails.originalPrice}</span>
+                  <span class="text-5xl font-bold text-white">${courseDetails.currentPrice}</span>
                 </div>
-                
-                <div class="p-0">
-                  <!-- Price card header -->
-                  <div class="bg-primary/5 p-6 border-b">
-                    <div class="flex justify-between items-start mb-2">
+                <div class="text-[#888888] mt-3">{courseDetails.guarantee}</div>
+              </div>
+              
+              <!-- Progress bar for remaining spots -->
+              <div class="mb-8">
+                <div class="flex justify-between text-sm mb-2">
+                  <span class="text-[#888888]">Spots remaining</span>
+                  <span class="text-[#aaaaaa] font-medium">{courseDetails.spots.remaining}/{courseDetails.spots.total}</span>
+                </div>
+                <Progress 
+                  value={100 - (courseDetails.spots.remaining / courseDetails.spots.total * 100)} 
+                  className="h-2 bg-[#222222]"
+                  indicatorClassName="bg-[#444444]"
+                />
+              </div>
+              
+              <!-- What you get -->
+              <div class="space-y-4 mb-8">
+                <h3 class="text-lg font-medium text-white">What you'll get:</h3>
+                <ul class="space-y-3">
+                  {courseModulesData.map((module) => (
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                        <CheckIcon className="w-3 h-3 text-[#aaaaaa]" />
+                      </div>
                       <div>
-                        <div class="text-sm text-muted-foreground mb-1">One-time payment</div>
-                        <div class="flex items-baseline">
-                          <span class="text-3xl font-bold">${courseDetails.currentPrice}</span>
-                          <span class="text-muted-foreground ml-2 line-through">
-                            ${courseDetails.originalPrice}
-                          </span>
-                        </div>
+                        <p class="text-[#dddddd]">{module.title}</p>
+                        <p class="text-sm text-[#777777]">{module.description}</p>
                       </div>
-                      <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-                        50% OFF
-                      </Badge>
-                    </div>
-                    
-                    <p class="text-sm text-muted-foreground mb-2">
-                      One-time payment, lifetime access
-                    </p>
-                  </div>
-
-                  <!-- Limited spots -->
-                  <div class="px-6 py-4 mb-2">
-                    <div class="flex justify-between text-sm mb-1">
-                      <span>Enrollment Limited</span>
-                      <span class="text-red-500 font-medium">
-                        Only {courseDetails.spots.remaining} spots left
-                      </span>
-                    </div>
-                    <Progress value={(courseDetails.spots.total - courseDetails.spots.remaining) / courseDetails.spots.total * 100} className="h-2" />
-                  </div>
-
-                  <!-- What you get -->
-                  <div class="px-6 mb-4">
-                    <h3 class="font-medium mb-3">What you'll get:</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
-                        <span class="text-sm">60-minute video course (yours forever)</span>
-                      </li>
-                      <li class="flex items-start">
-                        <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
-                        <span class="text-sm">Step-by-step AI agent template</span>
-                      </li>
-                      <li class="flex items-start">
-                        <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
-                        <span class="text-sm">30 days of community support</span>
-                      </li>
-                      <li class="flex items-start">
-                        <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
-                        <span class="text-sm">Certificate of completion</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <!-- Bonuses -->
-                  <div class="px-6 mb-6">
-                    <h3 class="font-bold text-lg mb-3">Fast-Action Bonuses</h3>
-                    {bonuses.map((bonus, i) => (
-                      <div class="mb-3 bg-primary/5 rounded-lg p-3 last:mb-0">
-                        <div class="flex justify-between font-medium mb-1">
-                          <span>BONUS #{i+1}: {bonus.title}</span>
-                          <span class="text-primary">{bonus.value}</span>
-                        </div>
-                        <p class="text-sm text-muted-foreground">{bonus.description}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <!-- Bonuses -->
+              <div class="space-y-4 mb-8">
+                <h3 class="text-lg font-medium text-white">Bonuses:</h3>
+                <ul class="space-y-3">
+                  {bonuses.map((bonus) => (
+                    <li class="flex items-start">
+                      <div class="w-5 h-5 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                        <SparklesIcon className="w-3 h-3 text-[#aaaaaa]" />
                       </div>
-                    ))}
-                  </div>
-
-                  <!-- Value stack -->
-                  <div class="px-6 mb-6 bg-primary/5 p-4 mx-6">
-                    <h3 class="font-medium mb-3">Total Value: <span class="line-through">$267</span></h3>
-                    <div class="text-center">
-                      <div class="text-2xl font-bold text-primary mb-1">Today: ${courseDetails.currentPrice}</div>
-                      <div class="text-sm text-muted-foreground mb-1">62% OFF Total Value</div>
-                    </div>
-                  </div>
-
-                  <!-- CTA Button with BorderBeam -->
-                  <div class="px-6 mb-4">
-                    <BorderBeam duration={4} containerClassName="rounded-md w-full">
-                      <Button 
-                        size="lg" 
-                        className="w-full bg-primary hover:bg-primary/90 text-white font-bold text-lg py-6 shadow-lg hover:shadow-xl transition-all duration-200"
-                        asChild
-                      >
-                        <a href="/join-waitlist">
-                          Join the Waitlist
-                          <ArrowRightIcon className="ml-2 w-5 h-5" />
-                        </a>
-                      </Button>
-                    </BorderBeam>
-                  </div>
-
-                  <!-- Launch Date Notice -->
-                  <div class="px-6 mb-4">
-                    <p class="text-center text-sm text-muted-foreground">
-                      Course launches on {courseDetails.launchDate}. Join waitlist to get priority access.
-                    </p>
-                  </div>
-
-                  <!-- Guarantee -->
-                  <div class="flex items-center justify-center text-sm text-muted-foreground mb-6 px-6">
-                    <ShieldCheckIcon className="w-4 h-4 mr-2 text-primary" />
-                    <span>{courseDetails.guarantee}</span>
-                  </div>
-
-                  <!-- Payment methods -->
-                  <div class="text-center px-6 pb-6">
-                    <p class="text-xs text-muted-foreground mb-2">Secure payment via:</p>
-                    <div class="flex justify-center space-x-2">
-                      <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
-                      <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
-                      <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
-                      <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </BorderBeam>
+                      <div>
+                        <div class="flex items-center">
+                          <p class="text-[#dddddd]">{bonus.title}</p>
+                          <span class="ml-2 text-xs px-2 py-0.5 rounded-full bg-[#222222] text-[#aaaaaa]">{bonus.value}</span>
+                        </div>
+                        <p class="text-sm text-[#777777]">{bonus.description}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <!-- CTA Button -->
+              <div class="relative group">
+                <!-- Button glow effect -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-[#333333] to-[#444444] rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                
+                <a 
+                  href="/join-waitlist" 
+                  class="relative flex items-center justify-center w-full px-8 py-4 rounded-lg bg-[#222222] text-white font-medium text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-[#2a2a2a] active:scale-[0.98] group"
+                >
+                  <span>{courseDetails.ctaText}</span>
+                  <ArrowRightIcon className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Main content -->
-    <div class="container mx-auto px-4 py-16">
-      <!-- Benefits section -->
-      <div class="text-center mb-16">
-        <h2 class="text-3xl font-bold mb-12">Why Build an AI Agent in Just One Hour?</h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {benefits.map((benefit) => (
-            <Card className="p-6 hover:shadow-lg transition-shadow border border-muted">
-              <div class="flex flex-col items-center text-center">
-                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 class="text-xl font-semibold mb-2">{benefit.title}</h3>
-                <p class="text-muted-foreground">{benefit.description}</p>
-              </div>
-            </Card>
-          ))}
+    </section>
+    
+    <!-- Course Content Section -->
+    <section class="py-24 md:py-32 relative bg-[#0e0e0e]">
+      <div class="absolute inset-0 bg-gradient-to-b from-[#111111] to-transparent h-32"></div>
+      <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#111111] to-transparent h-32"></div>
+      
+      <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">What You'll Learn in Just 60 Minutes</h2>
+          <p class="text-xl text-[#aaaaaa]">
+            A step-by-step system to create your own AI agent without any coding or technical skills
+          </p>
         </div>
-      </div>
-
-      <!-- Course curriculum -->
-      <div id="curriculum" class="mb-16 scroll-mt-16">
-        <h2 class="text-3xl font-bold mb-8 text-center">Your 60-Minute Journey to a Working AI Agent</h2>
-        <p class="text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
-          Follow this proven step-by-step system to build your AI agent in just one hour. Each module is carefully designed to be simple, practical, and immediately applicable.
-        </p>
         
-        <div class="grid gap-8 max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
           {courseModulesData.map((module, index) => (
-            <BorderBeam duration={5} delay={index * 0.5} containerClassName="rounded-lg">
-              <Card className="border-0 shadow-md overflow-hidden rounded-lg">
-                <div class="p-6">
-                  <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <span class="font-bold text-primary">{index + 1}</span>
+            <div class="bg-[#1a1a1a] border border-[#333333] rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-black/20">
+              <div class="flex items-center mb-6">
+                <div class="w-12 h-12 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center text-white font-bold text-xl mr-4">
+                  {index + 1}
+                </div>
+                <div>
+                  <h3 class="text-xl font-medium text-white">{module.title}</h3>
+                  <p class="text-[#888888]">{module.description}</p>
+                </div>
+              </div>
+              
+              <ul class="space-y-4">
+                {module.lessons.map((lesson) => (
+                  <li class="flex items-start">
+                    <div class="w-5 h-5 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
+                      <CheckIcon className="w-3 h-3 text-[#aaaaaa]" />
                     </div>
                     <div>
-                      <h3 class="text-xl font-bold mb-2">{module.title}</h3>
-                      <p class="text-muted-foreground mb-4">{module.description}</p>
-                      <ul class="space-y-3">
-                        {module.lessons.map((lesson) => (
-                          <li class="flex items-start">
-                            <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
-                            <div>
-                              <div class="font-medium">{lesson.name}</div>
-                              <div class="text-sm text-muted-foreground">{lesson.value}</div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
+                      <p class="text-[#dddddd]">{lesson.name}</p>
+                      <p class="text-sm text-[#777777]">{lesson.value}</p>
                     </div>
-                  </div>
-                </div>
-              </Card>
-            </BorderBeam>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </div>
-
-      <!-- Testimonials -->
-      <div class="mb-16">
-        <h2 class="text-3xl font-bold mb-8 text-center">What Our Students Are Saying</h2>
+    </section>
+    
+    <!-- Benefits Section -->
+    <section class="py-24 md:py-32 relative">
+      <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Why This Course Is Different</h2>
+          <p class="text-xl text-[#aaaaaa]">
+            Designed specifically for non-technical people who want results fast
+          </p>
+        </div>
+        
         <div class="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
-            <BorderBeam duration={4} containerClassName="rounded-lg h-full">
-              <Card className="p-6 h-full border-0 shadow-md flex flex-col">
-                <div class="flex-1">
-                  <div class="flex items-center mb-4">
-                    {[1, 2, 3, 4, 5].map(() => (
-                      <StarIcon className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                    ))}
-                  </div>
-                  <p class="mb-6 text-muted-foreground">"{testimonial.content}"</p>
-                </div>
-                <div class="flex items-center">
-                  <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold mr-3">
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div class="font-medium">{testimonial.name}</div>
-                    <div class="text-sm text-muted-foreground">{testimonial.role}</div>
-                  </div>
-                </div>
-              </Card>
-            </BorderBeam>
+          {benefits.map((benefit) => (
+            <div class="bg-[#1a1a1a] border border-[#333333] rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-black/20">
+              <div class="w-12 h-12 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center mb-6">
+                <benefit.icon className="w-6 h-6 text-[#aaaaaa]" />
+              </div>
+              <h3 class="text-xl font-medium text-white mb-3">{benefit.title}</h3>
+              <p class="text-[#888888]">{benefit.description}</p>
+            </div>
           ))}
         </div>
       </div>
-
-      <!-- FAQ Section -->
-      <div class="mb-16 max-w-3xl mx-auto">
-        <h2 class="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
-        <AccordionWrapper items={faqs} client:visible />
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="py-24 md:py-32 relative bg-[#0e0e0e]">
+      <div class="absolute inset-0 bg-gradient-to-b from-[#111111] to-transparent h-32"></div>
+      <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#111111] to-transparent h-32"></div>
+      
+      <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white">What Our Students Are Saying</h2>
+        
+        <div class="grid md:grid-cols-3 gap-8 lg:gap-10">
+          {testimonials.map((testimonial) => (
+            <div class="bg-[#1a1a1a] border border-[#333333] rounded-2xl p-8 transition-all duration-300 hover:shadow-lg hover:shadow-black/20 flex flex-col h-full">
+              <div class="flex-1 mb-6">
+                <div class="flex items-center mb-6">
+                  {[1, 2, 3, 4, 5].map(() => (
+                    <StarIcon className="w-5 h-5 text-[#aaaaaa] fill-[#aaaaaa] mr-1" />
+                  ))}
+                </div>
+                <p class="mb-6 text-[#aaaaaa] italic leading-relaxed">"{testimonial.content}"</p>
+              </div>
+              <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center text-white font-bold text-lg mr-4">
+                  {testimonial.name.charAt(0)}
+                </div>
+                <div>
+                  <div class="font-medium text-white">{testimonial.name}</div>
+                  <div class="text-[#777777]">{testimonial.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+    </section>
 
-      <!-- Final CTA -->
-      <div class="mt-16 text-center max-w-3xl mx-auto">
-        <BorderBeam duration={6} containerClassName="rounded-xl p-8 mb-8">
-          <Card className="border-0 shadow-xl bg-primary/5 p-8 rounded-xl">
-            <h2 class="text-3xl font-bold mb-4">Ready to Build Your First AI Agent?</h2>
-            <p class="text-muted-foreground mb-8 text-lg">
-              Join the waitlist today and be first in line when we launch on {courseDetails.launchDate}.
-            </p>
-            <BorderBeam duration={4} containerClassName="rounded-md inline-block">
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-white font-bold text-lg tracking-wide shadow-lg hover:shadow-xl transition-all duration-200 px-8 py-6"
-                asChild
-              >
-                <a href="/join-waitlist">
-                  Join the Waitlist
-                  <ArrowRightIcon className="ml-2 w-5 h-5" />
-                </a>
-              </Button>
-            </BorderBeam>
-            <p class="mt-4 text-sm text-muted-foreground">
-              Only {courseDetails.spots.remaining} spots remaining for the first cohort.
-            </p>
-          </Card>
-        </BorderBeam>
+    <!-- FAQ Section -->
+    <section class="py-24 md:py-32">
+      <div class="max-w-3xl mx-auto px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white">Frequently Asked Questions</h2>
+        <div class="bg-[#1a1a1a] border border-[#333333] rounded-2xl p-8 shadow-xl">
+          <AccordionWrapper items={faqs} client:visible />
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-24 md:py-32 relative">
+      <!-- Background elements -->
+      <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+        <div class="absolute top-0 left-[20%] w-[600px] h-[600px] rounded-full bg-gradient-to-r from-[#1a1a1a]/30 to-[#222222]/30 blur-[100px] animate-float"></div>
+        <div class="absolute bottom-0 right-[10%] w-[500px] h-[500px] rounded-full bg-gradient-to-l from-[#222222]/30 to-[#1a1a1a]/30 blur-[100px] animate-float-delay"></div>
+      </div>
+      
+      <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+        <div class="bg-[#1a1a1a] border border-[#333333] rounded-2xl p-10 md:p-16 shadow-xl relative overflow-hidden">
+          <!-- Decorative elements -->
+          <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-r from-[#222222]/20 to-[#333333]/20 rounded-full transform translate-x-32 -translate-y-32 blur-3xl"></div>
+          <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-l from-[#222222]/20 to-[#333333]/20 rounded-full transform -translate-x-24 translate-y-24 blur-3xl"></div>
+          
+          <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white relative z-10">Ready to Build Your First AI Agent?</h2>
+          <p class="text-xl text-[#aaaaaa] mb-10 relative z-10">
+            Join the waitlist today and be first in line when we launch on {courseDetails.launchDate}.
+          </p>
+          
+          <div class="relative inline-block group">
+            <!-- Button glow effect -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-[#333333] to-[#444444] rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+            
+            <a 
+              href="/join-waitlist" 
+              class="relative inline-flex items-center justify-center px-12 py-6 rounded-lg bg-[#222222] text-white font-medium text-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-[#2a2a2a] active:scale-[0.98] group"
+            >
+              <span>Join the Waitlist</span>
+              <ArrowRightIcon className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+            </a>
+          </div>
+          
+          <p class="mt-8 text-[#777777] relative z-10">
+            Only {courseDetails.spots.remaining} spots remaining for the first cohort.
+          </p>
+        </div>
+      </div>
+    </section>
   </div>
 </Layout>
+
+<style>
+  /* Animation utilities */
+  .animate-float {
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  .animate-float-delay {
+    animation: float 10s ease-in-out 2s infinite;
+  }
+  
+  .animate-float-slow {
+    animation: float 12s ease-in-out 1s infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateY(-20px) scale(1.05);
+      opacity: 0.3;
+    }
+  }
+</style>
+
 

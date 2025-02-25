@@ -3,17 +3,6 @@
 # Version: 1.0.0
 # Purpose: Single source of truth for generating the entire site structure
 
-# Generator Configuration
-generator:
-  version: 1.0.0
-  engine: astro
-  mode: SSR
-  integrations:
-    - react
-    - tailwind
-    - mdx
-    - shadcn
-
 # Business Configuration
 business:
   name: ONE

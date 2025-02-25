@@ -8,9 +8,10 @@ import { AccordionWrapper } from "../components/AccordionWrapper";
 import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
 import { Separator } from "../components/ui/separator";
+import { BorderBeam } from "../components/magicui/border-beam";
 
-const title = "Master AI Business Building - Complete Course";
-const description = "Transform your ideas into profitable AI-powered businesses with our comprehensive, step-by-step system";
+const title = "Pricing Plans";
+const description = "Choose the perfect plan for your AI business needs";
 
 // Course details
 const courseDetails = {
@@ -125,321 +126,307 @@ const instructor = {
   image: "/instructor.jpg"
 };
 
-// FAQs
-const faqs = [
+// Plans data
+const plans = [
   {
-    question: "Do I need technical skills to succeed with this course?",
-    answer: "No technical background is required. We've designed the course to be beginner-friendly while still covering advanced concepts. We provide step-by-step instructions and templates so you can focus on building your business, not learning to code."
+    name: "Starter",
+    price: "49",
+    period: "per month",
+    description: "Perfect for individuals and small businesses just getting started with AI",
+    features: [
+      "3 AI Agents",
+      "Basic customization",
+      "Standard response time",
+      "Email support",
+      "5,000 messages/month"
+    ],
+    cta: "Get Started",
+    popular: false
   },
   {
-    question: "How quickly can I expect to see results?",
-    answer: "Most students launch their AI business within 30 days of starting the course. The fastest student went from zero to first paying customer in just 18 days. Your results will depend on how quickly you implement the steps, but our framework is designed for rapid deployment."
+    name: "Professional",
+    price: "99",
+    period: "per month",
+    description: "Ideal for growing businesses that need more advanced AI capabilities",
+    features: [
+      "10 AI Agents",
+      "Advanced customization",
+      "Faster response time",
+      "Priority support",
+      "25,000 messages/month",
+      "Custom training data",
+      "Analytics dashboard"
+    ],
+    cta: "Upgrade Now",
+    popular: true
   },
   {
-    question: "What makes this different from other AI business courses?",
-    answer: "Unlike other courses that focus only on theory, we provide a complete system including step-by-step implementation guides, done-for-you templates, technical assistance, and community support. We focus on practical, proven strategies that are currently working in the AI space."
-  },
-  {
-    question: "How much time do I need to commit?",
-    answer: "Most students spend 5-7 hours per week implementing the course material. The course is designed to fit around a full-time job, with bite-sized lessons and actionable steps you can complete in small time blocks."
+    name: "Enterprise",
+    price: "Custom",
+    period: "tailored pricing",
+    description: "For organizations requiring enterprise-grade AI solutions at scale",
+    features: [
+      "Unlimited AI Agents",
+      "Full customization",
+      "Fastest response time",
+      "24/7 dedicated support",
+      "Unlimited messages",
+      "Advanced analytics",
+      "Custom integrations",
+      "SLA guarantees",
+      "Dedicated account manager"
+    ],
+    cta: "Contact Sales",
+    popular: false
   }
 ];
 
-// Bonuses
-const bonuses = [
+// Feature comparison
+const featureComparison = [
+  { name: "AI Agents", starter: "3", pro: "10", enterprise: "Unlimited" },
+  { name: "Messages per month", starter: "5,000", pro: "25,000", enterprise: "Unlimited" },
+  { name: "Custom training", starter: "Basic", pro: "Advanced", enterprise: "Enterprise-grade" },
+  { name: "Response time", starter: "Standard", pro: "Fast", enterprise: "Fastest" },
+  { name: "Support", starter: "Email", pro: "Priority", enterprise: "24/7 Dedicated" },
+  { name: "Analytics", starter: "Basic", pro: "Advanced", enterprise: "Custom" },
+  { name: "White labeling", starter: "❌", pro: "✓", enterprise: "✓" },
+  { name: "API access", starter: "❌", pro: "✓", enterprise: "✓" },
+  { name: "Custom domain", starter: "❌", pro: "✓", enterprise: "✓" },
+  { name: "SLA guarantee", starter: "❌", pro: "❌", enterprise: "✓" }
+];
+
+// FAQ items
+const faqs = [
   {
-    title: "AI Business Templates Bundle",
-    description: "20+ ready-to-use templates for your AI business including prompts, marketing materials, and legal documents",
-    value: "$997 Value"
+    title: "Can I switch plans later?",
+    content: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle."
   },
   {
-    title: "Private Community Access",
-    description: "Connect with 300+ AI entrepreneurs building profitable businesses with this system",
-    value: "$497 Value"
+    title: "Is there a free trial?",
+    content: "We offer a 14-day free trial on all plans. No credit card required to start your trial."
   },
   {
-    title: "6 Weekly Group Coaching Calls",
-    description: "Get your specific questions answered and receive personalized guidance",
-    value: "$997 Value"
+    title: "How do I cancel my subscription?",
+    content: "You can cancel your subscription at any time from your account dashboard. If you cancel, you'll still have access until the end of your current billing period."
+  },
+  {
+    title: "Do you offer refunds?",
+    content: "We offer a 30-day money-back guarantee. If you're not satisfied with our service, contact us within 30 days of your purchase for a full refund."
+  },
+  {
+    title: "What payment methods do you accept?",
+    content: "We accept all major credit cards, PayPal, and cryptocurrency payments including Bitcoin, Ethereum, and Solana."
   }
 ];
 ---
 
 <Layout title={title} description={description}>
-  <div class="min-h-screen bg-gradient-to-b from-primary/5 to-background">
-    <!-- Hero Section -->
-    <div class="container mx-auto px-4 py-16">
-      <div class="text-center mb-16">
-        <Badge variant="outline" className="mb-4 animate-pulse">
-          {courseDetails.badge}
-        </Badge>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight">{courseDetails.title}</h1>
-        <p class="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8">{courseDetails.subtitle}</p>
-        <div class="max-w-2xl mx-auto mb-8">
-          <Progress value={(courseDetails.spots.total - courseDetails.spots.remaining) / courseDetails.spots.total * 100} className="h-2 mb-2" />
-          <p class="text-sm text-muted-foreground">
-            <span class="text-primary font-medium">{courseDetails.spots.remaining} spots remaining</span> out of {courseDetails.spots.total} total enrollments
-          </p>
-        </div>
-        
-        <!-- Benefits Grid -->
-        <div class="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mb-8">
-          {benefits.map((benefit) => (
-            <div class="flex flex-col items-center p-4 rounded-lg bg-primary/5">
-              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                <benefit.icon className="w-6 h-6 text-primary" />
+  <div class="main-grid">
+    <div class="center-grid">
+      <div class="content-area">
+        <!-- Hero Section with 70s MCM styling -->
+        <div class="mb-32 pt-16">
+          <div class="text-center max-w-3xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 tracking-tight one-text-gradient">
+              Simple, Transparent Pricing
+            </h1>
+            <p class="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Choose the perfect plan for your business needs with no hidden fees or surprises
+            </p>
+            
+            <!-- Pricing Toggle -->
+            <div class="flex items-center justify-center mb-16">
+              <span class="text-sm font-medium mr-3">Monthly</span>
+              <div class="w-12 h-6 bg-muted rounded-full p-1 cursor-pointer">
+                <div class="w-4 h-4 bg-white rounded-full"></div>
               </div>
-              <h3 class="font-bold mb-1">{benefit.title}</h3>
-              <p class="text-sm text-muted-foreground text-center">{benefit.description}</p>
+              <span class="text-sm font-medium ml-3">Annual <Badge variant="outline" className="ml-2 text-xs">Save 20%</Badge></span>
             </div>
-          ))}
-        </div>
-        
-        <Button 
-          size="lg" 
-          className="bg-primary hover:bg-primary/90 text-white text-lg font-bold py-6 px-8 shadow-lg hover:shadow-xl transition-all duration-200"
-          asChild
-        >
-          <a href="#pricing">
-            {courseDetails.ctaText}
-            <ArrowRightIcon className="ml-2 w-5 h-5" />
-          </a>
-        </Button>
-      </div>
-      
-      <!-- Main Content -->
-      <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto" id="pricing">
-        <!-- Left Column (Course Details) -->
-        <div class="lg:col-span-2">
-          <!-- Video Preview -->
-          <Card className="mb-10 overflow-hidden">
-            <div class="aspect-video bg-muted/50 flex items-center justify-center">
-              <div class="text-center">
-                <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-2">
-                  <PlayIcon className="w-8 h-8 text-primary" />
-                </div>
-                <span class="text-sm text-muted-foreground">Click to Play Course Preview</span>
-              </div>
-            </div>
-          </Card>
+          </div>
           
-          <!-- What You'll Learn -->
-          <Card className="p-8 mb-10 border-primary/10">
-            <h2 class="text-2xl font-bold mb-6 flex items-center">
-              <LightbulbIcon className="w-6 h-6 text-primary mr-2" />
-              What You'll Learn
-            </h2>
-            <div class="grid sm:grid-cols-2 gap-4">
-              {learningOutcomes.map(outcome => (
-                <div class="flex items-start">
-                  <CheckIcon className="w-5 h-5 text-green-500 mt-1 mr-2 flex-shrink-0" />
-                  <p>{outcome}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          <!-- Course Modules -->
-          <h2 class="text-2xl font-bold mb-6">Course Curriculum</h2>
-          <Card className="p-0 overflow-hidden mb-10 border-primary/10">
-            <div class="bg-primary/5 p-4 flex items-center justify-between">
-              <div>
-                <span class="font-medium">5 Modules</span>
-                <span class="text-muted-foreground"> • </span>
-                <span class="font-medium">15 Lessons</span>
-                <span class="text-muted-foreground"> • </span>
-                <span class="font-medium">6+ Hours</span>
-              </div>
-              <span class="inline-flex items-center border border-primary/20 bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-semibold rounded-full">
-                Lifetime Access
-              </span>
-            </div>
-            <div class="p-0">
-              <AccordionWrapper client:load 
-                items={courseModulesData.map(module => ({
-                  title: module.title,
-                  content: { type: "module", description: module.description, lessons: module.lessons }
-                }))}
-              />
-            </div>
-          </Card>
-
-          <!-- Instructor -->
-          <Card className="p-8 mb-10 border-primary/10">
-            <h2 class="text-2xl font-bold mb-6">Your Instructor</h2>
-            <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-              <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20 flex-shrink-0">
-                <img src={instructor.image} alt={instructor.name} class="w-full h-full object-cover" />
-              </div>
-              <div>
-                <h3 class="text-xl font-bold">{instructor.name}</h3>
-                <p class="text-primary mb-3">{instructor.title}</p>
-                <p class="text-muted-foreground">{instructor.bio}</p>
-              </div>
-            </div>
-          </Card>
-
-          <!-- Testimonials -->
-          <h2 class="text-2xl font-bold mb-6">Student Success Stories</h2>
-          <div class="grid md:grid-cols-2 gap-6 mb-10">
-            {testimonials.map(testimonial => (
-              <Card className="p-6 border-primary/10 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full -mr-10 -mt-10 z-0"></div>
-                <div class="relative z-10">
-                  <div class="flex text-amber-400 mb-2">
-                    <StarIcon className="w-4 h-4" />
-                    <StarIcon className="w-4 h-4" />
-                    <StarIcon className="w-4 h-4" />
-                    <StarIcon className="w-4 h-4" />
-                    <StarIcon className="w-4 h-4" />
+          <!-- Pricing Cards with ONE styling -->
+          <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {plans.map((plan, index) => (
+              <div class={`relative ${plan.popular ? 'mt-[-1rem] mb-[-1rem]' : ''}`}>
+                {plan.popular && (
+                  <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <Badge className="bg-white text-black px-3 py-1">Most Popular</Badge>
                   </div>
-                  <p class="italic mb-4">{testimonial.quote}</p>
-                  <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-full overflow-hidden mr-3">
-                      <img src={testimonial.image} alt={testimonial.author} class="w-full h-full object-cover" />
+                )}
+                
+                <Card className={`one-glass-dark p-8 border-[hsla(var(--one-border))] h-full flex flex-col ${plan.popular ? 'shadow-xl' : 'shadow-md'}`}>
+                  <div class="mb-6">
+                    <h3 class="text-2xl font-bold mb-2">{plan.name}</h3>
+                    <p class="text-muted-foreground">{plan.description}</p>
+                  </div>
+                  
+                  <div class="mb-6">
+                    <div class="flex items-end">
+                      <span class="text-4xl font-bold">
+                        {plan.price === "Custom" ? "" : "$"}{plan.price}
+                      </span>
+                      {plan.price !== "Custom" && (
+                        <span class="text-muted-foreground ml-2">{plan.period}</span>
+                      )}
                     </div>
-                    <div>
-                      <p class="font-medium">{testimonial.author}</p>
-                      <p class="text-sm text-muted-foreground">{testimonial.business}</p>
-                    </div>
+                    {plan.price === "Custom" && (
+                      <span class="text-muted-foreground">{plan.period}</span>
+                    )}
                   </div>
-                  <div class="mt-3 bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-400 text-sm font-medium px-3 py-1 rounded inline-block">
-                    Result: {testimonial.result}
+                  
+                  <ul class="space-y-3 mb-8 flex-grow">
+                    {plan.features.map(feature => (
+                      <li class="flex items-start">
+                        <CheckIcon className="w-5 h-5 text-white mr-2 flex-shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <div class="mt-auto">
+                    {plan.popular ? (
+                      <BorderBeam duration={8} containerClassName="w-full rounded-md">
+                        <Button size="lg" className="w-full one-button bg-white text-black hover:bg-white/90">
+                          {plan.cta}
+                          <ArrowRightIcon className="ml-2 h-5 w-5" />
+                        </Button>
+                      </BorderBeam>
+                    ) : (
+                      <Button size="lg" variant="outline" className="w-full border-white text-white hover:bg-white/10">
+                        {plan.cta}
+                      </Button>
+                    )}
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </div>
             ))}
           </div>
-
-          <!-- FAQs -->
-          <Card className="p-8 mb-10 border-primary/10">
-            <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
-            <AccordionWrapper client:load 
-              items={faqs.map(item => ({
-                title: item.question,
-                content: item.answer
-              }))}
-            />
-          </Card>
         </div>
         
-        <!-- Right Column (Pricing) -->
-        <div class="lg:col-span-1">
-          <div class="sticky top-24">
-            <Card className="p-8 border-primary/20 shadow-lg relative overflow-hidden bg-white dark:bg-zinc-900">
-              <!-- Decorative elements -->
-              <div class="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full -mr-20 -mt-20"></div>
-              <div class="absolute bottom-0 left-0 w-40 h-40 bg-primary/5 rounded-full -ml-20 -mb-20"></div>
-              
-              <div class="relative z-10">
-                <div class="mb-6 text-center">
-                  <div class="inline-block bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 px-3 py-1 rounded-full text-sm font-medium mb-2">
-                    Save ${parseInt(courseDetails.originalPrice) - parseInt(courseDetails.currentPrice)} Today
-                  </div>
-                  
-                  <div class="flex items-baseline justify-center gap-2 mb-1">
-                    <span class="text-muted-foreground line-through text-lg">
-                      ${courseDetails.originalPrice}
-                    </span>
-                    <span class="text-4xl font-bold text-primary">
-                      ${courseDetails.currentPrice}
-                    </span>
-                  </div>
-                  
-                  <p class="text-sm text-muted-foreground mb-2">
-                    One-time payment, lifetime access
-                  </p>
-                </div>
-
-                <!-- Limited spots -->
-                <div class="mb-6">
-                  <div class="flex justify-between text-sm mb-1">
-                    <span>Enrollment Closing Soon</span>
-                    <span class="text-red-500 font-medium">
-                      Only {courseDetails.spots.remaining} spots left
-                    </span>
-                  </div>
-                  <Progress value={(courseDetails.spots.total - courseDetails.spots.remaining) / courseDetails.spots.total * 100} className="h-2" />
-                </div>
-
-                <!-- Bonuses -->
-                <div class="mb-6">
-                  <h3 class="font-bold text-lg mb-3">Fast-Action Bonuses</h3>
-                  {bonuses.map((bonus, i) => (
-                    <div class="mb-3 bg-primary/5 rounded-lg p-3 last:mb-0">
-                      <div class="flex justify-between font-medium mb-1">
-                        <span>BONUS #{i+1}: {bonus.title}</span>
-                        <span class="text-primary">{bonus.value}</span>
-                      </div>
-                      <p class="text-sm text-muted-foreground">{bonus.description}</p>
-                    </div>
+        <!-- Feature Comparison with ONE styling -->
+        <div class="mb-32">
+          <h2 class="text-4xl font-bold mb-12 text-center tracking-tight">
+            Feature Comparison
+          </h2>
+          
+          <div class="one-glass-dark border border-[hsla(var(--one-border))] rounded-xl overflow-hidden max-w-5xl mx-auto">
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="border-b border-[hsla(var(--one-border))]">
+                    <th class="text-left p-4">Feature</th>
+                    <th class="text-center p-4">Starter</th>
+                    <th class="text-center p-4 bg-[hsla(var(--one-background-nav))]">Professional</th>
+                    <th class="text-center p-4">Enterprise</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {featureComparison.map((feature, index) => (
+                    <tr class={index !== featureComparison.length - 1 ? "border-b border-[hsla(var(--one-border))]" : ""}>
+                      <td class="p-4 font-medium">{feature.name}</td>
+                      <td class="text-center p-4">{feature.starter}</td>
+                      <td class="text-center p-4 bg-[hsla(var(--one-background-nav))]">{feature.pro}</td>
+                      <td class="text-center p-4">{feature.enterprise}</td>
+                    </tr>
                   ))}
-                </div>
-
-                <!-- Value stack -->
-                <div class="mb-6 bg-primary/5 p-4 rounded-lg">
-                  <h3 class="font-medium mb-3">Total Value: <span class="line-through">$3,988</span></h3>
-                  <div class="text-center">
-                    <div class="text-2xl font-bold text-primary mb-1">Today: ${courseDetails.currentPrice}</div>
-                    <div class="text-sm text-muted-foreground mb-1">88% OFF Total Value</div>
-                  </div>
-                </div>
-
-                <!-- CTA Button -->
-                <Button 
-                  size="lg" 
-                  className="w-full bg-primary hover:bg-primary/90 text-white font-bold text-lg py-6 shadow-lg hover:shadow-xl transition-all duration-200 mb-4"
-                  asChild
-                >
-                  <a href="/checkout">
-                    {courseDetails.ctaText}
-                    <ArrowRightIcon className="ml-2 w-5 h-5" />
-                  </a>
-                </Button>
-
-                <!-- Guarantee -->
-                <div class="flex items-center justify-center text-sm text-muted-foreground mb-6">
-                  <ShieldCheckIcon className="w-4 h-4 mr-2 text-primary" />
-                  <span>{courseDetails.guarantee}</span>
-                </div>
-
-                <!-- Payment methods -->
-                <div class="text-center">
-                  <p class="text-xs text-muted-foreground mb-2">Secure payment via:</p>
-                  <div class="flex justify-center space-x-2">
-                    <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
-                    <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
-                    <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
-                    <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
-                  </div>
-                </div>
-              </div>
-            </Card>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+        
+        <!-- Testimonials with ONE styling -->
+        <div class="mb-32">
+          <h2 class="text-4xl font-bold mb-12 text-center tracking-tight">
+            What Our Customers Say
+          </h2>
+          
+          <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div class="one-glass-dark border border-[hsla(var(--one-border))] p-8 rounded-xl">
+              <div class="flex items-center mb-4">
+                {Array(5).fill(0).map(() => (
+                  <StarIcon className="w-5 h-5 text-white fill-white" />
+                ))}
+              </div>
+              <p class="italic mb-6 text-lg">"The Professional plan completely transformed our customer service. Our AI agents handle 80% of inquiries automatically now."</p>
+              <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full bg-[hsla(var(--one-background-nav))] flex items-center justify-center font-bold mr-3">
+                  M
+                </div>
+                <div>
+                  <div class="font-medium">Michael Thompson</div>
+                  <div class="text-sm text-muted-foreground">CEO, TechFlow</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="one-glass-dark border border-[hsla(var(--one-border))] p-8 rounded-xl">
+              <div class="flex items-center mb-4">
+                {Array(5).fill(0).map(() => (
+                  <StarIcon className="w-5 h-5 text-white fill-white" />
+                ))}
+              </div>
+              <p class="italic mb-6 text-lg">"We started with the Starter plan and quickly upgraded to Enterprise as we saw the incredible ROI. Best decision we made this year."</p>
+              <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full bg-[hsla(var(--one-background-nav))] flex items-center justify-center font-bold mr-3">
+                  S
+                </div>
+                <div>
+                  <div class="font-medium">Sarah Johnson</div>
+                  <div class="text-sm text-muted-foreground">Marketing Director, Elevate</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <!-- Final CTA -->
-      <div class="mt-16 text-center max-w-3xl mx-auto">
-        <h2 class="text-3xl font-bold mb-4">Ready to Build Your AI Business?</h2>
-        <p class="text-muted-foreground mb-8 text-lg">
-          Join 300+ entrepreneurs who have already transformed their ideas into profitable AI businesses.
-        </p>
-        <Button
-          size="lg"
-          className="bg-primary hover:bg-primary/90 text-white font-bold text-lg tracking-wide shadow-lg hover:shadow-xl transition-all duration-200 px-8 py-6"
-          asChild
-        >
-          <a href="/checkout">
-            Secure Your Spot Now
-            <ArrowRightIcon className="ml-2 w-5 h-5" />
-          </a>
-        </Button>
-        <p class="mt-4 text-sm text-muted-foreground">
-          Only {courseDetails.spots.remaining} spots remaining. Enrollment closes soon.
-        </p>
+        <!-- FAQ with ONE styling -->
+        <div class="mb-32">
+          <h2 class="text-4xl font-bold mb-12 text-center tracking-tight">
+            Frequently Asked Questions
+          </h2>
+          
+          <div class="max-w-4xl mx-auto one-glass-dark border border-[hsla(var(--one-border))] p-8 rounded-xl">
+            <AccordionWrapper items={faqs} client:visible />
+          </div>
+        </div>
+
+        <!-- Final CTA with ONE styling -->
+        <div class="text-center max-w-3xl mx-auto mb-32">
+          <div class="one-glass-dark border border-[hsla(var(--one-border))] shadow-xl p-12 rounded-xl">
+            <h2 class="text-4xl font-bold mb-6 tracking-tight one-text-gradient">
+              Ready to Get Started?
+            </h2>
+            <p class="text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
+              Choose the plan that's right for you and start building your AI-powered business today
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <BorderBeam duration={8} containerClassName="rounded-md">
+                <Button size="lg" className="one-button bg-white text-black hover:bg-white/90 border-0 px-8 py-6 text-lg">
+                  View Plans
+                  <ArrowRightIcon className="ml-2 h-5 w-5" />
+                </Button>
+              </BorderBeam>
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
+                Contact Sales
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </Layout>
+
+<style>
+  /* Add custom fonts for MCM aesthetic */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+  
+  /* 70s MCM geometric patterns */
+  .geometric-pattern {
+    background-image: radial-gradient(circle at 25px 25px, hsla(0, 0%, 100%, 0.1) 2%, transparent 0%), 
+                      radial-gradient(circle at 75px 75px, hsla(0, 0%, 100%, 0.1) 2%, transparent 0%);
+    background-size: 100px 100px;
+  }
+</style>
 
