@@ -1,0 +1,516 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "../components/ui/button";
+import { Badge } from "../components/ui/badge";
+import { Card } from "../components/ui/card";
+import { CheckIcon, ArrowRightIcon, SparklesIcon, ShieldCheckIcon, ZapIcon, StarIcon, ClockIcon, UserIcon, HeartIcon, BarChartIcon, LightbulbIcon, PlayIcon } from "lucide-react";
+import { AccordionWrapper } from "../components/AccordionWrapper";
+import { CourseModuleContent } from "../components/CourseModuleContent";
+import { Progress } from "../components/ui/progress";
+import { Separator } from "../components/ui/separator";
+import { BorderBeam } from "../components/magicui/border-beam";
+
+const title = "Build Your First AI Agent in 1 Hour";
+const description = "Learn to create intelligent AI assistants that can talk to customers, generate content, and automate tasks—even if you have zero coding experience";
+
+// Countdown timer calculation
+const launchDate = new Date("April 1, 2025").getTime();
+const now = new Date().getTime();
+const timeRemaining = Math.max(0, launchDate - now);
+const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+
+// Course details
+const courseDetails = {
+  badge: "Launch Special: One-Time Payment",
+  title: "Build Your First AI Agent in 1 Hour",
+  subtitle: "Create intelligent AI assistants that work for your business 24/7",
+  originalPrice: "197",
+  currentPrice: "100",
+  guarantee: "30-Day 100% Money-Back Guarantee",
+  ctaText: "Reserve Your Spot Now",
+  valueProposition: "No coding required. Just follow along and have a working AI agent in 60 minutes.",
+  spots: {
+    total: 100,
+    remaining: 37
+  },
+  launchDate: "April 1, 2025"
+};
+
+// Course modules data - simplified for 1-hour course
+const courseModulesData = [
+  {
+    title: "Setup & Foundation (15 minutes)",
+    description: "Get everything ready quickly",
+    lessons: [
+      { name: "AI Platform Setup", value: "Connect to OpenAI or Claude in 5 minutes" },
+      { name: "Agent Structure", value: "The 3-part framework for effective agents" },
+      { name: "Environment Configuration", value: "Set up your workspace for success" }
+    ]
+  },
+  {
+    title: "Agent Intelligence Design (20 minutes)",
+    description: "Make your AI smart and effective",
+    lessons: [
+      { name: "Prompt Engineering", value: "Create clear instructions your AI will follow" },
+      { name: "Knowledge Integration", value: "Teach your AI about your business" },
+      { name: "Personality Design", value: "Give your AI a consistent voice and style" }
+    ]
+  },
+  {
+    title: "Conversation & Task Design (15 minutes)",
+    description: "Help your AI handle real conversations",
+    lessons: [
+      { name: "Conversation Flows", value: "Design natural discussion patterns" },
+      { name: "Task Completion", value: "Enable your AI to finish specific jobs" },
+      { name: "Error Handling", value: "Prevent and manage mistakes gracefully" }
+    ]
+  },
+  {
+    title: "Testing & Deployment (10 minutes)",
+    description: "Get your AI working in the real world",
+    lessons: [
+      { name: "Test Scenarios", value: "Verify your agent works as expected" },
+      { name: "Quick Deployment", value: "Make your agent available immediately" },
+      { name: "Usage Guidance", value: "Learn how to interact with your agent" }
+    ]
+  }
+];
+
+// Benefits - focused on immediate ROI for a $100 course
+const benefits = [
+  { title: "Just 60 Minutes", icon: ClockIcon, description: "Go from zero to working AI agent in one hour flat" },
+  { title: "Zero Coding Required", icon: CheckIcon, description: "If you can type, you can create an AI agent" },
+  { title: "Immediate ROI", icon: SparklesIcon, description: "Automate tasks that would cost $500+ to outsource" },
+  { title: "Ready-To-Use Templates", icon: ZapIcon, description: "Copy-paste solutions for common business needs" },
+  { title: "Step-By-Step System", icon: UserIcon, description: "Never get lost with our clear, beginner-friendly guide" },
+  { title: "Lifetime Updates", icon: ShieldCheckIcon, description: "Get all future improvements at no extra cost" }
+];
+
+// Fast-action bonuses
+const bonuses = [
+  {
+    title: "Premium Prompt Library",
+    value: "$49 Value",
+    description: "50+ proven prompts for customer service, content creation, and sales"
+  },
+  {
+    title: "30-Day Community Access",
+    value: "$79 Value",
+    description: "Get help and feedback from AI experts and fellow creators"
+  },
+  {
+    title: "AI Agent Templates Pack",
+    value: "$39 Value",
+    description: "Pre-built templates for 5 common business use cases"
+  }
+];
+
+// Testimonials (placeholders - to be updated after first cohort)
+const testimonials = [
+  {
+    name: "Sarah Johnson",
+    role: "Marketing Consultant",
+    content: "I built my first AI agent in exactly 58 minutes. It now handles all my client email inquiries, saving me 15+ hours every week.",
+    avatar: "/testimonials/avatar-1.png"
+  },
+  {
+    name: "Michael Chen",
+    role: "E-commerce Owner",
+    content: "This course paid for itself in 2 days. My AI agent now handles customer support questions 24/7, increasing our sales by 22%.",
+    avatar: "/testimonials/avatar-2.png"
+  },
+  {
+    name: "Jessica Williams",
+    role: "Content Creator",
+    content: "I was skeptical about the '1 hour' claim, but it's true! My AI now writes my weekly newsletter, saving me 5 hours per week.",
+    avatar: "/testimonials/avatar-3.png"
+  }
+];
+
+// FAQ items
+const faqs = [
+  {
+    question: "Do I need coding experience to create an AI agent?",
+    answer: "Absolutely not! This course is specifically designed for non-technical people. If you can use a word processor, you can build an AI agent following our step-by-step system."
+  },
+  {
+    question: "Will my AI agent really work in just one hour?",
+    answer: "Yes! We've structured the course to build a functional AI agent in 60 minutes. You'll continue refining it after the initial build, but you'll have a working agent that can handle real tasks by the end of the hour."
+  },
+  {
+    question: "What kind of tasks can my AI agent handle?",
+    answer: "Your AI agent can handle customer service questions, generate content like blog posts and social media, qualify sales leads, automate repetitive tasks, and much more. We cover the most valuable use cases in the course."
+  },
+  {
+    question: "How much will it cost to run my AI agent?",
+    answer: "Most students spend less than $10/month on AI usage fees, while saving thousands in outsourcing or employee costs. The ROI is typically 50x or higher."
+  },
+  {
+    question: "What if I get stuck or need help?",
+    answer: "Your course includes 30 days of community access where our instructors answer questions within 24 hours. Plus, our step-by-step approach is designed to eliminate confusion."
+  },
+  {
+    question: "What's your refund policy?",
+    answer: "We offer a 30-day, 100% money-back guarantee. If you can't build a working AI agent within one hour by following our instructions, we'll refund your purchase—no questions asked."
+  }
+];
+---
+
+<Layout title={title} description={description}>
+  <div class="min-h-screen">
+    <!-- Hero Section with BorderBeam -->
+    <div class="relative py-20 overflow-hidden bg-gradient-to-b from-background to-background/80">
+      <!-- Background elements -->
+      <div class="absolute inset-0 overflow-hidden opacity-30">
+        <div class="absolute -top-[40%] -right-[40%] w-[80%] h-[80%] rounded-full bg-primary/20 blur-3xl"></div>
+        <div class="absolute -bottom-[40%] -left-[40%] w-[80%] h-[80%] rounded-full bg-primary/20 blur-3xl"></div>
+      </div>
+      
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+          <!-- Left side: Course info -->
+          <div class="flex-1 text-center lg:text-left">
+            <div class="mb-6 inline-block">
+              <BorderBeam duration={4} containerClassName="rounded-full">
+                <Badge variant="outline" className="text-primary border-primary/30 bg-primary/5 px-4 py-1 text-sm font-medium rounded-full">
+                  Launching {courseDetails.launchDate}
+                </Badge>
+              </BorderBeam>
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+              {courseDetails.title}
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0">
+              {courseDetails.subtitle}
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+              <BorderBeam duration={5} containerClassName="rounded-md">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary/90 text-white font-bold text-lg py-6 px-8 shadow-lg hover:shadow-xl transition-all duration-200 rounded-md"
+                  asChild
+                >
+                  <a href="/join-waitlist">
+                    Join the Waitlist
+                    <ArrowRightIcon className="ml-2 w-5 h-5" />
+                  </a>
+                </Button>
+              </BorderBeam>
+              
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="border-2 py-6 font-medium"
+                asChild
+              >
+                <a href="#curriculum">
+                  See Curriculum
+                </a>
+              </Button>
+            </div>
+            
+            <!-- Countdown timer -->
+            <div class="flex justify-center lg:justify-start gap-4 mb-8">
+              <div class="text-center">
+                <div class="text-3xl font-bold">{days}</div>
+                <div class="text-xs text-muted-foreground">Days</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold">{hours}</div>
+                <div class="text-xs text-muted-foreground">Hours</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold">{minutes}</div>
+                <div class="text-xs text-muted-foreground">Minutes</div>
+              </div>
+              <div class="text-center">
+                <div class="text-3xl font-bold">00</div>
+                <div class="text-xs text-muted-foreground">Seconds</div>
+              </div>
+            </div>
+            
+            <!-- Social proof -->
+            <div class="flex items-center justify-center lg:justify-start gap-2 text-sm text-muted-foreground">
+              <div class="flex -space-x-2">
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">JD</div>
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">MC</div>
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">KL</div>
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs text-primary">+</div>
+              </div>
+              <span>Join 300+ professionals who've automated their work</span>
+            </div>
+          </div>
+          
+          <!-- Right side: Course card with BorderBeam -->
+          <div class="lg:w-[450px] w-full">
+            <BorderBeam duration={6} containerClassName="rounded-xl">
+              <Card className="border-0 shadow-xl overflow-hidden rounded-xl">
+                <div class="aspect-video w-full bg-muted relative overflow-hidden">
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center cursor-pointer hover:bg-primary transition-colors">
+                      <PlayIcon className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+                  <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
+                    <div class="text-sm font-medium">Watch the preview</div>
+                    <div class="text-xs opacity-80">2:45 min</div>
+                  </div>
+                </div>
+                
+                <div class="p-0">
+                  <!-- Price card header -->
+                  <div class="bg-primary/5 p-6 border-b">
+                    <div class="flex justify-between items-start mb-2">
+                      <div>
+                        <div class="text-sm text-muted-foreground mb-1">One-time payment</div>
+                        <div class="flex items-baseline">
+                          <span class="text-3xl font-bold">${courseDetails.currentPrice}</span>
+                          <span class="text-muted-foreground ml-2 line-through">
+                            ${courseDetails.originalPrice}
+                          </span>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
+                        50% OFF
+                      </Badge>
+                    </div>
+                    
+                    <p class="text-sm text-muted-foreground mb-2">
+                      One-time payment, lifetime access
+                    </p>
+                  </div>
+
+                  <!-- Limited spots -->
+                  <div class="px-6 py-4 mb-2">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>Enrollment Limited</span>
+                      <span class="text-red-500 font-medium">
+                        Only {courseDetails.spots.remaining} spots left
+                      </span>
+                    </div>
+                    <Progress value={(courseDetails.spots.total - courseDetails.spots.remaining) / courseDetails.spots.total * 100} className="h-2" />
+                  </div>
+
+                  <!-- What you get -->
+                  <div class="px-6 mb-4">
+                    <h3 class="font-medium mb-3">What you'll get:</h3>
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+                        <span class="text-sm">60-minute video course (yours forever)</span>
+                      </li>
+                      <li class="flex items-start">
+                        <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+                        <span class="text-sm">Step-by-step AI agent template</span>
+                      </li>
+                      <li class="flex items-start">
+                        <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+                        <span class="text-sm">30 days of community support</span>
+                      </li>
+                      <li class="flex items-start">
+                        <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+                        <span class="text-sm">Certificate of completion</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- Bonuses -->
+                  <div class="px-6 mb-6">
+                    <h3 class="font-bold text-lg mb-3">Fast-Action Bonuses</h3>
+                    {bonuses.map((bonus, i) => (
+                      <div class="mb-3 bg-primary/5 rounded-lg p-3 last:mb-0">
+                        <div class="flex justify-between font-medium mb-1">
+                          <span>BONUS #{i+1}: {bonus.title}</span>
+                          <span class="text-primary">{bonus.value}</span>
+                        </div>
+                        <p class="text-sm text-muted-foreground">{bonus.description}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <!-- Value stack -->
+                  <div class="px-6 mb-6 bg-primary/5 p-4 mx-6">
+                    <h3 class="font-medium mb-3">Total Value: <span class="line-through">$267</span></h3>
+                    <div class="text-center">
+                      <div class="text-2xl font-bold text-primary mb-1">Today: ${courseDetails.currentPrice}</div>
+                      <div class="text-sm text-muted-foreground mb-1">62% OFF Total Value</div>
+                    </div>
+                  </div>
+
+                  <!-- CTA Button with BorderBeam -->
+                  <div class="px-6 mb-4">
+                    <BorderBeam duration={4} containerClassName="rounded-md w-full">
+                      <Button 
+                        size="lg" 
+                        className="w-full bg-primary hover:bg-primary/90 text-white font-bold text-lg py-6 shadow-lg hover:shadow-xl transition-all duration-200"
+                        asChild
+                      >
+                        <a href="/join-waitlist">
+                          Join the Waitlist
+                          <ArrowRightIcon className="ml-2 w-5 h-5" />
+                        </a>
+                      </Button>
+                    </BorderBeam>
+                  </div>
+
+                  <!-- Launch Date Notice -->
+                  <div class="px-6 mb-4">
+                    <p class="text-center text-sm text-muted-foreground">
+                      Course launches on {courseDetails.launchDate}. Join waitlist to get priority access.
+                    </p>
+                  </div>
+
+                  <!-- Guarantee -->
+                  <div class="flex items-center justify-center text-sm text-muted-foreground mb-6 px-6">
+                    <ShieldCheckIcon className="w-4 h-4 mr-2 text-primary" />
+                    <span>{courseDetails.guarantee}</span>
+                  </div>
+
+                  <!-- Payment methods -->
+                  <div class="text-center px-6 pb-6">
+                    <p class="text-xs text-muted-foreground mb-2">Secure payment via:</p>
+                    <div class="flex justify-center space-x-2">
+                      <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
+                      <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
+                      <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
+                      <div class="w-10 h-6 bg-muted rounded opacity-70"></div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </BorderBeam>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="container mx-auto px-4 py-16">
+      <!-- Benefits section -->
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold mb-12">Why Build an AI Agent in Just One Hour?</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {benefits.map((benefit) => (
+            <Card className="p-6 hover:shadow-lg transition-shadow border border-muted">
+              <div class="flex flex-col items-center text-center">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <benefit.icon className="w-6 h-6 text-primary" />
+                </div>
+                <h3 class="text-xl font-semibold mb-2">{benefit.title}</h3>
+                <p class="text-muted-foreground">{benefit.description}</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      <!-- Course curriculum -->
+      <div id="curriculum" class="mb-16 scroll-mt-16">
+        <h2 class="text-3xl font-bold mb-8 text-center">Your 60-Minute Journey to a Working AI Agent</h2>
+        <p class="text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
+          Follow this proven step-by-step system to build your AI agent in just one hour. Each module is carefully designed to be simple, practical, and immediately applicable.
+        </p>
+        
+        <div class="grid gap-8 max-w-4xl mx-auto">
+          {courseModulesData.map((module, index) => (
+            <BorderBeam duration={5} delay={index * 0.5} containerClassName="rounded-lg">
+              <Card className="border-0 shadow-md overflow-hidden rounded-lg">
+                <div class="p-6">
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <span class="font-bold text-primary">{index + 1}</span>
+                    </div>
+                    <div>
+                      <h3 class="text-xl font-bold mb-2">{module.title}</h3>
+                      <p class="text-muted-foreground mb-4">{module.description}</p>
+                      <ul class="space-y-3">
+                        {module.lessons.map((lesson) => (
+                          <li class="flex items-start">
+                            <CheckIcon className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+                            <div>
+                              <div class="font-medium">{lesson.name}</div>
+                              <div class="text-sm text-muted-foreground">{lesson.value}</div>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </BorderBeam>
+          ))}
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="mb-16">
+        <h2 class="text-3xl font-bold mb-8 text-center">What Our Students Are Saying</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          {testimonials.map((testimonial) => (
+            <BorderBeam duration={4} containerClassName="rounded-lg h-full">
+              <Card className="p-6 h-full border-0 shadow-md flex flex-col">
+                <div class="flex-1">
+                  <div class="flex items-center mb-4">
+                    {[1, 2, 3, 4, 5].map(() => (
+                      <StarIcon className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                    ))}
+                  </div>
+                  <p class="mb-6 text-muted-foreground">"{testimonial.content}"</p>
+                </div>
+                <div class="flex items-center">
+                  <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold mr-3">
+                    {testimonial.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div class="font-medium">{testimonial.name}</div>
+                    <div class="text-sm text-muted-foreground">{testimonial.role}</div>
+                  </div>
+                </div>
+              </Card>
+            </BorderBeam>
+          ))}
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="mb-16 max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8 text-center">Frequently Asked Questions</h2>
+        <AccordionWrapper items={faqs} client:visible />
+      </div>
+
+      <!-- Final CTA -->
+      <div class="mt-16 text-center max-w-3xl mx-auto">
+        <BorderBeam duration={6} containerClassName="rounded-xl p-8 mb-8">
+          <Card className="border-0 shadow-xl bg-primary/5 p-8 rounded-xl">
+            <h2 class="text-3xl font-bold mb-4">Ready to Build Your First AI Agent?</h2>
+            <p class="text-muted-foreground mb-8 text-lg">
+              Join the waitlist today and be first in line when we launch on {courseDetails.launchDate}.
+            </p>
+            <BorderBeam duration={4} containerClassName="rounded-md inline-block">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-white font-bold text-lg tracking-wide shadow-lg hover:shadow-xl transition-all duration-200 px-8 py-6"
+                asChild
+              >
+                <a href="/join-waitlist">
+                  Join the Waitlist
+                  <ArrowRightIcon className="ml-2 w-5 h-5" />
+                </a>
+              </Button>
+            </BorderBeam>
+            <p class="mt-4 text-sm text-muted-foreground">
+              Only {courseDetails.spots.remaining} spots remaining for the first cohort.
+            </p>
+          </Card>
+        </BorderBeam>
+      </div>
+    </div>
+  </div>
+</Layout>
+

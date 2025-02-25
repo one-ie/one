@@ -6,6 +6,8 @@ I use Zod for data validation. I use Shadcn/UI for component library. I use Tail
 
 ALWAYS USE PNPM
 
+DON'T Confuse class with is for regular Astro pages and className which is for React
+
 ## 1. Project Foundation
 - Technology Stack:
   - Astro 5.2+
