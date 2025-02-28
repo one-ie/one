@@ -97,6 +97,19 @@
       ]
     },
     {
+      "pattern": "1/components/layout/*.astro",
+      "priority": 2,
+      "description": "Layout panel components",
+      "tags": ["layout", "panels", "structure"],
+      "actions": [
+        {
+          "type": "format",
+          "when": "saved",
+          "formatter": "prettier"
+        }
+      ]
+    },
+    {
       "pattern": "1/api/*.ts",
       "priority": 3,
       "description": "API endpoints",
@@ -212,6 +225,67 @@
       "validator": "yaml-lint",
       "actions": ["format", "validate"]
     }
+  },
+  "cursorRules": {
+    "directory": ".cursor/rules",
+    "format": ".mdc",
+    "rules": [
+      {
+        "name": "astro-component-guidelines",
+        "description": "Guidelines for Astro components",
+        "glob_patterns": ["src/**/*.astro", "src/components/**/*.astro"]
+      },
+      {
+        "name": "react-component-guidelines",
+        "description": "Guidelines for React components",
+        "glob_patterns": ["src/components/**/*.tsx", "src/components/**/*.jsx"]
+      },
+      {
+        "name": "shadcn-ui-guidelines",
+        "description": "Guidelines for Shadcn/UI and Tailwind CSS usage",
+        "glob_patterns": ["src/components/ui/**/*.tsx", "src/**/*.css"]
+      },
+      {
+        "name": "content-management-guidelines",
+        "description": "Guidelines for content management and MDX",
+        "glob_patterns": ["src/content/**/*", "src/pages/**/*.md", "src/pages/**/*.mdx"]
+      },
+      {
+        "name": "project-guidelines",
+        "description": "General project guidelines",
+        "glob_patterns": ["**/*"]
+      },
+      {
+        "name": "ai-integration-guidelines",
+        "description": "Guidelines for AI integration and prompt engineering",
+        "glob_patterns": ["src/schema/chat.ts", "src/pages/api/chat.ts", "src/content/prompts/**/*"]
+      },
+      {
+        "name": "astro-client-directives",
+        "description": "Guidelines for using Astro client directives and interactive components",
+        "glob_patterns": ["src/**/*.astro", "src/components/**/*.tsx", "src/components/**/*.jsx"]
+      },
+      {
+        "name": "content-collections",
+        "description": "Guidelines for using Astro content collections and MDX",
+        "glob_patterns": ["src/content/**/*.md", "src/content/**/*.mdx", "src/content/config.ts", "src/pages/**/*.md", "src/pages/**/*.mdx"]
+      },
+      {
+        "name": "chat-system-guidelines",
+        "description": "Guidelines for configuring and implementing the ONE chat system",
+        "glob_patterns": ["src/pages/**/*.astro", "src/pages/**/*.md", "src/pages/**/*.mdx", "src/components/chat/**/*.tsx", "src/schema/chat.ts"]
+      },
+      {
+        "name": "layout-components-guidelines",
+        "description": "Guidelines for implementing layout panel components in the ONE framework",
+        "glob_patterns": ["src/layouts/Layout.astro", "src/components/layout/*.astro"]
+      },
+      {
+        "name": "layout-todos",
+        "description": "Todo items for implementing layout panel components in the ONE framework",
+        "glob_patterns": ["src/layouts/Layout.astro", "src/components/layout/*.astro"]
+      }
+    ]
   },
   "hooks": {
     "pre-commit": [

@@ -26,14 +26,14 @@ export class ONE {
 
 
 
-**Why This Order:**
+Sequence
 1. Website First:
    - Gives us a visual interface to work with
    - Provides immediate feedback
    - Can watch the system grow
-   - Tests our component architecture
+   - Tests our blocks
 
-2. Collection System Next:
+2. Collect:
    - Allows us to gather data from existing sites
    - Builds our knowledge base
    - Provides training data for agents
@@ -46,23 +46,23 @@ export class ONE {
    - Can be tested against real scenarios
 
 **Initial Focus:**
-```typescript:1/website/pages/system.tsx
+```typescript:1/1.tsx
 import { ONE } from '../1'
-import { Layout, Card, Button } from '../components'
+import { Layout, Card, Button } from '../blocks'
 
-export default function SystemDashboard() {
+export default function App() {
   return (
     <Layout>
       <Card>
-        <h2>System Status</h2>
+        <h2>Agents</h2>
         {/* System metrics */}
       </Card>
       <Card>
-        <h2>Data Collection</h2>
+        <h2>Traffic</h2>
         {/* Collection controls */}
       </Card>
       <Card>
-        <h2>Agent Status</h2>
+        <h2>Sales</h2>
         {/* Future agent metrics */}
       </Card>
     </Layout>
