@@ -1,0 +1,303 @@
+# Business 
+business:
+  name: ONE
+  description: AI Agents for Creators
+  website: https://one.ie
+  legalName: ONE
+  type: Technology Company
+  founded: 1999
+  founders: [Anthony O Connell]
+  hours: 24/7 - AI Powered
+  support:
+    email: ai@one.ie
+    hours: 24/7
+    response: < 1 minute
+  payments:
+    - Stripe
+    - Credit Card
+    - Debit Card
+  currencies: [EUR, USD, GBP]
+
+# Contact 
+contact:
+  email: ai@one.ie
+  phone: "+66660106632"
+  whatsapp: "+66660106632"
+  telegram: "+66660106632"
+  address:
+    street: Le Canadu
+    area: Pollnarooma West
+    city: Salthill
+    county: Galway
+    country: Ireland
+  social:
+    github: https://github.com/one-ie
+    twitter: "@tonyoconnell"
+    linkedin: https://www.linkedin.com/company/network-one/
+    instagram: "@tonyoc"
+    youtube: https://www.youtube.com/@onedotie
+    discord: https://discord.gg/one-ie
+    medium: null
+    facebook: https://www.facebook.com/networkone
+    tiktok: null
+    threads: null
+    mastodon: null
+    slack: https://one-ie.slack.com
+    telegram_channel: https://t.me/onedotbot
+
+# Brand 
+brand:
+  logos:
+    default: logo.svg
+    dark: /logo-dark.svg
+    light: logo.svg
+  favicon:
+    ico: /favicon.ico
+    png: /favicon.png
+    svg: /favicon.svg
+    sizes: [16, 32, 64, 128, 256]
+  colors:
+    primary: '#0D76FF'  # Turbo Blue
+    secondary: '#2F2F2F'  # Charcoal
+    accent: '#FF3366'  # Coral Red
+    background: '#ffffff'  # Pure White
+    text: '#000000'  # Pure Black
+    light:
+      background: "#FFFFFF"  # Pure White
+      foreground: "#111111"  # Soft Black
+      card: "#FFFFFF"  # Pure White
+      card-foreground: "#111111"  # Soft Black
+      popover: "#FFFFFF"  # Pure White
+      popover-foreground: "#111111"  # Soft Black
+      primary: "#0D76FF"  # Turbo Blue
+      primary-foreground: "#FFFFFF"  # Pure White
+      secondary: "#F5F5F5"  # Light Gray
+      secondary-foreground: "#2F2F2F"  # Charcoal
+      muted: "#F5F5F5"  # Light Gray
+      muted-foreground: "#737373"  # Medium Gray
+      accent: "#FF3366"  # Coral Red
+      accent-foreground: "#FFFFFF"  # Pure White
+      destructive: "#FF4444"  # Error Red
+      destructive-foreground: "#FFFFFF"  # Pure White
+      border: "#EAEAEA"  # Border Gray
+      input: "#EAEAEA"  # Border Gray
+      ring: "#0D76FF"  # Turbo Blue
+    dark:
+      background: "#000000"  # Pure Black
+      foreground: "#FFFFFF"  # Pure White
+      card: "#111111"  # Soft Black
+      card-foreground: "#FFFFFF"  # Pure White
+      popover: "#111111"  # Soft Black
+      popover-foreground: "#FFFFFF"  # Pure White
+      primary: "#0D76FF"  # Turbo Blue
+      primary-foreground: "#FFFFFF"  # Pure White
+      secondary: "#2F2F2F"  # Charcoal
+      secondary-foreground: "#FFFFFF"  # Pure White
+      muted: "#2F2F2F"  # Charcoal
+      muted-foreground: "#A1A1AA"  # Silver Gray
+      accent: "#FF3366"  # Coral Red
+      accent-foreground: "#FFFFFF"  # Pure White
+      destructive: "#FF4444"  # Error Red
+      destructive-foreground: "#FFFFFF"  # Pure White
+      border: "#2F2F2F"  # Charcoal
+      input: "#2F2F2F"  # Charcoal
+      ring: "#0D76FF"  # Turbo Blue
+  fonts:
+    heading: "Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'"
+    body: "Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'"
+    code: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+    system:
+      sans: "Inter var, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'"
+      serif: "ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif"
+      mono: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+
+# SEO & Social Metadata
+search:
+  canonical: https://one.ie
+  title: ONE - AI Agents for Creators
+  metaTitle: ONE - Scale Your Creator Empire with AI Agents
+  metaDescription: Transform your creator business with AI agents that work 24/7 to grow your content, audience, and revenue. No monthly fees.
+  metaKeywords: [AI agents, content creation, creator economy, automation, social media]
+  metaRobots: index, follow
+  openGraph:
+    type: website
+    locale: en_IE
+    site_name: ONE
+    title: ONE - AI Agents for Creators
+    description: Build your creator empire with AI agents that work 24/7 to grow your content, audience, and revenue
+    image:
+      url: https://one.ie/og-image.png
+      width: 1200
+      height: 630
+      alt: ONE Platform Preview
+    videos:
+      - url: https://www.youtube.com/@onedotie
+        type: video/mp4
+  twitter:
+    card: summary_large_image
+    site: "@oneie"
+    creator: "@oneie"
+    title: ONE - AI Agents for Creators
+    description: Build your creator empire with AI agents that work 24/7 to grow your content, audience, and revenue
+    image: https://one.ie/og-image.png
+ 
+# Schema.org Metadata
+schema:
+  "@context": https://schema.org
+  "@type": SoftwareApplication
+  name: ONE
+  applicationCategory: WebApplication, DeveloperTool
+  applicationSubCategory: Edge Computing Platform
+  operatingSystem: Any
+  offers:
+    "@type": Offer
+    price: 0
+    priceCurrency: USD
+    availability: https://schema.org/InStock
+    seller:
+      "@type": Organization
+      name: ONE.ie
+      url: https://one.ie
+      contactPoint:
+        "@type": ContactPoint
+        telephone: "+66660106632"
+        contactType: sales
+        email: ai@one.ie
+        areaServed: Worldwide
+        availableLanguage: [English]
+  author:
+    "@type": Person
+    name: Anthony O Connell
+    email: tony@one.ie
+    url: https://one.ie
+    sameAs: 
+      - https://github.com/tonyoconnell
+      - https://twitter.com/tonyoconnell
+      - https://linkedin.com/in/tonyoconnell
+
+# Localization
+i18n:
+  defaultLocale: en
+  locales: [en]
+  defaultTimezone: Europe/Dublin
+  dateFormat: DD/MM/YYYY
+  currencies:
+    default: EUR
+    supported: [EUR, USD, GBP]
+
+# Navigation
+navigation:
+  # Top Navigation
+  top:
+    logo: "/logo.svg"
+    favicon: "/favicon.ico"
+    items: []  # Removed items since we're using buttons only
+    buttons:
+      - title: "Build"
+        path: "/build"
+        variant: "outline"
+        icon:
+          name: "Code"
+      - title: "Deploy"
+        path: "/deploy"
+        variant: "primary"
+        icon:
+          name: "Rocket"
+
+  # Left Sidebar 
+  sidebar:
+    - title: "Stories"
+      path: "/watch"
+      icon:
+        name: "PlayCircle"
+    - title: "Podcast"
+      path: "/listen"
+      icon:
+        name: "Headphones"
+    - title: "Chat"
+      path: "/chat"
+      icon:
+        name: "MessageCircle"
+    - title: "Software"
+      path: "/software"
+      icon:
+        name: "Code2"
+    - title: "Education"
+      path: "/education"
+      icon:
+        name: "GraduationCap"
+
+  # Footer 
+  footer:
+    columns:
+      - title: Product
+        links:
+          - title: Features
+            path: /features
+          - title: License
+            path: /enterprise-license
+
+      - title: Company
+        links:
+          - title: About
+            path: /about
+          - title: Blog
+            path: /watch
+          - title: Careers
+            path: /careers
+      - title: Legal
+        links:
+          - title: Privacy
+            path: /privacy
+          - title: Terms
+            path: /terms
+          - title: Cookie Policy
+            path: /cookies
+    bottom:
+      copyright: © 2024 ONE. All rights reserved.
+      links:
+        - title: Status
+          path: /status
+        - title: Security
+          path: /security
+
+# Chat Configuration
+chat:
+  provider: "openai"
+  model: "gpt-4o-mini"
+  apiEndpoint: "https://n8n.agentc.app/webhook/chat"
+  mode: "icon"
+  theme: "system"
+  features:
+    markdown: true
+    codeHighlighting: true
+    media:
+      attachments: false
+      audio: false
+    reactions: false
+    threads: false
+    search: false
+  ui:
+    title: "Chat with AI"
+    description: "I'm your AI assistant, ready to help with any questions or tasks you have."
+    placeholder: "Ask me anything..."
+    layout: {
+      type: "floating",
+      position: "bottom-right"
+    }
+    events: {}
+
+# Pages Configuration
+pages:
+  # Global page defaults (fallback values)
+  defaults:
+    layout: "default"  # default, course, landing, etc
+    showHeader: true
+    showFooter: true
+    showSidebar: true
+    showChat: true
+    theme: "dark"
+    seo:
+      titleTemplate: "%s | ONE"
+      descriptionTemplate: "Learn about %s with ONE"
+      imageTemplate: "/og/%s.jpg"

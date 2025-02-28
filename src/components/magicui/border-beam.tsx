@@ -20,10 +20,12 @@ export function BorderBeam({
   size = 0.25,
   borderRadius = '1rem',
   containerClassName,
-  as: Component = 'div',
+  as = 'div',
 }: BorderBeamProps) {
+  const Comp = as as any;
+  
   return (
-    <Component
+    <Comp
       className={cn(
         'relative rounded-[--border-radius] p-[1px] overflow-hidden',
         containerClassName
@@ -58,6 +60,6 @@ export function BorderBeam({
       >
         {children}
       </div>
-    </Component>
+    </Comp>
   );
 } 
