@@ -6,12 +6,12 @@ description: "Join us to build AI apps aand agents"
 
 # Join Our Team
 
-We're looking for exceptional people to join us in building AI apps and agents. 
+We're always looking for exceptional people to join us in building AI apps and agents. 
 
 ## Our Tech Stack
 - **Frontend**: Astro, React, Shadcn UI, Tailwind CSS
 - **Backend**: Node.js
-- **Inference**: Deepseek, Anthropic, OpenAI, Mistral, OpenRouter
+- **Inference**: Deepseek, Anthropic, OpenAI, Replicate
 - **Infrastructure**: Cloudflare Edge, Workers, Vercel, Docker, Coolify
 - **Ai Automation**: n8n, Eliza OS
 - **DevOps**: GitHub Actions, Docker

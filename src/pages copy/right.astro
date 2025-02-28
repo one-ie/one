@@ -1,0 +1,42 @@
+---
+import NewLayout from "../layouts/New.astro";
+---
+
+<NewLayout 
+    defaultWidth="quarter"
+    defaultOpen={false}
+>
+    <main class:list={["space-y-4"]}>
+        <h1 class:list={["text-4xl font-bold"]}>Right Panel Test</h1>
+        <p class:list={["text-lg text-muted-foreground"]}>
+            This page demonstrates the responsive right panel layout with custom content. Try:
+        </p>
+        <ul class:list={["list-disc list-inside space-y-2"]}>
+            <li>Toggle the panel open/closed using the button above</li>
+            <li>Switch between quarter and half width using the panel controls</li>
+            <li>Notice how the main content area adjusts automatically</li>
+            <li>Observe the smooth transitions between states</li>
+        </ul>
+        
+        <div class:list={["grid gap-4 mt-8"]}>
+            <div class:list={["p-6 rounded-lg border bg-card text-card-foreground shadow-sm"]}>
+                <h2 class:list={["text-xl font-semibold mb-2"]}>Main Content Area</h2>
+                <p class:list={["text-muted-foreground"]}>
+                    This area automatically adjusts its width based on the panel state.
+                    When the panel is closed, it takes up the full width.
+                </p>
+            </div>
+            
+            <div class:list={["p-6 rounded-lg border bg-muted text-card-foreground shadow-sm"]}>
+                <h2 class:list={["text-xl font-semibold mb-2"]}>Layout Features</h2>
+                <ul class:list={["space-y-2 text-sm text-muted-foreground"]}>
+                    <li>✨ Customizable panel content</li>
+                    <li>🎚️ Adjustable panel width (1/4 or 1/2)</li>
+                    <li>🔄 Smooth transitions</li>
+                    <li>📱 Responsive design</li>
+                    <li>🎨 Consistent styling with shadcn/ui</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+</NewLayout>

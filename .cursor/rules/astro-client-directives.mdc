@@ -1,0 +1,202 @@
+---
+description: Guidelines for using Astro client directives and interactive components
+glob_patterns:
+  - "src/**/*.astro"
+  - "src/components/**/*.tsx"
+  - "src/components/**/*.jsx"
+---
+
+# Astro Client Directives Guidelines
+
+## Client Directives
+
+When using interactive components in Astro, always use the appropriate client directive:
+
+- `client:load` - Component loads and hydrates immediately on page load
+- `client:idle` - Component loads after the page is done with its initial load and the browser's "idle callback" runs
+- `client:visible` - Component loads when it enters the viewport using Intersection Observer
+- `client:media` - Component loads when a CSS media query is met
+- `client:only` - Component skips server-rendering and only renders on the client
+
+## Best Practices
+
+### 1. Choose the Right Directive
+
+```astro
+<!-- For critical UI elements that need immediate interactivity -->
+<InteractiveComponent client:load />
+
+<!-- For components that can wait until the page is idle -->
+<AccordionComponent client:idle />
+
+<!-- For components that only need to be interactive when visible -->
+<LazyLoadedComponent client:visible />
+
+<!-- For components that should only appear on certain screen sizes -->
+<MobileNavigation client:media="(max-width: 768px)" />
+```
+
+### 2. Working with Shadcn/UI Components
+
+Shadcn/UI components that require interactivity must use client directives:
+
+```astro
+---
+import { Accordion } from "@/components/ui/accordion-wrapper";
+import { Tabs } from "@/components/ui/tabs-wrapper";
+---
+
+<!-- Use client:idle for components that don't need immediate interactivity -->
+<Accordion data={accordionData} client:idle />
+
+<!-- Use client:load for critical interactive components -->
+<Tabs items={tabItems} client:load />
+```
+
+### 3. Wrapper Components for Complex UI
+
+For complex Shadcn/UI components that use React context, create wrapper components:
+
+```tsx
+// src/components/ui/accordion-wrapper.tsx
+import {
+  Accordion as BaseAccordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+interface AccordionData {
+  title: string;
+  content: string;
+  value: string;
+}
+
+export function Accordion({ data }: { data: AccordionData[] }) {
+  return (
+    <BaseAccordion type="single" collapsible className="w-full">
+      {data.map((item) => (
+        <AccordionItem value={item.value} key={item.value}>
+          <AccordionTrigger>{item.title}</AccordionTrigger>
+          <AccordionContent>{item.content}</AccordionContent>
+        </AccordionItem>
+      ))}
+    </BaseAccordion>
+  );
+}
+```
+
+### 4. Hydration Errors Prevention
+
+To prevent hydration errors:
+
+- Ensure server and client render the same content
+- Use mounting checks for components with different server/client output
+- Avoid conditional rendering based on client-only APIs
+
+```tsx
+import { useEffect, useState } from "react";
+
+export function ClientComponent() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  if (!mounted) {
+    return <div>Loading...</div>; // Server-side placeholder
+  }
+  
+  return <div>Client-side content</div>;
+}
+```
+
+### 5. Performance Optimization
+
+- Use `client:visible` for below-the-fold components
+- Lazy load non-critical components
+- Split large components into smaller chunks
+- Minimize the number of hydrated components
+
+```astro
+<!-- Only hydrate when scrolled into view -->
+<HeavyComponent client:visible />
+
+<!-- Only hydrate on larger screens -->
+<ComplexDashboard client:media="(min-width: 1024px)" />
+```
+
+### 6. Common Pitfalls to Avoid
+
+- **DON'T** use client directives on non-interactive components
+- **DON'T** use `client:load` for everything (performance impact)
+- **DON'T** forget to wrap Shadcn/UI components that use React context
+- **DON'T** mix `className` (React) and `class` (Astro) attributes
+- **DON'T** use browser-only APIs without checking for their existence
+
+### 7. Specific Component Guidelines
+
+#### Accordion
+
+```astro
+---
+import { Accordion } from "@/components/ui/accordion-wrapper";
+
+const accordionData = [
+  {
+    title: "Is it accessible?",
+    content: "Yes. It adheres to the WAI-ARIA design pattern.",
+    value: "item-1"
+  },
+  // More items...
+];
+---
+
+<Accordion data={accordionData} client:idle />
+```
+
+#### Tabs
+
+```astro
+---
+import { Tabs } from "@/components/ui/tabs-wrapper";
+
+const tabItems = [
+  {
+    value: "tab1",
+    label: "Tab 1",
+    content: "Content for Tab 1"
+  },
+  // More tabs...
+];
+---
+
+<Tabs items={tabItems} client:idle />
+```
+
+#### Dialog/Modal
+
+```astro
+---
+import { Dialog } from "@/components/ui/dialog-wrapper";
+---
+
+<Dialog
+  title="Important Information"
+  description="This is important information that needs your attention."
+  client:load
+>
+  <button>Open Dialog</button>
+</Dialog>
+```
+
+## Testing Interactive Components
+
+Always test interactive components in multiple scenarios:
+
+1. Initial page load
+2. After navigation
+3. After browser resize
+4. With slow network conditions
+5. With JavaScript temporarily disabled (for graceful degradation) 

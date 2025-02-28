@@ -1,0 +1,102 @@
+---
+import Layout from "../layouts/1.astro";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  Apple as AppleIcon,
+  Monitor as WindowsIcon, 
+  MonitorDown as LinuxIcon
+} from 'lucide-react';
+
+---
+
+<Layout 
+  title="Download"
+  description="Download the latest version of our tools"
+>
+  <main class="container mx-auto px-6 w-full">
+    <section class="min-h-screen flex flex-col justify-center items-center text-center py-12 -mt-[200px]">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60 max-w-[900px]">
+        Build AI Apps Faster
+      </h1>
+      
+      <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mb-12">
+        The enterprise-grade AI framework that's completely free and open source.
+        Production-ready in minutes, not months.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-[1200px]">
+        <Card className="text-center hover:shadow-lg hover:border-primary transition-all duration-300">
+          <CardHeader className="pb-4">
+            <AppleIcon className="w-12 h-12 mx-auto mb-2 text-primary" />
+            <CardTitle className="text-xl mb-1">macOS Version</CardTitle>
+            <CardDescription>Universal Binary (Intel/ARM)</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full bg-primary hover:bg-primary/90 text-base py-4" size="lg">
+              Download for Mac
+            </Button>
+            <p class="text-xs text-muted-foreground mt-2">
+              macOS 10.15 or later
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="text-center hover:shadow-lg hover:border-primary transition-all duration-300">
+          <CardHeader className="pb-4">
+            <WindowsIcon className="w-12 h-12 mx-auto mb-2 text-primary" />
+            <CardTitle className="text-xl mb-1">Windows Version</CardTitle>
+            <CardDescription>64-bit Installation</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full bg-primary hover:bg-primary/90 text-base py-4" size="lg">
+              Download for Windows
+            </Button>
+            <p class="text-xs text-muted-foreground mt-2">
+              Windows 10/11
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="text-center hover:shadow-lg hover:border-primary transition-all duration-300">
+          <CardHeader className="pb-4">
+            <LinuxIcon className="w-12 h-12 mx-auto mb-2 text-primary" />
+            <CardTitle className="text-xl mb-1">Linux Version</CardTitle>
+            <CardDescription>AppImage & Native</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full bg-primary hover:bg-primary/90 text-base py-4" size="lg">
+              Download for Linux
+            </Button>
+            <p class="text-xs text-muted-foreground mt-2">
+              Ubuntu, Debian & more
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .prose {
+    @apply mx-auto;
+  }
+  
+  .prose pre {
+    @apply bg-muted;
+  }
+
+  .container {
+    width: 95%;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+</style>

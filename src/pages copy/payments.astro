@@ -1,0 +1,221 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Card } from "../components/ui/card";
+import CryptoPayment from "../components/CryptoPayment";
+import { Shield, Zap, Rocket, CreditCard } from "lucide-react";
+
+const cryptoPlans = [
+    {
+        name: "Build Your First AI Agent",
+        price: 100,
+        description: "1-hour intensive session on April 1st",
+        features: [
+            "Hands-on AI agent development",
+            "Core concepts and best practices",
+            "Implementation guidance",
+            "Q&A session",
+        ],
+        icon: Shield,
+    },
+    {
+        name: "Switch on Your AI Infrastructure",
+        price: 1000,
+        description: "Full-day comprehensive setup",
+        features: [
+            "Complete infrastructure setup",
+            "Custom AI agent deployment",
+            "Integration with your systems",
+            "Performance optimization",
+            "Deployment strategy",
+        ],
+        icon: Rocket,
+    },
+];
+
+const stripePlans = [
+    {
+        name: "Pro",
+        price: 29,
+        interval: "month",
+        priceId: "price_0MC5WIqs14Mpveu1bfwvrkq6",
+        features: [
+            "Unlimited AI agents",
+            "Priority support",
+            "Advanced analytics",
+            "Custom branding"
+        ],
+        icon: CreditCard
+    },
+    {
+        name: "Enterprise",
+        price: 299,
+        interval: "month",
+        priceId: "price_0MC5WIqs14Mpveu1bfwvrkq6",
+        features: [
+            "Everything in Pro",
+            "Dedicated support",
+            "Custom integrations",
+            "SLA guarantees",
+            "Team training"
+        ],
+        icon: Zap
+    }
+];
+---
+
+<Layout
+    title="Payment Options"
+    description="Accept crypto payments and subscriptions through Stripe"
+>
+    <div class="container mx-auto px-4 py-16">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl font-bold mb-4">Payment Integration Guide</h1>
+            <p class="text-xl text-muted-foreground">
+                Learn how to accept cryptocurrency payments and Stripe subscriptions in your ONE-powered application.
+            </p>
+        </div>
+
+        {/* Crypto Payments Section */}
+        <section class="mb-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Cryptocurrency Payments</h2>
+                <p class="text-lg text-muted-foreground">
+                    Accept one-time payments in BTC, ETH, and SOL. Perfect for digital products and services.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                {cryptoPlans.map((plan) => (
+                    <Card className="p-6 flex flex-col">
+                        <div class="mb-8">
+                            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                                <plan.icon className="w-6 h-6 text-primary" />
+                            </div>
+                            <h2 class="text-2xl font-bold mb-2">{plan.name}</h2>
+                            <div class="mb-4">
+                                <span class="text-3xl font-bold">
+                                    ${plan.price}
+                                </span>
+                                <span class="text-muted-foreground">
+                                    one-time
+                                </span>
+                            </div>
+                            <p class="text-muted-foreground mb-4">
+                                {plan.description}
+                            </p>
+                        </div>
+
+                        <div class="flex-grow">
+                            <ul class="space-y-2 mb-8">
+                                {plan.features.map((feature) => (
+                                    <li class="flex items-center gap-2">
+                                        <Shield className="w-4 h-4 text-primary" />
+                                        <span>{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div>
+                            <CryptoPayment
+                                client:load
+                                orderId={`${plan.name.toLowerCase()}_${Date.now()}`}
+                                amount={plan.price}
+                                currency="USD"
+                            />
+                        </div>
+                    </Card>
+                ))}
+            </div>
+
+            <div class="max-w-2xl mx-auto text-center">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="p-4 rounded-lg bg-muted">
+                        <img
+                            src="/btc-logo.svg"
+                            alt="Bitcoin"
+                            class="w-12 h-12 mx-auto mb-2"
+                        />
+                        <div class="font-semibold">Bitcoin</div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-muted">
+                        <img
+                            src="/eth-logo.svg"
+                            alt="Ethereum"
+                            class="w-12 h-12 mx-auto mb-2"
+                        />
+                        <div class="font-semibold">Ethereum</div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-muted">
+                        <img
+                            src="/sol-logo.svg"
+                            alt="Solana"
+                            class="w-12 h-12 mx-auto mb-2"
+                        />
+                        <div class="font-semibold">Solana</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* Stripe Subscriptions Section */}
+        <section>
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Stripe Subscriptions</h2>
+                <p class="text-lg text-muted-foreground">
+                    Set up recurring payments with Stripe's powerful subscription system.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                {stripePlans.map((plan) => (
+                    <Card className="p-6 flex flex-col">
+                        <div class="mb-8">
+                            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                                <plan.icon className="w-6 h-6 text-primary" />
+                            </div>
+                            <h2 class="text-2xl font-bold mb-2">{plan.name}</h2>
+                            <div class="mb-4">
+                                <span class="text-3xl font-bold">
+                                    ${plan.price}
+                                </span>
+                                <span class="text-muted-foreground">
+                                    /{plan.interval}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow">
+                            <ul class="space-y-2 mb-8">
+                                {plan.features.map((feature) => (
+                                    <li class="flex items-center gap-2">
+                                        <Shield className="w-4 h-4 text-primary" />
+                                        <span>{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <form method="get" action="/stripe" class="w-full">
+                            <input type="hidden" name="price_id" value={plan.priceId} />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit" class="w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                                Subscribe Now
+                            </button>
+                        </form>
+                    </Card>
+                ))}
+            </div>
+
+            <div class="max-w-2xl mx-auto text-center text-sm text-muted-foreground">
+                <p class="font-medium mb-2">Implementation Notes:</p>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>Set STRIPE_SECRET_KEY in your .env file</li>
+                    <li>Configure success_url and cancel_url in your Stripe settings</li>
+                    <li>Test thoroughly in Stripe's test mode before going live</li>
+                    <li>Monitor webhooks for subscription lifecycle events</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</Layout>

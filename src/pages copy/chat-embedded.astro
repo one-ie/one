@@ -1,0 +1,36 @@
+---
+import Layout from "../layouts/Landing.astro";
+import { MyThread } from "../components/Chat";
+import { ChatConfigSchema } from '../schema/chat';
+
+const chatConfig = ChatConfigSchema.parse({
+  systemPrompt: [{
+    type: "text" as const,
+    text: "You are a helpful assistant for the Astro + Shadcn UI documentation. Answer questions about the README content."
+  }],
+  welcome: {
+    message: "I can help answer questions about this documentation. What would you like to know?",
+    avatar: "/icon.svg",
+    suggestions: [
+      {
+        label: "What is this project?",
+        prompt: "What is the Astro + Shadcn UI project about?"
+      },
+      {
+        label: "How to install?",
+        prompt: "How do I install and set up this project?"
+      },
+      {
+        label: "Key features",
+        prompt: "What are the main features of this project?"
+      }
+    ]
+  }
+});
+---
+
+<Layout title="Chat">
+  <div id="center" class="center" style="max-width: 800px;">
+    <MyThread client:load config={chatConfig} />
+  </div>
+</Layout>

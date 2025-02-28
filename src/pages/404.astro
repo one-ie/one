@@ -1,40 +1,109 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { MyThread } from "../components/Chat";
-import { ChatConfigSchema } from '../schema/chat';
 
-const chatConfig = ChatConfigSchema.parse({
-  systemPrompt: [{
-    type: "text" as const,
-    text: "You are a friendly guide helping lost visitors navigate through the site. Your tone is warm and adventurous, turning their 404 experience into the beginning of a journey."
-  }],
-  welcome: {
-    message: "Oh! Looks like you've wandered off the beaten path. But don't worry – sometimes the best adventures start with a wrong turn! How can I help you find your way?",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "Start the Journey",
-        prompt: "I'm new here. What's the best place to start exploring this site?"
-      },
-      {
-        label: "Popular Destinations",
-        prompt: "What are the most interesting sections of the site I should check out?"
-      },
-      {
-        label: "Quick Escape",
-        prompt: "Just take me to the homepage, please!"
-      }
-    ]
+// Define animation keyframes for the glitch effect
+const glitchKeyframes = `
+  @keyframes glitch {
+    0% {
+      transform: translate(0);
+    }
+    20% {
+      transform: translate(-2px, 2px);
+    }
+    40% {
+      transform: translate(-2px, -2px);
+    }
+    60% {
+      transform: translate(2px, 2px);
+    }
+    80% {
+      transform: translate(2px, -2px);
+    }
+    100% {
+      transform: translate(0);
+    }
   }
-});
+`;
+
+// Set rightPanelMode to hidden to remove the chat functionality
+const rightPanelMode = "hidden";
 ---
 
-<Layout title="404 - A New Adventure">
-  <div class="container flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
-    <h1 class="text-4xl font-bold text-center mb-4">404 - Not Found</h1>
-    <p class="text-center text-muted-foreground mb-8">Every lost explorer needs a friendly guide...</p>
-    <div class="w-full max-w-[800px]">
-      <MyThread client:load config={chatConfig} />
+<Layout title="404 - Page Not Found" rightPanelMode={rightPanelMode}>
+  <div class="container mx-auto px-4 py-16 min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center">
+    <div class="max-w-3xl w-full text-center space-y-8">
+      <!-- Glitchy 404 Text -->
+      <div class="relative">
+        <h1 class="text-[10rem] md:text-[15rem] font-bold leading-none tracking-tighter text-primary/80 glitch-text">
+          404
+        </h1>
+        <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+          <h1 class="text-[10rem] md:text-[15rem] font-bold leading-none tracking-tighter text-primary/30 glitch-shadow">
+            404
+          </h1>
+        </div>
+      </div>
+      
+      <!-- Message -->
+      <div class="space-y-4">
+        <h2 class="text-3xl md:text-4xl font-bold">Signal Lost</h2>
+        <p class="text-xl text-muted-foreground max-w-xl mx-auto">
+          The digital coordinates you're looking for seem to have drifted into uncharted territory.
+        </p>
+      </div>
+      
+      <!-- Cool SVG Illustration -->
+      <div class="py-8 flex justify-center">
+        <img 
+          src="/images/drawings/Elevate.svg" 
+          alt="Lost in digital space" 
+          class="w-full max-w-md mx-auto hover:scale-105 transition-transform duration-500"
+        />
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4 justify-center pt-4">
+        <a 
+          href="/" 
+          class="px-6 py-3 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors"
+        >
+          Return to Base
+        </a>
+        <a 
+          href="/sitemap" 
+          class="px-6 py-3 bg-muted text-foreground rounded-md font-medium hover:bg-muted/80 transition-colors"
+        >
+          View Map
+        </a>
+      </div>
+      
+      <!-- Random Fun Fact -->
+      <div class="mt-12 p-4 bg-muted/50 rounded-lg max-w-lg mx-auto">
+        <h3 class="font-semibold mb-2">Did You Know?</h3>
+        <p class="text-sm text-muted-foreground">
+          The term "404" comes from the HTTP status code that means "Not Found." It was chosen because room 404 at CERN, where the World Wide Web was born, was the central hub where all the web files were stored.
+        </p>
+      </div>
     </div>
   </div>
-</Layout> 
+</Layout>
+
+<style set:html={glitchKeyframes}>
+  .glitch-text {
+    position: relative;
+    animation: glitch 0.5s infinite alternate-reverse;
+  }
+  
+  .glitch-shadow {
+    animation: glitch 0.5s infinite alternate-reverse;
+    animation-delay: 0.1s;
+    opacity: 0.5;
+    filter: blur(1px);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .glitch-text, .glitch-shadow {
+      animation: none;
+    }
+  }
+</style> 

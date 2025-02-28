@@ -1,0 +1,256 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card } from "@/components/ui/card";
+import { ChatConfigSchema } from "../schema/chat";
+import {
+  GitHubLogoIcon,
+  CodeIcon,
+  DownloadIcon,
+  CheckIcon,
+} from "@radix-ui/react-icons";
+
+// Import license content
+import License from "../../LICENSE?raw";
+const SYSTEM_REQUIREMENTS = [
+  "Node.js 18.x or higher",
+  "pnpm package manager",
+  "Modern web browser (Chrome, Firefox, Safari, Edge)",
+  "Any modern operating system (Windows, macOS, Linux)",
+  "Deploy on Vercel, Netlify, AWS or any Node.js server",
+];
+
+const INSTALLATION_STEPS = [
+  {
+    title: "Get the Code",
+    description: "Download ZIP or clone with Git - takes just seconds",
+  },
+  {
+    title: "Quick Install",
+    description: "Run 'npm install' to install dependencies",
+  },
+  {
+    title: "Add Your Keys",
+    description:
+      "Add the keys to your AI providers in your environment variables",
+  },
+  {
+    title: "Start Building",
+    description: "Create your first AI agent and go live",
+  },
+  {
+    title: "Deploy Anywhere",
+    description: "Push to Vercel, AWS, or your own server",
+  },
+];
+
+const GITHUB_REPO = "one-ie/one";
+const GITHUB_URL = `https://github.com/${GITHUB_REPO}`;
+const DOWNLOAD_URL = `https://github.com/${GITHUB_REPO}/archive/refs/heads/main.zip`;
+
+const URLS = {
+  clone: `git clone https://github.com/${GITHUB_REPO}.git`,
+  codespace: `https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=${GITHUB_REPO}`,
+  fork: `https://github.com/${GITHUB_REPO}/fork`,
+};
+
+// Configure chat
+const chatConfig = ChatConfigSchema.parse({
+  systemPrompt: [
+    {
+      type: "text" as const,
+      text: `You are ONE's setup specialist, helping users build AI-powered businesses. Your role includes:
+    
+    - Fast framework installation and deployment
+    - Setting up AI agents for sales and support
+    - Configuring payment systems and automation
+    - Implementing content generation
+    - Troubleshooting technical issues
+    
+    Key Features to Highlight:
+    1. AI Agent Capabilities
+       • 24/7 automated sales and support
+       • Content generation and optimization
+       • Multi-language support
+       • Custom training options
+    
+    2. Payment Integration
+       • Crypto: BTC, ETH, SOL
+       • Traditional: Cards, transfers
+       • Digital: Apple Pay, Google Pay
+       • Global: Alipay, Klarna
+    
+    3. Token System Benefits
+       • 100 ONE - Single project
+       • 1,000 ONE - Multiple domains
+       • 10,000 ONE - Unlimited projects
+       • 50,000+ ONE - Enterprise features
+    
+    Reference Information:
+    ${JSON.stringify({ SYSTEM_REQUIREMENTS, INSTALLATION_STEPS, URLS }, null, 2)}
+    
+    Focus on helping users deploy their first AI agent and set up payment processing. Guide them through token system benefits.`,
+    },
+  ],
+  welcome: {
+    message:
+      "👋 Ready to build your AI-powered business? I'll help you get started with AI agents, payments, and token features.",
+    avatar: "/icon.svg",
+    suggestions: [
+      {
+        label: "🤖 AI Agent Setup",
+        prompt: "How do I create my first AI sales agent?",
+      },
+      {
+        label: "💳 Payment Integration",
+        prompt: "Guide me through setting up crypto and traditional payments",
+      },
+      {
+        label: "🪙 Token Features",
+        prompt: "Explain how the token system works for unlocking features",
+      },
+      {
+        label: "📥 Quick Install",
+        prompt: "What's the fastest way to get started with ONE?",
+      },
+    ],
+  },
+});
+
+import { GitSection } from "@/components/GitSection";
+
+// Remove the old stats fetching since GitSection handles it internally
+---
+
+<Layout
+  title="Download ONE - AI Agents & Crypto Commerce Toolbox"
+  description="Download the first framework for building intelligent AI agents that generate content, engage customers, and process crypto payments. Free and open source."
+  chatConfig={chatConfig}
+  rightPanelMode="quarter"
+>
+  <main class="container mx-auto px-6 w-full">
+    <section class="py-12 text-center max-w-4xl mx-auto mb-12">
+      <h1
+        class="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60"
+      >
+        Download
+        <span class="block mt-2 text-4xl">100% Free Forever</span>
+      </h1>
+      <p class="text-xl text-muted-foreground mb-8">
+        ONE is completely free and open source. Get started in minutes with zero
+        setup complexity. Deploy anywhere - from Vercel to your own
+        infrastructure.
+      </p>
+    </section>
+
+    <GitSection />
+
+    <!-- System Requirements Section -->
+    <section class="w-full max-w-4xl mx-auto mb-16">
+      <h2 class="text-3xl font-bold mb-8 text-center">System Requirements</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {
+          SYSTEM_REQUIREMENTS.map((requirement) => (
+            <Card className="p-6 flex items-start space-x-4">
+              <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <CheckIcon className="w-5 h-5 text-primary" />
+              </div>
+              <p class="text-muted-foreground">{requirement}</p>
+            </Card>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- License Section -->
+    <section class="w-full max-w-[1400px] mb-20">
+      <h2 class="text-4xl font-bold mb-10 text-center">License</h2>
+      <Card className="prose prose-lg max-w-none dark:prose-invert p-8">
+        <pre
+          class="whitespace-pre-wrap text-sm leading-relaxed opacity-90">{License}</pre>
+      </Card>
+    </section>
+
+    <!-- Installation Guide Section -->
+    <section class="w-full max-w-4xl mx-auto mb-16">
+      <h2 class="text-3xl font-bold mb-8 text-center">Easy Steps</h2>
+      <div class="space-y-6">
+        {
+          INSTALLATION_STEPS.map((step, index) => (
+            <Card className="p-6">
+              <div class="flex items-start space-x-4">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <span class="text-primary font-semibold">{index + 1}</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold mb-2">{step.title}</h3>
+                  <p class="text-muted-foreground">{step.description}</p>
+                </div>
+              </div>
+            </Card>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="text-center mb-16 w-full max-w-[1400px]">
+      <Alert className="py-6">
+        <AlertDescription className="text-lg">
+          Join developers at the frontier of AI building the future with ONE.
+          <a href={GITHUB_URL} class="inline-block">
+            <Button
+              variant="link"
+              className="ml-3 text-lg text-foreground hover:text-foreground"
+            >
+              Star on GitHub <GitHubLogoIcon className="ml-2 w-5 h-5" />
+            </Button>
+          </a>
+        </AlertDescription>
+      </Alert>
+    </section>
+
+    <GitSection />
+  </main>
+</Layout>
+
+<style>
+  .prose {
+    @apply mx-auto;
+  }
+
+  .prose pre {
+    @apply bg-muted;
+  }
+
+  .container {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  // Handle copy functionality
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyButton = document.getElementById("copyCloneCommand");
+    const copyMessage = document.getElementById("copyMessage");
+
+    if (copyButton && copyMessage) {
+      copyButton.addEventListener("click", () => {
+        navigator.clipboard.writeText(
+          "git clone https://github.com/one-ie/one",
+        );
+        copyMessage.classList.remove("opacity-0");
+        setTimeout(() => copyMessage.classList.add("opacity-0"), 2000);
+      });
+    }
+  });
+</script>

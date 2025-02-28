@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MyAudioPlayer from '../components/AudioPlayer';
+---
+
+<Layout title="Audio Player Demo">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Audio Player Demo</h1>
+    <div class="max-w-2xl mx-auto">
+      <MyAudioPlayer client:load src="/audio/podcast-truth-terminal.mp3" />
+    </div>
+  </main>
+</Layout>

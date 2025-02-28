@@ -1,0 +1,110 @@
+---
+description: Todo items for implementing layout panel components in the ONE framework
+glob_patterns:
+  - "src/layouts/Layout.astro"
+  - "src/components/layout/*.astro"
+---
+
+# Layout Components Todos
+
+## Implementation Checklist
+
+### Layout Structure
+- [ ] Implement main Layout.astro file with panel orchestration
+- [ ] Add panel visibility props and controls
+- [ ] Configure CSS Grid layout system
+- [ ] Implement responsive behavior
+
+### Panel Components
+- [ ] Left panel component (src/components/layout/Left.astro)
+  - [ ] Navigation structure
+  - [ ] Logo placement
+  - [ ] Panel footer
+  - [ ] Collapsible behavior
+
+- [ ] Top panel component (src/components/layout/Top.astro)
+  - [ ] Header layout
+  - [ ] Search integration
+  - [ ] User controls
+  - [ ] Theme toggle
+
+- [ ] Center panel component (src/components/layout/Center.astro)
+  - [ ] Content container
+  - [ ] Scroll behavior
+  - [ ] Slot implementation
+  - [ ] Padding and spacing
+
+- [ ] Bottom panel component (src/components/layout/Bottom.astro)
+  - [ ] Status indicators
+  - [ ] Control buttons
+  - [ ] Information display
+  - [ ] Responsive behavior
+
+- [ ] Right panel component (src/components/layout/Right.astro)
+  - [ ] Chat integration
+  - [ ] Panel modes (quarter, half, full)
+  - [ ] Default content
+  - [ ] Collapsible behavior
+
+### Panel Functionality
+- [ ] Panel visibility controls
+  - [ ] Toggle buttons
+  - [ ] State persistence
+  - [ ] Smooth transitions
+
+- [ ] Responsive panel behavior
+  - [ ] Mobile breakpoints
+  - [ ] Panel stacking
+  - [ ] Touch interactions
+
+- [ ] Panel resize functionality
+  - [ ] Resize handles
+  - [ ] Drag behavior
+  - [ ] Size constraints
+  - [ ] State persistence
+
+## Implementation Guidelines
+
+### Priority Order
+1. Layout structure and basic panels
+2. Panel visibility controls
+3. Responsive behavior
+4. Resize functionality
+
+### Testing Scenarios
+- Desktop (various screen sizes)
+- Tablet (portrait and landscape)
+- Mobile devices
+- Different panel combinations
+- Keyboard navigation
+- Screen readers
+
+### Performance Considerations
+- Minimize layout shifts
+- Optimize transitions
+- Lazy load panel content
+- Use will-change for animations
+
+## Integration Points
+
+### Theme System
+- Ensure panels respect theme variables
+- Implement proper dark/light mode support
+- Use consistent border and shadow styles
+
+### Chat System
+- Right panel should integrate with chat system
+- Support different chat panel modes
+- Handle chat state persistence
+
+### Navigation
+- Left panel should integrate with site navigation
+- Support nested navigation items
+- Highlight active routes
+
+## Accessibility Requirements
+- All panels must be keyboard navigable
+- Use proper ARIA attributes for dynamic content
+- Ensure sufficient color contrast
+- Implement focus management
+- Support screen readers 

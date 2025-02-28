@@ -1,0 +1,432 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "../components/ui/button";
+import { Badge } from "../components/ui/badge";
+import { Card } from "../components/ui/card";
+import { CheckIcon, ArrowRightIcon, SparklesIcon, ShieldCheckIcon, ZapIcon, StarIcon, ClockIcon, UserIcon, HeartIcon, BarChartIcon, LightbulbIcon, PlayIcon } from "lucide-react";
+import { AccordionWrapper } from "../components/AccordionWrapper";
+import { CourseModuleContent } from "../components/CourseModuleContent";
+import { Progress } from "../components/ui/progress";
+import { Separator } from "../components/ui/separator";
+import { BorderBeam } from "../components/magicui/border-beam";
+
+const title = "Pricing Plans";
+const description = "Choose the perfect plan for your AI business needs";
+
+// Course details
+const courseDetails = {
+  badge: "Limited-Time Offer: 50% OFF",
+  title: "AI Business Accelerator™",
+  subtitle: "The Complete System to Build, Launch & Scale Your AI Business in 30 Days",
+  originalPrice: "997",
+  currentPrice: "497",
+  guarantee: "30-Day 100% Money-Back Guarantee",
+  ctaText: "Secure Your Spot Now",
+  valueProposition: "All the tools, templates & support you need to create your profitable AI business",
+  spots: {
+    total: 50,
+    remaining: 7
+  }
+};
+
+// Course modules data
+const courseModulesData = [
+  {
+    title: "Foundation & Setup",
+    description: "Build your technical foundation",
+    lessons: [
+      { name: "Environment Setup", value: "Complete development environment configuration" },
+      { name: "Project Structure", value: "Optimized file organization for scalability" },
+      { name: "AI Integration", value: "Connect to leading AI providers" }
+    ]
+  },
+  {
+    title: "Brand Development",
+    description: "Create a compelling AI brand identity",
+    lessons: [
+      { name: "Brand Strategy", value: "Position your AI business for success" },
+      { name: "Visual Identity", value: "Design system implementation" },
+      { name: "Voice & Tone", value: "Consistent communication framework" }
+    ]
+  },
+  {
+    title: "AI Agent Creation",
+    description: "Build powerful AI assistants",
+    lessons: [
+      { name: "Agent Architecture", value: "Design intelligent conversation flows" },
+      { name: "Prompt Engineering", value: "Create effective AI instructions" },
+      { name: "Personality Design", value: "Develop unique AI personalities" }
+    ]
+  },
+  {
+    title: "Content Automation",
+    description: "Scale your content production",
+    lessons: [
+      { name: "Content Strategy", value: "Plan your automated content ecosystem" },
+      { name: "Multi-channel Publishing", value: "Distribute across platforms" },
+      { name: "SEO Optimization", value: "Maximize content visibility" }
+    ]
+  },
+  {
+    title: "Monetization & Sales",
+    description: "Generate revenue from your AI business",
+    lessons: [
+      { name: "Payment Integration", value: "Accept multiple payment methods" },
+      { name: "Sales Automation", value: "Create AI-powered sales systems" },
+      { name: "Subscription Models", value: "Build recurring revenue streams" }
+    ]
+  }
+];
+
+// Benefits - Enhanced with stronger outcomes
+const benefits = [
+  { title: "Launch in 30 Days", icon: ClockIcon, description: "Go from idea to paying customers in just 4 weeks" },
+  { title: "Done-for-You Templates", icon: CheckIcon, description: "Save 100+ hours with ready-to-use systems" },
+  { title: "AI Business Toolkit", icon: SparklesIcon, description: "Access $5,000+ worth of premium resources" },
+  { title: "Private Community", icon: UserIcon, description: "Get help from successful AI entrepreneurs" },
+  { title: "Lifetime Updates", icon: ZapIcon, description: "Stay ahead with the latest AI strategies" },
+  { title: "Expert Support", icon: ShieldCheckIcon, description: "Get answers within 24 hours, guaranteed" }
+];
+
+// Enhanced testimonials with more specific results
+const testimonials = [
+  {
+    quote: "Within 3 weeks of starting this course, I launched my AI writing assistant and secured my first 5 clients, generating $3,750 in my first month. The step-by-step framework eliminated all the guesswork.",
+    author: "Alex K., Founder of ContentAI Pro",
+    business: "AI Content Generation",
+    result: "$3,750 in first month",
+    image: "/testimonials/alex.jpg"
+  },
+  {
+    quote: "As someone with zero technical background, I was worried this would be over my head. But the course breaks everything down so clearly that I was able to build and launch my AI legal assistant, which now generates $7,200/month in recurring revenue.",
+    author: "Sarah M., Creator of LegalAssistAI",
+    business: "Legal Tech",
+    result: "$7,200/month recurring",
+    image: "/testimonials/sarah.jpg"
+  }
+];
+
+// Learning outcomes
+const learningOutcomes = [
+  "How to identify profitable AI business opportunities in under 60 minutes",
+  "The exact tech stack needed to build any AI business (even as a non-developer)",
+  "Our proven 7-step framework for creating AI agents that sell themselves",
+  "How to automate content creation across blogs, social media, and email",
+  "The simple method for setting up payments and subscription systems",
+  "Advanced AI prompt engineering techniques for performance optimization",
+  "Step-by-step marketing strategy to attract your first 100 customers",
+  "Scaling techniques to grow from $0 to $10,000/month"
+];
+
+// Instructor details
+const instructor = {
+  name: "David Chen",
+  title: "AI Business Strategist & Entrepreneur",
+  bio: "Over the past 3 years, David has built and sold 4 AI businesses with a combined exit value of $2.7M. He's helped over 300 entrepreneurs create profitable AI businesses through his proven framework.",
+  image: "/instructor.jpg"
+};
+
+// Plans data
+const plans = [
+  {
+    name: "Starter",
+    price: "49",
+    period: "per month",
+    description: "Perfect for individuals and small businesses just getting started with AI",
+    features: [
+      "3 AI Agents",
+      "Basic customization",
+      "Standard response time",
+      "Email support",
+      "5,000 messages/month"
+    ],
+    cta: "Get Started",
+    popular: false
+  },
+  {
+    name: "Professional",
+    price: "99",
+    period: "per month",
+    description: "Ideal for growing businesses that need more advanced AI capabilities",
+    features: [
+      "10 AI Agents",
+      "Advanced customization",
+      "Faster response time",
+      "Priority support",
+      "25,000 messages/month",
+      "Custom training data",
+      "Analytics dashboard"
+    ],
+    cta: "Upgrade Now",
+    popular: true
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    period: "tailored pricing",
+    description: "For organizations requiring enterprise-grade AI solutions at scale",
+    features: [
+      "Unlimited AI Agents",
+      "Full customization",
+      "Fastest response time",
+      "24/7 dedicated support",
+      "Unlimited messages",
+      "Advanced analytics",
+      "Custom integrations",
+      "SLA guarantees",
+      "Dedicated account manager"
+    ],
+    cta: "Contact Sales",
+    popular: false
+  }
+];
+
+// Feature comparison
+const featureComparison = [
+  { name: "AI Agents", starter: "3", pro: "10", enterprise: "Unlimited" },
+  { name: "Messages per month", starter: "5,000", pro: "25,000", enterprise: "Unlimited" },
+  { name: "Custom training", starter: "Basic", pro: "Advanced", enterprise: "Enterprise-grade" },
+  { name: "Response time", starter: "Standard", pro: "Fast", enterprise: "Fastest" },
+  { name: "Support", starter: "Email", pro: "Priority", enterprise: "24/7 Dedicated" },
+  { name: "Analytics", starter: "Basic", pro: "Advanced", enterprise: "Custom" },
+  { name: "White labeling", starter: "❌", pro: "✓", enterprise: "✓" },
+  { name: "API access", starter: "❌", pro: "✓", enterprise: "✓" },
+  { name: "Custom domain", starter: "❌", pro: "✓", enterprise: "✓" },
+  { name: "SLA guarantee", starter: "❌", pro: "❌", enterprise: "✓" }
+];
+
+// FAQ items
+const faqs = [
+  {
+    title: "Can I switch plans later?",
+    content: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing cycle."
+  },
+  {
+    title: "Is there a free trial?",
+    content: "We offer a 14-day free trial on all plans. No credit card required to start your trial."
+  },
+  {
+    title: "How do I cancel my subscription?",
+    content: "You can cancel your subscription at any time from your account dashboard. If you cancel, you'll still have access until the end of your current billing period."
+  },
+  {
+    title: "Do you offer refunds?",
+    content: "We offer a 30-day money-back guarantee. If you're not satisfied with our service, contact us within 30 days of your purchase for a full refund."
+  },
+  {
+    title: "What payment methods do you accept?",
+    content: "We accept all major credit cards, PayPal, and cryptocurrency payments including Bitcoin, Ethereum, and Solana."
+  }
+];
+---
+
+<Layout title={title} description={description}>
+  <div class="main-grid">
+    <div class="center-grid">
+      <div class="content-area">
+        <!-- Hero Section with 70s MCM styling -->
+        <div class="mb-32 pt-16">
+          <div class="text-center max-w-3xl mx-auto">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 tracking-tight one-text-gradient">
+              Simple, Transparent Pricing
+            </h1>
+            <p class="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Choose the perfect plan for your business needs with no hidden fees or surprises
+            </p>
+            
+            <!-- Pricing Toggle -->
+            <div class="flex items-center justify-center mb-16">
+              <span class="text-sm font-medium mr-3">Monthly</span>
+              <div class="w-12 h-6 bg-muted rounded-full p-1 cursor-pointer">
+                <div class="w-4 h-4 bg-white rounded-full"></div>
+              </div>
+              <span class="text-sm font-medium ml-3">Annual <Badge variant="outline" className="ml-2 text-xs">Save 20%</Badge></span>
+            </div>
+          </div>
+          
+          <!-- Pricing Cards with ONE styling -->
+          <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {plans.map((plan, index) => (
+              <div class={`relative ${plan.popular ? 'mt-[-1rem] mb-[-1rem]' : ''}`}>
+                {plan.popular && (
+                  <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <Badge className="bg-white text-black px-3 py-1">Most Popular</Badge>
+                  </div>
+                )}
+                
+                <Card className={`one-glass-dark p-8 border-[hsla(var(--one-border))] h-full flex flex-col ${plan.popular ? 'shadow-xl' : 'shadow-md'}`}>
+                  <div class="mb-6">
+                    <h3 class="text-2xl font-bold mb-2">{plan.name}</h3>
+                    <p class="text-muted-foreground">{plan.description}</p>
+                  </div>
+                  
+                  <div class="mb-6">
+                    <div class="flex items-end">
+                      <span class="text-4xl font-bold">
+                        {plan.price === "Custom" ? "" : "$"}{plan.price}
+                      </span>
+                      {plan.price !== "Custom" && (
+                        <span class="text-muted-foreground ml-2">{plan.period}</span>
+                      )}
+                    </div>
+                    {plan.price === "Custom" && (
+                      <span class="text-muted-foreground">{plan.period}</span>
+                    )}
+                  </div>
+                  
+                  <ul class="space-y-3 mb-8 flex-grow">
+                    {plan.features.map(feature => (
+                      <li class="flex items-start">
+                        <CheckIcon className="w-5 h-5 text-white mr-2 flex-shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <div class="mt-auto">
+                    {plan.popular ? (
+                      <BorderBeam duration={8} containerClassName="w-full rounded-md">
+                        <Button size="lg" className="w-full one-button bg-white text-black hover:bg-white/90">
+                          {plan.cta}
+                          <ArrowRightIcon className="ml-2 h-5 w-5" />
+                        </Button>
+                      </BorderBeam>
+                    ) : (
+                      <Button size="lg" variant="outline" className="w-full border-white text-white hover:bg-white/10">
+                        {plan.cta}
+                      </Button>
+                    )}
+                  </div>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <!-- Feature Comparison with ONE styling -->
+        <div class="mb-32">
+          <h2 class="text-4xl font-bold mb-12 text-center tracking-tight">
+            Feature Comparison
+          </h2>
+          
+          <div class="one-glass-dark border border-[hsla(var(--one-border))] rounded-xl overflow-hidden max-w-5xl mx-auto">
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="border-b border-[hsla(var(--one-border))]">
+                    <th class="text-left p-4">Feature</th>
+                    <th class="text-center p-4">Starter</th>
+                    <th class="text-center p-4 bg-[hsla(var(--one-background-nav))]">Professional</th>
+                    <th class="text-center p-4">Enterprise</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {featureComparison.map((feature, index) => (
+                    <tr class={index !== featureComparison.length - 1 ? "border-b border-[hsla(var(--one-border))]" : ""}>
+                      <td class="p-4 font-medium">{feature.name}</td>
+                      <td class="text-center p-4">{feature.starter}</td>
+                      <td class="text-center p-4 bg-[hsla(var(--one-background-nav))]">{feature.pro}</td>
+                      <td class="text-center p-4">{feature.enterprise}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Testimonials with ONE styling -->
+        <div class="mb-32">
+          <h2 class="text-4xl font-bold mb-12 text-center tracking-tight">
+            What Our Customers Say
+          </h2>
+          
+          <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div class="one-glass-dark border border-[hsla(var(--one-border))] p-8 rounded-xl">
+              <div class="flex items-center mb-4">
+                {Array(5).fill(0).map(() => (
+                  <StarIcon className="w-5 h-5 text-white fill-white" />
+                ))}
+              </div>
+              <p class="italic mb-6 text-lg">"The Professional plan completely transformed our customer service. Our AI agents handle 80% of inquiries automatically now."</p>
+              <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full bg-[hsla(var(--one-background-nav))] flex items-center justify-center font-bold mr-3">
+                  M
+                </div>
+                <div>
+                  <div class="font-medium">Michael Thompson</div>
+                  <div class="text-sm text-muted-foreground">CEO, TechFlow</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="one-glass-dark border border-[hsla(var(--one-border))] p-8 rounded-xl">
+              <div class="flex items-center mb-4">
+                {Array(5).fill(0).map(() => (
+                  <StarIcon className="w-5 h-5 text-white fill-white" />
+                ))}
+              </div>
+              <p class="italic mb-6 text-lg">"We started with the Starter plan and quickly upgraded to Enterprise as we saw the incredible ROI. Best decision we made this year."</p>
+              <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full bg-[hsla(var(--one-background-nav))] flex items-center justify-center font-bold mr-3">
+                  S
+                </div>
+                <div>
+                  <div class="font-medium">Sarah Johnson</div>
+                  <div class="text-sm text-muted-foreground">Marketing Director, Elevate</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ with ONE styling -->
+        <div class="mb-32">
+          <h2 class="text-4xl font-bold mb-12 text-center tracking-tight">
+            Frequently Asked Questions
+          </h2>
+          
+          <div class="max-w-4xl mx-auto one-glass-dark border border-[hsla(var(--one-border))] p-8 rounded-xl">
+            <AccordionWrapper items={faqs} client:visible />
+          </div>
+        </div>
+
+        <!-- Final CTA with ONE styling -->
+        <div class="text-center max-w-3xl mx-auto mb-32">
+          <div class="one-glass-dark border border-[hsla(var(--one-border))] shadow-xl p-12 rounded-xl">
+            <h2 class="text-4xl font-bold mb-6 tracking-tight one-text-gradient">
+              Ready to Get Started?
+            </h2>
+            <p class="text-xl text-muted-foreground mb-8 max-w-xl mx-auto">
+              Choose the plan that's right for you and start building your AI-powered business today
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <BorderBeam duration={8} containerClassName="rounded-md">
+                <Button size="lg" className="one-button bg-white text-black hover:bg-white/90 border-0 px-8 py-6 text-lg">
+                  View Plans
+                  <ArrowRightIcon className="ml-2 h-5 w-5" />
+                </Button>
+              </BorderBeam>
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 px-8 py-6 text-lg">
+                Contact Sales
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Add custom fonts for MCM aesthetic */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+  
+  /* 70s MCM geometric patterns */
+  .geometric-pattern {
+    background-image: radial-gradient(circle at 25px 25px, hsla(0, 0%, 100%, 0.1) 2%, transparent 0%), 
+                      radial-gradient(circle at 75px 75px, hsla(0, 0%, 100%, 0.1) 2%, transparent 0%);
+    background-size: 100px 100px;
+  }
+</style>
+

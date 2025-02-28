@@ -1,0 +1,407 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "../components/ui/button";
+import { Badge } from "../components/ui/badge";
+import { Card } from "../components/ui/card";
+import { CheckIcon, ArrowRightIcon, SparklesIcon, ShieldCheckIcon, ZapIcon, StarIcon, ClockIcon, UserIcon, HeartIcon, BarChartIcon, LightbulbIcon, PlayIcon } from "lucide-react";
+import { AccordionWrapper } from "../components/AccordionWrapper";
+import { CourseModuleContent } from "../components/CourseModuleContent";
+import { Progress } from "../components/ui/progress";
+import { Separator } from "../components/ui/separator";
+import { CountdownTimer } from "../components/CountdownTimer";
+import { StudentTestimonials } from "../components/StudentTestimonials";
+
+const title = "Build Your First AI Agent in 1 Hour";
+const description = "Learn to create intelligent AI assistants that can talk to customers, generate content, and automate tasks—even if you have zero coding experience";
+
+// Countdown timer calculation
+const launchDate = new Date("April 1, 2025").getTime();
+
+// Course details
+const courseDetails = {
+  badge: "Launch Special: One-Time Payment",
+  title: "Build Your First AI Agent in 1 Hour",
+  subtitle: "Create intelligent AI assistants that work for your business 24/7",
+  originalPrice: "197",
+  currentPrice: "100",
+  guarantee: "30-Day 100% Money-Back Guarantee",
+  ctaText: "Reserve Your Spot Now",
+  valueProposition: "No coding required. Just follow along and have a working AI agent in 60 minutes.",
+  spots: {
+    total: 10,
+    remaining: 8
+  },
+  launchDate: "April 1, 2025"
+};
+
+// Course modules data - simplified for 1-hour course
+const courseModulesData = [
+  {
+    title: "Setup & Foundation (15 minutes)",
+    description: "Get everything ready quickly",
+    lessons: [
+      { name: "AI Platform Setup", value: "Connect to OpenAI or Claude in 5 minutes" },
+      { name: "Agent Structure", value: "The 3-part framework for effective agents" },
+      { name: "Environment Configuration", value: "Set up your workspace for success" }
+    ]
+  },
+  {
+    title: "Agent Intelligence Design (20 minutes)",
+    description: "Make your AI smart and effective",
+    lessons: [
+      { name: "Prompt Engineering", value: "Create clear instructions your AI will follow" },
+      { name: "Knowledge Integration", value: "Teach your AI about your business" },
+      { name: "Personality Design", value: "Give your AI a consistent voice and style" }
+    ]
+  },
+  {
+    title: "Deployment & Testing (25 minutes)",
+    description: "Get your agent live and working",
+    lessons: [
+      { name: "Web Integration", value: "Add your agent to any website in minutes" },
+      { name: "Conversation Testing", value: "Ensure your agent handles questions correctly" },
+      { name: "Performance Optimization", value: "Make your agent faster and more reliable" }
+    ]
+  }
+];
+
+// What you'll learn
+const learningOutcomes = [
+  "Create AI agents that can answer customer questions 24/7",
+  "Design effective prompts that guide AI behavior",
+  "Integrate your business knowledge into your AI assistant",
+  "Deploy your agent on websites, social media, or messaging platforms",
+  "Test and optimize your agent's performance",
+  "Scale your AI capabilities as your business grows"
+];
+
+// Bonuses
+const bonuses = [
+  {
+    title: "50 Ready-to-Use AI Prompts",
+    description: "Copy-paste prompts for sales, support, content creation, and more",
+    value: "$97 Value"
+  },
+  {
+    title: "AI Agent Analytics Dashboard",
+    description: "Track performance and improve your agent with data insights",
+    value: "$147 Value"
+  },
+  {
+    title: "Private Community Access",
+    description: "Join our exclusive community of AI builders for ongoing support",
+    value: "$197 Value"
+  }
+];
+
+// Testimonials
+const testimonials = [
+  {
+    name: "Sarah Johnson",
+    role: "E-commerce Store Owner",
+    content: "I had zero tech experience but followed along and had my first AI agent answering customer questions within an hour. It's already saved me 15+ hours per week in customer service time."
+  },
+  {
+    name: "Michael Chen",
+    role: "Marketing Consultant",
+    content: "The step-by-step approach made this incredibly easy. My AI agent now handles initial client inquiries and I've seen a 40% increase in qualified leads since implementing it."
+  },
+  {
+    name: "David Rodriguez",
+    role: "Content Creator",
+    content: "This course delivered exactly what it promised. I built my content creation AI in an hour, and it's already saved me 15+ hours of work in the first week alone."
+  }
+];
+
+// FAQs
+const faqs = [
+  {
+    title: "Do I need coding experience?",
+    content: "No coding experience is required. The course is specifically designed for non-technical business owners and professionals. We use no-code tools and provide step-by-step instructions."
+  },
+  {
+    title: "How long will it take to build my first AI agent?",
+    content: "As the title suggests, you'll have your first working AI agent in about 60 minutes. The course is structured to be completed in a single sitting, with clear milestones along the way."
+  },
+  {
+    title: "What can my AI agent do?",
+    content: "Your AI agent can handle customer inquiries, generate content, qualify leads, provide product recommendations, and automate repetitive tasks. The specific capabilities depend on how you configure it for your business needs."
+  },
+  {
+    title: "Will this work for my specific business?",
+    content: "Yes! The course teaches universal principles that apply to any business type. We include examples for e-commerce, service businesses, content creators, consultants, and more."
+  },
+  {
+    title: "What ongoing costs are there?",
+    content: "The course itself is a one-time payment. Your AI agent will require an API subscription with OpenAI or Anthropic, which typically costs $10-20/month for most small businesses based on usage."
+  },
+  {
+    title: "What if I'm not satisfied with the course?",
+    content: "We offer a 30-day 100% money-back guarantee. If you're not completely satisfied, simply email us for a full refund, no questions asked."
+  }
+];
+
+// Calculate total bonus value
+const totalBonusValue = bonuses.reduce((total, bonus) => {
+  const value = parseInt(bonus.value.replace(/\$|,|\s|Value/g, ''));
+  return total + value;
+}, 0);
+---
+
+<Layout title={title} description={description}>
+  <!-- Hero Section -->
+  <section class="pt-20 pb-16 md:pt-28 md:pb-20">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <Badge variant="outline" className="mb-4 text-blue-400 border-blue-400/30 bg-blue-400/10">
+          {courseDetails.badge}
+        </Badge>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+          {courseDetails.title}
+        </h1>
+        <p class="text-xl md:text-2xl text-[#aaaaaa] max-w-3xl mx-auto mb-8">
+          {courseDetails.subtitle}
+        </p>
+        <p class="text-lg text-[#888888] max-w-2xl mx-auto">
+          {courseDetails.valueProposition}
+        </p>
+      </div>
+      
+      <!-- Countdown Timer -->
+      <div class="mb-12">
+        <h3 class="text-xl font-medium text-white text-center mb-6">Course Starts 1 April 2025 ... in:</h3>
+        <CountdownTimer targetDate={launchDate} className="mb-8" client:visible />
+        
+        <div class="max-w-md mx-auto">
+          <div class="mb-2 flex justify-between text-sm text-[#888888]">
+            <span>Spots Filled</span>
+            <span>{courseDetails.spots.total - courseDetails.spots.remaining}/{courseDetails.spots.total}</span>
+          </div>
+          <Progress value={(courseDetails.spots.total - courseDetails.spots.remaining) / courseDetails.spots.total * 100} className="h-2 mb-6" />
+          <p class="text-center text-[#888888] text-sm">
+            Only <span class="text-white font-medium">{courseDetails.spots.remaining} spots</span> remaining for this cohort
+          </p>
+        </div>
+      </div>
+      
+      <!-- CTA Button -->
+      <div class="text-center mb-12">
+        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl">
+          {courseDetails.ctaText}
+          <ArrowRightIcon className="ml-2 w-5 h-5" />
+        </Button>
+        <p class="mt-4 text-[#888888] text-sm">{courseDetails.guarantee}</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- What You'll Learn Section -->
+  <section class="py-20 bg-[#0e0e0e]">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">What You'll Learn</h2>
+        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto">
+          In just 60 minutes, you'll gain the skills to create AI agents that work for your business 24/7
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        {learningOutcomes.map((outcome) => (
+          <div class="flex items-start gap-4 bg-[#1a1a1a] border border-[#333333] p-6 rounded-xl">
+            <div class="w-10 h-10 rounded-full bg-blue-600/10 flex-shrink-0 flex items-center justify-center">
+              <CheckIcon className="w-5 h-5 text-blue-500" />
+            </div>
+            <p class="text-[#dddddd]">{outcome}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Course Curriculum Section -->
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Course Curriculum</h2>
+        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto">
+          A step-by-step process to build your AI agent in just 60 minutes
+        </p>
+      </div>
+      
+      <div class="space-y-8">
+        {courseModulesData.map((module, index) => (
+          <Card className="bg-[#1a1a1a] border-[#333333] overflow-hidden">
+            <div class="bg-[#222222] p-6">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-blue-600/10 flex-shrink-0 flex items-center justify-center">
+                  <span class="text-blue-500 font-bold">{index + 1}</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-medium text-white">{module.title}</h3>
+                  <p class="text-[#888888]">{module.description}</p>
+                </div>
+              </div>
+            </div>
+            <div class="p-6">
+              <CourseModuleContent lessons={module.lessons} moduleNumber={index + 1} client:visible />
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Pricing Section -->
+  <section class="py-20 bg-[#0e0e0e]">
+    <div class="max-w-4xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Invest in Your AI Future</h2>
+        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto mb-8">
+          One-time payment, lifetime access, no subscriptions
+        </p>
+      </div>
+      
+      <Card className="bg-[#1a1a1a] border-[#333333] p-8 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+          <div>
+            <h3 class="text-2xl font-bold text-white mb-2">Complete AI Agent Course</h3>
+            <p class="text-[#888888]">Everything you need to build your first AI agent</p>
+          </div>
+          <div class="text-center md:text-right">
+            <div class="text-[#888888] line-through mb-1">${courseDetails.originalPrice}</div>
+            <div class="text-3xl font-bold text-white">${courseDetails.currentPrice}</div>
+            <div class="text-[#888888] text-sm">One-time payment</div>
+          </div>
+        </div>
+        
+        <Separator className="bg-[#333333] mb-8" />
+        
+        <div class="grid md:grid-cols-2 gap-4 mb-8">
+          <div class="flex items-start gap-3">
+            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span class="text-[#dddddd]">Step-by-step video lessons</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span class="text-[#dddddd]">Ready-to-use templates</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span class="text-[#dddddd]">Lifetime access to updates</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span class="text-[#dddddd]">Private community access</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span class="text-[#dddddd]">All bonus materials</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span class="text-[#dddddd]">30-day money-back guarantee</span>
+          </div>
+        </div>
+        
+        <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg rounded-xl">
+          {courseDetails.ctaText}
+          <ArrowRightIcon className="ml-2 w-5 h-5" />
+        </Button>
+      </Card>
+      
+      <p class="text-center text-[#888888] text-sm">
+        Secure payment via credit card, PayPal, or crypto
+      </p>
+    </div>
+  </section>
+  
+  <!-- Bonuses Section -->
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Exclusive Bonuses</h2>
+        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto mb-4">
+          Get these valuable resources when you enroll today
+        </p>
+        <p class="text-xl font-bold text-blue-400">
+          Total Value: ${totalBonusValue}
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        {bonuses.map((bonus, index) => (
+          <div class="relative">
+            <div class="relative bg-[#1a1a1a] border border-[#333333] rounded-2xl p-8 h-full">
+              <div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-[#222222] text-[#aaaaaa] text-sm font-medium">
+                {bonus.value}
+              </div>
+              <div class="w-12 h-12 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center mb-6">
+                <span class="text-xl font-bold text-[#aaaaaa]">{index + 1}</span>
+              </div>
+              <h3 class="text-xl font-medium text-white mb-3">{bonus.title}</h3>
+              <p class="text-[#888888]">{bonus.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+ 
+
+  <!-- FAQ Section -->
+  <section class="py-24 md:py-32">
+    <div class="max-w-3xl mx-auto px-6 lg:px-8">
+      <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white">Frequently Asked Questions</h2>
+      
+      <AccordionWrapper items={faqs} client:visible />
+    </div>
+  </section>
+  
+  <!-- Final CTA Section -->
+  <section class="py-24 md:py-32 bg-[#0e0e0e] relative">
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -top-[300px] -right-[300px] w-[600px] h-[600px] rounded-full bg-blue-600/5 blur-3xl"></div>
+      <div class="absolute -bottom-[300px] -left-[300px] w-[600px] h-[600px] rounded-full bg-blue-600/5 blur-3xl"></div>
+    </div>
+    
+    <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-white">Ready to Build Your First AI Agent?</h2>
+      <p class="text-xl text-[#aaaaaa] mb-10 max-w-2xl mx-auto">
+        Join us and create an intelligent AI assistant for your business in just 60 minutes - even if you have zero coding experience.
+      </p>
+      
+      <div class="mb-8">
+        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl">
+          {courseDetails.ctaText}
+          <ArrowRightIcon className="ml-2 w-5 h-5" />
+        </Button>
+      </div>
+      
+      <div class="flex flex-col md:flex-row items-center justify-center gap-6 text-[#aaaaaa]">
+        <div class="flex items-center gap-2">
+          <ShieldCheckIcon className="w-5 h-5 text-blue-400" />
+          <span>{courseDetails.guarantee}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <UserIcon className="w-5 h-5 text-blue-400" />
+          <span>Only {courseDetails.spots.remaining} spots remaining</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Add any custom styles here */
+  @keyframes border-beam {
+    0% {
+      transform: translateZ(0) rotate(0);
+    }
+    100% {
+      transform: translateZ(0) rotate(360deg);
+    }
+  }
+</style>
+
+

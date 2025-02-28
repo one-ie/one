@@ -1,0 +1,46 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ReadmeContent from '../../README.md';
+import { MyThread } from "../components/Chat";
+import { ChatConfigSchema } from '../schema/chat';
+
+const chatConfig = ChatConfigSchema.parse({
+  systemPrompt: [{
+    type: "text" as const,
+    text: "You are a helpful assistant for the Astro + Shadcn UI documentation. Answer questions about the README content."
+  }],
+  welcome: {
+    message: "I can help answer questions about this documentation. What would you like to know?",
+    avatar: "/icon.svg",
+    suggestions: [
+      {
+        label: "What is this project?",
+        prompt: "What is the Astro + Shadcn UI project about?"
+      },
+      {
+        label: "How to install?",
+        prompt: "How do I install and set up this project?"
+      },
+      {
+        label: "Key features",
+        prompt: "What are the main features of this project?"
+      }
+    ]
+  }
+});
+---
+
+<Layout title="README" description="Astro + Shadcn UI Documentation">
+  
+  
+  <div id="center" class="center">
+    <MyThread client:load config={chatConfig} />
+  </div>
+
+  <div id="right" class="right prose dark:prose-invert max-w-none">
+    <article>
+      <ReadmeContent />
+    </article>
+  </div>
+
+</Layout>

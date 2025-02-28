@@ -1,0 +1,124 @@
+---
+import Layout from "../layouts/1.astro";
+import Hero from "../components/Hero.astro";
+import PowerStats from "../components/PowerStats.astro";
+import Timeline from "../components/Timeline.astro";
+import AgentSkills from "../components/AgentSkills.astro";
+import Comparison from "../components/Comparison.astro";
+import OrgChart from "../components/OrgChart.tsx";
+import Benefits from "../components/Benefits.astro";
+import Features from "../components/Features.astro";
+import { Users, Zap, Globe, Clock, Target, Server, Rocket, Brain, Code, Share } from "lucide-react";
+
+const agentSkills = [
+    {
+        icon: Brain,
+        title: "Content Creation",
+        description: "Generate engaging content across multiple platforms automatically"
+    },
+    {
+        icon: Code,
+        title: "Smart Automation",
+        description: "Automate repetitive tasks and workflows with AI precision"
+    },
+    {
+        icon: Share,
+        title: "Audience Growth",
+        description: "Expand your reach with AI-driven engagement strategies"
+    }
+];
+
+const page = {
+    meta: {
+        title: "ONE - AI Agents for Creators",
+        description: "Build your creator empire with AI agents that work 24/7 to grow your content, audience, and revenue",
+        ogImage: "https://one.ie/og-image.png",
+        canonical: "https://one.ie",
+    }
+};
+
+const timelineData = {
+    title: "How It Works",
+    subtitle: "Onboard Your AI Agent team in ONE Day ✨",
+    phases: [
+        {
+            hour: "Hour 1",
+            time: "10:00 AM",
+            title: "Prepare",
+            icon: Target,
+            goal: "Understand AI's impact on your industry",
+            tasks: [
+                "Industry research complete",
+                "Development environment ready",
+                "Project scope defined",
+                "Strategic roadmap created",
+            ],
+        },
+        {
+            hour: "Hour 4",
+            time: "2:00 PM",
+            title: "Build",
+            icon: Server,
+            goal: "Deploy your first AI agent",
+            tasks: [
+                "Infrastructure setup",
+                "AI model integration",
+                "Testing complete",
+                "Initial deployment done",
+            ],
+        },
+        {
+            hour: "Hour 8",
+            time: "6:00 PM",
+            title: "Launch",
+            icon: Rocket,
+            goal: "Go live with your AI solution",
+            tasks: [
+                "Final testing passed",
+                "Documentation ready",
+                "Team training complete",
+                "Production deployment",
+            ],
+        },
+    ],
+};
+
+const stats = [
+    {
+        value: "24/7",
+        label: "Availability",
+        Icon: Clock
+    },
+    {
+        value: "100x",
+        label: "Productivity",
+        Icon: Zap
+    },
+    {
+        value: "Global",
+        label: "Reach",
+        Icon: Globe
+    },
+    {
+        value: "1000+",
+        label: "Users",
+        Icon: Users
+    }
+];
+
+---
+
+<Layout title={page.meta.title} description={page.meta.description}>
+    <Hero />
+    <PowerStats stats={stats} />
+    <Timeline
+        title={timelineData.title}
+        subtitle={timelineData.subtitle}
+        phases={timelineData.phases}
+    />
+    <AgentSkills skills={agentSkills} />
+    <Comparison />
+    <OrgChart client:load />
+    <Benefits />
+    <Features />
+</Layout>

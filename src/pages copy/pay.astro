@@ -1,0 +1,99 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Stripe as StripeClient } from "stripe";
+
+
+let session;
+let error = null;
+
+try {
+    const stripeKey = import.meta.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+        throw new Error("Stripe secret key is not configured");
+    }
+
+    const stripe = new StripeClient(stripeKey, {
+        apiVersion: "2025-01-27.acacia", // Latest API version
+    });
+
+    const { origin } = Astro.url;
+    console.log("Creating Stripe session with origin:", origin); // Debug log
+
+    session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        line_items: [
+            {
+                price: "price_0MC5WIqs14Mpveu1bfwvrkq6",
+                quantity: 1,
+            },
+        ],
+        success_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/stripe`,
+    });
+
+    if (session.url) {
+        return Astro.redirect(session.url);
+    }
+} catch (e) {
+    console.error("Stripe error details:", {
+        error: e,
+        message: e instanceof Error ? e.message : "Unknown error",
+        env: !!import.meta.env.STRIPE_SECRET_KEY ? "Key exists" : "Key missing",
+    });
+    error =
+        e instanceof Error
+            ? e.message
+            : "An error occurred with the payment system";
+}
+---
+
+<Layout title="Subscribe to ONE">
+    <div class="container max-w-2xl mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-4">Subscribe to ONE</h1>
+            <p class="text-xl text-muted-foreground mb-6">Get unlimited access to all features and premium support</p>
+            <div class="flex justify-center space-x-4 mb-8">
+                <div class="flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span>Instant Access</span>
+                </div>
+                <div class="flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span>Premium Support</span>
+                </div>
+                <div class="flex items-center text-green-600">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span>Cancel Anytime</span>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            {error ? (
+                <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg shadow-sm mb-8">
+                    <div class="flex items-center mb-3">
+                        <svg class="w-6 h-6 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="text-lg font-semibold text-red-800">Payment Error</h3>
+                    </div>
+                    <p class="text-red-700 mb-2">{error}</p>
+                    <p class="text-red-600">
+                        Please try again later or <a href="/contact" class="underline hover:text-red-800">contact our support team</a>.
+                    </p>
+                </div>
+            ) : (
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                    <div class="animate-pulse flex flex-col items-center">
+                        <div class="w-16 h-16 mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-lg text-muted-foreground mb-2">Preparing your checkout session...</p>
+                        <p class="text-sm text-muted-foreground">You'll be redirected to Stripe's secure payment page in a moment.</p>
+                    </div>
+                </div>
+            )}
+        </div>
+    </div>
+</Layout>

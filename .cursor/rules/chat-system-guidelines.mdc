@@ -1,0 +1,367 @@
+---
+description: Guidelines for configuring and implementing the ONE chat system
+glob_patterns:
+  - "src/pages/**/*.astro"
+  - "src/pages/**/*.md"
+  - "src/pages/**/*.mdx"
+  - "src/components/chat/**/*.tsx"
+  - "src/schema/chat.ts"
+---
+
+# Chat System Guidelines
+
+## Chat Configuration
+
+The ONE framework includes a powerful AI chat system that can be configured for each page. Use the following guidelines when implementing chat functionality.
+
+### Basic Configuration
+
+Configure the chat system using the `ChatConfigSchema` from Zod:
+
+```typescript
+// Import the schema
+import { ChatConfigSchema } from '../schema/chat';
+
+// Create a configuration
+const chatConfig = ChatConfigSchema.parse({
+  systemPrompt: [{
+    type: "text",
+    text: "You are a helpful AI assistant."
+  }],
+  welcome: {
+    message: "👋 How can I help you today?",
+    avatar: "/icon.svg",
+    suggestions: [
+      {
+        label: "Get Started",
+        prompt: "How do I get started?"
+      }
+    ]
+  }
+});
+```
+
+### Layout Integration
+
+Add the chat configuration to your layout:
+
+```astro
+---
+import Layout from "../layouts/Layout.astro";
+import { ChatConfigSchema } from '../schema/chat';
+
+const chatConfig = ChatConfigSchema.parse({
+  // Your configuration here
+});
+---
+
+<Layout
+  title="Your Page Title"
+  chatConfig={chatConfig}
+  rightPanelMode="quarter"
+>
+  <!-- Your content here -->
+</Layout>
+```
+
+## Panel Modes
+
+Choose the appropriate panel mode based on your page's needs:
+
+- `quarter`: 25% width side panel (default)
+- `half`: 50% width side panel
+- `full`: Full screen chat interface
+- `floating`: Detached floating window
+- `icon`: Minimized chat button
+- `hidden`: No chat interface
+
+```astro
+<Layout
+  title="Documentation"
+  chatConfig={chatConfig}
+  rightPanelMode="quarter"
+>
+  <!-- Documentation content -->
+</Layout>
+```
+
+```astro
+<Layout
+  title="Chat Interface"
+  chatConfig={chatConfig}
+  rightPanelMode="full"
+>
+  <!-- Minimal content, focus on chat -->
+</Layout>
+```
+
+## System Prompts
+
+Create effective system prompts to define your AI assistant's role and capabilities:
+
+### Basic System Prompt
+
+```typescript
+systemPrompt: [{
+  type: "text",
+  text: "You are a helpful AI assistant focused on answering questions about our product."
+}]
+```
+
+### Detailed System Prompt
+
+```typescript
+systemPrompt: [{
+  type: "text",
+  text: `You are an expert in [specific domain] focused on helping users understand [specific topics].
+
+Core Capabilities:
+1. [Capability 1]
+2. [Capability 2]
+3. [Capability 3]
+
+Communication Style:
+- Be concise and clear
+- Use examples when helpful
+- Maintain a professional tone
+
+Key Points to Emphasize:
+- [Point 1]
+- [Point 2]
+- [Point 3]`
+}]
+```
+
+### Real Example
+
+```typescript
+systemPrompt: [{
+  type: "text",
+  text: `You are ONE's lead AI advocate, helping users understand how to build AI-powered businesses with our framework. Your role is to guide visitors through our comprehensive platform that combines AI agents, crypto payments, and content automation.
+
+Core Capabilities:
+1. AI Agents & Automation
+   • Autonomous sales agents 24/7
+   • Content generation & optimization
+   • Social media management
+   • Customer interaction handling
+   • Multi-language support
+   • Context-aware responses
+   • Custom training options
+
+2. Payment Integration
+   • Cryptocurrency (BTC, ETH, SOL)
+   • Traditional payments (Credit Cards)
+   • Digital wallets (Apple Pay, Google Pay)
+   • Global options (Alipay, Klarna)
+   • Real-time verification
+   • QR code support
+   • Automatic conversion
+
+Communication Style:
+• Be solution-focused
+• Highlight practical applications
+• Explain token benefits clearly
+• Share specific examples
+• Provide implementation steps
+• Address technical & business needs
+• Maintain professional enthusiasm`
+}]
+```
+
+## Welcome Screen Configuration
+
+Create engaging welcome screens to guide users:
+
+```typescript
+welcome: {
+  message: "👋 Welcome! I'm here to help you with [specific topic].",
+  avatar: "/path/to/avatar.svg",
+  suggestions: [
+    {
+      label: "🚀 Getting Started",
+      prompt: "How do I get started with [product]?"
+    },
+    {
+      label: "💡 Key Features",
+      prompt: "What are the main features of [product]?"
+    },
+    {
+      label: "🔧 Troubleshooting",
+      prompt: "I'm having an issue with [product]."
+    }
+  ]
+}
+```
+
+## Advanced Configuration
+
+For more control, use these advanced configuration options:
+
+```typescript
+const advancedConfig = ChatConfigSchema.parse({
+  provider: "openai",
+  model: "gpt-4o-mini",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 2000,
+  systemPrompt: [{
+    type: "text",
+    text: "Your system prompt here"
+  }],
+  welcome: {
+    message: "Welcome message",
+    avatar: "/path/to/avatar.svg",
+    suggestions: [
+      // Suggestions here
+    ]
+  },
+  features: {
+    textToSpeech: true,
+    codeHighlight: true,
+    markdown: true,
+    suggestions: true,
+    branchNavigation: true
+  }
+});
+```
+
+## Page-Specific AI Agents
+
+Create specialized AI agents for specific pages:
+
+### Documentation Agent
+
+```typescript
+const docsAgent = ChatConfigSchema.parse({
+  systemPrompt: [{
+    type: "text",
+    text: "You are a documentation expert focused on helping users understand our product's features and implementation details."
+  }],
+  welcome: {
+    message: "👋 Need help with our documentation? Ask me anything!",
+    suggestions: [
+      {
+        label: "📚 Find Topics",
+        prompt: "What topics are covered in the documentation?"
+      },
+      {
+        label: "🔍 Search",
+        prompt: "How do I find specific information?"
+      }
+    ]
+  }
+});
+```
+
+### Sales Agent
+
+```typescript
+const salesAgent = ChatConfigSchema.parse({
+  systemPrompt: [{
+    type: "text",
+    text: "You are a sales representative helping potential customers understand our product's value proposition and pricing options."
+  }],
+  welcome: {
+    message: "👋 Interested in our product? I can help you find the right plan!",
+    suggestions: [
+      {
+        label: "💰 Pricing",
+        prompt: "What are your pricing options?"
+      },
+      {
+        label: "✨ Features",
+        prompt: "What features do you offer?"
+      }
+    ]
+  }
+});
+```
+
+## Chat API Integration
+
+Configure the chat API endpoint:
+
+```typescript
+// src/pages/api/chat.ts
+import { OpenAIStream, StreamingTextResponse } from 'ai';
+import { Configuration, OpenAIApi } from 'openai-edge';
+
+export const config = {
+  runtime: 'edge',
+};
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
+
+export default async function POST(req: Request) {
+  const { messages, systemPrompt } = await req.json();
+
+  const response = await openai.createChatCompletion({
+    model: 'gpt-4o-mini',
+    stream: true,
+    temperature: 0.7,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      ...messages,
+    ],
+  });
+
+  const stream = OpenAIStream(response);
+  return new StreamingTextResponse(stream);
+}
+```
+
+## Best Practices
+
+### 1. System Prompt Design
+
+- Be specific about the AI's role and expertise
+- Define clear boundaries and capabilities
+- Include communication style guidelines
+- Provide domain-specific knowledge
+- Keep prompts concise but informative
+
+### 2. Welcome Screen Design
+
+- Use friendly, engaging welcome messages
+- Include relevant avatar images
+- Provide 3-5 useful suggestion buttons
+- Make suggestions specific and actionable
+- Ensure suggestions cover common user needs
+
+### 3. Panel Mode Selection
+
+- Use `quarter` for content-heavy pages
+- Use `half` for balanced content and chat
+- Use `full` for dedicated chat interfaces
+- Use `floating` for minimal interference
+- Use `icon` for maximum content space
+
+### 4. Performance Optimization
+
+- Use edge runtime for API endpoints
+- Implement proper streaming responses
+- Optimize message history management
+- Use appropriate model sizes
+- Implement caching where appropriate
+
+### 5. Accessibility
+
+- Ensure chat interface is keyboard navigable
+- Provide proper ARIA labels
+- Support screen readers
+- Maintain sufficient color contrast
+- Implement proper focus management
+
+## Common Pitfalls to Avoid
+
+- **DON'T** use overly generic system prompts
+- **DON'T** create too many suggestion buttons
+- **DON'T** use `client:load` for non-critical chat components
+- **DON'T** expose API keys in client-side code
+- **DON'T** forget to handle error states
+- **DON'T** use the same chat configuration for all pages 

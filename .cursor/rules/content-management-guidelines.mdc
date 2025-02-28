@@ -1,0 +1,140 @@
+---
+description: Content Management and MDX Guidelines
+globs: src/content/**/*.{md,mdx}
+---
+
+# Content Management and MDX Guidelines
+
+Rules for managing content and using MDX in the ONE framework.
+
+## Content Collections
+
+### Structure
+- Organize content in `src/content/` directory.
+- Group related content in collections (e.g., `blog`, `docs`, `prompts`).
+- Use consistent file naming conventions.
+
+### Frontmatter
+- Include required metadata in frontmatter:
+  - `title`: The content title
+  - `description`: A brief description
+  - `date`: Publication date (YYYY-MM-DD format)
+  - `section`: Content section or category
+  - `order`: Numerical order for sorting (if applicable)
+
+### Example
+```markdown
+---
+title: Getting Started
+description: Learn how to get started with ONE framework
+date: 2024-02-01
+section: Introduction
+order: 1
+---
+
+# Getting Started with ONE
+
+Content goes here...
+```
+
+## MDX Usage
+
+### Components in MDX
+- Import components at the top of the MDX file.
+- Use components with proper props.
+- Keep component usage simple and focused.
+
+### Example
+```mdx
+---
+title: Interactive Guide
+layout: ../layouts/DocsLayout.astro
+---
+
+import { Tabs, TabItem } from '@/components/ui/tabs';
+import { Alert } from '@/components/ui/alert';
+
+# Interactive Guide
+
+<Alert variant="info">
+  This guide includes interactive examples.
+</Alert>
+
+<Tabs>
+  <TabItem value="react" label="React">
+    React content here...
+  </TabItem>
+  <TabItem value="astro" label="Astro">
+    Astro content here...
+  </TabItem>
+</Tabs>
+```
+
+## Content Formatting
+
+### Headings
+- Use proper heading hierarchy (h1 → h2 → h3).
+- Include only one h1 per page.
+- Keep headings concise and descriptive.
+
+### Lists
+- Use unordered lists for items without sequence.
+- Use ordered lists for sequential steps.
+- Maintain consistent formatting.
+
+### Code Blocks
+- Specify the language for syntax highlighting.
+- Use proper indentation.
+- Include comments for complex code.
+
+```tsx
+// Example React component
+const Example = () => {
+  return <div>Example</div>;
+};
+```
+
+### Links
+- Use relative links for internal navigation.
+- Use descriptive link text.
+- Include title attributes for accessibility.
+
+## Images and Media
+
+### Image Usage
+- Store images in `public/images/` or use content collections.
+- Include alt text for all images.
+- Optimize images for web.
+- Use responsive images when appropriate.
+
+### Example
+```markdown
+![Dashboard overview with key metrics](../../public/images/dashboard.png)
+```
+
+## Chat Configuration
+
+### System Prompts
+- Define clear system prompts for AI assistants.
+- Structure prompts with clear sections.
+- Include examples when helpful.
+
+### Example
+```yaml
+chatConfig:
+  systemPrompt:
+    - type: text
+      text: "You are an expert in [topic] focused on helping visitors understand [specific aspects]."
+  welcome:
+    message: "👋 How can I help you with [topic]?"
+    suggestions:
+      - label: "Getting Started"
+        prompt: "How do I get started with [topic]?"
+```
+
+## Best Practices
+- Keep content focused and concise.
+- Use consistent terminology throughout.
+- Include examples and code snippets when helpful.
+- Maintain a clear information hierarchy.
+- Test content rendering in both light and dark modes. 
