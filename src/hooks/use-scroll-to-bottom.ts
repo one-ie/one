@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	type RefObject,
 	useCallback,
@@ -86,8 +88,8 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 		});
 
 		viewport.addEventListener("scroll", handleScroll, { passive: true });
-		viewport.addEventListener("touchstart", handleTouchStart, { passive: true });
-		viewport.addEventListener("touchend", handleTouchEnd, { passive: true });
+		viewport.addEventListener("touchstart", handleTouchStart);
+		viewport.addEventListener("touchend", handleTouchEnd);
 
 		observer.observe(container, {
 			childList: true,

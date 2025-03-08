@@ -1,4 +1,6 @@
-import { useEffect, useRef } from "react";
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
 import type { ComponentProps } from "react";
 
 export function useTextareaResize(
@@ -8,7 +10,7 @@ export function useTextareaResize(
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const textArea = textareaRef.current;
 
 		if (textArea) {
