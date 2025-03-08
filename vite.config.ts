@@ -1,22 +1,10 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  plugins: [react()],
-  server: {
-    hmr: {
-      port: 443,
-      protocol: 'wss'
-    },
+  plugins: [
+    tailwindcss()
+  ],
     host: true
-  },
-  optimizeDeps: {
-    include: [
-      '@radix-ui/react-tabs',
-      'react',
-      'react-dom',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-primitive'
-    ]
   }
-});
+);

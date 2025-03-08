@@ -1,0 +1,66 @@
+---
+import Layout from "../layouts/1.blank.astro";
+import Right from "../components/Right";
+import type { ChatConfig } from "../components/Right";
+
+// Define chat configuration
+const chatConfig: ChatConfig = {
+  api: "/api/chat",
+  welcome: {
+    message: "👋 Hello! I'm the upgraded AI assistant. How can I help you today?",
+    avatar: "/icon.svg"
+  }
+};
+
+// Define the props for the Right component
+interface Props {
+  chatConfig: ChatConfig;
+  rightPanelMode: "full" | "half" | "quarter" | "floating" | "hidden" | "icon";
+}
+---
+
+<Layout title="Chat Test Page">
+  <div 
+    id="main-grid" 
+    class="min-h-screen bg-background text-foreground">
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-4xl font-bold mb-4">Chat Test Page</h1>
+      <p class="text-lg mb-8">Testing the upgraded chat implementation.</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-card rounded-lg p-6">
+          <h2 class="text-2xl font-semibold mb-4">Main Content</h2>
+          <p>This is the main content area. The chat panel should appear on the right.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {/* Adding client:load directive to Right component */}
+  <Right 
+    client:load
+    chatConfig={chatConfig}
+    rightPanelMode="quarter"
+  />
+</Layout>
+
+<style>
+  /* Add grid mode styles */
+  #main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    transition: grid-template-columns 0.3s ease;
+  }
+
+  #main-grid[data-panel-mode="Quarter"] {
+    grid-template-columns: 1fr 25%;
+  }
+
+  #main-grid[data-panel-mode="Half"] {
+    grid-template-columns: 1fr 50%;
+  }
+
+  #main-grid[data-panel-mode="Full"] {
+    grid-template-columns: 0fr 1fr;
+  }
+</style>

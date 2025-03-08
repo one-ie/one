@@ -1,154 +1,122 @@
+"use client";
 import {
-    ChatInput,
-    ChatInputSubmit,
-    ChatInputTextArea,
-} from "@/components/chat/chat-input";
+  ChatInput,
+  ChatInputSubmit,
+  ChatInputTextArea,
+} from "@/components/ui/chat-input";
 import {
-    ChatMessage,
-    ChatMessageAvatar,
-    ChatMessageContent,
-} from "@/components/chat/chat-message";
-import { ScrollArea } from "@/components/ui/scroll-area";
+  ChatMessage,
+  ChatMessageAvatar,
+  ChatMessageContent,
+} from "@/components/ui/chat-message";
+import { ChatMessageArea } from "@/components/ui/chat-message-area";
 import { useChat } from "ai/react";
 import type { ComponentPropsWithoutRef } from "react";
-import { useEffect, useRef, useState } from "react";
-import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import type { ChatConfig } from "@/schema/chat";
 
-interface ChatSimpleProps extends ComponentPropsWithoutRef<"div"> {
-    config?: ChatConfig;
-    content?: string;
-}
+export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
+  const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
+    useChat({
+      api: "/api/ai/chat",
+      initialMessages: [
+        {
+          id: "1",
+          content:
+            "Hi! I need help organizing my project management workflow. Can you guide me through some best practices?",
+          role: "user",
+        },
+        {
+          id: "2",
+          content:
+            "I'd be happy to help you with project management best practices! Here's a structured approach:\n\n#### 1. Project Initiation\n- Define clear project objectives\n- Identify key stakeholders\n- Set measurable goals\n- Create project charter\n\n#### 2. Planning Phase\n- Break down work into tasks\n- Set priorities\n- Create timeline\n- Assign responsibilities\n\nWould you like me to elaborate on any of these points?",
+          role: "assistant",
+        },
+        {
+          id: "3",
+          content:
+            "Yes, please tell me more about breaking down work into tasks. How should I approach this?",
+          role: "user",
+        },
+        {
+          id: "4",
+          content:
+            "Breaking down work into tasks is crucial for project success. Here's a detailed approach:\n\n##### Work Breakdown Structure (WBS)\n1. **Start with major deliverables**\n   - Identify end goals\n   - List main project phases\n\n2. **Break into smaller components**\n   - Tasks should be:\n     - Specific\n     - Measurable\n     - Achievable\n     - Time-bound\n\n3. **Task Estimation**\n   ```\n   Task Example:\n   - Name: User Authentication Feature\n   - Duration: 3 days\n   - Dependencies: Database setup\n   - Priority: High\n   ```\n\n4. **Use the 8/80 Rule**\n   - Tasks shouldn't take less than 8 hours\n   - Or more than 80 hours\n   - If they do, break them down further",
+          role: "assistant",
+        },
+        {
+          id: "5",
+          content:
+            "That's really helpful! What tools would you recommend for tracking all these tasks?",
+          role: "user",
+        },
+        {
+          id: "6",
+          content:
+            "Here are some popular project management tools:\n\n##### Tips for Tool Selection\n- ✅ Consider team size\n- ✅ Integration needs\n- ✅ Learning curve\n- ✅ Budget constraints\n\nWould you like specific recommendations based on your team's needs?",
+          role: "assistant",
+        },
+        {
+          id: "7",
+          content:
+            "Yes, we're a small team of 5 developers. What would work best for us?",
+          role: "user",
+        },
+        {
+          id: "8",
+          content:
+            "For a team of 5 developers, I'd recommend:\n\n##### Primary Choice: Jira Software\n\n**Advantages:**\n- 🔧 Built for development teams\n- 📊 Great for agile workflows\n- 🔄 Git integration\n- 📱 Mobile apps\n\n##### Alternative: ClickUp\n\n**Benefits:**\n- 💰 Cost-effective\n- 🎨 More flexible\n- 🚀 Faster setup\n\n```\nRecommended Setup:\n- Sprint Length: 2 weeks\n- Board Structure:\n  - Backlog\n  - To Do\n  - In Progress\n  - Code Review\n  - Testing\n  - Done\n- Key Features:\n  - Story Points\n  - Time Tracking\n  - Sprint Reports\n```\n\nWould you like me to explain how to set up the recommended workflow in either of these tools?",
+          role: "assistant",
+        },
+      ],
+      onFinish: (message) => {
+        //console.log("onFinish", message, completion);
+      },
+    });
 
-export function ChatSimple({ className, config, content, ...props }: ChatSimpleProps) {
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-    const [isFocused, setIsFocused] = useState(false);
-    const [mounted, setMounted] = useState(false);
-    
-    const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
-        useChat({
-            api: "/api/chatsimple",
-            body: {
-                config: config || {
-                    provider: "mistral",
-                    model: "mistral-large-latest",
-                }
-            },
-            initialMessages: [
-                {
-                    id: "system",
-                    content: `${config?.systemPrompt?.[0]?.text || "I am an AI assistant. How can I help you?"}\n\n${content ? `Context:\n${content}` : ''}`,
-                    role: "system"
-                }
-            ],
-        });
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    useEffect(() => {
-        if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-        }
-    }, [messages]);
-
-    if (!mounted) {
-        return null;
+  const handleSubmitMessage = () => {
+    if (isLoading) {
+      return;
     }
+    handleSubmit();
+  };
 
-    const handleSuggestionClick = (prompt: string) => {
-        handleInputChange({ target: { value: prompt } } as any);
-        handleSubmit({ preventDefault: () => {} } as any);
-    };
-
-    return (
-        <div className={cn("flex h-full flex-col", className)} {...props}>
-            <ScrollArea className="flex-1 px-4">
-                <div className="space-y-4 py-4">
-                    {messages.length === 1 && config?.welcome && (
-                        <div className="flex flex-col items-center justify-center px-6 py-4">
-                            <Avatar>
-                                <AvatarFallback>
-                                    {config.welcome.avatar ? (
-                                        <img src={config.welcome.avatar} alt="Assistant Avatar" className="w-full h-full object-cover" />
-                                    ) : (
-                                        'A'
-                                    )}
-                                </AvatarFallback>
-                            </Avatar>
-                            <p className="mt-4 font-medium">{config.welcome.message}</p>
-                            {config.welcome.suggestions && config.welcome.suggestions.length > 0 && (
-                                <div className="mt-6 flex flex-wrap gap-2 justify-center">
-                                    {config.welcome.suggestions.map((suggestion, index) => (
-                                        <Button
-                                            key={index}
-                                            variant="outline"
-                                            onClick={() => handleSuggestionClick(suggestion.prompt)}
-                                            className="bg-muted hover:bg-blue-600/90 hover:text-white transition-colors"
-                                            aria-label={`Use suggestion: ${suggestion.label}`}
-                                        >
-                                            {suggestion.label}
-                                        </Button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                    {messages.slice(1).map((message) => (
-                        <ChatMessage
-                            key={message.id}
-                            className={cn(
-                                message.role === "user" && "justify-end"
-                            )}
-                        >
-                            <ChatMessageAvatar
-                                className={cn(
-                                    message.role === "user" && "order-2"
-                                )}
-                            >
-                                {message.role === "user" ? "U" : "A"}
-                            </ChatMessageAvatar>
-                            <ChatMessageContent
-                                className={cn(
-                                    message.role === "user"
-                                        ? "bg-primary text-primary-foreground"
-                                        : "bg-muted"
-                                )}
-                            >
-                                {message.content}
-                            </ChatMessageContent>
-                        </ChatMessage>
-                    ))}
-                    {isLoading && (
-                        <ChatMessage>
-                            <ChatMessageAvatar>A</ChatMessageAvatar>
-                            <ChatMessageContent className="bg-muted">
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            </ChatMessageContent>
-                        </ChatMessage>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-            </ScrollArea>
-            <form
-                onSubmit={handleSubmit}
-                className="mx-4 flex flex-col gap-3 pb-4"
-            >
-                <ChatInput>
-                    <ChatInputTextArea
-                        placeholder="Send a message..."
-                        value={input}
-                        onChange={handleInputChange}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                    />
-                    <ChatInputSubmit>Send</ChatInputSubmit>
-                </ChatInput>
-            </form>
+  return (
+    <div className={`flex-1 flex flex-col h-full overflow-y-auto ${className}`} {...props}>
+      <ChatMessageArea scrollButtonAlignment="center">
+        <div className="max-w-2xl mx-auto w-full px-4 py-8 space-y-4">
+          {messages.map((message) => {
+            if (message.role !== "user") {
+              return (
+                <ChatMessage key={message.id} id={message.id}>
+                  <ChatMessageAvatar />
+                  <ChatMessageContent content={message.content} />
+                </ChatMessage>
+              );
+            }
+            return (
+              <ChatMessage
+                key={message.id}
+                id={message.id}
+                variant="bubble"
+                type="outgoing"
+              >
+                <ChatMessageContent content={message.content} />
+              </ChatMessage>
+            );
+          })}
         </div>
-    );
+      </ChatMessageArea>
+      <div className="px-2 py-4 max-w-2xl mx-auto w-full">
+        <ChatInput
+          value={input}
+          onChange={handleInputChange}
+          onSubmit={handleSubmitMessage}
+          loading={isLoading}
+          onStop={stop}
+        >
+          <ChatInputTextArea placeholder="Type a message..." />
+          <ChatInputSubmit />
+        </ChatInput>
+      </div>
+    </div>
+  );
 }

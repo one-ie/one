@@ -9,6 +9,9 @@ const DEFAULT_PRE_BLOCK_CLASS =
 	"my-4 overflow-x-auto w-fit rounded-xl bg-zinc-950 text-zinc-50 dark:bg-zinc-900 border border-border p-4";
 
 const extractTextContent = (node: React.ReactNode): string => {
+  type ReactElementWithChildren = React.ReactElement & {
+    props: { children?: React.ReactNode }
+  };
 	if (typeof node === "string") {
 		return node;
 	}
@@ -16,7 +19,8 @@ const extractTextContent = (node: React.ReactNode): string => {
 		return node.map(extractTextContent).join("");
 	}
 	if (isValidElement(node)) {
-		return extractTextContent(node.props.children);
+	  const element = node as ReactElementWithChildren;
+	  return extractTextContent(element.props.children || '');
 	}
 	return "";
 };
@@ -282,13 +286,14 @@ interface MarkdownBlockProps {
 const MemoizedMarkdownBlock = memo(
 	({ content, className }: MarkdownBlockProps) => {
 		return (
-			<ReactMarkdown
-				remarkPlugins={[remarkGfm]}
-				components={components}
-				className={className}
-			>
-				{content}
-			</ReactMarkdown>
+		  <div className={className}>
+		    <ReactMarkdown
+		      remarkPlugins={[remarkGfm]}
+		      components={components}
+		    >
+		      {content}
+		    </ReactMarkdown>
+		  </div>
 		);
 	},
 	(prevProps, nextProps) => {
