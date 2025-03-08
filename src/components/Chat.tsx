@@ -1,90 +1,154 @@
-// src/components/Chat.tsx
-import { AssistantRuntimeProvider } from "@assistant-ui/react";
-import { useVercelUseChatRuntime } from "@assistant-ui/react-ai-sdk";
-import { MyThread as CustomThread } from "@/components/chat/thread";
-import { type ChatConfig, createDefaultConfig } from "@/schema/chat";
+import {
+    ChatInput,
+    ChatInputSubmit,
+    ChatInputTextArea,
+} from "@/components/chat/chat-input";
+import {
+    ChatMessage,
+    ChatMessageAvatar,
+    ChatMessageContent,
+} from "@/components/chat/chat-message";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useChat } from "ai/react";
-import { useCallback, useEffect, useState } from 'react';
-import { nanoid } from 'nanoid';
-  
-export function MyThread({
-  config = createDefaultConfig(),
-  content
-}: {
-  config?: ChatConfig,
-  content?: string
-}) {
-  // Client-side only rendering
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+import type { ComponentPropsWithoutRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import type { ChatConfig } from "@/schema/chat";
 
-  // Ensure we always have a valid config
-  const safeConfig = config || createDefaultConfig();
+interface ChatSimpleProps extends ComponentPropsWithoutRef<"div"> {
+    config?: ChatConfig;
+    content?: string;
+}
 
-  const chat = useChat({
-    api: "/api/chat",
-    initialMessages: [
-      {
-        id: nanoid(),
-        role: "system" as const,
-        content: `${safeConfig.systemPrompt?.[0]?.text || "I am an AI assistant. How can I help you?"}\n\n${content ? `Context:\n${content}` : ''}`
-      }
-    ],
-    body: {
-      config: safeConfig
-    },
-    onError: (error) => {
-      console.error("Chat error:", error);
-    }
-  });
-
-  const runtime = useVercelUseChatRuntime(chat);
-
-  // Handle suggestion clicks
-  const handleSuggestionClick = useCallback((prompt: string) => {
-    // Set the input value first
-    chat.setInput(prompt);
+export function ChatSimple({ className, config, content, ...props }: ChatSimpleProps) {
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [isFocused, setIsFocused] = useState(false);
+    const [mounted, setMounted] = useState(false);
     
-    // Create minimal form event data
-    const submitEvent = {
-      preventDefault() {},
-      target: { message: { value: prompt } }
+    const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
+        useChat({
+            api: "/api/chatsimple",
+            body: {
+                config: config || {
+                    provider: "mistral",
+                    model: "mistral-large-latest",
+                }
+            },
+            initialMessages: [
+                {
+                    id: "system",
+                    content: `${config?.systemPrompt?.[0]?.text || "I am an AI assistant. How can I help you?"}\n\n${content ? `Context:\n${content}` : ''}`,
+                    role: "system"
+                }
+            ],
+        });
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
+
+    if (!mounted) {
+        return null;
+    }
+
+    const handleSuggestionClick = (prompt: string) => {
+        handleInputChange({ target: { value: prompt } } as any);
+        handleSubmit({ preventDefault: () => {} } as any);
     };
-    
-    // Submit the chat
-    chat.handleSubmit(submitEvent as any);
 
-    // Force scroll to bottom
-    const scrollContainer = document.querySelector('[data-radix-scroll-area-viewport]');
-    if (scrollContainer) {
-      // Initial scroll
-      scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      
-      // Keep scrolling to follow messages
-      const scrollInterval = setInterval(() => {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }, 100);
-
-      // Stop following after 2 seconds
-      setTimeout(() => clearInterval(scrollInterval), 2000);
-    }
-  }, [chat]);
-
-  if (!mounted) {
-    return null;
-  }
-
-  return (
-    <div className="h-full">
-      <AssistantRuntimeProvider runtime={runtime}>
-        <CustomThread 
-          welcome={safeConfig.welcome}
-          onSuggestionClick={handleSuggestionClick}
-        />
-      </AssistantRuntimeProvider>
-    </div>
-  );
+    return (
+        <div className={cn("flex h-full flex-col", className)} {...props}>
+            <ScrollArea className="flex-1 px-4">
+                <div className="space-y-4 py-4">
+                    {messages.length === 1 && config?.welcome && (
+                        <div className="flex flex-col items-center justify-center px-6 py-4">
+                            <Avatar>
+                                <AvatarFallback>
+                                    {config.welcome.avatar ? (
+                                        <img src={config.welcome.avatar} alt="Assistant Avatar" className="w-full h-full object-cover" />
+                                    ) : (
+                                        'A'
+                                    )}
+                                </AvatarFallback>
+                            </Avatar>
+                            <p className="mt-4 font-medium">{config.welcome.message}</p>
+                            {config.welcome.suggestions && config.welcome.suggestions.length > 0 && (
+                                <div className="mt-6 flex flex-wrap gap-2 justify-center">
+                                    {config.welcome.suggestions.map((suggestion, index) => (
+                                        <Button
+                                            key={index}
+                                            variant="outline"
+                                            onClick={() => handleSuggestionClick(suggestion.prompt)}
+                                            className="bg-muted hover:bg-blue-600/90 hover:text-white transition-colors"
+                                            aria-label={`Use suggestion: ${suggestion.label}`}
+                                        >
+                                            {suggestion.label}
+                                        </Button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    {messages.slice(1).map((message) => (
+                        <ChatMessage
+                            key={message.id}
+                            className={cn(
+                                message.role === "user" && "justify-end"
+                            )}
+                        >
+                            <ChatMessageAvatar
+                                className={cn(
+                                    message.role === "user" && "order-2"
+                                )}
+                            >
+                                {message.role === "user" ? "U" : "A"}
+                            </ChatMessageAvatar>
+                            <ChatMessageContent
+                                className={cn(
+                                    message.role === "user"
+                                        ? "bg-primary text-primary-foreground"
+                                        : "bg-muted"
+                                )}
+                            >
+                                {message.content}
+                            </ChatMessageContent>
+                        </ChatMessage>
+                    ))}
+                    {isLoading && (
+                        <ChatMessage>
+                            <ChatMessageAvatar>A</ChatMessageAvatar>
+                            <ChatMessageContent className="bg-muted">
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                            </ChatMessageContent>
+                        </ChatMessage>
+                    )}
+                    <div ref={messagesEndRef} />
+                </div>
+            </ScrollArea>
+            <form
+                onSubmit={handleSubmit}
+                className="mx-4 flex flex-col gap-3 pb-4"
+            >
+                <ChatInput>
+                    <ChatInputTextArea
+                        placeholder="Send a message..."
+                        value={input}
+                        onChange={handleInputChange}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
+                    />
+                    <ChatInputSubmit>Send</ChatInputSubmit>
+                </ChatInput>
+            </form>
+        </div>
+    );
 }

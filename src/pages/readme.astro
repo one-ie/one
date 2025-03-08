@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ReadmeContent from '../../README.md';
-import { MyThread } from "../components/Chat";
+import { ChatSimple } from "../components/ChatSimple";
 import { ChatConfigSchema } from '../schema/chat';
 
 const chatConfig = ChatConfigSchema.parse({
@@ -34,7 +34,7 @@ const chatConfig = ChatConfigSchema.parse({
   
   
   <div id="center" class="center">
-    <MyThread client:load config={chatConfig} />
+    <ChatSimple client:load config={chatConfig} />
   </div>
 
   <div id="right" class="right prose dark:prose-invert max-w-none">

@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Landing.astro";
-import { MyThread } from "../components/Chat";
+import { ChatSimple } from "../components/ChatSimple";
 import { ChatConfigSchema } from '../schema/chat';
 
 const chatConfig = ChatConfigSchema.parse({
@@ -31,6 +31,6 @@ const chatConfig = ChatConfigSchema.parse({
 
 <Layout title="Chat">
   <div id="center" class="center" style="max-width: 800px;">
-    <MyThread client:load config={chatConfig} />
+    <ChatSimple client:load config={chatConfig} />
   </div>
 </Layout>

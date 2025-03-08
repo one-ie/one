@@ -1,35 +1,36 @@
 /* ONE Theme System - Elegant Monochrome */
-@import "tailwindcss";
 
 
 :root {
-  /* Core colors */
-  --one-black: 0 0% 0%;        /* #000000 */
-  --one-dark: 0 0% 7%;         /* #111111 */
-  --one-background: 0 0% 13%;  /* #222222 */
-  --one-white: 0 0% 100%;      /* #FFFFFF */
-  
-  /* Semantic mappings */
-  --one-background-main: var(--one-background);    /* Main content #222 */
-  --one-background-nav: var(--one-dark);          /* Sidebar/header #111 */
-  --one-background-logo: var(--one-black);        /* Logo area #000 */
-  --one-background-card: var(--one-dark);         /* Cards #111 */
-  
-  /* Text colors */
-  --one-foreground: var(--one-white);
-  --one-foreground-muted: 0 0% 75%;
-  
-  /* Primary action colors */
-  --one-primary: var(--one-white);
-  --one-primary-foreground: var(--one-black);
-  
-  /* Secondary elements */
-  --one-secondary: var(--one-dark);
-  --one-secondary-foreground: var(--one-white);
-  
-  /* Accent colors */
-  --one-accent: var(--one-white);
-  --one-accent-foreground: var(--one-black);
+  @theme {
+    /* Core colors */
+    --one-black: hsl(0 0% 0%);        /* #000000 */
+    --one-dark: hsl(0 0% 7%);         /* #111111 */
+    --one-background: hsl(0 0% 13%);  /* #222222 */
+    --one-white: hsl(0 0% 100%);      /* #FFFFFF */
+    
+    /* Semantic mappings */
+    --one-background-main: var(--one-background);    /* Main content #222 */
+    --one-background-nav: var(--one-dark);          /* Sidebar/header #111 */
+    --one-background-logo: var(--one-black);        /* Logo area #000 */
+    --one-background-card: var(--one-dark);         /* Cards #111 */
+    
+    /* Text colors */
+    --one-foreground: var(--one-white);
+    --one-foreground-muted: hsl(0 0% 75%);
+    
+    /* Primary action colors */
+    --one-primary: var(--one-white);
+    --one-primary-foreground: var(--one-black);
+    
+    /* Secondary elements */
+    --one-secondary: var(--one-dark);
+    --one-secondary-foreground: var(--one-white);
+    
+    /* Accent colors */
+    --one-accent: var(--one-white);
+    --one-accent-foreground: var(--one-black);
+  }
   
   /* Interface elements */
   --one-muted: var(--one-dark);
@@ -134,29 +135,13 @@
   background: color-mix(in srgb, hsl(var(--one-dark)), transparent 90%);
 }
 
-.one-button {
+@utility one-button {
   position: relative;
   overflow: hidden;
   transition: all var(--one-duration-normal) ease-in-out;
 }
 
-.one-button::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  transform: translateX(-100%);
-  transition: transform var(--one-duration-slow) ease-in-out;
-}
 
-.one-button:hover::after {
-  transform: translateX(100%);
-}
 
 /* Navigation Elements */
 .one-nav-item {
