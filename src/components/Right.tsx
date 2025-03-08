@@ -114,8 +114,7 @@ export default function Right({ rightPanelMode, chatConfig, content }: RightPane
       data-mode={layout.mode}
       style={{
         ...styles,
-        overflow: 'hidden',
-        backgroundColor: '#1A1A1A',
+        overflow: 'hidden'
       }}
     >
       {isIcon ? (
