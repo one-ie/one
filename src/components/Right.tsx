@@ -43,7 +43,7 @@ export default function Right({ rightPanelMode, chatConfig, content }: RightPane
 
   // Initialize chat with Vercel AI SDK
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } = useChat({
-    api: chatConfig?.api || "/api/chat",
+    api: chatConfig?.api || "/api/chatsimple",
     initialMessages: chatConfig?.welcome ? [
       {
         id: "welcome",
