@@ -1,26 +1,15 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel';
-import mdx from '@astrojs/mdx';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   integrations: [
     react(),
-    tailwind({
-      applyBaseStyles: false  
-    }),
-    mdx(),
   ],
-  output: 'server',
-  adapter: vercel({
-    webAnalytics: {
-      enabled: true
-    },
-    imageService: true
-  }),
   vite: {
+    plugins: [tailwindcss()],
     ssr: {
       noExternal: ['@radix-ui/*', '@assistant-ui/*', 'lucide-react']
     },
@@ -28,5 +17,12 @@ export default defineConfig({
       assetsInlineLimit: 0,
       cssCodeSplit: false
     }
-  }
+  },
+  output: 'server',
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true
+    },
+    imageService: true
+  })
 });

@@ -33,35 +33,24 @@
     --radius: 0.5rem;
     
     --sidebar-background: 0 0% 98%;
-    
     --sidebar-foreground: 240 5.3% 26.1%;
-    
     --sidebar-primary: 240 5.9% 10%;
-    
     --sidebar-primary-foreground: 0 0% 98%;
-    
     --sidebar-accent: 240 4.8% 95.9%;
-    
     --sidebar-accent-foreground: 240 5.9% 10%;
-    
     --sidebar-border: 220 13% 91%;
-    
     --sidebar-ring: 217.2 91.2% 59.8%;
     
     --destructive: 0 84.2% 60.2%;
-    
     --destructive-foreground: 210 20% 98%;
     
     --chart-1: 12 76% 61%;
-    
     --chart-2: 173 58% 39%;
-    
     --chart-3: 197 37% 24%;
-    
     --chart-4: 43 74% 66%;
-    
     --chart-5: 27 87% 67%;
   }
+
   .dark {
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -100,7 +89,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-[hsl(var(--border))];
   }
   
   html {
@@ -149,7 +138,7 @@
 
   /* Minimal input */
   .one-input {
-    @apply block w-full rounded border-border bg-background px-3 py-2 text-sm
+    @apply block w-full rounded border-[hsl(var(--border))] bg-background px-3 py-2 text-sm
     focus:outline-none focus:ring-1 focus:ring-ring
     disabled:cursor-not-allowed disabled:opacity-50;
     border-radius: calc(var(--radius) * 0.5);
@@ -180,7 +169,7 @@
 
 /* Clean Dividers */
 .one-divider {
-  @apply border-t border-border my-4;
+  @apply border-t border-[hsl(var(--border))] my-4;
 }
 
 /* Text Styles */
