@@ -1,4 +1,6 @@
 /* ONE Theme System - Elegant Monochrome */
+@import "tailwindcss";
+
 
 :root {
   /* Core colors */

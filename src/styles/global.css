@@ -1,7 +1,5 @@
+@import 'tailwindcss';
 @import './one.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer base {
   :root {
@@ -87,119 +85,88 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-[hsl(var(--border))];
-  }
-  
-  html {
-    @apply antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
-  
-  body {
-    @apply bg-background text-foreground;
-    text-rendering: optimizeLegibility;
-  }
-}
-
-/* Minimalist Components */
 @layer components {
   .one-container {
-    @apply max-w-6xl mx-auto px-4 sm:px-6;
+    @apply max-w-6xl mx-auto px-4;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    @screen sm {
+      padding-right: 2rem;
+      padding-left: 2rem;
+    }
   }
 
   .one-section {
     @apply py-12;
   }
 
-  /* Clean, simple card */
   .one-card {
-    @apply border bg-card text-card-foreground relative overflow-hidden;
+    @apply border border-[hsl(var(--border))] bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] relative overflow-hidden;
     border-radius: calc(var(--radius) * 0.5);
   }
 
-  /* Minimal button */
   .one-button {
     @apply inline-flex items-center justify-center text-sm font-medium
     transition-colors focus-visible:outline-none focus-visible:ring-1 
-    focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+    focus-visible:ring-[hsl(var(--ring))] disabled:pointer-events-none disabled:opacity-50;
     border-radius: calc(var(--radius) * 0.5);
     padding: 0.5rem 1rem;
   }
 
   .one-button-primary {
-    @apply one-button bg-primary text-primary-foreground hover:bg-primary/90;
+    @apply one-button bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary)/.9)];
   }
 
   .one-button-secondary {
-    @apply one-button bg-secondary text-secondary-foreground hover:bg-secondary/80;
+    @apply one-button bg-[hsl(var(--secondary))] text-[hsl(var(--secondary-foreground))] hover:bg-[hsl(var(--secondary)/.8)];
   }
 
-  /* Minimal input */
   .one-input {
-    @apply block w-full rounded border-[hsl(var(--border))] bg-background px-3 py-2 text-sm
-    focus:outline-none focus:ring-1 focus:ring-ring
+    @apply block w-full rounded border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2 text-sm
+    focus:outline-none focus:ring-1 focus:ring-[hsl(var(--ring))]
     disabled:cursor-not-allowed disabled:opacity-50;
     border-radius: calc(var(--radius) * 0.5);
   }
 
-  /* Simple badge */
   .one-badge {
     @apply inline-flex items-center text-xs font-medium px-2 py-0.5
-    border rounded-sm;
+    border border-[hsl(var(--border))] rounded-sm;
   }
 }
 
-/* Classic Animation Utilities */
-.animate-fade-in {
-  animation: simple-fade-in var(--one-duration-normal) ease-out;
-}
-
-@keyframes simple-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Minimal Glass Effect */
 .one-glass {
-  @apply backdrop-blur-sm bg-background/50;
+  @apply backdrop-blur-sm bg-[hsl(var(--background)/.5)];
   border: 1px solid hsl(var(--border));
 }
 
-/* Clean Dividers */
 .one-divider {
   @apply border-t border-[hsl(var(--border))] my-4;
 }
 
-/* Text Styles */
 .one-heading {
-  @apply font-medium tracking-tight text-foreground;
+  @apply font-medium tracking-tight text-[hsl(var(--foreground))];
 }
 
 .one-text {
-  @apply text-foreground/90;
+  @apply text-[hsl(var(--foreground)/.9)];
 }
 
 .one-text-muted {
-  @apply text-muted-foreground;
+  @apply text-[hsl(var(--muted-foreground))];
 }
 
-/* Interactive States */
 .one-hover {
   @apply transition-colors duration-200;
 }
 
 .one-hover:hover {
-  @apply bg-secondary/50;
+  @apply bg-[hsl(var(--secondary)/.5)];
 }
 
-/* Focus States */
 .one-focus {
-  @apply focus:outline-none focus:ring-1 focus:ring-ring;
+  @apply focus:outline-none focus:ring-1 focus:ring-[hsl(var(--ring))];
 }
 
-/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
