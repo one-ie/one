@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/card"
 import type {
     ChartConfig,
-} from "@/components/chat/chart"
+} from "@/components/ui/chart"
 import {
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
-} from "@/components/chat/chart"
+} from "@/components/ui/chart"
 const GITHUB_REPO = "one-ie/one"
 
 const chartConfig = {
