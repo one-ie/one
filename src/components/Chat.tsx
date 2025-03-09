@@ -16,7 +16,7 @@ import type { ComponentPropsWithoutRef } from "react";
 export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
     useChat({
-      api: "/api/chat",
+      api: "/api/chatsimple",
       initialMessages: [
         {
           id: "1",

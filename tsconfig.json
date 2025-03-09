@@ -12,7 +12,7 @@
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "types": ["vite/client", "astro/client", "node"],
     "target": "ESNext",
     "module": "ESNext",
