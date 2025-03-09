@@ -50,6 +50,7 @@
 
   /* Animation durations */
   --duration: 1s;
+  --start-angle: 0;
 }
 
 .dark {
@@ -149,11 +150,17 @@
 
 @keyframes orbit {
   from {
-    transform: rotate(calc(var(--start-angle) * 1deg)) translate(calc(var(--radius) * 1px)) rotate(calc(var(--start-angle) * -1deg));
+    transform: rotate(calc(var(--start-angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--start-angle) * -1deg));
   }
   to {
-    transform: rotate(calc(360deg + (var(--start-angle) * 1deg))) translate(calc(var(--radius) * 1px)) rotate(calc(-360deg + (var(--start-angle) * -1deg)));
+    transform: rotate(calc(360deg + (var(--start-angle) * 1deg))) translateY(calc(var(--radius) * 1px)) rotate(calc(-360deg + (var(--start-angle) * -1deg)));
   }
+}
+
+/* Define the orbit animation utility */
+@utility animate-orbit {
+  position: absolute;
+  animation: orbit calc(var(--duration)*1s) linear infinite;
 }
 
 /* Base styles */
