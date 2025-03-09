@@ -3,13 +3,13 @@ import {
   ChatInput,
   ChatInputSubmit,
   ChatInputTextArea,
-} from "@/components/ui/chat-input";
+} from "@/components/chat/chat-input";
 import {
   ChatMessage,
   ChatMessageAvatar,
   ChatMessageContent,
-} from "@/components/ui/chat-message";
-import { ChatMessageArea } from "@/components/ui/chat-message-area";
+} from "@/components/chat/chat-message";
+import { ChatMessageArea } from "@/components/chat/chat-message-area";
 import { useChat } from "ai/react";
 import type { ComponentPropsWithoutRef } from "react";
 

@@ -51,16 +51,3 @@ import {
   </div>
 </header>
 
-<script>
-  let isMobile = window.innerWidth < 640;
-
-  function updateMobileState() {
-    isMobile = window.innerWidth < 640;
-  }
-
-  // Initial state setup
-  updateMobileState();
-
-  // Event listeners
-  window.addEventListener("resize", updateMobileState);
-</script>
