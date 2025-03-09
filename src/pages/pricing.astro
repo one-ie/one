@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
-import { CheckIcon, ArrowRightIcon, SparklesIcon, ShieldCheckIcon, ZapIcon, StarIcon, ClockIcon, UserIcon } from "lucide-react";
+import { ArrowRightIcon, StarIcon } from "lucide-react";
 import { AccordionWrapper } from "../components/AccordionWrapper";
 import { BorderBeam } from "../components/magicui/border-beam";
 import { PricingCard, type PricingPlan } from "../components/pricing/PricingCard";
@@ -10,81 +10,6 @@ import { FeatureComparison, type FeatureItem } from "../components/pricing/Featu
 
 const title = "Pricing Plans";
 const description = "Choose the perfect plan for your AI business needs";
-
-// Course details
-const courseDetails = {
-  badge: "Limited-Time Offer: 50% OFF",
-  title: "AI Business Accelerator™",
-  subtitle: "The Complete System to Build, Launch & Scale Your AI Business in 30 Days",
-  originalPrice: "997",
-  currentPrice: "497",
-  guarantee: "30-Day 100% Money-Back Guarantee",
-  ctaText: "Secure Your Spot Now",
-  valueProposition: "All the tools, templates & support you need to create your profitable AI business",
-  spots: {
-    total: 50,
-    remaining: 7
-  }
-};
-
-// Course modules data
-const courseModulesData = [
-  {
-    title: "Foundation & Setup",
-    description: "Build your technical foundation",
-    lessons: [
-      { name: "Environment Setup", value: "Complete development environment configuration" },
-      { name: "Project Structure", value: "Optimized file organization for scalability" },
-      { name: "AI Integration", value: "Connect to leading AI providers" }
-    ]
-  },
-  {
-    title: "Brand Development",
-    description: "Create a compelling AI brand identity",
-    lessons: [
-      { name: "Brand Strategy", value: "Position your AI business for success" },
-      { name: "Visual Identity", value: "Design system implementation" },
-      { name: "Voice & Tone", value: "Consistent communication framework" }
-    ]
-  },
-  {
-    title: "AI Agent Creation",
-    description: "Build powerful AI assistants",
-    lessons: [
-      { name: "Agent Architecture", value: "Design intelligent conversation flows" },
-      { name: "Prompt Engineering", value: "Create effective AI instructions" },
-      { name: "Personality Design", value: "Develop unique AI personalities" }
-    ]
-  },
-  {
-    title: "Content Automation",
-    description: "Scale your content production",
-    lessons: [
-      { name: "Content Strategy", value: "Plan your automated content ecosystem" },
-      { name: "Multi-channel Publishing", value: "Distribute across platforms" },
-      { name: "SEO Optimization", value: "Maximize content visibility" }
-    ]
-  },
-  {
-    title: "Monetization & Sales",
-    description: "Generate revenue from your AI business",
-    lessons: [
-      { name: "Payment Integration", value: "Accept multiple payment methods" },
-      { name: "Sales Automation", value: "Create AI-powered sales systems" },
-      { name: "Subscription Models", value: "Build recurring revenue streams" }
-    ]
-  }
-];
-
-// Benefits - Enhanced with stronger outcomes
-const benefits = [
-  { title: "Launch in 30 Days", icon: ClockIcon, description: "Go from idea to paying customers in just 4 weeks" },
-  { title: "Done-for-You Templates", icon: CheckIcon, description: "Save 100+ hours with ready-to-use systems" },
-  { title: "AI Business Toolkit", icon: SparklesIcon, description: "Access $5,000+ worth of premium resources" },
-  { title: "Private Community", icon: UserIcon, description: "Get help from successful AI entrepreneurs" },
-  { title: "Lifetime Updates", icon: ZapIcon, description: "Stay ahead with the latest AI strategies" },
-  { title: "Expert Support", icon: ShieldCheckIcon, description: "Get answers within 24 hours, guaranteed" }
-];
 
 // Testimonials data
 const testimonials = [
@@ -101,26 +26,6 @@ const testimonials = [
     initial: "S"
   }
 ];
-
-// Learning outcomes
-const learningOutcomes = [
-  "How to identify profitable AI business opportunities in under 60 minutes",
-  "The exact tech stack needed to build any AI business (even as a non-developer)",
-  "Our proven 7-step framework for creating AI agents that sell themselves",
-  "How to automate content creation across blogs, social media, and email",
-  "The simple method for setting up payments and subscription systems",
-  "Advanced AI prompt engineering techniques for performance optimization",
-  "Step-by-step marketing strategy to attract your first 100 customers",
-  "Scaling techniques to grow from $0 to $10,000/month"
-];
-
-// Instructor details
-const instructor = {
-  name: "David Chen",
-  title: "AI Business Strategist & Entrepreneur",
-  bio: "Over the past 3 years, David has built and sold 4 AI businesses with a combined exit value of $2.7M. He's helped over 300 entrepreneurs create profitable AI businesses through his proven framework.",
-  image: "/instructor.jpg"
-};
 
 // Plans data
 const plans: PricingPlan[] = [
