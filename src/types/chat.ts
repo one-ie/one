@@ -9,12 +9,6 @@ const DEFAULT_CONFIG = {
   theme: 'system' as const
 } as const;
 
-// Default event handlers
-const DEFAULT_EVENTS = {
-  onError: (error: string) => console.error('[Chat Error]:', error),
-  onMessage: (message: any) => console.log('[Chat Message]:', message)
-} as const;
-
 // Chat mode and size types
 export type ChatMode = 'split' | 'icon' | 'floating' | 'fullscreen' | 'embedded';
 export type ChatSize = 'full' | 'half' | 'third' | 'quarter';

@@ -3,13 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Card } from "../components/ui/card";
-import { CheckIcon, ArrowRightIcon, SparklesIcon, ShieldCheckIcon, ZapIcon, StarIcon, ClockIcon, UserIcon, HeartIcon, BarChartIcon, LightbulbIcon, PlayIcon, BrainIcon, GraduationCapIcon, RocketIcon, SchoolIcon } from "lucide-react";
+import { CheckIcon, ArrowRightIcon, SparklesIcon, ShieldCheckIcon, ZapIcon, StarIcon, UserIcon, BarChartIcon, LightbulbIcon } from "lucide-react";
 import { AccordionWrapper } from "../components/AccordionWrapper";
 import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
 import { Separator } from "../components/ui/separator";
 import { CountdownTimer } from "../components/CountdownTimer";
-import { StudentTestimonials } from "../components/StudentTestimonials";
 import { ChatConfigSchema } from "../schema/chat";
 
 const title = "Elite AI Education Partnership";
@@ -156,25 +155,6 @@ const schoolOutcomes = [
   }
 ];
 
-// Success stories - enhanced to emphasize exclusivity
-const successStories = [
-  {
-    name: "International School of Excellence",
-    location: "Selected Partner School",
-    content: "Being selected for this program transformed our educational offering. Our students created AI-powered science projects that were featured in international technology showcases, and our school has become known as a technology leader in the region."
-  },
-  {
-    name: "Greenfield Academy",
-    location: "Selected Partner School",
-    content: "Selected from dozens of applicants, our partnership has delivered extraordinary results. Our students now develop sophisticated AI applications that have won national recognition, and we've seen a 40% increase in applications from families seeking cutting-edge education."
-  },
-  {
-    name: "St. Thomas Preparatory School",
-    location: "Selected Partner School",
-    content: "The selective nature of this program has positioned us as educational innovators. Our students now regularly secure places at elite universities based on their AI portfolio work, and we've been featured in educational publications for our forward-thinking approach."
-  }
-];
-
 // FAQs
 const faqs = [
   {
@@ -213,7 +193,6 @@ const faqs = [
 
 // Remove the calculation that's causing the error and set a fixed value
 // This would have been the approximate value but we're not displaying it
-const totalValue = 25000; // Fixed value instead of calculating
 
 // Create the chat config using Mistral instead of OpenAI
 const chatConfig = ChatConfigSchema.parse({

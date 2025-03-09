@@ -1,6 +1,3 @@
-'use client';
-
-import React from 'react';
 import { BorderBeam } from './magicui/border-beam';
 import { StarIcon } from 'lucide-react';
 

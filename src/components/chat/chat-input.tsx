@@ -50,16 +50,17 @@ function ChatInput({
 
 	return (
 		<ChatInputContext.Provider value={contextValue}>
-			<div className={cn("absolute bottom-0 left-0 right-0 w-full p-4", className)}>
-			  <div className={cn(
-			    "w-full bg-muted/50 backdrop-blur rounded-2xl px-4 py-3",
-			    variant === "default" && "flex flex-col items-end gap-2",
-			    variant === "unstyled" && "flex items-start gap-2 bg-transparent"
-			  )}>
-			    {children}
-			  </div>
+			<div
+				className={cn(
+					variant === "default" &&
+						"flex flex-col items-end w-full p-2 rounded-2xl border border-input bg-transparent focus-within:ring-1 focus-within:ring-ring focus-within:outline-none",
+					variant === "unstyled" && "flex items-start gap-2 w-full",
+					className,
+				)}
+			>
+				{children}
 			</div>
-			</ChatInputContext.Provider>
+		</ChatInputContext.Provider>
 	);
 }
 
@@ -112,9 +113,9 @@ function ChatInputTextArea({
 			onChange={onChange}
 			onKeyDown={handleKeyDown}
 			className={cn(
-				"min-h-[44px] max-h-[200px] resize-none overflow-x-hidden",
-				"bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0",
-				variant === "unstyled" && "shadow-none",
+				"max-h-[400px] min-h-0 resize-none overflow-x-hidden",
+				variant === "unstyled" &&
+					"border-none focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none",
 				className,
 			)}
 			rows={rows}
@@ -147,10 +148,9 @@ function ChatInputSubmit({
 			<Button
 				onClick={onStop}
 				className={cn(
-					"shrink-0 rounded-full p-2 h-fit bg-primary hover:bg-primary/90 text-primary-foreground border-none",
+					"shrink-0 rounded-full p-1.5 h-fit border dark:border-zinc-600",
 					className,
 				)}
-				aria-label="Stop Generation"
 				{...props}
 			>
 				<svg
@@ -178,7 +178,7 @@ function ChatInputSubmit({
 	return (
 		<Button
 			className={cn(
-				"shrink-0 rounded-full p-2 h-fit bg-primary hover:bg-primary/90 text-primary-foreground border-none",
+				"shrink-0 rounded-full p-1.5 h-fit border dark:border-zinc-600",
 				className,
 			)}
 			disabled={isDisabled}

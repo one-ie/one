@@ -9,13 +9,13 @@ import {
   ChatInput,
   ChatInputSubmit,
   ChatInputTextArea,
-} from "@/components/ui/chat-input";
+} from "@/components/chat/chat-input";
 import {
   ChatMessage,
   ChatMessageAvatar,
   ChatMessageContent,
-} from "@/components/ui/chat-message";
-import { ChatMessageArea } from "@/components/ui/chat-message-area";
+} from "@/components/chat/chat-message";
+import { ChatMessageArea } from "@/components/chat/chat-message-area";
 
 export interface ChatConfig {
   api?: string;
@@ -43,7 +43,7 @@ export default function Right({ rightPanelMode, chatConfig, content }: RightPane
 
   // Initialize chat with Vercel AI SDK
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } = useChat({
-    api: chatConfig?.api || "/api/simple",
+    api: chatConfig?.api || "/api/chatsimple",
     initialMessages: chatConfig?.welcome ? [
       {
         id: "welcome",

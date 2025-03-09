@@ -1,4 +1,3 @@
-import React from "react";
 import { CheckIcon } from "lucide-react";
 
 export interface CourseModuleContentProps {
@@ -6,7 +5,7 @@ export interface CourseModuleContentProps {
   moduleNumber?: number;
 }
 
-export function CourseModuleContent({ lessons, moduleNumber = 0 }: CourseModuleContentProps) {
+export function CourseModuleContent({ lessons }: CourseModuleContentProps) {
   return (
     <div className="space-y-4">
       {lessons.map((lesson, index) => (

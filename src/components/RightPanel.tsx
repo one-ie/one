@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ChatSimple } from "@/components/ChatSimple";
+import { Chat } from "@/components/Chat";
 
 interface RightPanelProps {
     children?: React.ReactNode;
@@ -76,7 +76,7 @@ export function RightPanel({
                         </Button>
                     </div>
                     <div className="flex-1 overflow-hidden">
-                        <ChatSimple />
+                        <Chat />
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { ChatSimple } from "@/components/ChatSimple";
+import { Chat } from "@/components/Chat";
 import { SidebarApp } from "@/components/ChatSidebar";
 
 export default function Page() {
@@ -33,7 +33,7 @@ export default function Page() {
 						</Breadcrumb>
 					</div>
 				</header>
-				<ChatSimple />
+				<Chat />
 			</SidebarInset>
 		</SidebarProvider>
 	);

@@ -11,7 +11,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { ChatSimple } from "@/components/ChatSimple";
+import { Chat } from "@/components/Chat";
 import { SidebarApp } from "@/components/ChatSidebar";
 import { MessageSquare, PanelLeft } from "lucide-react";
 
@@ -57,7 +57,7 @@ const RightSidebar = () => {
         `}
       >
         <div className="pt-14">
-          <ChatSimple />
+          <Chat />
         </div>
       </Sidebar>
     </>

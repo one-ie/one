@@ -246,7 +246,7 @@ const faqs = [
           
           <!-- Pricing Cards with ONE styling -->
           <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {plans.map((plan, index) => (
+            {plans.map((plan) => (
               <div class={`relative ${plan.popular ? 'mt-[-1rem] mb-[-1rem]' : ''}`}>
                 {plan.popular && (
                   <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">

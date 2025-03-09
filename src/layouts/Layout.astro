@@ -29,7 +29,6 @@ const {
   content,
 } = Astro.props;
 
-const { header = true, footer = true } = Astro.props;
 
 // Default chat configuration
 const defaultChatConfig = ChatConfigSchema.parse({
@@ -43,7 +42,7 @@ const chatConfig = providedConfig || defaultChatConfig;
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charSet="UTF-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <title>{title}</title>
@@ -57,20 +56,19 @@ const chatConfig = providedConfig || defaultChatConfig;
     >
       <Sidebar />
       <div class="center-grid" id="center-grid">
-        <Header client:load className="w-full" />
+        <Header client:load />
         
         <main>
           <slot />
         </main>
 
-        <Footer client:idle className="w-full" />
+        <Footer client:idle />
       </div>
       <Right
         client:idle
         chatConfig={chatConfig}
         rightPanelMode={rightPanelMode}
         content={content}
-        className="w-full"
       />
     </div>
   </body>

@@ -5,7 +5,7 @@ import { useStore } from '@nanostores/react';
 import { layoutStore } from '../stores/layout';
 import type { Theme } from '../types/theme';
 import {
-  Newspaper, Headphones, Download, FileText, Shield, Sun, Moon, CircleDot, CreditCard,
+  Newspaper, Headphones, Download, Shield, Sun, Moon, CircleDot,
   type LucideIcon
 } from 'lucide-react';
 

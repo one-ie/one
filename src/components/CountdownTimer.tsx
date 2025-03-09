@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { BorderBeam } from './magicui/border-beam';
+import { useState, useEffect } from 'react';
 
 interface CountdownTimerProps {
   targetDate: Date | string | number;

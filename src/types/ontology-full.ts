@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 /**
  * ONE Platform Ontology
  * 
