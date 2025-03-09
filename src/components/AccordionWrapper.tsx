@@ -158,7 +158,7 @@ interface AccordionWrapperProps {
 }
 
 // This is the component we'll use in the course.astro page
-export function AccordionWrapper({ items, type = "faq" }: AccordionWrapperProps) {
+export function AccordionWrapper({ items }: AccordionWrapperProps) {
   return (
     <UiAccordion type="single" collapsible className="w-full">
       {items.map((item, index) => {

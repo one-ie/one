@@ -43,7 +43,7 @@ const chatConfig = providedConfig || defaultChatConfig;
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charSet="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <title>{title}</title>
@@ -57,19 +57,20 @@ const chatConfig = providedConfig || defaultChatConfig;
     >
       <Sidebar />
       <div class="center-grid" id="center-grid">
-        {header && <Header client:load />}
+        <Header client:load className="w-full" />
         
         <main>
           <slot />
         </main>
 
-        {footer && <Footer client:idle />}
+        <Footer client:idle className="w-full" />
       </div>
       <Right
         client:idle
         chatConfig={chatConfig}
         rightPanelMode={rightPanelMode}
         content={content}
+        className="w-full"
       />
     </div>
   </body>

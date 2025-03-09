@@ -18,7 +18,6 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-const GITHUB_REPO = "one-ie/one"
 
 const chartConfig = {
     views: {

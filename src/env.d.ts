@@ -1,8 +1,10 @@
 /// <reference types="astro/client" />
 /// <reference types="astro/server" />
 
-declare namespace JSX {
-  interface IntrinsicElements {
-    [elemName: string]: any;
-  }
+interface ImportMetaEnv {
+  // Add your environment variables here
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
 }
