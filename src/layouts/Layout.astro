@@ -7,17 +7,24 @@ import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar.astro";
 import Right from "../components/Right";
 import { ChatConfigSchema } from "../schema/chat";
+import type { RightPanelProps } from "../components/Right";
 
-interface Props {
+// Define Astro-specific client directive types
+type AstroBuiltinAttributes = {
+  "client:load"?: boolean;
+  "client:idle"?: boolean;
+  "client:visible"?: boolean;
+  "client:media"?: string;
+  "client:only"?: string;
+};
+
+interface Props extends RightPanelProps {
   title: string;
   description?: string;
   children: any;
   header?: boolean;
   footer?: boolean;
   initialPanelMode?: "Quarter" | "Half" | "Full" | "Floating" | "Icon";
-  chatConfig?: any;
-  rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
-  content?: string;
 }
 
 const {
@@ -29,7 +36,6 @@ const {
   content,
 } = Astro.props;
 
-
 // Default chat configuration
 const defaultChatConfig = ChatConfigSchema.parse({
   // ... existing chat config
@@ -39,7 +45,7 @@ const defaultChatConfig = ChatConfigSchema.parse({
 const chatConfig = providedConfig || defaultChatConfig;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -62,10 +68,10 @@ const chatConfig = providedConfig || defaultChatConfig;
           <slot />
         </main>
 
-        <Footer client:idle />
+        <Footer client:load />
       </div>
       <Right
-        client:idle
+        client:only="react"
         chatConfig={chatConfig}
         rightPanelMode={rightPanelMode}
         content={content}

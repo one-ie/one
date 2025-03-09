@@ -1,4 +1,5 @@
-// src/components/Header.tsx
+'use client';
+
 import { Download } from 'lucide-react';
 
 export default function Header() {

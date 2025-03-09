@@ -171,7 +171,7 @@ importers:
         specifier: 1.0.0
         version: 1.0.0(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       date-fns:
-        specifier: ^3.1.0
+        specifier: ^3.6.0
         version: 3.6.0
       dotenv:
         specifier: ^16.4.7
