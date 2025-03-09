@@ -1,9 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
   "compilerOptions": {
-    "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -15,5 +12,15 @@
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-  }
+    "verbatimModuleSyntax": true,
+    "types": ["vite/client", "astro/client", "node"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }
