@@ -17,7 +17,7 @@ import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useState, useRef } from "react";
 
 export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
+  const { messages, input, handleInputChange, handleSubmit, isLoading, stop, setInput } =
     useChat({
       api: "/api/chatsimple",
       initialMessages: [
@@ -32,6 +32,7 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
   const [showTyping, setShowTyping] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const [editedMessages, setEditedMessages] = useState<Record<string, string>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -98,6 +99,26 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
     setTimeout(scrollToBottom, 100);
   };
 
+  // Handle message content editing
+  const handleMessageEdit = (id: string, newContent: string) => {
+    setEditedMessages(prev => ({
+      ...prev,
+      [id]: newContent
+    }));
+  };
+
+  // Handle resubmitting assistant message as a user message
+  const handleResubmit = (content: string) => {
+    if (isLoading) return;
+    
+    setInput(content);
+    // Use a small timeout to ensure the UI updates before submitting
+    setTimeout(() => {
+      handleSubmit();
+      scrollToBottom();
+    }, 50);
+  };
+
   return (
     <div className={`flex flex-col h-full w-full bg-background ${className}`} {...props}>
       {/* Message area with improved styling */}
@@ -117,7 +138,8 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
                 >
                   <ChatMessageContent 
                     content={message.content} 
-                    className="prose prose-sm dark:prose-invert max-w-none"
+                    className="prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500"
+                    onResubmit={handleResubmit}
                   />
                 </ChatMessage>
               );
@@ -131,8 +153,9 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
                 className="animate-slide-in"
               >  
                 <ChatMessageContent 
-                  content={message.content} 
-                  className="font-medium"
+                  content={editedMessages[message.id] || message.content} 
+                  className="font-medium text-base"
+                  onContentChange={handleMessageEdit}
                 />
                 <ChatMessageAvatar />
               </ChatMessage>
@@ -150,7 +173,7 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
         {showScrollButton && (
           <Button
             onClick={scrollToBottom}
-            className="absolute bottom-28 right-4 rounded-full w-10 h-10 flex items-center justify-center bg-primary text-primary-foreground shadow-lg hover:shadow-xl animate-bounce-subtle z-10"
+            className="absolute bottom-28 right-4 rounded-full w-10 h-10 flex items-center justify-center bg-blue-600 text-white shadow-lg hover:shadow-xl animate-bounce-subtle z-10 hover:bg-blue-700"
           >
             <ChevronDown className="h-5 w-5" />
           </Button>
@@ -170,9 +193,9 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
           >
             <ChatInputTextArea 
               placeholder="Type a message..." 
-              className="focus:ring-1 focus:ring-primary/50 transition-all"
+              className="focus:ring-1 focus:ring-blue-600/50 transition-all text-base"
             />
-            <ChatInputSubmit className="bg-primary hover:bg-primary/90 text-primary-foreground" />
+            <ChatInputSubmit className="bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-full flex items-center justify-center" />
           </ChatInput>
         </div>
       </div>

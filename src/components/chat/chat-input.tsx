@@ -54,7 +54,7 @@ const ChatInput = function ChatInput({
       <div
         className={cn(
           variant === "default" &&
-            "flex items-center gap-2 w-full p-3 rounded-full bg-[#333333] focus-within:ring-1 focus-within:ring-primary/30 focus-within:outline-none transition-all duration-200 shadow-md hover:shadow-lg",
+            "flex items-center gap-2 w-full p-3 rounded-full bg-[#2a2a2a] focus-within:ring-1 focus-within:ring-blue-600/30 focus-within:outline-none transition-all duration-200 shadow-md hover:shadow-lg",
           variant === "unstyled" && "flex items-start gap-2 w-full",
           className,
         )}
@@ -124,7 +124,7 @@ const ChatInputTextArea = forwardRef<HTMLTextAreaElement, ChatInputTextAreaProps
         onChange={onChange}
         onKeyDown={handleKeyDown}
         className={cn(
-          "flex-1 max-h-[60px] min-h-0 resize-none overflow-x-hidden text-base transition-all duration-200 text-white placeholder:text-gray-400 bg-transparent",
+          "flex-1 max-h-[80px] min-h-0 resize-none overflow-x-hidden text-base transition-all duration-200 text-white placeholder:text-gray-400 bg-transparent",
           variant === "unstyled" &&
             "border-none focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none",
           className,
@@ -160,7 +160,7 @@ const ChatInputSubmit = function ChatInputSubmit({
       <Button
         onClick={onStop}
         className={cn(
-          "shrink-0 rounded-full p-3 h-10 w-10 flex items-center justify-center bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-all duration-200 shadow-sm hover:shadow-md",
+          "shrink-0 rounded-full w-10 h-10 flex items-center justify-center bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-all duration-200 shadow-sm hover:shadow-md",
           className,
         )}
         {...props}
@@ -176,7 +176,7 @@ const ChatInputSubmit = function ChatInputSubmit({
   return (
     <Button
       className={cn(
-        "shrink-0 rounded-full p-3 h-10 w-10 flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md",
+        "shrink-0 rounded-full w-10 h-10 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-sm hover:shadow-md",
         isDisabled ? "opacity-50" : "animate-subtle-bounce",
         className,
       )}

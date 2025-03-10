@@ -19,11 +19,11 @@ export default function Page() {
 			<SidebarApp />
 			<SidebarInset className="flex flex-col h-screen overflow-y-auto">
 				<header className="sticky top-0 flex h-11 shrink-0 items-center gap-2 bg-background">
-					<div className="flex flex-1 items-center gap-2 px-3">
+					<div className="flex flex-1 items-center gap-2 px-3 pt-6">
 						<SidebarTrigger />
 						<Separator orientation="vertical" className="mr-2 h-4" />
 						<Breadcrumb>
-							<BreadcrumbList>
+							<BreadcrumbList >
 								<BreadcrumbItem>
 									<BreadcrumbPage className="line-clamp-1">
 										Agent ONE

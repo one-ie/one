@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils";
 import { marked } from "marked";
 import * as React from "react";
-import { Suspense, isValidElement, memo, useMemo} from "react";
+import { Suspense, isValidElement, memo, useMemo, useState } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const DEFAULT_PRE_BLOCK_CLASS =
-	"my-4 overflow-x-auto w-fit rounded-xl bg-zinc-950 text-zinc-50 dark:bg-zinc-900 border border-border p-4";
+	"my-4 overflow-x-auto w-fit rounded-xl bg-zinc-950 text-zinc-50 dark:bg-zinc-900 border border-border p-4 relative text-base";
 
 const extractTextContent = (node: React.ReactNode): string => {
   type ReactElementWithChildren = React.ReactElement & {
@@ -33,7 +33,8 @@ interface HighlightedPreProps extends React.HTMLAttributes<HTMLPreElement> {
 const AsyncHighlightedPre = ({ children, className, language, ...props }: HighlightedPreProps) => {
   const [content, setContent] = React.useState<JSX.Element>(
     <pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-      <code className="whitespace-pre-wrap">{children}</code>
+      <code className="whitespace-pre-wrap text-base">{children}</code>
+      <CopyButton code={extractTextContent(children)} />
     </pre>
   );
 
@@ -56,7 +57,7 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
 
       setContent(
         <pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-          <code className="whitespace-pre-wrap">
+          <code className="whitespace-pre-wrap text-base">
             {tokens.map((line, lineIndex) => (
               <span key={`line-${lineIndex}`}>
                 {line.map((token, tokenIndex) => {
@@ -71,6 +72,7 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
               </span>
             ))}
           </code>
+          <CopyButton code={code} />
         </pre>
       );
     };
@@ -81,13 +83,54 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
   return content;
 };
 
+// Copy button component for code blocks
+const CopyButton = ({ code }: { code: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="absolute top-2 right-2 w-8 h-8 rounded-full bg-gray-700 hover:bg-gray-600 text-white transition-colors flex items-center justify-center"
+      aria-label="Copy code"
+    >
+      {copied ? (
+        <>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
+            Copied!
+          </span>
+        </>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+      )}
+    </button>
+  );
+};
+
 // Update HighlightedPre to use the new component
 const HighlightedPre = memo(({ children, className, language, ...props }: HighlightedPreProps) => {
   return (
     <Suspense
       fallback={
         <pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-          <code className="whitespace-pre-wrap">{children}</code>
+          <code className="whitespace-pre-wrap text-base">{children}</code>
+          <CopyButton code={extractTextContent(children)} />
         </pre>
       }
     >
@@ -114,7 +157,8 @@ const CodeBlock = ({
 		<Suspense
 			fallback={
 				<pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-					<code className="whitespace-pre-wrap">{children}</code>
+					<code className="whitespace-pre-wrap text-base">{children}</code>
+          <CopyButton code={extractTextContent(children)} />
 				</pre>
 			}
 		>
@@ -174,7 +218,7 @@ const components: Partial<Components> = {
 		</h6>
 	),
 	p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-		<p className="leading-6 [&:not(:first-child)]:mt-4" {...props}>
+		<p className="leading-7 text-base [&:not(:first-child)]:mt-4" {...props}>
 			{children}
 		</p>
 	),
@@ -188,7 +232,7 @@ const components: Partial<Components> = {
 		...props
 	}: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
 		<a
-			className="font-medium underline underline-offset-4"
+			className="font-medium underline underline-offset-4 text-base"
 			target="_blank"
 			rel="noreferrer"
 			{...props}
@@ -197,17 +241,17 @@ const components: Partial<Components> = {
 		</a>
 	),
 	ol: ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
-		<ol className="my-4 ml-6 list-decimal" {...props}>
+		<ol className="my-4 ml-6 list-decimal text-base" {...props}>
 			{children}
 		</ol>
 	),
 	ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
-		<ul className="my-4 ml-6 list-disc" {...props}>
+		<ul className="my-4 ml-6 list-disc text-base" {...props}>
 			{children}
 		</ul>
 	),
 	li: ({ children, ...props }: React.LiHTMLAttributes<HTMLLIElement>) => (
-		<li className="mt-2" {...props}>
+		<li className="mt-2 text-base" {...props}>
 			{children}
 		</li>
 	),
@@ -215,7 +259,7 @@ const components: Partial<Components> = {
 		children,
 		...props
 	}: React.HTMLAttributes<HTMLQuoteElement>) => (
-		<blockquote className="mt-4 border-l-2 pl-6 italic" {...props}>
+		<blockquote className="mt-4 border-l-2 pl-6 italic text-base" {...props}>
 			{children}
 		</blockquote>
 	),
@@ -225,7 +269,7 @@ const components: Partial<Components> = {
 	table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
 		<div className="my-6 w-full overflow-y-auto">
 			<table
-				className="relative w-full overflow-hidden border-none text-sm"
+				className="relative w-full overflow-hidden border-none text-base"
 				{...props}
 			>
 				{children}
@@ -239,7 +283,7 @@ const components: Partial<Components> = {
 	),
 	th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
 		<th
-			className="px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right"
+			className="px-4 py-2 text-left font-bold text-base [&[align=center]]:text-center [&[align=right]]:text-right"
 			{...props}
 		>
 			{children}
@@ -247,7 +291,7 @@ const components: Partial<Components> = {
 	),
 	td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
 		<td
-			className="px-4 py-2 text-left [&[align=center]]:text-center [&[align=right]]:text-right"
+			className="px-4 py-2 text-left text-base [&[align=center]]:text-center [&[align=right]]:text-right"
 			{...props}
 		>
 			{children}
@@ -257,28 +301,36 @@ const components: Partial<Components> = {
 		// biome-ignore lint/a11y/useAltText: alt is not required
 		<img className="rounded-md" alt={alt} {...props} />
 	),
-	code: ({ children, node, className, ...props }) => {
+	code: ({ node, inline, className, children, ...props }: any) => {
 		const match = /language-(\w+)/.exec(className || "");
-		if (match) {
+		if (inline) {
 			return (
-				<CodeBlock language={match[1]} className={className} {...props}>
+				<code
+					className={cn("rounded px-1 py-0.5 bg-muted/50 text-base", className)}
+					{...props}
+				>
 					{children}
-				</CodeBlock>
+				</code>
 			);
 		}
+
 		return (
-			<code
-				className={cn(
-					"rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm",
-					className,
-				)}
+			<CodeBlock
+				language={(match && match[1]) || ""}
+				className={className}
 				{...props}
 			>
-				{children}
-			</code>
+				{String(children).replace(/\n$/, "")}
+			</CodeBlock>
 		);
 	},
-	pre: ({ children }) => <>{children}</>,
+	pre: ({ children, className, ...props }: React.HTMLAttributes<HTMLPreElement>) => {
+		return (
+			<pre className={cn(DEFAULT_PRE_BLOCK_CLASS, className)} {...props}>
+				{children}
+			</pre>
+		);
+	},
 };
 
 function parseMarkdownIntoBlocks(markdown: string): string[] {
