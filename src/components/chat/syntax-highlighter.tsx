@@ -1,27 +1,72 @@
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coldarkDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { useState } from "react";
 
 interface CodeProps {
   language: string;
   children: string;
 }
 
+// Copy button component for code blocks
+const CopyButton = ({ code }: { code: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-gray-700 hover:bg-gray-600 text-white transition-colors flex items-center justify-center"
+      aria-label="Copy code"
+    >
+      {copied ? (
+        <>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
+            Copied!
+          </span>
+        </>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+      )}
+    </button>
+  );
+};
+
 export const CodeHighlighter = ({ language, children }: CodeProps) => {
   return (
-    <SyntaxHighlighter
-      language={language}
-      style={coldarkDark}
-      customStyle={{
-        margin: 0,
-        width: "100%",
-        background: "transparent",
-        padding: "1.5rem 1rem",
-        fontSize: "0.875rem", // 14px
-        lineHeight: "1.5", // For better readability
-      }}
-      PreTag="div"
-    >
-      {children}
-    </SyntaxHighlighter>
+    <div className="relative">
+      <SyntaxHighlighter
+        language={language}
+        style={coldarkDark}
+        customStyle={{
+          margin: 0,
+          width: "100%",
+          background: "transparent",
+          padding: "1.5rem 1rem",
+          paddingBottom: "3.5rem",
+          fontSize: "0.875rem", // 14px
+          lineHeight: "1.5", // For better readability
+        }}
+        PreTag="div"
+      >
+        {children}
+      </SyntaxHighlighter>
+      <CopyButton code={children} />
+    </div>
   );
 };
