@@ -9,6 +9,7 @@ The ONE design system provides a set of carefully crafted design tokens, compone
 ## Core Features
 
 - **Dark Mode by Default**: Sleek, elegant dark theme with extremely subtle borders
+- **Symmetrical Design**: Matching sidebar and right panel create a balanced frame
 - **Theme Variants**: Support for light, dark, and high-contrast themes
 - **Responsive Layout**: Flexible grid system with adaptive components
 - **Glass Effects**: Beautiful backdrop-filter effects for depth
@@ -23,8 +24,8 @@ The color system is based on HSL values for maximum flexibility:
 
 ```css
 --one-black: hsl(0 0% 0%);        /* Pure black */
---one-dark: hsl(0 0% 0%);         /* Pure black sidebar */
---one-background: hsl(0 0% 13%);  /* #222222 - Lighter background */
+--one-dark: hsl(0 0% 8%);         /* #141414 - Slightly lighter sidebar */
+--one-background: hsl(0 0% 13%);  /* #222222 - Main background */
 --one-white: hsl(0 0% 100%);      /* Pure white */
 ```
 
@@ -36,16 +37,16 @@ Colors are mapped to semantic roles:
 --one-background-main: var(--one-background);  /* Main content */
 --one-background-nav: var(--one-dark);         /* Sidebar/header */
 --one-background-logo: var(--one-black);       /* Logo area */
---one-background-card: hsl(220 7% 10%);        /* Cards */
+--one-background-card: hsl(0 0% 16%);          /* Cards - slightly lighter than background */
 ```
 
 ### Border System
 
-Subtle borders for an elegant look:
+Extremely subtle borders for an elegant look:
 
 ```css
---one-border: hsla(0, 0%, 100%, 0.05);      /* 5% opacity white border */
---one-border-nav: hsla(0, 0%, 100%, 0.04);  /* 4% opacity for nav */
+--one-border: hsla(0, 0%, 100%, 0.03);      /* 3% opacity white border */
+--one-border-nav: hsla(0, 0%, 100%, 0.02);  /* 2% opacity for nav */
 ```
 
 ### Animation Timings

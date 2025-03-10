@@ -121,9 +121,9 @@ const chatConfig = providedConfig || defaultChatConfig;
     max-width: 100%;
     margin-right: 0;
     overflow: hidden;
-    border-right: 1px solid hsla(0, 0%, 100%, 0.05);
-    background-color: hsla(0, 0%, 13%, 0.98);
-    backdrop-filter: blur(8px);
+    border-right: 1px solid hsla(0, 0%, 100%, 0.03);
+    background-color: hsl(0, 0%, 13%);
+    backdrop-filter: none;
   }
 
   @media (min-width: 640px) {
@@ -138,12 +138,12 @@ const chatConfig = providedConfig || defaultChatConfig;
     right: 0;
     bottom: 0;
     z-index: 9999;
-    background-color: hsla(0, 0%, 13%, 0.98);
-    border-left: 1px solid hsla(0, 0%, 100%, 0.05);
+    background-color: hsl(0, 0%, 8%);
+    border-left: 1px solid hsla(0, 0%, 100%, 0.03);
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.01);
+    box-shadow: none;
   }
 
   :global(.transitions-enabled .right-panel) {

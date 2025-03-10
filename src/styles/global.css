@@ -12,8 +12,8 @@
 :root {
   /* Core colors */
   --one-black: hsl(0 0% 0%);        /* #000000 */
-  --one-dark: hsl(0 0% 10%);         /* Pure black sidebar */
-  --one-background: hsl(0 0% 13%);  /* #222222 - Lighter background */
+  --one-dark: hsl(0 0% 8%);         /* #141414 - Slightly lighter sidebar */
+  --one-background: hsl(0 0% 13%);  /* #222222 - Main background */
   --one-white: hsl(0 0% 100%);      /* #FFFFFF */
   
   /* Semantic mappings - Dark Theme (Default) */
@@ -41,13 +41,13 @@
   /* Interface elements */
   --one-muted: hsl(220 7% 15%);
   --one-muted-foreground: hsl(220 5% 65%);
-  --one-card: hsl(220 7% 10%);
+  --one-card: hsl(0 0% 16%);
   --one-card-foreground: var(--one-white);
-  --one-popover: hsl(220 7% 10%);
+  --one-popover: hsl(0 0% 16%);
   --one-popover-foreground: var(--one-white);
   
-  /* Border colors - Subtle but visible */
-  --one-border: hsla(0, 0%, 100%, 0.05);      /* 5% opacity white border */
+  /* Border colors - Extremely subtle */
+  --one-border: hsla(0, 0%, 100%, 0.03);      /* 3% opacity white border */
   --one-border-nav: hsla(0, 0%, 100%, 0.04);  /* 4% opacity for nav */
   
   /* Input elements */
@@ -350,25 +350,25 @@
 .one-glass {
   backdrop-filter: blur(10px);
   background: hsla(0, 0%, 13%, 0.7);
-  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  border: 1px solid hsla(0, 0%, 100%, 0.03);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.01);
 }
 
 .one-glass-dark {
   backdrop-filter: blur(12px);
-  background: hsla(0, 0%, 0%, 0.8);
-  border: 1px solid hsla(0, 0%, 100%, 0.04);
+  background: hsla(0, 0%, 8%, 0.8);
+  border: 1px solid hsla(0, 0%, 100%, 0.02);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.01);
 }
 
 .one-glass-card {
   backdrop-filter: blur(16px);
   background: hsla(0, 0%, 16%, 0.8);
-  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  border: 1px solid hsla(0, 0%, 100%, 0.03);
   border-radius: var(--radius);
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.005),
-    0 0 0 1px hsla(0, 0%, 100%, 0.03);
+    0 0 0 1px hsla(0, 0%, 100%, 0.02);
   transition: all 0.3s ease;
 }
 
@@ -376,14 +376,14 @@
   transform: translateY(-2px);
   box-shadow: 
     0 8px 30px rgba(0, 0, 0, 0.01),
-    0 0 0 1px hsla(0, 0%, 100%, 0.1);
+    0 0 0 1px hsla(0, 0%, 100%, 0.05);
 }
 
 /* Card Styles */
 .one-card {
   background-color: hsla(var(--card) / 0.98);
   color: hsl(var(--card-foreground));
-  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  border: 1px solid hsla(0, 0%, 100%, 0.03);
   border-radius: calc(var(--radius) - 2px);
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.005);
@@ -393,7 +393,7 @@
 .one-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.01);
-  border-color: hsla(0, 0%, 100%, 0.1);
+  border-color: hsla(0, 0%, 100%, 0.05);
 }
 
 /* Navigation Elements */
@@ -411,11 +411,11 @@
   transform: translateY(-50%);
   width: 2px;
   height: 0;
-  background: hsla(var(--one-accent) / 0.2);
+  background: hsla(var(--one-accent) / 0.1);
   transition: height var(--one-duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 0 2px 2px 0;
-  box-shadow: 0 0 8px hsla(var(--one-accent) / 0.05);
-  opacity: 0.4;
+  box-shadow: 0 0 8px hsla(var(--one-accent) / 0.03);
+  opacity: 0.3;
 }
 
 .one-nav-item:hover::before {
@@ -424,15 +424,15 @@
 
 .one-nav-item.active::before {
   height: 2rem;
-  background: hsla(var(--one-accent) / 0.4);
-  opacity: 0.6;
+  background: hsla(var(--one-accent) / 0.3);
+  opacity: 0.5;
 }
 
 .one-nav-item::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: hsla(var(--one-accent) / 0.01);
+  background: hsla(var(--one-accent) / 0.005);
   opacity: 0;
   transition: opacity var(--one-duration-normal) ease-in-out;
 }
@@ -471,7 +471,7 @@
 .one-button-secondary {
   background-color: hsla(var(--one-secondary) / 0.8);
   color: hsl(var(--one-secondary-foreground));
-  border: 1px solid hsl(var(--border));
+  border: 1px solid hsla(0, 0%, 100%, 0.01);
 }
 
 .one-button-secondary:hover {
@@ -481,14 +481,14 @@
 
 .one-button-outline {
   background-color: transparent;
-  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  border: 1px solid hsla(0, 0%, 100%, 0.02);
   color: hsl(var(--one-foreground));
   backdrop-filter: blur(4px);
 }
 
 .one-button-outline:hover {
   background-color: hsla(var(--one-muted) / 0.02);
-  border-color: hsla(0, 0%, 100%, 0.1);
+  border-color: hsla(0, 0%, 100%, 0.03);
 }
 
 /* Chat UI Specific Styles */
@@ -497,7 +497,7 @@
   border-radius: var(--radius);
   padding: 0.75rem 1rem;
   transition: all 0.2s ease;
-  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  border: 1px solid hsla(0, 0%, 100%, 0.02);
   backdrop-filter: blur(4px);
 }
 
@@ -510,7 +510,7 @@
   background-color: hsla(var(--one-primary) / 0.03);
   color: hsl(var(--one-foreground));
   border-bottom-right-radius: 0;
-  border-color: hsla(var(--one-primary) / 0.08);
+  border-color: hsla(var(--one-primary) / 0.05);
 }
 
 .chat-message-bubble.incoming {
@@ -522,7 +522,7 @@
 .chat-input-container {
   position: relative;
   transition: all 0.3s ease;
-  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  border: 1px solid hsla(0, 0%, 100%, 0.02);
   border-radius: var(--radius);
   backdrop-filter: blur(8px);
   background-color: hsla(var(--one-background-card) / 0.3);
@@ -530,7 +530,7 @@
 
 .chat-input-container:focus-within {
   transform: translateY(-2px);
-  border-color: hsla(var(--one-primary) / 0.1);
+  border-color: hsla(var(--one-primary) / 0.08);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.005);
 }
 

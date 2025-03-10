@@ -26,16 +26,16 @@ const currentPath = Astro.url.pathname;
 ---
 
 <aside
-  class="hidden sm:flex fixed left-0 top-0 h-screen z-40 w-[64px] shrink-0 bg-black border-r border-[hsla(0,0%,100%,0.05)] transition-all duration-300 ease-in-out"
+  class="hidden sm:flex fixed left-0 top-0 h-screen z-40 w-[64px] shrink-0 bg-[hsl(0,0%,8%)] border-r border-[hsla(0,0%,100%,0.03)] transition-all duration-300 ease-in-out"
 >
-  <nav class="h-full flex flex-col bg-black">
+  <nav class="h-full flex flex-col bg-[hsl(0,0%,8%)]">
     <!-- Logo Section -->
     <div
-      class="flex items-center justify-center bg-black"
+      class="flex items-center justify-center bg-[hsl(0,0%,8%)]"
     >
       <a
         href="/"
-        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,10%,0.3)] transition-colors duration-200"
+        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,12%,0.5)] transition-colors duration-200"
       >
         <div class="w-8 h-8">
           <img src="/icon.svg" alt="ONE Logo" class="w-full h-full" />
@@ -51,8 +51,8 @@ const currentPath = Astro.url.pathname;
             href={path}
             class:list={[
               "w-[64px] h-16 flex items-center justify-center transition-colors duration-200 group relative",
-              "hover:bg-[hsla(0,0%,10%,0.3)]",
-              { "bg-[hsla(0,0%,10%,0.5)]": currentPath === path },
+              "hover:bg-[hsla(0,0%,12%,0.5)]",
+              { "bg-[hsla(0,0%,12%,0.7)]": currentPath === path },
             ]}
             data-tooltip={title}
             aria-label={title}
@@ -70,11 +70,11 @@ const currentPath = Astro.url.pathname;
 
     <!-- Theme Toggle -->
     <div
-      class="flex items-center justify-center bg-black"
+      class="flex items-center justify-center bg-[hsl(0,0%,8%)]"
     >
       <button
         id="theme-toggle"
-        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,10%,0.3)] transition-colors duration-200"
+        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,12%,0.5)] transition-colors duration-200"
         aria-label="Toggle theme"
       >
         <div class="w-10 h-10 flex items-center justify-center">
@@ -140,7 +140,7 @@ const currentPath = Astro.url.pathname;
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
-    background: hsla(220, 7%, 10%, 0.95);
+    background: hsla(0, 0%, 8%, 0.95);
     color: hsl(var(--one-foreground));
     padding: 0.5rem 0.75rem;
     border-radius: 0.375rem;
@@ -151,7 +151,7 @@ const currentPath = Astro.url.pathname;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     opacity: 0;
     animation: tooltip 0.2s ease-out forwards;
-    border: 1px solid hsla(0, 0%, 100%, 0.05);
+    border: 1px solid hsla(0, 0%, 100%, 0.03);
     backdrop-filter: blur(8px);
   }
 
