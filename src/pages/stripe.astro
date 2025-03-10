@@ -46,13 +46,65 @@ if (price_id) {
 
 <style>
   .input {
-    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    display: flex;
+    height: 2.5rem;
+    width: 100%;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--input));
+    background-color: hsl(var(--background));
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
   }
+  .input::file-selector-button {
+    border: none;
+    background: transparent;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .input::placeholder {
+    color: hsl(var(--muted-foreground));
+  }
+  .input:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--ring));
+  }
+  .input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
   .button {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    transition: background-color 0.2s;
   }
+  .button:hover {
+    background-color: hsl(var(--primary) / 0.9);
+  }
+  .button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px hsl(var(--ring));
+  }
+  .button:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
   .card {
-    @apply border rounded-lg p-6 bg-card text-card-foreground;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
   }
 </style>
 

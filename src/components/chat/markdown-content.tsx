@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { marked } from "marked";
-import type * as React from "react";
-import { Suspense, isValidElement, memo, useMemo } from "react";
+import * as React from "react";
+import { Suspense, isValidElement, memo, useMemo, useState, useEffect } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -29,63 +29,74 @@ interface HighlightedPreProps extends React.HTMLAttributes<HTMLPreElement> {
 	language: string;
 }
 
-const HighlightedPre = memo(
-	async ({ children, className, language, ...props }: HighlightedPreProps) => {
-		const { codeToTokens, bundledLanguages } = await import("shiki");
-		const code = extractTextContent(children);
+// Convert AsyncHighlightedPre to a regular component that uses useEffect
+const AsyncHighlightedPre = ({ children, className, language, ...props }: HighlightedPreProps) => {
+  const [content, setContent] = React.useState<JSX.Element>(
+    <pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
+      <code className="whitespace-pre-wrap">{children}</code>
+    </pre>
+  );
 
-		if (!(language in bundledLanguages)) {
-			return (
-				<pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-					<code className="whitespace-pre-wrap">{children}</code>
-				</pre>
-			);
-		}
+  React.useEffect(() => {
+    const renderHighlightedCode = async () => {
+      const { codeToTokens, bundledLanguages } = await import("shiki");
+      const code = extractTextContent(children);
 
-		const { tokens } = await codeToTokens(code, {
-			lang: language as keyof typeof bundledLanguages,
-			themes: {
-				light: "github-dark",
-				dark: "github-dark",
-			},
-		});
+      if (!(language in bundledLanguages)) {
+        return;
+      }
 
-		return (
-			<pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-				<code className="whitespace-pre-wrap">
-					{tokens.map((line, lineIndex) => (
-						<span
-							key={`line-${
-								// biome-ignore lint/suspicious/noArrayIndexKey: Needed for react key
-								lineIndex
-							}`}
-						>
-							{line.map((token, tokenIndex) => {
-								const style =
-									typeof token.htmlStyle === "string"
-										? undefined
-										: token.htmlStyle;
+      const { tokens } = await codeToTokens(code, {
+        lang: language as keyof typeof bundledLanguages,
+        themes: {
+          light: "github-dark",
+          dark: "github-dark",
+        },
+      });
 
-								return (
-									<span
-										key={`token-${
-											// biome-ignore lint/suspicious/noArrayIndexKey: Needed for react key
-											tokenIndex
-										}`}
-										style={style}
-									>
-										{token.content}
-									</span>
-								);
-							})}
-							{lineIndex !== tokens.length - 1 && "\n"}
-						</span>
-					))}
-				</code>
-			</pre>
-		);
-	},
-);
+      setContent(
+        <pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
+          <code className="whitespace-pre-wrap">
+            {tokens.map((line, lineIndex) => (
+              <span key={`line-${lineIndex}`}>
+                {line.map((token, tokenIndex) => {
+                  const style = typeof token.htmlStyle === "string" ? undefined : token.htmlStyle;
+                  return (
+                    <span key={`token-${tokenIndex}`} style={style}>
+                      {token.content}
+                    </span>
+                  );
+                })}
+                {lineIndex !== tokens.length - 1 && "\n"}
+              </span>
+            ))}
+          </code>
+        </pre>
+      );
+    };
+
+    renderHighlightedCode();
+  }, [children, className, language, props]);
+
+  return content;
+};
+
+// Update HighlightedPre to use the new component
+const HighlightedPre = memo(({ children, className, language, ...props }: HighlightedPreProps) => {
+  return (
+    <Suspense
+      fallback={
+        <pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
+          <code className="whitespace-pre-wrap">{children}</code>
+        </pre>
+      }
+    >
+      <AsyncHighlightedPre language={language} className={className} {...props}>
+        {children}
+      </AsyncHighlightedPre>
+    </Suspense>
+  );
+});
 
 HighlightedPre.displayName = "HighlightedPre";
 

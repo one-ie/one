@@ -164,6 +164,11 @@
   animation: orbit calc(var(--duration)*1s) linear infinite;
 }
 
+/* Custom bg-muted utility */
+@utility bg-muted {
+  background-color: hsl(var(--muted));
+}
+
 /* Base styles */
 @layer base {
   * {

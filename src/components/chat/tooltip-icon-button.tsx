@@ -7,10 +7,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import type { ButtonProps } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export type TooltipIconButtonProps = ButtonProps & {
+export type TooltipIconButtonProps = React.ComponentProps<"button"> & {
   tooltip: string;
   side?: "top" | "bottom" | "left" | "right";
 };

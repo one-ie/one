@@ -55,7 +55,7 @@ graph TD
 ### 1. Base Configuration
 ```typescript
 // Default chat configuration in Layout.astro
-const defaultChatConfig = ChatConfigSchema.parse({
+const defaultChatConfig = ChatSchema.parse({
   provider: 'mistral',
   model: 'mistral-large-latest',
   systemPrompt: [{
