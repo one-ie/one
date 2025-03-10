@@ -48,7 +48,7 @@
   
   /* Border colors - Extremely subtle */
   --one-border: hsla(0, 0%, 100%, 0.03);      /* 3% opacity white border */
-  --one-border-nav: hsla(0, 0%, 100%, 0.04);  /* 4% opacity for nav */
+  --one-border-nav: hsla(0, 0%, 100%, 0.02);  /* 2% opacity for nav */
   
   /* Input elements */
   --one-input: hsl(220 7% 15%);
@@ -85,9 +85,12 @@
   --radius: var(--one-radius-md);
   
   /* Layout dimensions */
-  --sidebar-width: 64px;
-  --main-content-ratio: calc((100% - var(--sidebar-width)) * 0.67);
-  --right-panel-ratio: calc((100% - var(--sidebar-width)) * 0.33);
+  --one-sidebar-width: 64px;
+  --one-panel-quarter-width: 350px;
+  --one-panel-half-width: 50%;
+  --one-panel-full-width: 100%;
+  --one-panel-floating-width: 400px;
+  --one-panel-floating-height: 600px;
 
   /* Set Tailwind compatibility vars */
   --background: var(--one-background-main);
@@ -109,6 +112,11 @@
   --border: var(--one-border);
   --input: var(--one-input);
   --ring: var(--one-ring);
+
+  /* Z-index layers */
+  --one-z-sidebar: 40;
+  --one-z-center: 10;
+  --one-z-panel: 9999;
 }
 
 /* ========== THEME VARIANTS ========== */
@@ -539,7 +547,7 @@
   display: grid;
   min-height: 100vh;
   position: relative;
-  z-index: 10;
+  z-index: var(--one-z-center);
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -547,11 +555,11 @@
 
 .main-grid[data-panel-mode="Quarter"] {
   /* Ensure main content takes remaining space while panel maintains minimum width */
-  grid-template-columns: minmax(0, calc(100% - 350px));
+  grid-template-columns: minmax(0, calc(100% - var(--one-panel-quarter-width)));
 }
 
 .main-grid[data-panel-mode="Half"] {
-  grid-template-columns: minmax(0, 50%);
+  grid-template-columns: minmax(0, var(--one-panel-half-width));
 }
 
 .main-grid[data-panel-mode="Full"] {
@@ -570,38 +578,87 @@
 
 .center-grid {
   position: relative;
-  z-index: 10;
+  z-index: var(--one-z-center);
   width: 100%;
   max-width: 100%;
   margin-right: 0;
   overflow: hidden;
-  border-right: 1px solid hsla(0, 0%, 100%, 0.005);
-  background-color: hsla(var(--one-background-main) / 0.98);
-  backdrop-filter: blur(8px);
+  border-right: 1px solid var(--one-border);
+  background-color: var(--one-background-main);
 }
 
 @media (min-width: 640px) {
   .main-grid:not([data-panel-mode="Full"]) .center-grid {
-    padding-left: 64px;
+    padding-left: var(--one-sidebar-width);
   }
 }
 
+/* Right Panel Styles */
 .right-panel {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: 9999;
-  background-color: hsla(220, 7%, 8%, 0.98);
-  border-left: 1px solid hsla(0, 0%, 100%, 0.005);
+  z-index: var(--one-z-panel);
+  background-color: var(--one-background-nav);
+  border-left: 1px solid var(--one-border);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.01);
 }
 
 .transitions-enabled .right-panel {
   transition: all 0.3s ease;
+}
+
+/* Panel Mode Styles */
+.right-panel[data-mode="quarter"] {
+  width: var(--one-panel-quarter-width);
+  min-width: 320px;
+}
+
+.right-panel[data-mode="half"] {
+  width: var(--one-panel-half-width);
+}
+
+.right-panel[data-mode="full"] {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  inset: 0;
+  border: none;
+}
+
+.right-panel[data-mode="floating"] {
+  width: var(--one-panel-floating-width);
+  height: var(--one-panel-floating-height);
+  top: 50%;
+  right: 20px;
+  bottom: auto;
+  transform: translateY(-50%);
+  border-radius: 12px;
+  border: 1px solid var(--one-border);
+}
+
+.right-panel[data-mode="icon"] {
+  width: 48px;
+  height: 48px;
+  top: auto;
+  bottom: 20px;
+  right: 20px;
+  border: none;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: var(--one-primary);
+}
+
+@media (max-width: 768px) {
+  .right-panel[data-mode="floating"] {
+    width: calc(100% - 40px);
+    height: calc(100% - 120px);
+  }
 }
 
 /* ========== ANIMATION KEYFRAMES ========== */
@@ -736,4 +793,11 @@
     --one-duration-normal: 0s;
     --one-duration-slow: 0s;
   }
+}
+
+/* Layout System */
+body {
+  min-height: 100vh;
+  background-color: var(--one-background-main);
+  color: var(--one-foreground);
 }

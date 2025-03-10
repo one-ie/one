@@ -118,13 +118,9 @@ const Right: React.FC<RightPanelProps> = (props) => {
   const styles = PanelMode[layout.mode].right;
   
   return (
-    <aside
+    <div
       className={`right-panel layout-transition ${layout.mode === 'Floating' ? 'floating' : ''}`}
-      data-mode={layout.mode}
-      style={{
-        ...styles,
-        overflow: 'hidden'
-      }}
+      data-mode={layout.mode.toLowerCase()}
     >
       {isIcon ? (
         <button 
@@ -226,7 +222,7 @@ const Right: React.FC<RightPanelProps> = (props) => {
           </main>
         </div>
       )}
-    </aside>
+    </div>
   );
 };
 
