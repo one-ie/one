@@ -3,10 +3,10 @@ import Layout from "../layouts/Layout.astro";
 import { ChatConfigSchema } from "../schema/chat";
 import { GitSection } from "@/components/GitSection";
 import { Chart } from "@/components/ChartClones";
-import FaqAccordion from "../components/FaqAccordion";
-import Circles from "../components/Circles.astro";
-import Features2 from "../components/Features2.astro";
-import MeetYourTeam from "../components/MeetYourTeam.astro";
+import FaqAccordion from "@/components/FaqAccordion";
+import Circles from "@/components/Circles.astro";
+import Features2 from "@/components/Features2.astro";
+import MeetYourTeam from "@/components/MeetYourTeam.astro";
 
 const faqs = [
   // Core Features
@@ -169,6 +169,7 @@ Communication Style:
       </div>
     </section>
 
+    <Circles>
     
     <section class="container mx-auto px-6 py-8 border-b border-border bg-background/30 backdrop-blur-sm">
       <div class="w-full max-w-[800px] mx-auto text-center">

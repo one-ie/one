@@ -1,14 +1,5 @@
 import { z } from 'zod';
 
-// Default values
-const DEFAULT_CONFIG = {
-  mode: 'split' as const,
-  provider: 'openai',
-  model: 'gpt-4',
-  apiEndpoint: 'https://n8n.agentc.app/webhook/chat',
-  theme: 'system' as const
-} as const;
-
 // Chat mode and size types
 export type ChatMode = 'split' | 'icon' | 'floating' | 'fullscreen' | 'embedded';
 export type ChatSize = 'full' | 'half' | 'third' | 'quarter';

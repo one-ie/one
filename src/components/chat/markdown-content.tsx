@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { marked } from "marked";
 import * as React from "react";
-import { Suspense, isValidElement, memo, useMemo, useState, useEffect } from "react";
+import { Suspense, isValidElement, memo, useMemo} from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
