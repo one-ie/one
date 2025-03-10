@@ -1,4 +1,5 @@
 ---
+/// <reference types="astro/client" />
 import "../styles/global.css";
 import "../styles/one.css";
 import ThemeInit from "../components/Theme.astro";
@@ -9,22 +10,16 @@ import Right from "../components/Right";
 import { ChatConfigSchema } from "../schema/chat";
 import type { RightPanelProps } from "../components/Right";
 
-// Define Astro-specific client directive types
-type AstroBuiltinAttributes = {
-  "client:load"?: boolean;
-  "client:idle"?: boolean;
-  "client:visible"?: boolean;
-  "client:media"?: string;
-  "client:only"?: string;
-};
-
-interface Props extends RightPanelProps {
+interface Props {
   title: string;
   description?: string;
   children: any;
   header?: boolean;
   footer?: boolean;
   initialPanelMode?: "Quarter" | "Half" | "Full" | "Floating" | "Icon";
+  chatConfig?: any;
+  rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
+  content?: string;
 }
 
 const {
