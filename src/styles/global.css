@@ -12,15 +12,15 @@
 :root {
   /* Core colors */
   --one-black: hsl(0 0% 0%);        /* #000000 */
-  --one-dark: hsl(0 0% 8%);         /* #141414 - Slightly lighter sidebar */
-  --one-background: hsl(0 0% 13%);  /* #222222 - Main background */
+  --one-dark: hsl(0 0% 10%);        /* #1A1A1A - Slightly lighter sidebar */
+  --one-background: hsl(0 0% 11%);  /* #1C1C1C - Slightly darker background */
   --one-white: hsl(0 0% 100%);      /* #FFFFFF */
   
   /* Semantic mappings - Dark Theme (Default) */
   --one-background-main: var(--one-background);  /* Main content */
   --one-background-nav: var(--one-dark);         /* Sidebar/header */
   --one-background-logo: var(--one-black);       /* Logo area */
-  --one-background-card: hsl(0 0% 16%);          /* Cards - slightly lighter than background */
+  --one-background-card: hsl(0 0% 14%);          /* Cards - slightly lighter than background */
   
   /* Text colors */
   --one-foreground: var(--one-white);
@@ -594,13 +594,21 @@
 }
 
 /* Right Panel Styles */
+.right-panel, 
+.right-panel[data-mode="quarter"],
+.right-panel[data-mode="half"],
+.right-panel[data-mode="full"],
+.right-panel[data-mode="floating"],
+.right-panel[data-mode="icon"] {
+  background-color: var(--one-background-nav);
+}
+
 .right-panel {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   z-index: var(--one-z-panel);
-  background-color: var(--one-background-nav);
   border-left: 1px solid var(--one-border);
   display: flex;
   flex-direction: column;
@@ -659,6 +667,11 @@
     width: calc(100% - 40px);
     height: calc(100% - 120px);
   }
+}
+
+/* Right Panel Styles */
+.right-panel-bg {
+  background-color: var(--one-background-nav);
 }
 
 /* ========== ANIMATION KEYFRAMES ========== */

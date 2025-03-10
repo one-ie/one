@@ -28,8 +28,8 @@ export const PanelMode = {
       zIndex: 1000,
       borderRadius: '16px',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-      border: '1px solid var(--border)',
-      background: 'var(--background)',
+      border: '1px solid var(--one-border)',
+      background: 'var(--one-background-nav)',
       '@media (max-width: 768px)': {
         width: 'calc(100% - 40px)',
         height: 'calc(100% - 120px)'
@@ -41,8 +41,8 @@ export const PanelMode = {
     right: {
       width: '25%',
       minWidth: '320px',
-      background: 'var(--background)',
-      borderLeft: '1px solid var(--border)',
+      background: 'var(--one-background-nav)',
+      borderLeft: '1px solid var(--one-border)',
       height: '100%',
       position: 'fixed',
       top: 0,
@@ -55,8 +55,8 @@ export const PanelMode = {
     main: { width: '50%' },
     right: {
       width: '50%',
-      background: 'var(--background)',
-      borderLeft: '1px solid var(--border)',
+      background: 'var(--one-background-nav)',
+      borderLeft: '1px solid var(--one-border)',
       height: '100%',
       position: 'fixed',
       top: 0,
@@ -73,7 +73,7 @@ export const PanelMode = {
     },
     right: { 
       width: '100%',
-      background: 'var(--background)',
+      background: 'var(--one-background-nav)',
       height: '100%',
       position: 'fixed',
       top: 0,

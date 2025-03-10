@@ -115,11 +115,10 @@ const Right: React.FC<RightPanelProps> = (props) => {
   if (!layout.isVisible || !mounted) return null;
 
   const isIcon = layout.mode === "Icon";
-  const styles = PanelMode[layout.mode].right;
   
   return (
     <div
-      className={`right-panel layout-transition ${layout.mode === 'Floating' ? 'floating' : ''}`}
+      className={`right-panel right-panel-bg layout-transition ${layout.mode === 'Floating' ? 'floating' : ''}`}
       data-mode={layout.mode.toLowerCase()}
     >
       {isIcon ? (
@@ -133,8 +132,10 @@ const Right: React.FC<RightPanelProps> = (props) => {
           AI
         </button>
       ) : (
-        <div className="h-full flex flex-col">
-          <header className="flex-none px-2 h-[65px] border-b border-l flex items-center relative">
+        <div className="h-full flex flex-col right-panel-bg">
+          <header 
+            className="flex-none px-2 h-[65px] border-b border-l flex items-center relative right-panel-bg"
+          >
             <div className="flex items-center w-full">
               <div className="flex items-center gap-1">
                 {layout.mode !== 'Full' && (
@@ -186,11 +187,13 @@ const Right: React.FC<RightPanelProps> = (props) => {
               </div>
             </div>
           </header>
-          <main className="flex-1 overflow-y-auto overflow-x-hidden mx-auto w-full max-w-[850px]">
-            <div className="h-full">
-              <div className="flex-1 flex flex-col h-full">
+          <main 
+            className="flex-1 overflow-y-auto overflow-x-hidden mx-auto w-full max-w-[850px] right-panel-bg"
+          >
+            <div className="h-full right-panel-bg">
+              <div className="flex-1 flex flex-col h-full right-panel-bg">
                 <ChatMessageArea scrollButtonAlignment="center">
-                  <div className="max-w-2xl mx-auto w-full px-4 py-8 space-y-4">
+                  <div className="max-w-2xl mx-auto w-full px-4 py-8 space-y-4 right-panel-bg">
                     {messages.map((message) => (
                       <ChatMessage 
                         key={message.id} 
@@ -205,7 +208,7 @@ const Right: React.FC<RightPanelProps> = (props) => {
                   </div>
                 </ChatMessageArea>
                 
-                <div className="px-2 py-4 max-w-2xl mx-auto w-full">
+                <div className="px-2 py-4 max-w-2xl mx-auto w-full right-panel-bg">
                   <ChatInput
                     value={input}
                     onChange={handleInputChange}

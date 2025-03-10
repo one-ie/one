@@ -35,7 +35,7 @@ const currentPath = Astro.url.pathname;
     >
       <a
         href="/"
-        class="w-[var(--one-sidebar-width)] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,12%,0.5)] transition-colors duration-200"
+        class="w-[var(--one-sidebar-width)] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,14%,0.5)] transition-colors duration-200"
       >
         <div class="w-8 h-8">
           <img src="/icon.svg" alt="ONE Logo" class="w-full h-full" />
@@ -51,8 +51,8 @@ const currentPath = Astro.url.pathname;
             href={path}
             class:list={[
               "w-[var(--one-sidebar-width)] h-16 flex items-center justify-center transition-colors duration-200 group relative",
-              "hover:bg-[hsla(0,0%,12%,0.5)]",
-              { "bg-[hsla(0,0%,12%,0.7)]": currentPath === path },
+              "hover:bg-[hsla(0,0%,14%,0.5)]",
+              { "bg-[hsla(0,0%,14%,0.7)]": currentPath === path },
             ]}
             data-tooltip={title}
             aria-label={title}
@@ -74,7 +74,7 @@ const currentPath = Astro.url.pathname;
     >
       <button
         id="theme-toggle"
-        class="w-[var(--one-sidebar-width)] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,12%,0.5)] transition-colors duration-200"
+        class="w-[var(--one-sidebar-width)] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,14%,0.5)] transition-colors duration-200"
         aria-label="Toggle theme"
       >
         <div class="w-10 h-10 flex items-center justify-center">

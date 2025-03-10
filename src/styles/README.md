@@ -24,8 +24,8 @@ The color system is based on HSL values for maximum flexibility:
 
 ```css
 --one-black: hsl(0 0% 0%);        /* Pure black */
---one-dark: hsl(0 0% 8%);         /* #141414 - Slightly lighter sidebar */
---one-background: hsl(0 0% 13%);  /* #222222 - Main background */
+--one-dark: hsl(0 0% 10%);        /* #1A1A1A - Slightly lighter sidebar */
+--one-background: hsl(0 0% 11%);  /* #1C1C1C - Slightly darker background */
 --one-white: hsl(0 0% 100%);      /* Pure white */
 ```
 
@@ -37,7 +37,7 @@ Colors are mapped to semantic roles:
 --one-background-main: var(--one-background);  /* Main content */
 --one-background-nav: var(--one-dark);         /* Sidebar/header */
 --one-background-logo: var(--one-black);       /* Logo area */
---one-background-card: hsl(0 0% 16%);          /* Cards - slightly lighter than background */
+--one-background-card: hsl(0 0% 14%);          /* Cards - slightly lighter than background */
 ```
 
 ### Border System

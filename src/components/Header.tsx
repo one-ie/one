@@ -4,7 +4,7 @@ import { Download } from 'lucide-react';
 
 export default function Header() {
   return (
-    <header className="flex h-[65px] items-center justify-between border-b border-[var(--one-border)] bg-[var(--one-background-nav)] px-4 sm:bg-[var(--one-background-nav)] backdrop-blur">
+    <header className="flex h-[65px] items-center justify-between border-b border-[var(--one-border)] bg-[var(--one-background-main)] px-4 sm:bg-[var(--one-background-main)]">
       {/* Mobile Menu Button */}
       <div className="sm:hidden">
         <a
