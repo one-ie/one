@@ -25,7 +25,7 @@ const CopyButton = ({ code }: { code: string }) => {
   return (
     <button
       onClick={handleCopy}
-      className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-gray-700 hover:bg-gray-600 text-white transition-colors flex items-center justify-center"
+      className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-gray-700 hover:bg-gray-600 text-white transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible"
       aria-label="Copy code"
     >
       {copied ? (
@@ -49,7 +49,7 @@ const CopyButton = ({ code }: { code: string }) => {
 
 export const CodeHighlighter = ({ language, children }: CodeProps) => {
   return (
-    <div className="relative">
+    <div className="relative group">
       <SyntaxHighlighter
         language={language}
         style={coldarkDark}
@@ -58,7 +58,7 @@ export const CodeHighlighter = ({ language, children }: CodeProps) => {
           width: "100%",
           background: "transparent",
           padding: "1.5rem 1rem",
-          paddingBottom: "3.5rem",
+          paddingBottom: "2rem",
           fontSize: "0.875rem", // 14px
           lineHeight: "1.5", // For better readability
         }}

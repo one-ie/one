@@ -24,7 +24,7 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
         {
           id: "1",
           role: "user",
-          content: "Hi! I need help organizing my project management workflow. Can you guide me through some best practices?"
+          content: "Hi! I need help writing code. Can you help me?"
         }
       ]
     });
