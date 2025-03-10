@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import "../styles/one.css";
 import ThemeInit from "@/components/Theme.astro";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -163,7 +162,7 @@ const chatConfig = providedConfig || defaultChatConfig;
         bottom: 0;
         z-index: 9999;
         background-color: hsl(var(--background));
-        border-left: 1px solid hsl(var(--border));
+        border-left: 1px solid hsla(0, 0%, 100%, 0.05);
         display: flex;
         flex-direction: column;
         overflow-y: auto;

@@ -1,6 +1,7 @@
 ---
 description: Content Management and MDX Guidelines
 globs: src/content/**/*.{md,mdx}
+alwaysApply: false
 ---
 
 # Content Management and MDX Guidelines
@@ -109,7 +110,7 @@ const Example = () => {
 
 ### Example
 ```markdown
-![Dashboard overview with key metrics](../../public/images/dashboard.png)
+![Dashboard overview with key metrics](mdc:../../public/images/dashboard.png)
 ```
 
 ## Chat Configuration

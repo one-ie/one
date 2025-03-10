@@ -1,5 +1,5 @@
 ---
-// Theme.astro - Minimal Duotone Theme Initialization
+// Theme.astro - Theme Initialization Component
 // @ts-nocheck - Astro directives are not recognized by TypeScript
 ---
 
@@ -11,15 +11,31 @@
         return stored;
       }
     }
-    // Default to our minimal duotone theme
+    
+    // Check for system preference
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    
+    // Default to dark theme to match the image
     return 'dark';
   }
   
   function setTheme(theme) {
     const root = document.documentElement;
+    
+    // Remove all theme classes
     root.classList.remove('light', 'dark', 'high-contrast');
-    root.classList.add(theme);
+    
+    // Add the selected theme class (except for light which is the default)
+    if (theme !== 'light') {
+      root.classList.add(theme);
+    }
+    
+    // Set data-theme attribute for CSS selectors
     root.setAttribute('data-theme', theme);
+    
+    // Store in localStorage
     localStorage.setItem('theme', theme);
 
     // Dispatch event for React components
@@ -40,6 +56,25 @@
   // Expose theme functions to window
   window.setTheme = setTheme;
   window.getThemePreference = getThemePreference;
+  
+  // Cycle to the next theme
+  window.cycleTheme = function() {
+    const currentTheme = getThemePreference();
+    
+    switch (currentTheme) {
+      case 'light':
+        setTheme('dark');
+        break;
+      case 'dark':
+        setTheme('high-contrast');
+        break;
+      case 'high-contrast':
+        setTheme('light');
+        break;
+      default:
+        setTheme('dark');
+    }
+  };
 
   // Listen for theme changes from React components
   document.addEventListener('set-theme', (e) => {
@@ -55,11 +90,15 @@
     color-scheme: dark;
   }
 
-  :root[data-theme="light"] {
+  :root.light, :root[data-theme="light"] {
     color-scheme: light;
   }
 
-  :root[data-theme="high-contrast"] {
+  :root.dark, :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  :root.high-contrast, :root[data-theme="high-contrast"] {
     color-scheme: dark;
   }
 </style>

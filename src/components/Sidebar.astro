@@ -1,20 +1,21 @@
 ---
 import {
   Newspaper,
-  Headphones,
   Download,
   BookText,
   Shield,
   LayoutGrid,
-  CreditCard
+  CreditCard,
+  FileText,
+  Home
 } from "lucide-react";
 
 // Default navigation items
 const defaultNavigation = [
+  { title: "Home", path: "/chat", icon: Home },
   { title: "Blog", path: "/blog", icon: Newspaper },
-  { title: "Podcast", path: "/podcast", icon: Headphones },
-  { title: "Prompts", path: "/prompts", icon: BookText },
   { title: "Docs", path: "/docs", icon: BookText },
+  { title: "Prompts", path: "/prompts", icon: FileText },
   { title: "Pages", path: "/pages", icon: LayoutGrid },
   { title: "Payments", path: "/payments", icon: CreditCard },
   { title: "Download", path: "/download", icon: Download },
@@ -25,16 +26,16 @@ const currentPath = Astro.url.pathname;
 ---
 
 <aside
-  class="hidden sm:flex fixed left-0 top-0 h-screen z-40 w-[64px] shrink-0 bg-[hsl(var(--one-background-nav))] border-r border-[hsl(var(--one-border-nav))] transition-all duration-300 ease-in-out"
+  class="hidden sm:flex fixed left-0 top-0 h-screen z-40 w-[64px] shrink-0 bg-black border-r border-[hsla(0,0%,100%,0.05)] transition-all duration-300 ease-in-out"
 >
-  <nav class="h-full flex flex-col bg-[hsl(var(--one-background-nav))]">
+  <nav class="h-full flex flex-col bg-black">
     <!-- Logo Section -->
     <div
-      class="flex items-center justify-center bg-[hsl(var(--one-background-logo))]"
+      class="flex items-center justify-center bg-black"
     >
       <a
         href="/"
-        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsl(var(--one-background-nav))] transition-colors duration-200"
+        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,10%,0.3)] transition-colors duration-200"
       >
         <div class="w-8 h-8">
           <img src="/icon.svg" alt="ONE Logo" class="w-full h-full" />
@@ -50,15 +51,15 @@ const currentPath = Astro.url.pathname;
             href={path}
             class:list={[
               "w-[64px] h-16 flex items-center justify-center transition-colors duration-200 group relative",
-              "hover:bg-[hsl(var(--one-background-logo))]",
-              { "bg-[hsl(var(--one-background-logo))]": currentPath === path },
+              "hover:bg-[hsla(0,0%,10%,0.3)]",
+              { "bg-[hsla(0,0%,10%,0.5)]": currentPath === path },
             ]}
             data-tooltip={title}
             aria-label={title}
           >
             <div class="w-5 h-5 flex items-center justify-center">
               <Icon
-                className="w-full h-full text-foreground/70 group-hover:text-foreground/90 transition-colors"
+                className="w-full h-full text-foreground/60 group-hover:text-foreground/90 transition-colors"
                 strokeWidth={1.25}
               />
             </div>
@@ -69,16 +70,17 @@ const currentPath = Astro.url.pathname;
 
     <!-- Theme Toggle -->
     <div
-      class="flex items-center justify-center bg-[hsl(var(--one-background-logo))]"
+      class="flex items-center justify-center bg-black"
     >
       <button
         id="theme-toggle"
-        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsl(var(--one-background-nav))] transition-colors duration-200"
+        class="w-[64px] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,10%,0.3)] transition-colors duration-200"
         aria-label="Toggle theme"
       >
         <div class="w-10 h-10 flex items-center justify-center">
+          <!-- Light theme icon (sun) -->
           <svg
-            class="w-5 h-5 text-foreground dark:hidden"
+            class="w-5 h-5 text-foreground/60 dark:hidden high-contrast:hidden"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -91,8 +93,9 @@ const currentPath = Astro.url.pathname;
               d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
             ></path>
           </svg>
+          <!-- Dark theme icon (moon) -->
           <svg
-            class="w-5 h-5 text-foreground hidden dark:block"
+            class="w-5 h-5 text-foreground/60 hidden dark:block high-contrast:hidden"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -103,6 +106,21 @@ const currentPath = Astro.url.pathname;
               stroke-linejoin="round"
               stroke-width="1.5"
               d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            ></path>
+          </svg>
+          <!-- High contrast icon -->
+          <svg
+            class="w-5 h-5 text-foreground/60 hidden high-contrast:block"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
             ></path>
           </svg>
         </div>
@@ -122,17 +140,19 @@ const currentPath = Astro.url.pathname;
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
-    background: hsl(var(--one-background-logo));
-    color: hsl(var(--foreground));
+    background: hsla(220, 7%, 10%, 0.95);
+    color: hsl(var(--one-foreground));
     padding: 0.5rem 0.75rem;
     border-radius: 0.375rem;
     font-size: 0.875rem;
     white-space: nowrap;
     z-index: 50;
     margin-left: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     opacity: 0;
     animation: tooltip 0.2s ease-out forwards;
+    border: 1px solid hsla(0, 0%, 100%, 0.05);
+    backdrop-filter: blur(8px);
   }
 
   @keyframes tooltip {
@@ -150,9 +170,10 @@ const currentPath = Astro.url.pathname;
 <script>
   const themeToggle = document.getElementById("theme-toggle");
 
+  // Use the global theme cycle function
   themeToggle?.addEventListener("click", () => {
-    const isDark = document.documentElement.classList.contains("dark");
-    document.documentElement.classList.toggle("dark", !isDark);
-    localStorage.setItem("theme", isDark ? "light" : "dark");
+    if (window.cycleTheme) {
+      window.cycleTheme();
+    }
   });
 </script>
