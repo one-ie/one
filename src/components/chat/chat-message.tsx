@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import { MarkdownContent } from "@/components/chat/markdown-content";
 import { type VariantProps, cva } from "class-variance-authority";
-import { SparklesIcon, UserIcon } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import React, { type ReactNode } from "react";
 
-const chatMessageVariants = cva("flex gap-4 w-full", {
+const chatMessageVariants = cva("flex gap-4 w-full group transition-all duration-200", {
 	variants: {
 		variant: {
 			default: "",
@@ -85,12 +85,12 @@ ChatMessage.displayName = "ChatMessage";
 // Avatar component
 
 const chatMessageAvatarVariants = cva(
-	"w-8 h-8 flex items-center rounded-full justify-center ring-1 shrink-0 bg-transparent overflow-hidden",
+	"w-10 h-10 flex items-center rounded-full justify-center ring-2 shrink-0 bg-transparent overflow-hidden shadow-sm transition-all duration-300 group-hover:shadow-md",
 	{
 		variants: {
 			type: {
-				incoming: "ring-border",
-				outgoing: "ring-muted-foreground/30",
+				incoming: "ring-primary/20 group-hover:ring-primary/30",
+				outgoing: "ring-muted-foreground/30 group-hover:ring-muted-foreground/40",
 			},
 		},
 		defaultVariants: {
@@ -110,8 +110,8 @@ const ChatMessageAvatar = React.forwardRef<
 >(({ className, icon: iconProps, imageSrc, ...props }, ref) => {
 	const context = useChatMessage();
 	const type = context?.type ?? "incoming";
-	const icon =
-		iconProps ?? (type === "incoming" ? <SparklesIcon /> : <UserIcon />);
+	const icon = iconProps ?? <UserIcon className="text-muted-foreground" />;
+	
 	return (
 		<div
 			ref={ref}
@@ -122,10 +122,10 @@ const ChatMessageAvatar = React.forwardRef<
 				<img
 					src={imageSrc}
 					alt="Avatar"
-					className="h-full w-full object-cover"
+					className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 				/>
 			) : (
-				<div className="translate-y-px [&_svg]:size-4 [&_svg]:shrink-0">
+				<div className="translate-y-px [&_svg]:size-5 [&_svg]:shrink-0 transition-all duration-300 group-hover:scale-110">
 					{icon}
 				</div>
 			)}
@@ -136,11 +136,11 @@ ChatMessageAvatar.displayName = "ChatMessageAvatar";
 
 // Content component
 
-const chatMessageContentVariants = cva("flex flex-col gap-2", {
+const chatMessageContentVariants = cva("flex flex-col gap-2 transition-all duration-200", {
 	variants: {
 		variant: {
 			default: "",
-			bubble: "rounded-xl px-3 py-2",
+			bubble: "px-4 py-3",
 			full: "",
 		},
 		type: {
@@ -152,12 +152,12 @@ const chatMessageContentVariants = cva("flex flex-col gap-2", {
 		{
 			variant: "bubble",
 			type: "incoming",
-			className: "bg-secondary text-secondary-foreground",
+			className: "text-foreground",
 		},
 		{
 			variant: "bubble",
 			type: "outgoing",
-			className: "bg-primary text-primary-foreground",
+			className: "bg-primary text-primary-foreground rounded-xl rounded-br-none shadow-sm group-hover:shadow-md",
 		},
 	],
 	defaultVariants: {
@@ -184,14 +184,53 @@ const ChatMessageContent = React.forwardRef<
 	return (
 		<div
 			ref={ref}
-			className={cn(chatMessageContentVariants({ variant, type, className }))}
+			className={cn(
+				chatMessageContentVariants({ variant, type, className }),
+				type === "incoming" ? "" : "group-hover:translate-x-[-0.125rem]",
+				"transition-transform duration-300"
+			)}
 			{...props}
 		>
-			{content.length > 0 && <MarkdownContent id={id} content={content} />}
+			{content.length > 0 && (
+				<MarkdownContent 
+					id={id} 
+					content={content} 
+					className={cn(
+						"prose-headings:font-semibold prose-p:leading-relaxed",
+						type === "incoming" ? "prose-a:text-primary" : "prose-a:text-primary-foreground/90",
+						"prose-code:bg-muted/50 prose-code:p-0.5 prose-code:rounded"
+					)}
+				/>
+			)}
 			{children}
 		</div>
 	);
 });
 ChatMessageContent.displayName = "ChatMessageContent";
 
-export { ChatMessage, ChatMessageAvatar, ChatMessageContent };
+// Typing indicator component
+interface ChatMessageTypingProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const ChatMessageTyping = React.forwardRef<HTMLDivElement, ChatMessageTypingProps>(
+	({ className, ...props }, ref) => {
+		return (
+			<ChatMessage id="typing-indicator">
+				<div 
+					ref={ref}
+					className={cn(
+						"flex items-center gap-1.5 px-4 py-3 ml-4",
+						className
+					)}
+					{...props}
+				>
+					<div className="w-2 h-2 rounded-full bg-primary/40 animate-bounce [animation-delay:-0.3s]"></div>
+					<div className="w-2 h-2 rounded-full bg-primary/40 animate-bounce [animation-delay:-0.15s]"></div>
+					<div className="w-2 h-2 rounded-full bg-primary/40 animate-bounce"></div>
+				</div>
+			</ChatMessage>
+		);
+	}
+);
+ChatMessageTyping.displayName = "ChatMessageTyping";
+
+export { ChatMessage, ChatMessageAvatar, ChatMessageContent, ChatMessageTyping };

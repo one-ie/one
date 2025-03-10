@@ -149,6 +149,43 @@
   }
 }
 
+/* Chat UI Animations */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes typing {
+  0% { width: 0 }
+  30% { width: 3em }
+  60% { width: 6em }
+  100% { width: 0 }
+}
+
+@keyframes blink {
+  50% { opacity: 0 }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 hsla(var(--primary) / 0.2);
+  }
+  50% { 
+    box-shadow: 0 0 10px 3px hsla(var(--primary) / 0.4);
+  }
+}
+
+@keyframes subtle-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
 @keyframes orbit {
   from {
     transform: rotate(calc(var(--start-angle) * 1deg)) translateY(calc(var(--radius) * 1px)) rotate(calc(var(--start-angle) * -1deg));
@@ -162,6 +199,31 @@
 @utility animate-orbit {
   position: absolute;
   animation: orbit calc(var(--duration)*1s) linear infinite;
+}
+
+/* Chat UI Animation Utilities */
+@utility animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+@utility animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+@utility animate-typing {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid currentColor;
+  animation: typing 3s steps(40) infinite, blink 1s step-end infinite;
+}
+
+@utility animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@utility animate-subtle-bounce {
+  animation: subtle-bounce 2s ease-in-out infinite;
 }
 
 /* Custom bg-muted utility */
@@ -209,4 +271,38 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Chat UI Specific Styles */
+.chat-message-bubble {
+  position: relative;
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.chat-message-bubble:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.chat-message-bubble.outgoing {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-bottom-right-radius: 0;
+}
+
+.chat-message-bubble.incoming {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
+  border-bottom-left-radius: 0;
+}
+
+.chat-input-container {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.chat-input-container:focus-within {
+  transform: translateY(-2px);
 }

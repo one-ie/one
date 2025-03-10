@@ -53,18 +53,18 @@ export function ChatMessageArea({
 }: ChatMessageAreaProps) {
 	const [containerRef, showScrollButton, scrollToBottom] =
 		useScrollToBottom<HTMLDivElement>({
-			threshold: 150,
-			behavior: "smooth",
-			debounce: 100,
+			threshold: 150, // Increased threshold for better user experience
+			behavior: "smooth", // Always use smooth scrolling
+			debounce: 100, // Add debounce for better performance
 		});
 
 	return (
-		<ScrollArea className="h-full w-full relative">
+		<ScrollArea className="flex-1 relative">
 			<div 
 				ref={containerRef}
-				className="min-h-full w-full transition-all duration-300"
+				className="min-h-full transition-all duration-300"
 			>
-				<div className={cn("min-h-full w-full", className)}>{children}</div>
+				<div className={cn(className, "min-h-0")}>{children}</div>
 			</div>
 			{showScrollButton && (
 				<ScrollButton
@@ -77,4 +77,4 @@ export function ChatMessageArea({
 	);
 }
 
-ChatMessageArea.displayName = "ChatMessageArea";
+ChatMessageArea.displayName = "ChatMessageArea"; 

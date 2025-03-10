@@ -8,16 +8,27 @@ import {
 	useState,
 } from "react";
 
-export function useScrollToBottom<T extends HTMLElement>(): [
-	RefObject<T>,
-	boolean,
-	() => void,
-] {
+interface ScrollOptions {
+	threshold?: number;
+	behavior?: ScrollBehavior;
+	debounce?: number;
+}
+
+export function useScrollToBottom<T extends HTMLElement>(
+	options: ScrollOptions = {}
+): [RefObject<T>, boolean, () => void] {
+	const {
+		threshold = 100,
+		behavior = "smooth",
+		debounce = 50
+	} = options;
+	
 	const containerRef = useRef<T>(null);
 	const [showScrollButton, setShowScrollButton] = useState(false);
 	const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
 	const isUserScrolling = useRef(false);
 	const isGrowing = useRef(false);
+	const debounceTimeout = useRef<number | null>(null);
 
 	const getViewport = useCallback((element: HTMLElement | null) => {
 		return element?.closest("[data-radix-scroll-area-viewport]") as HTMLElement;
@@ -25,22 +36,29 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 
 	const isAtBottom = useCallback((viewport: HTMLElement) => {
 		const { scrollTop, scrollHeight, clientHeight } = viewport;
-		return Math.abs(scrollHeight - scrollTop - clientHeight) < 10;
-	}, []);
+		// Use threshold to determine if we're "close enough" to the bottom
+		return scrollHeight - scrollTop - clientHeight < threshold;
+	}, [threshold]);
 
 	const updateScrollState = useCallback(
 		(viewport: HTMLElement) => {
-			const { scrollHeight, clientHeight } = viewport;
-			const hasScrollableContent = scrollHeight > clientHeight;
-			const atBottom = isAtBottom(viewport);
-
-			setShowScrollButton(hasScrollableContent && !atBottom);
-
-			if (!isUserScrolling.current) {
-				setShouldAutoScroll(atBottom);
+			if (debounceTimeout.current) {
+				window.clearTimeout(debounceTimeout.current);
 			}
+
+			debounceTimeout.current = window.setTimeout(() => {
+				const { scrollHeight, clientHeight } = viewport;
+				const hasScrollableContent = scrollHeight > clientHeight;
+				const atBottom = isAtBottom(viewport);
+
+				setShowScrollButton(hasScrollableContent && !atBottom);
+
+				if (!isUserScrolling.current) {
+					setShouldAutoScroll(atBottom);
+				}
+			}, debounce);
 		},
-		[isAtBottom],
+		[isAtBottom, debounce],
 	);
 
 	useEffect(() => {
@@ -68,6 +86,18 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 			updateScrollState(viewport);
 		};
 
+		const handleMouseDown = () => {
+			isUserScrolling.current = true;
+		};
+
+		const handleMouseUp = () => {
+			// Small delay to ensure it's a deliberate action
+			setTimeout(() => {
+				isUserScrolling.current = false;
+				updateScrollState(viewport);
+			}, 100);
+		};
+
 		let growthTimeout: number;
 		const observer = new MutationObserver(() => {
 			isGrowing.current = true;
@@ -76,8 +106,7 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 			if (shouldAutoScroll && !isUserScrolling.current) {
 				viewport.scrollTo({
 					top: viewport.scrollHeight,
-
-					behavior: "instant",
+					behavior: behavior === "smooth" && isGrowing.current ? "smooth" : "instant",
 				});
 			}
 			updateScrollState(viewport);
@@ -88,8 +117,10 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 		});
 
 		viewport.addEventListener("scroll", handleScroll, { passive: true });
-		viewport.addEventListener("touchstart", handleTouchStart);
-		viewport.addEventListener("touchend", handleTouchEnd);
+		viewport.addEventListener("touchstart", handleTouchStart, { passive: true });
+		viewport.addEventListener("touchend", handleTouchEnd, { passive: true });
+		viewport.addEventListener("mousedown", handleMouseDown, { passive: true });
+		viewport.addEventListener("mouseup", handleMouseUp, { passive: true });
 
 		observer.observe(container, {
 			childList: true,
@@ -99,13 +130,18 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 		});
 
 		return () => {
+			if (debounceTimeout.current) {
+				window.clearTimeout(debounceTimeout.current);
+			}
 			window.clearTimeout(growthTimeout);
 			observer.disconnect();
 			viewport.removeEventListener("scroll", handleScroll);
 			viewport.removeEventListener("touchstart", handleTouchStart);
 			viewport.removeEventListener("touchend", handleTouchEnd);
+			viewport.removeEventListener("mousedown", handleMouseDown);
+			viewport.removeEventListener("mouseup", handleMouseUp);
 		};
-	}, [getViewport, updateScrollState, shouldAutoScroll]);
+	}, [getViewport, updateScrollState, shouldAutoScroll, behavior]);
 
 	const scrollToBottom = () => {
 		const viewport = getViewport(containerRef.current);
@@ -116,7 +152,7 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 		setShouldAutoScroll(true);
 		viewport.scrollTo({
 			top: viewport.scrollHeight,
-			behavior: isGrowing.current ? "instant" : "smooth",
+			behavior: isGrowing.current ? "instant" : behavior,
 		});
 	};
 

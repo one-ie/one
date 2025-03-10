@@ -1,11 +1,10 @@
-// Add 'use client' directive for React Server Components
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useTextareaResize } from "@/hooks/use-textarea-resize";
-import { SendIcon, StopCircleIcon } from "lucide-react";
+import { ArrowUpIcon, SendIcon, StopCircleIcon } from "lucide-react";
 import type React from "react";
 import { createContext, useContext, forwardRef, useEffect } from "react";
 
@@ -54,7 +53,7 @@ const ChatInput = function ChatInput({
       <div
         className={cn(
           variant === "default" &&
-            "flex items-center gap-2 w-full p-3 rounded-full bg-[#333333] focus-within:ring-1 focus-within:ring-primary/30 focus-within:outline-none transition-all duration-200 shadow-md hover:shadow-lg",
+            "flex flex-col items-end w-full p-3 rounded-2xl border border-input bg-background/80 backdrop-blur-sm focus-within:ring-2 focus-within:ring-primary/30 focus-within:border-primary/50 focus-within:outline-none transition-all duration-200 shadow-sm hover:shadow-md",
           variant === "unstyled" && "flex items-start gap-2 w-full",
           className,
         )}
@@ -124,7 +123,7 @@ const ChatInputTextArea = forwardRef<HTMLTextAreaElement, ChatInputTextAreaProps
         onChange={onChange}
         onKeyDown={handleKeyDown}
         className={cn(
-          "flex-1 max-h-[60px] min-h-0 resize-none overflow-x-hidden text-base transition-all duration-200 text-white placeholder:text-gray-400 bg-transparent",
+          "max-h-[400px] min-h-0 resize-none overflow-x-hidden text-base transition-all duration-200",
           variant === "unstyled" &&
             "border-none focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none",
           className,
@@ -160,7 +159,7 @@ const ChatInputSubmit = function ChatInputSubmit({
       <Button
         onClick={onStop}
         className={cn(
-          "shrink-0 rounded-full p-3 h-10 w-10 flex items-center justify-center bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-all duration-200 shadow-sm hover:shadow-md",
+          "shrink-0 rounded-full p-2 h-fit border dark:border-zinc-600 bg-destructive/90 text-destructive-foreground hover:bg-destructive transition-all duration-200 shadow-sm hover:shadow-md",
           className,
         )}
         {...props}
@@ -176,7 +175,7 @@ const ChatInputSubmit = function ChatInputSubmit({
   return (
     <Button
       className={cn(
-        "shrink-0 rounded-full p-3 h-10 w-10 flex items-center justify-center transition-all duration-200 shadow-sm hover:shadow-md",
+        "shrink-0 rounded-full p-2 h-fit border dark:border-zinc-600 transition-all duration-200 shadow-sm hover:shadow-md",
         isDisabled ? "opacity-50" : "animate-subtle-bounce",
         className,
       )}
@@ -203,4 +202,4 @@ export {
   type ChatInputProps,
   type ChatInputTextAreaProps,
   type ChatInputSubmitProps,
-};
+}; 

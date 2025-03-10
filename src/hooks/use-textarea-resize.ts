@@ -1,7 +1,10 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { ComponentProps } from "react";
+
+// Create a safe version of useLayoutEffect that falls back to useEffect during SSR
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useEffect : useEffect;
 
 export function useTextareaResize(
 	value: ComponentProps<"textarea">["value"],
@@ -9,8 +12,8 @@ export function useTextareaResize(
 ) {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useLayoutEffect(() => {
+	// Use our isomorphic layout effect instead
+	useIsomorphicLayoutEffect(() => {
 		const textArea = textareaRef.current;
 
 		if (textArea) {
@@ -31,7 +34,7 @@ export function useTextareaResize(
 			// Set the final height
 			textArea.style.height = `${scrollHeight + 2}px`;
 		}
-	}, [textareaRef, value, rows]);
+	}, [value, rows]);
 
 	return textareaRef;
 }
