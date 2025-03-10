@@ -10,11 +10,11 @@ The ONE design system provides a set of carefully crafted design tokens, compone
 
 - **Dark Mode by Default**: Sleek, elegant dark theme with extremely subtle borders
 - **Symmetrical Design**: Matching sidebar and right panel create a balanced frame
-- **Theme Variants**: Support for light, dark, and high-contrast themes
+- **Theme Variants**: Support for light, dark, and slate-based high-contrast themes
 - **Responsive Layout**: Flexible grid system with adaptive components
 - **Glass Effects**: Beautiful backdrop-filter effects for depth
 - **Animation System**: Smooth, elegant animations and transitions
-- **Accessibility**: High-contrast mode and reduced motion support
+- **Accessibility**: High-contrast slate mode and reduced motion support
 
 ## Design Tokens
 
@@ -47,6 +47,22 @@ Extremely subtle borders for an elegant look:
 ```css
 --one-border: hsla(0, 0%, 100%, 0.03);      /* 3% opacity white border */
 --one-border-nav: hsla(0, 0%, 100%, 0.02);  /* 2% opacity for nav */
+```
+
+### High Contrast Slate Theme
+
+The high contrast slate theme provides better accessibility while maintaining a sophisticated look:
+
+```css
+/* Core colors */
+--one-black: hsl(215 28% 17%);      /* #1e293b - Slate 800 */
+--one-dark: hsl(217 33% 17%);       /* #1e2a3b - Slate 900 */
+--one-background: hsl(222 47% 11%); /* #0f172a - Slate 950 */
+--one-white: hsl(0 0% 100%);        /* #ffffff - Pure white */
+
+/* Primary & Accent colors */
+--one-primary: hsl(217 91% 60%);    /* #3b82f6 - Blue 500 */
+--one-accent: hsl(199 89% 48%);     /* #0ea5e9 - Sky 500 */
 ```
 
 ### Animation Timings

@@ -195,59 +195,59 @@
   --ring: var(--one-ring);
 }
 
-/* High Contrast Theme */
+/* High Contrast Theme - Slate */
 .high-contrast, [data-theme="high-contrast"] {
   /* Core colors */
-  --one-black: hsl(0 0% 0%);
-  --one-dark: hsl(0 0% 0%);
-  --one-background: hsl(0 0% 0%);
-  --one-white: hsl(0 0% 100%);
+  --one-black: hsl(215 28% 17%);      /* #1e293b - Slate 800 */
+  --one-dark: hsl(217 33% 17%);       /* #1e2a3b - Slate 900 */
+  --one-background: hsl(222 47% 11%); /* #0f172a - Slate 950 */
+  --one-white: hsl(0 0% 100%);        /* #ffffff - Pure white */
   
   /* Semantic mappings */
-  --one-background-main: var(--one-black);
-  --one-background-nav: var(--one-black);
-  --one-background-logo: var(--one-white);
-  --one-background-card: var(--one-black);
+  --one-background-main: var(--one-background);
+  --one-background-nav: var(--one-dark);
+  --one-background-logo: var(--one-black);
+  --one-background-card: hsl(215 25% 27%); /* #334155 - Slate 700 */
   
   /* Text colors */
-  --one-foreground: var(--one-white);
-  --one-foreground-muted: hsl(0 0% 80%);
+  --one-foreground: hsl(214 15% 91%);    /* #f1f5f9 - Slate 100 */
+  --one-foreground-muted: hsl(210 40% 96%); /* #f8fafc - Slate 50 */
   
   /* Primary action colors */
-  --one-primary: hsl(60 100% 50%); /* Bright yellow for high contrast */
-  --one-primary-foreground: var(--one-black);
+  --one-primary: hsl(217 91% 60%);      /* #3b82f6 - Blue 500 */
+  --one-primary-foreground: hsl(0 0% 100%);
   
   /* Secondary elements */
-  --one-secondary: hsl(0 0% 20%);
-  --one-secondary-foreground: var(--one-white);
+  --one-secondary: hsl(215 20% 65%);    /* #94a3b8 - Slate 400 */
+  --one-secondary-foreground: hsl(222 47% 11%);
   
   /* Accent colors */
-  --one-accent: hsl(60 100% 50%);
-  --one-accent-foreground: var(--one-black);
+  --one-accent: hsl(199 89% 48%);       /* #0ea5e9 - Sky 500 */
+  --one-accent-foreground: hsl(0 0% 100%);
   
   /* Interface elements */
-  --one-muted: hsl(0 0% 20%);
-  --one-muted-foreground: hsl(0 0% 90%);
-  --one-card: var(--one-black);
-  --one-card-foreground: var(--one-white);
-  --one-popover: var(--one-black);
-  --one-popover-foreground: var(--one-white);
+  --one-muted: hsl(215 25% 27%);        /* #334155 - Slate 700 */
+  --one-muted-foreground: hsl(214 32% 91%);
+  --one-card: hsl(215 25% 27%);         /* #334155 - Slate 700 */
+  --one-card-foreground: hsl(214 15% 91%);
+  --one-popover: hsl(215 28% 17%);      /* #1e293b - Slate 800 */
+  --one-popover-foreground: hsl(214 15% 91%);
   
-  /* Border colors - High contrast needs more visible borders */
-  --one-border: hsl(0 0% 50%);
-  --one-border-nav: hsl(0 0% 70%);
+  /* Border colors - Subtle but visible for slate theme */
+  --one-border: hsla(214, 32%, 91%, 0.2);
+  --one-border-nav: hsla(214, 32%, 91%, 0.15);
   
   /* Input elements */
-  --one-input: hsl(0 0% 20%);
-  --one-input-foreground: var(--one-white);
-  --one-ring: var(--one-white);
+  --one-input: hsl(215 25% 27%);        /* #334155 - Slate 700 */
+  --one-input-foreground: hsl(214 15% 91%);
+  --one-ring: hsla(217, 91%, 60%, 0.5);
 
-  /* Chart colors - High contrast versions */
-  --one-chart-1: hsl(60 100% 50%);  /* Yellow */
-  --one-chart-2: hsl(120 100% 50%); /* Green */
-  --one-chart-3: hsl(180 100% 50%); /* Cyan */
-  --one-chart-4: hsl(300 100% 50%); /* Magenta */
-  --one-chart-5: hsl(0 100% 50%);   /* Red */
+  /* Chart colors - Slate theme */
+  --one-chart-1: hsl(217 91% 60%);      /* Blue 500 */
+  --one-chart-2: hsl(199 89% 48%);      /* Sky 500 */
+  --one-chart-3: hsl(152 76% 44%);      /* Emerald 500 */
+  --one-chart-4: hsl(262 83% 58%);      /* Violet 500 */
+  --one-chart-5: hsl(334 85% 45%);      /* Rose 500 */
 
   /* Update Tailwind compatibility vars */
   --background: var(--one-background-main);
