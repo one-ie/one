@@ -6,7 +6,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const DEFAULT_PRE_BLOCK_CLASS =
-	"my-4 overflow-x-auto w-full rounded-lg bg-[#1e1e1e] text-zinc-200 dark:bg-[#1e1e1e] p-0 relative text-base group border border-zinc-800 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]";
+	"my-4 overflow-x-auto w-full rounded-lg bg-[#1e1e1e] text-[#d4d4d4] dark:bg-[#1e1e1e] p-0 relative text-base group border border-zinc-800 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]";
 
 const extractTextContent = (node: React.ReactNode): string => {
   type ReactElementWithChildren = React.ReactElement & {
@@ -34,11 +34,11 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
   const [content, setContent] = React.useState<JSX.Element>(
     <div className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
       {/* Header */}
-      <div className="flex items-center px-4 py-2 bg-[#2d2d2d] border-b border-zinc-800">
-        <span className="text-sm text-zinc-400 font-mono lowercase">{language}</span>
+      <div className="flex items-center px-4 py-1.5 bg-[#252526] border-b border-[#1e1e1e]">
+        <span className="text-xs text-[#cccccc] font-mono lowercase">{language}</span>
       </div>
-      <pre {...props} className="p-4 m-0">
-        <code className="whitespace-pre-wrap text-base font-mono">{children}</code>
+      <pre {...props} className="p-4 m-0 font-['Menlo',_'Monaco',_'Consolas',_'Courier_New',_monospace] text-sm">
+        <code className="whitespace-pre-wrap text-[14px] font-['Menlo',_'Monaco',_'Consolas',_'Courier_New',_monospace]">{children}</code>
         <CopyButton code={extractTextContent(children)} />
       </pre>
     </div>
@@ -64,11 +64,11 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
       setContent(
         <div className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
           {/* Header */}
-          <div className="flex items-center px-4 py-2 bg-[#2d2d2d] border-b border-zinc-800">
-            <span className="text-sm text-zinc-400 font-mono lowercase">{language}</span>
+          <div className="flex items-center px-4 py-1.5 bg-[#252526] border-b border-[#1e1e1e]">
+            <span className="text-xs text-[#cccccc] font-mono lowercase">{language}</span>
           </div>
-          <pre {...props} className="p-4 m-0">
-            <code className="whitespace-pre-wrap text-base font-mono">
+          <pre {...props} className="p-4 m-0 font-['Menlo',_'Monaco',_'Consolas',_'Courier_New',_monospace] text-sm">
+            <code className="whitespace-pre-wrap text-[14px] font-['Menlo',_'Monaco',_'Consolas',_'Courier_New',_monospace]">
               {tokens.map((line, lineIndex) => (
                 <span key={`line-${lineIndex}`}>
                   {line.map((token, tokenIndex) => {
@@ -170,11 +170,11 @@ const CodeBlock = ({
 			fallback={
 				<div className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
           {/* Header */}
-          <div className="flex items-center px-4 py-2 bg-[#2d2d2d] border-b border-zinc-800">
-            <span className="text-sm text-zinc-400 font-mono lowercase">{language}</span>
+          <div className="flex items-center px-4 py-1.5 bg-[#252526] border-b border-[#1e1e1e]">
+            <span className="text-xs text-[#cccccc] font-mono lowercase">{language}</span>
           </div>
-          <pre {...props} className="p-4 m-0">
-            <code className="whitespace-pre-wrap text-base font-mono">{children}</code>
+          <pre {...props} className="p-4 m-0 font-['Menlo',_'Monaco',_'Consolas',_'Courier_New',_monospace] text-sm">
+            <code className="whitespace-pre-wrap text-[14px] font-['Menlo',_'Monaco',_'Consolas',_'Courier_New',_monospace]">{children}</code>
             <CopyButton code={extractTextContent(children)} />
           </pre>
         </div>

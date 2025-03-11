@@ -47,51 +47,108 @@ const CopyButton = ({ code }: { code: string }) => {
   );
 };
 
-// Custom syntax highlighting theme to match the image
+// Custom syntax highlighting theme to match the screenshot exactly
 const customSyntaxTheme = {
-  ...coldarkDark,
-  'keyword': { color: '#569CD6' },       // Blue for keywords like import, const, return
-  'function': { color: '#DCDCAA' },      // Yellow for function names
-  'string': { color: '#CE9178' },        // Orange-red for strings
-  'comment': { color: '#6A9955' },       // Green for comments
-  'punctuation': { color: '#D4D4D4' },   // Light gray for punctuation
-  'operator': { color: '#D4D4D4' },      // Light gray for operators
-  'variable': { color: '#9CDCFE' },      // Light blue for variables
-  'class-name': { color: '#4EC9B0' },    // Teal for class names
-  'parameter': { color: '#9CDCFE' },     // Light blue for parameters
-  'property': { color: '#9CDCFE' },      // Light blue for properties
-  'builtin': { color: '#569CD6' },       // Blue for built-in functions
+  'comment': { color: '#6A9955' },                  // Green for comments
+  'prolog': { color: '#d4d4d4' },
+  'doctype': { color: '#d4d4d4' },
+  'cdata': { color: '#d4d4d4' },
+  'punctuation': { color: '#d4d4d4' },              // Light gray for punctuation
+  'namespace': { opacity: 0.7 },
+  'property': { color: '#9cdcfe' },                 // Light blue for properties
+  'tag': { color: '#569cd6' },                      // Blue for tags
+  'boolean': { color: '#569cd6' },                  // Blue for booleans
+  'number': { color: '#b5cea8' },                   // Light green for numbers
+  'constant': { color: '#9cdcfe' },                 // Light blue for constants
+  'symbol': { color: '#b5cea8' },
+  'selector': { color: '#d7ba7d' },
+  'attr-name': { color: '#9cdcfe' },                // Light blue for attribute names
+  'string': { color: '#ce9178' },                   // Orange-red for strings
+  'char': { color: '#ce9178' },
+  'builtin': { color: '#4ec9b0' },                  // Teal for built-ins
+  'inserted': { color: '#ce9178' },
+  'operator': { color: '#d4d4d4' },                 // Light gray for operators
+  'entity': { color: '#4ec9b0', cursor: 'help' },
+  'url': { color: '#ce9178' },
+  'atrule': { color: '#c586c0' },                   // Purple for at-rules
+  'attr-value': { color: '#ce9178' },               // Orange-red for attribute values
+  'keyword': { color: '#569cd6' },                  // Blue for keywords like import
+  'function': { color: '#dcdcaa' },                 // Yellow for function names
+  'regex': { color: '#d16969' },
+  'important': { color: '#569cd6', fontWeight: 'bold' },
+  'variable': { color: '#9cdcfe' },                 // Light blue for variables
+  'bold': { fontWeight: 'bold' },
+  'italic': { fontStyle: 'italic' },
+  'deleted': { color: '#ce9178' },
+  'class-name': { color: '#4ec9b0' },               // Teal for class names
+  'maybe-class-name': { color: '#4ec9b0' },         // Teal for possible class names
+  'parameter': { color: '#9cdcfe' },                // Light blue for parameters
+  'imports': { color: '#569cd6' },                  // Blue for import keyword
+  'exports': { color: '#569cd6' },                  // Blue for export keyword
+  'jsx-tag': { color: '#569cd6' },                  // Blue for JSX tags
+  'jsx-expression': { color: '#d4d4d4' },           // Light gray for JSX expressions
+  'jsx-attr-name': { color: '#9cdcfe' },            // Light blue for JSX attribute names
+  'jsx-attr-value': { color: '#ce9178' },           // Orange-red for JSX attribute values
+  // Bash specific colors
+  'bash': { color: '#d4d4d4' },
+  'bash-keyword': { color: '#569cd6' },
+  'bash-command': { color: '#9b37ff' },             // Purple for npm command
 };
 
 export const CodeHighlighter = ({ language, children }: CodeProps) => {
   const customStyles = {
     margin: 0,
     width: "100%",
-    background: "#1e1e1e", // Darker background like in the image
-    padding: "1rem",
-    fontSize: "0.9rem",
-    lineHeight: "1.5",
-    borderRadius: "0.5rem",
-    fontFamily: "'JetBrains Mono', monospace",
+    background: "#1e1e1e",                          // VS Code dark theme background
+    padding: "1rem",                                // Reduced padding to match image
+    fontSize: "14px",                               // VS Code default font size
+    lineHeight: "1.5",                              // Proper line height
+    borderRadius: "0",                              // No border radius for code area
+    fontFamily: "'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", // VS Code-like font
+    overflow: "visible",                            // Ensure content is visible
   };
 
+  // Special handling for npm commands to make them purple
+  let processedCode = children;
+  if (language === 'bash' && children.includes('npm')) {
+    processedCode = children.replace(/npm/, '<span style="color: #9b37ff;">npm</span>');
+  }
+
   return (
-    <div className="relative group rounded-lg overflow-hidden bg-[#1e1e1e] border border-zinc-800">
+    <div className="relative group overflow-hidden bg-[#1e1e1e]">
       {/* Header */}
-      <div className="flex items-center px-4 py-2 bg-[#2d2d2d] border-b border-zinc-800">
-        <span className="text-sm text-zinc-400 font-mono lowercase">{language}</span>
+      <div className="flex items-center px-4 py-1.5 bg-[#252526]">
+        <span className="text-xs text-[#cccccc] font-mono lowercase">{language}</span>
       </div>
       
       {/* Code content */}
-      <div className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <SyntaxHighlighter
-          language={language}
-          style={customSyntaxTheme}
-          customStyle={customStyles}
-          PreTag="div"
-        >
-          {children}
-        </SyntaxHighlighter>
+      <div className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] overflow-auto">
+        {language === 'bash' && children.includes('npm') ? (
+          <div 
+            style={{
+              ...customStyles,
+              padding: "1rem",
+              fontFamily: "'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
+              fontSize: "14px",
+            }}
+            dangerouslySetInnerHTML={{ __html: processedCode }}
+          />
+        ) : (
+          <SyntaxHighlighter
+            language={language}
+            style={customSyntaxTheme}
+            customStyle={customStyles}
+            PreTag="div"
+            codeTagProps={{
+              style: {
+                fontFamily: "'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
+                fontSize: "14px",
+              }
+            }}
+          >
+            {children}
+          </SyntaxHighlighter>
+        )}
       </div>
       <CopyButton code={children} />
     </div>
