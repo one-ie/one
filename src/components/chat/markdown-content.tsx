@@ -6,7 +6,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const DEFAULT_PRE_BLOCK_CLASS =
-	"my-4 overflow-x-auto w-fit rounded-lg bg-zinc-950 text-zinc-200 dark:bg-zinc-900 p-4 relative text-base group";
+	"my-4 overflow-x-auto w-fit rounded-lg bg-zinc-950 text-zinc-200 dark:bg-zinc-900 p-0 px-4 py-2 relative text-base group mb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]";
 
 const extractTextContent = (node: React.ReactNode): string => {
   type ReactElementWithChildren = React.ReactElement & {
@@ -101,7 +101,7 @@ const CopyButton = ({ code }: { code: string }) => {
   return (
     <button
       onClick={handleCopy}
-      className="absolute bottom-3 right-3 w-8 h-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible"
+      className="absolute bottom-0 right-0 translate-y-full -translate-x-0 mt-2 w-8 h-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible z-10"
       aria-label="Copy code"
     >
       {copied ? (

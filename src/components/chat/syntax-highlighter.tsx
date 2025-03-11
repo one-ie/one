@@ -25,7 +25,7 @@ const CopyButton = ({ code }: { code: string }) => {
   return (
     <button
       onClick={handleCopy}
-      className="absolute bottom-3 right-3 w-8 h-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible"
+      className="absolute bottom-0 right-0 translate-y-full -translate-x-2 mt-1 w-8 h-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible z-10"
       aria-label="Copy code"
     >
       {copied ? (
@@ -49,24 +49,25 @@ const CopyButton = ({ code }: { code: string }) => {
 
 export const CodeHighlighter = ({ language, children }: CodeProps) => {
   return (
-    <div className="relative group rounded-lg overflow-hidden">
-      <SyntaxHighlighter
-        language={language}
-        style={coldarkDark}
-        customStyle={{
-          margin: 0,
-          width: "100%",
-          background: "#18181b", // zinc-950
-          padding: "1rem",
-          paddingBottom: "2rem",
-          fontSize: "0.875rem", // 14px
-          lineHeight: "1.5", // For better readability
-          borderRadius: "0.5rem",
-        }}
-        PreTag="div"
-      >
-        {children}
-      </SyntaxHighlighter>
+    <div className="relative group rounded-lg overflow-hidden mb-6">
+      <div className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <SyntaxHighlighter
+          language={language}
+          style={coldarkDark}
+          customStyle={{
+            margin: 0,
+            width: "100%",
+            background: "#18181b", // zinc-950
+            padding: "0 1rem",
+            fontSize: "0.875rem", // 14px
+            lineHeight: "1.5", // For better readability
+            borderRadius: "0.5rem",
+          }}
+          PreTag="div"
+        >
+          {children}
+        </SyntaxHighlighter>
+      </div>
       <CopyButton code={children} />
     </div>
   );
