@@ -6,7 +6,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const DEFAULT_PRE_BLOCK_CLASS =
-	"my-4 overflow-x-auto w-fit rounded-xl bg-zinc-950 text-zinc-50 dark:bg-zinc-900 p-4 relative text-base group";
+	"my-4 overflow-x-auto w-fit rounded-lg bg-zinc-950 text-zinc-200 dark:bg-zinc-900 p-4 relative text-base group";
 
 const extractTextContent = (node: React.ReactNode): string => {
   type ReactElementWithChildren = React.ReactElement & {
@@ -101,7 +101,7 @@ const CopyButton = ({ code }: { code: string }) => {
   return (
     <button
       onClick={handleCopy}
-      className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-gray-700 hover:bg-gray-600 text-white transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible"
+      className="absolute bottom-3 right-3 w-8 h-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible"
       aria-label="Copy code"
     >
       {copied ? (
@@ -109,7 +109,7 @@ const CopyButton = ({ code }: { code: string }) => {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
+          <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-zinc-800 text-zinc-200 text-xs py-1 px-2 rounded whitespace-nowrap">
             Copied!
           </span>
         </>

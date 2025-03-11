@@ -13,7 +13,7 @@ const chatMessageVariants = cva("flex gap-4 w-full group transition-all duration
 		},
 		type: {
 			incoming: "justify-start mr-auto",
-			outgoing: "justify-end ml-auto",
+			outgoing: "justify-end ml-auto relative",
 		},
 	},
 	compoundVariants: [
@@ -145,7 +145,7 @@ const chatMessageContentVariants = cva("flex flex-col gap-2 transition-all durat
 		},
 		type: {
 			incoming: "",
-			outgoing: "",
+			outgoing: "relative",
 		},
 	},
 	compoundVariants: [
@@ -264,7 +264,7 @@ const ChatMessageContent = React.forwardRef<
 									<div className="flex gap-2 mt-2 justify-end">
 										<button 
 											onClick={handleEditCancel}
-											className="w-9 h-9 rounded-full bg-gray-700 hover:bg-gray-600 text-white transition-colors flex items-center justify-center"
+											className="w-9 h-9 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center"
 											aria-label="Cancel edit"
 										>
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -274,7 +274,7 @@ const ChatMessageContent = React.forwardRef<
 										</button>
 										<button 
 											onClick={handleEditSave}
-											className="w-9 h-9 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors flex items-center justify-center"
+											className="w-9 h-9 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center"
 											aria-label="Save edit"
 										>
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -287,19 +287,17 @@ const ChatMessageContent = React.forwardRef<
 								</div>
 							) : (
 								<div className="relative group/message">
+									<button 
+										onClick={handleEditStart}
+										className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-[calc(100%+12px)] w-8 h-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible z-10"
+										aria-label="Edit message"
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+											<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+											<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+										</svg>
+									</button>
 									<div className="text-base">{content}</div>
-									<div className="flex gap-2 mt-2 justify-end">
-										<button 
-											onClick={handleEditStart}
-											className="w-9 h-9 rounded-full bg-gray-700 hover:bg-gray-600 text-white transition-colors flex items-center justify-center"
-											aria-label="Edit message"
-										>
-											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-												<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-												<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-											</svg>
-										</button>
-									</div>
 								</div>
 							)}
 						</>
@@ -318,11 +316,11 @@ const ChatMessageContent = React.forwardRef<
 							<div className="flex gap-2 mt-1 relative">
 								<button 
 									onClick={handleCopy}
-									className="w-9 h-9 rounded-full bg-gray-700 hover:bg-gray-600 text-white transition-colors flex items-center justify-center relative"
+									className="w-9 h-9 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center relative"
 									aria-label="Copy message"
 								>
 									{copyNotification && (
-										<span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
+										<span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-zinc-800 text-zinc-200 text-xs py-1 px-2 rounded whitespace-nowrap">
 											Copied!
 										</span>
 									)}
@@ -333,7 +331,7 @@ const ChatMessageContent = React.forwardRef<
 								</button>
 								<button 
 									onClick={handleResubmit}
-									className="w-9 h-9 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors flex items-center justify-center"
+									className="w-9 h-9 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center"
 									aria-label="Resubmit message"
 								>
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
