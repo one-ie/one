@@ -25,7 +25,7 @@ const CopyButton = ({ code }: { code: string }) => {
   return (
     <button
       onClick={handleCopy}
-      className="absolute bottom-0 right-0 translate-y-full -translate-x-2 mt-1 w-8 h-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible z-10"
+      className="absolute top-3 right-3 w-8 h-8 rounded-md bg-zinc-700 hover:bg-zinc-600 text-zinc-300 hover:text-zinc-100 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100 z-10"
       aria-label="Copy code"
     >
       {copied ? (
@@ -47,22 +47,47 @@ const CopyButton = ({ code }: { code: string }) => {
   );
 };
 
+// Custom syntax highlighting theme to match the image
+const customSyntaxTheme = {
+  ...coldarkDark,
+  'keyword': { color: '#569CD6' },       // Blue for keywords like import, const, return
+  'function': { color: '#DCDCAA' },      // Yellow for function names
+  'string': { color: '#CE9178' },        // Orange-red for strings
+  'comment': { color: '#6A9955' },       // Green for comments
+  'punctuation': { color: '#D4D4D4' },   // Light gray for punctuation
+  'operator': { color: '#D4D4D4' },      // Light gray for operators
+  'variable': { color: '#9CDCFE' },      // Light blue for variables
+  'class-name': { color: '#4EC9B0' },    // Teal for class names
+  'parameter': { color: '#9CDCFE' },     // Light blue for parameters
+  'property': { color: '#9CDCFE' },      // Light blue for properties
+  'builtin': { color: '#569CD6' },       // Blue for built-in functions
+};
+
 export const CodeHighlighter = ({ language, children }: CodeProps) => {
+  const customStyles = {
+    margin: 0,
+    width: "100%",
+    background: "#1e1e1e", // Darker background like in the image
+    padding: "1rem",
+    fontSize: "0.9rem",
+    lineHeight: "1.5",
+    borderRadius: "0.5rem",
+    fontFamily: "'JetBrains Mono', monospace",
+  };
+
   return (
-    <div className="relative group rounded-lg overflow-hidden mb-6">
+    <div className="relative group rounded-lg overflow-hidden bg-[#1e1e1e] border border-zinc-800">
+      {/* Header */}
+      <div className="flex items-center px-4 py-2 bg-[#2d2d2d] border-b border-zinc-800">
+        <span className="text-sm text-zinc-400 font-mono lowercase">{language}</span>
+      </div>
+      
+      {/* Code content */}
       <div className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <SyntaxHighlighter
           language={language}
-          style={coldarkDark}
-          customStyle={{
-            margin: 0,
-            width: "100%",
-            background: "#18181b", // zinc-950
-            padding: "0 1rem",
-            fontSize: "0.875rem", // 14px
-            lineHeight: "1.5", // For better readability
-            borderRadius: "0.5rem",
-          }}
+          style={customSyntaxTheme}
+          customStyle={customStyles}
           PreTag="div"
         >
           {children}

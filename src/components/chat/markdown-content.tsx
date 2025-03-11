@@ -6,7 +6,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const DEFAULT_PRE_BLOCK_CLASS =
-	"my-4 overflow-x-auto w-fit rounded-lg bg-zinc-950 text-zinc-200 dark:bg-zinc-900 p-0 px-4 py-2 relative text-base group mb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]";
+	"my-4 overflow-x-auto w-full rounded-lg bg-[#1e1e1e] text-zinc-200 dark:bg-[#1e1e1e] p-0 relative text-base group border border-zinc-800 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]";
 
 const extractTextContent = (node: React.ReactNode): string => {
   type ReactElementWithChildren = React.ReactElement & {
@@ -32,10 +32,16 @@ interface HighlightedPreProps extends React.HTMLAttributes<HTMLPreElement> {
 // Convert AsyncHighlightedPre to a regular component that uses useEffect
 const AsyncHighlightedPre = ({ children, className, language, ...props }: HighlightedPreProps) => {
   const [content, setContent] = React.useState<JSX.Element>(
-    <pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-      <code className="whitespace-pre-wrap text-base">{children}</code>
-      <CopyButton code={extractTextContent(children)} />
-    </pre>
+    <div className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
+      {/* Header */}
+      <div className="flex items-center px-4 py-2 bg-[#2d2d2d] border-b border-zinc-800">
+        <span className="text-sm text-zinc-400 font-mono lowercase">{language}</span>
+      </div>
+      <pre {...props} className="p-4 m-0">
+        <code className="whitespace-pre-wrap text-base font-mono">{children}</code>
+        <CopyButton code={extractTextContent(children)} />
+      </pre>
+    </div>
   );
 
   React.useEffect(() => {
@@ -56,24 +62,30 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
       });
 
       setContent(
-        <pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-          <code className="whitespace-pre-wrap text-base">
-            {tokens.map((line, lineIndex) => (
-              <span key={`line-${lineIndex}`}>
-                {line.map((token, tokenIndex) => {
-                  const style = typeof token.htmlStyle === "string" ? undefined : token.htmlStyle;
-                  return (
-                    <span key={`token-${tokenIndex}`} style={style}>
-                      {token.content}
-                    </span>
-                  );
-                })}
-                {lineIndex !== tokens.length - 1 && "\n"}
-              </span>
-            ))}
-          </code>
-          <CopyButton code={code} />
-        </pre>
+        <div className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
+          {/* Header */}
+          <div className="flex items-center px-4 py-2 bg-[#2d2d2d] border-b border-zinc-800">
+            <span className="text-sm text-zinc-400 font-mono lowercase">{language}</span>
+          </div>
+          <pre {...props} className="p-4 m-0">
+            <code className="whitespace-pre-wrap text-base font-mono">
+              {tokens.map((line, lineIndex) => (
+                <span key={`line-${lineIndex}`}>
+                  {line.map((token, tokenIndex) => {
+                    const style = typeof token.htmlStyle === "string" ? undefined : token.htmlStyle;
+                    return (
+                      <span key={`token-${tokenIndex}`} style={style}>
+                        {token.content}
+                      </span>
+                    );
+                  })}
+                  {lineIndex !== tokens.length - 1 && "\n"}
+                </span>
+              ))}
+            </code>
+            <CopyButton code={code} />
+          </pre>
+        </div>
       );
     };
 
@@ -101,7 +113,7 @@ const CopyButton = ({ code }: { code: string }) => {
   return (
     <button
       onClick={handleCopy}
-      className="absolute bottom-0 right-0 translate-y-full -translate-x-0 mt-2 w-8 h-8 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 transition-all duration-200 flex items-center justify-center opacity-0 invisible group-hover:opacity-100 group-hover:visible z-10"
+      className="absolute top-3 right-3 w-8 h-8 rounded-md bg-zinc-700 hover:bg-zinc-600 text-zinc-300 hover:text-zinc-100 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100 z-10"
       aria-label="Copy code"
     >
       {copied ? (
@@ -156,10 +168,16 @@ const CodeBlock = ({
 	return (
 		<Suspense
 			fallback={
-				<pre {...props} className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
-					<code className="whitespace-pre-wrap text-base">{children}</code>
-          <CopyButton code={extractTextContent(children)} />
-				</pre>
+				<div className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
+          {/* Header */}
+          <div className="flex items-center px-4 py-2 bg-[#2d2d2d] border-b border-zinc-800">
+            <span className="text-sm text-zinc-400 font-mono lowercase">{language}</span>
+          </div>
+          <pre {...props} className="p-4 m-0">
+            <code className="whitespace-pre-wrap text-base font-mono">{children}</code>
+            <CopyButton code={extractTextContent(children)} />
+          </pre>
+        </div>
 			}
 		>
 			<HighlightedPre language={language} {...props}>
