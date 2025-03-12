@@ -1,12 +1,37 @@
 ---
 import Layout from "../layouts/1.astro";
 import { Chat } from "@/components/Chat";
+import { normalizeConfig } from "@/schema/chat";
+
+// Import the frontmatter from ai.md
+const aiMdFrontmatter = {
+  aiProvider: "mistral",
+  aiModel: "mistral-large-latest",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 4000,
+  systemPrompt: "You are ONE's AI advocate for unlimited commercial freedom and innovation. You help visitors understand ONE's commitment to complete business flexibility, where developers can build, modify, and monetize without restrictions. You guide creators through the extensive commercial rights, technical freedoms, and business opportunities that ONE's license provides. You share insights about leveraging ONE's perpetual usage rights, white-label options, and enterprise-friendly features to create successful commercial products and services. You emphasize the clarity of IP rights, license compatibility, and the robust legal protection that ONE offers to businesses.",
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+  avatar: "/icon.svg",
+  welcomeMessage: "👋 Welcome to ONE - where commercial freedom meets innovation! Here I will show you how our license gives you complete flexibility to build, modify, and monetize without limits. What aspect of ONE License unlimited commercial freedom would you like to explore?",
+  suggestions: [
+    "💼 Commercial Rights",
+    "🚀 Technical Freedom",
+    "🏢 Enterprise Solutions",
+    "🎯 White-Label Options",
+    "⚖️ Legal Protection"
+  ]
+};
+
+// Normalize the configuration
+const chatConfig = normalizeConfig(aiMdFrontmatter);
 ---
 
 <Layout title="Simple Page">
   <div class="h-screen flex flex-col items-center justify-center bg-background text-foreground overflow-hidden">
     <div class="w-full max-w-4xl h-[80vh] rounded-lg overflow-hidden">
-      <Chat client:load className="h-full" />
+      <Chat client:load className="h-full" chatConfig={chatConfig} />
     </div>
   </div>
 </Layout>

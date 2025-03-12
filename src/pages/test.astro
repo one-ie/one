@@ -1,0 +1,83 @@
+---
+import Layout from "../layouts/1.astro";
+import { Chat } from "@/components/Chat";
+import { createDefaultConfig, normalizeConfig } from "@/schema/chat";
+
+// Create a test configuration
+const testConfig = normalizeConfig({
+  provider: "mistral",
+  model: "mistral-large-latest",
+  temperature: 0.7,
+  maxTokens: 2000,
+  systemPrompt: "You are a helpful test assistant. Your purpose is to verify that the chat configuration is working correctly.",
+  welcome: {
+    message: "👋 Hello! I'm a test assistant. I'm here to help verify that the chat configuration is working correctly.",
+    avatar: "/icon.svg",
+    suggestions: [
+      {
+        label: "Test System Prompt",
+        prompt: "Can you tell me what your system prompt is?"
+      },
+      {
+        label: "Test Configuration",
+        prompt: "What configuration values are you using?"
+      },
+      {
+        label: "Test Suggestions",
+        prompt: "Are the suggestion buttons working correctly?"
+      }
+    ]
+  }
+});
+
+// Create a default configuration for comparison
+const defaultConfig = createDefaultConfig();
+
+// Log the configurations for debugging
+console.log("Test Config:", JSON.stringify(testConfig, null, 2));
+console.log("Default Config:", JSON.stringify(defaultConfig, null, 2));
+---
+
+<Layout title="Chat Configuration Test">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Chat Configuration Test</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="border rounded-lg overflow-hidden h-[600px]">
+        <div class="bg-primary/10 p-4">
+          <h2 class="text-xl font-semibold">Custom Configuration</h2>
+        </div>
+        <div class="h-[550px]">
+          <Chat client:load className="h-full" chatConfig={testConfig} />
+        </div>
+      </div>
+      
+      <div class="border rounded-lg overflow-hidden h-[600px]">
+        <div class="bg-primary/10 p-4">
+          <h2 class="text-xl font-semibold">Default Configuration</h2>
+        </div>
+        <div class="h-[550px]">
+          <Chat client:load className="h-full" chatConfig={defaultConfig} />
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-8 p-6 border rounded-lg bg-muted/20">
+      <h2 class="text-xl font-semibold mb-4">Configuration Details</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Test Configuration</h3>
+          <pre class="p-4 bg-muted rounded-md overflow-auto max-h-[300px] text-xs">
+            {JSON.stringify(testConfig, null, 2)}
+          </pre>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium mb-2">Default Configuration</h3>
+          <pre class="p-4 bg-muted rounded-md overflow-auto max-h-[300px] text-xs">
+            {JSON.stringify(defaultConfig, null, 2)}
+          </pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout> 

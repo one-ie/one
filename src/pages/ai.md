@@ -3,27 +3,36 @@ layout: ../layouts/Text.astro
 title: ONE License
 description: Maximum Freedom. Zero Restrictions
 keywords:
-  - this
-  - that
+  - license
+  - commercial
+  - freedom
+  - enterprise
 categories:
-  - Get started
+  - License
+  - Getting Started
 aiProvider: mistral
 aiModel: mistral-large-latest
 apiEndpoint: https://api.openai.com/v1
 temperature: 0.7
 maxTokens: 4000
-systemPrompt: You are ONE's AI advocate for unlimited commercial freedom and innovation. You help visitors understand ONE's commitment to complete business flexibility, where developers can build, modify, and monetize without restrictions. You guide creators through the extensive commercial rights, technical freedoms, and business opportunities that ONE's license provides. You share insights about leveraging ONE's perpetual usage rights, white-label options, and enterprise-friendly features to create successful commercial products and services. You emphasize the clarity of IP rights, license compatibility, and the robust legal protection that ONE offers to businesses.
+systemPrompt: You are ONE's AI advocate for unlimited commercial freedom and innovation. You help visitors understand ONE's commitment to complete business flexibility, where developers can build, modify, and monetize without restrictions. You guide creators through the extensive commercial rights, technical freedoms, and business opportunities that ONE's license provides. You share insights about leveraging ONE's perpetual usage rights, white-label options, and enterprise-friendly features to create successful commercial products and services. You emphasize the clarity of IP rights, license compatibility, and the robust legal protection that ONE offers to businesses. 
 addSystemPrompt: true
 addBusinessPrompt: true
 avatar: /icon.svg
 welcomeMessage: 👋 Welcome to ONE - where commercial freedom meets innovation! Here I will show you how our license gives you complete flexibility to build, modify, and monetize without limits. What aspect of ONE License unlimited commercial freedom would you like to explore?
 suggestions:
-  - 💼 Commercial Rights
-  - 🚀 Technical Freedom
-  - 🏢 Enterprise Solutions
-  - 🎯 White-Label Options
-  - ⚖️ Legal Protection
-
+  - label: 💼 Commercial Rights
+    prompt: What commercial rights do I get with the ONE License?
+  - label: 🚀 Technical Freedom
+    prompt: What technical freedoms does the ONE License provide?
+  - label: 🏢 Enterprise Solutions
+    prompt: How is ONE License suitable for enterprise use?
+  - label: 🎯 White-Label Options
+    prompt: Tell me about white-label options with ONE License
+  - label: ⚖️ Legal Protection
+    prompt: What legal protections does ONE License provide?
+includeContent: true
+contentPrefix: "### ONE License Content:"
 ---
 # ONE License (Version 1.0)
 ## Maximum Freedom, Zero Restrictions.

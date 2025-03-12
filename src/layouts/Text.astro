@@ -1,27 +1,42 @@
 ---
-import Layout from "./Layout.astro";
+import Layout from "./1.astro";
+import { Chat } from "@/components/Chat";
+import { normalizeConfig } from "@/schema/chat";
 
-type Props = {
-  frontmatter: {
-    title: string;
-    description: string;
-    chatConfig?: any;
-  };
-};
+// Get frontmatter and content from the markdown file
+const { frontmatter, content } = Astro.props;
 
-const { frontmatter } = Astro.props as Props;
+// Extract the raw content without frontmatter
+const rawContent = content.toString();
 
-// Get raw content and strip frontmatter
-const rawContent = await Astro.slots.render('default');
-const cleanContent = rawContent.replace(/^---[\s\S]*?---/, '').trim();
+// Normalize the configuration from frontmatter
+const chatConfig = normalizeConfig(frontmatter);
 ---
-<Layout 
-  title={frontmatter.title} 
-  description={frontmatter.description}
-  chatConfig={frontmatter.chatConfig}
-  content={cleanContent}
->
-  <article class="prose dark:prose-invert prose-slate max-w-1000 py-8 px-8 mx-auto container">
-    <slot />
-  </article>
+
+<Layout title={frontmatter.title} description={frontmatter.description}>
+  <div class="flex flex-col md:flex-row h-screen">
+    <!-- Content area -->
+    <div class="w-full md:w-3/4 overflow-auto p-8">
+      <article class="prose prose-lg dark:prose-invert max-w-3xl mx-auto">
+        <slot />
+      </article>
+    </div>
+    
+    <!-- Chat area -->
+    <div class="w-full md:w-1/4 border-l border-gray-200 dark:border-gray-800 h-full">
+      <Chat client:load chatConfig={chatConfig} content={rawContent} className="h-full" />
+    </div>
+  </div>
 </Layout>
+
+<style>
+  /* Hide scrollbars but keep functionality */
+  :global(*::-webkit-scrollbar) {
+    display: none;
+  }
+  
+  :global(*) {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+</style>

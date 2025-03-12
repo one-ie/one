@@ -15,44 +15,69 @@ import { useChat } from '@ai-sdk/react';
 import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useState, useRef } from "react";
-
-export interface ChatConfig {
-  api?: string;
-  welcome?: {
-    message: string;
-    avatar: string;
-  };
-  initialMessages?: Array<{
-    id: string;
-    content: string;
-    role: 'user' | 'assistant' | 'system';
-  }>;
-}
+import type { ChatConfig } from "@/schema/chat";
 
 interface ChatProps extends ComponentPropsWithoutRef<"div"> {
   chatConfig?: ChatConfig;
+  content?: string; // Add support for markdown content
 }
 
-export function Chat({ className, chatConfig, ...props }: ChatProps) {
+export function Chat({ className, chatConfig, content = '', ...props }: ChatProps) {
+  // Process the system prompt
+  const processedSystemPrompt = chatConfig?.systemPrompt 
+    ? (typeof chatConfig.systemPrompt === 'string' 
+        ? chatConfig.systemPrompt 
+        : Array.isArray(chatConfig.systemPrompt) 
+          ? chatConfig.systemPrompt.map(p => p.text).join('\n\n')
+          : '')
+    : '';
+
+  // Process welcome message and avatar
+  const welcomeMessage = chatConfig?.welcome?.message;
+  const avatarUrl = chatConfig?.welcome?.avatar;
+
+  // Create initial messages
+  const initialMessages = [];
+  
+  // Add welcome message if available
+  if (welcomeMessage) {
+    initialMessages.push({
+      id: "welcome",
+      role: "assistant" as const,
+      content: welcomeMessage
+    });
+  }
+  
+  // Add any additional initial messages
+  if (chatConfig?.initialMessages) {
+    initialMessages.push(...chatConfig.initialMessages);
+  }
+  
+  // If no messages were added, add a default one
+  if (initialMessages.length === 0) {
+    initialMessages.push({
+      id: "1",
+      role: "user" as const,
+      content: "Hi! I need help writing code. Can you help me?"
+    });
+  }
+
   const { messages, input, handleInputChange, handleSubmit, status, stop, setInput } =
     useChat({
       api: chatConfig?.api || "/api/chatsimple",
-      initialMessages: chatConfig?.welcome 
-        ? [
-            {
-              id: "welcome",
-              role: "assistant",
-              content: chatConfig.welcome.message
-            },
-            ...(chatConfig?.initialMessages || [])
-          ] 
-        : [
-            {
-              id: "1",
-              role: "user",
-              content: "Hi! I need help writing code. Can you help me?"
-            }
-          ]
+      body: {
+        config: chatConfig,
+        provider: chatConfig?.provider,
+        model: chatConfig?.model,
+        apiEndpoint: chatConfig?.apiEndpoint,
+        temperature: chatConfig?.temperature,
+        maxTokens: chatConfig?.maxTokens,
+        systemPrompt: processedSystemPrompt,
+        addSystemPrompt: chatConfig?.addSystemPrompt,
+        addBusinessPrompt: chatConfig?.addBusinessPrompt,
+        content: content // Pass the content to the API
+      },
+      initialMessages
     });
 
   // Define isLoading based on status
@@ -157,6 +182,34 @@ export function Chat({ className, chatConfig, ...props }: ChatProps) {
     }, 50);
   };
 
+  // Render suggestions if available
+  const renderSuggestions = () => {
+    if (!chatConfig?.welcome?.suggestions || chatConfig.welcome.suggestions.length === 0) return null;
+    
+    return (
+      <div className="flex flex-wrap gap-2 mt-4 mb-6 justify-center">
+        {chatConfig.welcome.suggestions.map((suggestion, index) => {
+          // Handle both string and object suggestions
+          const label = typeof suggestion === 'string' ? suggestion : suggestion.label;
+          const prompt = typeof suggestion === 'string' ? suggestion : suggestion.prompt;
+          
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                setInput(prompt);
+                setTimeout(() => handleSubmit(), 50);
+              }}
+              className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-full text-sm transition-colors"
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className={`flex flex-col h-full w-full bg-background relative overflow-hidden ${className}`} {...props} ref={chatWrapperRef}>
       {/* Message area with improved styling */}
@@ -166,6 +219,8 @@ export function Chat({ className, chatConfig, ...props }: ChatProps) {
         style={{ paddingBottom: `${inputHeight + 16}px` }} // Dynamic padding based on input height
       >
         <div className="max-w-2xl mx-auto w-full px-4 py-6 space-y-6">
+          {messages.length === 0 && renderSuggestions()}
+          
           {messages.map((message) => {
             if (message.role !== "user") {
               return (
