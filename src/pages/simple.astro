@@ -4,9 +4,36 @@ import { Chat } from "@/components/Chat";
 ---
 
 <Layout title="Simple Page">
-  <div class="min-h-screen bg-background text-foreground dark">
-    <div class="container mx-auto px-4 py-8">
-      <Chat client:load/>
+  <div class="h-screen flex flex-col bg-background text-foreground overflow-hidden">
+    <header class="h-14 border-b px-4 flex items-center shrink-0">
+      <h1 class="text-lg font-semibold">Simple Chat</h1>
+    </header>
+    <div class="flex-1 relative overflow-hidden">
+      <Chat client:load className="h-full" />
     </div>
   </div>
 </Layout>
+
+<style>
+  /* Hide scrollbars but keep functionality */
+  :global(*::-webkit-scrollbar) {
+    display: none;
+  }
+  
+  :global(*) {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  /* Remove focus outlines */
+  :global(textarea:focus),
+  :global(input:focus),
+  :global(button:focus),
+  :global(*:focus) {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+    ring-width: 0 !important;
+    ring-color: transparent !important;
+  }
+</style>

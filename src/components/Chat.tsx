@@ -65,6 +65,7 @@ export function Chat({ className, chatConfig, ...props }: ChatProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatWrapperRef = useRef<HTMLDivElement>(null);
+  const [inputHeight, setInputHeight] = useState(76); // Default height for input area
 
   // Check if we need to show the scroll button
   const checkScrollPosition = () => {
@@ -79,6 +80,13 @@ export function Chat({ className, chatConfig, ...props }: ChatProps) {
   // Set initial load complete after component mounts
   useEffect(() => {
     setInitialLoadComplete(true);
+    
+    // Measure input height after mount
+    const inputContainer = document.querySelector('.chat-input-container');
+    if (inputContainer) {
+      const height = inputContainer.getBoundingClientRect().height;
+      setInputHeight(height);
+    }
   }, []);
 
   // Auto-scroll to bottom when messages change, but only after initial load
@@ -150,13 +158,14 @@ export function Chat({ className, chatConfig, ...props }: ChatProps) {
   };
 
   return (
-    <div className={`flex flex-col h-full w-full bg-background relative ${className}`} {...props} ref={chatWrapperRef}>
+    <div className={`flex flex-col h-full w-full bg-background relative overflow-hidden ${className}`} {...props} ref={chatWrapperRef}>
       {/* Message area with improved styling */}
       <div 
         ref={chatContainerRef}
         className="flex-1 overflow-auto pb-24 relative"
+        style={{ paddingBottom: `${inputHeight + 16}px` }} // Dynamic padding based on input height
       >
-        <div className="max-w-2xl mx-auto w-full px-4 py-8 space-y-6">
+        <div className="max-w-2xl mx-auto w-full px-4 py-6 space-y-6">
           {messages.map((message) => {
             if (message.role !== "user") {
               return (
@@ -211,7 +220,7 @@ export function Chat({ className, chatConfig, ...props }: ChatProps) {
       </div>
 
       {/* Input area at the bottom with width matching the chat container */}
-      <div className="absolute bottom-0 left-0 right-0 py-4 bg-background shadow-md">
+      <div className="absolute bottom-0 left-0 right-0 py-3 bg-background chat-input-container">
         <div className="px-4 w-full max-w-2xl mx-auto">
           <ChatInput
             value={input}
@@ -223,9 +232,9 @@ export function Chat({ className, chatConfig, ...props }: ChatProps) {
           >
             <ChatInputTextArea 
               placeholder="Type a message..." 
-              className="focus:ring-1 focus:ring-blue-600/50 transition-all text-base"
+              className="focus:ring-0 focus:outline-none transition-all text-base"
             />
-            <ChatInputSubmit className="bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-full flex items-center justify-center" />
+            <ChatInputSubmit className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center" />
           </ChatInput>
         </div>
       </div>
