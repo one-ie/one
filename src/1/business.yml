@@ -261,32 +261,6 @@ navigation:
         - title: Security
           path: /security
 
-# Chat Configuration
-chat:
-  provider: "openai"
-  model: "gpt-4o-mini"
-  apiEndpoint: "https://n8n.agentc.app/webhook/chat"
-  mode: "icon"
-  theme: "system"
-  features:
-    markdown: true
-    codeHighlighting: true
-    media:
-      attachments: false
-      audio: false
-    reactions: false
-    threads: false
-    search: false
-  ui:
-    title: "Chat with AI"
-    description: "I'm your AI assistant, ready to help with any questions or tasks you have."
-    placeholder: "Ask me anything..."
-    layout: {
-      type: "floating",
-      position: "bottom-right"
-    }
-    events: {}
-
 # Pages Configuration
 pages:
   # Global page defaults (fallback values)

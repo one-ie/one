@@ -4,9 +4,9 @@ import { Chat } from "@/components/Chat";
 ---
 
 <Layout title="Simple Page">
-  <div class="h-screen flex flex-col bg-background text-foreground overflow-hidden">
-    <div class="flex-1 relative overflow-hidden">
-      <Chat client:load />
+  <div class="h-screen flex flex-col items-center justify-center bg-background text-foreground overflow-hidden">
+    <div class="w-full max-w-4xl h-[80vh] rounded-lg overflow-hidden">
+      <Chat client:load className="h-full" />
     </div>
   </div>
 </Layout>
