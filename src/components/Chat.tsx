@@ -16,17 +16,43 @@ import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useState, useRef } from "react";
 
-export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
+export interface ChatConfig {
+  api?: string;
+  welcome?: {
+    message: string;
+    avatar: string;
+  };
+  initialMessages?: Array<{
+    id: string;
+    content: string;
+    role: 'user' | 'assistant' | 'system';
+  }>;
+}
+
+interface ChatProps extends ComponentPropsWithoutRef<"div"> {
+  chatConfig?: ChatConfig;
+}
+
+export function Chat({ className, chatConfig, ...props }: ChatProps) {
   const { messages, input, handleInputChange, handleSubmit, status, stop, setInput } =
     useChat({
-      api: "/api/chatsimple",
-      initialMessages: [
-        {
-          id: "1",
-          role: "user",
-          content: "Hi! I need help writing code. Can you help me?"
-        }
-      ]
+      api: chatConfig?.api || "/api/chatsimple",
+      initialMessages: chatConfig?.welcome 
+        ? [
+            {
+              id: "welcome",
+              role: "assistant",
+              content: chatConfig.welcome.message
+            },
+            ...(chatConfig?.initialMessages || [])
+          ] 
+        : [
+            {
+              id: "1",
+              role: "user",
+              content: "Hi! I need help writing code. Can you help me?"
+            }
+          ]
     });
 
   // Define isLoading based on status
@@ -38,6 +64,7 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
   const [editedMessages, setEditedMessages] = useState<Record<string, string>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const chatWrapperRef = useRef<HTMLDivElement>(null);
 
   // Check if we need to show the scroll button
   const checkScrollPosition = () => {
@@ -123,7 +150,7 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
   };
 
   return (
-    <div className={`flex flex-col h-full w-full bg-background ${className}`} {...props}>
+    <div className={`flex flex-col h-full w-full bg-background relative ${className}`} {...props} ref={chatWrapperRef}>
       {/* Message area with improved styling */}
       <div 
         ref={chatContainerRef}
@@ -183,8 +210,8 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
         )}
       </div>
 
-      {/* Fixed input area at the bottom with background matching the page */}
-      <div className="fixed bottom-0 left-0 right-0 py-4 bg-background z-50">
+      {/* Input area at the bottom with width matching the chat container */}
+      <div className="absolute bottom-0 left-0 right-0 py-4 bg-background shadow-md">
         <div className="px-4 w-full max-w-2xl mx-auto">
           <ChatInput
             value={input}
@@ -192,7 +219,7 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
             onSubmit={handleSubmitMessage}
             loading={isLoading}
             onStop={stop}
-            className="shadow-lg hover:shadow-xl transition-all duration-300"
+            className="transition-all duration-300"
           >
             <ChatInputTextArea 
               placeholder="Type a message..." 

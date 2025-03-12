@@ -4,32 +4,7 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { layoutStore, layoutActions, PanelMode } from '../stores/layout';
 import { Maximize2, PanelRightClose, Columns, Minus, X } from 'lucide-react';
-import { useChat } from '@ai-sdk/react';
-
-import {
-  ChatInput,
-  ChatInputSubmit,
-  ChatInputTextArea,
-} from "@/components/chat/chat-input";
-import {
-  ChatMessage,
-  ChatMessageAvatar,
-  ChatMessageContent,
-} from "@/components/chat/chat-message";
-import { ChatMessageArea } from "@/components/chat/chat-message-area";
-
-export interface ChatConfig {
-  api?: string;
-  welcome?: {
-    message: string;
-    avatar: string;
-  };
-  initialMessages?: Array<{
-    id: string;
-    content: string;
-    role: 'user' | 'assistant' | 'system';
-  }>;
-}
+import { Chat, ChatConfig } from '@/components/Chat';
 
 export interface RightPanelProps {
   chatConfig?: ChatConfig;
@@ -50,19 +25,6 @@ const Right: React.FC<RightPanelProps> = (props) => {
   const layout = useStore(layoutStore);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
-
-  // Initialize chat with Vercel AI SDK
-  const { messages, input, handleInputChange, handleSubmit, isLoading, stop } = useChat({
-    api: chatConfig?.api || "/api/chatsimple",
-    initialMessages: chatConfig?.welcome ? [
-      {
-        id: "welcome",
-        role: "assistant",
-        content: chatConfig.welcome.message
-      },
-      ...(chatConfig.initialMessages || [])
-    ] : []
-  });
 
   useEffect(() => {
     setMounted(true);
@@ -106,11 +68,6 @@ const Right: React.FC<RightPanelProps> = (props) => {
     } else {
       layoutActions.setMode(mode);
     }
-  };
-
-  const handleSubmitMessage = () => {
-    if (isLoading) return;
-    handleSubmit();
   };
 
   if (!layout.isVisible || !mounted) return null;
@@ -189,40 +146,9 @@ const Right: React.FC<RightPanelProps> = (props) => {
             </div>
           </header>
           <main 
-            className="flex-1 overflow-y-auto overflow-x-hidden mx-auto w-full max-w-[850px] right-panel-bg"
+            className="flex-1 overflow-hidden mx-auto w-full max-w-[850px] right-panel-bg"
           >
-            <div className="h-full right-panel-bg">
-              <div className="flex-1 flex flex-col h-full right-panel-bg">
-                <ChatMessageArea scrollButtonAlignment="center">
-                  <div className="max-w-2xl mx-auto w-full px-4 py-8 space-y-4 right-panel-bg">
-                    {messages.map((message) => (
-                      <ChatMessage 
-                        key={message.id} 
-                        id={message.id}
-                        variant={message.role === "user" ? "bubble" : "default"}
-                        type={message.role === "user" ? "outgoing" : "incoming"}
-                      >
-                        {message.role !== "user" && <ChatMessageAvatar />}
-                        <ChatMessageContent content={message.content} />
-                      </ChatMessage>
-                    ))}
-                  </div>
-                </ChatMessageArea>
-                
-                <div className="px-2 py-4 max-w-2xl mx-auto w-full right-panel-bg">
-                  <ChatInput
-                    value={input}
-                    onChange={handleInputChange}
-                    onSubmit={handleSubmitMessage}
-                    loading={isLoading}
-                    onStop={stop}
-                  >
-                    <ChatInputTextArea placeholder="Type a message..." />
-                    <ChatInputSubmit />
-                  </ChatInput>
-                </div>
-              </div>
-            </div>
+            <Chat className="right-panel-bg" chatConfig={chatConfig} />
           </main>
         </div>
       )}
