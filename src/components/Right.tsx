@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { layoutStore, layoutActions, PanelMode } from '../stores/layout';
 import { Maximize2, PanelRightClose, Columns, Minus, X } from 'lucide-react';
-import { useChat } from "ai/react";
+import { useChat } from '@ai-sdk/react';
+
 import {
   ChatInput,
   ChatInputSubmit,

@@ -19,14 +19,14 @@ The system follows a cascading inheritance pattern where configurations and prom
 - Establishes fundamental AI behavior patterns
 - Contains base feature explanations and agent characteristics
 
-### 2. I (`src/1/I.md`)
+### 2. I (`src/1/me.md`)
 - Appends business-specific instructions and knowledge
 - Customizes AI behavior for specific use cases
 - Allows for domain-specific rules and responses
 
 
 3. Chat src/components/Chat.tsx 
-Assembles prompt s
+Assembles the prompt - creates a system message from 1.md and Business.md and the values from 
 
 ### 3. Layout Level (`src/layouts/Layout.astro`)
 - Provides default chat configurations that fall ba

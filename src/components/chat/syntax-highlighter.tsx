@@ -1,5 +1,4 @@
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { coldarkDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { useState } from "react";
 
 interface CodeProps {

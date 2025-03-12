@@ -11,13 +11,13 @@ import {
   ChatMessageTyping,
 } from "@/components/chat/chat-message";
 import { Button } from "@/components/ui/button";
-import { useChat } from "ai/react";
+import { useChat } from '@ai-sdk/react';
 import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useState, useRef } from "react";
 
 export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, stop, setInput } =
+  const { messages, input, handleInputChange, handleSubmit, status, stop, setInput } =
     useChat({
       api: "/api/chatsimple",
       initialMessages: [
@@ -28,6 +28,9 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
         }
       ]
     });
+
+  // Define isLoading based on status
+  const isLoading = status === 'streaming' || status === 'submitted';
 
   const [showTyping, setShowTyping] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -79,7 +82,7 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
 
   // Show typing indicator when loading
   useEffect(() => {
-    if (isLoading) {
+    if (status === 'streaming' || status === 'submitted') {
       setShowTyping(true);
     } else {
       // Keep typing indicator for a short time after loading completes for a smoother transition
@@ -88,10 +91,10 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [isLoading]);
+  }, [status]);
 
   const handleSubmitMessage = () => {
-    if (isLoading) {
+    if (status === 'streaming' || status === 'submitted') {
       return;
     }
     handleSubmit();
@@ -109,7 +112,7 @@ export function Chat({ className, ...props }: ComponentPropsWithoutRef<"div">) {
 
   // Handle resubmitting assistant message as a user message
   const handleResubmit = (content: string) => {
-    if (isLoading) return;
+    if (status === 'streaming' || status === 'submitted') return;
     
     setInput(content);
     // Use a small timeout to ensure the UI updates before submitting

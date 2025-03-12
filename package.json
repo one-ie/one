@@ -16,6 +16,7 @@
     "@ai-sdk/anthropic": "^1.1.15",
     "@ai-sdk/mistral": "^1.1.15",
     "@ai-sdk/openai": "^1.2.1",
+    "@ai-sdk/react": "^1.1.21",
     "@assistant-ui/react": "^0.8.4",
     "@assistant-ui/react-ai-sdk": "^0.8.0",
     "@assistant-ui/react-markdown": "^0.8.0",
