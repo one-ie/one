@@ -228,11 +228,12 @@ export function Chat({ className, chatConfig, ...props }: ChatProps) {
             onSubmit={handleSubmitMessage}
             loading={isLoading}
             onStop={stop}
-            className="transition-all duration-300"
+            variant="unstyled"
+            className="transition-all duration-300 border-0 shadow-none bg-[#2a2a2a] p-3 rounded-full"
           >
             <ChatInputTextArea 
               placeholder="Type a message..." 
-              className="focus:ring-0 focus:outline-none transition-all text-base"
+              className="focus:ring-0 focus:outline-none transition-all text-base border-0 text-white placeholder:text-gray-400"
             />
             <ChatInputSubmit className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center" />
           </ChatInput>

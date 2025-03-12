@@ -5,11 +5,8 @@ import { Chat } from "@/components/Chat";
 
 <Layout title="Simple Page">
   <div class="h-screen flex flex-col bg-background text-foreground overflow-hidden">
-    <header class="h-14 border-b px-4 flex items-center shrink-0">
-      <h1 class="text-lg font-semibold">Simple Chat</h1>
-    </header>
     <div class="flex-1 relative overflow-hidden">
-      <Chat client:load className="h-full" />
+      <Chat client:load />
     </div>
   </div>
 </Layout>
@@ -35,5 +32,16 @@ import { Chat } from "@/components/Chat";
     border-color: transparent !important;
     ring-width: 0 !important;
     ring-color: transparent !important;
+  }
+  
+  /* Remove borders from chat input */
+  :global(.chat-input-container *) {
+    border: none !important;
+    outline: none !important;
+  }
+  
+  :global(.chat-input-container div) {
+    border: none !important;
+    outline: none !important;
   }
 </style>

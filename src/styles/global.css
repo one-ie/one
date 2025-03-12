@@ -527,20 +527,6 @@
   border-bottom-left-radius: 0;
 }
 
-.chat-input-container {
-  position: relative;
-  transition: all 0.3s ease;
-  border: 1px solid hsla(0, 0%, 100%, 0.02);
-  border-radius: var(--radius);
-  backdrop-filter: blur(8px);
-  background-color: hsla(var(--one-background-card) / 0.3);
-}
-
-.chat-input-container:focus-within {
-  transform: translateY(-2px);
-  border-color: hsla(var(--one-primary) / 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.005);
-}
 
 /* Layout Grid System */
 .main-grid {
