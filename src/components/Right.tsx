@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { layoutStore, layoutActions, PanelMode } from '../stores/layout';
 import { Maximize2, PanelRightClose, Columns, Minus, X } from 'lucide-react';
-import { Chat, ChatConfig } from '@/components/Chat';
+import { Chat } from '@/components/Chat';
+import type { ChatConfig } from '@/schema/chat';
 
 export interface RightPanelProps {
   chatConfig?: ChatConfig;
