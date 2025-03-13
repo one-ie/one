@@ -7,9 +7,6 @@ date: 2024-02-03
 
 # AI Everywhere
 
-ONE makes it easy to add AI into your app using markdown, yaml, and typescript. 
-Add AI to any type of content - pages, docs, blog posts, lessons, videos. You can use eternal data from anywhere like Shopify, Wordpress or Notion.
-
 ## Hierarchy
 
 The system follows a cascading inheritance pattern where configurations and prompts flow from base to specific implementations:
@@ -39,81 +36,4 @@ Assembles the prompt - creates a system message from 1.md and business.md and th
 - `Docs.astro`: Documentation-specific settings
 
 
-## Implementation Details
-
-### 1. Base Configuration
-```typescript
-// Default chat configuration in Layout.astro
-const defaultChatConfig = ChatSchema.parse({
-  provider: 'mistral',
-  model: 'mistral-large-latest',
-  systemPrompt: [{
-    type: 'text',
-    text: 'I am Agent ONE. How can I help you today?'
-  }]
-});
-```
-
-### 2. Page-Level Override
-```astro
----
-const chatConfig = ChatConfigSchema.parse({
-  systemPrompt: [{
-    type: "text",
-    text: "Custom prompt for this page"
-  }],
-  welcome: {
-    message: "Welcome to this section!",
-    suggestions: []
-  }
-});
----
-
-<Layout chatConfig={chatConfig}>
-  <!-- Page content -->
-</Layout>
-```
-
-## Best Practices
-
-1. **Modular Configuration**
-   - Keep base prompts focused and reusable
-   - Use business customization for specific domains
-   - Override only necessary settings at each level
-
-2. **Inheritance Management**
-   - Follow the configuration cascade
-   - Document overrides clearly
-   - Maintain consistent behavior patterns
-
-3. **Performance Optimization**
-   - Configure appropriate token limits
-   - Set temperature based on use case
-   - Choose suitable models for different scenarios
-
-## Advanced Usage
-
-### Custom Endpoints
-```typescript
-const config = {
-  provider: 'custom',
-  apiEndpoint: 'https://your-api.com',
-  apiKey: process.env.API_KEY
-};
-```
-
-### Runtime Selection
-```typescript
-const config = {
-  runtime: 'edge', // or 'node'
-  model: 'mistral-large-latest'
-};
-```
-
-## Next Steps
-
-1. Review the base system prompt in `src/1/1.md`
-2. Customize business rules in `src/1/I.md`
-3. Configure layout defaults in `Layout.astro`
-4. Implement page-specific overrides as needed
 

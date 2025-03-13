@@ -108,7 +108,7 @@ export const POST: APIRoute = async ({ request }) => {
     const provider = requestData.provider || config.provider || 'mistral';
     const model = requestData.model || config.model || 'mistral-large-latest';
     const temperature = requestData.temperature || config.temperature || 0.7;
-    const maxTokens = requestData.maxTokens || config.maxTokens || 2000;
+    const maxTokens = requestData.maxTokens || config.maxTokens || 12000;
     
     // Handle system prompts
     const userSystemPrompt = processSystemPrompt(requestData.systemPrompt || config.systemPrompt || '');
@@ -125,7 +125,6 @@ export const POST: APIRoute = async ({ request }) => {
     
     // Get content settings
     const includeContent = config.includeContent !== undefined ? config.includeContent : true;
-    const contentPrefix = config.contentPrefix || '### Reference Content:';
     
     // Check environment variables early
     const envKey = `${provider.toUpperCase()}_API_KEY`;
@@ -145,7 +144,6 @@ export const POST: APIRoute = async ({ request }) => {
     // Add content to system prompt if available and includeContent is true
     if (content && includeContent) {
       console.log('Adding content to system prompt');
-      fullSystemPrompt += `\n\n${contentPrefix}\n${content}`;
     } else {
       console.log('Not adding content to system prompt:', { content: !!content, includeContent });
     }

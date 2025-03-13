@@ -1,23 +1,21 @@
 import { z } from 'zod';
+import fs from 'node:fs';
+import path from 'node:path';
 
-const ContentPart = z.object({
+// Core schema definitions
+const ProviderSchema = z.enum(['openai', 'anthropic', 'mistral', 'ollama'])
+  .default('mistral');
+
+const ContentPartSchema = z.object({
   type: z.literal('text'),
   text: z.string()
 });
 
-// Define supported providers
-const ProviderSchema = z.enum(['openai', 'anthropic', 'mistral', 'ollama']).default('mistral');
-
-// Define the system prompt schema to accept both string and array formats
 const SystemPromptSchema = z.union([
   z.string(),
-  z.array(ContentPart)
-]).default([{
-  type: 'text',
-  text: 'I am Agent ONE. How can I help you today?'
-}]);
+  z.array(ContentPartSchema)
+]).default('I am Agent ONE. How can I help you today?');
 
-// Define the suggestions schema
 const SuggestionSchema = z.union([
   z.string(),
   z.object({
@@ -26,115 +24,136 @@ const SuggestionSchema = z.union([
   })
 ]);
 
-export const ChatConfigSchema = z.object({
-  // Core API configuration
-  provider: ProviderSchema,
-  model: z.string().default('mistral-large-latest'),
-  apiKey: z.string().optional(),
-  apiEndpoint: z.string().url().optional(),
-  runtime: z.enum(['edge', 'node']).default('edge'),
-  temperature: z.number().min(0).max(2).default(0.7),
-  maxTokens: z.number().min(1).max(4000).default(2000),
-  
-  // API endpoint
-  api: z.string().optional(),
-  
-  // Prompt configuration
-  systemPrompt: SystemPromptSchema,
-  userPrompt: z.array(ContentPart).optional(),
-  addSystemPrompt: z.boolean().default(false),
-  addBusinessPrompt: z.boolean().default(false),
-  
-  // Content configuration
-  includeContent: z.boolean().default(true),
-  contentPrefix: z.string().default('### Reference Content:'),
-  
-  // Alternative property names for compatibility with frontmatter
-  aiProvider: ProviderSchema.optional(),
-  aiModel: z.string().optional(),
-  
-  // Initial messages
-  initialMessages: z.array(
-    z.object({
-      id: z.string(),
-      content: z.string(),
-      role: z.enum(['user', 'assistant', 'system'])
-    })
-  ).optional(),
-  
-  // Welcome configuration
-  welcome: z.object({
-    message: z.string().default('How can I help you today?'),
-    avatar: z.string().default('/icon.svg'),
-    suggestions: z.array(SuggestionSchema).default([])
-  }).default({
-    message: 'How can I help you today?',
-    avatar: '/icon.svg',
-    suggestions: []
-  }),
-  
-  // Alternative welcome properties for compatibility with frontmatter
-  welcomeMessage: z.string().optional(),
-  avatar: z.string().optional(),
-  suggestions: z.array(SuggestionSchema).optional(),
-  
-  // Metadata for SEO and organization
+const MessageSchema = z.object({
+  id: z.string(),
+  content: z.string(),
+  role: z.enum(['user', 'assistant', 'system'])
+});
+
+// Base schema without transform
+const BaseChatSchema = z.object({
+  // Layout and Meta
+  layout: z.string().optional(),
   title: z.string().optional(),
   description: z.string().optional(),
   keywords: z.array(z.string()).optional(),
-  categories: z.array(z.string()).optional()
+  categories: z.array(z.string()).optional(),
+
+  // AI Config
+  aiProvider: ProviderSchema.optional().default('mistral'),
+  aiModel: z.string().optional().default('mistral-large-latest'),
+  apiEndpoint: z.string().url().optional().default('https://api.openai.com/v1'),
+  temperature: z.number().min(0).max(2).optional().default(0.7),
+  maxTokens: z.number().min(1).max(114000).optional().default(2000),
+  
+  // Prompt Config
+  systemPrompt: SystemPromptSchema.optional(),
+  addSystemPrompt: z.boolean().optional().default(true),
+  addBusinessPrompt: z.boolean().optional().default(true),
+
+  // Welcome Config
+  welcomeMessage: z.string().optional()
+    .default('How can I help you today?'),
+  avatar: z.string().optional().default('/icon.svg'),
+  suggestions: z.array(SuggestionSchema).optional().default([]),
+
+  // Optional Config
+  api: z.string().optional(),
+  apiKey: z.string().optional(),
+  runtime: z.enum(['edge', 'node']).optional().default('edge'),
+  includeContent: z.boolean().optional().default(true),
+  initialMessages: z.array(MessageSchema).optional()
 });
 
-export type ChatConfig = z.infer<typeof ChatConfigSchema>;
+// Type exports
+export type ContentPart = z.infer<typeof ContentPartSchema>;
+export type Suggestion = z.infer<typeof SuggestionSchema>;
+export type Message = z.infer<typeof MessageSchema>;
+export type BaseChat = z.infer<typeof BaseChatSchema>;
 
-// Helper function to create a default config
-export function createDefaultConfig(overrides?: Partial<z.infer<typeof ChatConfigSchema>>): ChatConfig {
-  return ChatConfigSchema.parse(overrides || {});
+// Helper function to load prompt content
+function loadPromptContent(filePath: string): string {
+  try {
+    return fs.readFileSync(path.join(process.cwd(), filePath), 'utf-8');
+  } catch (error) {
+    console.warn(`Warning: Could not load prompt from ${filePath}`, error);
+    return '';
+  }
 }
 
-// Helper function to normalize config from different sources (like frontmatter)
-export function normalizeConfig(config: Record<string, any>): ChatConfig {
-  // Map alternative property names to standard ones
-  const normalizedConfig: Record<string, any> = { ...config };
-  
-  // Handle provider mapping
-  if (config.aiProvider && !config.provider) {
-    normalizedConfig.provider = config.aiProvider;
+// Function to combine prompts in order
+function combinePrompts(config: BaseChat): ContentPart[] {
+  const prompts: string[] = [];
+
+  // Add system prompt (1.md) if enabled
+  if (config.addSystemPrompt) {
+    const systemPrompt = loadPromptContent('src/1/1.md');
+    if (systemPrompt) prompts.push(systemPrompt);
   }
-  
-  // Handle model mapping
-  if (config.aiModel && !config.model) {
-    normalizedConfig.model = config.aiModel;
+
+  // Add business prompt (business.md) if enabled
+  if (config.addBusinessPrompt) {
+    const businessPrompt = loadPromptContent('src/1/business.md');
+    if (businessPrompt) prompts.push(businessPrompt);
   }
-  
-  // Handle welcome message mapping
-  if (config.welcomeMessage && !config.welcome?.message) {
-    normalizedConfig.welcome = {
-      ...(normalizedConfig.welcome || {}),
-      message: config.welcomeMessage
-    };
+
+  // Add page-specific system prompt if provided
+  if (config.systemPrompt) {
+    prompts.push(typeof config.systemPrompt === 'string' 
+      ? config.systemPrompt 
+      : config.systemPrompt.map((p: ContentPart) => p.text).join('\n\n')
+    );
   }
-  
-  // Handle avatar mapping
-  if (config.avatar && !config.welcome?.avatar) {
-    normalizedConfig.welcome = {
-      ...(normalizedConfig.welcome || {}),
-      avatar: config.avatar
-    };
-  }
-  
-  // Handle suggestions mapping
-  if (config.suggestions && !config.welcome?.suggestions) {
-    normalizedConfig.welcome = {
-      ...(normalizedConfig.welcome || {}),
-      suggestions: config.suggestions.map((suggestion: string | { label: string, prompt: string }) => {
-        if (typeof suggestion === 'string') {
-          return { label: suggestion, prompt: suggestion };
-        }
-        return suggestion;
-      })
-    };
-  }
-  
-  return ChatConfigSchema.parse(normalizedConfig);
+
+  // Convert to ContentPart array
+  return prompts.map(text => ({
+    type: 'text' as const,
+    text: text.trim()
+  }));
 }
+
+// Schema with transform
+export const ChatSchema = BaseChatSchema.transform((config): Chat => ({
+  ...config,
+  provider: config.aiProvider || 'mistral',
+  model: config.aiModel || 'mistral-large-latest',
+  welcome: {
+    message: config.welcomeMessage || 'How can I help you today?',
+    avatar: config.avatar || '/icon.svg',
+    suggestions: (config.suggestions || []).map(suggestion => 
+      typeof suggestion === 'string' 
+        ? { label: suggestion, prompt: suggestion }
+        : suggestion
+    )
+  },
+  systemPrompt: combinePrompts(config)
+}));
+
+// Type for transformed output
+export interface Chat extends BaseChat {
+  provider: string;
+  model: string;
+  welcome: {
+    message: string;
+    avatar: string;
+    suggestions: Array<{ label: string; prompt: string; }>;
+  };
+  systemPrompt: ContentPart[];
+}
+
+// Type alias for backward compatibility
+export type ChatConfig = Chat;
+
+// Exports for backward compatibility
+export const ChatConfigSchema = ChatSchema;
+
+// Function exports
+export function normalizeConfig(config: Record<string, any>): Chat {
+  return ChatSchema.parse(config || {});
+}
+
+export function createChat(overrides?: Partial<Chat>): Chat {
+  return ChatSchema.parse(overrides || {});
+}
+
+export const createDefaultConfig = createChat;
