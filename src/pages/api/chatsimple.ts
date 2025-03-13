@@ -118,6 +118,15 @@ export const POST: APIRoute = async ({ request }) => {
     // Get content if available
     const content = requestData.content || '';
     
+    // Debug content
+    console.log('Content type:', typeof content);
+    console.log('Content length:', content.length);
+    console.log('Content preview:', content.substring(0, 100));
+    
+    // Get content settings
+    const includeContent = config.includeContent !== undefined ? config.includeContent : true;
+    const contentPrefix = config.contentPrefix || '### Reference Content:';
+    
     // Check environment variables early
     const envKey = `${provider.toUpperCase()}_API_KEY`;
     if (!process.env[envKey]) {
@@ -133,10 +142,16 @@ export const POST: APIRoute = async ({ request }) => {
       .filter(Boolean)
       .join('\n\n');
     
-    // Add content to system prompt if available
-    if (content) {
-      fullSystemPrompt += `\n\n### Reference Content:\n${content}`;
+    // Add content to system prompt if available and includeContent is true
+    if (content && includeContent) {
+      console.log('Adding content to system prompt');
+      fullSystemPrompt += `\n\n${contentPrefix}\n${content}`;
+    } else {
+      console.log('Not adding content to system prompt:', { content: !!content, includeContent });
     }
+    
+    // Log the system prompt for debugging
+    console.log('System prompt:', fullSystemPrompt.substring(0, 200) + '...');
     
     // Add system prompt if available
     let messages: ExtendedMessage[] = [...requestData.messages] as ExtendedMessage[];
@@ -164,7 +179,7 @@ export const POST: APIRoute = async ({ request }) => {
       };
     });
 
-    console.log('Sending messages:', JSON.stringify(formattedMessages, null, 2));
+    console.log('Sending messages:', JSON.stringify(formattedMessages.slice(0, 1), null, 2));
 
     const handler = createEdgeRuntimeAPI({
       model: getProvider(requestData),

@@ -26,7 +26,7 @@ The system follows a cascading inheritance pattern where configurations and prom
 
 
 3. Chat src/components/Chat.tsx 
-Assembles the prompt - creates a system message from 1.md and Business.md and the values from 
+Assembles the prompt - creates a system message from 1.md and business.md and the values from 
 
 ### 3. Layout Level (`src/layouts/Layout.astro`)
 - Provides default chat configurations that fall ba
@@ -38,17 +38,6 @@ Assembles the prompt - creates a system message from 1.md and Business.md and th
 - `page.md`: Custom content-specific configurations
 - `Docs.astro`: Documentation-specific settings
 
-## Configuration Flow
-
-```mermaid
-graph TD
-    A[Base System - 1.md] --> B[Business Custom - I.md]
-    B --> C[Layout.astro]
-    C --> D[Page Level]
-    D --> E[page.astro]
-    D --> F[page.md]
-    D --> G[Docs.astro]
-```
 
 ## Implementation Details
 

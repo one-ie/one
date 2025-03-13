@@ -1,0 +1,132 @@
+---
+import Layout from "../layouts/Layout.astro";
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import matter from 'gray-matter';
+import { normalizeConfig } from "@/schema/chat";
+
+// Read the content-test.md file
+const testMdPath = path.join(process.cwd(), 'src', 'pages', 'content-test.md');
+const testMdContent = await fs.readFile(testMdPath, 'utf-8');
+
+// Parse frontmatter and content
+const { data: frontmatter, content } = matter(testMdContent);
+
+// Normalize the configuration
+const chatConfig = normalizeConfig(frontmatter);
+
+// Process the system prompt
+const processedSystemPrompt = chatConfig?.systemPrompt 
+  ? (typeof chatConfig.systemPrompt === 'string' 
+      ? chatConfig.systemPrompt 
+      : Array.isArray(chatConfig.systemPrompt) 
+        ? chatConfig.systemPrompt.map(p => p.text).join('\n\n')
+        : '')
+  : '';
+
+// Get content settings
+const includeContent = chatConfig.includeContent !== undefined ? chatConfig.includeContent : true;
+const contentPrefix = chatConfig.contentPrefix || '### Reference Content:';
+
+// Combine system prompt and content
+let fullSystemPrompt = processedSystemPrompt;
+
+// Add content to system prompt if available and includeContent is true
+if (content && includeContent) {
+  fullSystemPrompt += `\n\n${contentPrefix}\n${content}`;
+}
+
+// Create a message object like what would be sent to the LLM
+const systemMessage = {
+  id: 'system-1',
+  role: 'system',
+  content: fullSystemPrompt
+};
+
+// Create a sample user message
+const userMessage = {
+  id: 'user-1',
+  role: 'user',
+  content: "What is this page about? Please reference specific details from the content."
+};
+
+// Create the messages array
+const messages = [systemMessage, userMessage];
+---
+
+<Layout title="Debug LLM Messages">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Debug LLM Messages</h1>
+    
+    <div class="grid grid-cols-1 gap-8">
+      <div class="border rounded-lg overflow-hidden">
+        <div class="bg-primary/10 p-4">
+          <h2 class="text-xl font-semibold">System Message</h2>
+        </div>
+        <div class="p-6 max-h-[600px] overflow-auto">
+          <pre class="whitespace-pre-wrap text-sm">{systemMessage.content}</pre>
+        </div>
+      </div>
+      
+      <div class="border rounded-lg overflow-hidden">
+        <div class="bg-primary/10 p-4">
+          <h2 class="text-xl font-semibold">User Message</h2>
+        </div>
+        <div class="p-6">
+          <pre class="whitespace-pre-wrap text-sm">{userMessage.content}</pre>
+        </div>
+      </div>
+      
+      <div class="border rounded-lg overflow-hidden">
+        <div class="bg-primary/10 p-4">
+          <h2 class="text-xl font-semibold">Full Messages Array</h2>
+        </div>
+        <div class="p-6">
+          <pre class="whitespace-pre-wrap text-sm">{JSON.stringify(messages, null, 2)}</pre>
+        </div>
+      </div>
+      
+      <div class="border rounded-lg overflow-hidden">
+        <div class="bg-primary/10 p-4">
+          <h2 class="text-xl font-semibold">Configuration</h2>
+        </div>
+        <div class="p-6">
+          <pre class="whitespace-pre-wrap text-sm">{JSON.stringify(chatConfig, null, 2)}</pre>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-8">
+      <h2 class="text-2xl font-bold mb-4">How to Test</h2>
+      <div class="prose prose-lg dark:prose-invert max-w-none">
+        <p>To verify that content is being sent to the LLM:</p>
+        
+        <ol>
+          <li>
+            <strong>Visit the <a href="/content-test">Content Test</a> page</strong>
+          </li>
+          <li>
+            <strong>Click on the suggestion buttons</strong> to ask questions about the content
+          </li>
+          <li>
+            <strong>Check if the AI references specific details</strong> from the content in its responses
+          </li>
+        </ol>
+        
+        <p>If the AI can reference specific details like the test numbers (42, 73, 91) or the secret code (BLUE-DOLPHIN-7734), then we know the content is being properly sent to the LLM.</p>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Hide scrollbars but keep functionality */
+  :global(*::-webkit-scrollbar) {
+    display: none;
+  }
+  
+  :global(*) {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+</style> 

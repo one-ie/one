@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Todo from "../components/Todo";
+---
+
+<Layout title="Todo App | ONE Framework">
+  <main class="container mx-auto py-12">
+    <h1 class="text-4xl font-bold text-center mb-8">Todo App</h1>
+    <p class="text-center text-muted-foreground mb-8 max-w-md mx-auto">
+      A simple Todo application built with ONE framework, React, and Shadcn UI.
+    </p>
+    
+    <Todo client:load />
+  </main>
+</Layout> 

@@ -23,6 +23,11 @@ interface ChatProps extends ComponentPropsWithoutRef<"div"> {
 }
 
 export function Chat({ className, chatConfig, content = '', ...props }: ChatProps) {
+  // Debug content
+  console.log('Chat component content type:', typeof content);
+  console.log('Chat component content length:', content.length);
+  console.log('Chat component content preview:', content.substring(0, 100));
+
   // Process the system prompt
   const processedSystemPrompt = chatConfig?.systemPrompt 
     ? (typeof chatConfig.systemPrompt === 'string' 
@@ -79,6 +84,13 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
       },
       initialMessages
     });
+
+  // Debug request body
+  console.log('Chat component request body:', {
+    provider: chatConfig?.provider,
+    model: chatConfig?.model,
+    contentLength: content.length
+  });
 
   // Define isLoading based on status
   const isLoading = status === 'streaming' || status === 'submitted';
