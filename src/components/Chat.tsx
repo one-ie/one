@@ -16,6 +16,7 @@ import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
 import { useEffect, useState, useRef } from "react";
 import type { ChatConfig } from "@/schema/chat";
+import { cn } from "@/lib/utils";
 
 interface ChatProps extends ComponentPropsWithoutRef<"div"> {
   chatConfig?: ChatConfig;
@@ -246,12 +247,17 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
                  type={isAssistant ? undefined : "outgoing"}
                  className={isAssistant ? "animate-fade-in" : "animate-slide-in"}
                >
-                 <ChatMessageContent
-                   content={isAssistant ? message.content : (editedMessages[message.id] || message.content)}
-                   className={isAssistant ? "prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500" : "font-medium text-base"}
-                   onContentChange={isAssistant ? undefined : handleMessageEdit}
-                   onResubmit={isAssistant ? handleResubmit : undefined}
-                 />
+                 <div className={isWelcomeMessage ? "welcome-message" : ""}>
+                   <ChatMessageContent
+                     content={isAssistant ? message.content : (editedMessages[message.id] || message.content)}
+                     className={cn(
+                       isAssistant ? "prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500" : "font-medium text-base",
+                       isWelcomeMessage ? "[&_button]:hidden" : ""
+                     )}
+                     onContentChange={isAssistant ? undefined : handleMessageEdit}
+                     onResubmit={isAssistant && !isWelcomeMessage ? handleResubmit : undefined}
+                   />
+                 </div>
                  {!isAssistant && <ChatMessageAvatar />}
                </ChatMessage>
 
