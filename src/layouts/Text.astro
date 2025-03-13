@@ -1,7 +1,7 @@
 ---
 import Layout from "./1.astro";
 import { Chat } from "@/components/Chat";
-import { ChatSchema } from "@/schema/chat";
+import { normalizeConfig } from "@/schema/chat";
 
 // Get frontmatter and content from the markdown file
 const { frontmatter, content } = Astro.props;
@@ -16,7 +16,7 @@ console.log('Raw content length:', rawContent.length);
 console.log('Raw content preview:', rawContent.substring(0, 100));
 
 // Normalize the configuration from frontmatter
-const chatConfig = ChatSchema.parse(frontmatter || {});
+const chatConfig = normalizeConfig(frontmatter);
 ---
 
 <Layout title={frontmatter.title} description={frontmatter.description}>

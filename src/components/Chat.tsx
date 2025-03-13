@@ -199,7 +199,7 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
     if (!chatConfig?.welcome?.suggestions || chatConfig.welcome.suggestions.length === 0) return null;
     
     return (
-      <div className="flex flex-wrap gap-2 mt-4 mb-6 justify-center">
+      <div className="flex flex-wrap gap-3 mt-6 mb-8 justify-center max-w-[600px] mx-auto">
         {chatConfig.welcome.suggestions.map((suggestion, index) => {
           // Handle both string and object suggestions
           const label = typeof suggestion === 'string' ? suggestion : suggestion.label;
@@ -212,8 +212,10 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
                 setInput(prompt);
                 setTimeout(() => handleSubmit(), 50);
               }}
-              className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-full text-sm transition-colors"
+              className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-md flex items-center gap-2"
             >
+              {/* Add a sparkle emoji before each suggestion */}
+              <span className="opacity-70">✨</span>
               {label}
             </button>
           );
@@ -231,45 +233,58 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
         style={{ paddingBottom: `${inputHeight + 16}px` }} // Dynamic padding based on input height
       >
         <div className="max-w-2xl mx-auto w-full px-4 py-6 space-y-6">
-          {messages.length === 0 && renderSuggestions()}
-          
-          {messages.map((message) => {
-            if (message.role !== "user") {
-              return (
-                <ChatMessage 
-                  key={message.id} 
-                  id={message.id}
-                  variant="bubble"
-                  className="animate-fade-in"
-                >
-                  <ChatMessageContent 
-                    content={message.content} 
-                    className="prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500"
-                    onResubmit={handleResubmit}
-                  />
-                </ChatMessage>
-              );
-            }
-            return (
-              <ChatMessage
-                key={message.id}
-                id={message.id}
-                variant="bubble"
-                type="outgoing"
-                className="animate-slide-in"
-              >  
-                <ChatMessageContent 
-                  content={editedMessages[message.id] || message.content} 
-                  className="font-medium text-base"
-                  onContentChange={handleMessageEdit}
-                />
-                <ChatMessageAvatar />
-              </ChatMessage>
-            );
-          })}
+         {messages.map((message, index) => {
+           const isAssistant = message.role === "assistant";
+           const isWelcomeMessage = isAssistant && index === 0 && message.id === "welcome";
+           const suggestions = chatConfig?.welcome?.suggestions || [];
+           
+           return (
+             <div key={message.id}>
+               <ChatMessage
+                 id={message.id}
+                 variant="bubble"
+                 type={isAssistant ? undefined : "outgoing"}
+                 className={isAssistant ? "animate-fade-in" : "animate-slide-in"}
+               >
+                 <ChatMessageContent
+                   content={isAssistant ? message.content : (editedMessages[message.id] || message.content)}
+                   className={isAssistant ? "prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500" : "font-medium text-base"}
+                   onContentChange={isAssistant ? undefined : handleMessageEdit}
+                   onResubmit={isAssistant ? handleResubmit : undefined}
+                 />
+                 {!isAssistant && <ChatMessageAvatar />}
+               </ChatMessage>
+
+               {/* Show suggestions after welcome message */}
+               {isWelcomeMessage && suggestions.length > 0 && (
+                 <div className="mt-4 mb-8">
+                   {renderSuggestions()}
+                 </div>
+               )}
+             </div>
+           );
+         })}
           
           {/* Typing indicator */}
           {showTyping && <ChatMessageTyping />}
+          
+          {/* Show suggestions button after some messages */}
+          {messages.length > 2 && !showTyping && (
+            <div className="flex justify-center my-4">
+              <Button
+                onClick={() => {
+                  setInput("Can you give me more suggestions?");
+                  setTimeout(() => handleSubmit(), 50);
+                }}
+                variant="secondary"
+                size="sm"
+                className="text-sm bg-primary/5 hover:bg-primary/10 text-primary hover:text-primary"
+              >
+                <span className="mr-2">✨</span>
+                Show more suggestions
+              </Button>
+            </div>
+          )}
           
           {/* Invisible element to scroll to */}
           <div ref={messagesEndRef} />
