@@ -120,7 +120,7 @@ export const CodeHighlighter = ({ language, children }: CodeProps) => {
   return (
     <div className="relative group overflow-hidden bg-[#1e1e1e]">
       {/* Header */}
-      <div className="flex items-center px-4 bg-[#252526]">
+      <div className="flex items-center h-8 px-4 bg-[#252526] border-b border-[#1e1e1e]">
         <span className="text-sm text-[#cccccc] font-mono lowercase">{language}</span>
       </div>
       

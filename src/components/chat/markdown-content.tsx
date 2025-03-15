@@ -7,7 +7,7 @@ import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const DEFAULT_PRE_BLOCK_CLASS =
-	"my-4 overflow-x-auto w-full rounded-lg bg-[#1e1e1e] text-[#d4d4d4] dark:bg-[#1e1e1e] p-0 relative text-base group border border-zinc-800 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]";
+"overflow-x-auto w-full rounded-lg bg-[#1e1e1e] text-[#d4d4d4] dark:bg-[#1e1e1e] p-0 relative text-base group border border-zinc-800 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]";
 
 const extractTextContent = (node: React.ReactNode): string => {
   type ReactElementWithChildren = React.ReactElement & {
@@ -35,7 +35,7 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
   const [content, setContent] = React.useState<JSX.Element>(
     <div className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
       {/* Header */}
-      <div className="flex items-center px-4 py-1.5 bg-[#252526] border-b border-[#1e1e1e]">
+      <div className="flex items-center h-8 px-4 bg-[#252526] border-b border-[#1e1e1e]">
         <span className="text-xs text-[#cccccc] font-mono lowercase">{language}</span>
       </div>
       <pre {...props} className="p-4 m-0 font-['Menlo',_'Monaco',_'Consolas',_'Courier_New',_monospace] text-sm">
@@ -65,7 +65,7 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
       setContent(
         <div className={cn(DEFAULT_PRE_BLOCK_CLASS, className)}>
           {/* Header */}
-          <div className="flex items-center px-4 py-1.5 bg-[#252526] border-b border-[#1e1e1e]">
+          <div className="flex items-center h-8 px-4 bg-[#252526] border-b border-[#1e1e1e]">
             <span className="text-xs text-[#cccccc] font-mono lowercase">{language}</span>
           </div>
           <pre {...props} className="p-4 m-0 font-['Menlo',_'Monaco',_'Consolas',_'Courier_New',_monospace] text-sm">
