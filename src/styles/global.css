@@ -13,7 +13,7 @@
   /* Core colors */
   --one-black: hsl(0 0% 0%);        /* #000000 */
   --one-dark: hsl(0 0% 10%);        /* #1A1A1A - Slightly lighter sidebar */
-  --one-background: hsl(0 0% 11%);  /* #1C1C1C - Slightly darker background */
+  --one-background: hsl(0 0% 13%);  /* #1C1C1C - Slightly darker background */
   --one-white: hsl(0 0% 100%);      /* #FFFFFF */
   
   /* Semantic mappings - Dark Theme (Default) */

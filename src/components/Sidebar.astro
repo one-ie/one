@@ -6,16 +6,14 @@ import {
   Shield,
   LayoutGrid,
   CreditCard,
-  FileText,
-  Home
+  MessageSquare
 } from "lucide-react";
 
 // Default navigation items
 const defaultNavigation = [
-  { title: "Home", path: "/chat", icon: Home },
+  { title: "Chat", path: "/ai", icon: MessageSquare },
   { title: "Blog", path: "/blog", icon: Newspaper },
   { title: "Docs", path: "/docs", icon: BookText },
-  { title: "Prompts", path: "/prompts", icon: FileText },
   { title: "Pages", path: "/pages", icon: LayoutGrid },
   { title: "Payments", path: "/payments", icon: CreditCard },
   { title: "Download", path: "/download", icon: Download },
@@ -31,7 +29,7 @@ const currentPath = Astro.url.pathname;
   <nav class="h-full flex flex-col bg-[var(--one-background-nav)]">
     <!-- Logo Section -->
     <div
-      class="flex items-center justify-center bg-[var(--one-background-nav)]"
+      class="flex items-center justify-center bg-[hsla(0,0%,14%,0.5)]"
     >
       <a
         href="/"

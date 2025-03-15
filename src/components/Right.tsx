@@ -1,5 +1,5 @@
 "use client";
-
+ 
 import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { layoutStore, layoutActions, PanelMode } from '../stores/layout';
@@ -22,7 +22,7 @@ const Right: React.FC<RightPanelProps> = (props) => {
     Object.entries(props).filter(([key]) => !key.startsWith("client:"))
   ) as Omit<RightPanelProps, "client:load" | "client:idle" | "client:only">;
 
-  const { rightPanelMode, chatConfig, content } = componentProps;
+  const { rightPanelMode, chatConfig } = componentProps;
   const layout = useStore(layoutStore);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);

@@ -99,10 +99,6 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
 import { CodeHighlighter } from "./syntax-highlighter";
 export { CodeHighlighter };
 
-// Import CopyButton from syntax-highlighter
-import type { CopyButtonProps } from "./syntax-highlighter";
-import { type FC } from "react";
-
 // Update HighlightedPre to use the new component
 const HighlightedPre = memo(({ children, className, language, ...props }: HighlightedPreProps) => {
   return (
