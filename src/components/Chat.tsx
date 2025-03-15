@@ -24,10 +24,34 @@ interface ChatProps extends ComponentPropsWithoutRef<"div"> {
 }
 
 export function Chat({ className, chatConfig, content = '', ...props }: ChatProps) {
-  // Debug content
-  console.log('Chat component content type:', typeof content);
-  console.log('Chat component content length:', content.length);
-  console.log('Chat component content preview:', content.substring(0, 100));
+  // Process and validate content
+  const sanitizedContent = (() => {
+    try {
+      if (!content) return '';
+      // If it looks like JSON, try to extract real content
+      if (content.startsWith('{') && content.endsWith('}')) {
+        try {
+          const parsed = JSON.parse(content);
+          // Look for actual content properties
+          return parsed.content || parsed.body || '';
+        } catch {
+          return content;
+        }
+      }
+      return content;
+    } catch (e) {
+      console.error('Error processing content:', e);
+      return '';
+    }
+  })();
+
+  // Debug processed content
+  console.log('Processed chat content:', {
+    originalType: typeof content,
+    processedType: typeof sanitizedContent,
+    length: sanitizedContent.length,
+    preview: sanitizedContent.substring(0, 100),
+  });
 
   // Process the system prompt
   const processedSystemPrompt = chatConfig?.systemPrompt 
@@ -81,7 +105,7 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
         systemPrompt: processedSystemPrompt,
         addSystemPrompt: chatConfig?.addSystemPrompt,
         addBusinessPrompt: chatConfig?.addBusinessPrompt,
-        content: content // Pass the content to the API
+        content: sanitizedContent // Pass the sanitized content to the API
       },
       initialMessages
     });
@@ -90,7 +114,8 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
   console.log('Chat component request body:', {
     provider: chatConfig?.provider,
     model: chatConfig?.model,
-    contentLength: content.length
+    contentLength: sanitizedContent.length,
+    contentPreview: sanitizedContent.substring(0, 50)
   });
 
   // Define isLoading based on status

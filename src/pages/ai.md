@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/Text.astro
+layout: ../layouts/Chat.astro
 title: ONE License
 description: Maximum Freedom. Zero Restrictions
 keywords:

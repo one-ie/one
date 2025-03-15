@@ -115,16 +115,24 @@ export const POST: APIRoute = async ({ request }) => {
     const addSystemPrompt = requestData.addSystemPrompt || config.addSystemPrompt || false;
     const addBusinessPrompt = requestData.addBusinessPrompt || config.addBusinessPrompt || false;
     
+    // Get content settings
+    const includeContent = config.includeContent !== undefined ? config.includeContent : true;
+
     // Get content if available
     const content = requestData.content || '';
     
-    // Debug content
-    console.log('Content type:', typeof content);
-    console.log('Content length:', content.length);
-    console.log('Content preview:', content.substring(0, 100));
-    
-    // Get content settings
-    const includeContent = config.includeContent !== undefined ? config.includeContent : true;
+    // Debug content processing
+    console.log('Content processing:', {
+      type: typeof content,
+      rawLength: content?.length || 0,
+      rawPreview: content?.substring?.(0, 100) || 'N/A',
+      includeContent,
+      isJSON: typeof content === 'string' && content.trim().startsWith('{'),
+      contentSettings: {
+        hasContent: !!content,
+        includeContent
+      }
+    });
     
     // Check environment variables early
     const envKey = `${provider.toUpperCase()}_API_KEY`;
@@ -141,15 +149,45 @@ export const POST: APIRoute = async ({ request }) => {
       .filter(Boolean)
       .join('\n\n');
     
-    // Add content to system prompt if available and includeContent is true
+    // Process and validate content if available and includeContent is true
     if (content && includeContent) {
       console.log('Adding content to system prompt');
+      let processedContent = content;
+      
+      try {
+        // Handle potential JSON string
+        if (typeof content === 'string' && content.trim().startsWith('{')) {
+          try {
+            const parsed = JSON.parse(content);
+            if (typeof parsed === 'object' && parsed !== null) {
+              // Try to extract meaningful content
+              processedContent = parsed.value || parsed.content || parsed.body ||
+                               parsed.text || JSON.stringify(parsed, null, 2);
+            }
+          } catch (e) {
+            console.log('Content is not valid JSON, using as-is');
+          }
+        }
+
+        // Clean up any [object Object] strings
+        if (processedContent === '[object Object]') {
+          processedContent = 'Error: Content could not be properly extracted';
+        }
+
+        // Add the content to the system prompt
+        fullSystemPrompt = `${fullSystemPrompt}\n\nPage Content:\n${processedContent}`;
+      } catch (e) {
+        console.error('Error processing content:', e);
+        fullSystemPrompt = `${fullSystemPrompt}\n\nError: Could not process page content`;
+      }
     } else {
-      console.log('Not adding content to system prompt:', { content: !!content, includeContent });
+      console.log('Not adding content to system prompt:', { hasContent: !!content, includeContent });
     }
     
     // Log the system prompt for debugging
-    console.log('System prompt:', fullSystemPrompt.substring(0, 200) + '...');
+    console.log('System prompt:', fullSystemPrompt.length > 200
+      ? fullSystemPrompt.substring(0, 200) + '...'
+      : fullSystemPrompt);
     
     // Add system prompt if available
     let messages: ExtendedMessage[] = [...requestData.messages] as ExtendedMessage[];

@@ -1,6 +1,6 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import { Chat } from "@/components/Chat";
+import Layout from "@layouts/1.blank.astro";
+import { Chat as ChatComponent } from "@/components/Chat";
 import { normalizeConfig } from "@/schema/chat";
 
 interface Props {
@@ -71,17 +71,10 @@ console.log('Content processing:', {
 ---
 
 <Layout title={frontmatter.title} description={frontmatter.description}>
-  <div class="flex flex-col md:flex-row h-screen">
-    <!-- Content area -->
-    <div class="w-full md:w-3/4 overflow-auto p-8">
-      <article class="prose prose-lg dark:prose-invert max-w-3xl mx-auto">
-        {Content ? <Content /> : <slot />}
-      </article>
-    </div>
-    
-    <!-- Chat area -->
-    <div class="w-full md:w-1/4 border-l border-gray-200 dark:border-gray-800 h-full">
-      <Chat
+  <div class="flex items-center justify-center h-screen">
+    <!-- Centered chat window -->
+    <div class="w-full max-w-2xl h-[90vh] border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg">
+      <ChatComponent
         client:load
         chatConfig={chatConfig}
         content={frontmatter.includeContent ? rawContent : undefined}
