@@ -1,5 +1,5 @@
 ---
-import Layout from "@layouts/1.blank.astro";
+import Layout from "@layouts/1.left.astro";
 import { Chat as ChatComponent } from "@/components/Chat";
 import { normalizeConfig } from "@/schema/chat";
 
@@ -73,7 +73,7 @@ console.log('Content processing:', {
 <Layout title={frontmatter.title} description={frontmatter.description}>
   <div class="flex items-center justify-center h-screen">
     <!-- Centered chat window -->
-    <div class="w-full max-w-2xl h-[90vh] border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg">
+    <div class="w-full max-w-2xl h-[90vh]">
       <ChatComponent
         client:load
         chatConfig={chatConfig}

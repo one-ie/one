@@ -45,15 +45,7 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
     }
   })();
 
-  // Debug processed content
-  console.log('Processed chat content:', {
-    originalType: typeof content,
-    processedType: typeof sanitizedContent,
-    length: sanitizedContent.length,
-    preview: sanitizedContent.substring(0, 100),
-  });
-
-  // Process the system prompt
+ // Process the system prompt
   const processedSystemPrompt = chatConfig?.systemPrompt 
     ? (typeof chatConfig.systemPrompt === 'string' 
         ? chatConfig.systemPrompt 
