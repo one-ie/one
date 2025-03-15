@@ -7,7 +7,11 @@ interface CodeProps {
 }
 
 // Copy button component for code blocks
-const CopyButton = ({ code }: { code: string }) => {
+export interface CopyButtonProps {
+  code: string;
+}
+
+export const CopyButton = ({ code }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -116,8 +120,8 @@ export const CodeHighlighter = ({ language, children }: CodeProps) => {
   return (
     <div className="relative group overflow-hidden bg-[#1e1e1e]">
       {/* Header */}
-      <div className="flex items-center px-4 py-1.5 bg-[#252526]">
-        <span className="text-xs text-[#cccccc] font-mono lowercase">{language}</span>
+      <div className="flex items-center px-4 bg-[#252526]">
+        <span className="text-sm text-[#cccccc] font-mono lowercase">{language}</span>
       </div>
       
       {/* Code content */}

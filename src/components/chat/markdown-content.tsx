@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
 import { marked } from "marked";
 import * as React from "react";
-import { Suspense, isValidElement, memo, useMemo, useState } from "react";
+import { Suspense, isValidElement, memo, useMemo } from "react";
+import { CopyButton } from "./syntax-highlighter";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -95,45 +96,12 @@ const AsyncHighlightedPre = ({ children, className, language, ...props }: Highli
   return content;
 };
 
-// Copy button component for code blocks
-const CopyButton = ({ code }: { code: string }) => {
-  const [copied, setCopied] = useState(false);
+import { CodeHighlighter } from "./syntax-highlighter";
+export { CodeHighlighter };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch(err => {
-        console.error('Failed to copy: ', err);
-      });
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      className="absolute top-3 right-3 w-8 h-8 rounded-md bg-zinc-700 hover:bg-zinc-600 text-zinc-300 hover:text-zinc-100 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100 z-10"
-      aria-label="Copy code"
-    >
-      {copied ? (
-        <>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-zinc-800 text-zinc-200 text-xs py-1 px-2 rounded whitespace-nowrap">
-            Copied!
-          </span>
-        </>
-      ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-        </svg>
-      )}
-    </button>
-  );
-};
+// Import CopyButton from syntax-highlighter
+import type { CopyButtonProps } from "./syntax-highlighter";
+import { type FC } from "react";
 
 // Update HighlightedPre to use the new component
 const HighlightedPre = memo(({ children, className, language, ...props }: HighlightedPreProps) => {

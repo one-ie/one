@@ -24,7 +24,7 @@ welcomeMessage:
  "👋 Welcome to ONE - where commercial freedom meets innovation! Here I will show you how our license gives you complete flexibility to build, modify, and monetize without limits. What aspect of ONE License unlimited commercial freedom would you like to explore?"
 avatar: /icon.svg
 suggestions:
-      - "💼 Commercial Rights"
+      - "Create a very simple react component just the code"
       - "🏢 Enterprise Solutions"
       - "🎯 White-Label Options"
 ---

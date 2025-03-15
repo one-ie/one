@@ -112,7 +112,6 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
 
   // Define isLoading based on status
   const isLoading = status === 'streaming' || status === 'submitted';
-
   const [showTyping, setShowTyping] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
@@ -338,7 +337,7 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
           >
             <ChatInputTextArea 
               placeholder="Type a message..." 
-              className="focus:ring-0 focus:outline-none transition-all text-base border-0 text-white placeholder:text-gray-400"
+              className="focus:ring-0 focus:outline-none focus:border-0 transition-all text-base border-0 text-white placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
             <ChatInputSubmit className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center" />
           </ChatInput>
