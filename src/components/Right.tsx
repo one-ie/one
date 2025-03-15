@@ -22,6 +22,9 @@ const Right: React.FC<RightPanelProps> = (props) => {
     Object.entries(props).filter(([key]) => !key.startsWith("client:"))
   ) as Omit<RightPanelProps, "client:load" | "client:idle" | "client:only">;
 
+  // Initialize with undefined to avoid hydration mismatch
+  const [hydratedChatConfig, setHydratedChatConfig] = useState<ChatConfig | undefined>(undefined);
+
   const { rightPanelMode, chatConfig } = componentProps;
   const layout = useStore(layoutStore);
   const [isMobile, setIsMobile] = useState(false);
@@ -32,8 +35,14 @@ const Right: React.FC<RightPanelProps> = (props) => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
+    
+    // Set chat config after component mounts
+    if (chatConfig) {
+      setHydratedChatConfig(chatConfig);
+    }
+    
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [chatConfig]);
 
   useEffect(() => {
     if (mounted) {
@@ -71,7 +80,15 @@ const Right: React.FC<RightPanelProps> = (props) => {
     }
   };
 
-  if (!layout.isVisible || !mounted) return null;
+  if (!layout.isVisible) return null;
+  
+  if (!mounted) {
+    return (
+      <div className="right-panel right-panel-bg layout-transition flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
 
   const isIcon = layout.mode === "Icon";
   
@@ -149,7 +166,7 @@ const Right: React.FC<RightPanelProps> = (props) => {
           <main 
             className="flex-1 overflow-hidden mx-auto w-full max-w-[850px] right-panel-bg"
           >
-            <Chat className="right-panel-bg" chatConfig={chatConfig} />
+            <Chat className="right-panel-bg" chatConfig={hydratedChatConfig} />
           </main>
         </div>
       )}

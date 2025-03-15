@@ -20,7 +20,7 @@ const SuggestionSchema = z.union([
   z.string(),
   z.object({
     label: z.string(),
-    prompt: z.string()
+    prompt: z.string()  
   })
 ]);
 

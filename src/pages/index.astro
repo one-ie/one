@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { ChatConfigSchema } from "../schema/chat";
+import { ChatSchema } from "../schema/chat";
 import { GitSection } from "@/components/GitSection";
 import { Chart } from "@/components/ChartClones";
 import FaqAccordion from "@/components/FaqAccordion";
@@ -55,7 +55,7 @@ const faqs = [
 ];
 
 // You can override any default values here
-const chatConfig = ChatConfigSchema.parse({
+const chatConfig = ChatSchema.parse({
   provider: "mistral",
   model: "mistral-large-latest",
   systemPrompt: [

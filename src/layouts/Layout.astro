@@ -6,7 +6,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Sidebar from "@/components/Sidebar.astro";
 import Right from "../components/Right";
-import { ChatConfigSchema } from "../schema/chat";
+import { ChatSchema } from "../schema/chat";
 
 interface Props {
   title: string;
@@ -29,13 +29,25 @@ const {
   content,
 } = Astro.props;
 
-// Default chat configuration
-const defaultChatConfig = ChatConfigSchema.parse({
-  // ... existing chat config
+// Use provided config or create a default one
+const chatConfig = providedConfig ? ChatSchema.parse(providedConfig) : ChatSchema.parse({
+  provider: "mistral",
+  model: "mistral-large-latest",
+  systemPrompt: [{
+    type: "text",
+    text: "I am Agent ONE. How can I help you today?"
+  }],
+  welcome: {
+    message: "👋 How can I help you today?",
+    avatar: "/icon.svg",
+    suggestions: [
+      {
+        label: "🚀 Get Started",
+        prompt: "How do I get started with ONE?"
+      }
+    ]
+  }
 });
-
-// Use provided config or fall back to default
-const chatConfig = providedConfig || defaultChatConfig;
 ---
 
 <!DOCTYPE html>
