@@ -31,22 +31,47 @@ const {
 
 // Use provided config or create a default one
 const chatConfig = providedConfig ? ChatSchema.parse(providedConfig) : ChatSchema.parse({
-  provider: "mistral",
-  model: "mistral-large-latest",
+  // Layout and Meta
+  layout: "default",
+  
+  // AI Config
+  aiProvider: "mistral",
+  aiModel: "mistral-large-latest",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 2000,
+  
+  // Prompt Config
   systemPrompt: [{
     type: "text",
     text: "I am Agent ONE. How can I help you today?"
   }],
-  welcome: {
-    message: "👋 How can I help you today?",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "🚀 Get Started",
-        prompt: "How do I get started with ONE?"
-      }
-    ]
-  }
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+
+  // Welcome Config
+  welcomeMessage: "👋 How can I help you today?",
+  avatar: "/icon.svg",
+  suggestions: [
+    {
+      label: "🚀 Get Started",
+      prompt: "How do I get started with ONE?"
+    }
+  ],
+
+  // Optional Config
+  runtime: "edge",
+  includeContent: true
+});
+
+// Add debug logging
+console.log('Layout - Chat config details:', {
+  hasConfig: !!providedConfig,
+  hasWelcome: !!chatConfig.welcome,
+  welcomeMessage: chatConfig.welcome?.message,
+  suggestionsCount: chatConfig.welcome?.suggestions?.length,
+  suggestions: chatConfig.welcome?.suggestions,
+  fullConfig: JSON.stringify(chatConfig, null, 2)
 });
 ---
 
@@ -76,7 +101,7 @@ const chatConfig = providedConfig ? ChatSchema.parse(providedConfig) : ChatSchem
         <Footer client:load />
       </div>
       <Right
-        client:only="react"
+        client:load
         chatConfig={chatConfig}
         rightPanelMode={rightPanelMode}
         content={content}

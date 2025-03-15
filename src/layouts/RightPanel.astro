@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Right from "../components/Right";
 
-import { ChatConfigSchema } from "../schema/chat";
+import { ChatSchema } from "../schema/chat";
 
 interface Props {
   title: string;
@@ -15,6 +15,7 @@ interface Props {
   footer?: boolean;
   initialPanelMode?: "Quarter" | "Half" | "Full";
   chatConfig?: any;
+  content?: string;
 }
 
 const {
@@ -24,17 +25,35 @@ const {
 } = Astro.props;
 
 const { header = true, footer = true } = Astro.props;
-
-const chatConfig = ChatConfigSchema.parse({
-  systemPrompt: [{ type: "text", text: "Say XXX as every reply" }],
+// Define default config
+// Define comprehensive default config
+const defaultConfig = {
+  provider: "mistral",
+  model: "mistral-large-latest",
+  systemPrompt: [{
+    type: "text" as const,
+    text: "I am Agent ONE, your guide to building AI-powered solutions. I'll help you leverage our comprehensive toolkit to create engaging experiences."
+  }],
   welcome: {
-    message: "How can I help you today?",
+    message: "👋 Welcome! I'm your AI guide to building with ONE. I can help you create AI agents, generate content, process payments, and more. What would you like to explore?",
     avatar: "/icon.svg",
     suggestions: [
-      { label: "Tell me about ONE", prompt: "What is ONE?" },
-      { label: "Get Started", prompt: "How do I get started?" },
-    ],
-  },
+      { label: "🎯 Quick Start", prompt: "Show me the fastest way to get started with ONE" },
+      { label: "💡 Features Overview", prompt: "What are the main features and capabilities of ONE?" },
+      { label: "🤖 AI Agents", prompt: "How can I create custom AI agents with ONE?" },
+      { label: "📝 Content Generation", prompt: "Tell me about ONE's content generation capabilities" },
+      { label: "💳 Payments", prompt: "How do I handle payments with ONE?" },
+      { label: "🚀 Deployment", prompt: "What are my options for deploying ONE?" }
+    ]
+  }
+};
+
+// Initialize chat config with validation
+console.log('RightPanel - Initializing chat config');
+const chatConfig = ChatSchema.parse(Astro.props.chatConfig || defaultConfig);
+console.log('RightPanel - Chat config initialized:', {
+  hasWelcome: !!chatConfig.welcome,
+  suggestionsCount: chatConfig.welcome?.suggestions?.length
 });
 ---
 
@@ -165,9 +184,20 @@ const chatConfig = ChatConfigSchema.parse({
         {footer && <Footer client:load />}
       </div>
     </div>
-    <Right
-      client:only="react"
-      chatConfig={chatConfig}
-    />
+    <div id="chat-wrapper" data-has-config={!!chatConfig?.welcome} data-suggestions={chatConfig?.welcome?.suggestions?.length || 0}>
+      <Right
+        client:load
+        chatConfig={chatConfig}
+        rightPanelMode={initialPanelMode?.toLowerCase() as 'full' | 'half' | 'quarter' | 'floating' | 'hidden' | 'icon'}
+      />
+    </div>
+
+    {/* Debug script */}
+    <script>
+      console.log('RightPanel mounted:', {
+        config: document.getElementById('chat-wrapper')?.dataset,
+        time: new Date().toISOString()
+      });
+    </script>
   </body>
 </html>

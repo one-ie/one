@@ -139,7 +139,41 @@ Communication Style:
   
 <Layout
   title="ONE - Build Your AI Brand"
-  chatConfig={chatConfig}
+  chatConfig={{
+    // Layout and Meta
+    layout: "home",
+    title: "ONE - Build Your AI Brand",
+    description: "AI-powered solutions with ONE",
+    
+    // AI Config
+    aiProvider: "mistral",
+    aiModel: "mistral-large-latest",
+    apiEndpoint: "https://api.openai.com/v1",
+    temperature: 0.7,
+    maxTokens: 2000,
+
+    // Prompt Config
+    systemPrompt: [{
+      type: "text",
+      text: "I am your AI guide to building with ONE. I'll help you understand and implement our powerful toolkit."
+    }],
+    addSystemPrompt: true,
+    addBusinessPrompt: true,
+
+    // Welcome Config
+    welcomeMessage: "👋 Welcome! I'm here to help you build amazing AI-powered solutions with ONE. What would you like to learn about?",
+    avatar: "/icon.svg",
+    suggestions: [
+      { label: "🚀 Quick Start Guide", prompt: "Show me how to get started with ONE quickly" },
+      { label: "💡 Key Features", prompt: "What are the main features of ONE?" },
+      { label: "🔧 Setup Guide", prompt: "How do I set up ONE in my project?" },
+      { label: "🤖 AI Capabilities", prompt: "What AI features does ONE provide?" }
+    ],
+
+    // Optional Config
+    runtime: "edge",
+    includeContent: true
+  }}
   rightPanelMode="quarter"
 >
   <main class="flex flex-col w-full">

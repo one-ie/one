@@ -36,13 +36,27 @@ const Right: React.FC<RightPanelProps> = (props) => {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    // Set chat config after component mounts
+    // Enhanced debug logging
     if (chatConfig) {
-      setHydratedChatConfig(chatConfig);
+      console.log('Right component - Chat config details:', {
+        welcome: chatConfig.welcome,
+        welcomeMessage: chatConfig.welcome?.message,
+        suggestions: chatConfig.welcome?.suggestions?.map(s => 
+          typeof s === 'string' ? s : s.label
+        ),
+        mounted,
+        previousConfig: hydratedChatConfig ? true : false
+      });
+      
+      // Only update if config changed
+      if (JSON.stringify(chatConfig) !== JSON.stringify(hydratedChatConfig)) {
+        console.log('Updating hydrated config');
+        setHydratedChatConfig(chatConfig);
+      }
     }
     
     return () => window.removeEventListener('resize', checkMobile);
-  }, [chatConfig]);
+  }, [chatConfig, mounted, hydratedChatConfig]);
 
   useEffect(() => {
     if (mounted) {
@@ -166,7 +180,11 @@ const Right: React.FC<RightPanelProps> = (props) => {
           <main 
             className="flex-1 overflow-hidden mx-auto w-full max-w-[850px] right-panel-bg"
           >
-            <Chat className="right-panel-bg" chatConfig={hydratedChatConfig} />
+            <Chat
+              className="right-panel-bg"
+              chatConfig={hydratedChatConfig}
+              key={hydratedChatConfig ? JSON.stringify(hydratedChatConfig.welcome) : 'initial'}
+            />
           </main>
         </div>
       )}

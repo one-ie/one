@@ -54,25 +54,60 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
           : '')
     : '';
 
-  // Process welcome message and avatar
+  // Component state
+  const [mounted, setMounted] = useState(false);
+  const [showTyping, setShowTyping] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const [editedMessages, setEditedMessages] = useState<Record<string, string>>({});
+  const [inputHeight, setInputHeight] = useState(76);
+
+  // Refs
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const chatWrapperRef = useRef<HTMLDivElement>(null);
+
+  // Process welcome message and config
   const welcomeMessage = chatConfig?.welcome?.message;
   const avatarUrl = chatConfig?.welcome?.avatar;
 
-  // Create initial messages
-  const initialMessages = [];
+  // Initial messages array
+  const initialMessages: Array<{id: string; role: "assistant" | "user"; content: string}> = [];
+
+  // Enhanced debug logging
+  console.log('Chat initialization details:', {
+    hasConfig: !!chatConfig,
+    welcome: {
+      message: welcomeMessage,
+      avatar: avatarUrl,
+      suggestions: chatConfig?.welcome?.suggestions
+    },
+    configDetails: chatConfig
+  });
   
-  // Add welcome message if available
+  // Initialize with welcome message if available
   if (welcomeMessage) {
     initialMessages.push({
       id: "welcome",
       role: "assistant" as const,
       content: welcomeMessage
     });
+    console.log('Added welcome message to initialMessages:', {
+      messageCount: initialMessages.length,
+      welcomeMessage,
+      hasSuggestions: !!chatConfig?.welcome?.suggestions?.length,
+      suggestions: chatConfig?.welcome?.suggestions
+    });
+  } else {
+    console.warn('No welcome message found in chat config');
   }
-  
-  // Add any additional initial messages
+
+  // Then add any additional messages, filtering out system messages
   if (chatConfig?.initialMessages) {
-    initialMessages.push(...chatConfig.initialMessages);
+    const validMessages = chatConfig.initialMessages.filter(
+      msg => msg.role === "assistant" || msg.role === "user"
+    ) as Array<{id: string; role: "assistant" | "user"; content: string}>;
+    initialMessages.push(...validMessages);
   }
   
   // If no messages were added, add a default one
@@ -102,24 +137,52 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
       initialMessages
     });
 
-  // Debug request body
-  console.log('Chat component request body:', {
-    provider: chatConfig?.provider,
-    model: chatConfig?.model,
-    contentLength: sanitizedContent.length,
-    contentPreview: sanitizedContent.substring(0, 50)
-  });
+  // Log chat state after initialization
+  useEffect(() => {
+    console.log('Chat state:', {
+      config: chatConfig?.welcome,
+      messagesCount: messages.length,
+      suggestions: chatConfig?.welcome?.suggestions,
+      firstMessage: messages[0]
+    });
+  }, [messages, chatConfig]);
 
-  // Define isLoading based on status
+  // Debug logs for chat state
+  useEffect(() => {
+    if (mounted && messages) {
+      console.log('Chat active state:', {
+        hasConfig: !!chatConfig,
+        welcome: chatConfig?.welcome,
+        suggestions: chatConfig?.welcome?.suggestions,
+        messagesCount: messages.length,
+        firstMessage: messages[0],
+        isWelcomeMessage: messages[0]?.id === 'welcome'
+      });
+    }
+  }, [chatConfig, messages, mounted]);
+
+  // Define loading state
   const isLoading = status === 'streaming' || status === 'submitted';
-  const [showTyping, setShowTyping] = useState(false);
-  const [showScrollButton, setShowScrollButton] = useState(false);
-  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
-  const [editedMessages, setEditedMessages] = useState<Record<string, string>>({});
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-  const chatWrapperRef = useRef<HTMLDivElement>(null);
-  const [inputHeight, setInputHeight] = useState(76); // Default height for input area
+
+  // Combined mount and state monitoring
+  useEffect(() => {
+    if (!mounted) {
+      setMounted(true);
+    } else if (messages) {
+      console.log('Chat state:', {
+        config: {
+          hasConfig: !!chatConfig,
+          welcome: chatConfig?.welcome,
+          suggestions: chatConfig?.welcome?.suggestions?.length
+        },
+        messages: {
+          count: messages.length,
+          firstMessage: messages[0],
+          isWelcomeMessage: messages[0]?.id === 'welcome'
+        }
+      });
+    }
+  }, [chatConfig, messages, mounted]);
 
   // Check if we need to show the scroll button
   const checkScrollPosition = () => {
@@ -130,6 +193,16 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
     const atBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 100;
     setShowScrollButton(!atBottom);
   };
+
+  // Monitor chat configuration and messages
+  useEffect(() => {
+    console.log('Chat configuration state:', {
+      hasWelcomeMessage: !!welcomeMessage,
+      suggestionsCount: chatConfig?.welcome?.suggestions?.length,
+      messageCount: messages.length,
+      firstMessage: messages[0]
+    });
+  }, [welcomeMessage, chatConfig?.welcome?.suggestions, messages]);
 
   // Set initial load complete after component mounts
   useEffect(() => {
@@ -213,14 +286,19 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
 
   // Render suggestions if available
   const renderSuggestions = () => {
-    if (!chatConfig?.welcome?.suggestions || chatConfig.welcome.suggestions.length === 0) return null;
+    if (!chatConfig?.welcome?.suggestions || chatConfig.welcome.suggestions.length === 0) {
+      return null;
+    }
     
     return (
-      <div className="flex flex-wrap gap-3 mt-6 mb-8 justify-center max-w-[600px] mx-auto">
+      <div className="grid grid-cols-2 gap-2">
         {chatConfig.welcome.suggestions.map((suggestion, index) => {
-          // Handle both string and object suggestions
           const label = typeof suggestion === 'string' ? suggestion : suggestion.label;
           const prompt = typeof suggestion === 'string' ? suggestion : suggestion.prompt;
+          
+          // Quick Start gets special treatment - smaller size
+          const isQuickStart = label.toLowerCase().includes('quick start') || 
+                             label.toLowerCase().includes('get started');
           
           return (
             <button
@@ -229,10 +307,10 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
                 setInput(prompt);
                 setTimeout(() => handleSubmit(), 50);
               }}
-              className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-full text-sm font-medium transition-all duration-200 hover:scale-105 hover:shadow-md flex items-center gap-2"
+              className={`${
+                isQuickStart ? 'col-span-2 py-2' : 'col-span-1 py-2'
+              } px-4 bg-primary/5 hover:bg-primary/10 rounded-lg transition-all duration-200 text-primary hover:text-primary/90 text-sm font-medium`}
             >
-              {/* Add a sparkle emoji before each suggestion */}
-              <span className="opacity-70">✨</span>
               {label}
             </button>
           );
@@ -247,45 +325,44 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
       <div 
         ref={chatContainerRef}
         className="flex-1 overflow-auto pb-24 relative"
-        style={{ paddingBottom: `${inputHeight + 16}px` }} // Dynamic padding based on input height
+        style={{ paddingBottom: `${inputHeight + 16}px` }}
       >
         <div className="max-w-2xl mx-auto w-full px-4 py-6 space-y-6">
-         {messages.map((message, index) => {
-           const isAssistant = message.role === "assistant";
-           const isWelcomeMessage = isAssistant && index === 0 && message.id === "welcome";
-           const suggestions = chatConfig?.welcome?.suggestions || [];
-           
-           return (
-             <div key={message.id}>
-               <ChatMessage
-                 id={message.id}
-                 variant="bubble"
-                 type={isAssistant ? undefined : "outgoing"}
-                 className={isAssistant ? "animate-fade-in" : "animate-slide-in"}
-               >
-                 <div className={isWelcomeMessage ? "welcome-message" : ""}>
-                   <ChatMessageContent
-                     content={isAssistant ? message.content : (editedMessages[message.id] || message.content)}
-                     className={cn(
-                       isAssistant ? "prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500" : "font-medium text-base",
-                       isWelcomeMessage ? "[&_button]:hidden" : ""
-                     )}
-                     onContentChange={isAssistant ? undefined : handleMessageEdit}
-                     onResubmit={isAssistant && !isWelcomeMessage ? handleResubmit : undefined}
-                   />
-                 </div>
-                 {!isAssistant && <ChatMessageAvatar />}
-               </ChatMessage>
+          {messages.map((message, index) => {
+            const isAssistant = message.role === "assistant";
+            const isWelcomeMessage = isAssistant && message.id === "welcome";
+            
+            return (
+              <div key={message.id}>
+                <ChatMessage
+                  id={message.id}
+                  variant="bubble"
+                  type={isAssistant ? undefined : "outgoing"}
+                  className={isAssistant ? "animate-fade-in" : "animate-slide-in"}
+                >
+                  <div className={isWelcomeMessage ? "welcome-message" : ""}>
+                    <ChatMessageContent
+                      content={isAssistant ? message.content : (editedMessages[message.id] || message.content)}
+                      className={cn(
+                        isAssistant ? "prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500" : "font-medium text-base",
+                        isWelcomeMessage ? "[&_button]:hidden" : ""
+                      )}
+                      onContentChange={isAssistant ? undefined : handleMessageEdit}
+                      onResubmit={isAssistant && !isWelcomeMessage ? handleResubmit : undefined}
+                    />
+                  </div>
+                  {!isAssistant && <ChatMessageAvatar />}
+                </ChatMessage>
 
-               {/* Show suggestions after welcome message */}
-               {isWelcomeMessage && suggestions.length > 0 && (
-                 <div className="mt-4 mb-8">
-                   {renderSuggestions()}
-                 </div>
-               )}
-             </div>
-           );
-         })}
+                {/* Show suggestions after welcome message */}
+                {isWelcomeMessage && (
+                  <div className="mt-4">
+                    {renderSuggestions()}
+                  </div>
+                )}
+              </div>
+            );
+          })}
           
           {/* Typing indicator */}
           {showTyping && <ChatMessageTyping />}
@@ -302,7 +379,6 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
                 size="sm"
                 className="text-sm bg-primary/5 hover:bg-primary/10 text-primary hover:text-primary"
               >
-                <span className="mr-2">✨</span>
                 Show more suggestions
               </Button>
             </div>
@@ -323,7 +399,7 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
         )}
       </div>
 
-      {/* Input area at the bottom with width matching the chat container */}
+      {/* Input area */}
       <div className="absolute bottom-0 left-0 right-0 py-3 bg-background chat-input-container">
         <div className="px-4 w-full max-w-2xl mx-auto">
           <ChatInput
