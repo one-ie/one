@@ -1,11 +1,13 @@
 ---
-title: "AI Everywhere"
-description: "How to add AI into your application"
+title: "ONE AU"
+description: "Lets upgrade our system to use content collectionsn"
 tags: ["ai", "prompts", "configuration", "customization", "system-design"]
 date: 2024-02-03
 ---
 
-# AI Everywhere
+# AI 
+
+
 
 ## Hierarchy
 
