@@ -328,7 +328,7 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
         style={{ paddingBottom: `${inputHeight + 16}px` }}
       >
         <div className="max-w-2xl mx-auto w-full px-4 py-6 space-y-6">
-          {messages.map((message, index) => {
+          {messages.map((message) => {
             const isAssistant = message.role === "assistant";
             const isWelcomeMessage = isAssistant && message.id === "welcome";
             

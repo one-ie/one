@@ -13,14 +13,14 @@ interface Props {
   children: any;
   header?: boolean;
   footer?: boolean;
-  initialPanelMode?: "Quarter" | "Half" | "Full";
   chatConfig?: any;
+  rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
 }
 
 const {
   title,
   description = "ONE",
-  initialPanelMode = "Quarter",
+  rightPanelMode = "quarter",
 } = Astro.props;
 
 const { header = true, footer = true } = Astro.props;
@@ -154,7 +154,7 @@ const chatConfig = ChatConfigSchema.parse({
       }
     </style>
   </head><body>
-    <div class="main-grid" id="main-grid" data-panel-mode={initialPanelMode}>
+    <div class="main-grid" id="main-grid" data-panel-mode={rightPanelMode}>
       <div class="center-grid" id="center-grid">
         {header && <Header client:load />}
 
@@ -168,6 +168,7 @@ const chatConfig = ChatConfigSchema.parse({
     <Right
       client:only="react"
       chatConfig={chatConfig}
+      rightPanelMode={rightPanelMode}
     />
   </body>
 </html>

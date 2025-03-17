@@ -14,7 +14,6 @@ interface Props {
   children: any;
   header?: boolean;
   footer?: boolean;
-  initialPanelMode?: "Quarter" | "Half" | "Full" | "Floating" | "Icon";
   chatConfig?: any;
   rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
   content?: string;
@@ -23,7 +22,6 @@ interface Props {
 const {
   title,
   description = "ONE",
-  initialPanelMode,
   rightPanelMode = "quarter",
   chatConfig: providedConfig,
   content,
@@ -78,7 +76,6 @@ const chatConfig = providedConfig ? ChatSchema.parse(providedConfig) : ChatSchem
     <div
       class="main-grid"
       id="main-grid"
-      data-panel-mode={initialPanelMode || "Quarter"}
     >
       <Sidebar />
       <div class="center-grid" id="center-grid">

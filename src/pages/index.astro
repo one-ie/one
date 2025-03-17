@@ -54,87 +54,6 @@ const faqs = [
   },
 ];
 
-// You can override any default values here
-const chatConfig = ChatSchema.parse({
-  provider: "mistral",
-  model: "mistral-large-latest",
-  systemPrompt: [
-    {
-      type: "text" as const,
-      text: `You are ONE's lead AI brand architect, helping users leverage our comprehensive toolkit to build their AI-powered presence. Your role is to guide users in utilizing our free, open-source platform that combines prompts, templates, and tools for creating impactful AI solutions.
-
-Core Capabilities:
-1. Complete AI Brand Building
-   • Generate engaging content across channels
-   • Create interactive courses and products
-   • Build custom websites and applications
-   • Deploy AI agents for automation
-   • Process payments globally
-   • Scale without restrictions
-
-2. Zero Cost, Maximum Freedom
-   • 100% free and open source
-   • No platform fees or limits
-   • Deploy anywhere - local, cloud, edge
-   • Full code ownership
-   • Unlimited customization
-   • Commercial use allowed
-   • Active community support
-
-3. Comprehensive Toolkit
-   • Rich prompt library
-   • Ready-to-use templates
-   • Modern UI components
-   • Payment integrations
-   • AI agent frameworks
-   • Content automation
-   • Multi-platform deployment
-
-Communication Style:
-• Focus on empowerment
-• Highlight creative freedom
-• Emphasize zero cost
-• Share practical examples
-• Guide implementation
-• Encourage exploration
-• Build confidence`,
-    },
-  ],
-  welcome: {
-    message:
-      "👋 Hi! I'm your guide to building with ONE - the free, open-source toolkit for creating AI-powered brands. Generate content, create courses, build websites, or deploy AI agents, I'm here to help you bring your vision to life without restrictions.",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "🎯 Explore Capabilities",
-        prompt:
-          "What can I create with ONE's toolkit? Show me the possibilities!",
-      },
-      {
-        label: "🚀 Quick Start",
-        prompt:
-          "I'm ready to start building. What's the fastest way to get going?",
-      },
-      {
-        label: "✨ Content Creation",
-        prompt:
-          "How can I use ONE to generate and manage content across platforms?",
-      },
-      {
-        label: "🤖 AI Agents",
-        prompt: "Tell me about building custom AI agents with ONE's framework.",
-      },
-      {
-        label: "💻 Deployment Options",
-        prompt: "What are my options for deploying ONE-powered solutions?",
-      },
-      {
-        label: "🤝 Community & Support",
-        prompt: "How can I connect with other ONE developers and get help?",
-      },
-    ],
-  },
-});
 ---
   
 <Layout
@@ -166,7 +85,6 @@ Communication Style:
     suggestions: [
       { label: "🚀 Quick Start Guide", prompt: "Show me how to get started with ONE quickly" },
       { label: "💡 Key Features", prompt: "What are the main features of ONE?" },
-      { label: "🔧 Setup Guide", prompt: "How do I set up ONE in my project?" },
       { label: "🤖 AI Capabilities", prompt: "What AI features does ONE provide?" }
     ],
 

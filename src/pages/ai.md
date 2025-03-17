@@ -46,14 +46,7 @@ addSystemPrompt: true
 addBusinessPrompt: true
 includeContent: true
 welcomeMessage: |
-  👋 Hi! I'm ONE's AI assistant. Let me show you how I can help with:
-
-  • Rich markdown formatting
-  • Code block demonstrations
-  • Business planning
-  • Friendly conversation
-
-  What would you like to explore?
+  👋 Hi. Here's a demo of our chat. 
 avatar: /icon.svg
 suggestions:
   - label: "📝 Markdown Demo"
