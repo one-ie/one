@@ -1,16 +1,15 @@
 ---
+import type { ChatConfigSchema } from "../schema/chat";
 import Layout from "../layouts/Layout.astro";
-import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChatConfigSchema } from "../schema/chat";
-import {
-  GitHubLogoIcon,
-  CheckIcon,
-} from "@radix-ui/react-icons";
+import { GitHubLogoIcon, CheckIcon } from "@radix-ui/react-icons";
+import { GitSection } from "@/components/GitSection";
 
 // Import license content
 import License from "../../LICENSE?raw";
+
 const SYSTEM_REQUIREMENTS = [
   "Node.js 18.x or higher",
   "pnpm package manager",
@@ -26,12 +25,11 @@ const INSTALLATION_STEPS = [
   },
   {
     title: "Quick Install",
-    description: "Run 'npm install' to install dependencies",
+    description: "Run 'pnpm install' to install dependencies",
   },
   {
     title: "Add Your Keys",
-    description:
-      "Add the keys to your AI providers in your environment variables",
+    description: "Add the keys to your AI providers in your environment variables",
   },
   {
     title: "Start Building",
@@ -43,21 +41,14 @@ const INSTALLATION_STEPS = [
   },
 ];
 
-const GITHUB_REPO = "one-ie/one";
-const GITHUB_URL = `https://github.com/${GITHUB_REPO}`;
-
-const URLS = {
-  clone: `git clone https://github.com/${GITHUB_REPO}.git`,
-  codespace: `https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=${GITHUB_REPO}`,
-  fork: `https://github.com/${GITHUB_REPO}/fork`,
-};
+// For GitHub links
+const GITHUB_URL = "https://github.com/one-ie/one";
 
 // Configure chat
-const chatConfig = ChatConfigSchema.parse({
-  systemPrompt: [
-    {
-      type: "text" as const,
-      text: `You are ONE's setup specialist, helping users build AI-powered businesses. Your role includes:
+const chatConfig = {
+  systemPrompt: [{
+    type: "text" as const,
+    text: `You are ONE's setup specialist, helping users build AI-powered businesses. Your role includes:
     
     - Fast framework installation and deployment
     - Setting up AI agents for sales and support
@@ -84,15 +75,16 @@ const chatConfig = ChatConfigSchema.parse({
        • 10,000 ONE - Unlimited projects
        • 50,000+ ONE - Enterprise features
     
-    Reference Information:
-    ${JSON.stringify({ SYSTEM_REQUIREMENTS, INSTALLATION_STEPS, URLS }, null, 2)}
+    Installation Requirements:
+    ${JSON.stringify(SYSTEM_REQUIREMENTS, null, 2)}
+    
+    Installation Steps:
+    ${JSON.stringify(INSTALLATION_STEPS, null, 2)}
     
     Focus on helping users deploy their first AI agent and set up payment processing. Guide them through token system benefits.`,
-    },
-  ],
+  }],
   welcome: {
-    message:
-      "👋 Ready to build your AI-powered business? I'll help you get started with AI agents, payments, and token features.",
+    message: "👋 Ready to build your AI-powered business? I'll help you get started with AI agents, payments, and token features.",
     avatar: "/icon.svg",
     suggestions: [
       {
@@ -113,11 +105,7 @@ const chatConfig = ChatConfigSchema.parse({
       },
     ],
   },
-});
-
-import { GitSection } from "@/components/GitSection";
-
-// Remove the old stats fetching since GitSection handles it internally
+} as const;
 ---
 
 <Layout
@@ -126,88 +114,73 @@ import { GitSection } from "@/components/GitSection";
   chatConfig={chatConfig}
   rightPanelMode="quarter"
 >
-  <main class="container mx-auto px-6 w-full">
-    <section class="py-12 text-center max-w-4xl mx-auto mb-12">
-      <h1
-        class="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60"
-      >
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-[1800px]">
+     <GitSection client:load />
+     <section class="py-12 text-center max-w-4xl mx-auto mb-12">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
         Download
         <span class="block mt-2 text-4xl">100% Free Forever</span>
       </h1>
       <p class="text-xl text-muted-foreground mb-8">
-        ONE is completely free and open source. Get started in minutes with zero
-        setup complexity. Deploy anywhere - from Vercel to your own
-        infrastructure.
+        ONE is completely free and open source. Get started in minutes with zero setup complexity. 
+        Deploy anywhere - from Vercel to your own infrastructure.
       </p>
     </section>
-
-    <GitSection />
-
     <!-- System Requirements Section -->
     <section class="w-full max-w-4xl mx-auto mb-16">
       <h2 class="text-3xl font-bold mb-8 text-center">System Requirements</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {
-          SYSTEM_REQUIREMENTS.map((requirement) => (
-            <Card className="p-6 flex items-start space-x-4">
-              <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <CheckIcon className="w-5 h-5 text-primary" />
-              </div>
-              <p class="text-muted-foreground">{requirement}</p>
-            </Card>
-          ))
-        }
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {SYSTEM_REQUIREMENTS.map((requirement) => (
+          <div class="px-4 py-3 flex items-start space-x-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors duration-200 group">
+            <div class="mt-0.5">
+              <CheckIcon className="w-4 h-4 text-primary group-hover:scale-110 transition-transform duration-200" />
+            </div>
+            <p class="text-sm text-muted-foreground">{requirement}</p>
+          </div>
+        ))}
       </div>
-    </section>
-
-    <!-- License Section -->
-    <section class="w-full max-w-[1400px] mb-20">
-      <h2 class="text-4xl font-bold mb-10 text-center">License</h2>
-      <Card className="prose prose-lg max-w-none dark:prose-invert p-8">
-        <pre
-          class="whitespace-pre-wrap text-sm leading-relaxed opacity-90">{License}</pre>
-      </Card>
     </section>
 
     <!-- Installation Guide Section -->
     <section class="w-full max-w-4xl mx-auto mb-16">
       <h2 class="text-3xl font-bold mb-8 text-center">Easy Steps</h2>
       <div class="space-y-6">
-        {
-          INSTALLATION_STEPS.map((step, index) => (
-            <Card className="p-6">
-              <div class="flex items-start space-x-4">
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <span class="text-primary font-semibold">{index + 1}</span>
-                </div>
-                <div>
-                  <h3 class="text-xl font-semibold mb-2">{step.title}</h3>
-                  <p class="text-muted-foreground">{step.description}</p>
-                </div>
+        {INSTALLATION_STEPS.map((step, index) => (
+          <Card className="p-6">
+            <div class="flex items-start space-x-4">
+              <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <span class="text-primary font-semibold">{index + 1}</span>
               </div>
-            </Card>
-          ))
-        }
+              <div>
+                <h3 class="text-xl font-semibold mb-2">{step.title}</h3>
+                <p class="text-muted-foreground">{step.description}</p>
+              </div>
+            </div>
+          </Card>
+        ))}
       </div>
     </section>
 
-    <section class="text-center mb-16 w-full max-w-[1400px]">
+    <!-- License Section -->
+    <section class="w-full max-w-[1400px] mx-auto mb-20">
+      <h2 class="text-4xl font-bold mb-10 text-center">License</h2>
+      <Card className="prose prose-lg max-w-none dark:prose-invert p-8">
+        <pre class="whitespace-pre-wrap text-sm leading-relaxed opacity-90">{License}</pre>
+      </Card>
+    </section>
+
+    <section class="text-center mb-16 max-w-[1400px] mx-auto">
       <Alert className="py-6">
         <AlertDescription className="text-lg">
           Join developers at the frontier of AI building the future with ONE.
           <a href={GITHUB_URL} class="inline-block">
-            <Button
-              variant="link"
-              className="ml-3 text-lg text-foreground hover:text-foreground"
-            >
-              Star on GitHub <GitHubLogoIcon className="ml-2 w-5 h-5" />
+            <Button variant="link" className="ml-3 text-lg text-foreground hover:text-foreground group">
+              Star on GitHub <GitHubLogoIcon className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
             </Button>
           </a>
         </AlertDescription>
       </Alert>
     </section>
-
-    <GitSection />
   </main>
 </Layout>
 
@@ -215,39 +188,8 @@ import { GitSection } from "@/components/GitSection";
   .prose {
     @apply mx-auto;
   }
-
+  
   .prose pre {
     background-color: hsl(var(--muted));
   }
-
-  .container {
-    width: 95%;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      width: 100%;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
 </style>
-
-<script>
-  // Handle copy functionality
-  document.addEventListener("DOMContentLoaded", () => {
-    const copyButton = document.getElementById("copyCloneCommand");
-    const copyMessage = document.getElementById("copyMessage");
-
-    if (copyButton && copyMessage) {
-      copyButton.addEventListener("click", () => {
-        navigator.clipboard.writeText(
-          "git clone https://github.com/one-ie/one",
-        );
-        copyMessage.classList.remove("opacity-0");
-        setTimeout(() => copyMessage.classList.add("opacity-0"), 2000);
-      });
-    }
-  });
-</script>

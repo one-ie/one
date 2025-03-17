@@ -415,7 +415,12 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
               placeholder="Type a message..." 
               className="focus:ring-0 focus:outline-none focus:border-0 transition-all text-base border-0 text-white placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
-            <ChatInputSubmit className="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center" />
+            <ChatInputSubmit
+              className="bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white w-10 h-10 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors duration-200"
+              aria-label="Send message"
+              role="button"
+              tabIndex={0}
+            />
           </ChatInput>
         </div>
       </div>

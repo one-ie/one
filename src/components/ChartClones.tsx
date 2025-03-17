@@ -25,11 +25,11 @@ const chartConfig = {
     },
     total: {
         label: "Total Clones",
-        color: "hsl(var(--chart-1))",
+        color: "hsl(220, 100%, 50%)",
     },
     uniques: {
         label: "Unique Cloners",
-        color: "hsl(var(--chart-2))",
+        color: "hsl(220, 70%, 60%)",
     },
 } satisfies ChartConfig
 
@@ -38,6 +38,15 @@ interface CloneData {
     total: number;
     uniques: number;
 }
+
+// Custom styles to override Recharts defaults
+const tooltipStyle = {
+    backgroundColor: "hsl(var(--card))",
+    border: "1px solid hsl(var(--border))",
+    borderRadius: "var(--radius)",
+    color: "hsl(var(--foreground))",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+};
 
 export function Chart() {
     const [chartData, setChartData] = React.useState<CloneData[]>([]);
@@ -149,9 +158,11 @@ export function Chart() {
                             }}
                         />
                         <ChartTooltip
+                            cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
+                            contentStyle={tooltipStyle}
                             content={
                                 <ChartTooltipContent
-                                    className="w-[150px]"
+                                    className="w-[150px] bg-card text-card-foreground border-border"
                                     nameKey="views"
                                     labelFormatter={(value) => {
                                         return new Date(value).toLocaleDateString("en-US", {
@@ -163,7 +174,13 @@ export function Chart() {
                                 />
                             }
                         />
-                        <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
+                        <Bar 
+                            dataKey={activeChart} 
+                            fill={activeChart === "total" ? "hsl(220, 100%, 50%)" : "hsl(220, 70%, 60%)"} 
+                            radius={[4, 4, 0, 0]}
+                            isAnimationActive={true}
+                            animationDuration={500}
+                        />
                     </BarChart>
                 </ChartContainer>
             </CardContent>

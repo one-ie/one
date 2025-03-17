@@ -61,7 +61,7 @@ export function GitSection() {
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
-          <Card className="p-6 flex flex-col justify-between">
+          <Card className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300 hover:-translate-y-1 border-border/40">
             <div>
               <h3 className="text-2xl font-bold mb-4">Download ZIP</h3>
               <p className="text-muted-foreground mb-6">
@@ -70,15 +70,18 @@ export function GitSection() {
             </div>
             <div className="flex gap-4">
               <a href={DOWNLOAD_URL} className="flex-1">
-                <Button className="w-full" size="lg">
-                  <DownloadIcon className="mr-2 h-5 w-5" />
+                <Button 
+                  className="w-full group transition-all duration-300 hover:shadow-md" 
+                  size="lg"
+                >
+                  <DownloadIcon className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
                   Download ZIP
                 </Button>
               </a>
             </div>
           </Card>
 
-          <Card className="p-6 flex flex-col justify-between">
+          <Card className="p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300 hover:-translate-y-1 border-border/40">
             <div>
               <h3 className="text-2xl font-bold mb-4">Clone Repository</h3>
               <p className="text-muted-foreground mb-6">
@@ -89,11 +92,11 @@ export function GitSection() {
               <div className="relative w-full">
                 <Button
                   variant="outline"
-                  className="flex-1 font-mono text-sm w-full"
+                  className="flex-1 font-mono text-sm w-full group transition-all duration-300 hover:border-primary/40 hover:bg-primary/5"
                   onClick={copyCloneCommand}
                 >
-                  <CodeIcon className="mr-2 h-4 w-4" />
-                  {GITHUB_REPO}
+                  <CodeIcon className="mr-2 h-4 w-4 group-hover:text-primary transition-colors duration-300" />
+                  <span className="group-hover:text-primary transition-colors duration-300">{GITHUB_REPO}</span>
                 </Button>
                 <p className={`absolute left-1/2 -translate-x-1/2 mt-2 text-sm text-primary transition-opacity duration-200 ${showCopyMessage ? 'opacity-100' : 'opacity-0'}`}>
                   Copied to clipboard!
@@ -108,12 +111,12 @@ export function GitSection() {
             <Button
               variant="outline"
               size="lg"
-              className="group bg-primary/5 hover:bg-primary/10 text-foreground hover:text-foreground"
+              className="group transition-all duration-300 hover:shadow-md hover:-translate-y-1 bg-primary/5 hover:bg-primary/10 hover:border-primary/40"
             >
-              <GitHubLogoIcon className="w-[20px] h-[20px] mr-2" />
+              <GitHubLogoIcon className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
               <span>View on GitHub</span>
-              <div className="ml-2 flex items-center gap-1 px-2 py-0.5 text-sm rounded-full bg-muted">
-                <span>{stats.stars}<span className="text-yellow-500">★</span></span>
+              <div className="ml-2 flex items-center gap-1 px-2 py-0.5 text-sm rounded-full bg-muted group-hover:bg-muted/80 transition-colors duration-300">
+                <span>{stats.stars}<span className="text-yellow-500 ml-1">★</span></span>
               </div>
             </Button>
           </a>
@@ -122,12 +125,12 @@ export function GitSection() {
             <Button
               variant="outline"
               size="lg"
-              className="group bg-primary/5 hover:bg-primary/10 text-foreground hover:text-foreground"
+              className="group transition-all duration-300 hover:shadow-md hover:-translate-y-1 bg-primary/5 hover:bg-primary/10 hover:border-primary/40"
             >
-              <GitHubLogoIcon className="w-[20px] h-[20px] mr-2" />
+              <GitHubLogoIcon className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
               <span>Fork Repository</span>
-              <div className="ml-2 flex items-center gap-1 px-2 py-0.5 text-sm rounded-full bg-muted">
-                <span>{stats.forks}⑂</span>
+              <div className="ml-2 flex items-center gap-1 px-2 py-0.5 text-sm rounded-full bg-muted group-hover:bg-muted/80 transition-colors duration-300">
+                <span>{stats.forks}<span className="ml-1">⑂</span></span>
               </div>
             </Button>
           </a>
@@ -139,9 +142,9 @@ export function GitSection() {
             <Button
               variant="outline"
               size="lg"
-              className="group bg-[#0D1117] hover:bg-[#161B22] border-2 border-[#30363D] hover:border-primary text-white hover:text-white transition-all duration-300"
+              className="group transition-all duration-300 hover:shadow-md hover:-translate-y-1 bg-[#0D1117] hover:bg-[#161B22] border-[#30363D] hover:border-primary/70 text-white"
             >
-              <GitHubLogoIcon className="w-[20px] h-[20px] mr-2" />
+              <GitHubLogoIcon className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
               <span>Open in Codespaces</span>
             </Button>
           </a>
