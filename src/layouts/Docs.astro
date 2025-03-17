@@ -1,41 +1,28 @@
 ---
-import "../styles/global.css";
-import ThemeInit from "@/components/Theme.astro";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Left from "@/components/Left";
-import Right from "../components/Right";
-import { ChatConfigSchema } from "../schema/chat";
-  
+import Layout from "./Layout.astro";
+import { Chat, ChatSchema } from "../schema/chat";
+
 interface Props {
   title: string;
   description?: string;
   children: any;
   header?: boolean;
   footer?: boolean;
-  chatConfig?: any;
+  chatConfig?: Chat;
   rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
   content?: string;
 }
 
-const {
-  title,
-  description = "ONE",
-  rightPanelMode = "half",
-  chatConfig: providedConfig,
-  content,
-} = Astro.props;
+const { title, description, header = true, footer = true } = Astro.props;
 
-const { header = true, footer = true } = Astro.props;
+// Get raw content from the slot
+const rawContent = await Astro.slots.render("default");
 
-// Default chat configuration
-const defaultChatConfig = ChatConfigSchema.parse({
-  provider: "mistral",
-  model: "mistral-large-latest",
-  systemPrompt: [
-    {
-      type: "text" as const,
-      text: `You are ONE's documentation specialist, helping users understand our comprehensive toolkit for building AI-powered brands. Your role is to guide users through:
+// Create docs-specific chat configuration
+const docsConfig = ChatSchema.parse({
+  aiProvider: "mistral",
+  aiModel: "mistral-large-latest",
+  systemPrompt: `You are ONE's documentation specialist, helping users understand our comprehensive toolkit for building AI-powered brands. Your role is to guide users through:
 
 • Toolkit Components
   - Rich prompt library and templates
@@ -62,243 +49,42 @@ const defaultChatConfig = ChatConfigSchema.parse({
   - Business automation
 
 Your goal is to help users understand how to leverage ONE's toolkit to build their AI-powered brand while emphasizing our commitment to being free, open-source, and restriction-free.`,
+  welcomeMessage: "👋 Welcome! I'm here to help you understand ONE's toolkit for building AI-powered brands. What would you like to learn about our free, open-source platform?",
+  avatar: "/icon.svg",
+  suggestions: [
+    {
+      label: "🎯 Toolkit Overview",
+      prompt: "What components and tools are available in ONE's toolkit?"
     },
-  ],
-  welcome: {
-    message:
-      "👋 Welcome! I'm here to help you understand ONE's toolkit for building AI-powered brands. What would you like to learn about our free, open-source platform?",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "🎯 Toolkit Overview",
-        prompt: "What components and tools are available in ONE's toolkit?",
-      },
-      {
-        label: "🚀 Getting Started",
-        prompt: "How do I start building with ONE's templates and frameworks?",
-      },
-      {
-        label: "💡 Use Cases",
-        prompt: "Show me some examples of what I can build with ONE.",
-      },
-    ],
-  },
+    {
+      label: "🚀 Getting Started",
+      prompt: "How do I start building with ONE's templates and frameworks?"
+    },
+    {
+      label: "💡 Use Cases",
+      prompt: "Show me some examples of what I can build with ONE?"
+    }
+  ]
 });
+// Create page data with async children
+const children = await Astro.slots.render('default');
 
-// Use provided config or fall back to default
-const chatConfig = providedConfig || defaultChatConfig;
+const pageData = {
+  title,
+  description,
+  header,
+  footer,
+  children,
+  chatConfig: docsConfig,
+  rightPanelMode: "quarter" as const,
+  content: rawContent
+} satisfies Props;
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
-    <ThemeInit />
-    <style>
-      :root {
-        --header-height: 60px;
-      }
-
-      .main-grid {
-        display: grid;
-        min-height: 100vh;
-        position: relative;
-        z-index: 10;
-        width: 100%;
-        max-width: 100%;
-        overflow-x: hidden;
-      }
-
-      /* Initial states without transitions */
-      .main-grid[data-panel-mode="Quarter"] {
-        grid-template-columns: minmax(0, 75%);
-      }
-
-      .main-grid[data-panel-mode="Half"] {
-        grid-template-columns: minmax(0, 50%);
-      }
-
-      .main-grid[data-panel-mode="Full"] {
-        grid-template-columns: 0;
-      }
-
-      .main-grid[data-panel-mode="Floating"],
-      .main-grid[data-panel-mode="Icon"] {
-        grid-template-columns: 1fr;
-        padding-right: 0;
-      }
-
-      /* Add transitions after initial render */
-      .main-grid.transitions-enabled {
-        transition: grid-template-columns 0.3s ease;
-      }
-
-      .center-grid {
-        position: relative;
-        z-index: 10;
-        width: 100%;
-        max-width: 100%;
-        margin-right: 0;
-        overflow: hidden;
-      }
-
-      /* Add left padding only on desktop and when not in full mode */
-      @media (min-width: 640px) {
-        .main-grid:not([data-panel-mode="Full"]) .center-grid {
-          padding-left: 60px;
-        }
-      }
-
-      /* Add styles for the right panel positioning */
-      :global(.right-panel) {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 9999;
-        background-color: hsl(var(--background));
-        border-left: 1px solid hsla(0, 0%, 100%, 0.05);
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-      }
-
-      /* Enable transitions after initial render */
-      :global(.transitions-enabled .right-panel) {
-        transition: all 0.3s ease;
-      }
-
-      /* Adjust header padding to align with main header */
-      :global(.right-panel header) {
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid hsl(var(--border) / 0.9);
-        margin-bottom: 2px;
-      }
-
-      /* Add border to chat window */
-      :global(.right-panel main) {
-        border-left: 1px solid hsl(var(--border) / 0.7);
-      }
-
-      :global(.right-panel[data-mode="Icon"]) {
-        width: 48px;
-        height: 48px;
-        top: auto;
-        bottom: 20px;
-        right: 20px;
-        border: none;
-        border-radius: 9999px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        background-color: hsl(var(--primary));
-      }
-
-      :global(.right-panel[data-mode="Quarter"]) {
-        width: 25%;
-        min-width: 320px;
-        background-color: hsl(var(--background));
-      }
-
-      :global(.right-panel[data-mode="Half"]) {
-        width: 50%;
-        background-color: hsl(var(--background));
-      }
-
-      :global(.right-panel[data-mode="Full"]) {
-        width: 100vw;
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        position: fixed;
-        inset: 0;
-        background-color: hsl(var(--background));
-        border: none;
-        z-index: 9999;
-        overflow-y: auto;
-      }
-
-      :global(.right-panel[data-mode="Full"] main) {
-        border-left: none;
-      }
-
-      :global(.right-panel[data-mode="Floating"]) {
-        width: 400px;
-        height: 600px;
-        top: 50%;
-        right: 20px;
-        bottom: auto;
-        transform: translateY(-50%);
-        border-radius: 12px;
-        border: 1px solid var(--border);
-        background-color: hsl(var(--background));
-      }
-
-      @media (max-width: 768px) {
-        :global(.right-panel[data-mode="Floating"]) {
-          width: calc(100% - 40px);
-          height: calc(100% - 120px);
-        }
-      }
-
-      /* Add smooth scrolling to the whole page */
-      html {
-        scroll-behavior: smooth;
-      }
-
-      /* Improve the scrollbar appearance */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: #d1d5db;
-        border-radius: 4px;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: #9ca3af;
-      }
-    </style>
-    <script>
-      // Enable transitions after initial render
-      window.addEventListener("load", () => {
-        document
-          .querySelector(".main-grid")
-          ?.classList.add("transitions-enabled");
-      });
-    </script>
-  </head>
-  <body>
-    <div
-      class="main-grid"
-      id="main-grid"
-      data-panel-mode={rightPanelMode}
-    >
-      <Left client:idle />
-      <div class="center-grid" id="center-grid">
-        {header && <Header client:load />}
-
-        <main class="p-4">
-          <article class="prose dark:prose-invert prose-slate max-w-none py-8">
-            <slot />
-          </article>
-        </main>
-
-        {footer && <Footer client:idle />}
-      </div>
-      <Right
-        client:idle
-        chatConfig={chatConfig}
-        rightPanelMode={rightPanelMode}
-        content={content}
-      />
-    </div>
-  </body>
-</html>
+<Layout {...pageData}>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <article class="prose dark:prose-invert prose-slate max-w-none py-8">
+      <slot />
+    </article>
+  </div>
+</Layout>

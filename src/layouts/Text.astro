@@ -56,18 +56,6 @@ const chatConfig = normalizeConfig({
   ...(frontmatter.includeContent && rawContent ? { content: rawContent } : {})
 });
 
-// Debug final state
-console.log('Content processing:', {
-  type: typeof rawContent,
-  rawLength: rawContent?.length || 0,
-  rawPreview: rawContent ? rawContent.substring(0, 100) : 'N/A',
-  includeContent: Boolean(frontmatter.includeContent),
-  isJSON: typeof rawContent === 'string' && rawContent.startsWith('{'),
-  contentSettings: {
-    hasContent: Boolean(rawContent),
-    includeContent: Boolean(frontmatter.includeContent)
-  }
-});
 ---
 
 <Layout title={frontmatter.title} description={frontmatter.description}>
