@@ -1,6 +1,6 @@
 ---
 import Layout from "./Layout.astro";
-import { Chat, ChatSchema } from "../schema/chat";
+import { ChatConfigSchema, type Chat } from "../schema/chat";
 
 interface Props {
   title: string;
@@ -11,18 +11,39 @@ interface Props {
   chatConfig?: Chat;
   rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
   content?: string;
+  // For MDX files
+  Content?: any;
 }
 
-const { title, description, header = true, footer = true } = Astro.props;
+const { title, description, header = true, footer = true, Content } = Astro.props;
 
-// Get raw content from the slot
-const rawContent = await Astro.slots.render("default");
+// Get the raw content with fallbacks
+let rawContent = '';
+
+try {
+  // First try: Direct content if provided
+  if (Astro.props.content && typeof Astro.props.content === 'string') {
+    rawContent = Astro.props.content;
+  }
+  
+  // Second try: MDX/Markdown Content component
+  if (!rawContent && Content?.rawContent) {
+    rawContent = await Content.rawContent();
+  }
+  
+  // Last try: Render default slot
+  if (!rawContent) {
+    rawContent = await Astro.slots.render('default');
+  }
+} catch (error) {
+  console.error('[Content extraction failed]:', error);
+}
 
 // Create docs-specific chat configuration
-const docsConfig = ChatSchema.parse({
+const docsConfig = ChatConfigSchema.parse({
   aiProvider: "mistral",
   aiModel: "mistral-large-latest",
-  systemPrompt: `You are ONE's documentation specialist, helping users understand our comprehensive toolkit for building AI-powered brands. Your role is to guide users through:
+  systemPrompt: `You are ONE's documentation specialist, helping users understand our comprehensive toolkit for building AI-powered brands. Your role is to guide users through the documentation and help them understand:
 
 • Toolkit Components
   - Rich prompt library and templates
@@ -48,23 +69,27 @@ const docsConfig = ChatSchema.parse({
   - Payment system integration
   - Business automation
 
-Your goal is to help users understand how to leverage ONE's toolkit to build their AI-powered brand while emphasizing our commitment to being free, open-source, and restriction-free.`,
-  welcomeMessage: "👋 Welcome! I'm here to help you understand ONE's toolkit for building AI-powered brands. What would you like to learn about our free, open-source platform?",
+Your goal is to help users understand the documentation and how to leverage ONE's toolkit while emphasizing our commitment to being free, open-source, and restriction-free.
+
+Here is the documentation content you should reference:
+${rawContent}`,
+  welcomeMessage: "👋 Welcome! I'm here to help you understand ONE's documentation. What would you like to know?",
   avatar: "/icon.svg",
   suggestions: [
     {
-      label: "🎯 Toolkit Overview",
-      prompt: "What components and tools are available in ONE's toolkit?"
+      label: "📖 Explain This",
+      prompt: "Can you explain what this documentation page is about?"
     },
     {
-      label: "🚀 Getting Started",
-      prompt: "How do I start building with ONE's templates and frameworks?"
+      label: "🔍 Key Points",
+      prompt: "What are the key points covered in this documentation?"
     },
     {
-      label: "💡 Use Cases",
-      prompt: "Show me some examples of what I can build with ONE?"
+      label: "💡 Examples",
+      prompt: "Can you show me some examples from this documentation?"
     }
-  ]
+  ],
+  includeContent: true
 });
 // Create page data with async children
 const children = await Astro.slots.render('default');
@@ -77,8 +102,11 @@ const pageData = {
   children,
   chatConfig: docsConfig,
   rightPanelMode: "quarter" as const,
-  content: rawContent
+  content: rawContent // This will be passed to Right component through Layout
 } satisfies Props;
+
+// Log content for debugging
+console.log('[Docs Layout] Content length:', rawContent?.length ?? 0);
 ---
 
 <Layout {...pageData}>
