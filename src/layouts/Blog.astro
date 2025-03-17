@@ -16,28 +16,29 @@ const rawContent = await Astro.slots.render("default");
 
 // Create blog-specific chat configuration
 const blogSpecificConfig = ChatConfigSchema.parse({
-  provider: "mistral",
-  model: "mistral-large-latest",
-  systemPrompt: [
+  aiProvider: "mistral",
+  aiModel: "mistral-large-latest",
+  systemPrompt: `I am a blog content assistant. I help users understand the blog post and answer questions about it.
+
+Here is the blog post content I will reference:
+${rawContent}`,
+  welcomeMessage: "👋 Have questions about this blog post? I'm here to help!",
+  avatar: "/icon.svg",
+  suggestions: [
     {
-      type: "text" as const,
-      text: "I am a blog content assistant. I help users understand the blog post and answer questions about it. I'll reference the current post content in my responses.",
+      label: "📝 Summarize",
+      prompt: "Can you give me a summary of this blog post?"
     },
+    {
+      label: "🔍 Key Points",
+      prompt: "What are the main points discussed in this article?"
+    },
+    {
+      label: "💡 Examples",
+      prompt: "Can you point out specific examples from this post?"
+    }
   ],
-  welcome: {
-    message: "👋 Have questions about this blog post? I'm here to help!",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "📝 Summarize",
-        prompt: "Can you give me a summary of this blog post?",
-      },
-      {
-        label: "🔍 Key Points",
-        prompt: "What are the main points discussed in this article?",
-      },
-    ],
-  },
+  includeContent: true
 });
 
 const pageData = {
