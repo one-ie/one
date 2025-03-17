@@ -308,8 +308,8 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
                 setTimeout(() => handleSubmit(), 50);
               }}
               className={`${
-                isQuickStart ? 'col-span-2 py-2' : 'col-span-1 py-2'
-              } px-4 bg-primary/5 hover:bg-primary/10 rounded-lg transition-all duration-200 text-primary hover:text-primary/90 text-sm font-medium`}
+                isQuickStart ? 'col-span-2 py-1.5' : 'col-span-1 py-1.5'
+              } px-3 bg-[#2a2a2a] hover:bg-[#353535] rounded-lg transition-all duration-200 text-white hover:text-white/90 shadow-sm hover:shadow text-sm font-medium`}
             >
               {label}
             </button>

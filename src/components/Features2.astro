@@ -1,5 +1,6 @@
 ---
 import { Bot, Globe, CreditCard, Code, Settings, Zap } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 const features = [
   {
@@ -37,32 +38,50 @@ const features = [
 
 <section class="container mx-auto px-6 py-20 border-b border-border bg-background/30 backdrop-blur-sm">
   <div class="w-full max-w-[1400px] mx-auto">
-    <h2 class="text-4xl font-bold mb-12 text-center text-foreground one-animate-fade-in">
+    <h2 class="text-4xl font-bold mb-12 text-center text-foreground animate-fade-in">
       Build Anything with Complete Freedom
     </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 one-animate-fade-in">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in">
       {features.map((feature) => (
-        <div class="p-6 rounded-lg border border-border card hover:bg-accent/5 transition-colors duration-200">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="p-2 rounded-lg bg-primary/10">
-              <feature.icon className="w-6 h-6 text-primary" />
+        <Card className="hover:shadow-md transition-all duration-300 hover:-translate-y-1 overflow-hidden group bg-card border-border/40">
+          <CardHeader className="pb-0">
+            <div class="flex items-center gap-4 mb-2">
+              <div class="p-2.5 rounded-lg bg-primary/10 group-hover:bg-primary/15 transition-colors">
+                <feature.icon className="w-5 h-5 text-primary" />
+              </div>
+              <CardTitle className="text-xl">{feature.title}</CardTitle>
             </div>
-            <h3 class="text-xl font-semibold text-foreground">{feature.title}</h3>
-          </div>
-          <p class="text-muted-foreground leading-relaxed">{feature.description}</p>
-        </div>
+          </CardHeader>
+          <CardContent>
+            <CardDescription className="text-sm leading-relaxed text-muted-foreground">
+              {feature.description}
+            </CardDescription>
+          </CardContent>
+        </Card>
       ))}
     </div>
   </div>
 </section>
 
 <style>
-  .one-animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-  }
-
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  /* Ensure card background is darker than main background */
+  :global(.bg-card) {
+    background-color: var(--one-card);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Enhance hover effect */
+  :global(.card:hover) {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border-color: hsla(var(--primary) / 0.15);
   }
 </style>

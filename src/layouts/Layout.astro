@@ -63,16 +63,6 @@ const chatConfig = providedConfig ? ChatSchema.parse(providedConfig) : ChatSchem
   runtime: "edge",
   includeContent: true
 });
-
-// Add debug logging
-console.log('Layout - Chat config details:', {
-  hasConfig: !!providedConfig,
-  hasWelcome: !!chatConfig.welcome,
-  welcomeMessage: chatConfig.welcome?.message,
-  suggestionsCount: chatConfig.welcome?.suggestions?.length,
-  suggestions: chatConfig.welcome?.suggestions,
-  fullConfig: JSON.stringify(chatConfig, null, 2)
-});
 ---
 
 <!DOCTYPE html>
