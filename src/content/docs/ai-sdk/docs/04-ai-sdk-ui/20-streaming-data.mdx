@@ -1,0 +1,200 @@
+---
+title: Streaming Custom Data
+description: Learn how to stream custom data to the client.
+---
+
+# Streaming Custom Data
+
+It is often useful to send additional data alongside the model's response.
+For example, you may want to send status information, the message ids after storing them,
+or references to content that the language model is referring to.
+
+The AI SDK provides several helpers that allows you to stream additional data to the client
+and attach it either to the `Message` or to the `data` object of the `useChat` hook:
+
+- `createDataStream`: creates a data stream
+- `createDataStreamResponse`: creates a response object that streams data
+- `pipeDataStreamToResponse`: pipes a data stream to a server response object
+
+The data is streamed as part of the response stream.
+
+## Sending Custom Data from the Server
+
+In your server-side route handler, you can use `createDataStreamResponse` and `pipeDataStreamToResponse` in combination with `streamText`.
+You need to:
+
+1. Call `createDataStreamResponse` or `pipeDataStreamToResponse` to get a callback function with a `DataStreamWriter`.
+2. Write to the `DataStreamWriter` to stream additional data.
+3. Merge the `streamText` result into the `DataStreamWriter`.
+4. Return the response from `createDataStreamResponse` (if that method is used)
+
+Here is an example:
+
+```tsx filename="route.ts" highlight="7-10,16,19-23,25-26,30"
+import { openai } from '@ai-sdk/openai';
+import { generateId, createDataStreamResponse, streamText } from 'ai';
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  // immediately start streaming (solves RAG issues with status, etc.)
+  return createDataStreamResponse({
+    execute: dataStream => {
+      dataStream.writeData('initialized call');
+
+      const result = streamText({
+        model: openai('gpt-4o'),
+        messages,
+        onChunk() {
+          dataStream.writeMessageAnnotation({ chunk: '123' });
+        },
+        onFinish() {
+          // message annotation:
+          dataStream.writeMessageAnnotation({
+            id: generateId(), // e.g. id from saved DB record
+            other: 'information',
+          });
+
+          // call annotation:
+          dataStream.writeData('call completed');
+        },
+      });
+
+      result.mergeIntoDataStream(dataStream);
+    },
+    onError: error => {
+      // Error messages are masked by default for security reasons.
+      // If you want to expose the error message to the client, you can do so here:
+      return error instanceof Error ? error.message : String(error);
+    },
+  });
+}
+```
+
+<Note>
+  You can also send stream data from custom backends, e.g. Python / FastAPI,
+  using the [Data Stream
+  Protocol](/docs/ai-sdk-ui/stream-protocol#data-stream-protocol).
+</Note>
+
+## Sending Custom Sources
+
+You can send custom sources to the client using the `writeSource` method on the `DataStreamWriter`:
+
+```tsx filename="route.ts" highlight="9-15"
+import { openai } from '@ai-sdk/openai';
+import { createDataStreamResponse, streamText } from 'ai';
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  return createDataStreamResponse({
+    execute: dataStream => {
+      // write a custom url source to the stream:
+      dataStream.writeSource({
+        sourceType: 'url',
+        id: 'source-1',
+        url: 'https://example.com',
+        title: 'Example Source',
+      });
+
+      const result = streamText({
+        model: openai('gpt-4o'),
+        messages,
+      });
+
+      result.mergeIntoDataStream(dataStream);
+    },
+  });
+}
+```
+
+## Processing Custom Data in `useChat`
+
+The `useChat` hook automatically processes the streamed data and makes it available to you.
+
+### Accessing Data
+
+On the client, you can destructure `data` from the `useChat` hook which stores all `StreamData`
+as a `JSONValue[]`.
+
+```tsx filename="page.tsx"
+import { useChat } from '@ai-sdk/react';
+
+const { data } = useChat();
+```
+
+### Accessing Message Annotations
+
+Each message from the `useChat` hook has an optional `annotations` property that contains
+the message annotations sent from the server.
+
+Since the shape of the annotations depends on what you send from the server,
+you have to destructure them in a type-safe way on the client side.
+
+Here we just show the annotations as a JSON string:
+
+```tsx filename="page.tsx" highlight="9"
+import { Message, useChat } from '@ai-sdk/react';
+
+const { messages } = useChat();
+
+const result = (
+  <>
+    {messages?.map((m: Message) => (
+      <div key={m.id}>
+        {m.annotations && <>{JSON.stringify(m.annotations)}</>}
+      </div>
+    ))}
+  </>
+);
+```
+
+### Updating and Clearing Data
+
+You can update and clear the `data` object of the `useChat` hook using the `setData` function.
+
+```tsx filename="page.tsx"
+const { setData } = useChat();
+
+// clear existing data
+setData(undefined);
+
+// set new data
+setData([{ test: 'value' }]);
+
+// transform existing data, e.g. adding additional values:
+setData(currentData => [...currentData, { test: 'value' }]);
+```
+
+#### Example: Clear on Submit
+
+```tsx filename="page.tsx" highlight="18-21"
+'use client';
+
+import { Message, useChat } from '@ai-sdk/react';
+
+export default function Chat() {
+  const { messages, input, handleInputChange, handleSubmit, data, setData } =
+    useChat();
+
+  return (
+    <>
+      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+
+      {messages?.map((m: Message) => (
+        <div key={m.id}>{`${m.role}: ${m.content}`}</div>
+      ))}
+
+      <form
+        onSubmit={e => {
+          setData(undefined); // clear stream data
+          handleSubmit(e);
+        }}
+      >
+        <input value={input} onChange={handleInputChange} />
+      </form>
+    </>
+  );
+}
+```

@@ -3,24 +3,80 @@ import Layout from "../../layouts/Docs.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   RocketIcon,
   LayersIcon,
   InfoCircledIcon,
   LightningBoltIcon,
   ArrowRightIcon,
+  MagnifyingGlassIcon,
+  CheckCircledIcon,
+  CrossCircledIcon
 } from "@radix-ui/react-icons";
+import {
+  Calendar,
+  LayoutList,
+  LayoutGrid,
+  Grid2x2,
+  Grid3x3,
+  FileText,
+  Newspaper,
+  Search,
+  BookText,
+  List,
+  Table,
+  Grid,
+  Tag,
+} from "lucide-react";
 import { ChatConfigSchema } from '../../schema/chat';
 
 // Type definitions
 type DocEntry = CollectionEntry<'docs'>;
 type DocSection = Record<string, DocEntry[]>;
 
+// Get view preference from URL or default to list view
+const viewMode = (Astro.url.searchParams.get("view") || "list") as
+    | "list"
+    | "compact"
+    | "grid1"
+    | "grid2"
+    | "grid3"
+    | "grid4";
+
 // Get all docs entries
 const entries = await getCollection("docs");
 
+// Get search query from URL
+const searchQuery = Astro.url.searchParams.get("search")?.toLowerCase() || '';
+
+// Get tag filter from URL
+const tagFilter = Astro.url.searchParams.get("tag")?.toLowerCase() || '';
+
+// Filter entries by search query if provided
+const filteredEntries = searchQuery || tagFilter
+  ? entries.filter((entry: DocEntry) => {
+      const title = entry.data.title?.toLowerCase() || '';
+      const description = entry.data.description?.toLowerCase() || '';
+      const section = entry.data.section?.toLowerCase() || '';
+      const tags = entry.data.tags?.map((t: string) => t.toLowerCase()) || [];
+      
+      // If tag filter is present, it takes precedence
+      if (tagFilter) {
+        return tags.includes(tagFilter);
+      }
+      
+      // Otherwise use search query
+      return title.includes(searchQuery) || 
+             description.includes(searchQuery) || 
+             section.includes(searchQuery) ||
+             tags.some((tag: string) => tag.includes(searchQuery));
+    })
+  : entries;
+
 // Group by sections and sort
-const sections = entries.reduce((acc: DocSection, entry: DocEntry) => {
+const sections = filteredEntries.reduce((acc: DocSection, entry: DocEntry) => {
   const section = entry.data.section || "Other";
   if (!acc[section]) {
     acc[section] = [];
@@ -31,9 +87,9 @@ const sections = entries.reduce((acc: DocSection, entry: DocEntry) => {
 
 // Sort sections in desired order
 const orderedSections: DocSection = {
-  "Getting Started": sections["Introduction"] || [],
-  "Level 2 - Core Concepts": sections["Core Concepts"] || [],
-  "Level 3 - Advanced Features": sections["Advanced Features"] || [],
+  "Introduction": sections["Introduction"] || [],
+  "Core Concepts": sections["Core Concepts"] || [],
+  "Advanced Features": sections["Advanced Features"] || [],
   // Filter out sections that are already included
   ...Object.entries(sections)
     .filter(([key]) => !['Introduction', 'Core Concepts', 'Advanced Features'].includes(key))
@@ -70,20 +126,54 @@ const chatConfig = ChatConfigSchema.parse({
   }
 });
 
-type IconMap = {
-  [key: string]: typeof RocketIcon;
-};
+// Helper to format dates
+function formatDate(date: string | Date | undefined): string {
+  if (!date) return '';
+  
+  try {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    
+    // Check if date is valid
+    if (isNaN(dateObj.getTime())) {
+      return '';
+    }
+    
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(dateObj);
+  } catch (error) {
+    console.error('Error formatting date:', error);
+    return '';
+  }
+}
 
-const iconMap: IconMap = {
-  "Quick Start": RocketIcon,
-  "Development": LayersIcon,
-  "Deployment": LightningBoltIcon,
-  "Other": InfoCircledIcon
-};
+// Get appropriate icon based on section
+function getSectionIcon(section: string) {
+  switch (section.toLowerCase()) {
+    case 'introduction':
+    case 'getting started':
+      return RocketIcon;
+    case 'core concepts':
+    case 'core features':
+      return LayersIcon;
+    case 'advanced features':
+      return LightningBoltIcon;
+    default:
+      return BookText;
+  }
+}
 
-const getSectionIcon = (section: string) => {
-  return iconMap[section] || InfoCircledIcon;
-};
+// Get tags from entry data
+function getTagsFromEntry(entry: DocEntry): string[] {
+  return entry.data.tags || [];
+}
+
+// Function to create tag URL
+function createTagUrl(tag: string): string {
+  return `/docs?tag=${encodeURIComponent(tag)}`;
+}
 ---
 
 <Layout
@@ -92,55 +182,389 @@ const getSectionIcon = (section: string) => {
   chatConfig={chatConfig}
   rightPanelMode="quarter"
 >
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-    <!-- Hero Section -->
-    <div class="text-center mb-16">
-      <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/60">
-        Documentation
-      </h1>
-      <p class="mx-auto max-w-2xl text-lg text-muted-foreground mb-8">
-        Everything you need to build intelligent applications with ONE framework
-      </p>
-     </div>
+  <div class="max-w-full px-3 sm:px-4 pt-4 pb-2">
+    {/* Header with Search and View Toggles */}
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+          Documentation
+        </h1>
+        <p class="text-base text-muted-foreground mt-1">
+          Everything you need to build intelligent applications
+        </p>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+        {/* Search Input */}
+        <form class="relative w-full sm:w-64 md:w-80" method="GET" action="/docs">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input 
+            type="search" 
+            name="search" 
+            placeholder="Search documentation..." 
+            className="pl-9 h-9 w-full bg-muted/40 focus:bg-background"
+            value={searchQuery}
+          />
+          {viewMode !== "list" && <input type="hidden" name="view" value={viewMode} />}
+          <button type="submit" class="sr-only">Search</button>
+        </form>
+        
+        <div class="flex gap-1 bg-muted/50 p-0.5 rounded-lg">
+          <a
+            href={`?view=list${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            class={`p-2 rounded-md transition-all ${viewMode === "list" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
+            aria-label="List view"
+            title="List view"
+          >
+            <List className="w-4 h-4" />
+          </a>
+          <a
+            href={`?view=compact${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            class={`p-2 rounded-md transition-all ${viewMode === "compact" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
+            aria-label="Compact view"
+            title="Compact view"
+          >
+            <Table className="w-4 h-4" />
+          </a>
+          <a
+            href={`?view=grid2${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            class={`p-2 rounded-md transition-all ${viewMode === "grid2" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
+            aria-label="Grid view with 2 columns"
+            title="Grid view (2 columns)"
+          >
+            <Grid2x2 className="w-4 h-4" />
+          </a>
+          <a
+            href={`?view=grid3${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            class={`p-2 rounded-md transition-all ${viewMode === "grid3" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
+            aria-label="Grid view with 3 columns"
+            title="Grid view (3 columns)"
+          >
+            <Grid3x3 className="w-4 h-4" />
+          </a>
+          <a
+            href={`?view=grid4${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            class={`p-2 rounded-md transition-all ${viewMode === "grid4" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
+            aria-label="Grid view with 4 columns"
+            title="Grid view (4 columns)"
+          >
+            <Grid className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+    </div>
 
-  
+    {/* Search Results */}
+    {(searchQuery || tagFilter) && (
+      <div class="mb-4 bg-primary/5 rounded-lg p-2 text-base">
+        <div class="flex items-center gap-2">
+          {searchQuery ? (
+            <>
+              <MagnifyingGlassIcon className="w-4 h-4 text-primary" />
+              <span>
+                Found {filteredEntries.length} result{filteredEntries.length !== 1 ? 's' : ''} for <strong>"{searchQuery}"</strong>
+              </span>
+            </>
+          ) : (
+            <>
+              <Tag className="w-4 h-4 text-primary" />
+              <span>
+                Found {filteredEntries.length} document{filteredEntries.length !== 1 ? 's' : ''} tagged <strong>"{tagFilter}"</strong>
+              </span>
+            </>
+          )}
+          <a href="/docs" class="ml-auto text-primary hover:underline text-base">Clear</a>
+        </div>
+      </div>
+    )}
 
-    <!-- Documentation Sections -->
-    <div class="space-y-16">
+    {/* Documentation Sections */}
+    <div class="space-y-6">
       {Object.entries(orderedSections).map(([section, entries]) => entries.length > 0 && (
-        <section id={section.toLowerCase().replace(/ /g, "-")}>
-          <div class="flex items-center gap-2 mb-8">
-            {(() => {
-              const Icon = getSectionIcon(section);
-              return <Icon className="w-6 h-6 text-primary" />;
-            })()}
-            <h2 class="text-2xl font-bold">{section}</h2>
+        <div class="mb-6">
+          <div class="flex items-center gap-2 mb-3 pb-1 border-b border-border/40">
+            {/* Display section icon dynamically */}
+            <div class="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center">
+              {(() => {
+                const Icon = getSectionIcon(section);
+                return <Icon className="w-4 h-4 text-primary" />;
+              })()}
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 class="text-lg font-bold text-foreground">{section}</h2>
+              <Badge
+                variant="secondary"
+                className="bg-primary/10 text-primary text-xs px-1.5 py-0"
+              >
+                {entries.length}
+              </Badge>
+            </div>
           </div>
-          
-          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {entries
-              .sort((a: DocEntry, b: DocEntry) => (a.data.order || 0) - (b.data.order || 0))
-              .map((entry: DocEntry) => (
-                <a href={`/docs/${entry.slug}`} class="group">
-                  <Card className="h-full p-6 hover:shadow-md transition-shadow">
-                    <h3 class="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                      {entry.data.title}
-                    </h3>
-                    <p class="text-sm text-muted-foreground mb-4">
-                      {entry.data.description}
-                    </p>
-                    <div class="flex items-center text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                      Read More
-                      <ArrowRightIcon className="ml-1 w-4 h-4" />
-                    </div>
+
+          {/* Grid 4 View - No descriptions, 4 columns */}
+          {viewMode === "grid4" && (
+            <div class="grid gap-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {entries
+                .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+                .map((entry) => (
+                  <Card className="p-2 hover:shadow-sm transition-shadow border-muted/30 hover:border-primary/30 bg-background/80 backdrop-blur-sm">
+                    <a href={`/docs/${entry.slug}`} class="group block">
+                      <div class="flex items-center gap-2">
+                        <div class="mt-0.5 p-1.5 rounded-md bg-muted/40 group-hover:bg-primary/10 transition-colors">
+                          <FileText className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                        </div>
+                        <h3 class="text-base font-medium group-hover:text-primary transition-colors line-clamp-1">
+                          {entry.data.title}
+                        </h3>
+                      </div>
+                    </a>
                   </Card>
-                </a>
-              ))}
-          </div>
-        </section>
+                ))}
+            </div>
+          )}
+
+          {/* Compact View - Table-like format */}
+          {viewMode === "compact" && (
+            <div class="border border-border/30 rounded-lg overflow-hidden">
+              <div class="divide-y divide-border/30">
+                {entries
+                  .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+                  .map((entry, idx) => (
+                    <div class="grid grid-cols-[auto_1fr_auto] items-center hover:bg-muted/20">
+                      <div class="p-2">
+                        <div class="p-1.5 rounded-md bg-muted/40 flex items-center justify-center">
+                          <FileText className="w-4 h-4 text-muted-foreground" />
+                        </div>
+                      </div>
+                      <div class="p-2">
+                        <a href={`/docs/${entry.slug}`} class="group">
+                          <h3 class="text-base font-medium group-hover:text-primary transition-colors no-underline">
+                            {entry.data.title}
+                          </h3>
+                        </a>
+                      </div>
+                      <div class="p-2 flex flex-wrap gap-1 justify-end">
+                        {entry.data.tags ? (
+                          entry.data.tags.slice(0, 3).map((tag: string) => (
+                            <a href={createTagUrl(tag)} class="no-underline">
+                              <Badge className="text-base px-2 py-0.5 bg-primary/10 hover:bg-primary/20 text-primary border-none flex items-center gap-1">
+                                <Tag className="w-3 h-3" />
+                                <span>{tag}</span>
+                              </Badge>
+                            </a>
+                          ))
+                        ) : (
+                          <span class="text-base text-muted-foreground">-</span>
+                        )}
+                        {entry.data.tags && entry.data.tags.length > 3 && (
+                          <span class="text-base text-muted-foreground">+{entry.data.tags.length - 3}</span>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          )}
+
+          {/* Standard Grid Views */}
+          {(viewMode === "grid2" || viewMode === "grid3") && (
+            <div
+              class={`grid gap-3 ${
+                viewMode === "grid3" 
+                ? "md:grid-cols-2 lg:grid-cols-3" 
+                : "md:grid-cols-2"
+              }`}
+            >
+              {entries
+                .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+                .map((entry) => (
+                  <Card className="h-full p-3 hover:shadow-md transition-shadow border-muted/50 hover:border-primary/30 bg-background/80 backdrop-blur-sm">
+                    <a href={`/docs/${entry.slug}`} class="group block no-underline">
+                      <div class="flex items-center gap-2 mb-2">
+                        <div class="mt-0.5 p-1.5 rounded-md bg-muted/40 group-hover:bg-primary/10 transition-colors">
+                          <FileText className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        </div>
+                        <h3 class="text-base font-medium group-hover:text-primary transition-colors line-clamp-1">
+                          {entry.data.title}
+                        </h3>
+                      </div>
+                      <p class="text-base text-muted-foreground line-clamp-2 mb-2 ml-8 group-hover:text-muted-foreground/80 transition-colors">
+                        {entry.data.description}
+                      </p>
+                      <div class="flex flex-wrap gap-1 ml-8">
+                        {entry.data.tags ? (
+                          entry.data.tags.map((tag: string) => (
+                            <a href={createTagUrl(tag)} class="no-underline">
+                              <Badge className="text-base px-2 py-0.5 bg-primary/10 hover:bg-primary/20 text-primary border-none flex items-center gap-1">
+                                <Tag className="w-3 h-3" />
+                                <span>{tag}</span>
+                              </Badge>
+                            </a>
+                          ))
+                        ) : null}
+                      </div>
+                    </a>
+                  </Card>
+                ))}
+            </div>
+          )}
+
+          {/* List View - Optimized */}
+          {viewMode === "list" && (
+            <div class="space-y-1.5">
+              {entries
+                .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+                .map((entry) => (
+                  <Card className="group hover:shadow-sm transition-all duration-300 border-muted/30 hover:border-primary/30 bg-background/80 backdrop-blur-sm py-2 px-3">
+                    <a href={`/docs/${entry.slug}`} class="no-underline block">
+                      <div class="flex gap-2">
+                        <div class="flex-shrink-0 mt-0.5 p-1.5 rounded-md bg-muted/30 group-hover:bg-primary/10 transition-colors h-fit">
+                          <FileText className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        </div>
+                        <div class="min-w-0 flex flex-col gap-1 flex-grow">
+                          <h3 class="text-base font-medium group-hover:text-primary transition-colors">
+                            {entry.data.title}
+                          </h3>
+                          <p class="text-base text-muted-foreground line-clamp-1">
+                            {entry.data.description}
+                          </p>
+                          <div class="flex flex-wrap gap-1 mt-1">
+                            {entry.data.tags ? (
+                              entry.data.tags.slice(0, 4).map((tag: string) => (
+                                <a href={createTagUrl(tag)} class="no-underline">
+                                  <Badge className="text-base px-2 py-0.5 bg-primary/10 hover:bg-primary/20 text-primary border-none flex items-center gap-1">
+                                    <Tag className="w-3 h-3" />
+                                    <span>{tag}</span>
+                                  </Badge>
+                                </a>
+                              ))
+                            ) : null}
+                            {entry.data.tags && entry.data.tags.length > 4 && (
+                              <span class="text-base text-muted-foreground">+{entry.data.tags.length - 4}</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </Card>
+                ))}
+            </div>
+          )}
+        </div>
       ))}
     </div>
 
-  
+    {/* Empty State */}
+    {filteredEntries.length === 0 && (
+      <div class="text-center py-8 bg-muted/20 rounded-lg mt-4">
+        <div class="max-w-md mx-auto">
+          <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+          <h2 class="text-xl font-semibold mb-2">
+            {searchQuery 
+              ? 'No matching documents found' 
+              : tagFilter 
+                ? 'No documents with this tag' 
+                : 'No documentation found'}
+          </h2>
+          <p class="text-base text-muted-foreground">
+            {searchQuery 
+              ? `No documentation pages match your search for "${searchQuery}".` 
+              : tagFilter
+                ? `No documentation pages found with tag "${tagFilter}".`
+                : 'No documentation pages exist in the content collection.'}
+          </p>
+          {(searchQuery || tagFilter) && (
+            <a href="/docs" class="inline-block mt-3 text-primary hover:underline text-base">
+              View all documentation
+            </a>
+          )}
+        </div>
+      </div>
+    )}
   </div>
 </Layout>
+
+<style>
+  .card {
+    transition: all 0.2s ease-in-out;
+  }
+  .card:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Gradient background styling */
+  :global(body) {
+    background-image: 
+      radial-gradient(at 100% 0%, hsla(var(--primary-hsl) / 0.15) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(var(--primary-hsl) / 0.1) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* Remove underlines from all links */
+  a {
+    text-decoration: none !important;
+  }
+
+  /* Tag hover styling */
+  .badge:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+</style>
+
+<script>
+  // Handle search form submission
+  document.addEventListener('DOMContentLoaded', () => {
+    const docSearchForm = document.querySelector('form');
+    const docSearchInput = docSearchForm?.querySelector('input[type="search"]') as HTMLInputElement;
+    const viewModeLinks = document.querySelectorAll('a[href^="?view="]');
+    
+    if (docSearchForm && docSearchInput) {
+      // Add event listener for the form submission
+      docSearchForm.addEventListener('submit', (e) => {
+        if (docSearchInput.value.trim() === '') {
+          // If search is empty and we're already on the docs page with no query,
+          // prevent the default action to avoid unnecessary page refresh
+          const currentUrl = new URL(window.location.href);
+          if (currentUrl.pathname === '/docs' && !currentUrl.searchParams.has('search')) {
+            e.preventDefault();
+          }
+        }
+      });
+      
+      // Set focus on search input with a slight delay
+      setTimeout(() => {
+        if (docSearchInput.value) {
+          // If there's a search value, place cursor at the end
+          docSearchInput.setSelectionRange(docSearchInput.value.length, docSearchInput.value.length);
+        }
+      }, 100);
+    }
+    
+    // Update view mode links to preserve search query and tag filter
+    if (viewModeLinks.length > 0) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const currentSearch = searchParams.get('search');
+      const currentTag = searchParams.get('tag');
+      
+      viewModeLinks.forEach(link => {
+        const href = link.getAttribute('href') || '';
+        let newHref = href;
+        
+        if (currentSearch && !newHref.includes('search=')) {
+          newHref += (newHref.includes('?') ? '&' : '?') + `search=${encodeURIComponent(currentSearch)}`;
+        }
+        
+        if (currentTag && !newHref.includes('tag=')) {
+          newHref += (newHref.includes('?') ? '&' : '?') + `tag=${encodeURIComponent(currentTag)}`;
+        }
+        
+        if (newHref !== href) {
+          link.setAttribute('href', newHref);
+        }
+      });
+    }
+  });
+</script>
