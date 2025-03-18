@@ -55,7 +55,6 @@ export function Breadcrumbs() {
     <div className={cn(
       "h-16",
       "flex items-center",
-      "pl-20",
       "bg-transparent"
     )}>
       <nav
