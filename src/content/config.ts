@@ -1,134 +1,212 @@
-// src/content/config.ts
-
-/**
- * Welcome to our Content Configuration!
- *
- * In this file, we define our content collections and their schemas using Zod.
- * We're writing a story about our content: blog posts, documentation, and creative prompts.
- *
- * You can use this file to define the fields and types of your content. Notice that most fields are ...
- * - `.optional()` lets a field be omitted (i.e., it might not appear at all).
- * - `.nullable()` allows the field to explicitly be set to `null`.
- *
- * This dual approach makes our schema human-friendly and flexible,
- * ensuring our application can handle cases where data might be missing or intentionally empty.
- */
-
 import { defineCollection, z } from 'astro:content';
 
 /**
- * Blog Schema – Telling the Story of Our Posts
- *
- * Every blog post needs a captivating title, but other details can be left blank if needed.
+ * Common Fields – Shared Across Content Types
+ * 
+ * These fields provide consistent metadata across all content types.
  */
-const BlogSchema = z.object({
-  // The headline of our story—essential to grab the reader's attention.
-  title: z.string(),
-
-  // A brief description to pique curiosity; it's okay if this is missing or set to null.
+const CommonFields = {
+  title: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
-
-  // The publication date of the post; optional in case the date isn't set or is unknown.
   date: z.date().optional().nullable(),
-
-  // Is this post still a work in progress? If not provided, we treat it as not a draft.
-  draft: z.boolean().optional().nullable(),
-
-  // A visual representation of the story; optional for creative freedom.
-  picture: z.string().optional().nullable(),
-
-  // An alternative image URL; again, optional and can be null.
-  image: z.string().optional().nullable(),
-
-  // The type or category of the post; optional to allow for broad storytelling.
-  type: z.string().optional().nullable(),
-
-  // Tags to help classify the post; optional so you can skip them if not needed.
+  status: z.enum(['private', 'public']).default('private'),
   tags: z.array(z.string()).optional().nullable(),
+  image: z.string().optional().nullable(),
+};
+
+/**
+ * Pages Schema
+ * For static pages and landing pages
+ */
+const PagesSchema = z.object({
+  ...CommonFields,
+  layout: z.string().optional(),
+  sections: z.array(z.string()).optional(),
+  menu: z.boolean().optional()
 });
 
 /**
- * Docs Schema – Your Guiding Light
- *
- * Documentation entries guide our users through the ins and outs of our project.
- * While some fields are essential for clarity, others can be left flexible.
+ * Blog Schema
+ * For blog posts and articles
+ */
+const BlogSchema = z.object({
+  ...CommonFields,
+  author: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
+  featured: z.boolean().optional().nullable(),
+});
+
+/**
+ * Docs Schema
+ * For documentation pages
  */
 const DocsSchema = z.object({
-  // A clear title for the documentation—vital for orientation.
-  title: z.string(),
-
-  // A detailed description that explains the purpose of the docs.
-  description: z.string(),
-
-  // The publication date to keep our guides in order.
-  date: z.date(),
-
-  // Indicates if this doc is still in draft form; optional to allow for updates.
-  draft: z.boolean().optional().nullable(),
-
-  // Which section of our docs does this belong to? Optional for additional organization.
+  ...CommonFields,
   section: z.string().optional().nullable(),
-
-  // An order value to control the sequence of documentation; optional for sorting flexibility.
   order: z.number().optional().nullable(),
 });
 
 /**
- * Prompts Schema – Sparking Creativity
- *
- * Prompts are designed to ignite your creativity and guide AI interactions.
- * They require essential metadata and can include additional organization details.
+ * Videos Schema
+ * For video content across platforms
+ */
+const VideosSchema = z.object({
+  ...CommonFields,
+  url: z.string(),
+  duration: z.number().optional(),
+  thumbnail: z.string().optional(),
+  transcript: z.string().optional()
+});
+
+/**
+ * Podcasts Schema
+ * For audio content and episodes
+ */
+const PodcastsSchema = z.object({
+  ...CommonFields,
+  audioUrl: z.string(),
+  duration: z.number(),
+  transcript: z.string().optional()
+});
+
+/**
+ * Software Schema
+ * For software projects and tools
+ */
+const SoftwareSchema = z.object({
+  ...CommonFields,
+  url: z.string().optional(),
+  repository: z.string().optional(),
+  license: z.string().optional(),
+  language: z.string().optional(),
+  video: z.string().optional()
+});
+
+/**
+ * Courses Schema
+ * For structured learning content
+ */
+const CoursesSchema = z.object({
+  ...CommonFields,
+  duration: z.string().optional(),
+  level: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
+  prerequisites: z.array(z.string()).optional(),
+  modules: z.array(z.string()).optional(),
+  instructor: z.string().optional()
+});
+
+/**
+ * Lessons Schema
+ * For individual course lessons
+ */
+const LessonsSchema = z.object({
+  ...CommonFields,
+  courseId: z.string(),
+  moduleId: z.string().optional(),
+  duration: z.number().optional(),
+  order: z.number(),
+  content: z.string().optional()
+});
+
+/**
+ * News Schema
+ * For news articles and updates
+ */
+const NewsSchema = z.object({
+  ...CommonFields,
+  category: z.string().optional(),
+  featured: z.boolean().optional(),
+  author: z.string().optional(),
+  source: z.string().optional()
+});
+
+/**
+ * Prompts Schema
+ * For AI prompts and templates
  */
 const PromptsSchema = z.object({
-  // The spark that starts the creative fire—a catchy title.
-  title: z.string(),
-
-  // A description that sets the stage for creative exploration.
-  description: z.string(),
-
-  // The creation or last update date to track prompt evolution.
-  date: z.date().optional().nullable(),
-
-  // Tags that help you find similar prompts; optional if you're keeping it simple.
-  tags: z.array(z.string()).optional().nullable(),
-
-  // Indicates if the prompt is still in draft mode; optional to let you iterate.
-  draft: z.boolean().optional().nullable(),
+  ...CommonFields,
+  category: z.string().optional()
 });
 
 /**
- * Now, we define our content collections using the schemas above.
- * Each collection corresponds to a type of content in our Astro project.
+ * Tutorials Schema
+ * For step-by-step guides
  */
-export const blog = defineCollection({
-  type: 'content',
-  schema: BlogSchema,
-});
-
-export const docs = defineCollection({
-  type: 'content',
-  schema: DocsSchema,
-});
-
-export const prompts = defineCollection({
-  type: 'content',
-  schema: PromptsSchema,
+const TutorialsSchema = z.object({
+  ...CommonFields,
+  category: z.string().optional()
 });
 
 /**
- * For convenience, we export all our collections as a single object.
- * This makes it easier to reference them throughout our project.
+ * Events Schema
+ * For events and webinars
  */
+const EventsSchema = z.object({
+  ...CommonFields,
+  startDate: z.date(),
+  endDate: z.date().optional(),
+  location: z.string().optional(),
+  virtual: z.boolean().optional()
+});
+
+// Define collections
+export const pages = defineCollection({ type: 'content', schema: PagesSchema });
+export const blog = defineCollection({ type: 'content', schema: BlogSchema });
+export const docs = defineCollection({ type: 'content', schema: DocsSchema });
+export const videos = defineCollection({ type: 'content', schema: VideosSchema });
+export const podcasts = defineCollection({ type: 'content', schema: PodcastsSchema });
+export const software = defineCollection({ type: 'content', schema: SoftwareSchema });
+export const courses = defineCollection({ type: 'content', schema: CoursesSchema });
+export const lessons = defineCollection({ type: 'content', schema: LessonsSchema });
+export const news = defineCollection({ type: 'content', schema: NewsSchema });
+export const prompts = defineCollection({ type: 'content', schema: PromptsSchema });
+export const tutorials = defineCollection({ type: 'content', schema: TutorialsSchema });
+export const events = defineCollection({ type: 'content', schema: EventsSchema });
+
+// Export collections object
 export const collections = {
+  pages,
   blog,
   docs,
+  videos,
+  podcasts,
+  software,
+  courses,
+  lessons,
+  news,
   prompts,
+  tutorials,
+  events,
 };
 
-/**
- * To leverage TypeScript's power, we export the inferred types from our schemas.
- * This ensures type safety and provides excellent editor support as we build our app.
- */
+// Export type inference
+export type Pages = z.infer<typeof PagesSchema>;
 export type Blog = z.infer<typeof BlogSchema>;
 export type Docs = z.infer<typeof DocsSchema>;
+export type Videos = z.infer<typeof VideosSchema>;
+export type Podcasts = z.infer<typeof PodcastsSchema>;
+export type Software = z.infer<typeof SoftwareSchema>;
+export type Courses = z.infer<typeof CoursesSchema>;
+export type Lessons = z.infer<typeof LessonsSchema>;
+export type News = z.infer<typeof NewsSchema>;
 export type Prompts = z.infer<typeof PromptsSchema>;
+export type Tutorials = z.infer<typeof TutorialsSchema>;
+export type Events = z.infer<typeof EventsSchema>;
+
+// Stream type for unified content
+export type StreamItem = {
+  type: keyof typeof collections;
+  data: z.infer<typeof PagesSchema> |
+        z.infer<typeof BlogSchema> |
+        z.infer<typeof DocsSchema> |
+        z.infer<typeof VideosSchema> |
+        z.infer<typeof PodcastsSchema> |
+        z.infer<typeof SoftwareSchema> |
+        z.infer<typeof CoursesSchema> |
+        z.infer<typeof LessonsSchema> |
+        z.infer<typeof NewsSchema> |
+        z.infer<typeof PromptsSchema> |
+        z.infer<typeof TutorialsSchema> |
+        z.infer<typeof EventsSchema>;
+};
