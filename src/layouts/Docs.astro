@@ -1,6 +1,7 @@
 ---
 import Layout from "./Layout.astro";
 import { ChatConfigSchema, type Chat } from "../schema/chat";
+import CopyButton from "../components/CopyButton";
 
 interface Props {
   title: string;
@@ -123,15 +124,138 @@ const pageData = {
 
 <Layout {...pageData}>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-end mb-4">
+      <CopyButton client:load content={rawContent} label="Copy Page Content" className="text-sm" />
+    </div>
     <article class="prose dark:prose-invert prose-slate max-w-none py-8">
-        <slot />
-      </div>
+      <slot />
     </article>
   </div>
 </Layout>
 
+<script>
+  function wrapCodeBlocks() {
+    document.querySelectorAll('pre').forEach(pre => {
+      // Only wrap if not already wrapped
+      if (!pre.parentElement?.classList.contains('code-block-wrapper')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper relative';
+        pre.parentNode?.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+        
+        // Add copy button container
+        const copyContainer = document.createElement('div');
+        copyContainer.className = 'copy-button-container absolute top-2 right-2';
+        copyContainer.innerHTML = `
+          <button class="relative inline-flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-slate-700/50"
+                  onclick="
+                    const btn = this;
+                    const pre = btn.closest('.code-block-wrapper').querySelector('pre');
+                    navigator.clipboard.writeText(pre.textContent).then(() => {
+                      // Show tooltip
+                      const tooltip = document.createElement('span');
+                      tooltip.className = 'copy-tooltip';
+                      tooltip.textContent = 'Copied!';
+                      btn.appendChild(tooltip);
+
+                      // Animate icon
+                      btn.querySelector('svg').style.color = '#22c55e';
+                      btn.querySelector('svg').style.animation = 'copy-feedback 0.2s ease';
+                      
+                      // Reset after animation
+                      setTimeout(() => {
+                        btn.querySelector('svg').style.color = '';
+                        btn.querySelector('svg').style.animation = '';
+                        tooltip.remove();
+                      }, 1000);
+                    });
+                  ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="text-slate-400">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </svg>
+          </button>
+        `;
+        wrapper.appendChild(copyContainer);
+      }
+    });
+  }
+
+  // Run on page load and after navigation
+  wrapCodeBlocks();
+  document.addEventListener('astro:page-load', wrapCodeBlocks);
+</script>
+
 <style is:global>
   .astro-code {
     background-color: #1a1a1a !important;
+    padding: 1.5rem !important;
+    margin: 0;
+    border-radius: 0.5rem;
+  }
+
+  .code-block-wrapper {
+    position: relative;
+  }
+
+  .copy-button-container {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .code-block-wrapper:hover .copy-button-container {
+    opacity: 1;
+  }
+
+  .copy-button-container button {
+    transition: all 0.2s;
+  }
+
+  .copy-button-container button:active {
+    transform: scale(0.95);
+  }
+
+  /* Add animation for copy feedback */
+  @keyframes copy-feedback {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  @keyframes tooltip-slide {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .copy-tooltip {
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #22c55e;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: tooltip-slide 0.2s ease;
+  }
+
+  .copy-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #22c55e transparent transparent transparent;
+  }
+
+  .copy-button-container button:active svg {
+    animation: copy-feedback 0.2s ease;
+    color: #22c55e;
   }
 </style>
