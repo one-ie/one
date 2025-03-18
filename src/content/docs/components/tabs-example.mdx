@@ -1,0 +1,89 @@
+---
+title: Using Tabs
+description: Example of using Shadcn Tabs in MDX
+section: Components
+order: 1
+---
+import { TabsContainer } from '@/components/ui/tabs-container';
+
+# Using Tabs in MDX
+
+Below is an example of using Shadcn Tabs in MDX content:
+
+<TabsContainer
+  items={[
+    {
+      value: "preview",
+      label: "Preview",
+      content: (
+        <div>
+          <h3 className="text-lg font-bold mb-2">Preview</h3>
+          <p>This is how the component looks in action.</p>
+        </div>
+      )
+    },
+    {
+      value: "code",
+      label: "Code",
+      content: (
+        <div>
+          <h3 className="text-lg font-bold mb-2">Installation</h3>
+          <p className="mb-4">First, install the required dependencies:</p>
+          <pre className="bg-muted p-4 rounded-lg">
+            <code>npx shadcn-ui@latest add tabs</code>
+          </pre>
+        </div>
+      )
+    },
+    {
+      value: "usage",
+      label: "Usage",
+      content: (
+        <div>
+          <h3 className="text-lg font-bold mb-2">Using the Component</h3>
+          <p>Import and use the TabsContainer component in your MDX files:</p>
+          <pre className="bg-muted p-4 rounded-lg">
+            {`import { TabsContainer } from '@/components/ui/tabs-container';
+            
+<TabsContainer
+  items={[
+    {
+      value: "tab1",
+      label: "Tab 1",
+      content: <div>Content for tab 1</div>
+    },
+    // ... more tabs
+  ]}
+/>`}
+          </pre>
+        </div>
+      )
+    }
+  ]}
+  gridCols={3}
+/>
+
+## Dynamic Tabs from Frontmatter
+
+You can also define tabs in your frontmatter and use them in your content:
+
+export const tabs = [
+  {
+    value: "example1",
+    label: "Example 1",
+    content: "This is content from frontmatter for example 1"
+  },
+  {
+    value: "example2",
+    label: "Example 2",
+    content: "This is content from frontmatter for example 2"
+  }
+];
+
+<TabsContainer
+  items={tabs.map(tab => ({
+    ...tab,
+    content: <div>{tab.content}</div>
+  }))}
+  gridCols={2}
+/> 

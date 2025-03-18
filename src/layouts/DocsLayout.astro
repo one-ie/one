@@ -1,0 +1,30 @@
+---
+import Layout from './Layout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'docs'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout title={entry.data.title} description={entry.data.description}>
+  <div class="container mx-auto px-4 py-8">
+    <article class="prose prose-slate dark:prose-invert max-w-none">
+      <Content />
+    </article>
+  </div>
+</Layout>
+
+<script>
+  // Hydrate all client components
+  document.addEventListener('astro:page-load', () => {
+    // Find all TabsContainer components and ensure they're properly hydrated
+    const tabContainers = document.querySelectorAll('[data-tabs-container]');
+    tabContainers.forEach(container => {
+      container.setAttribute('client:load', '');
+    });
+  });
+</script> 

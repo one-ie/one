@@ -36,6 +36,12 @@ const BlogSchema = z.object({
   featured: z.boolean().optional().nullable(),
 });
 
+const TabSchema = z.object({
+  value: z.string(),
+  label: z.string(),
+  content: z.string()
+});
+
 /**
  * Docs Schema
  * For documentation pages
@@ -44,6 +50,7 @@ const DocsSchema = z.object({
   ...CommonFields,
   section: z.string().optional().nullable(),
   order: z.number().optional().nullable(),
+  tabs: z.array(TabSchema).optional(),
 });
 
 /**
