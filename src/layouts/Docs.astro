@@ -27,13 +27,27 @@ try {
   }
   
   // Second try: MDX/Markdown Content component
-  if (!rawContent && Content?.rawContent) {
-    rawContent = await Content.rawContent();
+  if (!rawContent && Content) {
+    try {
+      if (Content.rawContent) {
+        rawContent = await Content.rawContent();
+      } else if (Content.render) {
+        const rendered = await Content.render();
+        rawContent = rendered.props.markdown;
+      }
+    } catch (error) {
+      console.error('[Content extraction warning]:', error);
+    }
   }
   
   // Last try: Render default slot
   if (!rawContent) {
-    rawContent = await Astro.slots.render('default');
+    try {
+      rawContent = await Astro.slots.render('default');
+    } catch (error) {
+      console.error('[Slot rendering warning]:', error);
+      rawContent = '';
+    }
   }
 } catch (error) {
   console.error('[Content extraction failed]:', error);
@@ -109,8 +123,45 @@ const pageData = {
 
 <Layout {...pageData}>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <article class="prose dark:prose-invert prose-slate max-w-none py-8">
-      <slot />
+    <article class="max-w-none py-8">
+      <div class="prose dark:prose-invert prose-slate prose-pre:bg-transparent prose-pre:p-0">
+        <slot />
+      </div>
     </article>
   </div>
 </Layout>
+
+<style>
+  /* Specific code block styling for docs */
+  :global(.prose pre) {
+    background-color: rgb(15 23 42);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+
+  :global(.prose pre code) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: rgb(226 232 240);
+  }
+
+  :global(.prose code) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875rem;
+  }
+
+  :global(.prose :not(pre) > code) {
+    background-color: rgb(226 232 240);
+    color: rgb(15 23 42);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+  }
+
+  :global(.dark .prose :not(pre) > code) {
+    background-color: rgb(30 41 59);
+    color: rgb(226 232 240);
+  }
+</style>

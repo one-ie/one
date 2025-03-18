@@ -6,6 +6,13 @@ import node from '@astrojs/node';
 export default defineConfig({
   integrations: [react()],
 
+  markdown: {
+    shikiConfig: {
+      theme: 'github-dark',
+      wrap: true
+    }
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },
