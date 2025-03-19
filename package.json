@@ -82,6 +82,7 @@
     "nanostores": "^0.11.4",
     "next-themes": "^0.4.6",
     "path-to-regexp": "^8.2.0",
+    "prismjs": "^1.30.0",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",

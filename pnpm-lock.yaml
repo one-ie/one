@@ -215,6 +215,9 @@ importers:
       path-to-regexp:
         specifier: ^8.2.0
         version: 8.2.0
+      prismjs:
+        specifier: ^1.30.0
+        version: 1.30.0
       qrcode.react:
         specifier: ^4.2.0
         version: 4.2.0(react@18.3.1)
