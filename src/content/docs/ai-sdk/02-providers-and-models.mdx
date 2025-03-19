@@ -1,0 +1,115 @@
+---
+title: Providers and Models
+description: Learn about the providers and models available in the AI SDK.
+status: public
+tags: ["AI", "providers", "models", "LLM", "API", "integrations"]
+---
+
+# Providers and Models
+
+Companies such as OpenAI and Anthropic (providers) offer access to a range of large language models (LLMs) with differing strengths and capabilities through their own APIs.
+
+Each provider typically has its own unique method for interfacing with their models, complicating the process of switching providers and increasing the risk of vendor lock-in.
+
+To solve these challenges, AI SDK Core offers a standardized approach to interacting with LLMs through a language model specification that abstracts differences between providers. This unified interface allows you to switch between providers with ease while using the same API for all providers.
+
+Here is an overview of the AI SDK Providers:
+
+## AI SDK Providers
+
+The AI SDK comes with a wide range of providers that you can use to interact with different language models:
+
+- OpenAI Provider (`@ai-sdk/openai`)
+- Azure OpenAI Provider (`@ai-sdk/azure`)
+- Anthropic Provider (`@ai-sdk/anthropic`)
+- Amazon Bedrock Provider (`@ai-sdk/amazon-bedrock`)
+- Google Generative AI Provider (`@ai-sdk/google`)
+- Google Vertex Provider (`@ai-sdk/google-vertex`)
+- Mistral Provider (`@ai-sdk/mistral`)
+- xAI Grok Provider (`@ai-sdk/xai`)
+- Together.ai Provider (`@ai-sdk/togetherai`)
+- Cohere Provider (`@ai-sdk/cohere`)
+- Fireworks Provider (`@ai-sdk/fireworks`)
+- DeepInfra Provider (`@ai-sdk/deepinfra`)
+- DeepSeek Provider (`@ai-sdk/deepseek`)
+- Cerebras Provider (`@ai-sdk/cerebras`)
+- Groq Provider (`@ai-sdk/groq`)
+- Perplexity Provider (`@ai-sdk/perplexity`)
+
+You can also use the OpenAI Compatible provider with OpenAI-compatible APIs:
+
+- LM Studio
+- Baseten
+
+Our language model specification is published as an open-source package, which you can use to create custom providers.
+
+The open-source community has created the following providers:
+
+- Ollama Provider (`ollama-ai-provider`)
+- ChromeAI Provider (`chrome-ai`)
+- FriendliAI Provider (`@friendliai/ai-provider`)
+- Portkey Provider (`@portkey-ai/vercel-provider`)
+- Cloudflare Workers AI Provider (`workers-ai-provider`)
+- OpenRouter Provider (`@openrouter/ai-sdk-provider`)
+- Crosshatch Provider (`@crosshatch/ai-provider`)
+- Mixedbread Provider (`mixedbread-ai-provider`)
+- Voyage AI Provider (`voyage-ai-provider`)
+- Mem0 Provider (`@mem0/vercel-ai-provider`)
+- Spark Provider (`spark-ai-provider`)
+- AnthropicVertex Provider (`anthropic-vertex-ai`)
+- LangDB Provider (`@langdb/vercel-provider`)
+
+## Self-Hosted Models
+
+You can access self-hosted models with the following providers:
+
+- Ollama Provider
+- LM Studio
+- Baseten
+
+Additionally, any self-hosted provider that supports the OpenAI specification can be used with the OpenAI Compatible Provider.
+
+## Model Capabilities
+
+The AI providers support different language models with various capabilities.
+Here are the capabilities of popular models:
+
+| Provider | Model | Image Input | Object Generation | Tool Usage | Tool Streaming |
+| -------- | ----- | ----------- | ----------------- | ---------- | -------------- |
+| OpenAI | `gpt-4o` | ✅ | ✅ | ✅ | ✅ |
+| OpenAI | `gpt-4o-mini` | ✅ | ✅ | ✅ | ✅ |
+| OpenAI | `gpt-4-turbo` | ✅ | ✅ | ✅ | ✅ |
+| OpenAI | `gpt-4` | ✅ | ✅ | ✅ | ✅ |
+| OpenAI | `o3-mini` | ✅ | ✅ | ✅ | ✅ |
+| OpenAI | `o1` | ✅ | ✅ | ✅ | ✅ |
+| OpenAI | `o1-mini` | ✅ | ✅ | ✅ | ✅ |
+| OpenAI | `o1-preview` | ✅ | ✅ | ✅ | ✅ |
+| Anthropic | `claude-3-7-sonnet-20250219` | ✅ | ✅ | ✅ | ✅ |
+| Anthropic | `claude-3-5-sonnet-20241022` | ✅ | ✅ | ✅ | ✅ |
+| Anthropic | `claude-3-5-sonnet-20240620` | ✅ | ✅ | ✅ | ✅ |
+| Anthropic | `claude-3-5-haiku-20241022` | ✅ | ✅ | ✅ | ✅ |
+| Mistral | `pixtral-large-latest` | ✅ | ✅ | ✅ | ✅ |
+| Mistral | `mistral-large-latest` | ✅ | ✅ | ✅ | ✅ |
+| Mistral | `mistral-small-latest` | ✅ | ✅ | ✅ | ✅ |
+| Mistral | `pixtral-12b-2409` | ✅ | ✅ | ✅ | ✅ |
+| Google Generative AI | `gemini-2.0-flash-exp` | ✅ | ✅ | ✅ | ✅ |
+| Google Generative AI | `gemini-1.5-flash` | ✅ | ✅ | ✅ | ✅ |
+| Google Generative AI | `gemini-1.5-pro` | ✅ | ✅ | ✅ | ✅ |
+| Google Vertex | `gemini-2.0-flash-exp` | ✅ | ✅ | ✅ | ✅ |
+| Google Vertex | `gemini-1.5-flash` | ✅ | ✅ | ✅ | ✅ |
+| Google Vertex | `gemini-1.5-pro` | ✅ | ✅ | ✅ | ✅ |
+| xAI Grok | `grok-2-1212` | ✅ | ✅ | ✅ | ✅ |
+| xAI Grok | `grok-2-vision-1212` | ✅ | ✅ | ✅ | ✅ |
+| xAI Grok | `grok-beta` | ✅ | ✅ | ✅ | ✅ |
+| xAI Grok | `grok-vision-beta` | ✅ | ✅ | ✅ | ✅ |
+| DeepSeek | `deepseek-chat` | ✅ | ✅ | ✅ | ✅ |
+| DeepSeek | `deepseek-reasoner` | ✅ | ✅ | ✅ | ✅ |
+| Cerebras | `llama3.1-8b` | ✅ | ✅ | ✅ | ✅ |
+| Cerebras | `llama3.1-70b` | ✅ | ✅ | ✅ | ✅ |
+| Cerebras | `llama3.3-70b` | ✅ | ✅ | ✅ | ✅ |
+| Groq | `llama-3.3-70b-versatile` | ✅ | ✅ | ✅ | ✅ |
+| Groq | `llama-3.1-8b-instant` | ✅ | ✅ | ✅ | ✅ |
+| Groq | `mixtral-8x7b-32768` | ✅ | ✅ | ✅ | ✅ |
+| Groq | `gemma2-9b-it` | ✅ | ✅ | ✅ | ✅ |
+
+This table is not exhaustive. Additional models can be found in the provider documentation pages and on the provider websites.

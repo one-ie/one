@@ -10,31 +10,25 @@ import {
   LayersIcon,
   InfoCircledIcon,
   LightningBoltIcon,
-  ArrowRightIcon,
-  MagnifyingGlassIcon,
-  CheckCircledIcon,
-  CrossCircledIcon
+  MagnifyingGlassIcon
 } from "@radix-ui/react-icons";
 import {
-  Calendar,
-  LayoutList,
-  LayoutGrid,
   Grid2x2,
-  Grid3x3,
-  FileText,
-  Newspaper,
-  Search,
+  Grid3x3, Search,
   BookText,
+  FileText,
   List,
   Table,
   Grid,
   Tag,
+  Folder,
+  FolderOpen
 } from "lucide-react";
 import { ChatConfigSchema } from '../../schema/chat';
 
 // Type definitions
 type DocEntry = CollectionEntry<'docs'>;
-type DocSection = Record<string, DocEntry[]>;
+type DocFolder = Record<string, DocEntry[]>;
 
 // Get view preference from URL or default to list view
 const viewMode = (Astro.url.searchParams.get("view") || "list") as
@@ -46,7 +40,7 @@ const viewMode = (Astro.url.searchParams.get("view") || "list") as
     | "grid4";
 
 // Get all docs entries
-const entries = await getCollection("docs");
+const entries = (await getCollection("docs")) as DocEntry[];
 
 // Get search query from URL
 const searchQuery = Astro.url.searchParams.get("search")?.toLowerCase() || '';
@@ -54,15 +48,24 @@ const searchQuery = Astro.url.searchParams.get("search")?.toLowerCase() || '';
 // Get tag filter from URL
 const tagFilter = Astro.url.searchParams.get("tag")?.toLowerCase() || '';
 
-// Filter entries by search query if provided
-const filteredEntries = searchQuery || tagFilter
+// Get folder filter from URL
+const folderFilter = Astro.url.searchParams.get("folder")?.toLowerCase() || '';
+
+// Filter entries by search query, tag, or folder
+const filteredEntries = searchQuery || tagFilter || folderFilter
   ? entries.filter((entry: DocEntry) => {
       const title = entry.data.title?.toLowerCase() || '';
       const description = entry.data.description?.toLowerCase() || '';
       const section = entry.data.section?.toLowerCase() || '';
       const tags = entry.data.tags?.map((t: string) => t.toLowerCase()) || [];
+      const folderPath = entry.slug.split('/')[0].toLowerCase();
       
-      // If tag filter is present, it takes precedence
+      // If folder filter is present, it takes precedence
+      if (folderFilter) {
+        return folderPath === folderFilter;
+      }
+      
+      // If tag filter is present, it takes precedence over search
       if (tagFilter) {
         return tags.includes(tagFilter);
       }
@@ -75,26 +78,28 @@ const filteredEntries = searchQuery || tagFilter
     })
   : entries;
 
-// Group by sections and sort
-const sections = filteredEntries.reduce((acc: DocSection, entry: DocEntry) => {
-  const section = entry.data.section || "Other";
-  if (!acc[section]) {
-    acc[section] = [];
+// Group by folders (first level of path)
+const folders = filteredEntries.reduce((acc: DocFolder, entry: DocEntry) => {
+  // Extract the folder name from the slug (first part before slash, or 'root' if no slash)
+  const folderPath = entry.slug.includes('/') 
+    ? entry.slug.split('/')[0] 
+    : 'root';
+  
+  if (!acc[folderPath]) {
+    acc[folderPath] = [];
   }
-  acc[section].push(entry);
+  acc[folderPath].push(entry);
   return acc;
 }, {});
 
-// Sort sections in desired order
-const orderedSections: DocSection = {
-  "Introduction": sections["Introduction"] || [],
-  "Core Concepts": sections["Core Concepts"] || [],
-  "Advanced Features": sections["Advanced Features"] || [],
-  // Filter out sections that are already included
-  ...Object.entries(sections)
-    .filter(([key]) => !['Introduction', 'Core Concepts', 'Advanced Features'].includes(key))
-    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
-};
+// Sort folders alphabetically with 'root' at the top
+const orderedFolders = Object.entries(folders)
+  .sort(([a, _a]: [string, DocEntry[]], [b, _b]: [string, DocEntry[]]) => {
+    if (a === 'root') return -1;
+    if (b === 'root') return 1;
+    return a.localeCompare(b);
+  })
+  .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}) as Record<string, DocEntry[]>;
 
 // Configure AI assistant for docs
 const chatConfig = ChatConfigSchema.parse({
@@ -126,53 +131,45 @@ const chatConfig = ChatConfigSchema.parse({
   }
 });
 
-// Helper to format dates
-function formatDate(date: string | Date | undefined): string {
-  if (!date) return '';
-  
-  try {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    
-    // Check if date is valid
-    if (isNaN(dateObj.getTime())) {
-      return '';
-    }
-    
-    return new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }).format(dateObj);
-  } catch (error) {
-    console.error('Error formatting date:', error);
-    return '';
-  }
-}
-
-// Get appropriate icon based on section
-function getSectionIcon(section: string) {
-  switch (section.toLowerCase()) {
-    case 'introduction':
-    case 'getting started':
+// Get appropriate icon based on folder name
+function getFolderIcon(folder: string) {
+  switch (folder.toLowerCase()) {
+    case 'getting-started':
       return RocketIcon;
-    case 'core concepts':
-    case 'core features':
+    case 'core-concepts':
       return LayersIcon;
-    case 'advanced features':
+    case 'advanced':
+    case 'ai-sdk':
       return LightningBoltIcon;
-    default:
+    case 'tutorials':
       return BookText;
+    case 'troubleshooting':
+      return InfoCircledIcon;
+    default:
+      return FolderOpen;
   }
 }
 
-// Get tags from entry data
-function getTagsFromEntry(entry: DocEntry): string[] {
-  return entry.data.tags || [];
+// Format folder name for display
+function formatFolderName(folder: string): string {
+  if (folder === 'root') return 'Get Started ';
+  
+  // Replace hyphens with spaces and capitalize each word
+  return folder
+    .replace(/-/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 // Function to create tag URL
 function createTagUrl(tag: string): string {
   return `/docs?tag=${encodeURIComponent(tag)}`;
+}
+
+// Function to create folder URL
+function createFolderUrl(folder: string): string {
+  return `/docs?folder=${encodeURIComponent(folder)}`;
 }
 ---
 
@@ -206,12 +203,13 @@ function createTagUrl(tag: string): string {
             value={searchQuery}
           />
           {viewMode !== "list" && <input type="hidden" name="view" value={viewMode} />}
+          {folderFilter && <input type="hidden" name="folder" value={folderFilter} />}
           <button type="submit" class="sr-only">Search</button>
         </form>
         
         <div class="flex gap-1 bg-muted/50 p-0.5 rounded-lg">
           <a
-            href={`?view=list${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            href={`?view=list${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}${folderFilter ? `&folder=${folderFilter}` : ''}`}
             class={`p-2 rounded-md transition-all ${viewMode === "list" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
             aria-label="List view"
             title="List view"
@@ -219,7 +217,7 @@ function createTagUrl(tag: string): string {
             <List className="w-4 h-4" />
           </a>
           <a
-            href={`?view=compact${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            href={`?view=compact${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}${folderFilter ? `&folder=${folderFilter}` : ''}`}
             class={`p-2 rounded-md transition-all ${viewMode === "compact" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
             aria-label="Compact view"
             title="Compact view"
@@ -227,7 +225,7 @@ function createTagUrl(tag: string): string {
             <Table className="w-4 h-4" />
           </a>
           <a
-            href={`?view=grid2${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            href={`?view=grid2${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}${folderFilter ? `&folder=${folderFilter}` : ''}`}
             class={`p-2 rounded-md transition-all ${viewMode === "grid2" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
             aria-label="Grid view with 2 columns"
             title="Grid view (2 columns)"
@@ -235,7 +233,7 @@ function createTagUrl(tag: string): string {
             <Grid2x2 className="w-4 h-4" />
           </a>
           <a
-            href={`?view=grid3${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            href={`?view=grid3${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}${folderFilter ? `&folder=${folderFilter}` : ''}`}
             class={`p-2 rounded-md transition-all ${viewMode === "grid3" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
             aria-label="Grid view with 3 columns"
             title="Grid view (3 columns)"
@@ -243,7 +241,7 @@ function createTagUrl(tag: string): string {
             <Grid3x3 className="w-4 h-4" />
           </a>
           <a
-            href={`?view=grid4${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}`}
+            href={`?view=grid4${searchQuery ? `&search=${searchQuery}` : ''}${tagFilter ? `&tag=${tagFilter}` : ''}${folderFilter ? `&folder=${folderFilter}` : ''}`}
             class={`p-2 rounded-md transition-all ${viewMode === "grid4" ? "bg-background shadow-sm" : "hover:bg-background/50"}`}
             aria-label="Grid view with 4 columns"
             title="Grid view (4 columns)"
@@ -254,8 +252,8 @@ function createTagUrl(tag: string): string {
       </div>
     </div>
 
-    {/* Search Results */}
-    {(searchQuery || tagFilter) && (
+    {/* Filter Results */}
+    {(searchQuery || tagFilter || folderFilter) && (
       <div class="mb-4 bg-primary/5 rounded-lg p-2 text-base">
         <div class="flex items-center gap-2">
           {searchQuery ? (
@@ -265,11 +263,18 @@ function createTagUrl(tag: string): string {
                 Found {filteredEntries.length} result{filteredEntries.length !== 1 ? 's' : ''} for <strong>"{searchQuery}"</strong>
               </span>
             </>
-          ) : (
+          ) : tagFilter ? (
             <>
               <Tag className="w-4 h-4 text-primary" />
               <span>
                 Found {filteredEntries.length} document{filteredEntries.length !== 1 ? 's' : ''} tagged <strong>"{tagFilter}"</strong>
+              </span>
+            </>
+          ) : (
+            <>
+              <Folder className="w-4 h-4 text-primary" />
+              <span>
+                Found {filteredEntries.length} document{filteredEntries.length !== 1 ? 's' : ''} in folder <strong>"{formatFolderName(folderFilter)}"</strong>
               </span>
             </>
           )}
@@ -278,27 +283,52 @@ function createTagUrl(tag: string): string {
       </div>
     )}
 
-    {/* Documentation Sections */}
+    {/* All Folders Navigation */}
+    {!searchQuery && !tagFilter && !folderFilter && (
+      <div class="mb-4 overflow-x-auto pb-2">
+        <div class="flex gap-2 flex-nowrap">
+          {Object.keys(orderedFolders).map((folder: string) => (
+            <a href={createFolderUrl(folder)} class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/40 hover:bg-primary/10 transition whitespace-nowrap no-underline">
+              {(() => {
+                const Icon = getFolderIcon(folder);
+                return <Icon className="w-4 h-4 text-primary" />;
+              })()}
+              <span class="text-base">{formatFolderName(folder)}</span>
+              <Badge variant="secondary" className="bg-primary/10 text-primary text-xs px-1.5 py-0">
+                {folders[folder].length}
+              </Badge>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {/* Documentation Folders */}
     <div class="space-y-6">
-      {Object.entries(orderedSections).map(([section, entries]) => entries.length > 0 && (
+      {(Object.entries(orderedFolders) as Array<[string, DocEntry[]]>).map(([folder, entries]) => entries.length > 0 && (
         <div class="mb-6">
           <div class="flex items-center gap-2 mb-3 pb-1 border-b border-border/40">
-            {/* Display section icon dynamically */}
+            {/* Display folder icon dynamically */}
             <div class="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center">
               {(() => {
-                const Icon = getSectionIcon(section);
+                const Icon = getFolderIcon(folder);
                 return <Icon className="w-4 h-4 text-primary" />;
               })()}
             </div>
             
             <div class="flex flex-wrap items-center gap-2">
-              <h2 class="text-lg font-bold text-foreground">{section}</h2>
+              <h2 class="text-lg font-bold text-foreground">{formatFolderName(folder)}</h2>
               <Badge
                 variant="secondary"
                 className="bg-primary/10 text-primary text-xs px-1.5 py-0"
               >
                 {entries.length}
               </Badge>
+              {!folderFilter && (
+                <a href={createFolderUrl(folder)} class="text-primary hover:underline text-base">
+                  View all
+                </a>
+              )}
             </div>
           </div>
 
@@ -306,8 +336,8 @@ function createTagUrl(tag: string): string {
           {viewMode === "grid4" && (
             <div class="grid gap-2 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {entries
-                .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-                .map((entry) => (
+                .sort((a: DocEntry, b: DocEntry) => (a.data.order || 0) - (b.data.order || 0))
+                .map((entry: DocEntry) => (
                   <Card className="p-2 hover:shadow-sm transition-shadow border-muted/30 hover:border-primary/30 bg-background/80 backdrop-blur-sm">
                     <a href={`/docs/${entry.slug}`} class="group block">
                       <div class="flex items-center gap-2">
@@ -329,8 +359,8 @@ function createTagUrl(tag: string): string {
             <div class="border border-border/30 rounded-lg overflow-hidden">
               <div class="divide-y divide-border/30">
                 {entries
-                  .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-                  .map((entry, idx) => (
+                  .sort((a: DocEntry, b: DocEntry) => (a.data.order || 0) - (b.data.order || 0))
+                  .map((entry: DocEntry) => (
                     <div class="grid grid-cols-[auto_1fr_auto] items-center hover:bg-muted/20">
                       <div class="p-2">
                         <div class="p-1.5 rounded-md bg-muted/40 flex items-center justify-center">
@@ -378,8 +408,8 @@ function createTagUrl(tag: string): string {
               }`}
             >
               {entries
-                .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-                .map((entry) => (
+                .sort((a: DocEntry, b: DocEntry) => (a.data.order || 0) - (b.data.order || 0))
+                .map((entry: DocEntry) => (
                   <Card className="h-full p-3 hover:shadow-md transition-shadow border-muted/50 hover:border-primary/30 bg-background/80 backdrop-blur-sm">
                     <a href={`/docs/${entry.slug}`} class="group block no-underline">
                       <div class="flex items-center gap-2 mb-2">
@@ -415,8 +445,8 @@ function createTagUrl(tag: string): string {
           {viewMode === "list" && (
             <div class="space-y-1.5">
               {entries
-                .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-                .map((entry) => (
+                .sort((a: DocEntry, b: DocEntry) => (a.data.order || 0) - (b.data.order || 0))
+                .map((entry: DocEntry) => (
                   <Card className="group hover:shadow-sm transition-all duration-300 border-muted/30 hover:border-primary/30 bg-background/80 backdrop-blur-sm py-2 px-3">
                     <a href={`/docs/${entry.slug}`} class="no-underline block">
                       <div class="flex gap-2">
@@ -466,16 +496,20 @@ function createTagUrl(tag: string): string {
               ? 'No matching documents found' 
               : tagFilter 
                 ? 'No documents with this tag' 
-                : 'No documentation found'}
+                : folderFilter
+                  ? 'No documents in this folder'
+                  : 'No documentation found'}
           </h2>
           <p class="text-base text-muted-foreground">
             {searchQuery 
               ? `No documentation pages match your search for "${searchQuery}".` 
               : tagFilter
                 ? `No documentation pages found with tag "${tagFilter}".`
-                : 'No documentation pages exist in the content collection.'}
+                : folderFilter
+                  ? `No documentation pages found in folder "${formatFolderName(folderFilter)}".`
+                  : 'No documentation pages exist in the content collection.'}
           </p>
-          {(searchQuery || tagFilter) && (
+          {(searchQuery || tagFilter || folderFilter) && (
             <a href="/docs" class="inline-block mt-3 text-primary hover:underline text-base">
               View all documentation
             </a>
@@ -548,6 +582,7 @@ function createTagUrl(tag: string): string {
       const searchParams = new URLSearchParams(window.location.search);
       const currentSearch = searchParams.get('search');
       const currentTag = searchParams.get('tag');
+      const currentFolder = searchParams.get('folder');
       
       viewModeLinks.forEach(link => {
         const href = link.getAttribute('href') || '';
@@ -559,6 +594,10 @@ function createTagUrl(tag: string): string {
         
         if (currentTag && !newHref.includes('tag=')) {
           newHref += (newHref.includes('?') ? '&' : '?') + `tag=${encodeURIComponent(currentTag)}`;
+        }
+        
+        if (currentFolder && !newHref.includes('folder=')) {
+          newHref += (newHref.includes('?') ? '&' : '?') + `folder=${encodeURIComponent(currentFolder)}`;
         }
         
         if (newHref !== href) {

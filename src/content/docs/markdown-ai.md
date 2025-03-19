@@ -214,4 +214,3 @@ This tutorial will guide you through setting up our framework...
 
 5. **Content Not Rendering**: Check for syntax errors in your markdown.
 
-For more help, check the [API Documentation](/docs/api) or [contact support](/contact). 

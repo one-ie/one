@@ -1,0 +1,44 @@
+---
+title: LlamaIndex
+description: Learn how to use LlamaIndex with the AI SDK.
+status: public
+tags: ['llamaindex', 'adapter', 'integration', 'data-indexing', 'rag']
+---
+
+# LlamaIndex
+
+🦙 Meet your new best friend in data wrangling! [LlamaIndex](https://ts.llamaindex.ai/) is like a super-smart librarian for your LLM applications. It helps you organize, structure, and access your private or domain-specific data with style. And guess what? LlamaIndex.TS brings all that Python goodness to JavaScript land!
+
+## Supported Environments
+- Node.js (Rock-solid official support) ✨
+- Vercel Edge Functions (Experimental but exciting!) 🚀
+- Deno (Also experimental, but living on the edge is fun!) 🦕
+
+## Quick Example: Completion
+
+Let's see this llama in action! Here's how to combine the AI SDK and LlamaIndex.
+
+
+```ts
+// api/completion/route.ts
+import { OpenAI, SimpleChatEngine } from 'llamaindex';
+import { LlamaIndexAdapter } from 'ai';
+
+export const maxDuration = 60;
+
+export async function POST(req: Request) {
+  const { prompt } = await req.json();
+
+  const llm = new OpenAI({ model: 'gpt-4o' });
+  const chatEngine = new SimpleChatEngine({ llm });
+
+  const stream = await chatEngine.chat({
+    message: prompt,
+    stream: true,
+  });
+
+  return LlamaIndexAdapter.toDataStreamResponse(stream);
+}
+```
+
+For the frontend piece, you'll want to use our completion hook. 

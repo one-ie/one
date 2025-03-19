@@ -1,0 +1,35 @@
+---
+title: LangChain
+description: Learn how to use LangChain with the AI SDK.
+status: public
+tags: ['langchain', 'adapter', 'integration', 'llm', 'rag']
+---
+
+# LangChain
+
+[LangChain](https://js.langchain.com/docs/) is your Swiss Army knife for building AI-powered apps. It's packed with features for working with language models, creating agents, managing vector stores, and implementing retrieval augmented generation (RAG). But here's the catch - it doesn't handle UI stuff or streaming data to the client out of the box. That's where we come in! 
+
+## Quick Example: Completion
+
+```ts
+// api/completion/route.ts
+import { ChatOpenAI } from '@langchain/openai';
+import { LangChainAdapter } from 'ai';
+
+export const maxDuration = 60;
+
+export async function POST(req: Request) {
+  const { prompt } = await req.json();
+
+  const model = new ChatOpenAI({
+    model: 'gpt-3.5-turbo-0125',
+    temperature: 0,
+  });
+
+  const stream = await model.stream(prompt);
+
+  return LangChainAdapter.toDataStreamResponse(stream);
+}
+```
+
+For the frontend, you'll want to hook this up to your UI using our handy `useCompletion` hook. 

@@ -8,324 +8,312 @@ order: 2
 
 # Chat Configuration Guide
 
-ONE's chat system provides a flexible configuration system that allows you to customize the behavior, appearance, and capabilities of your AI assistants. This guide explains all available configuration options and how to use them effectively.
+ONE's chat system provides a flexible configuration system for creating powerful AI interactions. This guide covers all configuration options, from basic setup to advanced features.
 
-## Configuration Schema
+## Quick Start
 
-The chat configuration is defined using Zod for type safety and validation. The schema is located in `src/schema/chat.ts` and provides a comprehensive set of options for customizing your chat experience.
-
-## Basic Configuration
-
-Here's a simple example of a chat configuration:
+Basic chat configuration example:
 
 ```typescript
-const chatConfig = {
-  provider: "mistral",
-  model: "mistral-large-latest",
+const chatConfig = ChatConfigSchema.parse({
+  // Core AI Settings
+  provider: "openai",
+  model: "gpt-4o-mini",
   temperature: 0.7,
   maxTokens: 2000,
-  systemPrompt: "You are a helpful assistant.",
+
+  // AI Behavior
+  systemPrompt: [{
+    type: "text",
+    text: "You are a helpful assistant."
+  }],
+
+  // User Interface
   welcome: {
     message: "👋 How can I help you today?",
     avatar: "/icon.svg",
     suggestions: [
-      "What can you help me with?",
-      "Tell me about ONE framework"
+      {
+        label: "🚀 Quick Start",
+        prompt: "Help me get started"
+      }
     ]
   }
-};
+});
 ```
 
-## Configuration Options
+## Configuration Schema
 
-### AI Provider Settings
+The chat system uses Zod for type-safe configuration:
+
+```typescript
+const ChatConfigSchema = z.object({
+  // Provider Settings
+  provider: z.string().default("openai"),
+  model: z.string(),
+  temperature: z.number().min(0).max(1).default(0.7),
+  maxTokens: z.number().positive().default(2000),
+  
+  // Runtime Options
+  runtime: z.enum(["edge", "node"]).default("edge"),
+  includeContent: z.boolean().default(true),
+  
+  // Prompts and Context
+  systemPrompt: z.union([
+    z.string(),
+    z.array(z.object({
+      type: z.literal("text"),
+      text: z.string()
+    }))
+  ]),
+  
+  // UI Configuration
+  welcome: z.object({
+    message: z.string(),
+    avatar: z.string().optional(),
+    suggestions: z.array(
+      z.union([
+        z.string(),
+        z.object({
+          label: z.string(),
+          prompt: z.string()
+        })
+      ])
+    ).optional()
+  }).optional()
+});
+```
+
+## Core Configuration Options
+
+### Provider Settings
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `provider` | string | `"mistral"` | AI provider to use (mistral, openai, anthropic) |
-| `model` | string | `"mistral-large-latest"` | Specific model to use |
-| `apiKey` | string | - | Optional API key (defaults to environment variable) |
-| `apiEndpoint` | string | Provider default | Custom API endpoint URL |
-| `runtime` | string | `"edge"` | Runtime environment (edge, node) |
-| `temperature` | number | `0.7` | Response randomness (0-1) |
+| `provider` | string | `"openai"` | AI provider (openai, mistral, anthropic) |
+| `model` | string | - | Model identifier |
+| `temperature` | number | `0.7` | Response creativity (0-1) |
 | `maxTokens` | number | `2000` | Maximum response length |
+| `apiEndpoint` | string | Provider default | Custom API endpoint |
+| `runtime` | "edge" \| "node" | `"edge"` | Runtime environment |
 
-### System Prompt
+### System Prompts
 
-The system prompt defines your AI assistant's personality, knowledge, and behavior. It can be specified in several formats:
+Multiple formats supported:
 
-#### String Format
 ```typescript
-systemPrompt: "You are a helpful assistant specialized in web development."
-```
+// Simple string
+systemPrompt: "You are a helpful assistant."
 
-#### Array Format
-```typescript
+// Detailed array format
 systemPrompt: [
   {
     type: "text",
-    text: "You are a helpful assistant specialized in web development."
+    text: "You are an AI assistant specialized in web development."
   },
   {
     type: "text",
-    text: "You provide clear, concise code examples when appropriate."
+    text: "You excel at explaining complex concepts simply."
   }
 ]
 ```
 
 ### Welcome Configuration
 
-The welcome configuration controls the initial appearance and behavior of the chat interface:
+Customize the initial chat experience:
 
 ```typescript
 welcome: {
   message: "👋 Hello! I'm your AI assistant.",
   avatar: "/path/to/avatar.png",
   suggestions: [
+    // Simple string suggestions
     "What can you help me with?",
-    "Tell me about your features",
+    
+    // Rich suggestions with labels
     {
-      label: "Show me an example",
-      prompt: "Can you show me an example of how to use this framework?"
+      label: "💡 Features",
+      prompt: "What are your main features?"
+    },
+    {
+      label: "🚀 Quick Start",
+      prompt: "Show me how to get started"
     }
   ]
 }
 ```
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `message` | string | Initial message from the assistant |
-| `avatar` | string | URL to the assistant's avatar image |
-| `suggestions` | array | Quick suggestion buttons (strings or objects with label/prompt) |
+## Advanced Features
 
-### Initial Messages
+### Edge Runtime Optimization
 
-You can pre-populate the chat with initial messages:
+Enable edge runtime for faster responses:
 
 ```typescript
-initialMessages: [
-  {
-    id: "welcome",
-    role: "assistant",
-    content: "Welcome to the chat!"
+const chatConfig = {
+  runtime: "edge",
+  streaming: true,
+  maxDuration: 60, // seconds
+  regions: ["all"],
+  // Other options...
+};
+```
+
+### Context-Aware Responses
+
+Provide page content for contextual awareness:
+
+```typescript
+const chatConfig = {
+  // Other options...
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+  includeContent: true,
+  contextData: pageContent,
+};
+```
+
+### Message Streaming
+
+Configure streaming behavior:
+
+```typescript
+const chatConfig = {
+  streaming: {
+    enabled: true,
+    chunkSize: 100,
+    maxDuration: 30,
+    retryOnError: true
   },
-  {
-    id: "user-1",
-    role: "user",
-    content: "Can you help me with something?"
-  }
-]
+  // Other options...
+};
 ```
 
-## Alternative Property Names
+## Integration Examples
 
-For compatibility with frontmatter in Markdown files, the following alternative property names are supported:
-
-| Standard Name | Alternative Name |
-|---------------|------------------|
-| `provider` | `aiProvider` |
-| `model` | `aiModel` |
-| `welcome.message` | `welcomeMessage` |
-| `welcome.avatar` | `avatar` |
-| `welcome.suggestions` | `suggestions` |
-
-## Helper Functions
-
-### createDefaultConfig
-
-Creates a default configuration with optional overrides:
-
-```typescript
-import { createDefaultConfig } from "@/schema/chat";
-
-const config = createDefaultConfig({
-  provider: "openai",
-  temperature: 0.8
-});
-```
-
-### normalizeConfig
-
-Normalizes configuration by mapping alternative property names to standard ones:
-
-```typescript
-import { normalizeConfig } from "@/schema/chat";
-
-// From frontmatter
-const config = normalizeConfig({
-  aiProvider: "openai",
-  aiModel: "gpt-4o-mini",
-  welcomeMessage: "Hello!",
-  avatar: "/icon.svg"
-});
-```
-
-## Usage in Astro Pages
-
-### In Frontmatter
+### In Astro Pages
 
 ```astro
 ---
-layout: ../layouts/Layout.astro
-title: "My Page"
-description: "Page with chat"
-chatConfig:
-  provider: mistral
-  model: mistral-large-latest
-  temperature: 0.7
-  systemPrompt: "You are a helpful assistant."
-  welcome:
-    message: "👋 How can I help you?"
-    avatar: "/icon.svg"
-    suggestions:
-      - "What can you do?"
-      - "Tell me more"
+import Layout from "../layouts/Layout.astro";
+import { ChatConfigSchema } from '../schema/chat';
+
+const chatConfig = ChatConfigSchema.parse({
+  provider: "openai",
+  model: "gpt-4o-mini",
+  systemPrompt: [{
+    type: "text",
+    text: "You are a helpful assistant."
+  }],
+  welcome: {
+    message: "👋 How can I help you?",
+    suggestions: [
+      {
+        label: "🚀 Quick Start",
+        prompt: "Help me get started"
+      }
+    ]
+  }
+});
 ---
 
-<h1>My Page with Chat</h1>
-<p>Content goes here...</p>
+<Layout 
+  title="Chat Example"
+  chatConfig={chatConfig}
+  rightPanelMode="quarter"
+>
+  <main>
+    <h1>Welcome to the Chat</h1>
+  </main>
+</Layout>
 ```
 
 ### In Markdown Files
 
 ```markdown
 ---
-title: My Document
-aiProvider: mistral
-aiModel: mistral-large-latest
-temperature: 0.7
-systemPrompt: You are a helpful assistant.
-welcomeMessage: 👋 How can I help you?
-avatar: /icon.svg
-suggestions:
-  - What can you do?
-  - Tell me more
+title: Documentation
+layout: ../layouts/Layout.astro
+chatConfig:
+  provider: openai
+  model: gpt-4o-mini
+  temperature: 0.7
+  systemPrompt:
+    - type: text
+      text: You are a documentation expert.
+  welcome:
+    message: 👋 Need help with the docs?
+    suggestions:
+      - label: 📖 Overview
+        prompt: Give me an overview
 ---
 
-# My Document
+# Documentation
 
-Content goes here...
-```
-
-### In Components
-
-```astro
----
-import Layout from "../layouts/Layout.astro";
-import { Chat } from "@/components/Chat";
-import { normalizeConfig } from "@/schema/chat";
-
-const chatConfig = normalizeConfig({
-  provider: "mistral",
-  model: "mistral-large-latest",
-  systemPrompt: "You are a helpful assistant.",
-  welcome: {
-    message: "👋 How can I help you?",
-    avatar: "/icon.svg",
-    suggestions: [
-      "What can you do?",
-      "Tell me more"
-    ]
-  }
-});
----
-
-<Layout title="Chat Example">
-  <div class="h-[600px]">
-    <Chat client:load chatConfig={chatConfig} />
-  </div>
-</Layout>
-```
-
-## Advanced Configuration
-
-### Custom API Endpoints
-
-```typescript
-const chatConfig = {
-  provider: "openai",
-  model: "gpt-4o-mini",
-  apiEndpoint: "https://your-custom-endpoint.com/v1",
-  // Other options...
-};
-```
-
-### Multiple System Prompts
-
-```typescript
-const chatConfig = {
-  // Other options...
-  systemPrompt: [
-    {
-      type: "text",
-      text: "You are a helpful assistant specialized in web development."
-    },
-    {
-      type: "text",
-      text: "You provide clear, concise code examples when appropriate."
-    },
-    {
-      type: "text",
-      text: "You follow best practices and modern standards."
-    }
-  ]
-};
-```
-
-### Rich Suggestions
-
-```typescript
-const chatConfig = {
-  // Other options...
-  welcome: {
-    message: "👋 How can I help you today?",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "💻 Web Development",
-        prompt: "Can you help me with web development using React and TypeScript?"
-      },
-      {
-        label: "🚀 Performance Tips",
-        prompt: "What are some tips for improving website performance?"
-      },
-      {
-        label: "🔒 Security Best Practices",
-        prompt: "What are the best security practices for web applications?"
-      }
-    ]
-  }
-};
+Your content here...
 ```
 
 ## Best Practices
 
-1. **Be Specific in System Prompts**: Clearly define your assistant's role, expertise, and limitations.
+1. **System Prompt Design**
+   - Be specific about assistant's role
+   - Define clear boundaries
+   - Include relevant context
+   - Use multiple prompts for complex behavior
 
-2. **Use Appropriate Temperature**: Lower values (0.1-0.4) for factual responses, higher values (0.7-0.9) for creative content.
+2. **Temperature Selection**
+   - `0.1-0.4`: Factual, consistent responses
+   - `0.5-0.7`: Balanced creativity
+   - `0.8-1.0`: More creative, varied responses
 
-3. **Provide Helpful Suggestions**: Offer 3-5 relevant suggestions to guide users.
+3. **Performance Optimization**
+   - Use edge runtime for faster responses
+   - Enable streaming for better UX
+   - Set appropriate token limits
+   - Optimize context length
 
-4. **Set Reasonable Token Limits**: Balance between comprehensive responses and performance.
-
-5. **Choose the Right Model**: Select models based on your specific needs (capabilities vs. cost).
-
-6. **Test Different Configurations**: Experiment to find the optimal settings for your use case.
-
-7. **Use Normalized Configuration**: Always use `normalizeConfig()` when working with frontmatter data.
+4. **User Experience**
+   - Provide helpful welcome message
+   - Include relevant suggestions
+   - Use clear, descriptive labels
+   - Add appropriate icons/emojis
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **API Key Errors**: Ensure the appropriate environment variable is set for your chosen provider.
+1. **Configuration Validation**
+   ```typescript
+   // Always use schema validation
+   const config = ChatConfigSchema.parse(userConfig);
+   ```
 
-2. **Model Not Available**: Verify that the model name is correct and available for your provider.
+2. **API Connection**
+   - Verify API keys in environment
+   - Check endpoint configuration
+   - Monitor rate limits
+   - Handle network errors
 
-3. **Configuration Not Applied**: Make sure you're using `normalizeConfig()` for frontmatter data.
+3. **Streaming Issues**
+   - Verify edge runtime support
+   - Check browser compatibility
+   - Monitor connection stability
+   - Handle disconnections
 
-4. **Suggestions Not Showing**: Check that your welcome message is properly configured.
+4. **Context Problems**
+   - Validate content format
+   - Check token limits
+   - Monitor memory usage
+   - Handle large documents
 
-5. **System Prompt Ignored**: Ensure your system prompt is properly formatted.
+### Error Handling
 
-For more help, check the [API Documentation](/docs/api) or [contact support](/contact). 
+```typescript
+try {
+  const config = ChatConfigSchema.parse(userConfig);
+} catch (error) {
+  if (error instanceof z.ZodError) {
+    console.error("Configuration validation failed:", error.issues);
+  }
+}
+```

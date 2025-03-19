@@ -6,13 +6,15 @@ section: Introduction
 order: 1
 ---
 
-This guide will help you set up and start building AI-powered applications using the ONE framework. ONE combines Astro, React, and 
+# Getting Started with ONE
+
+ONE is a toolkit for building AI-powered applications, combining Astro's performance, React's interactivity, and advanced AI capabilities. This guide will help you get up and running quickly.
 
 ## Quick Start
 
 ### 1. Get the Project
 
-You have three options to get started with ONE:
+Choose your preferred method to get started:
 
 ```bash
 # Option 1: Clone the repository
@@ -21,14 +23,13 @@ git clone https://github.com/one-ie/one.git
 # Option 2: Download the ZIP file
 # Visit: https://github.com/one-ie/one/archive/refs/heads/main.zip
 
-# Option 3: Fork the repository
-# Visit: https://github.com/one-ie/one/fork
+# Option 3: Open in GitHub Codespaces
+# Visit: https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=one-ie/one
 ```
 
-You can also create a new project directly in GitHub Codespaces:
-[Open in Codespaces](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=one-ie/one)
-
 ### 2. Install Dependencies
+
+ONE uses pnpm for package management:
 
 ```bash
 # Navigate to project directory
@@ -38,38 +39,58 @@ cd one
 pnpm install
 ```
 
-### 3. Configure Environment Variables
+### 3. Configure Environment
 
 Create a `.env` file in your project root:
 
 ```env
+# Required: OpenAI API key for AI features
 OPENAI_API_KEY=your_api_key_here
+
+# Optional: Override default AI settings
+AI_PROVIDER=openai
+AI_MODEL=gpt-4o-mini
+AI_TEMPERATURE=0.7
+AI_MAX_TOKENS=2000
 ```
 
-### 4. Start Development Server
+### 4. Start Development
 
 ```bash
 pnpm dev
 ```
 
-Visit `http://localhost:4321` to see your application running.
+Visit `http://localhost:4321` to see your application.
 
 ## Project Structure
 
 ```
 one/
 ├── src/
-│   ├── components/     # UI components
-│   ├── layouts/       # Page layouts
-│   ├── pages/         # Routes and pages
-│   ├── content/       # Markdown content
-│   └── styles/        # Global styles
-└── public/           # Static assets
+│   ├── components/          # UI Components
+│   │   ├── ui/             # Shadcn/UI components
+│   │   ├── chat/           # Chat components
+│   │   └── magicui/        # Enhanced UI components
+│   │
+│   ├── content/            # Content Collections
+│   │   ├── blog/          # Blog posts
+│   │   ├── docs/          # Documentation
+│   │   └── prompts/       # AI prompts
+│   │
+│   ├── layouts/            # Page layouts
+│   ├── lib/               # Utility functions
+│   ├── pages/             # Routes and pages
+│   ├── schema/            # Data schemas
+│   └── styles/            # Global styles
+│
+└── public/                # Static assets
 ```
 
 ## Adding AI Chat to a Page
 
-1. Create a new page (e.g., `src/pages/chat.astro`):
+### Basic Integration
+
+Create a new page with AI chat capabilities:
 
 ```astro
 ---
@@ -77,17 +98,26 @@ import Layout from "../layouts/Layout.astro";
 import { ChatConfigSchema } from '../schema/chat';
 
 const chatConfig = ChatConfigSchema.parse({
+  // AI Configuration
+  provider: "openai",
+  model: "gpt-4o-mini",
+  temperature: 0.7,
+  maxTokens: 2000,
+
+  // System Instructions
   systemPrompt: [{
     type: "text",
-    text: "You are a helpful assistant."
+    text: "You are a helpful AI assistant specialized in this topic."
   }],
+
+  // User Interface
   welcome: {
     message: "👋 How can I help you today?",
     avatar: "/icon.svg",
     suggestions: [
       {
-        label: "Get Started",
-        prompt: "How do I get started with ONE?"
+        label: "🚀 Quick Start",
+        prompt: "Show me how to get started"
       }
     ]
   }
@@ -95,69 +125,77 @@ const chatConfig = ChatConfigSchema.parse({
 ---
 
 <Layout 
-  title="Chat Page"
+  title="Your Page"
   chatConfig={chatConfig}
   rightPanelMode="quarter"
 >
   <main>
-    <h1>Welcome to the Chat</h1>
-    <!-- Your page content here -->
+    <h1>Your Content</h1>
+    <!-- Page content here -->
   </main>
 </Layout>
 ```
 
-## Customizing the Chat Interface
+### Chat Panel Modes
 
-### Chat Configuration Options
+Choose from multiple display modes:
+
+- `quarter`: 25% width side panel (default)
+- `half`: 50% width side panel
+- `full`: Full screen chat interface
+- `floating`: Detached floating window
+- `icon`: Minimized chat button
+- `hidden`: No chat interface
+
+```astro
+<Layout
+  rightPanelMode="quarter" // or "half", "full", "floating", "icon"
+>
+  <!-- Content -->
+</Layout>
+```
+
+## Advanced Features
+
+### 1. Context-Aware AI
+
+Make your AI assistant knowledgeable about page content:
+
+```typescript
+const chatConfig = ChatConfigSchema.parse({
+  systemPrompt: [{
+    type: "text",
+    text: `You are an expert on this topic. The content below provides context for your responses:
+
+    ${pageContent}`
+  }],
+  addSystemPrompt: true,
+  addBusinessPrompt: true
+});
+```
+
+### 2. Interactive Features
+
+Enable advanced chat capabilities:
 
 ```typescript
 const chatConfig = {
-  provider: "openai",          // AI provider
-  model: "gpt-4o-mini",       // Model to use
-  apiEndpoint: "https://api.openai.com/v1",
-  temperature: 0.7,           // Response creativity (0-1)
-  maxTokens: 2000,           // Maximum response length
-  systemPrompt: "...",       // AI behavior definition
-  welcome: {
-    message: "...",          // Welcome message
-    avatar: "/path/to/icon.svg",
-    suggestions: [...]       // Quick start prompts
+  // Streaming responses
+  runtime: "edge",
+  
+  // Message features
+  features: {
+    textToSpeech: true,    // Voice synthesis
+    codeHighlight: true,   // Code syntax highlighting
+    markdown: true,        // Rich text formatting
+    suggestions: true      // Quick action buttons
   }
 };
 ```
 
-### Panel Modes
+### 3. Custom Styling
 
-The chat interface can be displayed in different modes:
-- `quarter`: 25% width side panel
-- `half`: 50% width side panel
-- `full`: Full screen chat
-- `floating`: Floating chat window
-- `icon`: Minimized chat button
-
-## Adding Page-Specific Knowledge
-
-Make your AI assistant knowledgeable about specific pages:
-
-```astro
----
-const pageContent = "Your page content here";
-
-const chatConfig = ChatConfigSchema.parse({
-  systemPrompt: [{
-    type: "text",
-    text: `You are an expert on ${pageContent}. Help users understand this content.`
-  }],
-  // ... other config options
-});
----
-```
-
-## Basic Customization
-
-### 1. Styling
-
-Customize the appearance using Tailwind CSS classes:
+Customize appearance using Tailwind CSS and Shadcn UI:
 
 ```css
 /* src/styles/global.css */
@@ -165,65 +203,37 @@ Customize the appearance using Tailwind CSS classes:
 @tailwind components;
 @tailwind utilities;
 
-/* Your custom styles here */
+/* Theme customization */
+:root {
+  --primary: 210 100% 50%;
+  --secondary: 220 100% 60%;
+}
 ```
 
-### 2. Layout
+## Troubleshooting
 
-Adjust the layout using the Layout component props:
+### Common Issues
 
-```astro
-<Layout
-  title="Your Page"
-  description="Page description"
-  header={true}        // Show/hide header
-  footer={true}        // Show/hide footer
-  rightPanelMode="quarter"
->
-  <!-- Your content -->
-</Layout>
-```
+1. **API Configuration**
+   - Verify OPENAI_API_KEY in .env
+   - Check API endpoint configuration
+   - Monitor rate limits and quotas
 
-### 3. Chat Features
+2. **Build Problems**
+   - Run `pnpm clean && pnpm install`
+   - Update Node.js to v18+
+   - Clear browser cache
 
-Enable or disable specific chat features:
-
-```typescript
-const chatConfig = ChatConfigSchema.parse({
-  // ... other options
-  features: {
-    textToSpeech: true,    // Enable voice synthesis
-    codeHighlight: true,   // Enable code syntax highlighting
-    markdown: true,        // Enable markdown rendering
-    suggestions: true      // Enable quick suggestions
-  }
-});
-```
-
-## Common Issues
-
-### Troubleshooting
-
-1. **API Key Issues**
-   - Ensure your OpenAI API key is properly set in `.env`
-   - Check API key permissions and quotas
-
-2. **Build Errors**
-   - Run `pnpm clean` to clear cache
-   - Ensure all dependencies are installed
-   - Check for Node.js version compatibility
-
-3. **Chat Not Working**
-   - Verify API endpoint configuration
+3. **Chat Issues**
    - Check browser console for errors
-   - Ensure proper network connectivity
+   - Verify network connectivity
+   - Monitor streaming response status
 
-## Support
+## Getting Help
 
-Need help? Try these resources:
+Need assistance? Try these resources:
 
-- [GitHub Issues](https://github.com/yourusername/one/issues)
-- [Documentation](/docs)
+- [GitHub Issues](https://github.com/one-ie/one/issues)
 - Email: support@one.ie
 
-Remember to check the [Frequently Asked Questions](/docs/faq) for common queries and solutions.
+For additional guidance, check our [FAQ](/docs/faq) and [Troubleshooting Guide](/docs/troubleshooting/common-issues).

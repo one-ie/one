@@ -1,230 +1,251 @@
 ---
-title: Development FAQ
-description: Frequently asked questions about developing with ONE
+title: Frequently Asked Questions
+description: Comprehensive FAQ for developing with ONE framework
 date: 2024-02-02
 section: Development
 order: 5
 ---
 
-# Development FAQ
+# FAQ
 
-Common questions and answers about developing applications with ONE framework.
+Comprehensive answers to common questions about developing with ONE.
 
 ## Getting Started
 
-### Q: What are the minimum requirements to run ONE?
+### Q: What are the system requirements?
 **A:** You need:
 - Node.js 18 or higher
 - pnpm package manager
-- An OpenAI API key
+- OpenAI API key (or other supported providers)
+- Git for version control
 - Basic knowledge of Astro and React
 
-### Q: How do I install ONE?
-**A:** Use the following commands:
+### Q: How do I get started quickly?
+**A:** Use these commands:
 ```bash
-# Create new project
+# Clone repository
 git clone https://github.com/one-ie/one.git
 
 # Install dependencies
 cd one
 pnpm install
+
+# Start development
+pnpm dev
 ```
 
-### Q: How do I set up my OpenAI API key?
-**A:** Create a `.env` file in your project root and add:
+### Q: How do I configure my AI provider?
+**A:** Create a `.env` file:
 ```env
-OPENAI_API_KEY=your_api_key_here
+OPENAI_API_KEY=your_key_here
+OPENAI_ORG_ID=optional_org_id
+ANTHROPIC_API_KEY=your_key_here
+MISTRAL_API_KEY=your_key_here
 ```
 
-You can copy the .env.example to .env 
-## Chat System
+## AI Features
 
-### Q: How do I add chat to my page?
-**A:** Add chat configuration to your page's frontmatter:
-```yaml
----
-layout: ../layouts/Layout.astro
-chatConfig:
-  provider: openai
-  model: "gpt-4o-mini"
-  temperature: 0.7
-  maxTokens: 2000
-  systemPrompt:
-    - type: text
-      text: "Your system prompt here"
----
+### Q: Which AI providers are supported?
+**A:** ONE supports multiple providers:
+```typescript
+const providers = {
+  openai: {
+    models: ['gpt-4o-mini', 'gpt-4'],
+    features: ['streaming', 'functions']
+  },
+  anthropic: {
+    models: ['claude-2', 'claude-instant'],
+    features: ['streaming']
+  },
+  mistral: {
+    models: ['mistral-large'],
+    features: ['streaming']
+  }
+};
 ```
 
-### Q: How do I customize the chat panel position?
-**A:** Use the `rightPanelMode` prop in your Layout component:
+### Q: How do I optimize AI responses?
+**A:** Configure these parameters:
+```typescript
+const chatConfig = {
+  // Response Quality
+  temperature: 0.7,    // 0.1-1.0: lower = more focused
+  maxTokens: 2000,     // Adjust for response length
+  topP: 0.9,          // Nucleus sampling
+  
+  // Performance
+  streaming: true,     // Enable streaming
+  cache: true,        // Enable caching
+  
+  // Context
+  systemPrompt: "Be concise and clear",
+  contextWindow: 4000  // Maximum context size
+};
+```
+
+### Q: How do I handle streaming responses?
+**A:** Use the streaming configuration:
+```typescript
+const config = {
+  streaming: {
+    enabled: true,
+    chunkSize: 100,
+    maxDuration: 30,
+    retryOnError: true,
+    onProgress: (chunk) => {
+      // Handle chunks
+    }
+  }
+};
+```
+
+## Chat Integration
+
+### Q: How do I add chat to any page?
+**A:** Use the Layout component:
 ```astro
+---
+import Layout from "../layouts/Layout.astro";
+
+const chatConfig = {
+  provider: "openai",
+  model: "gpt-4o-mini",
+  systemPrompt: [{
+    type: "text",
+    text: "You are a helpful assistant."
+  }],
+  welcome: {
+    message: "👋 How can I help?",
+    suggestions: [
+      { label: "🚀 Start", prompt: "Help me get started" }
+    ]
+  }
+};
+---
+
 <Layout
   title="Your Page"
   chatConfig={chatConfig}
-  rightPanelMode="quarter" // or "half", "full", "floating", "icon"
+  rightPanelMode="quarter"
 >
-  <!-- Your content -->
+  <main>Your content here</main>
 </Layout>
 ```
 
-### Q: Can I customize the welcome message and suggestions?
-**A:** Yes, in your chat configuration:
-```yaml
-chatConfig:
-  welcome:
-    message: "👋 Your welcome message"
-    avatar: "/path/to/icon.svg"
-    suggestions:
-      - label: "💡 First Option"
-        prompt: "Your prompt here"
+### Q: What chat panel modes are available?
+**A:** Several modes for different use cases:
+```typescript
+type PanelMode = 
+  | "quarter"   // 25% width (default)
+  | "half"      // 50% width
+  | "full"      // Full screen
+  | "floating"  // Detached window
+  | "icon"      // Minimized button
+  | "hidden";   // No chat interface
+```
+
+### Q: How do I customize the chat interface?
+**A:** Use the theme system:
+```typescript
+const chatTheme = {
+  // Colors
+  colors: {
+    primary: "blue",
+    accent: "indigo",
+    background: "zinc"
+  },
+  
+  // Layout
+  layout: {
+    spacing: "comfortable",
+    width: "default",
+    radius: "medium"
+  },
+  
+  // Typography
+  font: {
+    family: "inter",
+    size: "base",
+    weight: "normal"
+  }
+};
 ```
 
 ## Content Management
 
-### Q: How do I create a chatbot for my markdown content?
-**A:** Create a markdown file with chat configuration in the frontmatter:
+### Q: How do I structure content collections?
+**A:** Organize in `src/content`:
+```
+src/content/
+├── docs/          # Documentation
+├── blog/          # Blog posts
+├── courses/       # Course content
+└── prompts/       # AI prompts
+```
+
+### Q: How do I add AI to markdown content?
+**A:** Use frontmatter configuration:
 ```markdown
 ---
-layout: ../layouts/Layout.astro
-title: "Your Title"
-chatConfig:
-  systemPrompt:
-    - type: text
-      text: "Define your AI's expertise"
+title: Your Page
+layout: ../layouts/Chat.astro
+aiConfig:
+  systemPrompt: "You are an expert on this topic"
+  suggestions:
+    - label: "Overview"
+      prompt: "Give me an overview"
 ---
 
-Your content here
+Your content here...
 ```
-
-See the tutorial [[create-a-chatbot-with-markdown]]
-### Q: How do I organize my documentation?
-**A:** Use the following structure:
-```
-src/content/docs/
-├── index.md         # Main documentation page
-├── getting-started/ # Getting started guides
-├── features/       # Feature documentation
-└── api/           # API documentation
-```
-
-
-## Styling and Theming
-
-### Q: How do I customize the appearance?
-**A:** ONE uses Tailwind CSS. Customize in `tailwind.config.mjs`:
-```javascript
-export default {
-  theme: {
-    extend: {
-      colors: {
-        primary: {...},
-        secondary: {...}
-      }
-    }
-  }
-}
-```
-
-### Q: How do I switch between light and dark themes?
-**A:** Use the built-in theme system:
+### Q: How do I implement caching?
+**A:** Configure caching strategy:
 ```typescript
-import { useTheme } from "@/hooks/use-theme";
-
-const { theme, setTheme } = useTheme();
+const cacheConfig = {
+  enabled: true,
+  duration: 3600,
+  strategy: "stale-while-revalidate",
+  revalidate: true
+};
 ```
-
 ## Troubleshooting
 
-### Q: Why isn't my chat interface showing up?
-**A:** Check these common issues:
-1. Verify chatConfig in frontmatter
-2. Ensure OpenAI API key is set
-3. Check for console errors
-4. Verify rightPanelMode setting
-
-### Q: Why are my API calls failing?
-**A:** Common solutions:
-1. Verify API key in .env
-2. Check API endpoint configuration
-3. Verify rate limits
-4. Check network connectivity
-
-### Q: How do I debug streaming responses?
-**A:** Use the browser's network tab:
-1. Open DevTools
-2. Go to Network tab
-3. Filter for 'Fetch/XHR'
-4. Look for streaming responses
-
-## Deployment
-
-### Q: How do I deploy my ONE application?
-**A:** Several options:
-1. Vercel 
-2. Netlify
-3. CloudFlare (under development)
-4. Any Node.js server - AWS, Google Cloud or using Coolify on Hetzner is a great option
-
-### Q: How do I handle environment variables in production?
-**A:** Set them in your hosting platform:
-```env
-OPENAI_API_KEY=production_key
-```
-
-## Development Best Practices
-
-### Q: What's the recommended way to structure a large application?
-**A:** Follow this structure:
-```
-src/
-├── components/    # Reusable components
-├── layouts/       # Page layouts
-├── content/       # Markdown content
-├── pages/         # Routes
-├── styles/        # Global styles
-└── lib/          # Utilities
-```
-
-### Q: How do I implement proper error handling?
-**A:** Use try-catch blocks and error boundaries:
+### Q: How do I debug AI responses?
+**A:** Use debug mode:
 ```typescript
-try {
-  // API calls
-} catch (error) {
-  if (error.response?.status === 429) {
-    // Handle rate limiting
+const debugConfig = {
+  debug: true,
+  logging: {
+    level: "verbose",
+    requests: true,
+    responses: true,
+    timing: true
   }
-  // Handle other errors
-}
-```
-
-### Q: How do I test my AI interactions?
-**A:** Use test modes and mock responses:
-```typescript
-const testConfig = {
-  ...chatConfig,
-  provider: 'test',
-  mockResponses: [...]
 };
 ```
 
-## Commercial Usage
-
-### Q: Can I use ONE in a commercial project?
-**A:** Yes, ONE License provides:
-- Full commercial rights
-- No royalty fees
-## Support and Resources
-
-### Q: Where can I get help?
-**A:** Several options:
-5. [Documentation](/docs)
-6. [GitHub Issues](https://github.com/one-ie/one/issues)
-7. Email support@one.ie
-
-### Q: How do I report bugs?
-**A:** Open an issue on GitHub with:
-- Description of the problem
-- Steps to reproduce
-- Expected vs actual behavior
-- Environment details
+### Q: How do I handle errors?
+**A:** Implement error handling:
+```typescript
+try {
+  const response = await ai.chat({
+    messages: messages,
+    onError: (error) => {
+      if (error.type === "rate_limit") {
+        // Handle rate limiting
+      } else if (error.type === "context_length") {
+        // Handle context overflow
+      }
+    }
+  });
+} catch (error) {
+  // Fallback handling
+}
+```
+### Q: How do I contribute?
+**A:** Follow these steps:
+1. Fork the repository
+2. Create a feature branch
+3. Make changes
+4. Submit pull request
+5. Follow contribution guidelines

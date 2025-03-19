@@ -1,184 +1,352 @@
-# Content Types Architecture
+---
+title: Content Types
+description: Complete guide to ONE's content collection system
+date: 2024-02-02
+section: Core Features
+order: 3
+---
 
-## Overview
+# Content Types System
 
-This document outlines the structure and schema for all content types in our application.
+ONE uses Astro's content collections with Zod validation to provide a powerful, type-safe content management system. This guide covers all content types, their schemas, and integration features.
 
-## Common Fields Schema
+## Quick Start
 
-All content types will share these base fields:
 ```typescript
-const CommonFields = {
-  title: z.string(),
-  description: z.string().optional().nullable(),
-  date: z.date().optional().nullable(),
-  draft: z.boolean().optional().nullable(),
-  tags: z.array(z.string()).optional().nullable(),
-  image: z.string().optional().nullable(),
-}
+// src/content/config.ts
+import { defineCollection, z } from 'astro:content';
+
+// Define collection with schema
+const blog = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.date(),
+    tags: z.array(z.string()).default([])
+  })
+});
+
+// Export collections
+export const collections = {
+  blog
+};
 ```
 
-## Content Type Schemas
+## Base Schema
+
+All content types extend from common base fields:
+
+```typescript
+const CommonFields = {
+  // Required fields
+  title: z.string(),
+  
+  // Optional fields
+  description: z.string().optional(),
+  date: z.date().optional(),
+  draft: z.boolean().default(false),
+  tags: z.array(z.string()).default([]),
+  image: z.string().optional(),
+  
+  // SEO fields
+  seo: z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    keywords: z.array(z.string()).optional(),
+    ogImage: z.string().optional()
+  }).optional()
+};
+```
+
+## Content Collections
 
 ### 1. Pages
+General website pages with flexible layouts.
+
 ```typescript
 const PagesSchema = z.object({
   ...CommonFields,
-  layout: z.string().optional(),
-  sections: z.array(z.string()).optional(),
-  menu: z.boolean().optional()
-})
+  layout: z.enum(['default', 'wide', 'landing']),
+  sections: z.array(z.object({
+    id: z.string(),
+    type: z.enum(['hero', 'features', 'cta', 'pricing']),
+    content: z.record(z.unknown())
+  })),
+  menu: z.object({
+    visible: z.boolean(),
+    order: z.number()
+  }).optional()
+});
+
+// Example usage
+---
+title: Home Page
+layout: landing
+sections:
+  - id: hero
+    type: hero
+    content:
+      heading: "Welcome to ONE"
+      subheading: "Build AI-powered applications"
+menu:
+  visible: true
+  order: 1
+---
 ```
 
-### 2. Videos
+### 2. Documentation
+Technical documentation and guides.
+
 ```typescript
-const VideosSchema = z.object({
+const DocsSchema = z.object({
   ...CommonFields,
-  url: z.string(),
-  duration: z.number().optional(),
-  thumbnail: z.string().optional(),
-  transcript: z.string().optional(),
-  platform: z.enum(['youtube', 'vimeo', 'other']).optional()
-})
+  section: z.string(),
+  order: z.number(),
+  prev: z.string().optional(),
+  next: z.string().optional(),
+  aiConfig: z.object({
+    systemPrompt: z.string(),
+    suggestions: z.array(z.object({
+      label: z.string(),
+      prompt: z.string()
+    }))
+  }).optional()
+});
+
+// Example usage
+---
+title: Getting Started
+section: Introduction
+order: 1
+aiConfig:
+  systemPrompt: "You are a documentation expert..."
+  suggestions:
+    - label: "🚀 Quick Start"
+      prompt: "Show me how to get started"
+---
 ```
 
-### 3. Podcasts
+### 3. Blog Posts
+Rich content articles with AI assistance.
+
 ```typescript
-const PodcastsSchema = z.object({
+const BlogSchema = z.object({
   ...CommonFields,
-  audioUrl: z.string(),
-  duration: z.number(),
-  episode: z.number().optional(),
-  season: z.number().optional(),
-  transcript: z.string().optional()
-})
+  author: z.object({
+    name: z.string(),
+    avatar: z.string().optional(),
+    bio: z.string().optional()
+  }),
+  category: z.string(),
+  featured: z.boolean().default(false),
+  aiSummary: z.boolean().default(true),
+  relatedContent: z.array(z.string()).optional()
+});
+
+// Example usage
+---
+title: Building AI Agents
+author:
+  name: John Doe
+  avatar: /authors/john.jpg
+category: Tutorials
+featured: true
+aiSummary: true
+---
 ```
 
-### 4. Software
-```typescript
-const SoftwareSchema = z.object({
-  ...CommonFields,
-  version: z.string(),
-  repository: z.string().optional(),
-  documentation: z.string().optional(),
-  requirements: z.array(z.string()).optional(),
-  installation: z.string().optional()
-})
-```
+### 4. Courses
+Educational content with structured lessons.
 
-### 5. Resources
-```typescript
-const ResourcesSchema = z.object({
-  ...CommonFields,
-  type: z.enum(['guide', 'template', 'tool', 'library', 'other']),
-  url: z.string().optional(),
-  downloadUrl: z.string().optional(),
-  category: z.string().optional()
-})
-```
-
-### 6. Courses
 ```typescript
 const CoursesSchema = z.object({
   ...CommonFields,
-  duration: z.string().optional(),
-  level: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
-  prerequisites: z.array(z.string()).optional(),
-  modules: z.array(z.string()).optional(),
-  instructor: z.string().optional()
-})
+  duration: z.string(),
+  level: z.enum(['beginner', 'intermediate', 'advanced']),
+  prerequisites: z.array(z.string()),
+  modules: z.array(z.object({
+    title: z.string(),
+    lessons: z.array(z.object({
+      title: z.string(),
+      duration: z.string(),
+      type: z.enum(['video', 'text', 'quiz'])
+    }))
+  })),
+  instructor: z.object({
+    name: z.string(),
+    bio: z.string(),
+    avatar: z.string()
+  })
+});
 ```
 
-### 7. Lessons
+### 5. AI Prompts
+Reusable AI conversation templates.
+
 ```typescript
-const LessonsSchema = z.object({
+const PromptsSchema = z.object({
   ...CommonFields,
-  courseId: z.string(),
-  moduleId: z.string().optional(),
-  duration: z.number().optional(),
-  order: z.number(),
-  content: z.string().optional()
-})
+  category: z.string(),
+  systemPrompt: z.string(),
+  examples: z.array(z.object({
+    user: z.string(),
+    assistant: z.string()
+  })),
+  parameters: z.object({
+    temperature: z.number(),
+    maxTokens: z.number()
+  }).optional()
+});
+
+// Example usage
+---
+title: Technical Interviewer
+category: Interviews
+systemPrompt: "You are an expert technical interviewer..."
+examples:
+  - user: "Tell me about your experience with TypeScript"
+    assistant: "That's a great question..."
+parameters:
+  temperature: 0.7
+  maxTokens: 2000
+---
 ```
 
-### 8. News
-```typescript
-const NewsSchema = z.object({
-  ...CommonFields,
-  category: z.string().optional(),
-  featured: z.boolean().optional(),
-  author: z.string().optional(),
-  source: z.string().optional()
-})
-```
+## Stream Integration
 
-### 9. Tutorials
-```typescript
-const TutorialsSchema = z.object({
-  ...CommonFields,
-  difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
-  timeToComplete: z.string().optional(),
-  prerequisites: z.array(z.string()).optional(),
-  category: z.string().optional()
-})
-```
-
-### 10. Events
-```typescript
-const EventsSchema = z.object({
-  ...CommonFields,
-  startDate: z.date(),
-  endDate: z.date().optional(),
-  location: z.string().optional(),
-  virtual: z.boolean().optional(),
-  registration: z.string().optional(),
-  capacity: z.number().optional()
-})
-```
-
-## Collection Exports
-
-Each content type should be exported as a collection:
+The stream system unifies content from all collections:
 
 ```typescript
-export const collections = {
-  pages: defineCollection({ type: 'content', schema: PagesSchema }),
-  videos: defineCollection({ type: 'content', schema: VideosSchema }),
-  podcasts: defineCollection({ type: 'content', schema: PodcastsSchema }),
-  software: defineCollection({ type: 'content', schema: SoftwareSchema }),
-  resources: defineCollection({ type: 'content', schema: ResourcesSchema }),
-  courses: defineCollection({ type: 'content', schema: CoursesSchema }),
-  lessons: defineCollection({ type: 'content', schema: LessonsSchema }),
-  blog: defineCollection({ type: 'content', schema: BlogSchema }),
-  news: defineCollection({ type: 'content', schema: NewsSchema }),
-  docs: defineCollection({ type: 'content', schema: DocsSchema }),
-  tutorials: defineCollection({ type: 'content', schema: TutorialsSchema }),
-  events: defineCollection({ type: 'content', schema: EventsSchema }),
-  prompts: defineCollection({ type: 'content', schema: PromptsSchema })
-};
-```
+// src/lib/stream.ts
+import { getCollection } from 'astro:content';
 
-## Stream Implementation
-
-The stream functionality will be implemented through a utility function that combines and sorts content from all collections:
-
-```typescript
 export type StreamItem = {
-  type: keyof typeof collections;
-  data: z.infer<typeof collections[keyof typeof collections]['schema']>;
+  id: string;
+  type: string;
+  title: string;
+  description?: string;
+  date: Date;
+  data: unknown;
 };
 
-export async function getStream(): Promise<StreamItem[]> {
-  // Implementation will fetch from all collections
+export async function getStream(options?: {
+  limit?: number;
+  offset?: number;
+  filter?: (item: StreamItem) => boolean;
+}): Promise<StreamItem[]> {
+  // Fetch from all collections
+  const [blog, docs, courses] = await Promise.all([
+    getCollection('blog'),
+    getCollection('docs'),
+    getCollection('courses')
+  ]);
+
+  // Combine and transform
+  const items: StreamItem[] = [
+    ...blog.map(post => ({
+      id: post.id,
+      type: 'blog',
+      title: post.data.title,
+      date: post.data.date,
+      data: post.data
+    })),
+    // ... transform other collections
+  ];
+
   // Sort by date
-  // Return unified stream
+  items.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+  // Apply options
+  let result = items;
+  if (options?.filter) {
+    result = result.filter(options.filter);
+  }
+  if (options?.offset) {
+    result = result.slice(options.offset);
+  }
+  if (options?.limit) {
+    result = result.slice(0, options.limit);
+  }
+
+  return result;
 }
 ```
 
-## Next Steps
+## AI Integration
 
-1. Implement this schema in `src/content/config.ts`
-2. Create folder structure for each content type
-3. Add example content for testing
-4. Create content rendering components
-5. Implement the stream functionality
+Each content type can include AI-specific configuration:
+
+```typescript
+const AIConfig = z.object({
+  // System behavior
+  systemPrompt: z.string(),
+  
+  // Quick suggestions
+  suggestions: z.array(z.object({
+    label: z.string(),
+    prompt: z.string()
+  })),
+  
+  // Content processing
+  summarize: z.boolean().default(true),
+  generateKeywords: z.boolean().default(true),
+  
+  // Response configuration
+  temperature: z.number().default(0.7),
+  maxTokens: z.number().default(2000)
+});
+```
+
+## Best Practices
+
+1. **Schema Organization**
+   - Keep schemas modular and reusable
+   - Use common fields consistently
+   - Document schema properties
+
+2. **Content Structure**
+   - Organize content logically
+   - Use clear, descriptive filenames
+   - Follow naming conventions
+
+3. **Type Safety**
+   - Always use Zod validation
+   - Define explicit types
+   - Handle optional fields properly
+
+4. **AI Integration**
+   - Configure AI per content type
+   - Provide clear system prompts
+   - Include helpful suggestions
+
+5. **Performance**
+   - Use appropriate collection types
+   - Optimize image assets
+   - Implement proper caching
+
+## Troubleshooting
+
+1. **Schema Validation**
+   ```typescript
+   try {
+     const data = schema.parse(frontmatter);
+   } catch (error) {
+     console.error("Validation failed:", error.issues);
+   }
+   ```
+
+2. **Collection Issues**
+   - Verify file organization
+   - Check frontmatter format
+   - Validate schema definitions
+
+3. **Stream Problems**
+   - Monitor memory usage
+   - Implement pagination
+   - Cache results appropriately
+
+For more help:
+- [Content Collections Guide](/docs/content-collections)
+- [AI Integration Guide](/docs/ai-integration)
+- Support: support@one.ie
