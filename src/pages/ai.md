@@ -11,8 +11,8 @@ categories:
   - Features
   - Demo
 aiProvider: openrouter
-aiModel: qwen/qwen-2.5-72b-instruct:free
-apiEndpoint: https://api.openai.com/v1
+aiModel: google/gemini-2.0-flash-001
+apiEndpoint: https://openrouter.ai/api/v1
 temperature: 0.7
 maxTokens: 4000
 systemPrompt: |
