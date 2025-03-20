@@ -10,8 +10,8 @@ keywords:
 categories:
   - Features
   - Demo
-aiProvider: mistral
-aiModel: mistral-large-latest
+aiProvider: openrouter
+aiModel: qwen/qwen-2.5-72b-instruct:free
 apiEndpoint: https://api.openai.com/v1
 temperature: 0.7
 maxTokens: 4000

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 // Core schema definitions
-const ProviderSchema = z.enum(['openai', 'anthropic', 'mistral', 'ollama'])
+const ProviderSchema = z.enum(['openai', 'anthropic', 'mistral', 'openrouter'])
   .default('mistral');
 
 const ContentPartSchema = z.object({

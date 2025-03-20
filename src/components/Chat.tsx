@@ -121,7 +121,7 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
 
   const { messages, input, handleInputChange, handleSubmit, status, stop, setInput } =
     useChat({
-      api: chatConfig?.api || "/api/chatsimple",
+      api: chatConfig?.api || "/api/openrouter",
       body: {
         config: chatConfig,
         provider: chatConfig?.provider,
