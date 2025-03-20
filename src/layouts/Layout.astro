@@ -34,11 +34,11 @@ const chatConfig = providedConfig ? ChatSchema.parse(providedConfig) : ChatSchem
   layout: "default",
   
   // AI Config
-  aiProvider: "mistral",
-  aiModel: "mistral-large-latest",
+  aiProvider: "openrouter",
+  aiModel: "google/gemini-2.0-flash-001",
   apiEndpoint: "https://api.openai.com/v1",
   temperature: 0.7,
-  maxTokens: 2000,
+  maxTokens: 999999,
   
   // Prompt Config
   systemPrompt: [{

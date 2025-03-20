@@ -40,11 +40,11 @@ const BaseChatSchema = z.object({
   categories: z.array(z.string()).optional(),
 
   // AI Config
-  aiProvider: ProviderSchema.optional().default('mistral'),
-  aiModel: z.string().optional().default('mistral-large-latest'),
+  aiProvider: ProviderSchema.optional().default('openrouter'),
+  aiModel: z.string().optional().default('google/gemini-2.0-flash-001'),
   apiEndpoint: z.string().url().optional().default('https://api.openai.com/v1'),
   temperature: z.number().min(0).max(2).optional().default(0.7),
-  maxTokens: z.number().min(1).max(114000).optional().default(2000),
+  maxTokens: z.number().min(1).max(999999).optional().default(999999),
   
   // Prompt Config
   systemPrompt: SystemPromptSchema.optional(),
@@ -87,13 +87,13 @@ function combinePrompts(config: BaseChat): ContentPart[] {
 
   // Add system prompt (1.md) if enabled
   if (config.addSystemPrompt) {
-    const systemPrompt = loadPromptContent('src/1/1.md');
+    const systemPrompt = loadPromptContent('src/content/prompts/system.md');
     if (systemPrompt) prompts.push(systemPrompt);
   }
 
   // Add business prompt (business.md) if enabled
   if (config.addBusinessPrompt) {
-    const businessPrompt = loadPromptContent('src/1/business.md');
+    const businessPrompt = loadPromptContent('src/content/prompts/business.md');
     if (businessPrompt) prompts.push(businessPrompt);
   }
 
