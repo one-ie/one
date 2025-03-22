@@ -10,115 +10,171 @@ import { Progress } from "../components/ui/progress";
 import { Separator } from "../components/ui/separator";
 import { CountdownTimer } from "../components/CountdownTimer";
 
-const title = "Build Your First AI Agent in 1 Hour";
-const description = "Learn to create intelligent AI assistants that can talk to customers, generate content, and automate tasks—even if you have zero coding experience";
+const title = "AI Marketing Revolution: Automate, Convert, and Scale Your Revenue";
+const description = "Discover the exact AI systems top marketers are using to automate their work, dominate search rankings, and convert visitors into high-paying customers";
 
 // Countdown timer calculation
-const launchDate = new Date("April 1, 2025").getTime();
+const launchDate = new Date("March 25, 2024").getTime();
 
 // Course details
 const courseDetails = {
-  badge: "Launch Special: One-Time Payment",
-  title: "Build Your First AI Agent in 1 Hour",
-  subtitle: "Create intelligent AI assistants that work for your business 24/7",
-  originalPrice: "197",
-  currentPrice: "100",
-  guarantee: "30-Day 100% Money-Back Guarantee",
-  ctaText: "Reserve Your Spot Now",
-  valueProposition: "No coding required. Just follow along and have a working AI agent in 60 minutes.",
+  badge: "Launch Special: 72-Hour Only",
+  title: "AI Marketing Revolution",
+  subtitle: "Generate More Traffic, Conversions, and Sales in Half the Time",
+  originalPrice: "1,997",
+  currentPrice: "997",
+  guarantee: "30-Day Implementation Guarantee",
+  ctaText: "Secure Your Spot Now",
+  valueProposition: "Join the AI marketing revolution and transform your business with automated systems that work 24/7.",
   spots: {
-    total: 10,
-    remaining: 8
+    total: 100,
+    remaining: 25
   },
-  launchDate: "April 1, 2025"
+  launchDate: "March 25, 2024"
 };
 
-// Course modules data - simplified for 1-hour course
+// Course modules data
 const courseModulesData = [
   {
-    title: "Setup & Foundation (15 minutes)",
-    description: "Get everything ready quickly",
+    title: "AI Marketing Foundations That Drive Real ROI",
+    description: "Master essential AI tools and strategies",
     lessons: [
-      { name: "AI Platform Setup", value: "Connect to OpenAI or Claude in 5 minutes" },
-      { name: "Agent Structure", value: "The 3-part framework for effective agents" },
-      { name: "Environment Configuration", value: "Set up your workspace for success" }
+      { name: "AI Marketing Terminology", value: "Learn the key concepts that matter for your bottom line" },
+      { name: "Top AI Tools", value: "Discover the exact tools top marketers use" },
+      { name: "Ethical AI Practices", value: "Build customer trust and boost conversion rates" }
     ]
   },
   {
-    title: "Agent Intelligence Design (20 minutes)",
-    description: "Make your AI smart and effective",
+    title: "AI-Powered Market Intelligence",
+    description: "Uncover hidden opportunities",
     lessons: [
-      { name: "Prompt Engineering", value: "Create clear instructions your AI will follow" },
-      { name: "Knowledge Integration", value: "Teach your AI about your business" },
-      { name: "Personality Design", value: "Give your AI a consistent voice and style" }
+      { name: "AI Research Tools", value: "Extract actionable insights your competitors miss" },
+      { name: "Customer Segmentation", value: "Build segments that spend 3X more" },
+      { name: "Buyer Personas", value: "Develop hyper-accurate customer profiles" }
     ]
   },
   {
-    title: "Deployment & Testing (25 minutes)",
-    description: "Get your agent live and working",
+    title: "Content Creation That Converts",
+    description: "Generate high-converting content",
     lessons: [
-      { name: "Web Integration", value: "Add your agent to any website in minutes" },
-      { name: "Conversation Testing", value: "Ensure your agent handles questions correctly" },
-      { name: "Performance Optimization", value: "Make your agent faster and more reliable" }
+      { name: "Copywriting", value: "Create content that drives immediate action" },
+      { name: "SEO Optimization", value: "Rank in top search positions consistently" },
+      { name: "Visual Content", value: "Design engaging visuals that increase engagement" }
+    ]
+  },
+  {
+    title: "Email Sequences That Convert",
+    description: "Build powerful email automation",
+    lessons: [
+      { name: "Personalization", value: "Achieve 40%+ open rates with AI" },
+      { name: "Subject Lines", value: "Outperform industry benchmarks consistently" },
+      { name: "Behavior Triggers", value: "Send emails at perfect moments" }
+    ]
+  },
+  {
+    title: "Social Media Strategies",
+    description: "Build profitable audiences",
+    lessons: [
+      { name: "AI Listening", value: "Identify viral trends before they explode" },
+      { name: "Content Calendar", value: "Create engagement-optimized schedules" },
+      { name: "Community Building", value: "Build self-sustaining sales channels" }
+    ]
+  },
+  {
+    title: "Conversational Marketing",
+    description: "Close deals 24/7",
+    lessons: [
+      { name: "Sales Chatbots", value: "Qualify leads while you sleep" },
+      { name: "Conversation Flows", value: "Convert at 3X your current rate" },
+      { name: "Support AI", value: "Turn support into sales opportunities" }
+    ]
+  },
+  {
+    title: "SEO Domination Strategies",
+    description: "Drive buying traffic",
+    lessons: [
+      { name: "Keyword Research", value: "Find untapped high-converting keywords" },
+      { name: "Content Ranking", value: "Get top 3 positions within 30 days" },
+      { name: "Technical SEO", value: "Double your organic traffic" }
+    ]
+  },
+  {
+    title: "Paid Advertising That Converts",
+    description: "Maximize ad ROI",
+    lessons: [
+      { name: "AI Copy Generation", value: "Beat control versions consistently" },
+      { name: "Budget Optimization", value: "Reduce CPA by up to 50%" },
+      { name: "Bid Management", value: "Use 7-figure agency strategies" }
     ]
   }
 ];
 
 // What you'll learn
 const learningOutcomes = [
-  "Create AI agents that can answer customer questions 24/7",
-  "Design effective prompts that guide AI behavior",
-  "Integrate your business knowledge into your AI assistant",
-  "Deploy your agent on websites, social media, or messaging platforms",
-  "Test and optimize your agent's performance",
-  "Scale your AI capabilities as your business grows"
+  "Generate high-converting copy in minutes, not hours",
+  "Create content strategies backed by predictive data",
+  "Build email sequences that adapt to each subscriber",
+  "Discover untapped keywords your competitors haven't found",
+  "Optimize your ad spend with precision targeting",
+  "Automate 70% of your repetitive marketing tasks",
+  "Scale your marketing efforts without hiring additional team members",
+  "Build complete AI marketing systems that run 24/7"
 ];
 
 // Bonuses
 const bonuses = [
   {
-    title: "50 Ready-to-Use AI Prompts",
-    description: "Copy-paste prompts for sales, support, content creation, and more",
-    value: "$97 Value"
+    title: "AI Template Library",
+    description: "100+ ready-to-use templates for every marketing function",
+    value: "$997 Value"
   },
   {
-    title: "AI Agent Analytics Dashboard",
-    description: "Track performance and improve your agent with data insights",
-    value: "$147 Value"
+    title: "The ELEVATE with AI Framework",
+    description: "Our proprietary system used by 7-figure agencies",
+    value: "$1,497 Value"
   },
   {
-    title: "Private Community Access",
-    description: "Join our exclusive community of AI builders for ongoing support",
-    value: "$197 Value"
+    title: "AI Automation Server with n8n",
+    description: "Complete setup with pre-built workflows",
+    value: "$797 Value"
+  },
+  {
+    title: "Customizable Chatbot Templates",
+    description: "Ready-to-deploy chatbots for leads and sales",
+    value: "$497 Value"
+  },
+  {
+    title: "Web Chat Integration Guide",
+    description: "Add AI-powered chat to your website",
+    value: "$397 Value"
   }
 ];
-
 
 // FAQs
 const faqs = [
   {
-    title: "Do I need coding experience?",
-    content: "No coding experience is required. The course is specifically designed for non-technical business owners and professionals. We use no-code tools and provide step-by-step instructions."
+    title: "Is this course suitable for beginners to AI?",
+    content: "Absolutely! The course is specifically designed to take you from AI novice to marketing automation expert with no prior experience required. We start with the fundamentals and progress to advanced applications."
   },
   {
-    title: "How long will it take to build my first AI agent?",
-    content: "As the title suggests, you'll have your first working AI agent in about 60 minutes. The course is structured to be completed in a single sitting, with clear milestones along the way."
+    title: "How quickly can I implement these strategies?",
+    content: "The course is intentionally fast-paced and designed for immediate implementation. Many students set up their first AI workflows within 24 hours of starting the course. Our step-by-step video tutorials make implementation straightforward."
   },
   {
-    title: "What can my AI agent do?",
-    content: "Your AI agent can handle customer inquiries, generate content, qualify leads, provide product recommendations, and automate repetitive tasks. The specific capabilities depend on how you configure it for your business needs."
+    title: "Do I need technical experience?",
+    content: "No technical background is required. The course is designed for marketers at all technical levels, with step-by-step instructions for setting up each tool and workflow. We use n8n for automation, which has an intuitive visual interface that requires no coding."
   },
   {
-    title: "Will this work for my specific business?",
-    content: "Yes! The course teaches universal principles that apply to any business type. We include examples for e-commerce, service businesses, content creators, consultants, and more."
+    title: "How long do I have access to the course materials?",
+    content: "You receive lifetime access to all course materials, including future updates as AI tools evolve and new strategies emerge."
   },
   {
-    title: "What ongoing costs are there?",
-    content: "The course itself is a one-time payment. Your AI agent will require an API subscription with OpenAI or Anthropic, which typically costs $10-20/month for most small businesses based on usage."
+    title: "What tools will I need to purchase?",
+    content: "The course focuses on maximizing value from affordable tools. We recommend a budget of $50-100/month for essential AI tools, though many students start with even less. We provide detailed guidance on which tools provide the best ROI for your specific situation."
   },
   {
-    title: "What if I'm not satisfied with the course?",
-    content: "We offer a 30-day 100% money-back guarantee. If you're not completely satisfied, simply email us for a full refund, no questions asked."
+    title: "How is this different from other AI marketing courses?",
+    content: "Unlike courses that simply teach you how to use ChatGPT for marketing, this system shows you how to build integrated AI marketing ecosystems using n8n and other tools. We include ready-to-deploy chatbots, web chat integration, and automation templates that give you immediate results."
   }
 ];
 
@@ -130,259 +186,267 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
 ---
 
 <Layout title={title} description={description}>
-  <!-- Hero Section -->
-  <section class="pt-20 pb-16 md:pt-28 md:pb-20">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-      <div class="text-center mb-12">
-        <Badge variant="outline" className="mb-4 text-blue-400 border-blue-400/30 bg-blue-400/10">
-          {courseDetails.badge}
-        </Badge>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
-          {courseDetails.title}
-        </h1>
-        <p class="text-xl md:text-2xl text-[#aaaaaa] max-w-3xl mx-auto mb-8">
-          {courseDetails.subtitle}
-        </p>
-        <p class="text-lg text-[#888888] max-w-2xl mx-auto">
-          {courseDetails.valueProposition}
-        </p>
-      </div>
+  <main class="min-h-screen bg-background">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col justify-center py-20 lg:py-32 overflow-hidden">
+      <!-- Background Elements -->
+      <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-primary/2 to-transparent pointer-events-none" />
+      <div class="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       
-      <!-- Countdown Timer -->
-      <div class="mb-12">
-        <h3 class="text-xl font-medium text-white text-center mb-6">Course Starts 1 April 2025 ... in:</h3>
-        <CountdownTimer targetDate={launchDate} className="mb-8" client:visible />
-        
-        <div class="max-w-md mx-auto">
-          <div class="mb-2 flex justify-between text-sm text-[#888888]">
-            <span>Spots Filled</span>
-            <span>{courseDetails.spots.total - courseDetails.spots.remaining}/{courseDetails.spots.total}</span>
-          </div>
-          <Progress value={(courseDetails.spots.total - courseDetails.spots.remaining) / courseDetails.spots.total * 100} className="h-2 mb-6" />
-          <p class="text-center text-[#888888] text-sm">
-            Only <span class="text-white font-medium">{courseDetails.spots.remaining} spots</span> remaining for this cohort
-          </p>
-        </div>
-      </div>
-      
-      <!-- CTA Button -->
-      <div class="text-center mb-12">
-        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl">
-          {courseDetails.ctaText}
-          <ArrowRightIcon className="ml-2 w-5 h-5" />
-        </Button>
-        <p class="mt-4 text-[#888888] text-sm">{courseDetails.guarantee}</p>
-      </div>
-    </div>
-  </section>
-  
-  <!-- What You'll Learn Section -->
-  <section class="py-20 bg-[#0e0e0e]">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">What You'll Learn</h2>
-        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto">
-          In just 60 minutes, you'll gain the skills to create AI agents that work for your business 24/7
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-2 gap-6">
-        {learningOutcomes.map((outcome) => (
-          <div class="flex items-start gap-4 bg-[#1a1a1a] border border-[#333333] p-6 rounded-xl">
-            <div class="w-10 h-10 rounded-full bg-blue-600/10 flex-shrink-0 flex items-center justify-center">
-              <CheckIcon className="w-5 h-5 text-blue-500" />
-            </div>
-            <p class="text-[#dddddd]">{outcome}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-  
-  <!-- Course Curriculum Section -->
-  <section class="py-20">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Course Curriculum</h2>
-        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto">
-          A step-by-step process to build your AI agent in just 60 minutes
-        </p>
-      </div>
-      
-      <div class="space-y-8">
-        {courseModulesData.map((module, index) => (
-          <Card className="bg-[#1a1a1a] border-[#333333] overflow-hidden">
-            <div class="bg-[#222222] p-6">
+      <div class="container px-4 mx-auto relative">
+        <div class="max-w-4xl mx-auto text-center">
+          <!-- Social Proof Banner -->
+          <div class="flex items-center justify-center gap-2 mb-8 animate-fade-in">
+            <div class="flex items-center gap-6 px-4 py-2 rounded-full bg-muted/5 one-glass-dark">
+              <p class="text-sm text-muted-foreground">Trusted by marketers at</p>
               <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-full bg-blue-600/10 flex-shrink-0 flex items-center justify-center">
-                  <span class="text-blue-500 font-bold">{index + 1}</span>
-                </div>
-                <div>
-                  <h3 class="text-xl font-medium text-white">{module.title}</h3>
-                  <p class="text-[#888888]">{module.description}</p>
-                </div>
+                <img src="/logos/google.svg" alt="Google" class="h-4 opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/hubspot.svg" alt="HubSpot" class="h-4 opacity-70 hover:opacity-100 transition-opacity" />
+                <img src="/logos/shopify.svg" alt="Shopify" class="h-4 opacity-70 hover:opacity-100 transition-opacity" />
               </div>
             </div>
-            <div class="p-6">
-              <CourseModuleContent lessons={module.lessons} moduleNumber={index + 1} client:visible />
-            </div>
-          </Card>
-        ))}
-      </div>
-    </div>
-  </section>
-  
-  <!-- Pricing Section -->
-  <section class="py-20 bg-[#0e0e0e]">
-    <div class="max-w-4xl mx-auto px-6 lg:px-8">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Invest in Your AI Future</h2>
-        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto mb-8">
-          One-time payment, lifetime access, no subscriptions
-        </p>
-      </div>
-      
-      <Card className="bg-[#1a1a1a] border-[#333333] p-8 mb-8">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
-          <div>
-            <h3 class="text-2xl font-bold text-white mb-2">Complete AI Agent Course</h3>
-            <p class="text-[#888888]">Everything you need to build your first AI agent</p>
           </div>
-          <div class="text-center md:text-right">
-            <div class="text-[#888888] line-through mb-1">${courseDetails.originalPrice}</div>
-            <div class="text-3xl font-bold text-white">${courseDetails.currentPrice}</div>
-            <div class="text-[#888888] text-sm">One-time payment</div>
-          </div>
-        </div>
-        
-        <Separator className="bg-[#333333] mb-8" />
-        
-        <div class="grid md:grid-cols-2 gap-4 mb-8">
-          <div class="flex items-start gap-3">
-            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span class="text-[#dddddd]">Step-by-step video lessons</span>
-          </div>
-          <div class="flex items-start gap-3">
-            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span class="text-[#dddddd]">Ready-to-use templates</span>
-          </div>
-          <div class="flex items-start gap-3">
-            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span class="text-[#dddddd]">Lifetime access to updates</span>
-          </div>
-          <div class="flex items-start gap-3">
-            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span class="text-[#dddddd]">Private community access</span>
-          </div>
-          <div class="flex items-start gap-3">
-            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span class="text-[#dddddd]">All bonus materials</span>
-          </div>
-          <div class="flex items-start gap-3">
-            <CheckIcon className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span class="text-[#dddddd]">30-day money-back guarantee</span>
-          </div>
-        </div>
-        
-        <Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-lg rounded-xl">
-          {courseDetails.ctaText}
-          <ArrowRightIcon className="ml-2 w-5 h-5" />
-        </Button>
-      </Card>
-      
-      <p class="text-center text-[#888888] text-sm">
-        Secure payment via credit card, PayPal, or crypto
-      </p>
-    </div>
-  </section>
-  
-  <!-- Bonuses Section -->
-  <section class="py-20">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">Exclusive Bonuses</h2>
-        <p class="text-lg text-[#aaaaaa] max-w-2xl mx-auto mb-4">
-          Get these valuable resources when you enroll today
-        </p>
-        <p class="text-xl font-bold text-blue-400">
-          Total Value: ${totalBonusValue}
-        </p>
-      </div>
-      
-      <div class="grid md:grid-cols-3 gap-8">
-        {bonuses.map((bonus, index) => (
-          <div class="relative">
-            <div class="relative bg-[#1a1a1a] border border-[#333333] rounded-2xl p-8 h-full">
-              <div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-[#222222] text-[#aaaaaa] text-sm font-medium">
-                {bonus.value}
-              </div>
-              <div class="w-12 h-12 rounded-full bg-[#222222] border border-[#333333] flex items-center justify-center mb-6">
-                <span class="text-xl font-bold text-[#aaaaaa]">{index + 1}</span>
-              </div>
-              <h3 class="text-xl font-medium text-white mb-3">{bonus.title}</h3>
-              <p class="text-[#888888]">{bonus.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-  
- 
 
-  <!-- FAQ Section -->
-  <section class="py-24 md:py-32">
-    <div class="max-w-3xl mx-auto px-6 lg:px-8">
-      <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white">Frequently Asked Questions</h2>
-      
-      <AccordionWrapper items={faqs} client:visible />
-    </div>
-  </section>
-  
-  <!-- Final CTA Section -->
-  <section class="py-24 md:py-32 bg-[#0e0e0e] relative">
-    <div class="absolute inset-0 overflow-hidden">
-      <div class="absolute -top-[300px] -right-[300px] w-[600px] h-[600px] rounded-full bg-blue-600/5 blur-3xl"></div>
-      <div class="absolute -bottom-[300px] -left-[300px] w-[600px] h-[600px] rounded-full bg-blue-600/5 blur-3xl"></div>
-    </div>
-    
-    <div class="relative max-w-4xl mx-auto px-6 lg:px-8 text-center">
-      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-white">Ready to Build Your First AI Agent?</h2>
-      <p class="text-xl text-[#aaaaaa] mb-10 max-w-2xl mx-auto">
-        Join us and create an intelligent AI assistant for your business in just 60 minutes - even if you have zero coding experience.
-      </p>
-      
-      <div class="mb-8">
-        <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl">
-          {courseDetails.ctaText}
-          <ArrowRightIcon className="ml-2 w-5 h-5" />
-        </Button>
-      </div>
-      
-      <div class="flex flex-col md:flex-row items-center justify-center gap-6 text-[#aaaaaa]">
-        <div class="flex items-center gap-2">
-          <ShieldCheckIcon className="w-5 h-5 text-blue-400" />
-          <span>{courseDetails.guarantee}</span>
+          <!-- Launch Badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-8 one-glass-dark animate-fade-in [--animation-delay:200ms]">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            <span class="text-sm font-medium">Launch Special: 72-Hour Only</span>
+          </div>
+
+          <!-- Main Title -->
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 animate-fade-in [--animation-delay:400ms] leading-[1.1]">
+            AI Marketing Revolution
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="text-xl md:text-2xl lg:text-3xl text-muted-foreground mb-8 animate-fade-in [--animation-delay:600ms] max-w-3xl mx-auto leading-normal">
+            Generate More Traffic, Conversions, and Sales in Half the Time
+          </p>
+
+          <!-- Video Preview -->
+          <div class="relative aspect-video max-w-3xl mx-auto mb-12 rounded-xl overflow-hidden one-glass-card animate-fade-in [--animation-delay:800ms]">
+            <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent" />
+            <img src="/video-placeholder.jpg" alt="AI Marketing Revolution Preview" class="w-full h-full object-cover" />
+            <button class="absolute inset-0 flex items-center justify-center group">
+              <span class="w-20 h-20 flex items-center justify-center rounded-full bg-primary/90 text-white group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" />
+                </svg>
+              </span>
+            </button>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="grid md:grid-cols-3 gap-6 mb-12 animate-fade-in [--animation-delay:1000ms]">
+            <div class="p-6 one-glass-card">
+              <div class="text-3xl font-bold text-primary mb-2">73%</div>
+              <p class="text-sm text-muted-foreground">Reduction in Content Creation Time</p>
+            </div>
+            <div class="p-6 one-glass-card">
+              <div class="text-3xl font-bold text-primary mb-2">3X</div>
+              <p class="text-sm text-muted-foreground">Average Increase in Conversion Rates</p>
+            </div>
+            <div class="p-6 one-glass-card">
+              <div class="text-3xl font-bold text-primary mb-2">42%</div>
+              <p class="text-sm text-muted-foreground">Reduction in Ad Spend</p>
+            </div>
+          </div>
+
+          <!-- CTA Section -->
+          <div class="space-y-8 animate-fade-in [--animation-delay:1200ms]">
+            <!-- Timer -->
+            <div class="max-w-sm mx-auto">
+              <p class="text-sm text-muted-foreground mb-2">Launch Special Ends In:</p>
+              <CountdownTimer targetDate={launchDate} className="mb-4" client:visible />
+            </div>
+
+            <!-- Price -->
+            <div class="flex items-center justify-center gap-4 mb-6">
+              <span class="text-2xl line-through text-muted-foreground">${courseDetails.originalPrice}</span>
+              <span class="text-4xl md:text-5xl font-bold text-primary">${courseDetails.currentPrice}</span>
+            </div>
+
+            <!-- Button -->
+            <Button size="lg" className="text-lg one-button-primary group relative overflow-hidden px-8 py-6">
+              <span class="relative z-10">Secure Your Spot Now</span>
+              <span class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 group-hover:translate-x-full duration-1000 ease-in-out transition-transform"></span>
+              <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+
+            <!-- Trust Indicators -->
+            <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+              <p class="flex items-center gap-2">
+                <ShieldCheckIcon className="w-5 h-5 text-primary" />
+                30-Day Implementation Guarantee
+              </p>
+              <p class="flex items-center gap-2">
+                <UserIcon className="w-5 h-5 text-primary" />
+                Only {courseDetails.spots.remaining} Spots Remaining
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <UserIcon className="w-5 h-5 text-blue-400" />
-          <span>Only {courseDetails.spots.remaining} spots remaining</span>
+      </div>
+    </section>
+
+    <!-- Course Overview -->
+    <section class="py-20 relative">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+      <div class="container px-4 mx-auto relative">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-12">What You'll Learn</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {learningOutcomes.map((outcome) => (
+            <Card className="p-4 one-glass-card">
+              <div class="flex items-start gap-3">
+                <CheckIcon className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
+                <p class="text-sm">{outcome}</p>
+              </div>
+            </Card>
+          ))}
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- Course Modules -->
+    <section class="container mx-auto px-6 py-20 border-t border-border/40">
+      <div class="w-full max-w-[1400px] mx-auto">
+        <h2 class="text-4xl font-bold mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Course Curriculum</h2>
+        {courseModulesData.map((module, index) => (
+          <div data-key={index} class="mb-12">
+            <h3 class="text-2xl font-bold mb-6">Module {index + 1}: {module.title}</h3>
+            <p class="text-lg text-muted-foreground mb-6">{module.description}</p>
+            <CourseModuleContent client:visible lessons={module.lessons} moduleNumber={index + 1} />
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Bonuses -->
+    <section class="py-20">
+      <div class="container px-4 mx-auto">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-4">Exclusive Bonuses</h2>
+        <p class="text-xl text-center text-muted-foreground mb-12">
+          Total Value: ${totalBonusValue.toLocaleString()}
+        </p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {bonuses.map((bonus) => (
+            <Card className="p-6">
+              <h3 class="text-xl font-semibold mb-2">{bonus.title}</h3>
+              <p class="text-muted-foreground mb-4">{bonus.description}</p>
+              <p class="text-primary font-semibold">{bonus.value}</p>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQs -->
+    <section class="py-20">
+      <div class="container px-4 mx-auto">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+        <div class="max-w-3xl mx-auto">
+          <AccordionWrapper items={faqs} client:visible />
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-20">
+      <div class="container px-4 mx-auto text-center">
+        <h2 class="text-3xl lg:text-4xl font-bold mb-6">Ready to Transform Your Marketing?</h2>
+        <p class="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          Join the AI marketing revolution and start generating more traffic, conversions, and sales in half the time.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button size="lg" className="text-lg">
+            {courseDetails.ctaText}
+            <ArrowRightIcon className="ml-2 h-5 w-5" />
+          </Button>
+          <Button size="lg" variant="outline" className="text-lg">
+            View Course Details
+          </Button>
+        </div>
+        <p class="text-sm text-muted-foreground mt-6">
+          <ShieldCheckIcon className="inline-block w-4 h-4 mr-1" />
+          {courseDetails.guarantee}
+        </p>
+      </div>
+    </section>
+  </main>
 </Layout>
 
 <style>
-  /* Add any custom styles here */
-  @keyframes border-beam {
-    0% {
-      transform: translateZ(0) rotate(0);
+  /* Enhanced animations */
+  .animate-fade-in {
+    opacity: 0;
+    animation: fade-in 0.5s ease-out forwards;
+    animation-delay: var(--animation-delay, 0ms);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
-    100% {
-      transform: translateZ(0) rotate(360deg);
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
-</style>
 
+  /* Enhanced glass effect */
+  .one-glass-dark {
+    backdrop-filter: blur(12px);
+    background: linear-gradient(
+      to right,
+      hsla(var(--primary) / 0.1),
+      hsla(var(--primary) / 0.05)
+    );
+    border: 1px solid hsla(var(--primary) / 0.1);
+    box-shadow: 
+      0 4px 12px hsla(var(--primary) / 0.1),
+      inset 0 0 0 1px hsla(var(--primary) / 0.1);
+  }
 
+  .one-glass-card {
+    backdrop-filter: blur(16px);
+    background: linear-gradient(
+      to bottom right,
+      hsla(var(--card) / 0.8),
+      hsla(var(--card) / 0.4)
+    );
+    border: 1px solid hsla(var(--primary) / 0.1);
+    border-radius: var(--radius);
+    box-shadow: 
+      0 4px 20px hsla(var(--primary) / 0.1),
+      inset 0 0 0 1px hsla(var(--primary) / 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .one-glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 30px hsla(var(--primary) / 0.15),
+      inset 0 0 0 1px hsla(var(--primary) / 0.1);
+  }
+
+  /* Button hover effect */
+  .one-button-primary {
+    background: linear-gradient(
+      to right,
+      hsl(var(--primary)),
+      hsl(var(--primary) / 0.8)
+    );
+    transition: all 0.3s ease;
+  }
+
+  .one-button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 20px hsla(var(--primary) / 0.2),
+      0 2px 4px hsla(var(--primary) / 0.1);
+  }
+</style> 
