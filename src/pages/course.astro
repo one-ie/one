@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Card, CardHeader, CardContent, CardFooter } from "../components/ui/card";
-import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon, StarIcon, BoltIcon, AwardIcon, LightbulbIcon, SparklesIcon, XIcon, DollarSignIcon, GiftIcon } from "lucide-react";
+import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon, StarIcon, BoltIcon, AwardIcon, LightbulbIcon, SparklesIcon, XIcon, DollarSignIcon, GiftIcon, TrendingUpIcon, ZapIcon, RocketIcon, TargetIcon, ChevronRightIcon, HeartIcon, ClockIcon, UsersIcon } from "lucide-react";
 import { AccordionWrapper } from "../components/AccordionWrapper";
 import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
@@ -187,20 +187,21 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
 
 <Layout title={title} description={description}>
   <main class="min-h-screen bg-background relative overflow-hidden">
-    <!-- Background elements that span the entire page -->
-    <div class="absolute top-0 right-0 -z-10 w-full aspect-square max-w-[1000px] opacity-30 blur-3xl bg-gradient-to-bl from-primary/20 via-primary/5 to-transparent"></div>
-    <div class="absolute bottom-0 left-0 -z-10 w-full aspect-square max-w-[1000px] opacity-20 blur-3xl bg-gradient-to-tr from-primary/20 via-primary/5 to-transparent"></div>
+    <!-- Enhanced Background elements with subtle animations -->
+    <div class="absolute top-0 right-0 -z-10 w-full aspect-square max-w-[1000px] opacity-30 blur-3xl bg-gradient-to-bl from-primary/20 via-primary/5 to-transparent animate-pulse-slow"></div>
+    <div class="absolute bottom-0 left-0 -z-10 w-full aspect-square max-w-[1000px] opacity-20 blur-3xl bg-gradient-to-tr from-primary/20 via-primary/5 to-transparent animate-pulse-slow animation-delay-2000"></div>
+    <div class="absolute inset-0 -z-10 bg-noise opacity-[0.02] mix-blend-overlay pointer-events-none"></div>
     
     <!-- Hero Section -->
     <section class="relative min-h-screen flex flex-col justify-center py-20 lg:py-32 overflow-hidden">
       <!-- Background Elements -->
-      <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white,transparent)] pointer-events-none opacity-10"></div>
+      <div class="absolute inset-0 bg-grid-pattern [mask-image:linear-gradient(to_bottom,white,transparent)] pointer-events-none opacity-[0.03]"></div>
       <div class="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
       
       <div class="container px-4 mx-auto relative @container">
         <div class="max-w-4xl mx-auto text-center">
           <!-- Social Proof Banner -->
-          <div class="inline-flex items-center gap-6 px-5 py-2.5 rounded-full bg-card/40 backdrop-blur-xl border border-border/30 mb-8 animate-fade-in shadow-sm">
+          <div class="inline-flex items-center gap-6 px-5 py-2.5 rounded-full bg-glass border border-white/10 mb-8 animate-fade-in shadow-glass">
             <p class="text-sm text-muted-foreground">Trusted by marketers at</p>
             <div class="flex items-center gap-5">
               <img src="/logos/google.svg" alt="Google" class="h-4 opacity-70 hover:opacity-100 transition-opacity" />
@@ -210,16 +211,17 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
           </div>
 
           <!-- Launch Badge -->
-          <Badge variant="outline" className="gap-2 px-4 py-1.5 text-sm font-medium rounded-full bg-primary/5 text-primary border-primary/20 mb-8 backdrop-blur-xl animate-fade-in [--animation-delay:200ms] shadow-glow-sm">
+          <Badge variant="outline" className="gap-2 px-4 py-2 text-sm font-medium rounded-full bg-glass border-white/10 mb-8 animate-fade-in [--animation-delay:200ms] shadow-glass group hover:bg-glass-hover transition-all">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             <span>Launch Special: 72-Hour Only</span>
+            <RocketIcon className="w-3.5 h-3.5 ml-1 text-primary/80 group-hover:translate-x-0.5 transition-transform" />
           </Badge>
 
           <!-- Main Title -->
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-foreground animate-fade-in [--animation-delay:400ms] leading-[1.1] gradient-heading">
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-foreground animate-fade-in [--animation-delay:400ms] leading-[1.1] gradient-heading pb-1">
             AI Marketing Revolution
           </h1>
 
@@ -229,11 +231,11 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
           </p>
 
           <!-- Video Preview -->
-          <div class="relative aspect-video max-w-3xl mx-auto mb-14 rounded-xl overflow-hidden animate-fade-in [--animation-delay:800ms] shadow-2xl shadow-primary/10 border border-border/40 backdrop-blur-sm bg-card/30">
+          <div class="relative aspect-video max-w-3xl mx-auto mb-14 rounded-xl overflow-hidden animate-fade-in [--animation-delay:800ms] shadow-glass-lg border border-white/10 glass-morphism group">
             <div class="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent"></div>
-            <img src="/video-placeholder.jpg" alt="AI Marketing Revolution Preview" class="w-full h-full object-cover" />
+            <img src="/video-placeholder.jpg" alt="AI Marketing Revolution Preview" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700" />
             <button class="absolute inset-0 flex items-center justify-center group">
-              <span class="w-20 h-20 flex items-center justify-center rounded-full bg-primary/90 text-white group-hover:bg-primary group-hover:scale-110 transition-all duration-300 shadow-xl">
+              <span class="w-20 h-20 flex items-center justify-center rounded-full bg-primary/90 text-white group-hover:bg-primary group-hover:scale-110 transition-all duration-500 shadow-xl relative z-10 before:absolute before:inset-0 before:rounded-full before:bg-primary/40 before:animate-ping-slow before:z-[-1]">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <polygon points="5 3 19 12 5 21 5 3" fill="currentColor" />
                 </svg>
@@ -243,16 +245,31 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
 
           <!-- Stats Grid -->
           <div class="grid md:grid-cols-3 gap-6 mb-12 animate-fade-in [--animation-delay:1000ms]">
-            <Card className="p-6 bg-card/40 backdrop-blur-md border-border/30 hover:bg-card/60 transition-all group">
-              <div class="text-3xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">73%</div>
+            <Card className="p-6 glass-card hover:glass-card-hover border-white/10 group transition-all duration-500">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="bg-primary/10 rounded-full p-2 text-primary">
+                  <TrendingUpIcon className="w-5 h-5" />
+                </div>
+              </div>
+              <div class="text-3xl font-bold text-primary mb-2 group-hover:scale-110 group-hover:translate-y-[-2px] transition-transform duration-500">73%</div>
               <p class="text-sm text-muted-foreground">Reduction in Content Creation Time</p>
             </Card>
-            <Card className="p-6 bg-card/40 backdrop-blur-md border-border/30 hover:bg-card/60 transition-all group">
-              <div class="text-3xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">3X</div>
+            <Card className="p-6 glass-card hover:glass-card-hover border-white/10 group transition-all duration-500">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="bg-primary/10 rounded-full p-2 text-primary">
+                  <ZapIcon className="w-5 h-5" />
+                </div>
+              </div>
+              <div class="text-3xl font-bold text-primary mb-2 group-hover:scale-110 group-hover:translate-y-[-2px] transition-transform duration-500">3X</div>
               <p class="text-sm text-muted-foreground">Average Increase in Conversion Rates</p>
             </Card>
-            <Card className="p-6 bg-card/40 backdrop-blur-md border-border/30 hover:bg-card/60 transition-all group">
-              <div class="text-3xl font-bold text-primary mb-2 group-hover:scale-110 transition-transform">42%</div>
+            <Card className="p-6 glass-card hover:glass-card-hover border-white/10 group transition-all duration-500">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="bg-primary/10 rounded-full p-2 text-primary">
+                  <DollarSignIcon className="w-5 h-5" />
+                </div>
+              </div>
+              <div class="text-3xl font-bold text-primary mb-2 group-hover:scale-110 group-hover:translate-y-[-2px] transition-transform duration-500">42%</div>
               <p class="text-sm text-muted-foreground">Reduction in Ad Spend</p>
             </Card>
           </div>
@@ -260,33 +277,45 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
           <!-- CTA Section -->
           <div class="space-y-8 animate-fade-in [--animation-delay:1200ms]">
             <!-- Timer -->
-            <div class="max-w-sm mx-auto">
-              <p class="text-sm text-muted-foreground mb-2">Launch Special Ends In:</p>
-              <CountdownTimer targetDate={launchDate} className="mb-4" client:visible />
+            <div class="max-w-sm mx-auto glass-pill px-6 py-3 rounded-full">
+              <div class="flex items-center justify-center gap-2 text-primary mb-2">
+                <ClockIcon className="w-4 h-4" />
+                <p class="text-sm">Launch Special Ends In:</p>
+              </div>
+              <CountdownTimer targetDate={launchDate} className="mb-1" client:visible />
             </div>
 
             <!-- Price -->
             <div class="flex items-center justify-center gap-4 mb-6">
               <span class="text-2xl line-through text-muted-foreground opacity-70">${courseDetails.originalPrice}</span>
-              <span class="text-4xl md:text-5xl font-bold text-primary">${courseDetails.currentPrice}</span>
+              <span class="text-4xl md:text-5xl font-bold text-primary relative">
+                ${courseDetails.currentPrice}
+                <span class="absolute -top-3 -right-3 rotate-12 text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-md">
+                  <HeartIcon className="w-3 h-3 inline-block mr-0.5" />Save 50%
+                </span>
+              </span>
             </div>
 
             <!-- Button -->
             <Button size="lg" className="text-lg shadow-glow relative overflow-hidden px-8 py-7 rounded-xl font-medium group">
-              <span class="relative z-10">{courseDetails.ctaText}</span>
-              <span class="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary group-hover:from-primary group-hover:to-primary/80 transition-colors duration-300"></span>
-              <span class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.1)_0%,_transparent_60%)] blur-sm transition-opacity duration-500"></span>
+              <span class="relative z-10 flex items-center">{courseDetails.ctaText}</span>
+              <span class="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary bg-[length:200%_100%] group-hover:bg-position-100 transition-[background-position] duration-500"></span>
+              <span class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.2)_0%,_transparent_60%)] blur-sm transition-opacity duration-500"></span>
               <ArrowRightIcon className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
 
             <!-- Trust Indicators -->
             <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
               <p class="flex items-center gap-2">
-                <ShieldCheckIcon className="w-5 h-5 text-primary" />
+                <div class="bg-primary/10 p-1.5 rounded-full">
+                  <ShieldCheckIcon className="w-4 h-4 text-primary" />
+                </div>
                 30-Day Implementation Guarantee
               </p>
               <p class="flex items-center gap-2">
-                <UserIcon className="w-5 h-5 text-primary" />
+                <div class="bg-primary/10 p-1.5 rounded-full">
+                  <UsersIcon className="w-4 h-4 text-primary" />
+                </div>
                 Only {courseDetails.spots.remaining} Spots Remaining
               </p>
             </div>
@@ -310,7 +339,7 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
               "Watching your workload grow while your results plateau or decline",
               "Losing sleep over constantly changing algorithms and platforms"
             ].map((point) => (
-              <Card className="p-6 bg-card/30 backdrop-blur-sm border-border/30 hover:bg-card/40 transition-colors group">
+              <Card className="p-6 glass-card border-white/10 hover:glass-card-hover transition-all duration-500 group">
                 <div class="flex items-start gap-3">
                   <span class="text-destructive group-hover:scale-110 transition-transform">❌</span>
                   <p class="text-base text-muted-foreground">{point}</p>
@@ -318,7 +347,7 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
               </Card>
             ))}
           </div>
-          <p class="text-center text-lg text-muted-foreground mt-10 max-w-2xl mx-auto">
+          <p class="text-center text-lg text-muted-foreground mt-10 max-w-2xl mx-auto glass-pill px-6 py-3 rounded-full mt-14 animate-fade-in animation-delay-500">
             If you nodded to any of these, you're not alone. The marketing landscape has changed dramatically, but there's a revolution happening right now that's changing everything...
           </p>
         </div>
@@ -326,11 +355,11 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
     </section>
 
     <!-- Solution Section -->
-    <section class="py-20 relative bg-gradient-to-b from-transparent via-primary/5 to-transparent">
+    <section class="py-20 relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-transparent before:via-primary/5 before:to-transparent before:pointer-events-none">
       <div class="container px-4 mx-auto relative @container">
-        <div class="max-w-4xl mx-auto text-center mb-16">
-          <Badge variant="outline" className="mb-6 inline-flex gap-2 px-4 py-1.5 rounded-full bg-primary/5 border-primary/20 backdrop-blur-xl">
-            <SparklesIcon className="w-4 h-4 text-primary" />
+        <div class="max-w-4xl mx-auto text-center mb-16 animate-fade-in">
+          <Badge variant="outline" className="mb-6 inline-flex gap-2 px-4 py-2 rounded-full glass-pill shadow-glass group hover:bg-glass-hover transition-all">
+            <SparklesIcon className="w-4 h-4 text-primary group-hover:rotate-12 transition-transform" />
             <span>The Revolution</span>
           </Badge>
           <h2 class="text-3xl lg:text-5xl font-bold mb-6 gradient-heading">How Smart Marketers Are Using AI to Triple Their Output</h2>
@@ -344,42 +373,45 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
             {
               title: "Generate High-Converting Copy",
               description: "Creating emails, ads, and content that consistently outperforms human-only writing",
-              icon: "✍️"
+              icon: <span class="text-4xl">✍️</span>
             },
             {
               title: "Develop Data-Backed Strategies",
               description: "Knowing which topics will drive traffic before investing time creating them",
-              icon: "📊"
+              icon: <TrendingUpIcon className="w-10 h-10 text-primary/80" />
             },
             {
               title: "Build Adaptive Email Sequences",
               description: "Delivering the right message at the perfect moment based on behavior",
-              icon: "📧"
+              icon: <span class="text-4xl">📧</span>
             },
             {
               title: "Discover Hidden Keywords",
               description: "Finding high-intent, low-competition search terms that drive buying traffic",
-              icon: "🔍"
+              icon: <TargetIcon className="w-10 h-10 text-primary/80" />
             },
             {
               title: "Optimize Ad Spend",
               description: "Targeting your ideal customers with messaging that speaks directly to their needs",
-              icon: "💰"
+              icon: <span class="text-4xl">💰</span>
             },
             {
               title: "Scale Your Impact",
               description: "Automating repetitive tasks while maintaining quality and consistency",
-              icon: "📈"
+              icon: <RocketIcon className="w-10 h-10 text-primary/80" />
             }
           ].map((feature) => (
-            <Card className="group hover:shadow-xl transition-all duration-300 border-border/30 bg-card/30 backdrop-blur-sm hover:bg-card/50">
+            <Card className="group glass-card hover:glass-card-hover border-white/10 transition-all duration-500 overflow-hidden">
               <CardHeader>
-                <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">{feature.icon}</div>
-                <h3 class="text-xl font-semibold">{feature.title}</h3>
+                <div class="flex items-center justify-center h-16 mb-2 group-hover:scale-110 group-hover:translate-y-[-2px] transition-transform duration-500">
+                  {feature.icon}
+                </div>
+                <h3 class="text-xl font-semibold group-hover:text-primary transition-colors">{feature.title}</h3>
               </CardHeader>
               <CardContent>
                 <p class="text-muted-foreground">{feature.description}</p>
               </CardContent>
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/0 via-primary/40 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </Card>
           ))}
         </div>
@@ -795,6 +827,24 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.2), 
                   0 0 20px rgba(var(--primary-rgb), 0.05);
     }
+    
+    .shadow-glass {
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 
+                  0 1px 2px rgba(255, 255, 255, 0.05);
+    }
+    
+    .shadow-glass-lg {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 
+                  0 1px 2px rgba(255, 255, 255, 0.05);
+    }
+    
+    .animation-delay-500 {
+      animation-delay: 500ms;
+    }
+    
+    .animation-delay-2000 {
+      animation-delay: 2000ms;
+    }
   }
 
   :root {
@@ -807,12 +857,52 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       linear-gradient(to right, hsla(var(--border) / 0.05) 1px, transparent 1px),
       linear-gradient(to bottom, hsla(var(--border) / 0.05) 1px, transparent 1px);
   }
+  
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 
   .gradient-heading {
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     background-image: linear-gradient(to right, hsl(var(--foreground)), hsl(var(--foreground) / 0.8));
+    position: relative;
+  }
+  
+  .glass-morphism {
+    backdrop-filter: blur(8px);
+    background: rgba(10, 10, 10, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: all 0.5s ease;
+  }
+  
+  .glass-card {
+    backdrop-filter: blur(16px);
+    background: rgba(30, 30, 30, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: all 0.5s ease;
+  }
+  
+  .glass-card-hover {
+    background: rgba(40, 40, 40, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  .glass-pill {
+    backdrop-filter: blur(12px);
+    background: rgba(30, 30, 30, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  
+  .bg-glass {
+    backdrop-filter: blur(12px);
+    background: rgba(30, 30, 30, 0.2);
+  }
+  
+  .bg-glass-hover {
+    background: rgba(40, 40, 40, 0.3);
   }
 
   /* Enhanced animations */
@@ -820,6 +910,19 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
     opacity: 0;
     animation: fade-in 0.5s ease-out forwards;
     animation-delay: var(--animation-delay, 0ms);
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 8s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 0.3;
+    }
   }
 
   @keyframes fade-in {
@@ -832,6 +935,21 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       transform: translateY(0);
     }
   }
+  
+  @keyframes ping-slow {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.6;
+    }
+    70%, 100% {
+      transform: scale(1.7);
+      opacity: 0;
+    }
+  }
+  
+  .animate-ping-slow {
+    animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
 
   @keyframes gradient-shift {
     0% { background-position: 0% 50%; }
@@ -842,5 +960,9 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
   .bg-gradient-to-r {
     background-size: 200% auto;
     animation: gradient-shift 8s ease infinite;
+  }
+  
+  .group:hover .bg-position-100 {
+    background-position: 100% 0;
   }
 </style> 
