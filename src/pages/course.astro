@@ -12,6 +12,8 @@ import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
 import { Separator } from "../components/ui/separator";
 import { CountdownTimer } from "../components/CountdownTimer";
+import HowItWorks from "../components/HowItWorks.astro";
+import MeetYourMarketingTeam from "../components/MeetYourMarketingTeam.astro";
 
 const title = "AI Marketing Revolution: Automate, Convert, and Scale Your Revenue";
 const description = "Discover the exact AI systems top marketers are using to automate their work, dominate search rankings, and convert visitors into high-paying customers";
@@ -22,7 +24,7 @@ const launchDate = "2025-04-11T00:00:00";  // Using ISO date format for better c
 // Course details
 const courseDetails = {
   badge: "Launch Special: 72-Hour Only",
-  title: "AI Marketing Revolution",
+  title: "AI Marketing Course",
   subtitle: "Generate More Traffic, Conversions, and Sales in Half the Time",
   originalPrice: "1,997",
   currentPrice: "997",
@@ -197,8 +199,6 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
 
 <Layout title={title} description={description}>
   <main class="min-h-screen bg-background">
-   
-    
     <HeroSection
       client:load
       title={courseDetails.title}
@@ -208,6 +208,8 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       }}
       description={description}
     />
+
+    <MeetYourMarketingTeam />
 
     <!-- Course Overview -->
     <section class="py-20 relative">
@@ -228,6 +230,9 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
         </div>
       </div>
     </section>
+
+    <!-- How It Works -->
+    <HowItWorks />
 
     <!-- Course Modules -->
     <section class="container mx-auto px-6 py-20 border-t border-border/40">

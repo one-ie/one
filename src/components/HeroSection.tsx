@@ -32,7 +32,7 @@ interface HeroSectionProps extends React.HTMLAttributes<HTMLDivElement> {
 const RetroGrid = ({
   angle = 65,
   cellSize = 60,
-  opacity = 0.5,
+  opacity = 0.2,
   lightLineColor = "var(--primary)",
   darkLineColor = "var(--primary)",
 }) => {
@@ -96,7 +96,7 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
               </h3>
               <h2 className="text-4xl tracking-tight font-bold mx-auto md:text-6xl lg:text-7xl leading-[1.1]">
                 {subtitle.regular}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-500 via-gray-300 to-white dark:from-gray-700 dark:via-gray-500 dark:to-gray-300">
+                <span className="bg-clip-text">
                   {subtitle.gradient}
                 </span>
               </h2>
