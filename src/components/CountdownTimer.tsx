@@ -9,36 +9,52 @@ interface CountdownTimerProps {
 }
 
 export function CountdownTimer({ targetDate, className = '', onComplete }: CountdownTimerProps) {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  });
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const target = new Date(targetDate).getTime();
+    const updateCountdown = () => {
+      try {
+        const endDate = new Date(targetDate);
+        const now = new Date();
+        
+        // Add debug logging
+        console.log('Target date:', endDate, 'Now:', now);
+        
+        // Calculate the difference in milliseconds
+        let difference = endDate.getTime() - now.getTime();
+        console.log('Time difference (ms):', difference);
+        
+        // If countdown is finished
+        if (difference <= 0) {
+          setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+          if (onComplete) onComplete();
+          return;
+        }
 
-    const calculateTimeLeft = () => {
-      const now = new Date().getTime();
-      const difference = Math.max(0, target - now);
-      
-      if (difference <= 0 && onComplete) {
-        onComplete();
+        // Calculate all units
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        difference -= days * (1000 * 60 * 60 * 24);
+
+        const hours = Math.floor(difference / (1000 * 60 * 60));
+        difference -= hours * (1000 * 60 * 60);
+
+        const minutes = Math.floor(difference / (1000 * 60));
+        difference -= minutes * (1000 * 60);
+
+        const seconds = Math.floor(difference / 1000);
+
+        setTimeLeft({ days, hours, minutes, seconds });
+      } catch (error) {
+        console.error('Error updating countdown:', error);
       }
-
-      setTimeLeft({
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((difference % (1000 * 60)) / 1000)
-      });
     };
 
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
+    // Update immediately and then every second
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
 
-    return () => clearInterval(timer);
+    // Cleanup on unmount
+    return () => clearInterval(interval);
   }, [targetDate, onComplete]);
 
   const timeUnits = [
@@ -49,13 +65,18 @@ export function CountdownTimer({ targetDate, className = '', onComplete }: Count
   ];
 
   return (
-    <div className={`flex flex-wrap justify-center gap-4 ${className}`}>
-      {timeUnits.map((unit) => (
-          <div className="bg-[#1a1a1a] px-4 py-3 md:px-6 md:py-4 rounded-lg min-w-[100px] text-center">
-            <div className="text-2xl md:text-3xl font-bold text-white">{unit.value}</div>
-            <div className="text-xs md:text-sm text-[#aaaaaa] uppercase tracking-wide">{unit.label}</div>
+    <div className={`inline-flex items-center justify-center gap-2 ${className}`}>
+      {timeUnits.map((unit, index) => (
+        <div key={unit.label} className="flex items-center">
+          <div className="bg-[#1a1a1a] px-6 py-4 rounded-lg text-center min-w-[120px]">
+            <div className="text-3xl font-bold text-white">{unit.value.toString().padStart(2, '0')}</div>
+            <div className="text-sm text-[#aaaaaa] uppercase tracking-wide">{unit.label}</div>
           </div>
+          {index < timeUnits.length - 1 && (
+            <div className="text-3xl font-bold text-white mx-3">:</div>
+          )}
+        </div>
       ))}
     </div>
   );
-} 
+}

@@ -14,7 +14,7 @@ const title = "AI Marketing Revolution: Automate, Convert, and Scale Your Revenu
 const description = "Discover the exact AI systems top marketers are using to automate their work, dominate search rankings, and convert visitors into high-paying customers";
 
 // Countdown timer calculation
-const launchDate = new Date("March 25, 2024").getTime();
+const launchDate = "2025-04-11T00:00:00";  // Using ISO date format for better compatibility
 
 // Course details
 const courseDetails = {
@@ -30,7 +30,7 @@ const courseDetails = {
     total: 100,
     remaining: 25
   },
-  launchDate: "March 25, 2024"
+  launchDate: "April 11, 2024"
 };
 
 // Course modules data
@@ -279,9 +279,11 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
           <!-- CTA Section -->
           <div class="space-y-8 animate-fade-in [--animation-delay:1200ms]">
             <!-- Timer -->
-            <div class="max-w-sm mx-auto">
-              <p class="text-sm text-muted-foreground mb-2">Launch Special Ends In:</p>
-              <CountdownTimer targetDate={launchDate} className="mb-4" client:visible />
+            <div class="w-full">
+              <p class="text-sm text-muted-foreground mb-4 text-center">Launch Special Ends In:</p>
+              <div class="flex justify-center w-full mb-8">
+                <CountdownTimer targetDate={launchDate} client:load />
+              </div>
             </div>
 
             <!-- Price -->
