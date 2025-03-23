@@ -844,6 +844,17 @@
   }
 }
 
+/* Add this to your global.css, near other animation keyframes */
+@keyframes grid {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-grid {
+  animation: grid 20s linear infinite;
+}
+
 /* ========== UTILITY CLASSES ========== */
 .one-container {
   max-width: 72rem;
