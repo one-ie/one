@@ -3,7 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Card } from "../components/ui/card";
-import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon} from "lucide-react";
+import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon } from "lucide-react";
+import { HeroPill } from "../components/HeroPill";
 import FaqAccordion from "@/components/FaqAccordion";
 import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
@@ -192,6 +193,18 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       <!-- Background Elements -->
       <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-primary/2 to-transparent pointer-events-none" />
       <div class="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+
+      {/* Hero Pill */}
+      <div class="absolute top-20 left-1/2 -translate-x-1/2">
+        <HeroPill client:load shimmerWidth={200} className="inline-flexitems-center gap-2 px-4 py-1 rounded-full bg-primary/10 one-glass-dark">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+          </span>
+          <span class="text-sm font-medium text-primary">Limited Launch Special: 72-Hour Only</span>
+          <ArrowRightIcon className="w-4 h-4 text-primary" />
+        </HeroPill>
+      </div>
       
       <div class="container px-4 mx-auto relative">
         <div class="max-w-4xl mx-auto text-center">
@@ -207,14 +220,7 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
             </div>
           </div>
 
-          <!-- Launch Badge -->
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-8 one-glass-dark animate-fade-in [--animation-delay:200ms]">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-            <span class="text-sm font-medium">Launch Special: 72-Hour Only</span>
-          </div>
+       
 
           <!-- Main Title -->
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 animate-fade-in [--animation-delay:400ms] leading-[1.1]">

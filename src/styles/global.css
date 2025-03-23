@@ -812,6 +812,18 @@
   }
 }
 
+@keyframes shiny-text {
+  to {
+    background-position: var(--shiny-width) 0;
+  }
+}
+
+.animate-shiny-text {
+  animation: shiny-text 2s linear infinite;
+  background-position: 0 0;
+  background-size: var(--shiny-width) 100%;
+}
+
 @keyframes tooltip {
   from {
     opacity: 0;
@@ -820,6 +832,15 @@
   to {
     opacity: 1;
     transform: translate(0, -50%) scale(1);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 
