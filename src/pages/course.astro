@@ -4,7 +4,7 @@ import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Card } from "../components/ui/card";
 import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon} from "lucide-react";
-import { AccordionWrapper } from "../components/AccordionWrapper";
+import FaqAccordion from "@/components/FaqAccordion";
 import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
 import { Separator } from "../components/ui/separator";
@@ -153,28 +153,28 @@ const bonuses = [
 // FAQs
 const faqs = [
   {
-    title: "Is this course suitable for beginners to AI?",
-    content: "Absolutely! The course is specifically designed to take you from AI novice to marketing automation expert with no prior experience required. We start with the fundamentals and progress to advanced applications."
+    question: "Is this course suitable for beginners to AI?",
+    answer: "Absolutely! The course is specifically designed to take you from AI novice to marketing automation expert with no prior experience required. We start with the fundamentals and progress to advanced applications."
   },
   {
-    title: "How quickly can I implement these strategies?",
-    content: "The course is intentionally fast-paced and designed for immediate implementation. Many students set up their first AI workflows within 24 hours of starting the course. Our step-by-step video tutorials make implementation straightforward."
+    question: "How quickly can I implement these strategies?",
+    answer: "The course is intentionally fast-paced and designed for immediate implementation. Many students set up their first AI workflows within 24 hours of starting the course. Our step-by-step video tutorials make implementation straightforward."
   },
   {
-    title: "Do I need technical experience?",
-    content: "No technical background is required. The course is designed for marketers at all technical levels, with step-by-step instructions for setting up each tool and workflow. We use n8n for automation, which has an intuitive visual interface that requires no coding."
+    question: "Do I need technical experience?",
+    answer: "No technical background is required. The course is designed for marketers at all technical levels, with step-by-step instructions for setting up each tool and workflow. We use n8n for automation, which has an intuitive visual interface that requires no coding."
   },
   {
-    title: "How long do I have access to the course materials?",
-    content: "You receive lifetime access to all course materials, including future updates as AI tools evolve and new strategies emerge."
+    question: "How long do I have access to the course materials?",
+    answer: "You receive lifetime access to all course materials, including future updates as AI tools evolve and new strategies emerge."
   },
   {
-    title: "What tools will I need to purchase?",
-    content: "The course focuses on maximizing value from affordable tools. We recommend a budget of $50-100/month for essential AI tools, though many students start with even less. We provide detailed guidance on which tools provide the best ROI for your specific situation."
+    question: "What tools will I need to purchase?",
+    answer: "The course focuses on maximizing value from affordable tools. We recommend a budget of $50-100/month for essential AI tools, though many students start with even less. We provide detailed guidance on which tools provide the best ROI for your specific situation."
   },
   {
-    title: "How is this different from other AI marketing courses?",
-    content: "Unlike courses that simply teach you how to use ChatGPT for marketing, this system shows you how to build integrated AI marketing ecosystems using n8n and other tools. We include ready-to-deploy chatbots, web chat integration, and automation templates that give you immediate results."
+    question: "How is this different from other AI marketing courses?",
+    answer: "Unlike courses that simply teach you how to use ChatGPT for marketing, this system shows you how to build integrated AI marketing ecosystems using n8n and other tools. We include ready-to-deploy chatbots, web chat integration, and automation templates that give you immediate results."
   }
 ];
 
@@ -373,12 +373,14 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       </div>
     </section>
 
-    <!-- FAQs -->
-    <section class="py-20">
-      <div class="container px-4 mx-auto">
-        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
-        <div class="max-w-3xl mx-auto">
-          <AccordionWrapper items={faqs} client:visible />
+    {/* FAQs Section */}
+    <section class="container mx-auto px-6 py-20 border-t border-border bg-background/10 backdrop-blur-sm">
+      <div class="w-full max-w-[1400px] mx-auto">
+        <h2 class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in">
+          Frequently Asked Questions
+        </h2>
+        <div class="one-animate-fade-in">
+          <FaqAccordion client:idle faqs={faqs} />
         </div>
       </div>
     </section>
