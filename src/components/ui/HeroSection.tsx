@@ -1,5 +1,5 @@
 import * as React from "react"
-import { cn } from "../lib/utils"
+import { cn } from "../../lib/utils"
 import { ChevronRight } from "lucide-react"
 
 interface HeroSectionProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -95,11 +95,11 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
                 <ChevronRight className="inline w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
               </h3>
               <h2 className="text-4xl tracking-tight font-bold mx-auto md:text-6xl lg:text-7xl leading-[1.1]">
-                {subtitle.regular}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-500 via-gray-300 to-white dark:from-gray-700 dark:via-gray-500 dark:to-gray-300">
-                  {subtitle.gradient}
-                </span>
-              </h2>
+  {subtitle.regular}
+  <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-gray-600 to-gray-400 dark:from-gray-700 dark:via-gray-500 dark:to-gray-300">
+    {subtitle.gradient}
+  </span>
+</h2>
               <p className="text-xl md:text-2xl lg:text-3xl text-muted-foreground max-w-3xl mx-auto leading-normal">
                 {description}
               </p>
