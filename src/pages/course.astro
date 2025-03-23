@@ -241,18 +241,39 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
 
           <!-- Stats Grid -->
           <div class="grid md:grid-cols-3 gap-6 mb-12 animate-fade-in [--animation-delay:1000ms]">
-            <div class="p-6 one-glass-card">
-              <div class="text-3xl font-bold text-primary mb-2">73%</div>
-              <p class="text-sm text-muted-foreground">Reduction in Content Creation Time</p>
-            </div>
-            <div class="p-6 one-glass-card">
-              <div class="text-3xl font-bold text-primary mb-2">3X</div>
-              <p class="text-sm text-muted-foreground">Average Increase in Conversion Rates</p>
-            </div>
-            <div class="p-6 one-glass-card">
-              <div class="text-3xl font-bold text-primary mb-2">42%</div>
-              <p class="text-sm text-muted-foreground">Reduction in Ad Spend</p>
-            </div>
+            <Card className="card p-6">
+              <div class="flex items-start gap-3">
+                <div class="card-icon">
+                  <CheckIcon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <div class="text-3xl font-bold text-primary mb-2">73%</div>
+                  <p class="text-sm text-muted-foreground">Reduction in Content Creation Time</p>
+                </div>
+              </div>
+            </Card>
+            <Card className="card p-6">
+              <div class="flex items-start gap-3">
+                <div class="card-icon">
+                  <CheckIcon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <div class="text-3xl font-bold text-primary mb-2">3X</div>
+                  <p class="text-sm text-muted-foreground">Average Increase in Conversion Rates</p>
+                </div>
+              </div>
+            </Card>
+            <Card className="card p-6">
+              <div class="flex items-start gap-3">
+                <div class="card-icon">
+                  <CheckIcon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <div class="text-3xl font-bold text-primary mb-2">42%</div>
+                  <p class="text-sm text-muted-foreground">Reduction in Ad Spend</p>
+                </div>
+              </div>
+            </Card>
           </div>
 
           <!-- CTA Section -->
@@ -299,9 +320,11 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
         <h2 class="text-3xl lg:text-4xl font-bold text-center mb-12">What You'll Learn</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {learningOutcomes.map((outcome) => (
-            <Card className="p-4 one-glass-card">
+            <Card className="card p-6">
               <div class="flex items-start gap-3">
-                <CheckIcon className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
+                <div class="card-icon">
+                  <CheckIcon className="w-5 h-5 text-primary" />
+                </div>
                 <p class="text-sm">{outcome}</p>
               </div>
             </Card>
@@ -333,10 +356,17 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
         </p>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bonuses.map((bonus) => (
-            <Card className="p-6">
-              <h3 class="text-xl font-semibold mb-2">{bonus.title}</h3>
-              <p class="text-muted-foreground mb-4">{bonus.description}</p>
-              <p class="text-primary font-semibold">{bonus.value}</p>
+            <Card className="card p-6">
+              <div class="flex items-start gap-3">
+                <div class="card-icon">
+                  <CheckIcon className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold mb-2">{bonus.title}</h3>
+                  <p class="text-muted-foreground mb-4">{bonus.description}</p>
+                  <p class="text-primary font-semibold">{bonus.value}</p>
+                </div>
+              </div>
             </Card>
           ))}
         </div>
@@ -377,76 +407,3 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
     </section>
   </main>
 </Layout>
-
-<style>
-  /* Enhanced animations */
-  .animate-fade-in {
-    opacity: 0;
-    animation: fade-in 0.5s ease-out forwards;
-    animation-delay: var(--animation-delay, 0ms);
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Enhanced glass effect */
-  .one-glass-dark {
-    backdrop-filter: blur(12px);
-    background: linear-gradient(
-      to right,
-      hsla(var(--primary) / 0.1),
-      hsla(var(--primary) / 0.05)
-    );
-    border: 1px solid hsla(var(--primary) / 0.1);
-    box-shadow: 
-      0 4px 12px hsla(var(--primary) / 0.1),
-      inset 0 0 0 1px hsla(var(--primary) / 0.1);
-  }
-
-  .one-glass-card {
-    backdrop-filter: blur(16px);
-    background: linear-gradient(
-      to bottom right,
-      hsla(var(--card) / 0.8),
-      hsla(var(--card) / 0.4)
-    );
-    border: 1px solid hsla(var(--primary) / 0.1);
-    border-radius: var(--radius);
-    box-shadow: 
-      0 4px 20px hsla(var(--primary) / 0.1),
-      inset 0 0 0 1px hsla(var(--primary) / 0.05);
-    transition: all 0.3s ease;
-  }
-
-  .one-glass-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-      0 8px 30px hsla(var(--primary) / 0.15),
-      inset 0 0 0 1px hsla(var(--primary) / 0.1);
-  }
-
-  /* Button hover effect */
-  .one-button-primary {
-    background: linear-gradient(
-      to right,
-      hsl(var(--primary)),
-      hsl(var(--primary) / 0.8)
-    );
-    transition: all 0.3s ease;
-  }
-
-  .one-button-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-      0 6px 20px hsla(var(--primary) / 0.2),
-      0 2px 4px hsla(var(--primary) / 0.1);
-  }
-</style> 

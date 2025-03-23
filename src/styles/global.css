@@ -381,20 +381,113 @@
     0 0 0 1px hsla(0, 0%, 100%, 0.06);
 }
 
-/* Card Styles */
-.one-card {
-  background-color: var(--one-card);
-  color: hsl(var(--card-foreground));
-  border: 1px solid var(--one-border);
-  border-radius: calc(var(--radius) - 2px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-  transition: all 0.2s ease;
+/* Card Styles - Glass effect for cards */
+.card {
+  background: hsla(0, 0%, 17%, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  border-radius: var(--radius);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px hsla(0, 0%, 100%, 0.03);
+  transition: all 0.3s ease;
 }
 
-.one-card:hover {
+.card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-  border-color: hsla(var(--primary) / 0.1);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.12),
+    0 0 0 1px hsla(0, 0%, 100%, 0.06);
+}
+
+.card:hover, .one-card:hover, [data-slot="card"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px hsla(var(--primary) / 0.15),
+    inset 0 0 0 1px hsla(var(--primary) / 0.1);
+  border-color: hsla(var(--primary) / 0.2);
+}
+
+/* Card icon styles */
+.card-icon, .one-card-icon, 
+[data-slot="card"] .p-2.5, 
+[data-slot="card"] .flex-shrink-0,
+[data-slot="card"] .rounded-lg {
+  padding: 0.625rem;
+  border-radius: var(--radius);
+  color: hsl(var(--primary));
+  background: linear-gradient(
+    to right bottom,
+    hsla(var(--primary) / 0.1),
+    hsla(var(--primary) / 0.05)
+  );
+  transition: background 0.3s ease;
+}
+
+.card:hover .card-icon, 
+.one-card:hover .one-card-icon,
+[data-slot="card"]:hover .p-2.5,
+[data-slot="card"]:hover .flex-shrink-0,
+[data-slot="card"]:hover .rounded-lg {
+  background: linear-gradient(
+    to right bottom,
+    hsla(var(--primary) / 0.15),
+    hsla(var(--primary) / 0.1)
+  );
+}
+
+/* Card content sections */
+[data-slot="card-header"] {
+  margin-bottom: 0.5rem;
+}
+
+[data-slot="card-title"] {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+[data-slot="card-description"],
+[data-slot="card-content"] {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Card content padding utility */
+.card-content, .one-card-content {
+  padding: 1.25rem;
+}
+
+/* Card with icon layout */
+.card-with-icon, .one-card-with-icon {
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+}
+
+/* Icon wrapper in cards */
+.card-icon, .one-card-icon {
+  padding: 0.625rem;
+  border-radius: var(--radius);
+  background: linear-gradient(
+    to right bottom,
+    hsla(var(--primary) / 0.1),
+    hsla(var(--primary) / 0.05)
+  );
+  transition: background 0.3s ease;
+}
+
+.card:hover .card-icon, .one-card:hover .one-card-icon,
+[data-slot="card"]:hover .card-icon {
+  background: linear-gradient(
+    to right bottom,
+    hsla(var(--primary) / 0.15),
+    hsla(var(--primary) / 0.1)
+  );
+}
+
+/* Add specific selectors for the icon wrapper inside Astro components */
+[data-slot="card"] .flex-shrink-0 {
+  color: hsl(var(--primary));
 }
 
 /* Navigation Elements */
