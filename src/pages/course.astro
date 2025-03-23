@@ -6,7 +6,7 @@ import { Card } from "../components/ui/card";
 import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon } from "lucide-react";
 import { HeroPill } from "../components/HeroPill";
 import { TrustedPill } from "../components/TrustedPill";
-import { HeroSection } from "../components/ui/HeroSection";
+import { HeroSection } from "../components/HeroSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
@@ -197,17 +197,7 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
 
 <Layout title={title} description={description}>
   <main class="min-h-screen bg-background">
-    <!-- Hero Section with new component -->
-    <div class="absolute top-20 left-1/2 -translate-x-1/2 z-10">
-      <HeroPill client:load shimmerWidth={200} className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#111111] one-glass-dark">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-        </span>
-        <span class="text-sm font-medium text-primary">Learn how to amplify marketing with AI</span>
-        <ArrowRightIcon className="w-4 h-4 text-primary" />
-      </HeroPill>
-    </div>
+   
     
     <HeroSection
       client:load

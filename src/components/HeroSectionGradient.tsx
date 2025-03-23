@@ -1,7 +1,7 @@
 import * as React from "react"
-import { cn } from "../../lib/utils"
+import { cn } from "../lib/utils"
 import { ChevronRight, ArrowRight } from "lucide-react"
-import { Button } from "./button"
+import { Button } from "./ui/button"
 
 interface HeroSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string
