@@ -5,6 +5,7 @@ import { Badge } from "../components/ui/badge";
 import { Card } from "../components/ui/card";
 import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon } from "lucide-react";
 import { HeroPill } from "../components/HeroPill";
+import { TrustedPill } from "../components/TrustedPill";
 import FaqAccordion from "@/components/FaqAccordion";
 import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
@@ -196,12 +197,12 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
 
       {/* Hero Pill */}
       <div class="absolute top-20 left-1/2 -translate-x-1/2">
-        <HeroPill client:load shimmerWidth={200} className="inline-flexitems-center gap-2 px-4 py-1 rounded-full bg-primary/10 one-glass-dark">
+        <HeroPill client:load shimmerWidth={200} className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#111111] one-glass-dark">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
           </span>
-          <span class="text-sm font-medium text-primary">Limited Launch Special: 72-Hour Only</span>
+          <span class="text-sm font-medium text-primary">Learn how to amplify marketing with AI</span>
           <ArrowRightIcon className="w-4 h-4 text-primary" />
         </HeroPill>
       </div>
@@ -209,18 +210,6 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       <div class="container px-4 mx-auto relative">
         <div class="max-w-4xl mx-auto text-center">
           <!-- Social Proof Banner -->
-          <div class="flex items-center justify-center gap-2 mb-8 animate-fade-in">
-            <div class="flex items-center gap-6 px-4 py-2 rounded-full bg-muted/5 one-glass-dark">
-              <p class="text-sm text-muted-foreground">Trusted by marketers at</p>
-              <div class="flex items-center gap-4">
-                <img src="/logos/google.svg" alt="Google" class="h-4 opacity-70 hover:opacity-100 transition-opacity" />
-                <img src="/logos/hubspot.svg" alt="HubSpot" class="h-4 opacity-70 hover:opacity-100 transition-opacity" />
-                <img src="/logos/shopify.svg" alt="Shopify" class="h-4 opacity-70 hover:opacity-100 transition-opacity" />
-              </div>
-            </div>
-          </div>
-
-       
 
           <!-- Main Title -->
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 animate-fade-in [--animation-delay:400ms] leading-[1.1]">
