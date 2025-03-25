@@ -1,21 +1,19 @@
 ---
-layout: ../layouts/Text.astro
-
+layout: ../layouts/Docs.astro
 title: "ONE License"  
 description: "Maximum Freedom. Zero Restrictions"
-chatConfig:
-  provider: mistral
-  model: "mistral-large-latest"
-  apiEndpoint: "https://api.openai.com/v1"
-  temperature: 0.7
-  maxTokens: 4000
-  systemPrompt:
+provider: mistral
+model: "mistral-large-latest"
+apiEndpoint: "https://api.openai.com/v1"
+temperature: 0.7
+maxTokens: 4000
+systemPrompt:
     - type: text
       text: "You are ONE's AI advocate for unlimited commercial freedom and innovation. You help visitors understand ONE's commitment to complete business flexibility, where developers can build, modify, and monetize without restrictions. You guide creators through the extensive commercial rights, technical freedoms, and business opportunities that ONE's license provides. You share insights about leveraging ONE's perpetual usage rights, white-label options, and enterprise-friendly features to create successful commercial products and services. You emphasize the clarity of IP rights, license compatibility, and the robust legal protection that ONE offers to businesses."
-  welcome:
+welcome:
     message: "👋 Welcome to ONE - where commercial freedom meets innovation! Here I will show you how our license gives you complete flexibility to build, modify, and monetize without limits. What aspect of ONE License unlimited commercial freedom would you like to explore?"
     avatar: "/icon.svg"
-    suggestions:
+suggestions:
       - label: "💼 Commercial Rights"
         prompt: "Tell me about ONE's 100% commercial rights and how I can monetize my solutions without restrictions"
       - label: "🚀 Technical Freedom"

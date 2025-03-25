@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { Card } from "../components/ui/card";
-import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon } from "lucide-react";
+import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon, TrophyIcon, GraduationCapIcon } from "lucide-react";
 import { HeroPill } from "../components/HeroPill";
 import { TrustedPill } from "../components/TrustedPill";
 import { HeroSection } from "../components/HeroSection";
@@ -14,17 +14,19 @@ import { Separator } from "../components/ui/separator";
 import { CountdownTimer } from "../components/CountdownTimer";
 import HowItWorks from "../components/HowItWorks.astro";
 import MeetYourMarketingTeam from "../components/MeetYourMarketingTeam.astro";
+import { PricingTable } from "../components/course/PricingTable";
+import { StickyEnrollBar } from "../components/course/StickyEnrollBar";
+import Teacher from "../components/Teacher.astro";
+import Elevate from "../components/Elevate";
 
 const title = "AI Marketing Revolution: Automate, Convert, and Scale Your Revenue";
 const description = "Discover the exact AI systems top marketers are using to automate their work, dominate search rankings, and convert visitors into high-paying customers";
-
-// Countdown timer calculation
 const launchDate = "2025-04-11T00:00:00";  // Using ISO date format for better compatibility
 
 // Course details
 const courseDetails = {
   badge: "Launch Special: 72-Hour Only",
-  title: "AI Marketing Course",
+  title: "AI Marketing Revolution",
   subtitle: "Generate More Traffic, Conversions, and Sales in Half the Time",
   originalPrice: "1,997",
   currentPrice: "997",
@@ -121,6 +123,175 @@ const courseModulesData = [
   }
 ];
 
+export const faqCategories = [
+  {
+    category: "Getting Started",
+    faqs: [
+      {
+        question: "Is this course suitable for beginners to AI?",
+        answer: "Absolutely! The course is designed to take you from AI novice to marketing automation expert with no prior experience required. We start with the fundamentals and progress to advanced applications."
+      },
+      {
+        question: "How quickly can I implement these strategies?",
+        answer: "The course is intentionally fast-paced and designed for immediate implementation. Many students set up their first AI workflows within 24 hours of starting the course."
+      },
+      {
+        question: "Do I need technical experience?",
+        answer: "No technical background is required. The course is designed for marketers at all technical levels, with step-by-step instructions for setting up each tool and workflow."
+      }
+    ]
+  },
+  {
+    category: "Course Details",
+    faqs: [
+      {
+        question: "How long do I have access to the course materials?",
+        answer: "You receive lifetime access to all course materials, including future updates as AI tools evolve and new strategies emerge."
+      },
+      {
+        question: "What tools will I need to purchase?",
+        answer: "The course focuses on maximizing value from affordable tools. We recommend a budget of $50-100/month for essential AI tools, though many students start with even less."
+      },
+      {
+        question: "How is this different from other AI marketing courses?",
+        answer: "Unlike courses that simply teach you how to use ChatGPT for marketing, this system shows you how to build integrated AI marketing ecosystems using n8n and other tools."
+      }
+    ]
+  },
+  {
+    category: "Results & Support",
+    faqs: [
+      {
+        question: "How soon can I expect results?",
+        answer: "Many students implement their first AI workflows within 48 hours of starting the course and see immediate efficiency gains. More substantial performance improvements typically begin within 2-4 weeks."
+      },
+      {
+        question: "Will I get support if I get stuck?",
+        answer: "Yes, you'll have access to our private community where you can ask questions and get help from both the instructor and fellow students. We also offer monthly live Q&A calls."
+      },
+      {
+        question: "What if the course doesn't work for me?",
+        answer: "We offer a 30-day Implementation Guarantee. If you implement the strategies taught in the first two modules and don't see measurable improvements in your marketing efficiency, we'll refund your entire investment."
+      }
+    ]
+  }
+];
+
+export const testimonials = [
+  {
+    name: "Jason K.",
+    title: "Digital Agency Owner",
+    imageSrc: "/assets/course/testimonials/jason.jpg",
+    beforeSituation: "Working 60+ hour weeks to manage campaigns for clients. Struggled to scale beyond 7 clients due to time constraints.",
+    afterResults: "Implemented AI content and ad management systems to automate 80% of campaign management. Now serves 22 clients with the same team size.",
+    quote: "I was skeptical about AI marketing, but this course changed everything. We're doing 3X the business with less stress.",
+    metrics: [
+      { label: "Clients Managed", value: "22" },
+      { label: "Hours Reduced", value: "25/wk" },
+      { label: "Client Retention", value: "+157%" },
+      { label: "Revenue Growth", value: "+186%" }
+    ]
+  },
+  {
+    name: "Michelle T.",
+    title: "eCommerce Marketing Manager",
+    imageSrc: "/assets/course/testimonials/michelle.jpg",
+    beforeSituation: "Spending $12,000/month on ads with a 1.7 ROAS. Content marketing efforts were inconsistent with poor results.",
+    afterResults: "ROAS increased to 3.2 while reducing ad spend to $9,500/month. Automated content system increased organic traffic by 142% in 90 days.",
+    quote: "The AI email sequencing strategy alone paid for the course within the first week. Six months later, we've increased revenue by 87%.",
+    metrics: [
+      { label: "ROAS", value: "3.2X" },
+      { label: "Ad Spend", value: "-21%" },
+      { label: "Email Open Rate", value: "32%" },
+      { label: "Organic Traffic", value: "+142%" }
+    ]
+  },
+  {
+    name: "Alex F.",
+    title: "SaaS Startup Founder",
+    imageSrc: "/assets/course/testimonials/alex.jpg",
+    beforeSituation: "Struggling to create consistent content with limited resources. SEO strategy was non-existent.",
+    afterResults: "Implemented the AI content engine to create 12 high-quality articles per month. Organic traffic went from 1,200 to 14,700 monthly visitors.",
+    quote: "As a technical founder with no marketing background, this course gave me a complete system for growing our user base.",
+    metrics: [
+      { label: "Organic Traffic", value: "+1125%" },
+      { label: "Demo Bookings", value: "+118%" },
+      { label: "Content Output", value: "12x" },
+      { label: "CAC", value: "-37%" }
+    ]
+  }
+];
+
+export const painPoints = {
+  headline: "Are You Still Marketing the Old Way?",
+  subheadline: "If you're facing these challenges, you're not alone",
+  painPoints: [
+    {
+      title: "Wasting Hours on Content",
+      description: "Creating content that disappears into the void of page 2 (or worse) despite your hard work"
+    },
+    {
+      title: "Burning Budget on Poor Ads",
+      description: "Spending money on ads that target the wrong people with the wrong message at the wrong time"
+    },
+    {
+      title: "Manual Email Campaigns",
+      description: "Building email sequences by hand that barely break industry average open rates"
+    },
+    {
+      title: "Falling Behind Competitors",
+      description: "Watching competitors publish everywhere at once while you struggle to keep pace"
+    },
+    {
+      title: "Growing Workload, Plateauing Results",
+      description: "Working harder than ever but seeing your results plateau or decline"
+    },
+    {
+      title: "Algorithm Anxiety",
+      description: "Losing sleep over constantly changing algorithms and platforms that affect your traffic"
+    }
+  ],
+  transitionText: "There's a better way to market your business using AI automation..."
+};
+
+export const pricingData = {
+  originalPrice: "1,997",
+  currentPrice: "997",
+  paymentOptions: {
+    full: "997",
+    installments: { amount: "367", count: 3 }
+  },
+  guarantee: "Implementation Guarantee",
+  guaranteeDays: 30,
+  totalValue: 7676,
+  valueBreakdown: [
+    { item: "Complete 8-Module AI Marketing System", value: "$1,997" },
+    { item: "Step-by-Step Video Tutorials", value: "$997" },
+    { item: "Comprehensive Implementation Ebook", value: "$497" },
+    { item: "The ELEVATE with AI Framework", value: "$1,497" },
+    { item: "AI Automation Server (n8n) Setup", value: "$797" },
+    { item: "Chatbot Templates", value: "$497" },
+    { item: "Web Chat Integration", value: "$397" },
+    { item: "50+ AI Marketing Templates", value: "$997" }
+  ],
+  features: [
+    { title: "Lifetime Access to Course Materials", included: true },
+    { title: "All Future Updates", included: true },
+    { title: "Complete n8n Automation Setup", included: true },
+    { title: "Private Community Access", included: true },
+    { title: "AI Template Library", included: true },
+    { title: "Monthly Live Q&A Calls", included: true },
+    { title: "1-on-1 Implementation Support", included: false },
+    { title: "Done-For-You Setup", included: false }
+  ],
+  ctaText: "Secure Your Spot Now",
+  spots: {
+    total: 100,
+    remaining: 25
+  },
+  deadline: "March 30, 2025"
+};
+
 // What you'll learn
 const learningOutcomes = [
   "Generate high-converting copy in minutes, not hours",
@@ -196,8 +367,133 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
   return total + value;
 }, 0);
 ---
+<Layout
+  title={title}
+  description={description}
+  chatConfig={{
+    // Layout and Meta
+    layout: "course",
+    title: "AI Marketing Revolution Course",
+    description: "Learn AI marketing automation and scale your business",
+    
+    // AI Config
+    aiProvider: "openrouter",
+    aiModel: "google/gemini-2.0-flash-001",
+    apiEndpoint: "https://api.openai.com/v1",
+    temperature: 0.7,
+    maxTokens: 2000,
 
-<Layout title={title} description={description}>
+    // Prompt Config
+    systemPrompt: [{
+      type: "text",
+      text: `I'm your AI sales consultant for the AI Marketing Revolution course. My goal is to help you understand how this revolutionary program can transform your business and generate exponential ROI. I'll show you exactly how our students are achieving incredible results in just 5 hours.
+
+Why You Need This Now:
+• Your competitors are already using AI (73% of successful businesses have adopted AI marketing)
+• Manual marketing is costing you thousands in wasted ad spend
+• You're losing leads to businesses with 24/7 AI sales systems
+• Every day without AI automation is leaving money on the table
+
+What Our Students Achieve:
+• 3X increase in conversion rates within 30 days
+• 73% reduction in content creation time
+• 42% reduction in ad spend while improving results
+• 186% average revenue growth in 6 months
+
+Your AI Marketing Team Capabilities:
+1. Leadership & Strategy
+• Director of Marketing - Strategic AI initiatives
+• Marketing Strategy Manager - AI-driven planning
+• Marketing Ops Specialist - Process automation
+• Strategic Planning Analyst - AI forecasting
+
+2. Growth & Conversion
+• Growth Marketing Manager - AI-powered acquisition
+• Conversion Specialist - AI testing & optimization
+• Customer Journey Analyst - AI journey mapping
+• Growth Hacking Specialist - AI opportunity analysis
+
+3. Digital Marketing & SEO
+• Digital Marketing Manager - Channel orchestration
+• SEO/SEM Specialist - AI search optimization
+• Paid Media Coordinator - AI bid management
+• Marketing Automation Specialist - AI workflows
+
+4. Content & Creative
+• Content Marketing Manager - AI content strategy
+• Content Operations Specialist - AI workflow automation
+• Senior Content Creator - AI-enhanced content
+• Creative Lead - AI-powered creative direction
+
+5. Social & Community
+• Social Media Manager - AI engagement strategy
+• Community Manager - AI sentiment analysis
+• Social Content Creator - AI trend prediction
+• Social Analytics Specialist - AI performance tracking
+
+6. Analytics & Research
+• Marketing Analytics Manager - AI insights
+• Data Science Specialist - Predictive modeling
+• Marketing Analyst - AI attribution
+• Consumer Insights Analyst - AI behavior analysis
+
+Course Implementation:
+Day 1 Timeline:
+10:00 AM - Industry research & setup
+11:00 AM - Launch AI command center
+12:00 PM - AI model training
+2:00 PM - Content automation launch
+3:00 PM - Distribution & analytics setup
+
+8 Core Modules:
+1. AI Marketing Foundations
+2. Market Intelligence
+3. Content Creation
+4. Email Sequences
+5. Social Media Strategies
+6. Conversational Marketing
+7. SEO Domination
+8. Paid Advertising
+
+Limited Time Offer:
+• Original Price: $1,997
+• Launch Special: Only $997 (Save $1,000)
+• Payment Plans: 3 x $367
+• 30-Day Implementation Guarantee
+• $4,185 in Exclusive Bonuses:
+  - AI Template Library ($997 value)
+  - ELEVATE Framework ($1,497 value)
+  - n8n Automation Server ($797 value)
+  - Chatbot Templates ($497 value)
+  - Web Chat Integration ($397 value)
+
+Only 25 Spots Remaining! Don't miss this opportunity to:
+• Automate your marketing and scale your business
+• Join successful students achieving 186% revenue growth
+• Get $4,185 in exclusive bonuses
+• Secure your spot at the special launch price
+
+I'm here to help you evaluate if this course is right for your business and secure your spot before enrollment closes. What would you like to know about first?`
+    }],
+    addSystemPrompt: true,
+    addBusinessPrompt: true,
+
+    // Welcome Config
+    welcomeMessage: "👋 Limited Time Opportunity! Discover how our students are achieving 3X conversion rates and 73% reduction in content creation time. Only 25 spots remaining at the special launch price. Would you like to see how this could work for your business?",
+    avatar: "/icon.svg",
+    suggestions: [
+      { label: "💰 ROI Calculator", prompt: "Show me the potential ROI for my business based on current marketing spend" },
+      { label: "⭐ Success Stories", prompt: "Share how other businesses increased revenue by 186% using this system" },
+      { label: "🎯 Your Business", prompt: "How can this 5-hour system specifically help my business grow?" },
+      { label: "💎 Special Offer", prompt: "Tell me about the launch special and $4,185 in bonuses included" }
+    ],
+
+    // Optional Config
+    runtime: "edge",
+    includeContent: true
+  }}
+  rightPanelMode="quarter"
+>
   <main class="min-h-screen bg-background">
     <HeroSection
       client:load
@@ -208,7 +504,6 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       }}
       description={description}
     />
-
     <MeetYourMarketingTeam />
 
     <!-- Course Overview -->
@@ -230,10 +525,22 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
         </div>
       </div>
     </section>
+<!-- How It Works -->
+<HowItWorks />
 
-    <!-- How It Works -->
-    <HowItWorks />
+<!-- Your Teacher -->
+<Teacher />
 
+<!-- ELEVATE Framework -->
+<section class="py-20 relative">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+  <div class="container px-4 mx-auto relative">
+    <h2 class="text-3xl lg:text-4xl font-bold text-center mb-12">The ELEVATE Framework</h2>
+    <Elevate client:visible />
+  </div>
+</section>
+
+<!-- Course Modules -->
     <!-- Course Modules -->
     <section class="container mx-auto px-6 py-20 border-t border-border/40">
       <div class="w-full max-w-[1400px] mx-auto">
@@ -274,7 +581,28 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
       </div>
     </section>
 
-    {/* FAQs Section */}
+    <!-- Pricing Section -->
+    <section class="py-20 relative">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+      <div class="container px-4 mx-auto relative">
+        <PricingTable
+          client:visible
+          originalPrice={pricingData.originalPrice}
+          currentPrice={pricingData.currentPrice}
+          paymentOptions={pricingData.paymentOptions}
+          guarantee={pricingData.guarantee}
+          guaranteeDays={pricingData.guaranteeDays}
+          totalValue={pricingData.totalValue}
+          valueBreakdown={pricingData.valueBreakdown}
+          features={pricingData.features}
+          ctaText={pricingData.ctaText}
+          spots={pricingData.spots}
+          deadline={pricingData.deadline}
+        />
+      </div>
+    </section>
+
+    <!-- FAQs Section -->
     <section class="container mx-auto px-6 py-20 border-t border-border bg-background/10 backdrop-blur-sm">
       <div class="w-full max-w-[1400px] mx-auto">
         <h2 class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in">
@@ -308,5 +636,14 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
         </p>
       </div>
     </section>
+
+    <!-- Sticky Enrollment Bar -->
+    <StickyEnrollBar
+      client:load
+      currentPrice={pricingData.currentPrice}
+      ctaText={courseDetails.ctaText}
+      spots={pricingData.spots}
+      deadline={pricingData.deadline}
+    />
   </main>
 </Layout>

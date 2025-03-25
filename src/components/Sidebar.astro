@@ -51,7 +51,7 @@ const currentPath = Astro.url.pathname;
             class:list={[
               "w-[var(--one-sidebar-width)] h-16 flex items-center justify-center transition-colors duration-200 group relative",
               "hover:bg-[hsla(0,0%,14%,0.5)]",
-              { "bg-[hsla(0,0%,14%,0.7)]": currentPath === path },
+              { "bg-[#1E3A8A]": currentPath === path }, // Updated background color
             ]}
             data-tooltip={title}
             aria-label={title}
