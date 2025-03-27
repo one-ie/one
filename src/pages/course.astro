@@ -535,7 +535,10 @@ I'm here to help you evaluate if this course is right for your business and secu
 <section class="py-20 relative">
   <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
   <div class="container px-4 mx-auto relative">
-    <h2 class="text-3xl lg:text-4xl font-bold text-center mb-12">The ELEVATE Framework</h2>
+    <h2 class="text-3xl lg:text-4xl font-bold text-center mb-6">The ELEVATE Framework</h2>
+    <p class="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
+      The Elevate Framework is a proven system to attract, convert and grow customer value.
+    </p>
     <Elevate client:visible />
   </div>
 </section>
@@ -544,14 +547,20 @@ I'm here to help you evaluate if this course is right for your business and secu
     <!-- Course Modules -->
     <section class="container mx-auto px-6 py-20 border-t border-border/40">
       <div class="w-full max-w-[1400px] mx-auto">
-        <h2 class="text-4xl font-bold mb-10 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Course Curriculum</h2>
-        {courseModulesData.map((module, index) => (
-          <div data-key={index} class="mb-12">
-            <h3 class="text-2xl font-bold mb-6">Module {index + 1}: {module.title}</h3>
-            <p class="text-lg text-muted-foreground mb-6">{module.description}</p>
-            <CourseModuleContent client:visible lessons={module.lessons} moduleNumber={index + 1} />
-          </div>
-        ))}
+        <h2 class="text-4xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Course Curriculum</h2>
+        <p class="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
+          Master the complete AI marketing system with our comprehensive, step-by-step curriculum
+        </p>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+          {courseModulesData.map((module, index) => (
+            <div data-key={index} class="text-center p-6 border rounded-lg hover:shadow-lg transition-all duration-300 hover:border-primary/20 bg-card">
+              <div class="font-mono text-4xl font-bold text-primary mb-4">{index + 1}</div>
+              <h3 class="text-xl font-bold mb-4">{module.title}</h3>
+              <p class="text-muted-foreground mb-6">{module.description}</p>
+              <CourseModuleContent client:visible lessons={module.lessons} moduleNumber={index + 1} />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
 
