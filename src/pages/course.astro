@@ -8,6 +8,7 @@ import { HeroPill } from "../components/HeroPill";
 import { TrustedPill } from "../components/TrustedPill";
 import { HeroSection } from "../components/HeroSection";
 import FaqAccordion from "@/components/FaqAccordion";
+import Circles from "@/components/Circles.astro";
 import { CourseModuleContent } from "../components/CourseModuleContent";
 import { Progress } from "../components/ui/progress";
 import { Separator } from "../components/ui/separator";
@@ -495,15 +496,40 @@ I'm here to help you evaluate if this course is right for your business and secu
   rightPanelMode="quarter"
 >
   <main class="min-h-screen bg-background">
-    <HeroSection
-      client:load
-      title={courseDetails.title}
-      subtitle={{
-        regular: "Generate More ",
-        gradient: "Traffic & Conversions"
-      }}
-      description={description}
-    />
+    {/* Hero Section */}
+    <section
+      class="container mx-auto px-6 py-12 border-b border-border bg-background/50 backdrop-blur-sm"
+    >
+      <div
+        class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-6 text-center"
+      >
+        <h1
+          class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground one-animate-fade-in"
+        >
+          Build Your <span class="text-accent">AI Brand</span>
+        </h1>
+        <div class="flex flex-col items-center gap-4 max-w-[800px]">
+          <p
+            class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in"
+          >
+            ONE is a free toolkit for building AI brands.
+           
+            You can generate anything - content, courses, payments, websites, and AI agents without restrictions.
+            
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <Circles />
+
+    <section class="container mx-auto px-6 py-8 border-b border-border bg-background/30 backdrop-blur-sm">
+      <div class="w-full max-w-[800px] mx-auto text-center">
+        <p class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide one-animate-fade-in">
+          ONE is 100% free, open source and compliant. You can host it for free. Run it locally, on your own server, in the cloud or at the edge.
+        </p>
+      </div>
+    </section>
     <MeetYourMarketingTeam />
 
     <!-- Course Overview -->
