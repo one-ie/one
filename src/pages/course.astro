@@ -20,20 +20,20 @@ import { StickyEnrollBar } from "../components/course/StickyEnrollBar";
 import Teacher from "../components/Teacher.astro";
 import Elevate from "../components/Elevate";
 
-const title = "AI Marketing Revolution: Automate, Convert, and Scale Your Revenue";
-const description = "Discover the exact AI systems top marketers are using to automate their work, dominate search rankings, and convert visitors into high-paying customers";
+const title = "The AI Prompt Playbook for Ecom Growth";
+const description = "Transform random AI experiments into a systematic growth engine. Get the proven 9-Step Framework + AI Prompt Playbook designed for Ecom Leaders ready to maximize growth, predictably.";
 const launchDate = "2025-04-11T00:00:00";  // Using ISO date format for better compatibility
 
 // Course details
 const courseDetails = {
   badge: "Launch Special: 72-Hour Only",
-  title: "AI Marketing Revolution",
-  subtitle: "Generate More Traffic, Conversions, and Sales in Half the Time",
+  title: "The AI Prompt Playbook",
+  subtitle: "Stop Experimenting. Start Systematically Scaling Your Ecom Store.",
   originalPrice: "1,997",
-  currentPrice: "997",
+  currentPrice: "999",
   guarantee: "30-Day Implementation Guarantee",
-  ctaText: "Secure Your Spot Now",
-  valueProposition: "Join the AI marketing revolution and transform your business with automated systems that work 24/7.",
+  ctaText: "Get The System Now",
+  valueProposition: "Transform random acts of AI into predictable profit performance with our proven 9-Step Framework + AI Prompt Playbook.",
   spots: {
     total: 100,
     remaining: 25
@@ -43,83 +43,92 @@ const courseDetails = {
 
 // Stats for hero section
 const heroStats = [
-  { value: "73%", label: "Reduction in Content Creation Time" },
-  { value: "3X", label: "Average Increase in Conversion Rates" },
-  { value: "42%", label: "Reduction in Ad Spend" }
+  { value: "73%", label: "Reduction in AI Prompt Testing Time" },
+  { value: "3X", label: "Average Increase in AI Output Quality" },
+  { value: "186%", label: "Average Revenue Growth in 6 Months" }
 ];
 
-// Course modules data
+// Course modules data aligned with ELEVATE framework
 const courseModulesData = [
   {
-    title: "AI Marketing Foundations That Drive Real ROI",
-    description: "Master essential AI tools and strategies",
+    title: "HOOK: Capture Attention That Converts",
+    description: "Master AI-powered hooks that stop the scroll",
     lessons: [
-      { name: "AI Marketing Terminology", value: "Learn the key concepts that matter for your bottom line" },
-      { name: "Top AI Tools", value: "Discover the exact tools top marketers use" },
-      { name: "Ethical AI Practices", value: "Build customer trust and boost conversion rates" }
+      { name: "Hook Generation", value: "Create scroll-stopping hooks with AI" },
+      { name: "Pattern Interruption", value: "Stand out in crowded feeds" },
+      { name: "A/B Testing", value: "Test and optimize with AI analysis" }
     ]
   },
   {
-    title: "AI-Powered Market Intelligence",
-    description: "Uncover hidden opportunities",
+    title: "GIFT: Create Irresistible Offers",
+    description: "Craft high-value lead magnets",
     lessons: [
-      { name: "AI Research Tools", value: "Extract actionable insights your competitors miss" },
-      { name: "Customer Segmentation", value: "Build segments that spend 3X more" },
-      { name: "Buyer Personas", value: "Develop hyper-accurate customer profiles" }
+      { name: "Value Proposition", value: "Design offers that convert at 40%+" },
+      { name: "AI Content Creation", value: "Generate lead magnets in hours" },
+      { name: "Delivery Automation", value: "Set up frictionless delivery" }
     ]
   },
   {
-    title: "Content Creation That Converts",
-    description: "Generate high-converting content",
+    title: "IDENTIFY: Target Perfect Customers",
+    description: "Find and attract ideal buyers",
     lessons: [
-      { name: "Copywriting", value: "Create content that drives immediate action" },
-      { name: "SEO Optimization", value: "Rank in top search positions consistently" },
-      { name: "Visual Content", value: "Design engaging visuals that increase engagement" }
+      { name: "Buyer Personas", value: "Create detailed AI-powered profiles" },
+      { name: "Market Research", value: "Uncover hidden customer insights" },
+      { name: "Targeting Strategy", value: "Match offers to audience segments" }
     ]
   },
   {
-    title: "Email Sequences That Convert",
-    description: "Build powerful email automation",
+    title: "ENGAGE: Build Authentic Connection",
+    description: "Create meaningful interactions",
     lessons: [
-      { name: "Personalization", value: "Achieve 40%+ open rates with AI" },
-      { name: "Subject Lines", value: "Outperform industry benchmarks consistently" },
-      { name: "Behavior Triggers", value: "Send emails at perfect moments" }
+      { name: "Content Strategy", value: "Plan content that resonates deeply" },
+      { name: "AI Copywriting", value: "Write in your brand voice consistently" },
+      { name: "Community Building", value: "Foster engaged customer groups" }
     ]
   },
   {
-    title: "Social Media Strategies",
-    description: "Build profitable audiences",
+    title: "SELL: Convert With Confidence",
+    description: "Turn interest into sales",
     lessons: [
-      { name: "AI Listening", value: "Identify viral trends before they explode" },
-      { name: "Content Calendar", value: "Create engagement-optimized schedules" },
-      { name: "Community Building", value: "Build self-sustaining sales channels" }
+      { name: "Sales Pages", value: "Create high-converting product pages" },
+      { name: "Email Sequences", value: "Build automated sales funnels" },
+      { name: "Objection Handling", value: "Address concerns proactively" }
     ]
   },
   {
-    title: "Conversational Marketing",
-    description: "Close deals 24/7",
+    title: "NURTURE: Maximize Customer Value",
+    description: "Build lasting relationships",
     lessons: [
-      { name: "Sales Chatbots", value: "Qualify leads while you sleep" },
-      { name: "Conversation Flows", value: "Convert at 3X your current rate" },
-      { name: "Support AI", value: "Turn support into sales opportunities" }
+      { name: "Content Automation", value: "Keep customers engaged automatically" },
+      { name: "Personalization", value: "Deliver tailored experiences" },
+      { name: "Retention Strategy", value: "Reduce churn with AI insights" }
     ]
   },
   {
-    title: "SEO Domination Strategies",
-    description: "Drive buying traffic",
+    title: "UPSELL: Increase Customer Value",
+    description: "Grow average order value",
     lessons: [
-      { name: "Keyword Research", value: "Find untapped high-converting keywords" },
-      { name: "Content Ranking", value: "Get top 3 positions within 30 days" },
-      { name: "Technical SEO", value: "Double your organic traffic" }
+      { name: "Bundle Creation", value: "Design irresistible offers" },
+      { name: "Timing Optimization", value: "Present offers at perfect moments" },
+      { name: "Value Ladder", value: "Build systematic upgrade paths" }
     ]
   },
   {
-    title: "Paid Advertising That Converts",
-    description: "Maximize ad ROI",
+    title: "UNDERSTAND: Data-Driven Growth",
+    description: "Optimize with AI insights",
     lessons: [
-      { name: "AI Copy Generation", value: "Beat control versions consistently" },
-      { name: "Budget Optimization", value: "Reduce CPA by up to 50%" },
-      { name: "Bid Management", value: "Use 7-figure agency strategies" }
+      { name: "Analytics Setup", value: "Track key performance metrics" },
+      { name: "AI Reporting", value: "Get actionable insights automatically" },
+      { name: "Growth Planning", value: "Scale what works systematically" }
+    ]
+  },
+  {
+    title: "SHARE: Amplify Success Stories",
+    description: "Turn customers into advocates",
+    lessons: [
+      { name: "Testimonial Generation", value: "Collect and optimize reviews" },
+      { name: "Case Study Creation", value: "Build compelling success stories" },
+      { name: "Referral Systems", value: "Automate word-of-mouth growth" }
     ]
   }
 ];
@@ -129,33 +138,33 @@ export const faqCategories = [
     category: "Getting Started",
     faqs: [
       {
-        question: "Is this course suitable for beginners to AI?",
-        answer: "Absolutely! The course is designed to take you from AI novice to marketing automation expert with no prior experience required. We start with the fundamentals and progress to advanced applications."
+        question: "Is this just another list of AI prompts?",
+        answer: "No. This is a complete system that combines two essential components: 1) The Elevate Ecom Framework - a clear, logical 9-step process covering your entire customer journey, and 2) The AI Prompt Playbook - field-tested prompts specifically designed for each step of the framework. Together, they create a systematic approach to scaling your ecommerce business."
       },
       {
-        question: "How quickly can I implement these strategies?",
-        answer: "The course is intentionally fast-paced and designed for immediate implementation. Many students set up their first AI workflows within 24 hours of starting the course."
+        question: "Do I need to be an AI expert?",
+        answer: "Not at all! The Playbook is designed for ecommerce owners who understand basic AI tools like ChatGPT but want a systematic approach to using them effectively. We provide clear, copy-paste prompts and step-by-step implementation guides."
       },
       {
-        question: "Do I need technical experience?",
-        answer: "No technical background is required. The course is designed for marketers at all technical levels, with step-by-step instructions for setting up each tool and workflow."
+        question: "How quickly can I implement this system?",
+        answer: "You can start implementing the system within hours of joining. Many students see their first improved AI outputs on day one. The full framework implementation typically takes 2-4 weeks, with measurable results appearing throughout the process."
       }
     ]
   },
   {
-    category: "Course Details",
+    category: "System Details",
     faqs: [
       {
-        question: "How long do I have access to the course materials?",
-        answer: "You receive lifetime access to all course materials, including future updates as AI tools evolve and new strategies emerge."
+        question: "What exactly do I get?",
+        answer: "You receive: 1) The complete 9-step Elevate Framework for systematic ecommerce growth, 2) 200+ tested AI prompts specifically designed for each framework step, 3) Step-by-step implementation guides, 4) Real-world case studies and examples, 5) Lifetime access and updates, 6) Private community access for support and optimization."
       },
       {
-        question: "What tools will I need to purchase?",
-        answer: "The course focuses on maximizing value from affordable tools. We recommend a budget of $50-100/month for essential AI tools, though many students start with even less."
+        question: "Which AI tools do I need?",
+        answer: "The system works with popular AI tools like ChatGPT, Claude, or Gemini. We recommend starting with ChatGPT ($20/month) and gradually adding other tools as needed. The focus is on maximizing results from affordable, accessible tools."
       },
       {
-        question: "How is this different from other AI marketing courses?",
-        answer: "Unlike courses that simply teach you how to use ChatGPT for marketing, this system shows you how to build integrated AI marketing ecosystems using n8n and other tools."
+        question: "How is this different from other AI courses?",
+        answer: "Most courses just teach you how to use AI tools. We provide a complete business system that integrates AI into every step of your customer journey. Our framework ensures you're not just getting good AI outputs, but using them strategically to drive real business growth."
       }
     ]
   },
@@ -163,16 +172,16 @@ export const faqCategories = [
     category: "Results & Support",
     faqs: [
       {
-        question: "How soon can I expect results?",
-        answer: "Many students implement their first AI workflows within 48 hours of starting the course and see immediate efficiency gains. More substantial performance improvements typically begin within 2-4 weeks."
+        question: "What results can I expect?",
+        answer: "Our students typically see: 1) 70-80% reduction in time spent on AI content creation, 2) 2-3X improvement in AI output quality and consistency, 3) Significant increases in conversion rates across channels, 4) Measurable revenue growth within 90 days. Individual results vary based on implementation and market factors."
       },
       {
-        question: "Will I get support if I get stuck?",
-        answer: "Yes, you'll have access to our private community where you can ask questions and get help from both the instructor and fellow students. We also offer monthly live Q&A calls."
+        question: "What support is available?",
+        answer: "You get access to our private community where you can ask questions, share results, and get feedback. We also host monthly live Q&A calls to address specific implementation challenges and optimization opportunities."
       },
       {
-        question: "What if the course doesn't work for me?",
-        answer: "We offer a 30-day Implementation Guarantee. If you implement the strategies taught in the first two modules and don't see measurable improvements in your marketing efficiency, we'll refund your entire investment."
+        question: "What if it doesn't work for me?",
+        answer: "We offer a 30-day Implementation Guarantee. Follow our system, use the prompts as directed, and if you don't see a measurable improvement in your AI workflow efficiency and output quality, we'll refund your investment in full. We succeed when you succeed."
       }
     ]
   }
@@ -180,79 +189,79 @@ export const faqCategories = [
 
 export const testimonials = [
   {
-    name: "Jason K.",
-    title: "Digital Agency Owner",
-    imageSrc: "/assets/course/testimonials/jason.jpg",
-    beforeSituation: "Working 60+ hour weeks to manage campaigns for clients. Struggled to scale beyond 7 clients due to time constraints.",
-    afterResults: "Implemented AI content and ad management systems to automate 80% of campaign management. Now serves 22 clients with the same team size.",
-    quote: "I was skeptical about AI marketing, but this course changed everything. We're doing 3X the business with less stress.",
+    name: "Sarah K.",
+    title: "Ecommerce Store Owner",
+    imageSrc: "/assets/course/testimonials/sarah.jpg",
+    beforeSituation: "Wasting 15+ hours weekly tweaking AI prompts. Generated content was hit-or-miss, rarely matching our brand voice.",
+    afterResults: "Cut AI workflow time by 73%. Now consistently producing on-brand content that converts at 2.8X our previous rate.",
+    quote: "The Prompt Playbook eliminated all the guesswork. Now we have a systematic approach that delivers predictable results every time.",
     metrics: [
-      { label: "Clients Managed", value: "22" },
-      { label: "Hours Reduced", value: "25/wk" },
-      { label: "Client Retention", value: "+157%" },
-      { label: "Revenue Growth", value: "+186%" }
+      { label: "Time Saved", value: "15hr/wk" },
+      { label: "Content Quality", value: "+180%" },
+      { label: "Conversion Rate", value: "2.8X" },
+      { label: "Revenue Growth", value: "+156%" }
     ]
   },
   {
-    name: "Michelle T.",
-    title: "eCommerce Marketing Manager",
-    imageSrc: "/assets/course/testimonials/michelle.jpg",
-    beforeSituation: "Spending $12,000/month on ads with a 1.7 ROAS. Content marketing efforts were inconsistent with poor results.",
-    afterResults: "ROAS increased to 3.2 while reducing ad spend to $9,500/month. Automated content system increased organic traffic by 142% in 90 days.",
-    quote: "The AI email sequencing strategy alone paid for the course within the first week. Six months later, we've increased revenue by 87%.",
+    name: "Mark T.",
+    title: "DTC Brand Founder",
+    imageSrc: "/assets/course/testimonials/mark.jpg",
+    beforeSituation: "Struggling to scale content creation with AI. Spent thousands on tools but lacked a system to use them effectively.",
+    afterResults: "Implemented the 9-step framework to create consistent, high-converting content across all channels. Sales up 186% in 6 months.",
+    quote: "This isn't just about prompts - it's a complete system for scaling ecommerce with AI. The ROI has been incredible.",
     metrics: [
-      { label: "ROAS", value: "3.2X" },
-      { label: "Ad Spend", value: "-21%" },
-      { label: "Email Open Rate", value: "32%" },
-      { label: "Organic Traffic", value: "+142%" }
+      { label: "Content Output", value: "5X" },
+      { label: "Email CTR", value: "+210%" },
+      { label: "Ad ROAS", value: "4.2X" },
+      { label: "AOV Increase", value: "+67%" }
     ]
   },
   {
-    name: "Alex F.",
-    title: "SaaS Startup Founder",
-    imageSrc: "/assets/course/testimonials/alex.jpg",
-    beforeSituation: "Struggling to create consistent content with limited resources. SEO strategy was non-existent.",
-    afterResults: "Implemented the AI content engine to create 12 high-quality articles per month. Organic traffic went from 1,200 to 14,700 monthly visitors.",
-    quote: "As a technical founder with no marketing background, this course gave me a complete system for growing our user base.",
+    name: "Lisa F.",
+    title: "Marketing Director",
+    imageSrc: "/assets/course/testimonials/lisa.jpg",
+    beforeSituation: "Random AI experiments yielding inconsistent results. No clear strategy for scaling what worked.",
+    afterResults: "Built a systematic AI workflow that consistently produces high-converting content. Reduced content creation time by 82%.",
+    quote: "Finally, a framework that makes AI truly practical for ecommerce. We've stopped experimenting and started scaling.",
     metrics: [
-      { label: "Organic Traffic", value: "+1125%" },
-      { label: "Demo Bookings", value: "+118%" },
-      { label: "Content Output", value: "12x" },
-      { label: "CAC", value: "-37%" }
+      { label: "Time Saved", value: "82%" },
+      { label: "Content ROI", value: "+245%" },
+      { label: "Email Revenue", value: "+167%" },
+      { label: "Customer LTV", value: "+98%" }
     ]
   }
 ];
 
 export const painPoints = {
-  headline: "Are You Still Marketing the Old Way?",
-  subheadline: "If you're facing these challenges, you're not alone",
+  headline: "Tired of Random AI Experiments?",
+  subheadline: "If you're facing these AI implementation challenges, you're not alone",
   painPoints: [
     {
-      title: "Wasting Hours on Content",
-      description: "Creating content that disappears into the void of page 2 (or worse) despite your hard work"
+      title: "Endless Prompt Tinkering",
+      description: "Hours wasted trying to find the 'magic words' for one good output"
     },
     {
-      title: "Burning Budget on Poor Ads",
-      description: "Spending money on ads that target the wrong people with the wrong message at the wrong time"
+      title: "Generic AI Content",
+      description: "AI writing that sounds bland, lacks your brand voice, and doesn't connect with your customers"
     },
     {
-      title: "Manual Email Campaigns",
-      description: "Building email sequences by hand that barely break industry average open rates"
+      title: "Disconnected Efforts",
+      description: "Good AI outputs that don't automatically translate into a cohesive marketing strategy"
     },
     {
       title: "Falling Behind Competitors",
-      description: "Watching competitors publish everywhere at once while you struggle to keep pace"
+      description: "Watching competitors use AI systematically while you're stuck in experimentation mode"
     },
     {
-      title: "Growing Workload, Plateauing Results",
-      description: "Working harder than ever but seeing your results plateau or decline"
+      title: "Time-Consuming Testing",
+      description: "Spending more time testing prompts than implementing actual marketing strategies"
     },
     {
-      title: "Algorithm Anxiety",
-      description: "Losing sleep over constantly changing algorithms and platforms that affect your traffic"
+      title: "Inconsistent Results",
+      description: "Never knowing if your next AI output will be usable or need hours of editing"
     }
   ],
-  transitionText: "There's a better way to market your business using AI automation..."
+  transitionText: "Stop paying the 'Trial-and-Error Tax.' Get a proven system that works."
 };
 
 export const pricingData = {
@@ -305,34 +314,55 @@ const learningOutcomes = [
   "Build complete AI marketing systems that run 24/7"
 ];
 
-// Bonuses
-const bonuses = [
+export const guarantee = {
+  title: "30-Day Implementation Guarantee",
+  description: "Follow our system, implement the prompts as directed, and if you don't see a measurable improvement in your AI workflow efficiency and output quality within 30 days, we'll refund your investment in full. No questions asked.",
+  points: [
+    "✓ Clear implementation milestones",
+    "✓ Measurable efficiency metrics",
+    "✓ Quality assessment tools",
+    "✓ Risk-free trial period"
+  ]
+};
+
+export const bonuses = [
   {
-    title: "AI Template Library",
-    description: "100+ ready-to-use templates for every marketing function",
-    value: "$997 Value"
+    title: "Bonus #1: AI Prompt Testing Framework",
+    value: "$497 Value",
+    description: "Our systematic approach to testing and optimizing AI prompts, including tracking templates and performance metrics."
   },
   {
-    title: "The ELEVATE with AI Framework",
-    description: "Our proprietary system used by 7-figure agencies",
-    value: "$1,497 Value"
+    title: "Bonus #2: Ecom-Specific Prompt Library",
+    value: "$997 Value",
+    description: "200+ field-tested prompts specifically designed for ecommerce, covering product descriptions, ad copy, email sequences, and more."
   },
   {
-    title: "AI Automation Server with n8n",
-    description: "Complete setup with pre-built workflows",
-    value: "$797 Value"
+    title: "Bonus #3: Monthly Live Q&A Calls",
+    value: "$1,997 Value",
+    description: "Get your specific questions answered and learn from other ecommerce owners' implementations and optimizations."
   },
   {
-    title: "Customizable Chatbot Templates",
-    description: "Ready-to-deploy chatbots for leads and sales",
-    value: "$497 Value"
-  },
-  {
-    title: "Web Chat Integration Guide",
-    description: "Add AI-powered chat to your website",
-    value: "$397 Value"
+    title: "Bonus #4: Private Community Access",
+    value: "$997 Value",
+    description: "Join our exclusive community of ecommerce owners using AI to scale their businesses. Share insights, get feedback, and stay updated on the latest AI strategies."
   }
 ];
+
+export const finalCta = {
+  headline: "Transform Your AI Experiments into a Systematic Growth Engine",
+  subheadline: "Join the AI Prompt Playbook Today and Start Scaling Your Ecommerce Business with Confidence",
+  points: [
+    "✓ Complete 9-Step Elevate Framework",
+    "✓ 200+ Tested AI Prompts",
+    "✓ Step-by-Step Implementation Guides",
+    "✓ $4,488 in Exclusive Bonuses",
+    "✓ 30-Day Implementation Guarantee"
+  ],
+  button: {
+    text: "Join Now - Special Launch Price $999",
+    subtext: "Regular Price: $1,997 | Price Increases Soon"
+  }
+};
 
 // FAQs
 const faqs = [
@@ -372,164 +402,144 @@ const totalBonusValue = bonuses.reduce((total, bonus) => {
   title={title}
   description={description}
   chatConfig={{
-    // Layout and Meta
-    layout: "course",
-    title: "AI Marketing Revolution Course",
-    description: "Learn AI marketing automation and scale your business",
-    
-    // AI Config
-    aiProvider: "openrouter",
-    aiModel: "google/gemini-2.0-flash-001",
-    apiEndpoint: "https://api.openai.com/v1",
-    temperature: 0.7,
-    maxTokens: 2000,
-
-    // Prompt Config
     systemPrompt: [{
       type: "text",
-      text: `I'm your AI sales consultant for the AI Marketing Revolution course. My goal is to help you understand how this revolutionary program can transform your business and generate exponential ROI. I'll show you exactly how our students are achieving incredible results in just 5 hours.
+      text: `I'm your AI consultant for the AI Prompt Playbook. I help ecommerce owners understand how our proven 9-step framework can transform random AI experiments into a systematic growth engine. I'll show you exactly how our students are achieving predictable results with AI.
 
-Why You Need This Now:
-• Your competitors are already using AI (73% of successful businesses have adopted AI marketing)
-• Manual marketing is costing you thousands in wasted ad spend
-• You're losing leads to businesses with 24/7 AI sales systems
-• Every day without AI automation is leaving money on the table
-
-What Our Students Achieve:
-• 3X increase in conversion rates within 30 days
-• 73% reduction in content creation time
-• 42% reduction in ad spend while improving results
+Key Benefits:
+• 73% reduction in AI prompt testing time
+• 3X improvement in AI output quality
 • 186% average revenue growth in 6 months
+• Complete system for ecommerce growth
 
-Your AI Marketing Team Capabilities:
-1. Leadership & Strategy
-• Director of Marketing - Strategic AI initiatives
-• Marketing Strategy Manager - AI-driven planning
-• Marketing Ops Specialist - Process automation
-• Strategic Planning Analyst - AI forecasting
-
-2. Growth & Conversion
-• Growth Marketing Manager - AI-powered acquisition
-• Conversion Specialist - AI testing & optimization
-• Customer Journey Analyst - AI journey mapping
-• Growth Hacking Specialist - AI opportunity analysis
-
-3. Digital Marketing & SEO
-• Digital Marketing Manager - Channel orchestration
-• SEO/SEM Specialist - AI search optimization
-• Paid Media Coordinator - AI bid management
-• Marketing Automation Specialist - AI workflows
-
-4. Content & Creative
-• Content Marketing Manager - AI content strategy
-• Content Operations Specialist - AI workflow automation
-• Senior Content Creator - AI-enhanced content
-• Creative Lead - AI-powered creative direction
-
-5. Social & Community
-• Social Media Manager - AI engagement strategy
-• Community Manager - AI sentiment analysis
-• Social Content Creator - AI trend prediction
-• Social Analytics Specialist - AI performance tracking
-
-6. Analytics & Research
-• Marketing Analytics Manager - AI insights
-• Data Science Specialist - Predictive modeling
-• Marketing Analyst - AI attribution
-• Consumer Insights Analyst - AI behavior analysis
-
-Course Implementation:
-Day 1 Timeline:
-10:00 AM - Industry research & setup
-11:00 AM - Launch AI command center
-12:00 PM - AI model training
-2:00 PM - Content automation launch
-3:00 PM - Distribution & analytics setup
-
-8 Core Modules:
-1. AI Marketing Foundations
-2. Market Intelligence
-3. Content Creation
-4. Email Sequences
-5. Social Media Strategies
-6. Conversational Marketing
-7. SEO Domination
-8. Paid Advertising
+What You Get:
+• 9-Step ELEVATE Framework
+• 200+ Tested AI Prompts
+• Step-by-Step Implementation Guides
+• Real-world Case Studies
+• Private Community Access
+• Monthly Live Q&A Calls
 
 Limited Time Offer:
 • Original Price: $1,997
-• Launch Special: Only $997 (Save $1,000)
-• Payment Plans: 3 x $367
+• Launch Special: Only $999
 • 30-Day Implementation Guarantee
-• $4,185 in Exclusive Bonuses:
-  - AI Template Library ($997 value)
-  - ELEVATE Framework ($1,497 value)
-  - n8n Automation Server ($797 value)
-  - Chatbot Templates ($497 value)
-  - Web Chat Integration ($397 value)
+• $4,488 in Exclusive Bonuses
 
 Only 25 Spots Remaining! Don't miss this opportunity to:
-• Automate your marketing and scale your business
-• Join successful students achieving 186% revenue growth
-• Get $4,185 in exclusive bonuses
+• Transform random AI experiments into systematic growth
+• Join successful students achieving predictable results
+• Get $4,488 in exclusive bonuses
 • Secure your spot at the special launch price
 
-I'm here to help you evaluate if this course is right for your business and secure your spot before enrollment closes. What would you like to know about first?`
+I'm here to help you understand how the AI Prompt Playbook can transform your ecommerce business. What would you like to know about first?`
     }],
-    addSystemPrompt: true,
-    addBusinessPrompt: true,
-
-    // Welcome Config
-    welcomeMessage: "👋 Limited Time Opportunity! Discover how our students are achieving 3X conversion rates and 73% reduction in content creation time. Only 25 spots remaining at the special launch price. Would you like to see how this could work for your business?",
+    welcomeMessage: "👋 Transform your AI experiments into predictable growth! Our students are seeing 73% faster results and 3X better AI outputs. Only 25 spots remaining at the special launch price. How can I help you evaluate if this system is right for your business?",
     avatar: "/icon.svg",
     suggestions: [
-      { label: "💰 ROI Calculator", prompt: "Show me the potential ROI for my business based on current marketing spend" },
-      { label: "⭐ Success Stories", prompt: "Share how other businesses increased revenue by 186% using this system" },
-      { label: "🎯 Your Business", prompt: "How can this 5-hour system specifically help my business grow?" },
-      { label: "💎 Special Offer", prompt: "Tell me about the launch special and $4,185 in bonuses included" }
-    ],
-
-    // Optional Config
-    runtime: "edge",
-    includeContent: true
+      { label: "🎯 Results", prompt: "Show me how other ecommerce stores are getting predictable results with this system" },
+      { label: "📘 Framework", prompt: "Tell me about the 9-step framework and how it works" },
+      { label: "💎 Special Offer", prompt: "What's included in the launch special and $4,488 in bonuses?" },
+      { label: "❓ My Store", prompt: "How can this system help my specific ecommerce business?" }
+    ]
   }}
   rightPanelMode="quarter"
 >
   <main class="min-h-screen bg-background">
     {/* Hero Section */}
-    <section
-      class="container mx-auto px-6 py-12 border-b border-border bg-background/50 backdrop-blur-sm"
-    >
-      <div
-        class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-6 text-center"
-      >
-        <h1
-          class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground one-animate-fade-in"
-        >
-          Build Your <span class="text-accent">AI Brand</span>
+    <section class="container mx-auto px-6 py-16 border-b border-border bg-background/50 backdrop-blur-sm">
+      <div class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-8 text-center">
+        <Badge variant="outline" className="text-sm md:text-base animate-fade-in">
+          {courseDetails.badge}
+        </Badge>
+        
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground one-animate-fade-in">
+          {courseDetails.title}
         </h1>
-        <div class="flex flex-col items-center gap-4 max-w-[800px]">
-          <p
-            class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in"
-          >
-            ONE is a free toolkit for building AI brands.
-           
-            You can generate anything - content, courses, payments, websites, and AI agents without restrictions.
-            
-          </p>
+        
+        <p class="text-xl sm:text-2xl md:text-3xl font-medium text-muted-foreground mb-4">
+          {courseDetails.subtitle}
+        </p>
+        
+        <p class="text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl">
+          {courseDetails.valueProposition}
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-8">
+          {heroStats.map((stat) => (
+            <Card className="p-6 text-center">
+              <h3 class="text-3xl font-bold text-primary mb-2">{stat.value}</h3>
+              <p class="text-sm text-muted-foreground">{stat.label}</p>
+            </Card>
+          ))}
         </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+          <Button size="lg" className="text-lg">
+            {courseDetails.ctaText}
+            <ArrowRightIcon className="ml-2 h-5 w-5" />
+          </Button>
+          <Button size="lg" variant="outline" className="text-lg">
+            Learn More
+          </Button>
+        </div>
+
+        <p class="text-sm text-muted-foreground mt-4 flex items-center justify-center gap-2">
+          <ShieldCheckIcon className="w-4 h-4" />
+          {courseDetails.guarantee}
+        </p>
       </div>
     </section>
 
     <Circles />
 
-    <section class="container mx-auto px-6 py-8 border-b border-border bg-background/30 backdrop-blur-sm">
-      <div class="w-full max-w-[800px] mx-auto text-center">
-        <p class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide one-animate-fade-in">
-          ONE is 100% free, open source and compliant. You can host it for free. Run it locally, on your own server, in the cloud or at the edge.
-        </p>
+    <section class="container mx-auto px-6 py-12 border-b border-border bg-background/30 backdrop-blur-sm">
+      <div class="w-full max-w-[1200px] mx-auto">
+        <div class="grid md:grid-cols-3 gap-8">
+          <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
+            <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
+              <TrophyIcon className="w-8 h-8 text-primary" />
+            </div>
+            <h3 class="text-xl font-bold mb-3">Proven System</h3>
+            <p class="text-muted-foreground">
+              Field-tested framework used by successful ecommerce stores to generate predictable growth with AI
+            </p>
+          </Card>
+
+          <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
+            <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
+              <CheckIcon className="w-8 h-8 text-primary" />
+            </div>
+            <h3 class="text-xl font-bold mb-3">200+ Tested Prompts</h3>
+            <p class="text-muted-foreground">
+              Skip the experimentation with our library of proven prompts designed specifically for ecommerce
+            </p>
+          </Card>
+
+          <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
+            <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
+              <UserIcon className="w-8 h-8 text-primary" />
+            </div>
+            <h3 class="text-xl font-bold mb-3">Expert Support</h3>
+            <p class="text-muted-foreground">
+              Get guidance from our community of successful ecommerce owners and AI experts
+            </p>
+          </Card>
+        </div>
+
+        <div class="text-center mt-12">
+          <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Join over 1,000+ ecommerce owners who have transformed their random AI experiments into systematic growth engines
+          </p>
+          <div class="flex justify-center gap-4 mt-8">
+            <Badge variant="outline" className="text-sm py-1 px-4">73% Faster Results</Badge>
+            <Badge variant="outline" className="text-sm py-1 px-4">3X Better Outputs</Badge>
+            <Badge variant="outline" className="text-sm py-1 px-4">186% Growth</Badge>
+          </div>
+        </div>
       </div>
     </section>
+
     <MeetYourMarketingTeam />
 
     <!-- Course Overview -->
