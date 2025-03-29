@@ -1,0 +1,104 @@
+---
+import { Card } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { 
+  BrainCircuitIcon, 
+  ShoppingBagIcon, 
+  BarChart3Icon, 
+  MessagesSquareIcon, 
+  MailIcon, 
+  SearchIcon,
+  TagIcon,
+  UsersIcon,
+  ShareIcon
+} from "lucide-react";
+
+const features = [
+  {
+    icon: BrainCircuitIcon,
+    title: "HOOK",
+    description: "AI-powered hooks that stop the scroll and capture attention"
+  },
+  {
+    icon: TagIcon,
+    title: "GIFT",
+    description: "Create high-value lead magnets that convert at 40%+"
+  },
+  {
+    icon: UsersIcon,
+    title: "IDENTIFY",
+    description: "Target and attract your perfect customers with AI precision"
+  },
+  {
+    icon: MessagesSquareIcon,
+    title: "ENGAGE",
+    description: "Build authentic connections that drive brand loyalty"
+  },
+  {
+    icon: ShoppingBagIcon,
+    title: "SELL",
+    description: "Convert interest into sales with proven frameworks"
+  },
+  {
+    icon: MailIcon,
+    title: "NURTURE",
+    description: "Maximize customer value with personalized journeys"
+  },
+  {
+    icon: BarChart3Icon,
+    title: "UPSELL",
+    description: "Increase average order value systematically"
+  },
+  {
+    icon: SearchIcon,
+    title: "UNDERSTAND",
+    description: "Optimize growth with AI-powered insights"
+  },
+  {
+    icon: ShareIcon,
+    title: "SHARE",
+    description: "Turn customers into vocal brand advocates"
+  }
+];
+---
+
+<section class="py-20 relative">
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none"></div>
+  
+  <div class="container px-4 mx-auto relative">
+    <div class="text-center mb-12">
+      <Badge variant="outline" className="mb-4">The ELEVATE Framework</Badge>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Your Complete AI Growth System
+      </h2>
+      <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+        Transform random AI experiments into a systematic approach for predictable ecommerce growth
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 max-w-[1200px] mx-auto">
+      {features.map((feature) => (
+        <Card className="p-6 hover:shadow-lg transition-all duration-300">
+          <div class="flex items-start gap-4">
+            <div class="rounded-lg bg-primary/10 p-3">
+              <feature.icon className="w-6 h-6 text-primary" />
+            </div>
+            <div>
+              <h3 class="font-bold mb-2">{feature.title}</h3>
+              <p class="text-sm text-muted-foreground">{feature.description}</p>
+            </div>
+          </div>
+        </Card>
+      ))}
+    </div>
+
+    <div class="text-center mt-12">
+      <p class="text-muted-foreground mb-6">
+        Each step includes field-tested prompts, templates, and implementation guides
+      </p>
+      <Badge variant="outline" className="text-sm py-1 px-4">
+        200+ Proven AI Prompts Included
+      </Badge>
+    </div>
+  </div>
+</section>

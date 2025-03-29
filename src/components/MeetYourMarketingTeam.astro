@@ -13,60 +13,79 @@ import {
   ShareIcon
 } from "lucide-react";
 
-const features = [
-  {
-    icon: BrainCircuitIcon,
-    title: "HOOK",
-    description: "AI-powered hooks that stop the scroll and capture attention"
+const features = {
+  grow: {
+    title: "GROW",
+    subtitle: "Elevate Value",
+    steps: [
+      {
+        icon: BarChart3Icon,
+        title: "Upsell",
+        description: "Increase average order value systematically"
+      },
+      {
+        icon: BrainCircuitIcon,
+        title: "Teach",
+        description: "AI-powered hooks that stop the scroll and capture attention"
+      },
+      {
+        icon: ShareIcon,
+        title: "Share",
+        description: "Turn customers into vocal brand advocates"
+      }
+    ]
   },
-  {
-    icon: TagIcon,
-    title: "GIFT",
-    description: "Create high-value lead magnets that convert at 40%+"
+  convert: {
+    title: "CONVERT",
+    subtitle: "Elevate Sales",
+    steps: [
+      {
+        icon: MailIcon,
+        title: "Remarket",
+        description: "Maximize customer value with personalized journeys"
+      },
+      {
+        icon: ShoppingBagIcon,
+        title: "Sell",
+        description: "Convert interest into sales with proven frameworks"
+      },
+      {
+        icon: MessagesSquareIcon,
+        title: "Engage",
+        description: "Build authentic connections that drive brand loyalty"
+      }
+    ]
   },
-  {
-    icon: UsersIcon,
-    title: "IDENTIFY",
-    description: "Target and attract your perfect customers with AI precision"
-  },
-  {
-    icon: MessagesSquareIcon,
-    title: "ENGAGE",
-    description: "Build authentic connections that drive brand loyalty"
-  },
-  {
-    icon: ShoppingBagIcon,
-    title: "SELL",
-    description: "Convert interest into sales with proven frameworks"
-  },
-  {
-    icon: MailIcon,
-    title: "NURTURE",
-    description: "Maximize customer value with personalized journeys"
-  },
-  {
-    icon: BarChart3Icon,
-    title: "UPSELL",
-    description: "Increase average order value systematically"
-  },
-  {
-    icon: SearchIcon,
-    title: "UNDERSTAND",
-    description: "Optimize growth with AI-powered insights"
-  },
-  {
-    icon: ShareIcon,
-    title: "SHARE",
-    description: "Turn customers into vocal brand advocates"
+  attract: {
+    title: "ATTRACT",
+    subtitle: "Elevate Reach",
+    steps: [
+      {
+        icon: SearchIcon,
+        title: "Find",
+        description: "Optimize growth with AI-powered insights"
+      },
+      {
+        icon: TagIcon,
+        title: "Gift",
+        description: "Create high-value lead magnets that convert at 40%+"
+      },
+      {
+        icon: UsersIcon,
+        title: "Identify",
+        description: "Target and attract your perfect customers with AI precision"
+      }
+    ]
   }
-];
+};
+
 ---
 
-<section class="py-20 relative">
+<section class="py-20 relative bg-black text-white">
   <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none"></div>
   
   <div class="container px-4 mx-auto relative">
-    <div class="text-center mb-12">
+    <div class="text-center mb-24">
       <Badge variant="outline" className="mb-4">The ELEVATE Framework</Badge>
       <h2 class="text-3xl md:text-4xl font-bold mb-4">
         Your Complete AI Growth System
@@ -76,23 +95,99 @@ const features = [
       </p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6 max-w-[1200px] mx-auto">
-      {features.map((feature) => (
-        <Card className="p-6 hover:shadow-lg transition-all duration-300">
-          <div class="flex items-start gap-4">
-            <div class="rounded-lg bg-primary/10 p-3">
-              <feature.icon className="w-6 h-6 text-primary" />
-            </div>
-            <div>
-              <h3 class="font-bold mb-2">{feature.title}</h3>
-              <p class="text-sm text-muted-foreground">{feature.description}</p>
+    <div class="max-w-[1200px] mx-auto space-y-32">
+      {/* GROW Section */}
+      <div class="relative">
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-48">
+          <div class="flex flex-col items-center gap-4">
+            <h3 class="text-5xl font-bold tracking-wider">{features.grow.title}</h3>
+            <div class="flex flex-col items-center gap-1">
+              <span class="text-3xl">↑</span>
+              <p class="text-xl font-light tracking-wide">{features.grow.subtitle}</p>
             </div>
           </div>
-        </Card>
-      ))}
+        </div>
+        
+        <div class="grid grid-cols-3 gap-24 pl-64">
+          {features.grow.steps.map((step, index) => (
+            <div class="relative">
+              <div class="rounded-full bg-zinc-900 border border-zinc-800 p-10 aspect-square flex items-center justify-center shadow-2xl">
+                <step.icon className="w-14 h-14 text-white/90" />
+              </div>
+              <h4 class="text-2xl font-semibold mt-6 text-center">{step.title}</h4>
+              <p class="text-sm text-zinc-400 text-center mt-3 max-w-[250px] mx-auto">{step.description}</p>
+              {index < 2 && (
+                <div class="absolute top-1/2 -right-20 w-16 h-[2px] bg-zinc-700">
+                  <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 border-t-2 border-r-2 border-zinc-700 transform rotate-45 translate-x-1"></div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CONVERT Section */}
+      <div class="relative">
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-48">
+          <div class="flex flex-col items-center gap-4">
+            <h3 class="text-5xl font-bold tracking-wider">{features.convert.title}</h3>
+            <div class="flex flex-col items-center gap-1">
+              <span class="text-3xl">↑</span>
+              <p class="text-xl font-light tracking-wide">{features.convert.subtitle}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-24 pl-64">
+          {features.convert.steps.map((step, index) => (
+            <div class="relative">
+              <div class="rounded-full bg-zinc-900 border border-zinc-800 p-10 aspect-square flex items-center justify-center shadow-2xl">
+                <step.icon className="w-14 h-14 text-white/90" />
+              </div>
+              <h4 class="text-2xl font-semibold mt-6 text-center">{step.title}</h4>
+              <p class="text-sm text-zinc-400 text-center mt-3 max-w-[250px] mx-auto">{step.description}</p>
+              {index < 2 && (
+                <div class="absolute top-1/2 -right-20 w-16 h-[2px] bg-zinc-700">
+                  <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 border-t-2 border-r-2 border-zinc-700 transform rotate-45 translate-x-1"></div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ATTRACT Section */}
+      <div class="relative">
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-48">
+          <div class="flex flex-col items-center gap-4">
+            <h3 class="text-5xl font-bold tracking-wider">{features.attract.title}</h3>
+            <div class="flex flex-col items-center gap-1">
+              <span class="text-3xl">↑</span>
+              <p class="text-xl font-light tracking-wide">{features.attract.subtitle}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-24 pl-64">
+          {features.attract.steps.map((step, index) => (
+            <div class="relative">
+              <div class="rounded-full bg-zinc-900 border border-zinc-800 p-10 aspect-square flex items-center justify-center shadow-2xl">
+                <step.icon className="w-14 h-14 text-white/90" />
+              </div>
+              <h4 class="text-2xl font-semibold mt-6 text-center">{step.title}</h4>
+              <p class="text-sm text-zinc-400 text-center mt-3 max-w-[250px] mx-auto">{step.description}</p>
+              {index < 2 && (
+                <div class="absolute top-1/2 -right-20 w-16 h-[2px] bg-zinc-700">
+                  <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 border-t-2 border-r-2 border-zinc-700 transform rotate-45 translate-x-1"></div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
 
-    <div class="text-center mt-12">
+    <div class="text-center mt-24">
       <p class="text-muted-foreground mb-6">
         Each step includes field-tested prompts, templates, and implementation guides
       </p>
