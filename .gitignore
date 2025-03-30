@@ -9,6 +9,11 @@ dist/
 .vercel/
 .wrangler/
 
+# Vector DB
+
+.smtcmp_vector_db.tar.gz
+.smart-env/
+.smtcmp_json_db/
 
 # dependencies
 node_modules/

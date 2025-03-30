@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Button } from "../components/ui/button";
-import { Badge } from "../components/ui/badge";
-import { Card } from "../components/ui/card";
-import { CheckIcon, ArrowRightIcon, ShieldCheckIcon, UserIcon, TrophyIcon, GraduationCapIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { ArrowRight, Shield, Check, User, Trophy, GraduationCap } from "lucide-react";
 import { HeroPill } from "../components/HeroPill";
 import { TrustedPill } from "../components/TrustedPill";
 import { HeroSection } from "../components/HeroSection";
@@ -15,8 +15,6 @@ import { Separator } from "../components/ui/separator";
 import { CountdownTimer } from "../components/CountdownTimer";
 import HowItWorks from "../components/HowItWorks.astro";
 import MeetYourMarketingTeam from "../components/MeetYourMarketingTeam.astro";
-import { PricingTable } from "../components/course/PricingTable";
-import { StickyEnrollBar } from "../components/course/StickyEnrollBar";
 import Teacher from "../components/Teacher.astro";
 import Elevate from "../components/Elevate";
 
@@ -310,35 +308,129 @@ export const pricingData = {
     full: "997",
     installments: { amount: "367", count: 3 }
   },
-  guarantee: "Implementation Guarantee",
-  guaranteeDays: 30,
-  totalValue: 7676,
+  guarantee: {
+    days: 30,
+    title: "30-Day Implementation Guarantee",
+    description: "Follow our proven system, implement the AI prompts as directed, and if you don't see a measurable improvement in your workflow efficiency and output quality within 30 days, we'll refund your investment in full. No questions asked.",
+    features: [
+      "Clear implementation milestones",
+      "Measurable efficiency metrics",
+      "Quality assessment tools",
+      "Risk-free trial period"
+    ]
+  },
+  totalValue: "12,997",
   valueBreakdown: [
-    { item: "Complete 8-Module AI Marketing System", value: "$1,997" },
-    { item: "Step-by-Step Video Tutorials", value: "$997" },
-    { item: "Comprehensive Implementation Ebook", value: "$497" },
-    { item: "The ELEVATE with AI Framework", value: "$1,497" },
-    { item: "AI Automation Server (n8n) Setup", value: "$797" },
-    { item: "Chatbot Templates", value: "$497" },
-    { item: "Web Chat Integration", value: "$397" },
-    { item: "50+ AI Marketing Templates", value: "$997" }
+    { 
+      item: "The Complete ELEVATE Framework & AI Prompt System",
+      value: "1,997",
+      description: "Transform random AI experiments into systematic growth with our proven 9-step framework"
+    },
+    { 
+      item: "200+ Tested AI Prompts Library",
+      value: "997",
+      description: "Skip months of testing with our field-proven collection of high-converting prompts"
+    },
+    { 
+      item: "Implementation Playbooks & Templates",
+      value: "1,497",
+      description: "Step-by-step guides for implementing each framework component"
+    },
+    { 
+      item: "AI Automation Workflows",
+      value: "2,997",
+      description: "Ready-to-use automation sequences for scaling your operations"
+    },
+    { 
+      item: "Private Community Access",
+      value: "997",
+      description: "Connect with successful ecom owners using AI to scale their businesses"
+    },
+    { 
+      item: "Monthly Live Q&A Calls",
+      value: "1,997",
+      description: "Get your specific questions answered and learn from others' implementations"
+    },
+    { 
+      item: "AI Tool Integration Guides",
+      value: "997",
+      description: "Detailed tutorials for setting up and optimizing your AI toolkit"
+    },
+    { 
+      item: "Lifetime Updates",
+      value: "1,497",
+      description: "Access to all future framework updates, new prompts, and features"
+    }
   ],
   features: [
-    { title: "Lifetime Access to Course Materials", included: true },
-    { title: "All Future Updates", included: true },
-    { title: "Complete n8n Automation Setup", included: true },
-    { title: "Private Community Access", included: true },
-    { title: "AI Template Library", included: true },
-    { title: "Monthly Live Q&A Calls", included: true },
-    { title: "1-on-1 Implementation Support", included: false },
-    { title: "Done-For-You Setup", included: false }
+    { 
+      title: "Complete Framework Access",
+      included: true,
+      highlight: true,
+      description: "Get immediate access to all 9 modules and implementation guides"
+    },
+    { 
+      title: "200+ AI Prompt Templates",
+      included: true,
+      highlight: true,
+      description: "Our complete library of tested, high-converting prompts"
+    },
+    { 
+      title: "Private Community Access",
+      included: true,
+      highlight: true,
+      description: "Connect with other successful AI-powered businesses"
+    },
+    { 
+      title: "Monthly Live Q&A Calls",
+      included: true,
+      highlight: false,
+      description: "Get your specific questions answered live"
+    },
+    { 
+      title: "Implementation Support",
+      included: true,
+      highlight: false,
+      description: "Step-by-step guidance for successful deployment"
+    },
+    { 
+      title: "Lifetime Updates",
+      included: true,
+      highlight: false,
+      description: "Access to all future content and features"
+    }
   ],
-  ctaText: "Secure Your Spot Now",
-  spots: {
-    total: 100,
-    remaining: 25
-  },
-  deadline: "March 30, 2025"
+  bonuses: [
+    {
+      title: "FAST ACTION BONUS: AI Automation Toolkit",
+      value: "2,997",
+      description: "Complete set of automation workflows and integrations",
+      expires: "48 hours"
+    },
+    {
+      title: "BONUS #1: Advanced Prompt Engineering Guide",
+      value: "997",
+      description: "Master the art of crafting high-converting AI prompts"
+    },
+    {
+      title: "BONUS #2: ROI Calculator & Analytics Dashboard",
+      value: "497",
+      description: "Track and optimize your AI implementation results"
+    },
+    {
+      title: "BONUS #3: AI Tool Selection Framework",
+      value: "497",
+      description: "Choose the right AI tools for your specific needs"
+    }
+  ],
+  scarcity: {
+    spots: {
+      total: 100,
+      remaining: 25
+    },
+    deadline: "March 30, 2024",
+    price_increase: "500"
+  }
 };
 
 // What you'll learn
@@ -514,17 +606,45 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 mt-8">
-          <Button size="lg" className="text-lg">
-            {courseDetails.ctaText}
-            <ArrowRightIcon className="ml-2 h-5 w-5" />
-          </Button>
-          <Button size="lg" variant="outline" className="text-lg">
-            Learn More
+          <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90">
+            Get Instant Access to the Playbook & Framework Now
+            <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
 
+        {/* Trust Elements */}
+        <div class="mt-8 space-y-6">
+          <div class="flex flex-wrap justify-center items-center gap-4 text-sm text-muted-foreground">
+            <span class="flex items-center gap-2">
+              <Check className="w-4 h-4 text-primary" />
+              Designed for Ecom Owners & Managers
+            </span>
+            <span class="flex items-center gap-2">
+              <Check className="w-4 h-4 text-primary" />
+              Leverage ChatGPT, Claude & Gemini
+            </span>
+            <span class="flex items-center gap-2">
+              <Check className="w-4 h-4 text-primary" />
+              Powered by the 9-Step Elevate Framework
+            </span>
+            <span class="flex items-center gap-2">
+              <Check className="w-4 h-4 text-primary" />
+              For Shopify, WooCommerce & More
+            </span>
+          </div>
+
+          {/* Partner Logos */}
+          <div class="flex flex-wrap justify-center items-center gap-8">
+            <img src="/images/logos/logo-openai.svg" alt="OpenAI" class="h-8 opacity-70 hover:opacity-100 transition-opacity" />
+            <img src="/images/logos/logo-antrophic.svg" alt="Anthropic" class="h-8 opacity-70 hover:opacity-100 transition-opacity" />
+            <img src="/images/logos/logo-google.svg" alt="Claude" class="h-8 opacity-70 hover:opacity-100 transition-opacity" />
+            <img src="/images/logos/logo-shopify.svg" alt="Shopify" class="h-8 opacity-70 hover:opacity-100 transition-opacity" />
+            <img src="/images/logos/logo-woocommerce.svg" alt="WooCommerce" class="h-8 opacity-70 hover:opacity-100 transition-opacity" />
+          </div>
+        </div>
+
         <p class="text-sm text-muted-foreground mt-4 flex items-center justify-center gap-2">
-          <ShieldCheckIcon className="w-4 h-4" />
+          <Shield className="w-4 h-4" />
           {courseDetails.guarantee}
         </p>
       </div>
@@ -532,14 +652,12 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
     <Circles />
 
-
-
     <section class="container mx-auto px-6 py-12 border-b border-border bg-background/30 backdrop-blur-sm">
       <div class="w-full max-w-[1200px] mx-auto">
         <div class="grid md:grid-cols-3 gap-8">
           <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
             <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
-              <TrophyIcon className="w-8 h-8 text-primary" />
+              <Trophy className="w-8 h-8 text-primary" />
             </div>
             <h3 class="text-xl font-bold mb-3">Proven System</h3>
             <p class="text-muted-foreground">
@@ -549,7 +667,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
           <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
             <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
-              <CheckIcon className="w-8 h-8 text-primary" />
+              <Check className="w-8 h-8 text-primary" />
             </div>
             <h3 class="text-xl font-bold mb-3">200+ Tested Prompts</h3>
             <p class="text-muted-foreground">
@@ -559,7 +677,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
           <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
             <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
-              <UserIcon className="w-8 h-8 text-primary" />
+              <User className="w-8 h-8 text-primary" />
             </div>
             <h3 class="text-xl font-bold mb-3">Expert Support</h3>
             <p class="text-muted-foreground">
@@ -581,81 +699,398 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
       </div>
     </section>
 
-
     <!-- ELEVATE Framework -->
-<section class="py-20 relative">
-  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
-  <div class="container px-4 mx-auto relative">
-    <h2 class="text-3xl lg:text-4xl font-bold text-center mb-6">The ELEVATE Framework</h2>
-    <p class="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
-      Your Complete AI Growth System
-      Transform random AI experiments into a systematic approach for predictable ecommerce growth    </p>
-    <Elevate client:visible />
-  </div>
-</section>
+    <section class="py-20 relative">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+      <div class="container px-4 mx-auto relative">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-6">The ELEVATE Framework</h2>
+        <p class="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
+          Your Complete AI Growth System
+          Transform random AI experiments into a systematic approach for predictable ecommerce growth
+        </p>
+        <Elevate client:visible />
 
-<!-- Course Modules -->
-<section class="container mx-auto px-6 py-20 border-t border-border/40">
-  <div class="w-full max-w-[1000px] mx-auto">
-    <h2 class="text-4xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Course Curriculum</h2>
-    <p class="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
-      Your Step-by-Step System for AI-Powered Ecom Growth
-    </p>
-    <div class="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:-translate-x-px before:bg-gradient-to-b before:from-transparent before:via-primary/20 before:to-transparent">
-      {courseModulesData.map((module, index) => (
-        <div class="relative flex items-start">
-          <div class="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-mono text-lg font-bold">
-            {index}
-          </div>
-          <div class="ml-12 w-full">
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary/20 bg-card group">
-              <div class="space-y-4">
-                {/* Module Header */}
-                <div class="flex flex-col md:flex-row md:items-start gap-4">
-                  <div class="flex-1">
-                    <h3 class="text-xl font-bold group-hover:text-primary transition-colors">{module.title}</h3>
-                    <p class="text-muted-foreground">{module.description}</p>
-                  </div>
-                  <div class="md:ml-auto flex items-center gap-2">
-                    <Badge variant="outline" className="bg-primary/5">
-                      {module.lessons.length} Lessons
-                    </Badge>
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Module Details */}
-                <div class="space-y-4">
-                  <div class="bg-muted/50 rounded-lg p-4">
-                    <p class="font-semibold text-primary mb-2">Objective:</p>
-                    <p class="text-muted-foreground">{module.objective}</p>
-                  </div>
-
-                  <div class="space-y-2">
-                    <p class="text-sm leading-relaxed text-muted-foreground">
-                      {module.mainDescription}
-                    </p>
-                  </div>
-
-                  <div class="bg-primary/5 rounded-lg p-4">
-                    <p class="font-semibold text-primary mb-2">What You'll Create:</p>
-                    <p class="text-muted-foreground">{module.output}</p>
-                  </div>
-                </div>
-
-                <Separator />
-
-                {/* Module Content */}
-                <CourseModuleContent client:visible lessons={module.lessons} moduleNumber={index} />
+        {/* Framework Overview */}
+        <div class="mt-20 max-w-4xl mx-auto">
+          <div class="grid md:grid-cols-2 gap-12">
+            {/* Strategic Framework */}
+            <div class="space-y-6">
+              <div class="inline-flex items-center gap-2 text-primary">
+                <GraduationCap className="w-5 h-5" />
+                <h3 class="text-lg font-semibold">Strategic Framework</h3>
               </div>
-            </Card>
+              <div class="space-y-4">
+                <h4 class="text-2xl font-bold">The Strategic Map for Growth</h4>
+                <p class="text-muted-foreground leading-relaxed">
+                  The ELEVATE Framework provides your complete roadmap for systematic ecommerce growth. It transforms scattered marketing efforts into a cohesive, predictable system that consistently delivers results.
+                </p>
+                <div class="space-y-3">
+                  <div class="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p class="text-sm">Clear, logical 9-step process covering your entire customer journey</p>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p class="text-sm">Proven sequence that builds momentum and compounds results</p>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p class="text-sm">Strategic checkpoints to ensure consistent progress</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Prompt Playbook */}
+            <div class="space-y-6">
+              <div class="inline-flex items-center gap-2 text-primary">
+                <Trophy className="w-5 h-5" />
+                <h3 class="text-lg font-semibold">AI Prompt Playbook</h3>
+              </div>
+              <div class="space-y-4">
+                <h4 class="text-2xl font-bold">The High-Speed Engine</h4>
+                <p class="text-muted-foreground leading-relaxed">
+                  While the framework provides direction, the AI Prompt Playbook delivers the tools for rapid execution. Get field-tested prompts designed specifically for each step of your journey.
+                </p>
+                <div class="space-y-3">
+                  <div class="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p class="text-sm">200+ proven prompts optimized for ecommerce growth</p>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p class="text-sm">Step-by-step implementation guides for each framework stage</p>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p class="text-sm">Ready-to-use templates for instant deployment</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Combined Power */}
+          <div class="mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
+            <h3 class="text-xl font-bold mb-4 text-center">The Power of Framework + Playbook</h3>
+            <p class="text-center text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              The ELEVATE Framework provides the strategic map, while the AI Prompt Playbook provides the high-speed engine, creating a powerful system for achieving predictable, scalable e-commerce growth.
+            </p>
+            <div class="grid md:grid-cols-3 gap-6 mt-8">
+              <Card className="p-4 text-center">
+                <h4 class="font-semibold mb-2">Systematic Approach</h4>
+                <p class="text-sm text-muted-foreground">Transform random experiments into predictable growth</p>
+              </Card>
+              <Card className="p-4 text-center">
+                <h4 class="font-semibold mb-2">Rapid Implementation</h4>
+                <p class="text-sm text-muted-foreground">Execute strategies 10x faster with AI automation</p>
+              </Card>
+              <Card className="p-4 text-center">
+                <h4 class="font-semibold mb-2">Proven Results</h4>
+                <p class="text-sm text-muted-foreground">Follow the exact system our successful students use</p>
+              </Card>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div class="mt-12 text-center">
+            <Button size="lg" className="text-lg px-8">
+              Get Access to the Complete System
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+            <p class="mt-4 text-sm text-muted-foreground">
+              Join successful store owners using our proven system to scale with AI
+            </p>
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 bg-primary/5 border-y border-primary/10">
+      <div class="container px-4 mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <Badge variant="outline" class="mb-4">Systematic Implementation</Badge>
+          <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+            How the Elevate Ecommerce Framework Works
+          </h2>
+          <p class="text-xl text-muted-foreground">
+            Your Complete System for AI-Accelerated Growth
+          </p>
+        </div>
+
+        {/* Foundation Step */}
+        <div class="max-w-4xl mx-auto mb-16">
+          <Card class="p-8">
+            <div class="flex items-start gap-6">
+              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <GraduationCap class="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold mb-4">1. Start with Your Foundation</h3>
+                <p class="text-muted-foreground mb-6">
+                  Before taking any marketing action, establish deep clarity by defining your essential building blocks.
+                </p>
+                <div class="grid md:grid-cols-3 gap-6">
+                  <div class="space-y-2">
+                    <h4 class="font-semibold text-primary">Customer Avatar</h4>
+                    <p class="text-sm text-muted-foreground">Map out your ideal customer's pains and desires (like "Sam Store")</p>
+                  </div>
+                  <div class="space-y-2">
+                    <h4 class="font-semibold text-primary">Company Context</h4>
+                    <p class="text-sm text-muted-foreground">Define your offers and unique brand voice</p>
+                  </div>
+                  <div class="space-y-2">
+                    <h4 class="font-semibold text-primary">Market Awareness</h4>
+                    <p class="text-sm text-muted-foreground">Understand your market positioning and competition</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* 9 Sequential Steps */}
+        <div class="max-w-4xl mx-auto mb-16">
+          <Card class="p-8">
+            <div class="flex items-start gap-6">
+              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Trophy class="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold mb-4">2. Follow the 9 Sequential Steps</h3>
+                <p class="text-muted-foreground mb-6">
+                  Build momentum logically through our proven sequence, addressing each critical part of the customer journey.
+                </p>
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                  <div class="p-4 bg-primary/5 rounded-lg">
+                    <h4 class="font-semibold text-primary mb-2">Attract</h4>
+                    <div class="space-y-2 text-sm">
+                      <p>• Hook</p>
+                      <p>• Gift</p>
+                      <p>• Identify</p>
+                    </div>
+                  </div>
+                  <div class="p-4 bg-primary/5 rounded-lg">
+                    <h4 class="font-semibold text-primary mb-2">Convert</h4>
+                    <div class="space-y-2 text-sm">
+                      <p>• Engage</p>
+                      <p>• Sell</p>
+                      <p>• Nurture</p>
+                    </div>
+                  </div>
+                  <div class="p-4 bg-primary/5 rounded-lg">
+                    <h4 class="font-semibold text-primary mb-2">Grow</h4>
+                    <div class="space-y-2 text-sm">
+                      <p>• Upsell</p>
+                      <p>• Understand</p>
+                      <p>• Share</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* AI Prompt Playbook Integration */}
+        <div class="max-w-4xl mx-auto mb-16">
+          <Card class="p-8">
+            <div class="flex items-start gap-6">
+              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <ArrowRight class="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold mb-4">3. Leverage the AI Prompt Playbook</h3>
+                <p class="text-muted-foreground mb-6">
+                  Accelerate your implementation with pre-tested prompts designed for each step's objective.
+                </p>
+                
+                <Card class="p-6 bg-primary/5 border-primary/10 mb-6">
+                  <h4 class="font-semibold mb-4">Example Workflow (HOOK Step)</h4>
+                  <div class="space-y-3">
+                    <div class="flex items-start gap-3">
+                      <Check class="w-4 h-4 text-primary mt-1" />
+                      <p class="text-sm">Identify goal: Create compelling Ad Headlines</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                      <Check class="w-4 h-4 text-primary mt-1" />
+                      <p class="text-sm">Select relevant prompt from Playbook</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                      <Check class="w-4 h-4 text-primary mt-1" />
+                      <p class="text-sm">Insert Foundation data into prompt</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                      <Check class="w-4 h-4 text-primary mt-1" />
+                      <p class="text-sm">Generate multiple draft headlines instantly</p>
+                    </div>
+                  </div>
+                </Card>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div class="space-y-3">
+                    <h4 class="font-semibold text-primary">Review & Refine</h4>
+                    <p class="text-sm text-muted-foreground">AI output is your first draft. Review, refine, and ensure brand alignment before implementation.</p>
+                  </div>
+                  <div class="space-y-3">
+                    <h4 class="font-semibold text-primary">Measure & Optimize</h4>
+                    <p class="text-sm text-muted-foreground">Track key metrics for each step to measure impact and identify optimization opportunities.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Framework Benefits */}
+        <div class="max-w-4xl mx-auto">
+          <Card class="p-8 bg-primary/5">
+            <h3 class="text-xl font-bold text-center mb-6">The Framework Transforms AI From a Confusing Novelty Into Your Strategic Growth Engine</h3>
+            <div class="grid md:grid-cols-4 gap-6">
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <GraduationCap className="w-6 h-6 text-primary" />
+                </div>
+                <h4 class="font-semibold mb-2">Structure</h4>
+                <p className="text-sm text-muted-foreground">Clear, logical 9-step roadmap</p>
+              </div>
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <Trophy className="w-6 h-6 text-primary" />
+                </div>
+                <h4 class="font-semibold mb-2">Strategy</h4>
+                <p className="text-sm text-muted-foreground">Deep Foundation knowledge</p>
+              </div>
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <ArrowRight className="w-6 h-6 text-primary" />
+                </div>
+                <h4 class="font-semibold mb-2">Speed</h4>
+                <p className="text-sm text-muted-foreground">Efficient AI integration</p>
+              </div>
+              <div class="text-center">
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                  <User className="w-6 h-6 text-primary" />
+                </div>
+                <h4 class="font-semibold mb-2">Control</h4>
+                <p className="text-sm text-muted-foreground">You guide implementation</p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Final CTA */}
+        <div class="mt-12 text-center">
+          <Button size="lg" class="text-lg px-8">
+            Get Started with the Framework
+            <ArrowRight class="ml-2 h-5 w-5" />
+          </Button>
+          <p class="mt-4 text-sm text-muted-foreground">
+            Join successful store owners using our proven system to scale with AI
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Course Modules -->
+    <section class="container mx-auto px-6 py-20 border-t border-border/40">
+      <div class="w-full max-w-[1000px] mx-auto">
+        <div class="text-center space-y-6 mb-16">
+          <Badge variant="outline" className="mb-4">Complete 10-Module System</Badge>
+          
+          <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+            Your Complete Roadmap to AI-Powered Ecom Success
+          </h2>
+          
+          <p class="text-xl md:text-2xl text-muted-foreground font-medium max-w-3xl mx-auto">
+            Transform Random AI Experiments into a Systematic Growth Engine
+          </p>
+
+          <div class="max-w-3xl mx-auto text-muted-foreground space-y-4 leading-relaxed">
+            <p>
+              Stop wasting time with trial-and-error AI prompts. Our proven 10-module system gives you everything you need to systematically scale your ecommerce store using AI – from initial customer attraction to lasting advocacy.
+            </p>
+            <p>
+              Each module delivers concrete, implementable assets you can use immediately in your business. No theory, just practical systems that work.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-4 mt-8">
+            <div class="flex items-center gap-2 text-muted-foreground">
+              <Check className="w-5 h-5 text-primary" />
+              <span>Step-by-Step Framework</span>
+            </div>
+            <div class="flex items-center gap-2 text-muted-foreground">
+              <Check className="w-5 h-5 text-primary" />
+              <span>200+ Proven Prompts</span>
+            </div>
+            <div class="flex items-center gap-2 text-muted-foreground">
+              <Check className="w-5 h-5 text-primary" />
+              <span>Ready-to-Use Templates</span>
+            </div>
+            <div class="flex items-center gap-2 text-muted-foreground">
+              <Check className="w-5 h-5 text-primary" />
+              <span>Implementation Guides</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:-translate-x-px before:bg-gradient-to-b before:from-transparent before:via-primary/20 before:to-transparent">
+          {courseModulesData.map((module, index) => (
+            <div class="relative flex items-start">
+              <div class="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-mono text-lg font-bold">
+                {index}
+              </div>
+              <div class="ml-12 w-full">
+                <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary/20 bg-card group">
+                  <div class="space-y-4">
+                    {/* Module Header */}
+                    <div class="flex flex-col md:flex-row md:items-start gap-4">
+                      <div class="flex-1">
+                        <h3 class="text-xl font-bold group-hover:text-primary transition-colors">{module.title}</h3>
+                        <p class="text-muted-foreground">{module.description}</p>
+                      </div>
+                      <div class="md:ml-auto flex items-center gap-2">
+                        <Badge variant="outline" className="bg-primary/5">
+                          {module.lessons.length} Lessons
+                        </Badge>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Module Details */}
+                    <div class="space-y-4">
+                      <div class="bg-muted/50 rounded-lg p-4">
+                        <p class="font-semibold text-primary mb-2">Objective:</p>
+                        <p class="text-muted-foreground">{module.objective}</p>
+                      </div>
+
+                      <div class="space-y-2">
+                        <p class="text-sm leading-relaxed text-muted-foreground">
+                          {module.mainDescription}
+                        </p>
+                      </div>
+
+                      <div class="bg-primary/5 rounded-lg p-4">
+                        <p class="font-semibold text-primary mb-2">What You'll Create:</p>
+                        <p class="text-muted-foreground">{module.output}</p>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Module Content */}
+                    <CourseModuleContent client:visible lessons={module.lessons} moduleNumber={index} />
+                  </div>
+                </Card>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
     <!-- Bonuses -->
     <section class="py-20">
@@ -669,7 +1104,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             <Card className="card p-6">
               <div class="flex items-start gap-3">
                 <div class="card-icon">
-                  <CheckIcon className="w-5 h-5 text-primary" />
+                  <Check className="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <h3 class="text-xl font-semibold mb-2">{bonus.title}</h3>
@@ -693,7 +1128,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             <Card className="card p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-emerald-500/20">
               <div class="flex items-center gap-5">
                 <div class="rounded-full bg-emerald-500/10 p-3 flex items-center justify-center shadow-inner shadow-emerald-500/5">
-                  <CheckIcon className="w-5 h-5 text-emerald-500" strokeWidth={3} />
+                  <Check className="w-5 h-5 text-emerald-500" strokeWidth={3} />
                 </div>
                 <p class="text-base md:text-lg font-medium">{outcome}</p>
               </div>
@@ -702,32 +1137,140 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         </div>
       </div>
     </section>
-<!-- How It Works -->
-<HowItWorks />
 
-<!-- Your Teacher -->
-<Teacher />
+    <!-- How It Works -->
+    <HowItWorks />
 
-
+    <!-- Your Teacher -->
+    <Teacher />
 
     <!-- Pricing Section -->
-    <section class="py-20 relative">
-      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+    <section class="py-20 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+      
       <div class="container px-4 mx-auto relative">
-        <PricingTable
-          client:visible
-          originalPrice={pricingData.originalPrice}
-          currentPrice={pricingData.currentPrice}
-          paymentOptions={pricingData.paymentOptions}
-          guarantee={pricingData.guarantee}
-          guaranteeDays={pricingData.guaranteeDays}
-          totalValue={pricingData.totalValue}
-          valueBreakdown={pricingData.valueBreakdown}
-          features={pricingData.features}
-          ctaText={pricingData.ctaText}
-          spots={pricingData.spots}
-          deadline={pricingData.deadline}
-        />
+        <div class="text-center space-y-4 mb-16">
+          <Badge variant="outline" className="mb-4">Special Launch Pricing</Badge>
+          
+          <h2 class="text-4xl md:text-5xl font-bold">
+            Transform Your Ecom Business with AI
+          </h2>
+          
+          <p class="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
+            Join successful store owners using our proven system to scale with AI
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-[1200px] mx-auto">
+          {/* Value Stack */}
+          <div class="space-y-8">
+            <Card className="p-6">
+              <h3 class="text-2xl font-bold mb-6">
+                Total Value: <span class="text-primary">${pricingData.totalValue}</span>
+              </h3>
+              
+              <div class="space-y-4">
+                {pricingData.valueBreakdown.map((item) => (
+                  <div class="flex gap-4 items-start">
+                    <div class="flex-shrink-0 w-5 h-5 mt-1">
+                      <Check className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <p class="font-medium">{item.item} <span class="text-primary">(${item.value})</span></p>
+                      <p class="text-sm text-muted-foreground">{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* Bonuses */}
+            <Card className="p-6 border-primary/20 bg-primary/5">
+              <h3 class="text-2xl font-bold mb-6">
+                Exclusive Bonuses
+              </h3>
+              
+              <div class="space-y-6">
+                {pricingData.bonuses.map((bonus, index) => (
+                  <div class="space-y-2">
+                    {index === 0 && (
+                      <Badge variant="destructive" className="mb-2">Expires in 48 Hours</Badge>
+                    )}
+                    <p class="font-medium">{bonus.title} <span class="text-primary">(${bonus.value})</span></p>
+                    <p class="text-sm text-muted-foreground">{bonus.description}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+
+          {/* Pricing Card */}
+          <div>
+            <Card className="p-8 border-primary">
+              <div class="space-y-6">
+                <div class="text-center">
+                  <p class="text-muted-foreground mb-2">Regular Price</p>
+                  <p class="text-2xl line-through text-muted-foreground">${pricingData.originalPrice}</p>
+                  
+                  <div class="mt-4">
+                    <p class="text-muted-foreground">Special Launch Price</p>
+                    <p class="text-5xl font-bold text-primary">${pricingData.currentPrice}</p>
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Payment Options */}
+                <div class="space-y-4">
+                  <Button className="w-full text-lg h-12" size="lg">
+                    Pay in Full: ${pricingData.paymentOptions.full}
+                  </Button>
+                  
+                  <Button variant="outline" className="w-full text-lg h-12" size="lg">
+                    3 Payments of ${pricingData.paymentOptions.installments.amount}
+                  </Button>
+                </div>
+
+                {/* Features */}
+                <div class="space-y-3">
+                  {pricingData.features.map((feature) => (
+                    <div class="flex items-start gap-3">
+                      <Check className={`w-5 h-5 mt-1 ${feature.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
+                      <div>
+                        <p class={`font-medium ${feature.highlight ? 'text-primary' : ''}`}>{feature.title}</p>
+                        <p class="text-sm text-muted-foreground">{feature.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Separator />
+
+                {/* Guarantee */}
+                <div class="text-center space-y-3">
+                  <Shield className="w-12 h-12 text-primary mx-auto" />
+                  <h4 class="text-xl font-bold">{pricingData.guarantee.title}</h4>
+                  <p class="text-sm text-muted-foreground">{pricingData.guarantee.description}</p>
+                </div>
+
+                <Separator />
+
+                {/* Scarcity */}
+                <div class="space-y-4">
+                  <div class="text-center">
+                    <p class="text-muted-foreground">Only {pricingData.scarcity.spots.remaining} Spots Remaining</p>
+                    <Progress value={((pricingData.scarcity.spots.total - pricingData.scarcity.spots.remaining) / pricingData.scarcity.spots.total) * 100} className="mt-2" />
+                  </div>
+                  
+                  <div class="text-center text-sm text-muted-foreground">
+                    <p>Price increases by ${pricingData.scarcity.price_increase} on</p>
+                    <p class="font-semibold">{pricingData.scarcity.deadline}</p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -753,26 +1296,37 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <Button size="lg" className="text-lg">
             {courseDetails.ctaText}
-            <ArrowRightIcon className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           <Button size="lg" variant="outline" className="text-lg">
             View Course Details
           </Button>
         </div>
         <p class="text-sm text-muted-foreground mt-6">
-          <ShieldCheckIcon className="inline-block w-4 h-4 mr-1" />
+          <Shield className="inline-block w-4 h-4 mr-1" />
           {courseDetails.guarantee}
         </p>
       </div>
     </section>
 
     <!-- Sticky Enrollment Bar -->
-    <StickyEnrollBar
-      client:load
-      currentPrice={pricingData.currentPrice}
-      ctaText={courseDetails.ctaText}
-      spots={pricingData.spots}
-      deadline={pricingData.deadline}
-    />
+    <div class="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t border-border z-50 py-4 px-6">
+      <div class="container mx-auto flex items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div>
+            <p class="text-sm text-muted-foreground">Special Launch Price</p>
+            <p class="text-xl font-bold text-primary">${pricingData.currentPrice}</p>
+          </div>
+          <div class="hidden md:block">
+            <p class="text-sm text-muted-foreground">Spots Remaining</p>
+            <p class="text-xl font-bold">{pricingData.scarcity.spots.remaining}/{pricingData.scarcity.spots.total}</p>
+          </div>
+        </div>
+        <Button size="lg" className="text-lg">
+          Enroll Now
+          <ArrowRight className="ml-2 h-5 w-5" />
+        </Button>
+      </div>
+    </div>
   </main>
 </Layout>
