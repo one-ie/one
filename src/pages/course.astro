@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Shield, Check, User, Trophy, GraduationCap } from "lucide-react";
+import { ArrowRight, Shield, Check, User, Trophy, GraduationCap, X } from "lucide-react";
 import { HeroPill } from "../components/HeroPill";
 import { TrustedPill } from "../components/TrustedPill";
 import { HeroSection } from "../components/HeroSection";
@@ -27,7 +27,7 @@ const courseDetails = {
   badge: "Launch Special: 72-Hour Only",
   title: "The AI Prompt Playbook",
   subtitle: "Stop Experimenting. Start Systematically Scaling Your Ecom Store.",
-  originalPrice: "1,997",
+  originalPrice: "1,999",
   currentPrice: "999",
   guarantee: "30-Day Implementation Guarantee",
   ctaText: "Get The System Now",
@@ -302,125 +302,93 @@ export const painPoints = {
 };
 
 export const pricingData = {
-  originalPrice: "1,997",
-  currentPrice: "997",
+  originalPrice: "1,999",
+  currentPrice: "999",
   paymentOptions: {
-    full: "997",
-    installments: { amount: "367", count: 3 }
+    full: "999",
+    installments: { amount: "369", count: 3 }
   },
   guarantee: {
     days: 30,
-    title: "30-Day Implementation Guarantee",
-    description: "Follow our proven system, implement the AI prompts as directed, and if you don't see a measurable improvement in your workflow efficiency and output quality within 30 days, we'll refund your investment in full. No questions asked.",
-    features: [
-      "Clear implementation milestones",
-      "Measurable efficiency metrics",
-      "Quality assessment tools",
-      "Risk-free trial period"
-    ]
+    title: "Our 30-Day 'Implement & See Results' Guarantee",
+    description: "We stand firmly behind this system. Enroll today, go through the modules, and actively implement the Elevate Framework using the AI Prompt Playbook as directed. If you follow the system and honestly don't see a significant improvement in your marketing workflow efficiency and the quality of your AI-generated outputs within 30 days, simply email our support team. We'll process a full, prompt refund of your investment. No hoops, no hassle. Your success is the goal."
   },
-  totalValue: "12,997",
+  totalValue: "5,189",
   valueBreakdown: [
     { 
-      item: "The Complete ELEVATE Framework & AI Prompt System",
-      value: "1,997",
-      description: "Transform random AI experiments into systematic growth with our proven 9-step framework"
+      item: "The Complete Elevate Framework Course (9 Modules)",
+      value: "1,999",
+      description: "Master the strategic 9-step system (Hook to Share) for systematic Ecom growth. Step-by-step video training and implementation guidance."
     },
     { 
-      item: "200+ Tested AI Prompts Library",
-      value: "997",
-      description: "Skip months of testing with our field-proven collection of high-converting prompts"
+      item: "The AI Prompt Playbook Library (200+ Tested Prompts)",
+      value: "999",
+      description: "Your copy-paste library of field-tested prompts for ChatGPT, Claude & Gemini, specifically engineered for each step of the Elevate Framework."
     },
     { 
-      item: "Implementation Playbooks & Templates",
-      value: "1,497",
-      description: "Step-by-step guides for implementing each framework component"
+      item: "Implementation Guides & Checklists",
+      value: "499",
+      description: "Ensure flawless execution with detailed guides and actionable checklists for implementing the framework and leveraging the prompts effectively."
     },
     { 
-      item: "AI Automation Workflows",
-      value: "2,997",
-      description: "Ready-to-use automation sequences for scaling your operations"
+      item: "Foundation Blueprint Worksheets",
+      value: "199",
+      description: "Quickly establish your essential Customer Avatar, Company Context, and Market Awareness inputs to fuel effective AI generation."
     },
     { 
-      item: "Private Community Access",
-      value: "997",
-      description: "Connect with successful ecom owners using AI to scale their businesses"
+      item: "Lifetime Access & FREE Updates",
+      value: "1,499",
+      description: "The world of AI and Ecom changes fast. Get lifetime access to all future course updates, new prompts, and framework refinements."
+    }
+  ],
+  bonuses: [
+    {
+      title: "AI Workflow Cheatsheets",
+      value: "499",
+      description: "Quick-reference guides showing how to efficiently integrate the Playbook prompts into your daily/weekly marketing tasks for maximum speed.",
+      expires: "48 hours"
     },
-    { 
-      item: "Monthly Live Q&A Calls",
-      value: "1,997",
-      description: "Get your specific questions answered and learn from others' implementations"
+    {
+      title: "'Behind the Prompts' Logic Guide",
+      value: "299",
+      description: "Understand why the core Playbook prompts work so well, empowering you to slightly adapt them for unique situations if needed."
     },
-    { 
-      item: "AI Tool Integration Guides",
-      value: "997",
-      description: "Detailed tutorials for setting up and optimizing your AI toolkit"
-    },
-    { 
-      item: "Lifetime Updates",
-      value: "1,497",
-      description: "Access to all future framework updates, new prompts, and features"
+    {
+      title: "Ecom AI Tool Selection Guide",
+      value: "199",
+      description: "A curated list and framework for choosing the right supporting AI tools for your specific Ecom needs, saving you research time."
     }
   ],
   features: [
     { 
-      title: "Complete Framework Access",
+      title: "Complete Elevate Framework Course Access",
       included: true,
       highlight: true,
       description: "Get immediate access to all 9 modules and implementation guides"
     },
     { 
-      title: "200+ AI Prompt Templates",
+      title: "The Full AI Prompt Playbook Library",
       included: true,
       highlight: true,
-      description: "Our complete library of tested, high-converting prompts"
+      description: "200+ field-tested prompts for every framework step"
     },
     { 
-      title: "Private Community Access",
+      title: "Implementation Guides & Checklists",
       included: true,
       highlight: true,
-      description: "Connect with other successful AI-powered businesses"
-    },
-    { 
-      title: "Monthly Live Q&A Calls",
-      included: true,
-      highlight: false,
-      description: "Get your specific questions answered live"
-    },
-    { 
-      title: "Implementation Support",
-      included: true,
-      highlight: false,
       description: "Step-by-step guidance for successful deployment"
     },
     { 
-      title: "Lifetime Updates",
+      title: "Foundation Blueprint Worksheets",
+      included: true,
+      highlight: true,
+      description: "Essential tools for effective AI generation"
+    },
+    { 
+      title: "Lifetime Access & Updates",
       included: true,
       highlight: false,
       description: "Access to all future content and features"
-    }
-  ],
-  bonuses: [
-    {
-      title: "FAST ACTION BONUS: AI Automation Toolkit",
-      value: "2,997",
-      description: "Complete set of automation workflows and integrations",
-      expires: "48 hours"
-    },
-    {
-      title: "BONUS #1: Advanced Prompt Engineering Guide",
-      value: "997",
-      description: "Master the art of crafting high-converting AI prompts"
-    },
-    {
-      title: "BONUS #2: ROI Calculator & Analytics Dashboard",
-      value: "497",
-      description: "Track and optimize your AI implementation results"
-    },
-    {
-      title: "BONUS #3: AI Tool Selection Framework",
-      value: "497",
-      description: "Choose the right AI tools for your specific needs"
     }
   ],
   scarcity: {
@@ -688,7 +656,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
         <div class="text-center mt-12">
           <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Join over 1,000+ ecommerce owners who have transformed their random AI experiments into systematic growth engines
+            Join owners of the world's leaading ecommerce storees who have transformed their random AI experiments into systematic growth engines
           </p>
           <div class="flex justify-center gap-4 mt-8">
             <Badge variant="outline" className="text-sm py-1 px-4">73% Faster Results</Badge>
@@ -993,14 +961,161 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
       </div>
     </section>
 
+    {/* Why It Works Section */}
+    <section class="py-20 bg-background border-y border-border">
+      <div class="container px-4 mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <Badge variant="outline" className="mb-4">The Science Behind The System</Badge>
+          <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+            Why This System Works (And Simple Prompting Doesn't Scale)
+          </h2>
+          <p class="text-xl text-muted-foreground">
+            Let's break down why our framework delivers superior results compared to standalone, "simple" AI prompting
+          </p>
+        </div>
+
+        {/* Simple Prompting Limitations */}
+        <div class="max-w-4xl mx-auto mb-16">
+          <Card className="p-8 bg-destructive/5 border-destructive/20">
+            <h3 class="text-2xl font-bold mb-6">Simple Prompting's Limitations</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
+                    <X className="w-4 h-4 text-destructive" />
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Lacks Strategy & Context</h4>
+                    <p class="text-sm text-muted-foreground">Asking for an "ad" without deep customer understanding is like throwing darts blindfolded</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
+                    <X className="w-4 h-4 text-destructive" />
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Yields Generic Output</h4>
+                    <p class="text-sm text-muted-foreground">Without rich context, AI defaults to bland, generalized language</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
+                    <X className="w-4 h-4 text-destructive" />
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Endless Trial-and-Error</h4>
+                    <p class="text-sm text-muted-foreground">Stuck in a loop of refining prompts without building a repeatable process</p>
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
+                    <X className="w-4 h-4 text-destructive" />
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Creates Disconnected Assets</h4>
+                    <p class="text-sm text-muted-foreground">Random generations aren't inherently connected to your broader marketing strategy</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
+                    <X className="w-4 h-4 text-destructive" />
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Doesn't Guarantee Focus</h4>
+                    <p class="text-sm text-muted-foreground">Time wasted on less critical tasks while neglecting major leverage points</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Why Our System Excels */}
+        <div class="max-w-4xl mx-auto">
+          <Card className="p-8 bg-primary/5 border-primary/20">
+            <h3 class="text-2xl font-bold mb-6">Why Our System Excels</h3>
+            <div class="space-y-8">
+              <div class="flex items-start gap-4">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Check className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold mb-2">Strategic Foundation First</h4>
+                  <p class="text-muted-foreground">The system forces you to start with deep clarity on your Customer, Company Context, and Market. This rich Foundation data becomes the essential fuel for every AI prompt in the Playbook.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Check className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold mb-2">Contextual Relevance</h4>
+                  <p class="text-muted-foreground">Each prompt is designed for a specific Framework Step and its unique objective. The AI knows exactly why it's generating each asset and how it fits into the bigger picture.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Check className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold mb-2">Proven Prompts</h4>
+                  <p class="text-muted-foreground">Skip becoming a prompt engineer. Use our tested, pre-engineered prompts specifically designed for ecommerce tasks within this framework. Dramatically reduce trial-and-error.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-4">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Check className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h4 class="text-lg font-semibold mb-2">System Synergy & Efficiency</h4>
+                  <p class="text-muted-foreground">Assets naturally connect because they originate from the same Foundation and follow the framework's logic. Your HOOK aligns with your GIFT; your NURTURE sequence leads to the SELL page content.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-12 p-6 bg-primary/10 rounded-lg">
+              <h4 class="text-xl font-bold mb-4 text-center">The Blueprint Analogy</h4>
+              <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-3">
+                  <h5 class="font-semibold text-destructive">Simple Prompting Is Like:</h5>
+                  <p class="text-sm text-muted-foreground">Giving someone a powerful hammer but no blueprints, no specific nails, and no instructions – they might eventually build something, but it will be slow, inefficient, and likely unstable.</p>
+                </div>
+                <div class="space-y-3">
+                  <h5 class="font-semibold text-primary">Our System Is Like:</h5>
+                  <p class="text-sm text-muted-foreground">Providing detailed blueprints (the Framework), specialized power tools with precise settings (the Prompts), fueled by the right materials (your Foundation data).</p>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <div class="mt-12 text-center">
+            <Button size="lg" className="text-lg px-8">
+              Get The Complete System
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+            <p class="mt-4 text-sm text-muted-foreground">
+              Stop experimenting. Start implementing what's proven to work.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Course Modules -->
     <section class="container mx-auto px-6 py-20 border-t border-border/40">
       <div class="w-full max-w-[1000px] mx-auto">
         <div class="text-center space-y-6 mb-16">
           <Badge variant="outline" className="mb-4">Complete 10-Module System</Badge>
           
+          <h2 class="text-4xl md:text-5xl font-bold">Course Modules</h2>
+          
           <h2 class="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-            Your Complete Roadmap to AI-Powered Ecom Success
+            Transform Random AI Experiments into a Systematic Growth Engine
           </h2>
           
           <p class="text-xl md:text-2xl text-muted-foreground font-medium max-w-3xl mx-auto">
@@ -1092,57 +1207,238 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
       </div>
     </section>
 
-    <!-- Bonuses -->
-    <section class="py-20">
-      <div class="container px-4 mx-auto">
-        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-4">Exclusive Bonuses</h2>
-        <p class="text-xl text-center text-muted-foreground mb-12">
-          Total Value: ${totalBonusValue.toLocaleString()}
-        </p>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bonuses.map((bonus) => (
-            <Card className="card p-6">
-              <div class="flex items-start gap-3">
-                <div class="card-icon">
-                  <Check className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <h3 class="text-xl font-semibold mb-2">{bonus.title}</h3>
-                  <p class="text-muted-foreground mb-4">{bonus.description}</p>
-                  <p class="text-primary font-semibold">{bonus.value}</p>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-
+    
     <!-- Course Overview -->
     <section class="py-20 relative">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
       <div class="container px-4 mx-auto relative">
         <h2 class="text-3xl lg:text-4xl font-bold text-center mb-12">What You Will Achieve</h2>
         <div class="max-w-3xl mx-auto space-y-4">
-          {learningOutcomes.map((outcome) => (
-            <Card className="card p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-emerald-500/20">
-              <div class="flex items-center gap-5">
-                <div class="rounded-full bg-emerald-500/10 p-3 flex items-center justify-center shadow-inner shadow-emerald-500/5">
-                  <Check className="w-5 h-5 text-emerald-500" strokeWidth={3} />
-                </div>
-                <p class="text-base md:text-lg font-medium">{outcome}</p>
+          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+            <div class="flex items-center gap-5">
+              <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
+                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
-            </Card>
-          ))}
+              <p class="text-base md:text-lg font-medium">Reduce AI experimentation time by 73% with proven prompts and workflows</p>
+            </div>
+          </Card>
+          
+          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+            <div class="flex items-center gap-5">
+              <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
+                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+              </div>
+              <p class="text-base md:text-lg font-medium">Triple your AI output quality with strategic context and systematic implementation</p>
+            </div>
+          </Card>
+          
+          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+            <div class="flex items-center gap-5">
+              <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
+                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+              </div>
+              <p class="text-base md:text-lg font-medium">Generate high-converting copy in minutes across your entire customer journey</p>
+            </div>
+          </Card>
+          
+          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+            <div class="flex items-center gap-5">
+              <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
+                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+              </div>
+              <p class="text-base md:text-lg font-medium">Build automated content strategies that adapt to customer behavior</p>
+            </div>
+          </Card>
+          
+          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+            <div class="flex items-center gap-5">
+              <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
+                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+              </div>
+              <p class="text-base md:text-lg font-medium">Create predictive marketing systems that identify opportunities before competitors</p>
+            </div>
+          </Card>
+          
+          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+            <div class="flex items-center gap-5">
+              <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
+                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+              </div>
+              <p class="text-base md:text-lg font-medium">Achieve average revenue growth of 186% within 6 months of implementation</p>
+            </div>
+          </Card>
+          
+          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+            <div class="flex items-center gap-5">
+              <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
+                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+              </div>
+              <p class="text-base md:text-lg font-medium">Scale your marketing operations without expanding your team</p>
+            </div>
+          </Card>
+          
+          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+            <div class="flex items-center gap-5">
+              <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
+                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+              </div>
+              <p class="text-base md:text-lg font-medium">Build complete AI marketing systems that run 24/7 with minimal oversight</p>
+            </div>
+          </Card>
         </div>
       </div>
     </section>
 
-    <!-- How It Works -->
-    <HowItWorks />
+    <!-- Transform Your Business Metrics -->
+    <section class="py-20 relative">
+      <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+      <div class="container px-4 mx-auto relative">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <Badge variant="outline" className="mb-4">Complete Business Transformation</Badge>
+          <h2 class="text-3xl lg:text-4xl font-bold mb-6">Powered by the Elevate Framework & AI Playbook</h2>
+          <p class="text-xl text-muted-foreground mb-8">This Course Isn't Just About AI Prompts – It's About Systematically Implementing Them Within a Proven Growth Framework.</p>
+          <p class="text-lg text-muted-foreground italic">Imagine achieving these objectives not through random tactics, but through targeted actions within each step of the Elevate Framework, accelerated by the AI Prompt Playbook!</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {/* Increases */}
+          <Card className="p-8 border-primary/20 bg-primary/5">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <ArrowRight className="w-8 h-8 text-primary transform rotate-[-90deg]" />
+              </div>
+              <h3 class="text-2xl font-bold text-primary">Increase</h3>
+            </div>
+            <div class="space-y-6">
+              {[
+                {
+                  title: "Profits",
+                  description: "through the integrated sales system built across the SELL, NURTURE, & UPSELL steps"
+                },
+                {
+                  title: "Sales",
+                  description: "by applying AI-powered conversion copy (via Playbook prompts) within the SELL, ENGAGE, & NURTURE steps"
+                },
+                {
+                  title: "Lead Quality",
+                  description: "by refining your HOOK and GIFT offers, and potentially using AI-assisted qualification in IDENTIFY/ENGAGE"
+                },
+                {
+                  title: "Subscribers",
+                  description: "with highly relevant GIFT offers crafted using AI insights, attracted by compelling HOOKS"
+                },
+                {
+                  title: "Average Order Value",
+                  description: "using AI-generated copy for strategic UPSELL offers presented at the optimal time"
+                },
+                {
+                  title: "Conversion Rates",
+                  description: "across the funnel by systematically optimizing HOOK (CTR), GIFT (Opt-in), SELL (Purchase), and ENGAGE (Completion)"
+                },
+                {
+                  title: "Customer Lifetime Value",
+                  description: "by implementing the full framework, especially NURTURE, UPSELL, UNDERSTAND, & SHARE"
+                },
+                {
+                  title: "Email Performance",
+                  description: "using AI-crafted subject lines and content tested within the NURTURE step"
+                },
+                {
+                  title: "Customer Engagement",
+                  description: "through personalized content drafted by AI based on your Foundation insights"
+                },
+                {
+                  title: "Loyalty & Referrals",
+                  description: "through proactive care sequences in UNDERSTAND & streamlined SHARE initiatives"
+                }
+              ].map((item) => (
+                <div class="flex items-start gap-3 hover:translate-x-1 transition-transform">
+                  <Check className="w-5 h-5 text-primary mt-1.5" />
+                  <div>
+                    <p class="font-semibold">{item.title}</p>
+                    <p class="text-sm text-muted-foreground">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Decreases */}
+          <Card className="p-8 border-destructive/20 bg-destructive/5">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
+                <ArrowRight className="w-8 h-8 text-destructive transform rotate-90" />
+              </div>
+              <h3 class="text-2xl font-bold text-destructive">Decrease</h3>
+            </div>
+            <div class="space-y-6">
+              {[
+                {
+                  title: "Customer Acquisition Costs",
+                  description: "through higher conversion efficiency across the HOOK, GIFT, & SELL steps"
+                },
+                {
+                  title: "Cost Per Lead",
+                  description: "by optimizing the GIFT conversion and running efficient AI-assisted NURTURE"
+                },
+                {
+                  title: "Unqualified Leads",
+                  description: "by attracting the right audience with precisely targeted HOOKS using Foundation data"
+                },
+                {
+                  title: "Time To Sale",
+                  description: "with effective, automated NURTURE follow-up sequences drafted rapidly by AI"
+                },
+                {
+                  title: "Cart & Chat Abandonment",
+                  description: "through timely, persuasive recovery sequences in NURTURE and instant responses in ENGAGE"
+                },
+                {
+                  title: "Response Times",
+                  description: "by leveraging AI assistance for efficiency in ENGAGE & UNDERSTAND"
+                },
+                {
+                  title: "Support Costs",
+                  description: "using AI automation and efficiency gains in ENGAGE & UNDERSTAND"
+                },
+                {
+                  title: "Manual Work Hours",
+                  description: "by replacing guesswork with the efficient Framework + AI Playbook system"
+                },
+                {
+                  title: "Content Creation Time",
+                  description: "letting AI handle the first draft of ads, emails, and descriptions within the framework"
+                },
+                {
+                  title: "Marketing Waste",
+                  description: "by improving performance with AI-generated copy that resonates better"
+                }
+              ].map((item) => (
+                <div class="flex items-start gap-3 hover:translate-x-1 transition-transform">
+                  <X className="w-5 h-5 text-destructive mt-1.5" />
+                  <div>
+                    <p class="font-semibold">{item.title}</p>
+                    <p class="text-sm text-muted-foreground">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+
+        <div class="mt-12 text-center">
+          <Button size="lg" className="text-lg px-8">
+            Achieve Total Transformation
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+          <p class="mt-4 text-sm text-muted-foreground">
+            Join successful store owners implementing the complete AI-powered Elevate System
+          </p>
+        </div>
+      </div>
+    </section>
 
     <!-- Your Teacher -->
-    <Teacher />
 
     <!-- Pricing Section -->
     <section class="py-20 relative overflow-hidden">
@@ -1150,14 +1446,14 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
       
       <div class="container px-4 mx-auto relative">
         <div class="text-center space-y-4 mb-16">
-          <Badge variant="outline" className="mb-4">Special Launch Pricing</Badge>
+          <Badge variant="outline" className="mb-4">Special Launch Offer</Badge>
           
           <h2 class="text-4xl md:text-5xl font-bold">
-            Transform Your Ecom Business with AI
+            Get the Complete AI Growth System Today
           </h2>
           
           <p class="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            Join successful store owners using our proven system to scale with AI
+            Stop wasting time on AI guesswork. Implement the proven system used by top Ecom owners to accelerate growth predictably.
           </p>
         </div>
 
@@ -1166,10 +1462,10 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
           <div class="space-y-8">
             <Card className="p-6">
               <h3 class="text-2xl font-bold mb-6">
-                Total Value: <span class="text-primary">${pricingData.totalValue}</span>
+                Here's Everything You Get Instant Access To:
               </h3>
               
-              <div class="space-y-4">
+              <div class="space-y-6">
                 {pricingData.valueBreakdown.map((item) => (
                   <div class="flex gap-4 items-start">
                     <div class="flex-shrink-0 w-5 h-5 mt-1">
@@ -1184,20 +1480,27 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
               </div>
             </Card>
 
-            {/* Bonuses */}
+            {/* Launch Bonuses */}
             <Card className="p-6 border-primary/20 bg-primary/5">
               <h3 class="text-2xl font-bold mb-6">
-                Exclusive Bonuses
+                PLUS: Enroll Before {pricingData.scarcity.deadline} & Get These Fast-Action Bonuses (Value: $991)
               </h3>
               
               <div class="space-y-6">
                 {pricingData.bonuses.map((bonus, index) => (
                   <div class="space-y-2">
-                    {index === 0 && (
-                      <Badge variant="destructive" className="mb-2">Expires in 48 Hours</Badge>
+                    {bonus.expires && (
+                      <Badge variant="destructive" className="mb-2">Expires in {bonus.expires}</Badge>
                     )}
-                    <p class="font-medium">{bonus.title} <span class="text-primary">(${bonus.value})</span></p>
-                    <p class="text-sm text-muted-foreground">{bonus.description}</p>
+                    <div class="flex gap-4 items-start">
+                      <div class="flex-shrink-0 w-5 h-5 mt-1">
+                        <Check className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <p class="font-medium">🎁 {bonus.title} <span class="text-primary">(${bonus.value})</span></p>
+                        <p class="text-sm text-muted-foreground">{bonus.description}</p>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1206,15 +1509,16 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
           {/* Pricing Card */}
           <div>
-            <Card className="p-8 border-primary">
+            <Card className="p-8 border-primary sticky top-8">
               <div class="space-y-6">
                 <div class="text-center">
-                  <p class="text-muted-foreground mb-2">Regular Price</p>
+                  <p class="text-muted-foreground mb-2">Regular Price (Post-Launch)</p>
                   <p class="text-2xl line-through text-muted-foreground">${pricingData.originalPrice}</p>
                   
                   <div class="mt-4">
-                    <p class="text-muted-foreground">Special Launch Price</p>
+                    <p class="text-muted-foreground">🔥 Special Launch Price (Limited Time) 🔥</p>
                     <p class="text-5xl font-bold text-primary">${pricingData.currentPrice}</p>
+                    <p class="text-sm text-muted-foreground mt-1">(One-Time Investment)</p>
                   </div>
                 </div>
 
@@ -1223,25 +1527,29 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 {/* Payment Options */}
                 <div class="space-y-4">
                   <Button className="w-full text-lg h-12" size="lg">
-                    Pay in Full: ${pricingData.paymentOptions.full}
+                    Enroll Now & Get Instant Access for ${pricingData.paymentOptions.full} →
                   </Button>
                   
                   <Button variant="outline" className="w-full text-lg h-12" size="lg">
-                    3 Payments of ${pricingData.paymentOptions.installments.amount}
+                    Start with 3 Payments of ${pricingData.paymentOptions.installments.amount} →
                   </Button>
                 </div>
 
-                {/* Features */}
-                <div class="space-y-3">
-                  {pricingData.features.map((feature) => (
-                    <div class="flex items-start gap-3">
-                      <Check className={`w-5 h-5 mt-1 ${feature.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
-                      <div>
-                        <p class={`font-medium ${feature.highlight ? 'text-primary' : ''}`}>{feature.title}</p>
-                        <p class="text-sm text-muted-foreground">{feature.description}</p>
+                <Separator />
+
+                {/* Features Recap */}
+                <div>
+                  <p class="font-medium mb-3">Here's a Recap of What You Unlock Immediately:</p>
+                  <div class="space-y-2">
+                    {pricingData.features.map((feature) => (
+                      <div class="flex items-start gap-3">
+                        <Check className={`w-5 h-5 mt-1 ${feature.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
+                        <p class={`text-sm ${feature.highlight ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
+                          {feature.title}
+                        </p>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
                 <Separator />
@@ -1258,7 +1566,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 {/* Scarcity */}
                 <div class="space-y-4">
                   <div class="text-center">
-                    <p class="text-muted-foreground">Only {pricingData.scarcity.spots.remaining} Spots Remaining</p>
+                    <p class="text-muted-foreground">Only {pricingData.scarcity.spots.remaining} Spots Remaining at Launch Price!</p>
                     <Progress value={((pricingData.scarcity.spots.total - pricingData.scarcity.spots.remaining) / pricingData.scarcity.spots.total) * 100} className="mt-2" />
                   </div>
                   
@@ -1267,6 +1575,14 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                     <p class="font-semibold">{pricingData.scarcity.deadline}</p>
                   </div>
                 </div>
+
+                {/* Final CTA */}
+                <Button size="lg" className="w-full text-lg">
+                  Secure Your Spot & Get the AI System Now →
+                </Button>
+                <p class="text-center text-xs text-muted-foreground">
+                  Instant Access | Secure Checkout | 30-Day Money-Back Guarantee
+                </p>
               </div>
             </Card>
           </div>
@@ -1330,3 +1646,4 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
     </div>
   </main>
 </Layout>
+
