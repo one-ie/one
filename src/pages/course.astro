@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Shield, Check, User, Trophy, GraduationCap, X } from "lucide-react";
+import { ArrowRight, Shield, Check, User, Trophy, GraduationCap, X, TrendingUp, TrendingDown } from "lucide-react";
 import { HeroPill } from "../components/HeroPill";
 import { TrustedPill } from "../components/TrustedPill";
 import { HeroSection } from "../components/HeroSection";
@@ -17,6 +17,7 @@ import HowItWorks from "../components/HowItWorks.astro";
 import MeetYourMarketingTeam from "../components/MeetYourMarketingTeam.astro";
 import Teacher from "../components/Teacher.astro";
 import Elevate from "../components/Elevate";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const title = "The AI Prompt Playbook for Ecom Growth";
 const description = "Transform random AI experiments into a systematic growth engine. Get the proven 9-Step Framework + AI Prompt Playbook designed for Ecom Leaders ready to maximize growth, predictably.";
@@ -218,7 +219,7 @@ export const faqCategories = [
       },
       {
         question: "What if it doesn't work for me?",
-        answer: "We offer a 30-day Implementation Guarantee. Follow our system, use the prompts as directed, and if you don't see a measurable improvement in your AI workflow efficiency and output quality, we'll refund your investment in full. We succeed when you succeed."
+        answer: "We offer a 30-Day Implementation Guarantee. Follow our system, use the prompts as directed, and if you don't see a measurable improvement in your AI workflow efficiency and output quality within 30 days, we'll refund your investment in full. We succeed when you succeed."
       }
     ]
   }
@@ -466,28 +467,24 @@ export const finalCta = {
 // FAQs
 const faqs = [
   {
-    question: "Is this course suitable for beginners to AI?",
-    answer: "Absolutely! The course is specifically designed to take you from AI novice to marketing automation expert with no prior experience required. We start with the fundamentals and progress to advanced applications."
+    question: "Is the $999 investment worth it?",
+    answer: "Absolutely. Most students recover the investment within weeks through increased efficiency and sales. The system saves hours of work weekly and helps generate better results across your marketing efforts."
   },
   {
-    question: "How quickly can I implement these strategies?",
-    answer: "The course is intentionally fast-paced and designed for immediate implementation. Many students set up their first AI workflows within 24 hours of starting the course. Our step-by-step video tutorials make implementation straightforward."
+    question: "How is this different from free prompts?",
+    answer: "This is a complete Ecom Growth SYSTEM with proven framework and tested prompts specifically for e-commerce. Free prompts lack strategy and testing. We provide a structured approach that delivers consistent results."
   },
   {
-    question: "Do I need technical experience?",
-    answer: "No technical background is required. The course is designed for marketers at all technical levels, with step-by-step instructions for setting up each tool and workflow. We use n8n for automation, which has an intuitive visual interface that requires no coding."
+    question: "How much time does it take?",
+    answer: "The system is designed to save you time. While there's initial learning time, using the prompts takes minutes instead of hours for tasks like writing ads or emails. You'll quickly reclaim more time than you invest."
   },
   {
-    question: "How long do I have access to the course materials?",
-    answer: "You receive lifetime access to all course materials, including future updates as AI tools evolve and new strategies emerge."
+    question: "Do I need technical skills?",
+    answer: "If you can copy-paste text and use basic tools like ChatGPT, you have all the skills needed. We focus on effective application, not complex technical setups."
   },
   {
-    question: "What tools will I need to purchase?",
-    answer: "The course focuses on maximizing value from affordable tools. We recommend a budget of $50-100/month for essential AI tools, though many students start with even less. We provide detailed guidance on which tools provide the best ROI for your specific situation."
-  },
-  {
-    question: "How is this different from other AI marketing courses?",
-    answer: "Unlike courses that simply teach you how to use ChatGPT for marketing, this system shows you how to build integrated AI marketing ecosystems using n8n and other tools. We include ready-to-deploy chatbots, web chat integration, and automation templates that give you immediate results."
+    question: "What's the guarantee?",
+    answer: "We offer a 30-Day 'Implement & See Results' Guarantee. Use the system as directed, and if you don't see clear improvements in 30 days, we'll refund your investment - no questions asked."
   }
 ];
 
@@ -548,7 +545,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
     {/* Hero Section */}
     <section class="container mx-auto px-6 py-16 border-b border-border bg-background/50 backdrop-blur-sm">
       <div class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-8 text-center">
-        <Badge variant="outline" className="text-sm md:text-base animate-fade-in">
+        <Badge variant="outline" class="text-sm md:text-base animate-fade-in">
           {courseDetails.badge}
         </Badge>
         
@@ -566,7 +563,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-8">
           {heroStats.map((stat) => (
-            <Card className="p-6 text-center">
+            <Card class="p-6 text-center">
               <h3 class="text-3xl font-bold text-primary mb-2">{stat.value}</h3>
               <p class="text-sm text-muted-foreground">{stat.label}</p>
             </Card>
@@ -574,9 +571,9 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 mt-8">
-          <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90">
+          <Button size="lg" class="text-lg px-8 py-6 bg-primary hover:bg-primary/90">
             Get Instant Access to the Playbook & Framework Now
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight class="ml-2 h-5 w-5" />
           </Button>
         </div>
 
@@ -584,19 +581,19 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         <div class="mt-8 space-y-6">
           <div class="flex flex-wrap justify-center items-center gap-4 text-sm text-muted-foreground">
             <span class="flex items-center gap-2">
-              <Check className="w-4 h-4 text-primary" />
+              <Check class="w-4 h-4 text-primary" />
               Designed for Ecom Owners & Managers
             </span>
             <span class="flex items-center gap-2">
-              <Check className="w-4 h-4 text-primary" />
+              <Check class="w-4 h-4 text-primary" />
               Leverage ChatGPT, Claude & Gemini
             </span>
             <span class="flex items-center gap-2">
-              <Check className="w-4 h-4 text-primary" />
+              <Check class="w-4 h-4 text-primary" />
               Powered by the 9-Step Elevate Framework
             </span>
             <span class="flex items-center gap-2">
-              <Check className="w-4 h-4 text-primary" />
+              <Check class="w-4 h-4 text-primary" />
               For Shopify, WooCommerce & More
             </span>
           </div>
@@ -612,7 +609,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         </div>
 
         <p class="text-sm text-muted-foreground mt-4 flex items-center justify-center gap-2">
-          <Shield className="w-4 h-4" />
+          <Shield class="w-4 h-4" />
           {courseDetails.guarantee}
         </p>
       </div>
@@ -623,9 +620,9 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
     <section class="container mx-auto px-6 py-12 border-b border-border bg-background/30 backdrop-blur-sm">
       <div class="w-full max-w-[1200px] mx-auto">
         <div class="grid md:grid-cols-3 gap-8">
-          <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
+          <Card class="p-6 text-center hover:shadow-lg transition-all duration-300">
             <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
-              <Trophy className="w-8 h-8 text-primary" />
+              <Trophy class="w-8 h-8 text-primary" />
             </div>
             <h3 class="text-xl font-bold mb-3">Proven System</h3>
             <p class="text-muted-foreground">
@@ -633,9 +630,9 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             </p>
           </Card>
 
-          <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
+          <Card class="p-6 text-center hover:shadow-lg transition-all duration-300">
             <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
-              <Check className="w-8 h-8 text-primary" />
+              <Check class="w-8 h-8 text-primary" />
             </div>
             <h3 class="text-xl font-bold mb-3">200+ Tested Prompts</h3>
             <p class="text-muted-foreground">
@@ -643,9 +640,9 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             </p>
           </Card>
 
-          <Card className="p-6 text-center hover:shadow-lg transition-all duration-300">
+          <Card class="p-6 text-center hover:shadow-lg transition-all duration-300">
             <div class="rounded-full bg-primary/10 p-4 mx-auto mb-4 w-16 h-16 flex items-center justify-center">
-              <User className="w-8 h-8 text-primary" />
+              <User class="w-8 h-8 text-primary" />
             </div>
             <h3 class="text-xl font-bold mb-3">Expert Support</h3>
             <p class="text-muted-foreground">
@@ -659,9 +656,9 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             Join owners of the world's leaading ecommerce storees who have transformed their random AI experiments into systematic growth engines
           </p>
           <div class="flex justify-center gap-4 mt-8">
-            <Badge variant="outline" className="text-sm py-1 px-4">73% Faster Results</Badge>
-            <Badge variant="outline" className="text-sm py-1 px-4">3X Better Outputs</Badge>
-            <Badge variant="outline" className="text-sm py-1 px-4">186% Growth</Badge>
+            <Badge variant="outline" class="text-sm py-1 px-4">73% Faster Results</Badge>
+            <Badge variant="outline" class="text-sm py-1 px-4">3X Better Outputs</Badge>
+            <Badge variant="outline" class="text-sm py-1 px-4">186% Growth</Badge>
           </div>
         </div>
       </div>
@@ -684,7 +681,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             {/* Strategic Framework */}
             <div class="space-y-6">
               <div class="inline-flex items-center gap-2 text-primary">
-                <GraduationCap className="w-5 h-5" />
+                <GraduationCap class="w-5 h-5" />
                 <h3 class="text-lg font-semibold">Strategic Framework</h3>
               </div>
               <div class="space-y-4">
@@ -694,15 +691,15 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 </p>
                 <div class="space-y-3">
                   <div class="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <Check class="w-5 h-5 text-primary mt-1" />
                     <p class="text-sm">Clear, logical 9-step process covering your entire customer journey</p>
                   </div>
                   <div class="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <Check class="w-5 h-5 text-primary mt-1" />
                     <p class="text-sm">Proven sequence that builds momentum and compounds results</p>
                   </div>
                   <div class="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <Check class="w-5 h-5 text-primary mt-1" />
                     <p class="text-sm">Strategic checkpoints to ensure consistent progress</p>
                   </div>
                 </div>
@@ -712,7 +709,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             {/* AI Prompt Playbook */}
             <div class="space-y-6">
               <div class="inline-flex items-center gap-2 text-primary">
-                <Trophy className="w-5 h-5" />
+                <Trophy class="w-5 h-5" />
                 <h3 class="text-lg font-semibold">AI Prompt Playbook</h3>
               </div>
               <div class="space-y-4">
@@ -722,15 +719,15 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 </p>
                 <div class="space-y-3">
                   <div class="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <Check class="w-5 h-5 text-primary mt-1" />
                     <p class="text-sm">200+ proven prompts optimized for ecommerce growth</p>
                   </div>
                   <div class="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <Check class="w-5 h-5 text-primary mt-1" />
                     <p class="text-sm">Step-by-step implementation guides for each framework stage</p>
                   </div>
                   <div class="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <Check class="w-5 h-5 text-primary mt-1" />
                     <p class="text-sm">Ready-to-use templates for instant deployment</p>
                   </div>
                 </div>
@@ -745,15 +742,15 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
               The ELEVATE Framework provides the strategic map, while the AI Prompt Playbook provides the high-speed engine, creating a powerful system for achieving predictable, scalable e-commerce growth.
             </p>
             <div class="grid md:grid-cols-3 gap-6 mt-8">
-              <Card className="p-4 text-center">
+              <Card class="p-4 text-center">
                 <h4 class="font-semibold mb-2">Systematic Approach</h4>
                 <p class="text-sm text-muted-foreground">Transform random experiments into predictable growth</p>
               </Card>
-              <Card className="p-4 text-center">
+              <Card class="p-4 text-center">
                 <h4 class="font-semibold mb-2">Rapid Implementation</h4>
                 <p class="text-sm text-muted-foreground">Execute strategies 10x faster with AI automation</p>
               </Card>
-              <Card className="p-4 text-center">
+              <Card class="p-4 text-center">
                 <h4 class="font-semibold mb-2">Proven Results</h4>
                 <p class="text-sm text-muted-foreground">Follow the exact system our successful students use</p>
               </Card>
@@ -762,9 +759,9 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
           {/* CTA */}
           <div class="mt-12 text-center">
-            <Button size="lg" className="text-lg px-8">
+            <Button size="lg" class="text-lg px-8">
               Get Access to the Complete System
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight class="ml-2 h-5 w-5" />
             </Button>
             <p class="mt-4 text-sm text-muted-foreground">
               Join successful store owners using our proven system to scale with AI
@@ -918,31 +915,31 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             <div class="grid md:grid-cols-4 gap-6">
               <div class="text-center">
                 <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <GraduationCap className="w-6 h-6 text-primary" />
+                  <GraduationCap class="w-6 h-6 text-primary" />
                 </div>
                 <h4 class="font-semibold mb-2">Structure</h4>
-                <p className="text-sm text-muted-foreground">Clear, logical 9-step roadmap</p>
+                <p class="text-sm text-muted-foreground">Clear, logical 9-step roadmap</p>
               </div>
               <div class="text-center">
                 <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <Trophy className="w-6 h-6 text-primary" />
+                  <Trophy class="w-6 h-6 text-primary" />
                 </div>
                 <h4 class="font-semibold mb-2">Strategy</h4>
-                <p className="text-sm text-muted-foreground">Deep Foundation knowledge</p>
+                <p class="text-sm text-muted-foreground">Deep Foundation knowledge</p>
               </div>
               <div class="text-center">
                 <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <ArrowRight className="w-6 h-6 text-primary" />
+                  <ArrowRight class="w-6 h-6 text-primary" />
                 </div>
                 <h4 class="font-semibold mb-2">Speed</h4>
-                <p className="text-sm text-muted-foreground">Efficient AI integration</p>
+                <p class="text-sm text-muted-foreground">Efficient AI integration</p>
               </div>
               <div class="text-center">
                 <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <User className="w-6 h-6 text-primary" />
+                  <User class="w-6 h-6 text-primary" />
                 </div>
                 <h4 class="font-semibold mb-2">Control</h4>
-                <p className="text-sm text-muted-foreground">You guide implementation</p>
+                <p class="text-sm text-muted-foreground">You guide implementation</p>
               </div>
             </div>
           </Card>
@@ -965,7 +962,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
     <section class="py-20 bg-background border-y border-border">
       <div class="container px-4 mx-auto">
         <div class="text-center max-w-3xl mx-auto mb-16">
-          <Badge variant="outline" className="mb-4">The Science Behind The System</Badge>
+          <Badge variant="outline" class="mb-4">The Science Behind The System</Badge>
           <h2 class="text-3xl lg:text-4xl font-bold mb-6">
             Why This System Works (And Simple Prompting Doesn't Scale)
           </h2>
@@ -976,13 +973,13 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
         {/* Simple Prompting Limitations */}
         <div class="max-w-4xl mx-auto mb-16">
-          <Card className="p-8 bg-destructive/5 border-destructive/20">
+          <Card class="p-8 bg-destructive/5 border-destructive/20">
             <h3 class="text-2xl font-bold mb-6">Simple Prompting's Limitations</h3>
             <div class="grid md:grid-cols-2 gap-6">
               <div class="space-y-4">
                 <div class="flex items-start gap-3">
                   <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-4 h-4 text-destructive" />
+                    <X class="w-4 h-4 text-destructive" />
                   </div>
                   <div>
                     <h4 class="font-semibold mb-1">Lacks Strategy & Context</h4>
@@ -991,7 +988,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 </div>
                 <div class="flex items-start gap-3">
                   <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-4 h-4 text-destructive" />
+                    <X class="w-4 h-4 text-destructive" />
                   </div>
                   <div>
                     <h4 class="font-semibold mb-1">Yields Generic Output</h4>
@@ -1000,7 +997,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 </div>
                 <div class="flex items-start gap-3">
                   <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-4 h-4 text-destructive" />
+                    <X class="w-4 h-4 text-destructive" />
                   </div>
                   <div>
                     <h4 class="font-semibold mb-1">Endless Trial-and-Error</h4>
@@ -1011,7 +1008,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
               <div class="space-y-4">
                 <div class="flex items-start gap-3">
                   <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-4 h-4 text-destructive" />
+                    <X class="w-4 h-4 text-destructive" />
                   </div>
                   <div>
                     <h4 class="font-semibold mb-1">Creates Disconnected Assets</h4>
@@ -1020,7 +1017,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 </div>
                 <div class="flex items-start gap-3">
                   <div class="w-6 h-6 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
-                    <X className="w-4 h-4 text-destructive" />
+                    <X class="w-4 h-4 text-destructive" />
                   </div>
                   <div>
                     <h4 class="font-semibold mb-1">Doesn't Guarantee Focus</h4>
@@ -1034,12 +1031,12 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
         {/* Why Our System Excels */}
         <div class="max-w-4xl mx-auto">
-          <Card className="p-8 bg-primary/5 border-primary/20">
+          <Card class="p-8 bg-primary/5 border-primary/20">
             <h3 class="text-2xl font-bold mb-6">Why Our System Excels</h3>
             <div class="space-y-8">
               <div class="flex items-start gap-4">
                 <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-5 h-5 text-primary" />
+                  <Check class="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <h4 class="text-lg font-semibold mb-2">Strategic Foundation First</h4>
@@ -1049,7 +1046,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
               <div class="flex items-start gap-4">
                 <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-5 h-5 text-primary" />
+                  <Check class="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <h4 class="text-lg font-semibold mb-2">Contextual Relevance</h4>
@@ -1059,7 +1056,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
               <div class="flex items-start gap-4">
                 <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-5 h-5 text-primary" />
+                  <Check class="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <h4 class="text-lg font-semibold mb-2">Proven Prompts</h4>
@@ -1069,7 +1066,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
               <div class="flex items-start gap-4">
                 <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-5 h-5 text-primary" />
+                  <Check class="w-5 h-5 text-primary" />
                 </div>
                 <div>
                   <h4 class="text-lg font-semibold mb-2">System Synergy & Efficiency</h4>
@@ -1094,9 +1091,9 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
           </Card>
 
           <div class="mt-12 text-center">
-            <Button size="lg" className="text-lg px-8">
+            <Button size="lg" class="text-lg px-8">
               Get The Complete System
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight class="ml-2 h-5 w-5" />
             </Button>
             <p class="mt-4 text-sm text-muted-foreground">
               Stop experimenting. Start implementing what's proven to work.
@@ -1110,7 +1107,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
     <section class="container mx-auto px-6 py-20 border-t border-border/40">
       <div class="w-full max-w-[1000px] mx-auto">
         <div class="text-center space-y-6 mb-16">
-          <Badge variant="outline" className="mb-4">Complete 10-Module System</Badge>
+          <Badge variant="outline" class="mb-4">Complete 10-Module System</Badge>
           
           <h2 class="text-4xl md:text-5xl font-bold">Course Modules</h2>
           
@@ -1133,19 +1130,19 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
           <div class="flex flex-wrap justify-center gap-4 mt-8">
             <div class="flex items-center gap-2 text-muted-foreground">
-              <Check className="w-5 h-5 text-primary" />
+              <Check class="w-5 h-5 text-primary" />
               <span>Step-by-Step Framework</span>
             </div>
             <div class="flex items-center gap-2 text-muted-foreground">
-              <Check className="w-5 h-5 text-primary" />
+              <Check class="w-5 h-5 text-primary" />
               <span>200+ Proven Prompts</span>
             </div>
             <div class="flex items-center gap-2 text-muted-foreground">
-              <Check className="w-5 h-5 text-primary" />
+              <Check class="w-5 h-5 text-primary" />
               <span>Ready-to-Use Templates</span>
             </div>
             <div class="flex items-center gap-2 text-muted-foreground">
-              <Check className="w-5 h-5 text-primary" />
+              <Check class="w-5 h-5 text-primary" />
               <span>Implementation Guides</span>
             </div>
           </div>
@@ -1158,7 +1155,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 {index}
               </div>
               <div class="ml-12 w-full">
-                <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary/20 bg-card group">
+                <Card class="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary/20 bg-card group">
                   <div class="space-y-4">
                     {/* Module Header */}
                     <div class="flex flex-col md:flex-row md:items-start gap-4">
@@ -1167,7 +1164,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                         <p class="text-muted-foreground">{module.description}</p>
                       </div>
                       <div class="md:ml-auto flex items-center gap-2">
-                        <Badge variant="outline" className="bg-primary/5">
+                        <Badge variant="outline" class="bg-primary/5">
                           {module.lessons.length} Lessons
                         </Badge>
                       </div>
@@ -1214,73 +1211,73 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
       <div class="container px-4 mx-auto relative">
         <h2 class="text-3xl lg:text-4xl font-bold text-center mb-12">What You Will Achieve</h2>
         <div class="max-w-3xl mx-auto space-y-4">
-          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+          <Card class="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
             <div class="flex items-center gap-5">
               <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
-                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+                <Check class="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
               <p class="text-base md:text-lg font-medium">Reduce AI experimentation time by 73% with proven prompts and workflows</p>
             </div>
           </Card>
           
-          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+          <Card class="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
             <div class="flex items-center gap-5">
               <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
-                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+                <Check class="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
               <p class="text-base md:text-lg font-medium">Triple your AI output quality with strategic context and systematic implementation</p>
             </div>
           </Card>
           
-          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+          <Card class="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
             <div class="flex items-center gap-5">
               <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
-                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+                <Check class="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
               <p class="text-base md:text-lg font-medium">Generate high-converting copy in minutes across your entire customer journey</p>
             </div>
           </Card>
           
-          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+          <Card class="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
             <div class="flex items-center gap-5">
               <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
-                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+                <Check class="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
               <p class="text-base md:text-lg font-medium">Build automated content strategies that adapt to customer behavior</p>
             </div>
           </Card>
           
-          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+          <Card class="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
             <div class="flex items-center gap-5">
               <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
-                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+                <Check class="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
               <p class="text-base md:text-lg font-medium">Create predictive marketing systems that identify opportunities before competitors</p>
             </div>
           </Card>
           
-          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+          <Card class="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
             <div class="flex items-center gap-5">
               <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
-                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+                <Check class="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
               <p class="text-base md:text-lg font-medium">Achieve average revenue growth of 186% within 6 months of implementation</p>
             </div>
           </Card>
           
-          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+          <Card class="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
             <div class="flex items-center gap-5">
               <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
-                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+                <Check class="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
               <p class="text-base md:text-lg font-medium">Scale your marketing operations without expanding your team</p>
             </div>
           </Card>
           
-          <Card className="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
+          <Card class="p-5 hover:scale-[1.02] transition-all duration-200 hover:shadow-lg hover:border-primary/20">
             <div class="flex items-center gap-5">
               <div class="rounded-full bg-primary/10 p-3 flex items-center justify-center shadow-inner shadow-primary/5">
-                <Check className="w-5 h-5 text-primary" strokeWidth={3} />
+                <Check class="w-5 h-5 text-primary" strokeWidth={3} />
               </div>
               <p class="text-base md:text-lg font-medium">Build complete AI marketing systems that run 24/7 with minimal oversight</p>
             </div>
@@ -1294,7 +1291,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
       <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       <div class="container px-4 mx-auto relative">
         <div class="text-center max-w-3xl mx-auto mb-12">
-          <Badge variant="outline" className="mb-4">Complete Business Transformation</Badge>
+          <Badge variant="outline" class="mb-4">Complete Business Transformation</Badge>
           <h2 class="text-3xl lg:text-4xl font-bold mb-6">Powered by the Elevate Framework & AI Playbook</h2>
           <p class="text-xl text-muted-foreground mb-8">This Course Isn't Just About AI Prompts – It's About Systematically Implementing Them Within a Proven Growth Framework.</p>
           <p class="text-lg text-muted-foreground italic">Imagine achieving these objectives not through random tactics, but through targeted actions within each step of the Elevate Framework, accelerated by the AI Prompt Playbook!</p>
@@ -1302,13 +1299,8 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
         <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Increases */}
-          <Card className="p-8 border-primary/20 bg-primary/5">
-            <div class="flex items-center gap-3 mb-6">
-              <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <ArrowRight className="w-8 h-8 text-primary transform rotate-[-90deg]" />
-              </div>
-              <h3 class="text-2xl font-bold text-primary">Increase</h3>
-            </div>
+          <Card class="p-8 border-primary/20 bg-primary/5">
+            <h3 class="text-2xl font-bold mb-6">Increase These Metrics:</h3>
             <div class="space-y-6">
               {[
                 {
@@ -1351,12 +1343,14 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                   title: "Loyalty & Referrals",
                   description: "through proactive care sequences in UNDERSTAND & streamlined SHARE initiatives"
                 }
-              ].map((item) => (
-                <div class="flex items-start gap-3 hover:translate-x-1 transition-transform">
-                  <Check className="w-5 h-5 text-primary mt-1.5" />
+              ].map((metric) => (
+                <div class="flex gap-4 items-start">
+                  <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <TrendingUp class="w-5 h-5 text-primary" />
+                  </div>
                   <div>
-                    <p class="font-semibold">{item.title}</p>
-                    <p class="text-sm text-muted-foreground">{item.description}</p>
+                    <p class="font-medium">{metric.title}</p>
+                    <p class="text-sm text-muted-foreground">{metric.description}</p>
                   </div>
                 </div>
               ))}
@@ -1364,13 +1358,8 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
           </Card>
 
           {/* Decreases */}
-          <Card className="p-8 border-destructive/20 bg-destructive/5">
-            <div class="flex items-center gap-3 mb-6">
-              <div class="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
-                <ArrowRight className="w-8 h-8 text-destructive transform rotate-90" />
-              </div>
-              <h3 class="text-2xl font-bold text-destructive">Decrease</h3>
-            </div>
+          <Card class="p-8 border-destructive/20 bg-destructive/5">
+            <h3 class="text-2xl font-bold mb-6">While Decreasing:</h3>
             <div class="space-y-6">
               {[
                 {
@@ -1413,12 +1402,14 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                   title: "Marketing Waste",
                   description: "by improving performance with AI-generated copy that resonates better"
                 }
-              ].map((item) => (
-                <div class="flex items-start gap-3 hover:translate-x-1 transition-transform">
-                  <X className="w-5 h-5 text-destructive mt-1.5" />
+              ].map((metric) => (
+                <div class="flex gap-4 items-start">
+                  <div class="flex-shrink-0 w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center">
+                    <TrendingDown class="w-5 h-5 text-destructive" />
+                  </div>
                   <div>
-                    <p class="font-semibold">{item.title}</p>
-                    <p class="text-sm text-muted-foreground">{item.description}</p>
+                    <p class="font-medium">{metric.title}</p>
+                    <p class="text-sm text-muted-foreground">{metric.description}</p>
                   </div>
                 </div>
               ))}
@@ -1427,9 +1418,9 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         </div>
 
         <div class="mt-12 text-center">
-          <Button size="lg" className="text-lg px-8">
+          <Button size="lg" class="text-lg px-8">
             Achieve Total Transformation
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight class="ml-2 h-5 w-5" />
           </Button>
           <p class="mt-4 text-sm text-muted-foreground">
             Join successful store owners implementing the complete AI-powered Elevate System
@@ -1446,7 +1437,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
       
       <div class="container px-4 mx-auto relative">
         <div class="text-center space-y-4 mb-16">
-          <Badge variant="outline" className="mb-4">Special Launch Offer</Badge>
+          <Badge variant="outline" class="mb-4">Special Launch Offer</Badge>
           
           <h2 class="text-4xl md:text-5xl font-bold">
             Get the Complete AI Growth System Today
@@ -1460,7 +1451,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         <div class="grid md:grid-cols-2 gap-8 max-w-[1200px] mx-auto">
           {/* Value Stack */}
           <div class="space-y-8">
-            <Card className="p-6">
+            <Card class="p-6">
               <h3 class="text-2xl font-bold mb-6">
                 Here's Everything You Get Instant Access To:
               </h3>
@@ -1469,7 +1460,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 {pricingData.valueBreakdown.map((item) => (
                   <div class="flex gap-4 items-start">
                     <div class="flex-shrink-0 w-5 h-5 mt-1">
-                      <Check className="w-5 h-5 text-primary" />
+                      <Check class="w-5 h-5 text-primary" />
                     </div>
                     <div>
                       <p class="font-medium">{item.item} <span class="text-primary">(${item.value})</span></p>
@@ -1481,7 +1472,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             </Card>
 
             {/* Launch Bonuses */}
-            <Card className="p-6 border-primary/20 bg-primary/5">
+            <Card class="p-6 border-primary/20 bg-primary/5">
               <h3 class="text-2xl font-bold mb-6">
                 PLUS: Enroll Before {pricingData.scarcity.deadline} & Get These Fast-Action Bonuses (Value: $991)
               </h3>
@@ -1490,11 +1481,11 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 {pricingData.bonuses.map((bonus, index) => (
                   <div class="space-y-2">
                     {bonus.expires && (
-                      <Badge variant="destructive" className="mb-2">Expires in {bonus.expires}</Badge>
+                      <Badge variant="destructive" class="mb-2">Expires in {bonus.expires}</Badge>
                     )}
                     <div class="flex gap-4 items-start">
                       <div class="flex-shrink-0 w-5 h-5 mt-1">
-                        <Check className="w-5 h-5 text-primary" />
+                        <Check class="w-5 h-5 text-primary" />
                       </div>
                       <div>
                         <p class="font-medium">🎁 {bonus.title} <span class="text-primary">(${bonus.value})</span></p>
@@ -1509,7 +1500,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
           {/* Pricing Card */}
           <div>
-            <Card className="p-8 border-primary sticky top-8">
+            <Card class="p-8 border-primary sticky top-8">
               <div class="space-y-6">
                 <div class="text-center">
                   <p class="text-muted-foreground mb-2">Regular Price (Post-Launch)</p>
@@ -1526,11 +1517,11 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
                 {/* Payment Options */}
                 <div class="space-y-4">
-                  <Button className="w-full text-lg h-12" size="lg">
+                  <Button class="w-full text-lg h-12" size="lg">
                     Enroll Now & Get Instant Access for ${pricingData.paymentOptions.full} →
                   </Button>
                   
-                  <Button variant="outline" className="w-full text-lg h-12" size="lg">
+                  <Button variant="outline" class="w-full text-lg h-12" size="lg">
                     Start with 3 Payments of ${pricingData.paymentOptions.installments.amount} →
                   </Button>
                 </div>
@@ -1543,7 +1534,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                   <div class="space-y-2">
                     {pricingData.features.map((feature) => (
                       <div class="flex items-start gap-3">
-                        <Check className={`w-5 h-5 mt-1 ${feature.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
+                        <Check class={`w-5 h-5 mt-1 ${feature.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
                         <p class={`text-sm ${feature.highlight ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
                           {feature.title}
                         </p>
@@ -1556,7 +1547,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
 
                 {/* Guarantee */}
                 <div class="text-center space-y-3">
-                  <Shield className="w-12 h-12 text-primary mx-auto" />
+                  <Shield class="w-12 h-12 text-primary mx-auto" />
                   <h4 class="text-xl font-bold">{pricingData.guarantee.title}</h4>
                   <p class="text-sm text-muted-foreground">{pricingData.guarantee.description}</p>
                 </div>
@@ -1567,7 +1558,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 <div class="space-y-4">
                   <div class="text-center">
                     <p class="text-muted-foreground">Only {pricingData.scarcity.spots.remaining} Spots Remaining at Launch Price!</p>
-                    <Progress value={((pricingData.scarcity.spots.total - pricingData.scarcity.spots.remaining) / pricingData.scarcity.spots.total) * 100} className="mt-2" />
+                    <Progress value={((pricingData.scarcity.spots.total - pricingData.scarcity.spots.remaining) / pricingData.scarcity.spots.total) * 100} class="mt-2" />
                   </div>
                   
                   <div class="text-center text-sm text-muted-foreground">
@@ -1577,7 +1568,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
                 </div>
 
                 {/* Final CTA */}
-                <Button size="lg" className="w-full text-lg">
+                <Button size="lg" class="w-full text-lg">
                   Secure Your Spot & Get the AI System Now →
                 </Button>
                 <p class="text-center text-xs text-muted-foreground">
@@ -1610,16 +1601,16 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
           Join the AI marketing revolution and start generating more traffic, conversions, and sales in half the time.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="text-lg">
+          <Button size="lg" class="text-lg">
             {courseDetails.ctaText}
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight class="ml-2 h-5 w-5" />
           </Button>
-          <Button size="lg" variant="outline" className="text-lg">
+          <Button size="lg" variant="outline" class="text-lg">
             View Course Details
           </Button>
         </div>
         <p class="text-sm text-muted-foreground mt-6">
-          <Shield className="inline-block w-4 h-4 mr-1" />
+          <Shield class="inline-block w-4 h-4 mr-1" />
           {courseDetails.guarantee}
         </p>
       </div>
@@ -1638,12 +1629,39 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
             <p class="text-xl font-bold">{pricingData.scarcity.spots.remaining}/{pricingData.scarcity.spots.total}</p>
           </div>
         </div>
-        <Button size="lg" className="text-lg">
+        <Button size="lg" class="text-lg">
           Enroll Now
-          <ArrowRight className="ml-2 h-5 w-5" />
+          <ArrowRight class="ml-2 h-5 w-5" />
         </Button>
       </div>
     </div>
+
+    <section class="py-20">
+      <div class="container px-4 mx-auto">
+        <Card class="max-w-4xl mx-auto p-8 border-primary">
+          <div class="text-center space-y-6">
+            <Shield class="w-16 h-16 text-primary mx-auto" />
+            
+            <div>
+              <h2 class="text-3xl font-bold mb-2">30-Day Money-Back Guarantee</h2>
+              <p class="text-xl text-muted-foreground">
+                Try the complete system risk-free for 30 days
+              </p>
+            </div>
+
+            <div class="max-w-2xl mx-auto">
+              <p class="text-muted-foreground">
+                If you're not completely satisfied with the AI Prompt Playbook and Elevate Framework within 30 days, simply email us for a full refund. No questions asked.
+              </p>
+            </div>
+
+            <Button class="text-lg" size="lg">
+              Get Started Risk-Free Today →
+            </Button>
+          </div>
+        </Card>
+      </div>
+    </section>
   </main>
 </Layout>
 
