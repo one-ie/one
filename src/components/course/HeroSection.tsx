@@ -96,7 +96,7 @@ export function CourseHeroSection({ courseDetails, heroStats }: HeroSectionProps
             </span>
             <span className="flex items-center gap-2">
               <Check className="w-4 h-4 text-primary" />
-              Leverage ChatGPT, Claude & Gemini
+              Leverage ChatGPT, Claude, Deepseek & Gemini
             </span>
             <span className="flex items-center gap-2">
               <Check className="w-4 h-4 text-primary" />
@@ -104,7 +104,7 @@ export function CourseHeroSection({ courseDetails, heroStats }: HeroSectionProps
             </span>
             <span className="flex items-center gap-2">
               <Check className="w-4 h-4 text-primary" />
-              For Shopify, WooCommerce & More
+              For Shopify, WooCommerce, Clickfunnels & More
             </span>
           </div>
 

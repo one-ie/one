@@ -16,12 +16,18 @@ interface TimeLeft {
 interface CountdownTimerProps {
   className?: string;
   onComplete?: () => void;
-  targetDate: string;
-  currentPrice: string;
-  originalPrice: string;
+  targetDate?: string;
+  currentPrice?: string;
+  originalPrice?: string;
 }
 
-export function CountdownTimer({ className = '', onComplete, targetDate, currentPrice, originalPrice }: CountdownTimerProps) {
+export function CountdownTimer({ 
+  className = '', 
+  onComplete, 
+  targetDate = '2025-05-01T00:00:00', 
+  currentPrice = '999', 
+  originalPrice = '1,999' 
+}: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -30,10 +36,14 @@ export function CountdownTimer({ className = '', onComplete, targetDate, current
     const updateCountdown = () => {
       try {
         const now = new Date();
+        console.log('Target Date:', targetDateTime);
+        console.log('Current Date:', now);
         let difference = targetDateTime.getTime() - now.getTime();
+        console.log('Time Difference (ms):', difference);
         
         // If countdown is finished
         if (difference <= 0) {
+          console.log('Countdown finished');
           setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
           if (onComplete) onComplete();
           return;
@@ -51,6 +61,7 @@ export function CountdownTimer({ className = '', onComplete, targetDate, current
 
         const seconds = Math.floor(difference / 1000);
 
+        console.log('Calculated time left:', { days, hours, minutes, seconds });
         setTimeLeft({ days, hours, minutes, seconds });
       } catch (error) {
         console.error('Error updating countdown:', error);
