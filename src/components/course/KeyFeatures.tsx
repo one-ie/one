@@ -43,12 +43,7 @@ export function KeyFeatures() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Join owners of the world's leading ecommerce stores who have transformed their random AI experiments into systematic growth engines
           </p>
-          <div className="flex justify-center gap-4 mt-8">
-            <Badge variant="outline" className="text-sm py-1 px-4">73% Faster Results</Badge>
-            <Badge variant="outline" className="text-sm py-1 px-4">3X Better Outputs</Badge>
-            <Badge variant="outline" className="text-sm py-1 px-4">186% Growth</Badge>
-          </div>
-        </div>
+         </div>
       </div>
     </section>
   );

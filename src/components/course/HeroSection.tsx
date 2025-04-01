@@ -67,8 +67,7 @@ export function CourseHeroSection({ courseDetails, heroStats }: HeroSectionProps
                 <span className="badge-glow inline-flex items-center">
                   🔥 Special Launch Price
                 </span>
-                <span className="mt-1">Save $998 Today
-                <span className="block text-xs mt-1 opacity-90">Only {courseDetails.spots.remaining} Spots Left</span>
+                <span className="mt-1">Save $1,000 Today
                 </span>
               </span>
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -80,7 +79,7 @@ export function CourseHeroSection({ courseDetails, heroStats }: HeroSectionProps
             className="text-lg px-8 py-6 button-shadow button-outline group transition-all duration-300" 
             asChild
           >
-            <a href="#pricing" className="no-underline flex items-center gap-2">
+            <a href="#framework" className="no-underline flex items-center gap-2">
               See Framework Details
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </a>
