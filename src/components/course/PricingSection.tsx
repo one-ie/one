@@ -12,13 +12,6 @@ interface PricingItem {
   description: string;
 }
 
-interface PricingBonus {
-  title: string;
-  value: string;
-  description: string;
-  expires?: string;
-}
-
 interface PricingFeature {
   title: string;
   included: boolean;
@@ -39,7 +32,6 @@ interface PricingData {
   };
   totalValue: string;
   valueBreakdown: PricingItem[];
-  bonuses: PricingBonus[];
   features: PricingFeature[];
   scarcity: {
     spots: {
@@ -62,14 +54,14 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
       
       <div className="container px-4 mx-auto relative">
         <div className="text-center space-y-4 mb-16">
-          <Badge variant="outline" className="mb-4">Special Launch Offer</Badge>
+          <Badge variant="outline" className="mb-4">Special Pre-Launch Offer</Badge>
           
           <h2 className="text-4xl md:text-5xl font-bold">
-            Get the Complete AI Growth System Today
+            Lock In Your Spot at the Special Pre-Launch Price
           </h2>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            Stop wasting time on AI guesswork. Implement the proven system used by top Ecom owners to accelerate growth predictably.
+            Save $1,000 by securing your access today. Get the complete system when it launches May 1, 2025.
           </p>
         </div>
 
@@ -78,7 +70,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
           <div className="space-y-8">
             <Card className="p-6">
               <h3 className="text-2xl font-bold mb-6">
-                Here's Everything You Get Instant Access To:
+                Here's Everything You Get Access To on May 1, 2025:
               </h3>
               
               <div className="space-y-6">
@@ -93,32 +85,56 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
                     </div>
                   </div>
                 ))}
-              </div>
-            </Card>
 
-            {/* Launch Bonuses */}
-            <Card className="p-6 border-primary/20 bg-primary/5">
-              <h3 className="text-2xl font-bold mb-6">
-                PLUS: Enroll Before {pricingData.scarcity.deadline} & Get These Fast-Action Bonuses (Value: $991)
-              </h3>
-              
-              <div className="space-y-6">
-                {pricingData.bonuses.map((bonus, index) => (
-                  <div key={index} className="space-y-2">
-                    {bonus.expires && (
-                      <Badge variant="destructive" className="mb-2">Expires in {bonus.expires}</Badge>
-                    )}
-                    <div className="flex gap-4 items-start">
-                      <div className="flex-shrink-0 w-5 h-5 mt-1">
-                        <Check className="w-5 h-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">🎁 {bonus.title} <span className="text-primary">(${bonus.value})</span></p>
-                        <p className="text-sm text-muted-foreground">{bonus.description}</p>
-                      </div>
+               
+
+                <Separator className="my-6" />
+
+                {/* Platform Compatibility */}
+                <div className="space-y-4">
+                  <h4 className="font-medium">Works With All Major Ecom Platforms:</h4>
+                  <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>Shopify</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>WooCommerce</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>Squarespace Commerce</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>Wix eCommerce</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>BigCommerce</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>Adobe Commerce</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>ClickFunnels</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>Ecwid</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-primary" />
+                      <span>PrestaShop</span>
                     </div>
                   </div>
-                ))}
+                  <p className="text-sm text-muted-foreground mt-2">
+                    ...and virtually any platform where you manage your ads, emails, and website content!
+                  </p>
+                </div>
               </div>
             </Card>
           </div>
@@ -128,13 +144,13 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
             <Card className="p-8 border-primary sticky top-8">
               <div className="space-y-6">
                 <div className="text-center">
-                  <p className="text-muted-foreground mb-2">Regular Price (Post-Launch)</p>
+                  <p className="text-muted-foreground mb-2">Regular Launch Price (May 1, 2025)</p>
                   <p className="text-2xl line-through text-muted-foreground">${pricingData.originalPrice}</p>
                   
                   <div className="mt-4">
-                    <p className="text-muted-foreground">🔥 Special Launch Price (Limited Time) 🔥</p>
+                    <p className="text-muted-foreground">🔥 Special Pre-Launch Price 🔥</p>
                     <p className="text-5xl font-bold text-primary">${pricingData.currentPrice}</p>
-                    <p className="text-sm text-muted-foreground mt-1">(One-Time Investment)</p>
+                    <Badge variant="outline" className="mt-2">Save $1,000 Today</Badge>
                   </div>
                 </div>
 
@@ -143,25 +159,11 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
                 {/* Payment Options */}
                 <div className="space-y-4">
                   <Button className="w-full text-lg h-12" size="lg">
-                    Enroll Now & Get Instant Access for ${pricingData.paymentOptions.full} →
+                    Lock In Your Pre-Launch Price Now →
                   </Button>
-                </div>
-
-                <Separator />
-
-                {/* Features Recap */}
-                <div>
-                  <p className="font-medium mb-3">Here's a Recap of What You Unlock Immediately:</p>
-                  <div className="space-y-2">
-                    {pricingData.features.map((feature, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <Check className={`w-5 h-5 mt-1 ${feature.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
-                        <p className={`text-sm ${feature.highlight ? 'text-primary font-medium' : 'text-muted-foreground'}`}>
-                          {feature.title}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                  <p className="text-sm text-center text-muted-foreground">
+                    Full Access Granted May 1, 2025
+                  </p>
                 </div>
 
                 <Separator />
@@ -178,22 +180,22 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
                 {/* Scarcity */}
                 <div className="space-y-4">
                   <div className="text-center">
-                    <p className="text-muted-foreground">Only {pricingData.scarcity.spots.remaining} Spots Remaining at Launch Price!</p>
+                    <p className="text-muted-foreground">Only {pricingData.scarcity.spots.remaining} Pre-Launch Spots Remaining!</p>
                     <Progress value={((pricingData.scarcity.spots.total - pricingData.scarcity.spots.remaining) / pricingData.scarcity.spots.total) * 100} className="mt-2" />
                   </div>
                   
                   <div className="text-center text-sm text-muted-foreground">
-                    <p>Price increases by ${pricingData.scarcity.price_increase} on</p>
+                    <p>Price increases to ${pricingData.originalPrice} on</p>
                     <p className="font-semibold">{pricingData.scarcity.deadline}</p>
                   </div>
                 </div>
 
                 {/* Final CTA */}
                 <Button size="lg" className="w-full text-lg">
-                  Secure Your Spot & Get the AI System Now →
+                  Secure Your Pre-Launch Price Now →
                 </Button>
                 <p className="text-center text-xs text-muted-foreground">
-                  Instant Access | Secure Checkout | 30-Day Money-Back Guarantee
+                  Launch Access May 1, 2025 | Secure Checkout | 30-Day Money-Back Guarantee
                 </p>
               </div>
             </Card>
