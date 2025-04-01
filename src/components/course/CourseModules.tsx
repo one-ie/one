@@ -31,14 +31,10 @@ export function CourseModules({ modules }: CourseModulesProps) {
           
           <h2 className="text-4xl md:text-5xl font-bold">Course Modules</h2>
           
-          <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+          <h3 className="text-3xl md:text-4xl font-bold bg-clip-text">
             Transform Random AI Experiments into a Systematic Growth Engine
-          </h2>
+          </h3>
           
-          <p className="text-xl md:text-2xl text-muted-foreground font-medium max-w-3xl mx-auto">
-            Transform Random AI Experiments into a Systematic Growth Engine
-          </p>
-
           <div className="max-w-3xl mx-auto text-muted-foreground space-y-4 leading-relaxed">
             <p>
               Stop wasting time with trial-and-error AI prompts. Our proven 10-module system gives you everything you need to systematically scale your ecommerce store using AI – from initial customer attraction to lasting advocacy.

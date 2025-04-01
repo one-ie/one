@@ -19,6 +19,10 @@ import FaqAccordion from "@/components/FaqAccordion";
 import Circles from "@/components/Circles.astro";
 import { HowFrameworkWorks } from "../components/course/HowFrameworkWorks";
 import { Transformation } from "../components/course/Transformation";
+import Teacher from "../components/Teacher.astro";
+import { CountdownTimer } from "../components/course/CountdownTimer";
+import { PreLaunchOffer } from "../components/course/PreLaunchOffer";
+
 
 const title = "The AI Prompt Playbook for Ecom Growth";
 const description = "Transform random AI experiments into a systematic growth engine. Get the proven 9-Step Framework + AI Prompt Playbook designed for Ecom Leaders ready to maximize growth, predictably.";
@@ -174,51 +178,51 @@ const courseModulesData = [
 
 // FAQs for the bottom section
 const faqs = [
-  {
-    question: "Is the $999 investment really worth it for my store?",
-    answer: "Absolutely. Think about the cost of *not* having this system: hours wasted weekly on ineffective prompting (15+ hours/week), lost sales from subpar conversions (potentially thousands/month), and failed ad campaigns. This course provides a system proven to save time and generate results. Many students find the ROI covers the investment within weeks through increased efficiency and sales lift alone. It's an investment in predictable growth, not an expense."
-  },
-  {
-    question: "How is this different from just finding free prompts online or other AI courses?",
-    answer: "Night and day difference. Free prompts lack strategy, context, and testing. Other courses might give generic AI tips. This is a complete Ecom Growth SYSTEM: the proven 9-Step Elevate Framework PLUS a library of meticulously tested, Ecom-specific prompts engineered to work within that strategic framework, using your specific business data. It's about actionable results, not just random AI tricks."
-  },
-  {
-    question: "I'm already busy running my store. How much time does this really take?",
-    answer: "This system is designed to save you time, significantly. While there's an upfront investment to learn the framework (which you can do at your own pace), using the Playbook prompts for tasks like writing ads or emails takes minutes, not hours. You'll quickly reclaim far more time than you invest by eliminating guesswork and inefficient content creation."
-  },
-  {
-    question: "How technical is this? Do I need to be an AI wizard or coder?",
-    answer: "Not at all! If you can copy and paste text, and use basic tools like ChatGPT/Claude and your Ecom platform/email software, you have all the technical skills required. We focus on strategic application and effective prompting, not complex tech setups. The Playbook handles the advanced prompt engineering for you."
-  },
-  {
+      {
+        question: "Is the $999 investment really worth it for my store?",
+        answer: "Absolutely. Think about the cost of *not* having this system: hours wasted weekly on ineffective prompting (15+ hours/week), lost sales from subpar conversions (potentially thousands/month), and failed ad campaigns. This course provides a system proven to save time and generate results. Many students find the ROI covers the investment within weeks through increased efficiency and sales lift alone. It's an investment in predictable growth, not an expense."
+      },
+      {
+        question: "How is this different from just finding free prompts online or other AI courses?",
+        answer: "Night and day difference. Free prompts lack strategy, context, and testing. Other courses might give generic AI tips. This is a complete Ecom Growth SYSTEM: the proven 9-Step Elevate Framework PLUS a library of meticulously tested, Ecom-specific prompts engineered to work within that strategic framework, using your specific business data. It's about actionable results, not just random AI tricks."
+      },
+      {
+        question: "I'm already busy running my store. How much time does this really take?",
+        answer: "This system is designed to save you time, significantly. While there's an upfront investment to learn the framework (which you can do at your own pace), using the Playbook prompts for tasks like writing ads or emails takes minutes, not hours. You'll quickly reclaim far more time than you invest by eliminating guesswork and inefficient content creation."
+      },
+      {
+        question: "How technical is this? Do I need to be an AI wizard or coder?",
+        answer: "Not at all! If you can copy and paste text, and use basic tools like ChatGPT/Claude and your Ecom platform/email software, you have all the technical skills required. We focus on strategic application and effective prompting, not complex tech setups. The Playbook handles the advanced prompt engineering for you."
+      },
+      {
     question: "What if I try it and it doesn't work for me? What's the guarantee?",
     answer: "Our 30-Day 'Implement & See Results' Guarantee is simple: Enroll, actively use the framework and playbook as directed. If you don't see a clear improvement in your workflow efficiency and output quality within 30 days, email us for a full, no-hassle refund. We're confident in the system's effectiveness when implemented."
   },
-  {
-    question: "Will this work for my specific Ecom niche (e.g., fashion, supplements, dropshipping)?",
-    answer: "Yes. The Elevate Framework addresses the fundamental principles of the e-commerce customer journey, applicable across niches. The AI Prompts are designed to be customized with your specific product details, customer avatar (Foundation module), and brand voice, making them highly adaptable and effective regardless of your niche."
+      {
+        question: "Will this work for my specific Ecom niche (e.g., fashion, supplements, dropshipping)?",
+        answer: "Yes. The Elevate Framework addresses the fundamental principles of the e-commerce customer journey, applicable across niches. The AI Prompts are designed to be customized with your specific product details, customer avatar (Foundation module), and brand voice, making them highly adaptable and effective regardless of your niche."
+      },
+      {
+        question: "Which specific AI tools do I need to use this course?",
+        answer: "You need access to at least one of the major Large Language Models: ChatGPT (GPT-4 recommended for best results), Anthropic's Claude (Claude 3 family is excellent), or Google's Gemini. The course doesn't require purchasing dozens of niche AI tools; it focuses on leveraging the core, powerful LLMs effectively."
+      },
+      {
+        question: "What kind of support is available if I get stuck?",
+        answer: "You get access to our private community to connect with peers and ask questions, plus monthly live Q&A calls to get direct expert guidance. Our support team is also available via email for technical issues related to course access."
+      },
+      {
+        question: "AI changes so fast. Will this course become outdated quickly?",
+        answer: "That's exactly why you get Lifetime Access, including FREE updates to the course content AND the AI Prompt Playbook. As AI evolves and we discover better prompts or framework refinements, we update the system, ensuring your investment continues to deliver cutting-edge value long-term."
+      },
+      {
+        question: "How many prompts are really included in the Playbook?",
+        answer: "You get access to our comprehensive library of 200+ prompts, each meticulously crafted and tested for specific Ecom tasks across all 9 steps of the Elevate Framework. This isn't inflated fluff; it's a curated arsenal designed for action."
   },
-  {
-    question: "Which specific AI tools do I need to use this course?",
-    answer: "You need access to at least one of the major Large Language Models: ChatGPT (GPT-4 recommended for best results), Anthropic's Claude (Claude 3 family is excellent), or Google's Gemini. The course doesn't require purchasing dozens of niche AI tools; it focuses on leveraging the core, powerful LLMs effectively."
-  },
-  {
-    question: "What kind of support is available if I get stuck?",
-    answer: "You get access to our private community to connect with peers and ask questions, plus monthly live Q&A calls to get direct expert guidance. Our support team is also available via email for technical issues related to course access."
-  },
-  {
-    question: "AI changes so fast. Will this course become outdated quickly?",
-    answer: "That's exactly why you get Lifetime Access, including FREE updates to the course content AND the AI Prompt Playbook. As AI evolves and we discover better prompts or framework refinements, we update the system, ensuring your investment continues to deliver cutting-edge value long-term."
-  },
-  {
-    question: "How many prompts are really included in the Playbook?",
-    answer: "You get access to our comprehensive library of 200+ prompts, each meticulously crafted and tested for specific Ecom tasks across all 9 steps of the Elevate Framework. This isn't inflated fluff; it's a curated arsenal designed for action."
-  },
-  {
-    question: "How is the Elevate Framework different from other marketing funnels or models?",
-    answer: "The Elevate Framework is specifically designed for modern Ecom, integrates AI implementation at every step, and follows a logical 9-step progression covering the entire customer value journey (Attraction, Conversion, AND Growth/Retention). It's more comprehensive and explicitly built for AI acceleration compared to older, simpler funnel models."
-  },
-  {
+      {
+        question: "How is the Elevate Framework different from other marketing funnels or models?",
+        answer: "The Elevate Framework is specifically designed for modern Ecom, integrates AI implementation at every step, and follows a logical 9-step progression covering the entire customer value journey (Attraction, Conversion, AND Growth/Retention). It's more comprehensive and explicitly built for AI acceleration compared to older, simpler funnel models."
+      },
+      {
     question: "Why are spots limited?",
     answer: "We offer special launch pricing to reward early adopters who are ready to implement this system now. By limiting initial spots, we can provide focused support during the crucial launch phase and ensure each student gets the attention they need. Acting now locks in the best value and ensures you don't miss out on the special launch bonuses."
   }
@@ -434,10 +438,11 @@ I'm here to understand your specific needs and show you how the AI Prompt Playbo
     {/* Why It Works */}
     <WhyItWorks client:visible />
 
-  
 
     {/* Business Transformation */}
     <Transformation client:visible />
+
+    <Teacher client:visible/>
 
     {/* Course Modules */}
     <CourseModules client:visible modules={courseModulesData} />
@@ -445,10 +450,23 @@ I'm here to understand your specific needs and show you how the AI Prompt Playbo
     {/* Pricing Section */}
     <PricingSection client:visible pricingData={pricingData} />
 
+     {/* Countdown Timer */}
+     <CountdownTimer 
+     client:visible 
+     targetDate={courseDetails.launchDate}
+     currentPrice={pricingData.currentPrice}
+     originalPrice={pricingData.originalPrice}
+   />
+
+    {/* Pre-Launch Offer */}
+    <PreLaunchOffer client:visible />
+
+   
+
     {/* FAQs Section */}
     <FAQSection client:visible faqs={faqs} />
 
-    {/* Final CTA */}
+        {/* Final CTA */}
     <section class="py-20">
       <div class="container px-4 mx-auto text-center">
         <h2 class="text-3xl lg:text-4xl font-bold mb-6">Ready to Transform Your Marketing?</h2>
