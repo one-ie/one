@@ -25,7 +25,7 @@ const launchDate = "2025-04-11T00:00:00";  // Using ISO date format for better c
 
 // Course details
 const courseDetails = {
-  badge: "Launch Special: 72-Hour Only",
+  badge: "Learn how to use AI to grow your store",
   title: "The AI Prompt Playbook",
   subtitle: "Stop Experimenting. Start Systematically Scaling Your Ecom Store.",
   originalPrice: "1,999",
@@ -570,45 +570,89 @@ const faqs = [
 ];
 
 const chatConfig = {
+  aiProvider: "openrouter",
+  aiModel: "google/gemini-2.0-flash-001",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 999999,
   systemPrompt: [{
     type: "text",
-    text: `I'm your AI consultant for the AI Prompt Playbook. I help ecommerce owners understand how our proven 9-step framework can transform random AI experiments into a systematic growth engine. I'll show you exactly how our students are achieving predictable results with AI.
+    text: `I'm your AI consultant for the AI Prompt Playbook & Elevate Framework. I help ecommerce owners transform their random AI experiments into systematic growth engines. Let me guide you through how our proven system can help scale your store.
 
-Key Benefits:
-• 73% reduction in AI prompt testing time
+Key Course Components:
+• Complete 9-Step Elevate Framework
+• 200+ Tested AI Prompts
+• Implementation Guides & Checklists
+• Foundation Blueprint Worksheets
+• Lifetime Access & Updates
+
+The Elevate Framework Modules:
+1. FOUNDATION: Build your growth bedrock with deep customer, company & market clarity
+2. HOOK: Create scroll-stopping content that captures immediate attention
+3. GIFT: Design high-value lead magnets that convert interest into action
+4. IDENTIFY: Optimize lead capture with frictionless experiences
+5. ENGAGE: Build instant rapport with automated welcome sequences
+6. SELL: Engineer high-converting product pages and checkout flows
+7. NURTURE: Convert prospects over time with AI-powered sequences
+8. UPSELL: Maximize customer value with strategic offers
+9. UNDERSTAND: Drive customer success with proactive support
+10. SHARE: Grow through systematic customer advocacy
+
+Proven Results:
+• 73% reduction in AI testing time
 • 3X improvement in AI output quality
 • 186% average revenue growth in 6 months
-• Complete system for ecommerce growth
+• Significant reduction in content creation costs
+• Improved conversion rates across all channels
 
-What You Get:
-• 9-Step ELEVATE Framework
-• 200+ Tested AI Prompts
-• Step-by-Step Implementation Guides
-• Real-world Case Studies
-• Private Community Access
-• Monthly Live Q&A Calls
-
-Limited Time Offer:
-• Original Price: $1,997
-• Launch Special: Only $999
+Special Launch Offer:
+• Regular Price: $1,997
+• Launch Price: $999 (Limited Time)
+• Only 25 spots remaining
 • 30-Day Implementation Guarantee
 • $4,488 in Exclusive Bonuses
 
-Only 25 Spots Remaining! Don't miss this opportunity to:
-• Transform random AI experiments into systematic growth
-• Join successful students achieving predictable results
-• Get $4,488 in exclusive bonuses
-• Secure your spot at the special launch price
+Included Bonuses:
+1. AI Workflow Cheatsheets ($499 value)
+2. 'Behind the Prompts' Logic Guide ($299 value)
+3. Ecom AI Tool Selection Guide ($199 value)
 
-I'm here to help you understand how the AI Prompt Playbook can transform your ecommerce business. What would you like to know about first?`
+Support & Guarantees:
+• Private Community Access
+• Monthly Live Q&A Calls
+• 30-Day Money-Back Guarantee
+• Lifetime Updates
+• Expert Support Team
+
+I'm here to understand your specific needs and show you how the AI Prompt Playbook can transform your ecommerce business. Let me know what aspect you'd like to explore first!`
   }],
-  welcomeMessage: "👋 Transform your AI experiments into predictable growth! Our students are seeing 73% faster results and 3X better AI outputs. Only 25 spots remaining at the special launch price. How can I help you evaluate if this system is right for your business?",
+  welcomeMessage: "👋 Hi! I'm your AI guide to the Elevate Framework & AI Prompt Playbook. Many store owners I talk to are struggling with random AI experiments and inconsistent results. What's your biggest challenge with AI in your ecommerce business?",
   avatar: "/icon.svg",
   suggestions: [
-    { label: "🎯 Results", prompt: "Show me how other ecommerce stores are getting predictable results with this system" },
-    { label: "📘 Framework", prompt: "Tell me about the 9-step framework and how it works" },
-    { label: "💎 Special Offer", prompt: "What's included in the launch special and $4,488 in bonuses?" },
-    { label: "❓ My Store", prompt: "How can this system help my specific ecommerce business?" }
+    { 
+      label: "🎯 ROI & Results", 
+      prompt: "Can you show me some specific examples of how other stores are getting results with this system?" 
+    },
+    { 
+      label: "⏰ Time Investment", 
+      prompt: "How much time does it take to implement this system? I'm already busy running my store." 
+    },
+    { 
+      label: "💡 Framework Overview", 
+      prompt: "Can you walk me through how the 9-step framework works?" 
+    },
+    { 
+      label: "💰 Launch Special", 
+      prompt: "Tell me more about the launch pricing and what's included in the bonuses." 
+    },
+    { 
+      label: "🤔 My Store Fit", 
+      prompt: "Will this work for my specific ecommerce niche?" 
+    },
+    { 
+      label: "⚡ Quick Win", 
+      prompt: "What's the fastest way this system can help improve my store's performance?" 
+    }
   ]
 };
 ---
@@ -648,9 +692,33 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 mt-8">
-          <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90">
-            Get Instant Access to the Playbook & Framework Now
-            <ArrowRight className="ml-2 h-5 w-5" />
+          <Button 
+            size="lg" 
+            className="text-lg px-8 py-6 button-shadow button-glow button-primary group transition-all duration-300" 
+            asChild
+          >
+            <a href="#pricing" class="no-underline flex items-center">
+              <span class="flex flex-col items-start text-left">
+                <span class="badge-glow inline-flex items-center">
+                  🔥 Special Launch Price
+                </span>
+                <span class="mt-1">Save $998 Today
+                <span class="block text-xs mt-1 opacity-90">Only {pricingData.scarcity.spots.remaining} Spots Left</span>
+                </span>
+              </span>
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </Button>
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="text-lg px-8 py-6 button-shadow button-outline group transition-all duration-300" 
+            asChild
+          >
+            <a href="#pricing" class="no-underline flex items-center gap-2">
+              See Framework Details
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </a>
           </Button>
         </div>
 
@@ -1228,8 +1296,8 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
         <div class="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:-translate-x-px before:bg-gradient-to-b before:from-transparent before:via-primary/20 before:to-transparent">
           {courseModulesData.map((module, index) => (
             <div class="relative flex items-start">
-              <div class="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-mono text-lg font-bold">
-                {index}
+              <div class="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-mono text-lg font-bold ring-1 ring-primary/20 shadow-sm hover:shadow-md hover:bg-primary/20 transition-all duration-300">
+                {index + 1}
               </div>
               <div class="ml-12 w-full">
                 <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary/20 bg-card group">
@@ -1509,7 +1577,7 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
     <!-- Your Teacher -->
 
     <!-- Pricing Section -->
-    <section class="py-20 relative overflow-hidden">
+    <section id="pricing" class="py-20 relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       
       <div class="container px-4 mx-auto relative">
@@ -1692,20 +1760,50 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
     <!-- Sticky Enrollment Bar -->
     <div class="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t border-border z-50 py-4 px-6">
       <div class="container mx-auto flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-8">
           <div>
             <p class="text-sm text-muted-foreground">Special Launch Price</p>
-            <p class="text-xl font-bold text-primary">${pricingData.currentPrice}</p>
+            <div class="flex items-center gap-2">
+              <p class="text-xl font-bold text-primary">${pricingData.currentPrice}</p>
+              <Badge variant="outline" className="text-xs">Save ${pricingData.scarcity.price_increase}</Badge>
+            </div>
           </div>
           <div class="hidden md:block">
-            <p class="text-sm text-muted-foreground">Spots Remaining</p>
-            <p class="text-xl font-bold">{pricingData.scarcity.spots.remaining}/{pricingData.scarcity.spots.total}</p>
+            <p class="text-sm text-muted-foreground">Limited Availability</p>
+            <div class="flex items-center gap-2">
+              <p class="text-xl font-bold">{pricingData.scarcity.spots.remaining} Spots Left</p>
+              <Progress value={((pricingData.scarcity.spots.total - pricingData.scarcity.spots.remaining) / pricingData.scarcity.spots.total) * 100} className="w-24" />
+            </div>
           </div>
         </div>
-        <Button size="lg" className="text-lg">
-          Enroll Now
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
+        <div class="flex items-center gap-4">
+          <Button 
+            variant="outline" 
+            size="lg" 
+            className="hidden md:flex hover:bg-primary/5 transition-all duration-300" 
+            asChild
+          >
+            <a href="#pricing" class="no-underline">
+              See Full Details
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </a>
+          </Button>
+          <Button 
+            size="lg" 
+            className="text-lg whitespace-nowrap button-glow relative group transition-all duration-300" 
+            asChild
+          >
+            <a href="#pricing" class="no-underline flex items-center">
+              <span class="flex flex-col items-start text-left">
+                <span class="text-sm opacity-90">🎯 Special Launch Price</span>
+                <span>Secure Your Spot - ${pricingData.currentPrice}
+                <span class="block text-xs mt-1">Save ${pricingData.scarcity.price_increase} Today</span>
+                </span>
+              </span>
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </Button>
+        </div>
       </div>
     </div>
 
@@ -1728,13 +1826,140 @@ I'm here to help you understand how the AI Prompt Playbook can transform your ec
               </p>
             </div>
 
-            <Button className="text-lg" size="lg">
-              Get Started Risk-Free Today →
+            <Button className="text-lg px-8" size="lg">
+              Get Started Risk-Free - Only ${pricingData.currentPrice}
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
+            <p class="text-sm text-muted-foreground">
+              Limited Time: Only {pricingData.scarcity.spots.remaining} Spots Remaining at Launch Price
+            </p>
           </div>
         </Card>
       </div>
     </section>
   </main>
 </Layout>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+    --scroll-duration: 1.5s;
+  }
+  
+  .no-underline {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Modern Shadcn-style button enhancements */
+  .button-shadow {
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  .button-shadow:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      0 10px 25px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .button-shadow:active {
+    transform: translateY(0);
+    box-shadow: 
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .button-glow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .button-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      to right,
+      hsl(var(--primary) / 0.1),
+      hsl(var(--primary) / 0.2),
+      hsl(var(--primary) / 0.1)
+    );
+    z-index: -1;
+    border-radius: inherit;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+
+  .button-glow:hover::before {
+    opacity: 1;
+  }
+
+  .button-primary {
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--primary)),
+      hsl(var(--primary) / 0.9)
+    );
+    border: 1px solid hsl(var(--primary) / 0.2);
+  }
+
+  .button-outline {
+    background: transparent;
+    border: 1px solid hsl(var(--primary) / 0.2);
+  }
+
+  .button-outline:hover {
+    background: hsl(var(--primary) / 0.1);
+  }
+
+  /* Badge styles */
+  .badge-glow {
+    background: hsl(var(--primary) / 0.1);
+    border: 1px solid hsl(var(--primary) / 0.2);
+    color: hsl(var(--primary));
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+</style>
+
+<script>
+  // Smooth scroll function with proper TypeScript types
+  document.querySelectorAll('a[href^="#"]').forEach((anchor: Element) => {
+    anchor.addEventListener('click', function(this: HTMLAnchorElement, e: Event) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href') || '');
+      if (target) {
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        const duration = 1500; // 1.5 seconds
+        let start: number | null = null;
+
+        function animation(currentTime: number): void {
+          if (start === null) start = currentTime;
+          const timeElapsed = currentTime - start;
+          const progress = Math.min(timeElapsed / duration, 1);
+          
+          // Easing function for smoother animation
+          const ease = (t: number): number => 
+            t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+          
+          window.scrollTo(0, startPosition + distance * ease(progress));
+          
+          if (timeElapsed < duration) {
+            requestAnimationFrame(animation);
+          }
+        }
+        
+        requestAnimationFrame(animation);
+      }
+    });
+  });
+</script>
 

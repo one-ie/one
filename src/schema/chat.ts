@@ -4,7 +4,7 @@ import path from 'node:path';
 
 // Core schema definitions
 const ProviderSchema = z.enum(['openai', 'anthropic', 'mistral', 'openrouter'])
-  .default('mistral');
+  .default('openrouter');
 
 const ContentPartSchema = z.object({
   type: z.literal('text'),

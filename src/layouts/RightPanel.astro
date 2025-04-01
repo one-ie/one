@@ -28,8 +28,8 @@ const { header = true, footer = true } = Astro.props;
 // Define default config
 // Define comprehensive default config
 const defaultConfig = {
-  provider: "mistral",
-  model: "mistral-large-latest",
+  provider: "openrouter",
+  model: "google/gemini-2.0-flash-001",
   systemPrompt: [{
     type: "text" as const,
     text: "I am Agent ONE, your guide to building AI-powered solutions. I'll help you leverage our comprehensive toolkit to create engaging experiences."
