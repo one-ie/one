@@ -61,7 +61,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
           </h2>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            Save $1,000 by securing your access today. Get the complete system when it launches May 1, 2025.
+            Save $1,000 by securing your access today. Get the complete system when it launches May 1, 2025. 
           </p>
         </div>
 

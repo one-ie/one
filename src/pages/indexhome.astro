@@ -1,0 +1,159 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { GitSection } from "@/components/GitSection";
+import { Chart } from "@/components/ChartClones";
+import FaqAccordion from "@/components/FaqAccordion";
+import Circles from "@/components/Circles.astro";
+import Features2 from "@/components/Features2.astro";
+import MeetYourTeam from "@/components/MeetYourTeam.astro";
+
+const faqs = [
+  // Core Features
+  {
+    question: "What can I build with ONE?",
+    answer:
+      "ONE enables you to build complete AI-powered businesses. It's perfect for building 1) AI Sales Agents that engage customers and close deals 24/7 2) Multi-channel Content Generation for blogs, social media, and marketing 3) Full E-commerce with crypto and traditional payments 4) Courses and digital products.",
+  },
+
+  // Payments
+  {
+    question: "What payment methods are supported?",
+    answer:
+      "ONE makes it easy for you to accept all major payment methods through Stripe:\n• Credit/Debit Cards (Visa, Mastercard, American Express)\n• Digital Wallets (Apple Pay, Google Pay, Microsoft Pay)\n• Bank Transfers (ACH, SEPA, BACS)\n• Buy Now Pay Later (Klarna, Afterpay, Clearpay)\n• Local Methods (iDEAL, Bancontact, giropay)\n• International Cards (JCB, UnionPay)\n\nCrypto payments (BTC, ETH, SOL) are under active development - see progress at /crypto",
+  },
+  // AI Agents
+  {
+    question: "How powerful are the AI agents?",
+    answer:
+      "You can build enterprise-grade agents that can:\n• Handle complete sales cycles\n• Generate and optimize content\n• Process transactions autonomously\n• Learn from customer interactions\n• Operate in multiple languages\n• Integrate with external systems\n• Maintain context across sessions",
+  },
+  // Content Generation
+  {
+    question: "What type of content can be automated?",
+    answer:
+      "The content automation system handles:\n• Blog posts & articles\n• Social media content\n• Product descriptions\n• Marketing materials\n• Documentation & guides\n• Email campaigns\n• Video scripts & podcasts\n\nAll content is SEO-optimized and maintains your brand voice.",
+  },
+  // Technical
+  {
+    question: "What's the technical architecture?",
+    answer:
+      "ONE is built on modern technology:\n• Astro & React for frontend\n• Edge-optimized runtime\n• Vercel AI SDK integration\n• WebSocket for real-time features\n• TypeScript support\n• Shadcn/UI components\n• API-first architecture",
+  },
+  // Getting Started
+  {
+    question: "How do I get started?",
+    answer:
+      "Getting started is straightforward:\n1. Download and install using pnpm\n2. Connect your AI provider (OpenAI, Anthropic, etc.)\n3. Set up payment processing\n4. Configure your first AI agent\n5. Deploy to your preferred platform\n\nVisit https://one.ie/docs/quickstart for step-by-step guidance.",
+  },
+  // Customization
+  {
+    question: "Can I customize everything?",
+    answer:
+      "Yes, ONE is fully customizable:\n• Create custom AI agents\n• Design unique workflows\n• Build custom UI components\n• Set up custom payment flows\n• Define business rules\n• Create specialized content templates\n• Implement custom authentication",
+  },
+];
+
+---
+  
+<Layout
+  title="ONE - Build Your AI Brand"
+  chatConfig={{
+    // Layout and Meta
+    layout: "home",
+    title: "ONE - Build Your AI Brand",
+    description: "AI-powered solutions with ONE",
+    
+    // AI Config
+    aiProvider: "openrouter",
+    aiModel: "google/gemini-2.0-flash-001",
+    apiEndpoint: "https://api.openai.com/v1",
+    temperature: 0.7,
+    maxTokens: 2000,
+
+    // Prompt Config
+    systemPrompt: [{
+      type: "text",
+      text: "I am your AI guide to building with ONE. I'll help you understand and implement our powerful toolkit."
+    }],
+    addSystemPrompt: true,
+    addBusinessPrompt: true,
+
+    // Welcome Config
+    welcomeMessage: "👋 Welcome! I'm here to help you build amazing AI-powered solutions with ONE. What would you like to learn about?",
+    avatar: "/icon.svg",
+    suggestions: [
+      { label: "🚀 Quick Start Guide", prompt: "Show me how to get started with ONE quickly" },
+      { label: "💡 Key Features", prompt: "What are the main features of ONE?" },
+      { label: "🤖 AI Capabilities", prompt: "What AI features does ONE provide?" }
+    ],
+
+    // Optional Config
+    runtime: "edge",
+    includeContent: true
+  }}
+  rightPanelMode="quarter"
+>
+  <main class="flex flex-col w-full">
+    {/* Hero Section */}
+    <section
+      class="container mx-auto px-6 py-12 border-b border-border bg-background/50 backdrop-blur-sm"
+    >
+      <div
+        class="w-full max-w-[1400px] mx-auto flex flex-col items-center gap-6 text-center"
+      >
+        <h1
+          class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground one-animate-fade-in"
+        >
+          Build Your <span class="text-accent">AI Brand</span>
+        </h1>
+        <div class="flex flex-col items-center gap-4 max-w-[800px]">
+          <p
+            class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide max-w-2xl one-animate-fade-in"
+          >
+            ONE is a free toolkit for building AI brands.
+           
+            You can generate anything - content, courses, payments, websites, and AI agents without restrictions. 
+            
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <Circles />   
+
+    <section class="container mx-auto px-6 py-8 border-b border-border bg-background/30 backdrop-blur-sm">
+      <div class="w-full max-w-[800px] mx-auto text-center">
+        <p class="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed tracking-wide one-animate-fade-in">
+          ONE is 100% free, open source and compliant. You can host it for free. Run it locally, on your own server, in the cloud or at the edge. 
+        </p>
+      </div>
+    </section>
+    <Features2 />
+
+    <MeetYourTeam />
+
+    {/* Download Section */}
+    <section
+      class="container mx-auto px-6 py-16 border-b border-border bg-background/30 backdrop-blur-sm"
+    >
+      <Chart client:load />
+      <GitSection client:load />
+    </section>
+
+    {/* FAQs Section */}
+    <section
+      class="container mx-auto px-6 py-20 border-t border-border bg-background/10 backdrop-blur-sm"
+    >
+      <div class="w-full max-w-[1400px] mx-auto">
+        <h2
+          class="text-4xl font-bold mb-10 text-center text-foreground one-animate-fade-in"
+        >
+          Frequently Asked Questions
+        </h2>
+        <div class="one-animate-fade-in">
+          <FaqAccordion client:idle faqs={faqs} />
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

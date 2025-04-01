@@ -25,20 +25,18 @@ chatConfig:
 # TODO List
 
 ## High Priority
-- [ x] how it works
-- [ x] Me
-- [ ] testimonnials
-- [ ] integrations
-- [ ] models
-- [ ] Review and update course module content
-- [ ] Update pricing and payment options
-- [ ] countdown 
-- [ ] Refresh testimonials with recent success stories
-- [ ] Update bonus offerings
-- [ ] order button 
-- [ ] elevate framework
-- [ ] what you get 
-- [ ] update ai 
+- [ ] Move course to index
+- [ ] get chat working on course
+- [ ] fix buttons to point to pricing 
+- [ ] pay by bank transfer 
+- [ ] pay by crypto 
+- [ ] pay by card
+- [ ] ecommerce logos 
+- [ ] bottom button 
+- [ ] 
+- [x] Me
+- [ ] testimonials
+- [ ] countdown  - explain how it is personalized learning ... 
 - [ ] video 
 
 

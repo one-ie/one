@@ -16,18 +16,21 @@ interface TimeLeft {
 interface CountdownTimerProps {
   className?: string;
   onComplete?: () => void;
+  targetDate: string;
+  currentPrice: string;
+  originalPrice: string;
 }
 
-export function CountdownTimer({ className = '', onComplete }: CountdownTimerProps) {
+export function CountdownTimer({ className = '', onComplete, targetDate, currentPrice, originalPrice }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const targetDate = new Date('2025-05-01T00:00:00');
+    const targetDateTime = new Date(targetDate);
 
     const updateCountdown = () => {
       try {
         const now = new Date();
-        let difference = targetDate.getTime() - now.getTime();
+        let difference = targetDateTime.getTime() - now.getTime();
         
         // If countdown is finished
         if (difference <= 0) {
@@ -60,7 +63,7 @@ export function CountdownTimer({ className = '', onComplete }: CountdownTimerPro
 
     // Cleanup on unmount
     return () => clearInterval(interval);
-  }, [onComplete]);
+  }, [targetDate, onComplete]);
 
   const timeUnits = [
     { value: timeLeft.days, label: 'Days' },
@@ -75,11 +78,15 @@ export function CountdownTimer({ className = '', onComplete }: CountdownTimerPro
         <div className="text-center mb-6">
           <Badge variant="outline" className="mb-2">
             <Clock className="w-4 h-4 mr-1" />
-            Course Launch Countdown
+            Pre-Launch Special Offer
           </Badge>
-          <h3 className="text-2xl font-bold mb-2">Time Until "AI Prompt Playbook" Launch</h3>
+          <h3 className="text-2xl font-bold mb-2">Lock In Your Pre-Launch Price</h3>
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <span className="text-2xl font-bold text-primary">${currentPrice}</span>
+            <span className="text-lg text-muted-foreground line-through">${originalPrice}</span>
+          </div>
           <p className="text-muted-foreground">
-            Full course access will be granted on May 1, 2025
+            Price increases after launch on {new Date(targetDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
           </p>
         </div>
 
