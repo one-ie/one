@@ -1,0 +1,269 @@
+---
+import {
+  Newspaper,
+  Download,
+  BookText,
+  Shield,
+  LayoutGrid,
+  CreditCard,
+  MessageSquare,
+  Rocket,
+  Lightbulb,
+  Target,
+  Clock,
+  HelpCircle,
+  DollarSign
+} from "lucide-react";
+
+// Course navigation items with anchor links
+const courseNavigation = [
+  { title: "Overview", path: "#overview", icon: Rocket },
+  { title: "Key Features", path: "#features", icon: Lightbulb },
+  { title: "Framework", path: "#framework", icon: Target },
+  { title: "How It Works", path: "#how-it-works", icon: Clock },
+  { title: "Modules", path: "#modules", icon: BookText },
+  { title: "Pricing", path: "#pricing", icon: DollarSign },
+  { title: "FAQ", path: "#faq", icon: HelpCircle },
+];
+
+// Main navigation items
+const mainNavigation = [
+  { title: "Chat", path: "/ai", icon: MessageSquare },
+  { title: "Blog", path: "/blog", icon: Newspaper },
+  { title: "Docs", path: "/docs", icon: BookText },
+  { title: "Download", path: "/download", icon: Download },
+  { title: "License", path: "/free-license", icon: Shield },
+];
+
+const currentPath = Astro.url.pathname;
+const isCoursePage = currentPath === "/" || currentPath === "/course";
+const navigationItems = isCoursePage ? courseNavigation : mainNavigation;
+---
+
+<aside
+  class="hidden sm:flex fixed left-0 top-0 h-screen z-[var(--one-z-sidebar)] w-[var(--one-sidebar-width)] shrink-0 bg-[var(--one-background-nav)] border-r border-[var(--one-border)] transition-all duration-300 ease-in-out"
+>
+  <nav class="h-full flex flex-col bg-[var(--one-background-nav)]">
+    <!-- Logo Section -->
+    <div
+      class="flex items-center justify-center bg-[hsla(0,0%,5%,0.8)]"
+    >
+      <a
+        href="/"
+        class="w-[var(--one-sidebar-width)] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,1%,0.5)] transition-colors duration-200"
+      >
+        <div class="w-8 h-8">
+          <img src="/icon.svg" alt="ONE Logo" class="w-full h-full" />
+        </div>
+      </a>
+    </div>
+
+    <!-- Navigation Items -->
+    <div class="flex-1 flex flex-col">
+      {
+        navigationItems.map(({ title, path, icon: Icon }) => (
+          <a
+            href={path}
+            class:list={[
+              "w-[var(--one-sidebar-width)] h-16 flex items-center justify-center transition-colors duration-200 group relative",
+              "hover:bg-[hsla(0,0%,14%,0.5)]",
+              { "bg-[#1E3A8A]": currentPath === path || (isCoursePage && path === "#overview" && currentPath === "/") },
+            ]}
+            data-tooltip={title}
+            aria-label={title}
+          >
+            <div class="w-5 h-5 flex items-center justify-center">
+              <Icon
+                className="w-full h-full text-foreground/60 group-hover:text-foreground/90 transition-colors"
+                strokeWidth={1.25}
+              />
+            </div>
+          </a>
+        ))
+      }
+    </div>
+
+    <!-- Theme Toggle -->
+    <div
+      class="flex items-center justify-center bg-[var(--one-background-nav)]"
+    >
+      <button
+        id="theme-toggle"
+        class="w-[var(--one-sidebar-width)] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,14%,0.5)] transition-colors duration-200"
+        aria-label="Toggle theme"
+      >
+        <div class="w-10 h-10 flex items-center justify-center">
+          <!-- Light theme icon (sun) -->
+          <svg
+            class="w-5 h-5 text-foreground/60 dark:hidden high-contrast:hidden"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            ></path>
+          </svg>
+          <!-- Dark theme icon (moon) -->
+          <svg
+            class="w-5 h-5 text-foreground/60 hidden dark:block high-contrast:hidden"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            ></path>
+          </svg>
+          <!-- High contrast icon -->
+          <svg
+            class="w-5 h-5 text-foreground/60 hidden high-contrast:block"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+            ></path>
+          </svg>
+        </div>
+      </button>
+    </div>
+  </nav>
+</aside>
+
+<style>
+  [data-tooltip] {
+    position: relative;
+  }
+
+  [data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--one-background-nav);
+    color: var(--one-foreground);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    z-index: 50;
+    margin-left: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    opacity: 0;
+    animation: tooltip 0.2s ease-out forwards;
+    border: 1px solid var(--one-border);
+    backdrop-filter: blur(8px);
+  }
+
+  @keyframes tooltip {
+    from {
+      opacity: 0;
+      transform: translate(0, -50%) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, -50%) scale(1);
+    }
+  }
+</style>
+
+<script>
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach((element) => {
+    const anchor = element as HTMLAnchorElement;
+    anchor.addEventListener('click', function(e: Event) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+      if (href) {
+        const targetElement = document.querySelector(href);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Update URL without jumping
+          history.pushState(null, '', href);
+
+          // Update active state manually
+          document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.classList.remove('bg-[#1E3A8A]');
+          });
+          this.classList.add('bg-[#1E3A8A]');
+        }
+      }
+    });
+  });
+
+  // Highlight current section in sidebar
+  const observerOptions = {
+    root: null,
+    rootMargin: '-20% 0px -70% 0px', // Adjust the margins to make detection more accurate
+    threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] // Multiple thresholds for better accuracy
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.6) { // Only trigger when section is more than 60% visible
+        const id = entry.target.id;
+        const sidebarLink = document.querySelector(`a[href="#${id}"]`);
+        
+        // Remove active class from all links
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+          link.classList.remove('bg-[#1E3A8A]');
+        });
+        
+        // Add active class to current link
+        if (sidebarLink) {
+          sidebarLink.classList.add('bg-[#1E3A8A]');
+        }
+      }
+    });
+  }, observerOptions);
+
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // Observe all sections
+    const sections = document.querySelectorAll('section[id]');
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+
+    // Set initial active state based on URL hash or first section
+    const hash = window.location.hash;
+    if (hash) {
+      const activeLink = document.querySelector(`a[href="${hash}"]`);
+      if (activeLink) {
+        activeLink.classList.add('bg-[#1E3A8A]');
+      }
+    } else {
+      const firstLink = document.querySelector('a[href^="#"]');
+      if (firstLink) {
+        firstLink.classList.add('bg-[#1E3A8A]');
+      }
+    }
+  });
+
+  // Theme toggle functionality
+  const themeToggle = document.getElementById("theme-toggle");
+  themeToggle?.addEventListener("click", () => {
+    if (window.cycleTheme) {
+      window.cycleTheme();
+    }
+  });
+</script>

@@ -1,5 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "../layouts/LayoutCourse.astro";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -327,12 +327,20 @@ export const pricingData = {
   }
 };
 
-const chatConfig = {
+const chat = {
+  // Layout and Meta
+  layout: "home",
+  title: "AI Prompt Playbook & Elevate Framework",
+  description: "Transform your ecommerce growth with systematic AI implementation",
+  
+  // AI Config
   aiProvider: "openrouter",
   aiModel: "google/gemini-2.0-flash-001",
   apiEndpoint: "https://api.openai.com/v1",
   temperature: 0.7,
-  maxTokens: 999999,
+  maxTokens: 900000,
+
+  // Prompt Config
   systemPrompt: [{
     type: "text",
     text: `I'm your AI consultant for the AI Prompt Playbook & Elevate Framework. I help ecommerce owners transform their random AI experiments into systematic growth engines. Let me guide you through how our proven system can help scale your store.
@@ -384,6 +392,10 @@ Support & Guarantees:
 
 I'm here to understand your specific needs and show you how the AI Prompt Playbook can transform your ecommerce business. Let me know what aspect you'd like to explore first!`
   }],
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+
+  // Welcome Config
   welcomeMessage: "👋 Hi! I'm your AI guide to the Elevate Framework & AI Prompt Playbook. Many store owners I talk to are struggling with random AI experiments and inconsistent results. What's your biggest challenge with AI in your ecommerce business?",
   avatar: "/icon.svg",
   suggestions: [
@@ -411,94 +423,80 @@ I'm here to understand your specific needs and show you how the AI Prompt Playbo
       label: "⚡ Quick Win", 
       prompt: "What's the fastest way this system can help improve my store's performance?" 
     }
-  ]
+  ],
+
+  // Optional Config
+  runtime: "edge",
+  includeContent: true
 };
 ---
 <Layout
   title="ONE - Build Your AI Brand"
-  chatConfig={{
-    // Layout and Meta
-    layout: "home",
-    title: "ONE - Build Your AI Brand",
-    description: "AI-powered solutions with ONE",
-    
-    // AI Config
-    aiProvider: "openrouter",
-    aiModel: "google/gemini-2.0-flash-001",
-    apiEndpoint: "https://api.openai.com/v1",
-    temperature: 0.7,
-    maxTokens: 900000,
-
-    // Prompt Config
-    systemPrompt: [{
-      type: "text",
-      text: "I am your AI guide to building with ONE. I'll help you understand and implement our powerful toolkit."
-    }],
-    addSystemPrompt: true,
-    addBusinessPrompt: true,
-
-    // Welcome Config
-    welcomeMessage: "👋 Welcome! I'm here to help you build amazing AI-powered solutions with ONE. What would you like to learn about?",
-    avatar: "/icon.svg",
-    suggestions: [
-      { label: "🚀 Quick Start Guide", prompt: "Show me how to get started with ONE quickly" },
-      { label: "💡 Key Features", prompt: "What are the main features of ONE?" },
-      { label: "🤖 AI Capabilities", prompt: "What AI features does ONE provide?" }
-    ],
-
-    // Optional Config
-    runtime: "edge",
-    includeContent: true
-  }}
+  chatConfig={chat}
   rightPanelMode="quarter"
 >
   <main class="min-h-screen bg-background">
     {/* Hero Section */}
-    <CourseHeroSection courseDetails={courseDetails} heroStats={heroStats} />
+    <section id="overview" class="min-h-screen">
+      <CourseHeroSection courseDetails={courseDetails} heroStats={heroStats} />
+    </section>
 
     <Circles />
 
     {/* Key Features */}
-    <KeyFeatures />
+    <section id="features" class="min-h-screen">
+      <KeyFeatures />
+    </section>
 
     {/* ELEVATE Framework */}
-    <FrameworkOverview client:load />
+    <section id="framework" class="min-h-screen">
+      <FrameworkOverview client:load />
+    </section>
 
     {/* How It Works Section */}
+    <section id="how-it-works" class="min-h-screen">
       <HowFrameworkWorks client:visible />
+    </section>
 
     {/* Why It Works */}
-    <WhyItWorks client:visible />
-
+    <section id="why-it-works" class="min-h-screen">
+      <WhyItWorks client:visible />
+    </section>
 
     {/* Business Transformation */}
-    <Transformation client:visible />
+    <section id="transformation" class="min-h-screen">
+      <Transformation client:visible />
+    </section>
 
     <Teacher />
 
     {/* Course Modules */}
-    <CourseModules client:visible modules={courseModulesData} />
+    <section id="modules" class="min-h-screen">
+      <CourseModules client:visible modules={courseModulesData} />
+    </section>
 
     {/* Pricing Section */}
-    <PricingSection client:visible pricingData={pricingData} />
+    <section id="pricing" class="min-h-screen">
+      <PricingSection client:visible pricingData={pricingData} />
+    </section>
 
-     {/* Countdown Timer */}
-     <CountdownTimer 
-     client:visible 
-     targetDate={courseDetails.launchDate}
-     currentPrice={pricingData.currentPrice}
-     originalPrice={pricingData.originalPrice}
-   />
+    {/* Countdown Timer */}
+    <CountdownTimer 
+      client:visible 
+      targetDate={courseDetails.launchDate}
+      currentPrice={pricingData.currentPrice}
+      originalPrice={pricingData.originalPrice}
+    />
 
     {/* Pre-Launch Offer */}
     <PreLaunchOffer client:visible />
 
-   
-
     {/* FAQs Section */}
-    <FAQSection client:visible faqs={faqs} />
+    <section id="faq" class="min-h-screen">
+      <FAQSection client:visible faqs={faqs} />
+    </section>
 
-        {/* Final CTA */}
+    {/* Final CTA */}
     <section class="py-20">
       <div class="container px-4 mx-auto text-center">
         <h2 class="text-3xl lg:text-4xl font-bold mb-6">Ready to Transform Your Marketing?</h2>

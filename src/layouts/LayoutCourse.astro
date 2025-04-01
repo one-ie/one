@@ -1,0 +1,106 @@
+---
+/// <reference types="astro/client" />
+import "../styles/global.css";
+import ThemeInit from "../components/Theme.astro";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Sidebar from "@/components/SidebarCourse.astro";
+import Right from "../components/Right";
+import { Breadcrumbs } from "../components/Breadcrumbs";
+import { ChatSchema } from "../schema/chat";
+
+interface Props {
+  title: string;
+  description?: string;
+  children: any;
+  header?: boolean;
+  footer?: boolean;
+  chatConfig?: any;
+  rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
+  content?: string;
+}
+
+const {
+  title,
+  description = "ONE",
+  rightPanelMode = "quarter",
+  chatConfig: providedConfig,
+  content,
+} = Astro.props;
+
+// Use provided config or create a default one
+const chatConfig = providedConfig ? ChatSchema.parse(providedConfig) : ChatSchema.parse({
+  // Layout and Meta
+  layout: "default",
+  
+  // AI Config
+  aiProvider: "openrouter",
+  aiModel: "google/gemini-2.0-flash-001",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 999999,
+  
+  // Prompt Config
+  systemPrompt: [{
+    type: "text",
+    text: "I am Agent ONE. How can I help you today?"
+  }],
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+
+  // Welcome Config
+  welcomeMessage: "👋 How can I help you today?",
+  avatar: "/icon.svg",
+  suggestions: [
+    {
+      label: "🚀 Get Started",
+      prompt: "How do I get started with ONE?"
+    }
+  ],
+
+  // Optional Config
+  runtime: "edge",
+  includeContent: true
+});
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <ThemeInit />
+  </head>
+  <body>
+    <div
+      class="main-grid"
+      id="main-grid"
+    >
+      <Sidebar />
+      <div class="center-grid" id="center-grid">
+        <Header client:load />
+        <Breadcrumbs client:load />
+        <main>
+          <slot />
+        </main>
+
+        <Footer client:load />
+      </div>
+      <Right
+        client:load
+        chatConfig={chatConfig}
+        rightPanelMode={rightPanelMode}
+        content={content}
+      />
+    </div>
+  </body>
+</html>
+
+<script>
+  // Enable transitions after initial render
+  window.addEventListener("load", () => {
+    document.querySelector(".main-grid")?.classList.add("transitions-enabled");
+  });
+</script>
