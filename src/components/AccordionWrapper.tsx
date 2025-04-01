@@ -4,7 +4,7 @@ import React from 'react';
 import * as Accordion from '@radix-ui/react-accordion';
 import { ChevronDownIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { CourseModuleContent } from './CourseModuleContent';
+import { CourseModuleContent } from './course/CourseModuleContent';
 import {
   Accordion as UiAccordion,
   AccordionContent as UiAccordionContent,
