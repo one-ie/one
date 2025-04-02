@@ -25,7 +25,7 @@ export default function Elevate() {
           </p>
 
           <p className="text-lg leading-relaxed">
-            As customers reach the <strong>Share</strong> stage at the summit, they naturally become ambassadors who introduce new prospects into the journey, creating a self-reinforcing cycle. Unlike traditional marketing funnels that simply move customers down a linear path, this next-generation framework creates an elevating spiral where each customer's journey strengthens the entire ecosystem, while the AI Prompt Playbook delivers the high-speed engine for predictable, scalable e-commerce growth.
+            As customers reach the <strong>Share</strong> stage at the summit, they naturally become ambassadors who introduce new prospects into the journey, creating a self-reinforcing cycle. Unlike traditional marketing funnels that simply move customers down a linear path, this next-generation framework creates an elevating spiral where each customer's journey strengthens the entire ecosystem, while the AI Prompt Playbook For Ecommerce delivers the high-speed engine for predictable, scalable e-commerce growth.
           </p>
         </div>
       </div>

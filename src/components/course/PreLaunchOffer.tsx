@@ -24,7 +24,7 @@ export function PreLaunchOffer() {
             ULTRA-EXCLUSIVE PRE-LAUNCH: Implement the AI Growth System 1:1 Directly with Anthony O'Connell
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            To get some early feedback and to refine the course I am offering personalized implementation sessions with me. This is your <span className="font-bold">single opportunity</span> before May 2025 to bypass the queue and have The Elevate Ecommerce Framework & AI Prompt Playbook system <span className="font-bold">personally architected and implemented for YOUR business, directly by me.</span>
+            To get some early feedback and to refine the course I am offering personalized implementation sessions with me. This is your <span className="font-bold">single opportunity</span> before May 2025 to bypass the queue and have The Elevate Ecommerce Framework & AI Prompt Playbook For Ecommerce system <span className="font-bold">personally architected and implemented for YOUR business, directly by me.</span>
           </p>
         </div>
 
@@ -39,7 +39,7 @@ export function PreLaunchOffer() {
         {/* Main Content */}
         <Card className="max-w-4xl mx-auto p-8 md:p-12 border-primary/20">
           <div className="prose prose-lg dark:prose-invert max-w-none mb-8">
-            <p className="lead">The full "AI Prompt Playbook for Ecom Growth" digital course arrives May 1, 2025, offering a powerful self-paced system.</p>
+            <p className="lead">The full "AI Prompt Playbook For Ecommerce for Ecom Growth" digital course arrives May 1, 2025, offering a powerful self-paced system.</p>
             <p className="font-bold text-xl">But for 4 Ecom Leaders ONLY, I'm offering something far more potent.</p>
             <p>This is <span className="font-bold">not</span> the digital course. This is a <span className="font-bold">white-glove, personalized implementation program</span> designed for maximum speed and impact.</p>
           </div>
@@ -205,7 +205,7 @@ export function PreLaunchOffer() {
                 My Personal Implementation Guarantee
               </h4>
               <p className="text-sm text-muted-foreground">
-                My commitment is to ensure that during our dedicated 1:1 coaching time, we successfully tailor and begin implementing the core pillars of The Elevate Ecommerce Framework & AI Prompt Playbook system specifically for your business. If, by the end of our scheduled sessions, you don't feel we have achieved this foundational implementation together, I will personally work with you to find a solution or offer a full refund.
+                My commitment is to ensure that during our dedicated 1:1 coaching time, we successfully tailor and begin implementing the core pillars of The Elevate Ecommerce Framework & AI Prompt Playbook For Ecommerce system specifically for your business. If, by the end of our scheduled sessions, you don't feel we have achieved this foundational implementation together, I will personally work with you to find a solution or offer a full refund.
               </p>
             </div>
           </div>

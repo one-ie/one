@@ -26,7 +26,7 @@ export function FinalCTA({ currentPrice, remainingSpots, guaranteeText }: FinalC
 
             <div className="max-w-2xl mx-auto">
               <p className="text-muted-foreground">
-                {guaranteeText || "If you're not completely satisfied with the AI Prompt Playbook and Elevate Framework within 30 days, simply email us for a full refund. No questions asked."}
+                {guaranteeText || "If you're not completely satisfied with the AI Prompt Playbook For Ecommerce and Elevate Framework within 30 days, simply email us for a full refund. No questions asked."}
               </p>
             </div>
 

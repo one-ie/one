@@ -62,7 +62,7 @@ export function HowFrameworkWorks() {
           <Badge variant="outline" className="bg-white/5 border-white/20 text-white mb-4 px-4 py-1">
             Systematic Implementation
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">
+          <h2 className="text-4xl md:text-4xl font-bold mb-6 text-white">
             How The Elevate Ecommerce Framework Works
           </h2>
           <p className="text-xl text-gray-300">
@@ -219,10 +219,10 @@ export function HowFrameworkWorks() {
           </div>
         </FrameworkStep>
         
-        {/* Step 3: AI Prompt Playbook */}
+        {/* Step 3: AI Prompt Playbook For Ecommerce */}
         <FrameworkStep 
           number="03"
-          title="Leverage the AI Prompt Playbook" 
+          title="Leverage the AI Prompt Playbook For Ecommerce" 
           description="Accelerate your implementation with pre-tested prompts designed for each step's objective."
           icon={<Zap className="w-7 h-7" />}
         >

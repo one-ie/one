@@ -48,16 +48,16 @@ export function FrameworkOverview() {
               </div>
             </div>
 
-            {/* AI Prompt Playbook */}
+            {/* AI Prompt Playbook For Ecommerce */}
             <div className="space-y-6">
               <div className="inline-flex items-center gap-2 text-primary">
                 <Trophy className="w-5 h-5" />
-                <h3 className="text-lg font-semibold">AI Prompt Playbook</h3>
+                <h3 className="text-lg font-semibold">AI Prompt Playbook For Ecommerce</h3>
               </div>
               <div className="space-y-4">
                 <h4 className="text-2xl font-bold">The High-Speed Engine</h4>
                 <p className="text-muted-foreground leading-relaxed">
-                  While the framework provides direction, the AI Prompt Playbook delivers the tools for rapid execution. Get field-tested prompts designed specifically for each step of your journey.
+                  While the framework provides direction, the AI Prompt Playbook For Ecommerce delivers the tools for rapid execution. Get field-tested prompts designed specifically for each step of your journey.
                 </p>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
@@ -81,7 +81,7 @@ export function FrameworkOverview() {
           <div className="mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-xl font-bold mb-4 text-center">The Power of Framework + Playbook</h3>
             <p className="text-center text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              The Elevate Ecommerce Framework provides the strategic map, while the AI Prompt Playbook provides the high-speed engine, creating a powerful system for achieving predictable, scalable e-commerce growth.
+              The Elevate Ecommerce Framework provides the strategic map, while the AI Prompt Playbook For Ecommerce provides the high-speed engine, creating a powerful system for achieving predictable, scalable e-commerce growth.
             </p>
             <div className="grid md:grid-cols-3 gap-6 mt-8">
               <Card className="p-4 text-center">
