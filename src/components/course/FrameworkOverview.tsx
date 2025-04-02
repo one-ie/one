@@ -10,7 +10,7 @@ export function FrameworkOverview() {
     <section className="py-20 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
       <div className="container px-4 mx-auto relative">
-        <h2 className="text-3xl lg:text-4xl font-bold text-center mb-6">The ELEVATE Framework</h2>
+        <h2 className="text-3xl lg:text-4xl font-bold text-center mb-6">The Elevate Ecommerce Framework</h2>
         <p className="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
           Your Complete AI Growth System
           Transform random AI experiments into a systematic approach for predictable ecommerce growth
@@ -29,7 +29,7 @@ export function FrameworkOverview() {
               <div className="space-y-4">
                 <h4 className="text-2xl font-bold">The Strategic Map for Growth</h4>
                 <p className="text-muted-foreground leading-relaxed">
-                  The ELEVATE Framework provides your complete roadmap for systematic ecommerce growth. It transforms scattered marketing efforts into a cohesive, predictable system that consistently delivers results.
+                  The Elevate Ecommerce Framework provides your complete roadmap for systematic ecommerce growth. It transforms scattered marketing efforts into a cohesive, predictable system that consistently delivers results.
                 </p>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
@@ -81,7 +81,7 @@ export function FrameworkOverview() {
           <div className="mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-xl font-bold mb-4 text-center">The Power of Framework + Playbook</h3>
             <p className="text-center text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              The ELEVATE Framework provides the strategic map, while the AI Prompt Playbook provides the high-speed engine, creating a powerful system for achieving predictable, scalable e-commerce growth.
+              The Elevate Ecommerce Framework provides the strategic map, while the AI Prompt Playbook provides the high-speed engine, creating a powerful system for achieving predictable, scalable e-commerce growth.
             </p>
             <div className="grid md:grid-cols-3 gap-6 mt-8">
               <Card className="p-4 text-center">

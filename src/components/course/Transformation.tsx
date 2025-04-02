@@ -138,7 +138,7 @@ export function Transformation() {
             Complete Business Transformation
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Powered by the Elevate Framework & AI Playbook
+            Powered by The Elevate Ecommerce Framework & AI Playbook
           </h2>
           <p className="text-lg text-muted-foreground">
             This Course Isn't Just About AI Prompts – It's About Systematically Implementing Them Within a Proven Growth Framework

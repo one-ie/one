@@ -63,7 +63,7 @@ export function HowFrameworkWorks() {
             Systematic Implementation
           </Badge>
           <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">
-            How the Elevate Framework Works
+            How The Elevate Ecommerce Framework Works
           </h2>
           <p className="text-xl text-gray-300">
             Your Complete System for AI-Accelerated Ecommerce Growth
