@@ -68,7 +68,7 @@ export function CourseModules({ modules }: CourseModulesProps) {
           {modules.map((module, index) => (
             <div key={index} className="relative flex items-start">
               <div className="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-mono text-lg font-bold ring-1 ring-primary/20 shadow-sm hover:shadow-md hover:bg-primary/20 transition-all duration-300">
-                {index + 1}
+                {index}
               </div>
               <div className="ml-12 w-full">
                 <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary/20 bg-card group">

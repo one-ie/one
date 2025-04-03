@@ -73,31 +73,11 @@ export function HowFrameworkWorks() {
         {/* Step 1: Foundation */}
         <FrameworkStep 
           number="01"
-          title="Start with Your Foundation" 
-          description="Before taking any marketing action, establish deep clarity by defining your essential building blocks."
+          title="Establish Your Foundation" 
+          description="Before taking any marketing action, you must establish deep clarity by defining your essential strategic building blocks. This ensures every subsequent step and AI prompt is hyper-relevant."
           icon={<GraduationCap className="w-7 h-7" />}
         >
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-white/5 border-white/10 p-8 hover:bg-white/10 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                  <User className="w-5 h-5 text-primary" />
-                </div>
-                <h4 className="text-2xl font-semibold text-white">Customer Avatar</h4>
-              </div>
-              <p className="text-gray-300">Map out your ideal customer's pains and desires (like "Sam Store")</p>
-              <ul className="mt-4 space-y-2">
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-sm text-gray-400">Deep understanding of motivations</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-sm text-gray-400">Specific pain points & desires</span>
-                </li>
-              </ul>
-            </Card>
-            
             <Card className="bg-white/5 border-white/10 p-8 hover:bg-white/10 transition-all duration-300">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
@@ -105,15 +85,15 @@ export function HowFrameworkWorks() {
                 </div>
                 <h4 className="text-2xl font-semibold text-white">Company Context</h4>
               </div>
-              <p className="text-gray-300">Define your offers and unique brand voice</p>
+              <p className="text-gray-300">Define your unique offers, powerful brand voice, and core value proposition</p>
               <ul className="mt-4 space-y-2">
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-sm text-gray-400">Clear value proposition</span>
+                  <span className="text-sm text-gray-400">Clear differentiation and product/service articulation</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-sm text-gray-400">Consistent brand messaging</span>
+                  <span className="text-sm text-gray-400">Consistent and authentic brand messaging</span>
                 </li>
               </ul>
             </Card>
@@ -125,15 +105,35 @@ export function HowFrameworkWorks() {
                 </div>
                 <h4 className="text-2xl font-semibold text-white">Market Awareness</h4>
               </div>
-              <p className="text-gray-300">Understand your market positioning and competition</p>
+              <p className="text-gray-300">Understand your competitive landscape and market positioning</p>
               <ul className="mt-4 space-y-2">
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-sm text-gray-400">Competitive advantage identification</span>
+                  <span className="text-sm text-gray-400">Identify competitive advantages</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                  <span className="text-sm text-gray-400">Market trend analysis</span>
+                  <span className="text-sm text-gray-400">Leverage current market dynamics</span>
+                </li>
+              </ul>
+            </Card>
+            
+            <Card className="bg-white/5 border-white/10 p-8 hover:bg-white/10 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                  <User className="w-5 h-5 text-primary" />
+                </div>
+                <h4 className="text-2xl font-semibold text-white">Customer Avatar</h4>
+              </div>
+              <p className="text-gray-300">Map out your specific ideal customer's pains, desires, and motivations</p>
+              <ul className="mt-4 space-y-2">
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                  <span className="text-sm text-gray-400">Deep understanding of THEIR specific motivations</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
+                  <span className="text-sm text-gray-400">Clarity on the specific pain points & desires THEY face</span>
                 </li>
               </ul>
             </Card>
@@ -144,7 +144,7 @@ export function HowFrameworkWorks() {
         <FrameworkStep 
           number="02"
           title="Follow the 9 Sequential Steps" 
-          description="Build momentum logically through our proven sequence, addressing each critical part of the customer journey."
+          description="Build momentum logically through our proven sequence. The framework guides you step-by-step, addressing each critical part of the customer journey for systematic growth."
           icon={<Trophy className="w-7 h-7" />}
         >
           <div className="grid md:grid-cols-3 gap-8">
@@ -153,20 +153,20 @@ export function HowFrameworkWorks() {
                 <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center mr-3">
                   <Megaphone className="w-4 h-4 text-blue-400" />
                 </div>
-                Attract
+                Attract (Elevate Reach)
               </h4>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-blue-500/30 flex items-center justify-center text-xs font-bold text-blue-300">1</div>
-                  <span className="text-gray-300">Hook</span>
+                  <span className="text-gray-300">FIND</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-blue-500/30 flex items-center justify-center text-xs font-bold text-blue-300">2</div>
-                  <span className="text-gray-300">Gift</span>
+                  <span className="text-gray-300">GIFT</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-blue-500/30 flex items-center justify-center text-xs font-bold text-blue-300">3</div>
-                  <span className="text-gray-300">Identify</span>
+                  <span className="text-gray-300">IDENTIFY</span>
                 </li>
               </ul>
             </Card>
@@ -176,20 +176,20 @@ export function HowFrameworkWorks() {
                 <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center mr-3">
                   <ShoppingCart className="w-4 h-4 text-purple-400" />
                 </div>
-                Convert
+                Convert (Elevate Sales)
               </h4>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-purple-500/30 flex items-center justify-center text-xs font-bold text-purple-300">4</div>
-                  <span className="text-gray-300">Engage</span>
+                  <span className="text-gray-300">ENGAGE</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-purple-500/30 flex items-center justify-center text-xs font-bold text-purple-300">5</div>
-                  <span className="text-gray-300">Sell</span>
+                  <span className="text-gray-300">SELL</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-purple-500/30 flex items-center justify-center text-xs font-bold text-purple-300">6</div>
-                  <span className="text-gray-300">Nurture</span>
+                  <span className="text-gray-300">NURTURE</span>
                 </li>
               </ul>
             </Card>
@@ -199,20 +199,20 @@ export function HowFrameworkWorks() {
                 <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mr-3">
                   <TrendingUp className="w-4 h-4 text-green-400" />
                 </div>
-                Grow
+                Grow (Elevate Value)
               </h4>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-green-500/30 flex items-center justify-center text-xs font-bold text-green-300">7</div>
-                  <span className="text-gray-300">Upsell</span>
+                  <span className="text-gray-300">UPSELL</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-green-500/30 flex items-center justify-center text-xs font-bold text-green-300">8</div>
-                  <span className="text-gray-300">Understand</span>
+                  <span className="text-gray-300">UNDERSTAND</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-green-500/30 flex items-center justify-center text-xs font-bold text-green-300">9</div>
-                  <span className="text-gray-300">Share</span>
+                  <span className="text-gray-300">SHARE</span>
                 </li>
               </ul>
             </Card>
@@ -223,7 +223,7 @@ export function HowFrameworkWorks() {
         <FrameworkStep 
           number="03"
           title="Leverage the AI Prompt Playbook For Ecommerce" 
-          description="Accelerate your implementation with pre-tested prompts designed for each step's objective."
+          description="Accelerate your implementation at every stage. Use pre-tested, Ecom-specific prompts designed for each framework step's objective."
           icon={<Zap className="w-7 h-7" />}
         >
           <div className="grid md:grid-cols-2 gap-12">
@@ -232,15 +232,15 @@ export function HowFrameworkWorks() {
                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mr-3">
                   <CodeIcon className="w-4 h-4 text-primary" />
                 </div>
-                Example Workflow (HOOK Step)
+                Example Workflow (Step 1: FIND)
               </h4>
               <ol className="space-y-4 relative">
                 <div className="absolute top-0 bottom-0 left-4 w-0.5 bg-white/10"></div>
                 {[
-                  "Identify goal: Create compelling Ad Headlines",
-                  "Select relevant prompt from Playbook",
-                  "Insert Foundation data into prompt",
-                  "Generate multiple draft headlines instantly"
+                  "Identify Goal: Strategically locate ideal customers and create compelling initial engagement headlines/messages",
+                  "Select relevant prompt from the FIND module in the Playbook",
+                  "Insert your detailed Foundation data into prompt placeholders",
+                  "Generate multiple draft FIND assets instantly via AI"
                 ].map((step, index) => (
                   <li key={index} className="pl-12 relative">
                     <div className="absolute left-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-black">
@@ -259,7 +259,7 @@ export function HowFrameworkWorks() {
                   <h4 className="text-xl font-semibold text-white">Review & Refine</h4>
                 </div>
                 <p className="text-gray-300">
-                  AI output is your first draft. Review, refine, and ensure brand alignment before implementation.
+                  AI output is your powerful first draft. You always review, refine, and ensure perfect brand alignment before implementation. You remain in control.
                 </p>
               </Card>
               
@@ -269,7 +269,7 @@ export function HowFrameworkWorks() {
                   <h4 className="text-xl font-semibold text-white">Measure & Optimize</h4>
                 </div>
                 <p className="text-gray-300">
-                  Track key metrics for each step to measure impact and identify optimization opportunities.
+                  Track key metrics related to each framework step to measure impact and continuously optimize your system.
                 </p>
               </Card>
             </div>
@@ -284,10 +284,10 @@ export function HowFrameworkWorks() {
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
-                { title: "Structure", desc: "Clear, logical 9-step roadmap", icon: <LayoutGrid className="w-5 h-5 text-primary" /> },
-                { title: "Strategy", desc: "Deep Foundation knowledge", icon: <BookOpen className="w-5 h-5 text-primary" /> },
-                { title: "Speed", desc: "Efficient AI integration", icon: <Hourglass className="w-5 h-5 text-primary" /> },
-                { title: "Control", desc: "You guide implementation", icon: <UserCheck className="w-5 h-5 text-primary" /> }
+                { title: "Structure", desc: "Clear, logical 9-step roadmap for action", icon: <LayoutGrid className="w-5 h-5 text-primary" /> },
+                { title: "Strategy", desc: "Decisions fueled by deep Foundation knowledge", icon: <BookOpen className="w-5 h-5 text-primary" /> },
+                { title: "Speed", desc: "Efficient AI integration via the Prompt Playbook", icon: <Hourglass className="w-5 h-5 text-primary" /> },
+                { title: "Control", desc: "You guide the AI and the implementation", icon: <UserCheck className="w-5 h-5 text-primary" /> }
               ].map((benefit, i) => (
                 <div key={i} className="text-center">
                   <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
