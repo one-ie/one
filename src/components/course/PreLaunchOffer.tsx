@@ -87,7 +87,7 @@ export function PreLaunchOffer() {
 
           {/* What You Get */}
           <div className="space-y-8 mb-12">
-            <h3 className="text-2xl font-semibold text-center">What You Secure Today for $1,497:</h3>
+            <h3 className="text-2xl font-semibold text-center">What You Secure Today for $1,499:</h3>
             <div className="space-y-4">
               {[
                 {
@@ -154,7 +154,7 @@ export function PreLaunchOffer() {
             <div>
               <p className="text-muted-foreground mb-2">Secure this unique, high-touch implementation package for just</p>
               <div className="flex items-center justify-center gap-4">
-                <span className="text-4xl md:text-5xl font-bold text-primary">$1,497</span>
+                <span className="text-4xl md:text-5xl font-bold text-primary">$1,499</span>
                 <Badge variant="outline" className="text-sm">Total Value: Over $6,000+</Badge>
               </div>
             </div>
@@ -163,7 +163,7 @@ export function PreLaunchOffer() {
               <a href="/pay-coaching" className="block p-[1px] bg-white shadow-[0_0_30px_rgba(0,0,0,0.8)] hover:shadow-[0_0_50px_rgba(0,0,0,0.9)] transition-all duration-300">
                 <Button size="lg" className="w-full text-lg h-14 bg-[#1E3A8A] hover:bg-black text-white border border-white hover:border-white rounded-none transform hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
                   <span className="relative z-10 flex items-center justify-center gap-2 font-semibold">
-                    Claim 1 of Only 4 Spots: Work 1:1 with Anthony Now
+                     Work 1:1 with Anthony
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </span>
                 </Button>
@@ -186,7 +186,7 @@ export function PreLaunchOffer() {
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="text-primary">1.</span>
-                  Click above to claim 1 of 4 spots for $1,497
+                  Click above to claim 1 of 4 spots for $1,499
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary">2.</span>

@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Stripe from "stripe";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
-import { Check, ArrowRight, Mail, Calendar, Video } from 'lucide-react';
+import { Check, ArrowRight, Mail, Calendar } from 'lucide-react';
 import type { Stripe as StripeType } from 'stripe';
 const rightPanelMode = "half"; // You can change this to 'full', 'half', 'floating', or 'icon'
 
@@ -19,11 +19,10 @@ try {
 }
 
 const { name, email } = session.customer_details || {};
-// Remove subscription retrieval since this is a one-off payment
 ---
 
 <Layout
-  title="ONE - Coaching Enrollment Confirmation"
+  title="ONE - Course Enrollment Confirmation"
   rightPanelMode={rightPanelMode}
 >
   <div class="container max-w-3xl mx-auto px-4 py-12">
@@ -32,15 +31,15 @@ const { name, email } = session.customer_details || {};
       <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-6">
         <Check className="w-8 h-8 text-green-600" />
       </div>
-      <h1 class="text-4xl font-bold mb-4">Thank You for Choosing ONE Coaching!</h1>
-      {name && <p class="text-xl text-muted-foreground mb-2">We're excited to work with you, {name}!</p>}
-      <p class="text-muted-foreground">You've unlocked both personal coaching and course access</p>
+      <h1 class="text-4xl font-bold mb-4">Payment Successful!</h1>
+      {name && <p class="text-xl text-muted-foreground mb-2">Thank you for enrolling, {name}!</p>}
+      <p class="text-muted-foreground">Your course access will begin on May 1st, 2025</p>
     </div>
 
     {/* Payment Details Card */}
     <Card className="mb-8">
       <CardHeader>
-        <h2 class="text-2xl font-semibold">Your Package Details</h2>
+        <h2 class="text-2xl font-semibold">Enrollment Details</h2>
       </CardHeader>
       <CardContent>
         <div class="space-y-4">
@@ -49,25 +48,16 @@ const { name, email } = session.customer_details || {};
               <Mail className="w-5 h-5 mt-1 text-muted-foreground" />
               <div>
                 <p class="font-medium">Confirmation Email</p>
-                <p class="text-muted-foreground">We've sent your enrollment confirmation to {email}</p>
+                <p class="text-muted-foreground">We've sent your payment confirmation to {email}</p>
               </div>
             </div>
           )}
           <div class="flex items-start gap-3">
-            <Video className="w-5 h-5 mt-1 text-muted-foreground" />
-            <div>
-              <p class="font-medium">Personal Coaching Session</p>
-              <p class="text-muted-foreground">
-                I'll personally reach out within 24 hours to schedule your coaching session at a time that works best for you.
-              </p>
-            </div>
-          </div>
-          <div class="flex items-start gap-3">
             <Calendar className="w-5 h-5 mt-1 text-muted-foreground" />
             <div>
-              <p class="font-medium">Course Access Included</p>
+              <p class="font-medium">Course Start Date</p>
               <p class="text-muted-foreground">
-                As a bonus, you'll get access to the full course starting <span class="font-medium">May 1st, 2025</span>. This complements your coaching experience.
+                Your course begins <span class="font-medium">May 1st, 2025</span>. You'll receive your login credentials and course materials before the start date.
               </p>
             </div>
           </div>
@@ -87,8 +77,8 @@ const { name, email } = session.customer_details || {};
               <span class="text-sm font-medium text-primary">1</span>
             </div>
             <div>
-              <p class="font-medium">Watch Your Inbox</p>
-              <p class="text-muted-foreground">I'll email you within 24 hours to arrange your coaching session. Please check your spam folder if you don't see it.</p>
+              <p class="font-medium">Save the Date: May 1st, 2025</p>
+              <p class="text-muted-foreground">Add the course start date to your calendar to ensure you're ready to begin!</p>
             </div>
           </li>
           <li class="flex items-start gap-3">
@@ -96,8 +86,8 @@ const { name, email } = session.customer_details || {};
               <span class="text-sm font-medium text-primary">2</span>
             </div>
             <div>
-              <p class="font-medium">Prepare for Your Session</p>
-              <p class="text-muted-foreground">Think about your goals and questions. The more prepared you are, the more value you'll get from our session.</p>
+              <p class="font-medium">Watch Your Inbox</p>
+              <p class="text-muted-foreground">We'll send your login details and course preparation materials before May 1st</p>
             </div>
           </li>
           <li class="flex items-start gap-3">
@@ -105,8 +95,8 @@ const { name, email } = session.customer_details || {};
               <span class="text-sm font-medium text-primary">3</span>
             </div>
             <div>
-              <p class="font-medium">Course Access: May 1st, 2025</p>
-              <p class="text-muted-foreground">Your complementary course access will begin on May 1st, giving you additional resources to support your journey.</p>
+              <p class="font-medium">Prepare Your Schedule</p>
+              <p class="text-muted-foreground">Block out time in your calendar for the course starting May 1st to maximize your learning experience</p>
             </div>
           </li>
         </ul>
