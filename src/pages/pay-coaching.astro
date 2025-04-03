@@ -20,14 +20,14 @@ try {
     console.log("Creating Stripe session with origin:", origin); // Debug log
 
     session = await stripe.checkout.sessions.create({
-        mode: "payment",
+        mode: "subscription",
         line_items: [
             {
-                price: "price_0R9fa3qs14Mpveu1phbBUa2f",
+                price: "price_0R9fe7qs14Mpveu13T0PqMaX",
                 quantity: 1,
             },
         ],
-        success_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${origin}/thankyou-coaching?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/stripe`,
     });
 
@@ -47,11 +47,11 @@ try {
 }
 ---
 
-<Layout title="Enroll in ONE Course">
+<Layout title="Subscribe to ONE">
     <div class="container max-w-2xl mx-auto px-4 py-8">
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold mb-4">Complete Your Enrollment</h1>
-            <p class="text-xl text-muted-foreground mb-6">Get instant access to the complete course and start learning today</p>
+            <h1 class="text-4xl font-bold mb-4">Subscribe to ONE</h1>
+            <p class="text-xl text-muted-foreground mb-6">Get unlimited access to all features and premium support</p>
             <div class="flex justify-center space-x-4 mb-8">
                 <div class="flex items-center text-green-600">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>

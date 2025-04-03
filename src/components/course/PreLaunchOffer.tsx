@@ -160,10 +160,12 @@ export function PreLaunchOffer() {
             </div>
 
             <div className="max-w-lg mx-auto">
-              <a href="/pay-coaching">
-                <Button size="lg" className="w-full text-lg h-14 bg-[#1E3A8A] hover:bg-[#1e3a8aee] text-white border border-white/10 hover:border-white/20">
-                  Claim 1 of Only 4 Spots: Work 1:1 with Anthony Now
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <a href="/pay-coaching" className="block p-[1px] bg-white shadow-[0_0_30px_rgba(0,0,0,0.8)] hover:shadow-[0_0_50px_rgba(0,0,0,0.9)] transition-all duration-300">
+                <Button size="lg" className="w-full text-lg h-14 bg-[#1E3A8A] hover:bg-black text-white border border-white hover:border-white rounded-none transform hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
+                  <span className="relative z-10 flex items-center justify-center gap-2 font-semibold">
+                    Claim 1 of Only 4 Spots: Work 1:1 with Anthony Now
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </span>
                 </Button>
               </a>
               <p className="text-xs text-muted-foreground mt-3">
