@@ -145,10 +145,12 @@ export function WhyItWorks() {
           <p className="text-muted-foreground mb-8">
             Stop experimenting. Start implementing what's proven to work.
           </p>
-          <Button size="lg" className="text-lg px-8 group">
-            Access the Framework & Playbook
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <a href="#pricing">
+            <Button size="lg" className="text-lg px-8 group">
+              Access the Framework & Playbook
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </a>
         </div>
       </div>
     </section>

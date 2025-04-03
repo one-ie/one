@@ -101,10 +101,12 @@ export function FrameworkOverview() {
 
           {/* CTA */}
           <div className="mt-12 text-center">
-            <Button size="lg" className="text-lg px-8">
-              Get Access to the Complete System
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <a href="#pricing">
+              <Button size="lg" className="text-lg px-8">
+                Get Access to the Complete System
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
             <p className="mt-4 text-sm text-muted-foreground">
               Join successful store owners using our proven system to scale with AI
             </p>

@@ -30,10 +30,12 @@ export function FinalCTA({ currentPrice, remainingSpots, guaranteeText }: FinalC
               </p>
             </div>
 
-            <Button className="text-lg px-8" size="lg">
-              Get Started Risk-Free - Only ${currentPrice}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <a href="#pricing">
+              <Button className="text-lg px-8" size="lg">
+                Get Started Risk-Free - Only ${currentPrice}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
             <p className="text-sm text-muted-foreground">
               Limited Time: Only {remainingSpots} Spots Remaining at Launch Price
             </p>

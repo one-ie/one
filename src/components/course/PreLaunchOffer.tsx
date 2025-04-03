@@ -160,10 +160,12 @@ export function PreLaunchOffer() {
             </div>
 
             <div className="max-w-lg mx-auto">
-              <Button size="lg" className="w-full text-lg h-14 group bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary">
-                Claim 1 of Only 4 Spots: Work 1:1 with Anthony Now
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <a href="/pay-coaching">
+                <Button size="lg" className="w-full text-lg h-14 bg-[#1E3A8A] hover:bg-[#1e3a8aee] text-white border border-white/10 hover:border-white/20">
+                  Claim 1 of Only 4 Spots: Work 1:1 with Anthony Now
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </a>
               <p className="text-xs text-muted-foreground mt-3">
                 Only 4 Spots Worldwide | Offer Vanishes When Full | Includes Lifetime Course Access | Secure Checkout
               </p>

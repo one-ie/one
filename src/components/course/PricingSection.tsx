@@ -158,9 +158,11 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
 
                 {/* Payment Options */}
                 <div className="space-y-4">
-                  <Button className="w-full text-lg h-12" size="lg">
-                    Lock In Your Pre-Launch Price Now →
-                  </Button>
+                  <a href="/pay-course">
+                    <Button className="w-full text-lg h-12 bg-[#1E3A8A] hover:bg-[#1e3a8aee] text-white border border-white/10 hover:border-white/20" size="lg">
+                      Lock In Your Pre-Launch Price Now →
+                    </Button>
+                  </a>
                   <p className="text-sm text-center text-muted-foreground">
                     Full Access Granted May 1, 2025
                   </p>
@@ -190,10 +192,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
                   </div>
                 </div>
 
-                {/* Final CTA */}
-                <Button size="lg" className="w-full text-lg">
-                  Secure Your Pre-Launch Price Now →
-                </Button>
+               
                 <p className="text-center text-xs text-muted-foreground">
                   Launch Access May 1, 2025 | Secure Checkout | 30-Day Money-Back Guarantee
                 </p>

@@ -232,10 +232,12 @@ export function Transformation() {
 
         {/* CTA */}
         <div className="text-center">
-          <Button size="lg" className="text-lg px-8 group">
-            Achieve Total Transformation
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <a href="#pricing">
+            <Button size="lg" className="text-lg px-8 group">
+              Achieve Total Transformation
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </a>
           <p className="mt-4 text-sm text-muted-foreground">
             Join successful store owners implementing the complete AI-powered Elevate System
           </p>
