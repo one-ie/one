@@ -7,7 +7,7 @@ Here's a few things I did first.
 I setup Indigo, Ireland's first internet marketing agency. 
 I setup Ogilvy Interactive Research, Ireland's first Internet research company. 
 I developed the strategy to setup EuroMBA, Europe's first online MBA program.
-I was one of Netscape's first customers for their Commerce Server (before this the Web didn't have SSL).
+I bought the first server that allowed secure transmission of credit cards over the internet. Before Netscape you couldn't do secure transactions on the web.
 I was accepted into Instagram's chat early access program (before this I was building chatbots with Messenger).
 I was one of the first users of GPT 3 (I got early access to their API), before this I was building AI applications with Google Dialogflow.
 

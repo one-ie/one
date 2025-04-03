@@ -65,48 +65,55 @@ export function WhyItWorks() {
             The Science Behind The System
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Why This System Works (And Simple Prompting Doesn't Scale)
+            Why You Need Your Own AI Framework
           </h2>
           <p className="text-xl text-muted-foreground">
             Let's break down why our framework delivers superior results compared to standalone, "simple" AI prompting
           </p>
         </div>
 
-        {/* Limitations of Simple Prompting */}
-        <div className="mb-16">
-          <h3 className="text-2xl font-bold text-center mb-8">
-            Simple Prompting's Limitations
-          </h3>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {limitations.map((limitation, index) => (
-              <Card key={index} className="p-6 hover:shadow-md transition-all duration-300 border-red-100 bg-red-50/10 dark:bg-red-950/5">
-                <div className="flex items-start gap-4 mb-3">
-                  {limitation.icon}
-                  <h4 className="font-semibold">{limitation.title}</h4>
-                </div>
-                <p className="text-sm text-muted-foreground">{limitation.description}</p>
-              </Card>
-            ))}
+        {/* Main Content Grid */}
+        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          {/* Left Column - Limitations */}
+          <div>
+            <h3 className="text-2xl font-bold text-center mb-8 text-red-500">
+              Simple Prompting's Limitations
+            </h3>
+            
+            <div className="space-y-6">
+              {limitations.map((limitation, index) => (
+                <Card key={index} className="p-6 hover:shadow-md transition-all duration-300 border-red-200 bg-red-50/10 dark:bg-red-950/5">
+                  <div className="flex items-start gap-4">
+                    {limitation.icon}
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2">{limitation.title}</h4>
+                      <p className="text-muted-foreground">{limitation.description}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Why Our System Excels */}
-        <div className="mb-16">
-          <h3 className="text-2xl font-bold text-center mb-8">
-            Why Our System Excels
-          </h3>
+          {/* Right Column - Advantages */}
+          <div>
+            <h3 className="text-2xl font-bold text-center mb-8 text-green-500">
+              How Your System will Excel
+            </h3>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {advantages.map((advantage, index) => (
-              <Card key={index} className="p-6 hover:shadow-md transition-all duration-300 border-green-100 bg-green-50/10 dark:bg-green-950/5">
-                <div className="flex items-start gap-4 mb-3">
-                  {advantage.icon}
-                  <h4 className="font-semibold">{advantage.title}</h4>
-                </div>
-                <p className="text-sm text-muted-foreground">{advantage.description}</p>
-              </Card>
-            ))}
+            <div className="space-y-6">
+              {advantages.map((advantage, index) => (
+                <Card key={index} className="p-6 hover:shadow-md transition-all duration-300 border-green-200 bg-green-50/10 dark:bg-green-950/5">
+                  <div className="flex items-start gap-4">
+                    {advantage.icon}
+                    <div>
+                      <h4 className="font-semibold text-lg mb-2">{advantage.title}</h4>
+                      <p className="text-muted-foreground">{advantage.description}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
 

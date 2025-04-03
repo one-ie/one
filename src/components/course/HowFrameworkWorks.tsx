@@ -83,7 +83,7 @@ export function HowFrameworkWorks() {
                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                   <Building className="w-5 h-5 text-primary" />
                 </div>
-                <h4 className="text-2xl font-semibold text-white">Company Context</h4>
+                <h4 className="text-2xl font-semibold text-white">Your Company</h4>
               </div>
               <p className="text-gray-300">Define your unique offers, powerful brand voice, and core value proposition</p>
               <ul className="mt-4 space-y-2">
@@ -103,7 +103,7 @@ export function HowFrameworkWorks() {
                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                   <Globe className="w-5 h-5 text-primary" />
                 </div>
-                <h4 className="text-2xl font-semibold text-white">Market Awareness</h4>
+                <h4 className="text-2xl font-semibold text-white">Your Market</h4>
               </div>
               <p className="text-gray-300">Understand your competitive landscape and market positioning</p>
               <ul className="mt-4 space-y-2">
@@ -123,7 +123,7 @@ export function HowFrameworkWorks() {
                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
                   <User className="w-5 h-5 text-primary" />
                 </div>
-                <h4 className="text-2xl font-semibold text-white">Customer Avatar</h4>
+                <h4 className="text-2xl font-semibold text-white">Your Customer</h4>
               </div>
               <p className="text-gray-300">Map out your specific ideal customer's pains, desires, and motivations</p>
               <ul className="mt-4 space-y-2">
