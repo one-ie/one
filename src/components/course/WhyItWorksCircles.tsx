@@ -2,61 +2,62 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArrowRight, Store, ShoppingBag, ShoppingCart, CreditCard, Package, Lightbulb, Boxes, Truck } from "lucide-react";
+import { ArrowRight, MessageCircle, MessagesSquare, MessageSquareDashed, MessageSquarePlus, MessageSquareMore, Lightbulb, MessagesSquare as GroupChat, MessageSquareHeart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function WhyItWorks() {
+export function WhyItWorksCircles() {
   const limitations = [
     {
-      title: "OpenAI Alone",
-      description: "Using ChatGPT without a framework leads to inconsistent results and wasted time",
-      icon: <img src="/icons/openai.svg" className="w-5 h-5" alt="OpenAI" />
+      title: "Lacks Strategy & Context",
+      description: "Asking for an \"ad\" without deep customer understanding is like throwing darts blindfolded",
+      icon: <MessageCircle className="w-5 h-5 text-red-500" />
     },
     {
-      title: "Anthropic Basic",
-      description: "Claude needs proper context and structure to deliver business value",
-      icon: <img src="/icons/anthropic.svg" className="w-5 h-5" alt="Anthropic" />
+      title: "Yields Generic Output",
+      description: "Without rich context, AI defaults to bland, generalized language",
+      icon: <MessagesSquare className="w-5 h-5 text-red-500" />
     },
     {
-      title: "Google Raw",
-      description: "Gemini's power is limited without a strategic implementation approach",
-      icon: <img src="/icons/gemini.svg" className="w-5 h-5" alt="Google" />
+      title: "Endless Trial-and-Error",
+      description: "Stuck in a loop of refining prompts without building a repeatable process",
+      icon: <MessageSquareDashed className="w-5 h-5 text-red-500" />
     },
     {
-      title: "Mistral Direct",
-      description: "Direct prompting lacks the structure needed for consistent business results",
-      icon: <img src="/icons/mistral.svg" className="w-5 h-5" alt="Mistral" />
+      title: "Creates Disconnected Assets",
+      description: "Random generations aren't inherently connected to your broader marketing strategy",
+      icon: <MessageSquarePlus className="w-5 h-5 text-red-500" />
     },
     {
-      title: "DeepSeek Simple",
-      description: "Advanced models still need proper frameworks for business applications",
-      icon: <img src="/icons/deepseek.svg" className="w-5 h-5" alt="DeepSeek" />
+      title: "Doesn't Guarantee Focus",
+      description: "Time wasted on less critical tasks while neglecting major leverage points",
+      icon: <MessageSquareMore className="w-5 h-5 text-red-500" />
     }
   ];
 
   const advantages = [
     {
-      title: "Shopify Integration",
-      description: "Seamlessly connect your store data to power AI-driven product descriptions, ads, and customer service",
-      icon: <Store className="w-5 h-5 text-green-500" />
+      title: "Strategic Foundation First",
+      description: "The system forces you to start with deep clarity on your Customer, Company Context, and Market. This rich Foundation data becomes the essential fuel for every AI prompt in the Playbook.",
+      icon: <MessageCircle className="w-5 h-5 text-green-500" />
     },
     {
-      title: "WooCommerce Sync",
-      description: "Automatically sync your WooCommerce products and customer data to enhance AI operations",
-      icon: <ShoppingCart className="w-5 h-5 text-green-500" />
+      title: "Contextual Relevance",
+      description: "Each prompt is designed for a specific Framework Step and its unique objective. The AI knows exactly why it's generating each asset and how it fits into the bigger picture.",
+      icon: <GroupChat className="w-5 h-5 text-green-500" />
     },
     {
-      title: "Payment Processing",
-      description: "Integrate with Stripe, PayPal, and crypto payment gateways for automated transactions",
-      icon: <CreditCard className="w-5 h-5 text-green-500" />
+      title: "Proven Prompts",
+      description: "Skip becoming a prompt engineer. Use our tested, pre-engineered prompts specifically designed for ecommerce tasks within this framework. Dramatically reduce trial-and-error.",
+      icon: <MessageSquareHeart className="w-5 h-5 text-green-500" />
     },
     {
-      title: "Inventory Management",
-      description: "Let AI help manage your inventory, reordering, and fulfillment processes",
-      icon: <Package className="w-5 h-5 text-green-500" />
+      title: "System Synergy & Efficiency",
+      description: "Assets naturally connect because they originate from the same Foundation and follow the framework's logic. Your HOOK aligns with your GIFT; your NURTURE sequence leads to the SELL page content.",
+      icon: <MessagesSquare className="w-5 h-5 text-green-500" />
     }
   ];
 
+  // Rest of the component remains the same as WhyItWorks.tsx
   return (
     <section className="py-20 bg-background" id="why-it-works">
       <div className="container mx-auto px-4">
