@@ -1,0 +1,55 @@
+---
+// src/pages/gemini.astro
+// This page provides a dedicated chat interface configured for Google Gemini models.
+
+import Layout from "../layouts/Chat.astro"; // Using the Chat layout
+import { normalizeConfig } from "@/schema/chat"; // Import schema normalizer
+
+// Define chat configuration specifically for Google Gemini via OpenRouter
+// Uses the model specified in your curl script example.
+const chatConfig = normalizeConfig({
+  title: "Google Gemini Chat",
+  description: "Chat directly with Google's Gemini Pro model via OpenRouter.",
+  
+  // --- AI Configuration ---
+  aiProvider: "openrouter", // Assuming OpenRouter is used to access Gemini
+  aiModel: "google/gemini-2.5-pro-preview-03-25", // The specific model from your curl script
+  apiEndpoint: "https://openrouter.ai/api/v1", // Standard OpenRouter endpoint
+  temperature: 0.7, // Standard default temperature
+  maxTokens: 100000, // Allow potentially long responses
+
+  // --- Prompt Configuration ---
+  // Define the AI's role and context
+  systemPrompt: `You are Google Gemini, a large language model trained by Google. 
+                 Respond helpfully, accurately, and concisely. 
+                 You are being accessed via the OpenRouter API.`,
+  // Don't add the generic system/business prompts for this specific agent page
+  addSystemPrompt: false, 
+  addBusinessPrompt: false, 
+  // This page likely doesn't have specific markdown content to include
+  includeContent: false, 
+
+  // --- UI Configuration ---
+  welcomeMessage: "👋 Hi! I'm Google Gemini, accessed via OpenRouter. How can I assist you?",
+  avatar: "/logos/gemini-logo-round.svg", // Assuming you have a Gemini logo here
+  suggestions: [
+    { label: "What can you do?", prompt: "List some of your capabilities." },
+    { label: "Explain LLMs", prompt: "Explain Large Language Models simply." },
+    { label: "Fun Fact", prompt: "Tell me an interesting fun fact." },
+    { label: "Code Example", prompt: "Show me a Python code example for reading a file." }
+  ]
+});
+---
+
+{/* Use the Chat layout, passing the Gemini-specific config */}
+<Layout 
+  title={chatConfig.title || "Gemini Chat"} 
+  description={chatConfig.description || "Chat with Google Gemini"}
+  chatConfig={chatConfig}
+>
+  <!-- 
+    The Chat.astro layout handles rendering the actual Chat component. 
+    No additional content is needed here unless you want to add specific 
+    UI elements around the chat interface for this particular page.
+  -->
+</Layout>
