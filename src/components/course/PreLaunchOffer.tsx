@@ -21,10 +21,10 @@ export function PreLaunchOffer() {
             ONLY 4 SPOTS AVAILABLE WORLDWIDE
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text">
-            ULTRA-EXCLUSIVE PRE-LAUNCH: Implement the AI Growth System 1:1 Directly with Anthony O'Connell
+           PRE-LAUNCH Offer: Implement the AI Growth System 1:1 Directly with Anthony O'Connell
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            To get some early feedback and to refine the course I am offering personalized implementation sessions with me. This is your <span className="font-bold">single opportunity</span> before May 2025 to bypass the queue and have The Elevate Ecommerce Framework & AI Prompt Playbook For Ecommerce system <span className="font-bold">personally architected and implemented for YOUR business, directly by me.</span>
+            To get some early feedback and to refine the course I am offering personalised implementation sessions with me. This is your <span className="font-bold">single opportunity</span> before May 2025 to bypass the queue and have The Elevate Ecommerce Framework & AI Prompt Playbook For Ecommerce system <span className="font-bold">personally architected and implemented for YOUR business, directly by me.</span>
           </p>
         </div>
 

@@ -2,7 +2,7 @@ Hi. I'm Anthony O'Connell. I help companies attract, convert and grow customers 
 
 I've been working as a web designer, engineer, marketer, and educator for 30 years already. I began crafting the web after I graduated with a degree in marketing from Portobello College (Ireland) in 1994.
 
-Here's a few things I did first. 
+Here's a few things I did first.
 
 I setup Indigo, Ireland's first internet marketing agency. 
 I setup Ogilvy Interactive Research, Ireland's first Internet research company. 

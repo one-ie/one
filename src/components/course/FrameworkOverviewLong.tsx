@@ -76,7 +76,42 @@ export function FrameworkOverview() {
               </div>
             </div>
           </div>
-</div>
+
+          {/* Combined Power */}
+          <div className="mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
+            <h3 className="text-xl font-bold mb-4 text-center">The Power of Framework + Playbook</h3>
+            <p className="text-center text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              The Elevate Ecommerce Framework provides the strategic map, while the AI Prompt Playbook For Ecommerce provides the high-speed engine, creating a powerful system for achieving predictable, scalable e-commerce growth.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 mt-8">
+              <Card className="p-4 text-center">
+                <h4 className="font-semibold mb-2">Systematic Approach</h4>
+                <p className="text-sm text-muted-foreground">Transform random experiments into predictable growth</p>
+              </Card>
+              <Card className="p-4 text-center">
+                <h4 className="font-semibold mb-2">Rapid Implementation</h4>
+                <p className="text-sm text-muted-foreground">Execute strategies 10x faster with AI automation</p>
+              </Card>
+              <Card className="p-4 text-center">
+                <h4 className="font-semibold mb-2">Proven Results</h4>
+                <p className="text-sm text-muted-foreground">Follow the exact system our successful students use</p>
+              </Card>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="mt-12 text-center">
+            <a href="#pricing">
+              <Button size="lg" className="text-lg px-8">
+                Get Access to the Complete System
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
+            <p className="mt-4 text-sm text-muted-foreground">
+              Join successful store owners using our proven system to scale with AI
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
