@@ -15,7 +15,7 @@ interface Props {
 }
 
 // Destructure props, getting chatConfig directly if passed
-const { chatConfig: passedChatConfig, frontmatter = {}, Content, content } = Astro.props;
+const { chatConfig: passedChatConfig, Content, content } = Astro.props;
 
 // Get the raw content
 let rawContent = '';
@@ -75,7 +75,7 @@ console.log('Content processing:', {
 ---
 
 {/* Use the normalized chatConfig for title, description etc. */}
-<Layout title={chatConfig.title} description={chatConfig.description}>
+<Layout title={chatConfig.title ?? ''} description={chatConfig.description ?? ''}>
   <div class="flex items-center justify-center h-screen">
     <!-- Centered chat window -->
     <div class="w-full max-w-2xl h-[90vh]">
