@@ -124,7 +124,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
                     </div>
                     <div className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-primary" />
-                      <span>Ecwid</span>
+                      <span>Webflow</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-primary" />

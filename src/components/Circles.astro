@@ -15,18 +15,19 @@ const outerStartAngles = [0, 72, 144, 216, 288]; // 5 AI providers
 
 // Define logo arrays with names for inner and outer circles
 const innerLogos = [
-    { path: "/logos/shopify-logo.svg", name: "Shopify" },
-    { path: "/logos/woocommerce-logo.svg", name: "WooCommerce" },
-    { path: "/logos/magento-logo.svg", name: "Magento" },
-    { path: "/logos/prestashop-logo.svg", name: "PrestaShop" }
+    { path: "/logos/shopify.svg", name: "Shopify" },
+    { path: "/logos/woocommerce.svg", name: "WooCommerce" },
+    { path: "/logos/magento.svg", name: "Magento" },
+    { path: "/logos/stripe.svg", name: "Stripe" },
+    { path: "/logos/prestashop.svg", name: "PrestaShop" }
 ];
 
 const outerLogos = [
-    { path: "/logos/openai-logo-rounded.svg", name: "OpenAI" },
-    { path: "/logos/anthropic-logo-round.svg", name: "Anthropic" },
-    { path: "/logos/gemini-logo-round.svg", name: "Gemini" },
-    { path: "/logos/mistral-logo-round.svg", name: "Mistral AI" },
-    { path: "/logos/deepseek-logo-round.svg", name: "DeepSeek" }
+    { path: "/logos/openai.svg", name: "OpenAI" },
+    { path: "/logos/anthropic.svg", name: "Anthropic" },
+    { path: "/logos/gemini.svg", name: "Gemini" },
+    { path: "/logos/mistral.svg", name: "Mistral AI" },
+    { path: "/logos/deepseek.svg", name: "DeepSeek" }
 ];
 
 // Use fixed values instead of random ones
@@ -66,7 +67,7 @@ const outerRadii = outerStartAngles.map(() => BASE_OUTER_RADIUS);
     {/* Center Logo */}
     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
         <img
-            src="/icons/one.svg"
+            src="/logos/one.svg"
             alt="ONE Logo"
             class="size-[76px] opacity-90 hover:scale-110 transition-transform duration-300"
         />
@@ -113,12 +114,12 @@ const outerRadii = outerStartAngles.map(() => BASE_OUTER_RADIUS);
                 client:load
             >
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                    <div class="h-14 w-14 rounded-full hover:scale-110 transition-all duration-300">
-                        <img
-                            src={outerLogos[i].path}
-                            alt={outerLogos[i].name}
-                            class="h-full w-full"
-                        />
+                    <div class="h-14 w-14 rounded-full hover:scale-110 transition-all duration-300 text-black dark:text-white">
+                    	<img
+                    		src={outerLogos[i].path}
+                    		alt={outerLogos[i].name}
+                    		class="h-full w-full"
+                    	/>
                     </div>
                     <span class="block mt-2 text-sm font-medium text-muted-foreground whitespace-nowrap">
                         {outerLogos[i].name}
