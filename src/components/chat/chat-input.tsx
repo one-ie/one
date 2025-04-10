@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useTextareaResize } from "@/hooks/use-textarea-resize";
-import { SendIcon, StopCircleIcon } from "lucide-react";
+import { SendIcon, StopCircleIcon, Paperclip, XIcon } from "lucide-react"; // Added Paperclip, XIcon
 import type React from "react";
-import { createContext, useContext, forwardRef, useEffect } from "react";
+import { createContext, useContext, forwardRef, useEffect, useState, useRef, ChangeEvent } from "react"; // Added useState, useRef, ChangeEvent
 
 interface ChatInputContextValue {
   value?: string;
@@ -26,6 +26,8 @@ interface ChatInputProps extends Omit<ChatInputContextValue, "variant"> {
   className?: string;
   variant?: "default" | "unstyled";
   rows?: number;
+  // Add a prop to pass the image data up
+  onImageChange?: (fileData: string | null) => void;
 }
 
 const ChatInput = function ChatInput({
@@ -38,7 +40,44 @@ const ChatInput = function ChatInput({
   loading,
   onStop,
   rows = 1,
+  onImageChange // Destructure the new prop
 }: ChatInputProps) {
+    // State for image preview and data
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageData, setImageData] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setImagePreview(base64String);
+                setImageData(base64String);
+                onImageChange?.(base64String); // Pass Base64 data up
+            };
+            reader.readAsDataURL(file); // Reads as Base64 data URL
+        }
+        // Reset the input value so the same file can be selected again
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current?.click();
+    };
+
+    const removeImage = () => {
+        setImagePreview(null);
+        setImageData(null);
+        onImageChange?.(null); // Signal image removal
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
   const contextValue: ChatInputContextValue = {
     value,
     onChange,
@@ -47,18 +86,53 @@ const ChatInput = function ChatInput({
     onStop,
     variant,
     rows,
+    // You might add imageData/setImageData to context if sub-components need it
   };
 
   return (
     <ChatInputContext.Provider value={contextValue}>
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className="hidden"
+        accept="image/*"
+      />
       <div
         className={cn(
           variant === "default" &&
-            "flex items-center gap-2 w-full p-3 rounded-full bg-[#2a2a2a] focus-within:ring-1 focus-within:ring-blue-600/30 focus-within:outline-none transition-all duration-200 shadow-md hover:shadow-lg",
-          variant === "unstyled" && "flex items-start gap-2 w-full",
+            "flex items-end gap-2 w-full p-3 rounded-lg bg-[#2a2a2a] focus-within:ring-1 focus-within:ring-blue-600/30 focus-within:outline-none transition-all duration-200 shadow-md hover:shadow-lg",
+          variant === "unstyled" && "flex items-end gap-2 w-full", // Changed items-start to items-end
           className,
         )}
       >
+        {/* Image Preview Area */}
+        {imagePreview && (
+          <div className="relative mb-1 shrink-0">
+            <img src={imagePreview} alt="Preview" className="h-12 w-12 rounded object-cover" />
+            <Button
+              variant="destructive"
+              size="icon"
+              className="absolute -top-2 -right-2 h-5 w-5 rounded-full"
+              onClick={removeImage}
+            >
+              <XIcon className="h-3 w-3" />
+            </Button>
+          </div>
+        )}
+
+        {/* Attach Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-10 w-10 shrink-0 rounded-full"
+          onClick={triggerFileInput}
+        >
+          <Paperclip className="h-5 w-5" />
+        </Button>
+
+        {/* The rest of the children (TextArea and Submit button) */}
         {children}
       </div>
     </ChatInputContext.Provider>
