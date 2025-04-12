@@ -7,22 +7,15 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { ArrowRight, Shield, Check } from "lucide-react";
 import { CourseHeroSection } from "../components/course/HeroSection";
-import { KeyFeatures } from "../components/course/KeyFeatures";
 import { FrameworkOverview } from "../components/course/FrameworkOverview";
-import { WhyItWorks } from "../components/course/WhyItWorks";
+import { HowFrameworkWorks } from "../components/course/HowFrameworkWorks";
 import { CourseModules } from "../components/course/CourseModules";
 import { FAQSection } from "../components/course/FAQSection";
 import { PricingSection } from "../components/course/PricingSection";
-import { StickyEnrollBar } from "../components/course/StickyEnrollBar";
 import { FinalCTA } from "../components/course/FinalCTA";
 import FaqAccordion from "@/components/FaqAccordion";
 import Circles from "@/components/Circles.astro";
-import { HowFrameworkWorks } from "../components/course/HowFrameworkWorks";
-import { Transformation } from "../components/course/Transformation";
-import Teacher from "../components/Teacher.astro";
 import { CountdownTimer } from "../components/course/CountdownTimer";
-import { PreLaunchOffer } from "../components/course/PreLaunchOffer";
-
 
 const title = "The AI Prompt Playbook For Ecommerce for Ecom Growth";
 const description = "Transform random AI experiments into a systematic growth engine. Get the proven 9-Step Framework + AI Prompt Playbook For Ecommerce designed for Ecom Leaders ready to maximize growth, predictably.";
@@ -30,14 +23,14 @@ const launchDate = "2025-04-11T00:00:00";  // Using ISO date format for better c
 
 // Course details
 const courseDetails = {
-  badge: "Explode Ecommerce Sales With AI",
-  title: "The AI Prompt Playbook For Ecommerce",
-  subtitle: "Stop Experimenting. Start Systematically Scaling Your Ecom Store.",
+  badge: "The ONE AI Playbook for Ecommerce",
+  title: "The ONE AI Playbook for Ecommerce",
+  subtitle: "Stop Guessing, Start Selling: Your Ebook, 100 Prompt System & Community",
   originalPrice: "1,999",
   currentPrice: "999",
   guarantee: "30-Day Implementation Guarantee",
   ctaText: "Get The System Now",
-  valueProposition: "Transform random acts of AI into predictable profit performance with our proven 9-Step Framework + AI Prompt Playbook For Ecommerce.",
+  valueProposition: "Master AI for Ecom growth. Transform random AI experiments into predictable profit with our actionable Playbook System – includes strategy Ebook, 100+ field-tested prompts, and expert community support.",
   spots: {
     total: 100,
     remaining: 25
@@ -47,133 +40,9 @@ const courseDetails = {
 
 // Stats for hero section
 const heroStats = [
-  { value: "73%", label: "Reduction in AI Prompt Testing Time" },
-  { value: "3X", label: "Average Increase in AI Output Quality" },
-  { value: "186%", label: "Average Revenue Growth in 6 Months" }
-];
-
-// Course modules data aligned with ELEVATE framework
-const courseModulesData = [
-  {
-    title: "FOUNDATION – Building Your Growth Bedrock",
-    description: "Establish deep strategic clarity before action",
-    objective: "Stop guessing, start knowing. Build the essential foundation for AI-powered success.",
-    mainDescription: "In this crucial foundational module, you'll forge the essential bedrock for all future success. We guide you to deeply understand your Ideal Customer Avatar ('Sam Store'), Company Context, and Market Awareness.",
-    output: "Your comprehensive Customer & Company Blueprint, ready to inform hyper-effective AI generation",
-    lessons: [
-      { name: "Ideal Customer Avatar", value: "Deep dive into customer pains, desires, and behaviors" },
-      { name: "Company Context", value: "Define your unique offer and powerful brand voice" },
-      { name: "Market Awareness", value: "Integrate vital market insights for maximum impact" }
-    ]
-  },
-  {
-    title: "HOOK – Capturing Attention & Defining Your Angle",
-    description: "Stop the scroll and spark immediate interest",
-    objective: "Command attention in crowded feeds with irresistible hooks",
-    mainDescription: "Transform your Foundation insights into irresistible Hooks using targeted AI prompts. Generate powerful headlines, compelling ad openers, and unique messaging angles that resonate deeply.",
-    output: "A validated set of high-impact hooks and attention-grabbing ad creative",
-    lessons: [
-      { name: "Hook Generation", value: "Create scroll-stopping headlines with AI" },
-      { name: "Channel Selection", value: "Choose optimal platforms for maximum visibility" },
-      { name: "Creative Development", value: "Craft compelling ad creative that converts" }
-    ]
-  },
-  {
-    title: "GIFT – Delivering Instant Value",
-    description: "Convert attention into genuine interest",
-    objective: "Create high-value lead magnets that actually convert",
-    mainDescription: "Use AI prompts to rapidly brainstorm, outline, and draft content for high-value Lead Magnets your ideal customers want. Craft compelling landing pages and promotional messages.",
-    output: "Ready-to-deploy lead magnet and landing page copy",
-    lessons: [
-      { name: "Lead Magnet Creation", value: "Design irresistible free offers" },
-      { name: "Landing Page Copy", value: "Write high-converting landing pages" },
-      { name: "Promotional Strategy", value: "Plan effective distribution" }
-    ]
-  },
-  {
-    title: "IDENTIFY – Capturing Future Customers",
-    description: "Convert interested prospects into leads",
-    objective: "Master the art of the low-friction ask",
-    mainDescription: "Use AI-assisted copy prompts to optimize opt-in forms and messaging. Set up basic tagging and welcome emails for smooth lead flow.",
-    output: "Optimized lead capture process and initial prospect list",
-    lessons: [
-      { name: "Form Optimization", value: "Create frictionless opt-in experiences" },
-      { name: "Welcome Sequence", value: "Design engaging welcome flows" },
-      { name: "Lead Tagging", value: "Implement smart segmentation" }
-    ]
-  },
-  {
-    title: "ENGAGE – Activating Leads Instantly",
-    description: "Build immediate rapport post-identification",
-    objective: "Capitalize on peak interest immediately",
-    mainDescription: "Implement immediate engagement strategies right after opt-in. Use AI for impactful welcome messages and follow-up sequences.",
-    output: "Automated engagement assets and qualification insights",
-    lessons: [
-      { name: "Instant Response", value: "Create immediate value delivery" },
-      { name: "Chatbot Integration", value: "Set up intelligent conversations" },
-      { name: "Follow-up Strategy", value: "Design effective nurture paths" }
-    ]
-  },
-  {
-    title: "SELL – Engineering Conversions",
-    description: "Maximize purchase conversions",
-    objective: "Transform product pages into conversion engines",
-    mainDescription: "Leverage AI prompts to craft persuasive sales copy, handle objections, and optimize CTAs. Learn to streamline checkout flow and build trust.",
-    output: "High-converting sales page copy and optimized checkout",
-    lessons: [
-      { name: "Sales Copy", value: "Write compelling product descriptions" },
-      { name: "Objection Handling", value: "Address concerns proactively" },
-      { name: "Checkout Flow", value: "Optimize the purchase process" }
-    ]
-  },
-  {
-    title: "NURTURE – Converting the Not Ready",
-    description: "Build trust over time",
-    objective: "Master the art of follow-up",
-    mainDescription: "Use AI-powered nurturing to draft value-driven email sequences and retargeting campaigns that convert prospects over time.",
-    output: "Automated nurture sequences and retargeting copy",
-    lessons: [
-      { name: "Email Sequences", value: "Create engaging nurture flows" },
-      { name: "Retargeting", value: "Design effective ad campaigns" },
-      { name: "Content Strategy", value: "Plan valuable content delivery" }
-    ]
-  },
-  {
-    title: "UPSELL – Maximizing Customer Value",
-    description: "Increase Average Order Value instantly",
-    objective: "Boost profitability with smart offers",
-    mainDescription: "Use AI prompts to create compelling post-purchase upsell and cross-sell offers. Learn optimal timing and presentation for maximum impact.",
-    output: "High-converting upsell offers and promotional copy",
-    lessons: [
-      { name: "Offer Creation", value: "Design irresistible upsells" },
-      { name: "Timing Strategy", value: "Optimize offer presentation" },
-      { name: "Value Optimization", value: "Maximize customer profitability" }
-    ]
-  },
-  {
-    title: "UNDERSTAND – Driving Customer Success",
-    description: "Maximize loyalty through insight",
-    objective: "Turn buyers into loyal fans",
-    mainDescription: "Craft exceptional customer onboarding sequences and analyze feedback for continuous improvement and proactive communication.",
-    output: "Effective onboarding system and insight strategy",
-    lessons: [
-      { name: "Onboarding Flow", value: "Create success-focused sequences" },
-      { name: "Feedback Analysis", value: "Generate actionable insights" },
-      { name: "Retention Strategy", value: "Implement proactive support" }
-    ]
-  },
-  {
-    title: "SHARE – Growing Through Advocacy",
-    description: "Leverage social proof for growth",
-    objective: "Transform customers into advocates",
-    mainDescription: "Use AI to streamline review collection and turn feedback into compelling social proof. Build systematic referral programs.",
-    output: "Review templates and referral campaign assets",
-    lessons: [
-      { name: "Review Generation", value: "Collect powerful testimonials" },
-      { name: "Social Proof", value: "Create compelling success stories" },
-      { name: "Referral System", value: "Build automated word-of-mouth" }
-    ]
-  }
+  { value: "10X", label: "Faster Content Creation" },
+  { value: "100+", label: "Field-Tested AI Prompts" },
+  { value: "24/7", label: "Community Support" }
 ];
 
 // FAQs for the bottom section
@@ -372,39 +241,29 @@ I'm here to understand your specific needs and show you how the AI Prompt Playbo
 };
 ---
 <Layout
-  title="ONE - Build Your AI Brand"
+  title="ONE - The AI Playbook for Ecommerce"
   chatConfig={chat}
   rightPanelMode="quarter"
 >
   <main class="min-h-screen bg-background">
     {/* Hero Section */}
-      <CourseHeroSection courseDetails={courseDetails} heroStats={heroStats} />
+    <CourseHeroSection courseDetails={courseDetails} heroStats={heroStats} />
 
     <Circles />
 
-  
-
-    {/* ELEVATE Framework */}
+    {/* System Overview */}
     <div id="framework">
       <FrameworkOverview client:load />
     </div>
 
-    {/* How It Works Section */}
+    {/* How It Works */}
     <div id="how-it-works">
       <HowFrameworkWorks client:visible />
     </div>
 
-
-    {/* Business Transformation */}
-    <div id="transformation">
-      <Transformation client:visible />
-    </div>
-
-    <Teacher />
-
-    {/* Course Modules */}
+    {/* Inside the System */}
     <div id="modules">
-      <CourseModules client:visible modules={courseModulesData} />
+      <CourseModules client:visible />
     </div>
 
     {/* Pricing Section */}
@@ -420,40 +279,18 @@ I'm here to understand your specific needs and show you how the AI Prompt Playbo
       originalPrice={pricingData.originalPrice}
     />
 
-
     {/* FAQs Section */}
     <div id="faq" class="min-h-screen">
       <FAQSection client:visible faqs={faqs} />
     </div>
 
     {/* Final CTA */}
-    <div class="py-20">
-      <div class="container px-4 mx-auto text-center">
-        <h2 class="text-3xl lg:text-4xl font-bold mb-6">Ready to Transform Your Marketing?</h2>
-        <p class="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Join the AI marketing revolution and start generating more traffic, conversions, and sales in half the time.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="#pricing">
-            <Button size="lg" variant="outline" className="text-lg">
-              Get the system now
-            </Button>
-          </a>
-        </div>
-    
-      </div>
-    </div>
-
-    {/* Guarantee Banner */}
     <FinalCTA 
       client:visible 
       currentPrice={pricingData.currentPrice} 
       remainingSpots={pricingData.scarcity.spots.remaining} 
       guaranteeText={pricingData.guarantee.description}
     />
-
-    {/* Sticky Enrollment Bar */}
-   
   </main>
 </Layout>
 
@@ -546,35 +383,16 @@ I'm here to understand your specific needs and show you how the AI Prompt Playbo
 </style>
 
 <script>
-  // Smooth scroll function with proper TypeScript types
+  // Smooth scroll function
   document.querySelectorAll('a[href^="#"]').forEach((anchor: Element) => {
     anchor.addEventListener('click', function(this: HTMLAnchorElement, e: Event) {
       e.preventDefault();
       const target = document.querySelector(this.getAttribute('href') || '');
       if (target) {
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
-        const startPosition = window.pageYOffset;
-        const distance = targetPosition - startPosition;
-        const duration = 1500; // 1.5 seconds
-        let start: number | null = null;
-
-        function animation(currentTime: number): void {
-          if (start === null) start = currentTime;
-          const timeElapsed = currentTime - start;
-          const progress = Math.min(timeElapsed / duration, 1);
-          
-          // Easing function for smoother animation
-          const ease = (t: number): number => 
-            t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-          
-          window.scrollTo(0, startPosition + distance * ease(progress));
-          
-          if (timeElapsed < duration) {
-            requestAnimationFrame(animation);
-          }
-        }
-        
-        requestAnimationFrame(animation);
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
       }
     });
   });

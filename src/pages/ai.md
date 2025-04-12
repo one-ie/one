@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/DocsChat.astro
+layout: ../layouts/Chat.astro
 title: AI Chat Demo
 description: Experience ONE's markdown and conversation capabilities
 keywords:

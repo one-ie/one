@@ -1,125 +1,103 @@
 import React from "react";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { CourseModuleContent } from "./CourseModuleContent";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, BookOpen, MessageSquare, Zap } from "lucide-react";
 
-interface ModuleLesson {
-  name: string;
-  value: string;
-}
+export function CourseModules() {
+  const modules = [
+    {
+      title: "Strategy Ebook",
+      description: "Master the foundational principles for AI success in e-commerce",
+      icon: <BookOpen className="w-6 h-6 text-primary" />,
+      features: [
+        "Company Context Framework",
+        "Market Analysis Templates",
+        "Customer Avatar Worksheets",
+        "Strategic Planning Tools",
+        "Implementation Guides",
+        "Case Studies & Examples"
+      ]
+    },
+    {
+      title: "100 Prompt System",
+      description: "Field-tested prompts for rapid implementation across marketing channels",
+      icon: <Zap className="w-6 h-6 text-primary" />,
+      features: [
+        "Product Descriptions",
+        "Ad Copy & Headlines",
+        "Email Sequences",
+        "Social Media Content",
+        "SEO Optimization",
+        "Customer Support Scripts"
+      ]
+    },
+    {
+      title: "Expert Community",
+      description: "Connect with successful store owners and get ongoing support",
+      icon: <MessageSquare className="w-6 h-6 text-primary" />,
+      features: [
+        "Weekly Strategy Calls",
+        "Implementation Support",
+        "Peer Networking",
+        "Latest AI Updates",
+        "Resource Sharing",
+        "Success Stories"
+      ]
+    }
+  ];
 
-interface CourseModule {
-  title: string;
-  description: string;
-  objective: string;
-  mainDescription: string;
-  output: string;
-  lessons: ModuleLesson[];
-}
-
-interface CourseModulesProps {
-  modules: CourseModule[];
-}
-
-export function CourseModules({ modules }: CourseModulesProps) {
   return (
-    <section className="container mx-auto px-6 py-20 border-t border-border/40">
-      <div className="w-full max-w-[1000px] mx-auto">
-        <div className="text-center space-y-6 mb-16">
-          <Badge variant="outline" className="mb-4">Complete 10-Module System</Badge>
-          
-          <h2 className="text-4xl md:text-5xl font-bold">Course Modules</h2>
-          
-          <h3 className="text-3xl md:text-4xl font-bold bg-clip-text">
-            Transform Random AI Experiments into a Systematic Growth Engine
-          </h3>
-          
-          <div className="max-w-3xl mx-auto text-muted-foreground space-y-4 leading-relaxed">
-            <p>
-              Stop wasting time with trial-and-error AI prompts. Our proven 10-module system gives you everything you need to systematically scale your ecommerce store using AI – from initial customer attraction to lasting advocacy.
-            </p>
-            <p>
-              Each module delivers concrete, implementable assets you can use immediately in your business. No theory, just practical systems that work.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-4 mt-8">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Check className="w-5 h-5 text-primary" />
-              <span>Step-by-Step Framework</span>
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Check className="w-5 h-5 text-primary" />
-              <span>200+ Proven Prompts</span>
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Check className="w-5 h-5 text-primary" />
-              <span>Ready-to-Use Templates</span>
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Check className="w-5 h-5 text-primary" />
-              <span>Implementation Guides</span>
-            </div>
-          </div>
+    <section className="py-20 relative">
+      <div className="container px-4 mx-auto">
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+            Inside the ONE Playbook System
+          </h2>
+          <p className="text-xl text-muted-foreground">
+            Everything you need to transform your e-commerce business with AI
+          </p>
         </div>
 
-        <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:h-full before:w-0.5 before:-translate-x-px before:bg-gradient-to-b before:from-transparent before:via-primary/20 before:to-transparent">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {modules.map((module, index) => (
-            <div key={index} className="relative flex items-start">
-              <div className="absolute left-0 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-mono text-lg font-bold ring-1 ring-primary/20 shadow-sm hover:shadow-md hover:bg-primary/20 transition-all duration-300">
-                {index}
+            <Card key={index} className="p-6">
+              <div className="mb-6">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  {module.icon}
+                </div>
+                <h3 className="text-xl font-bold mb-2">{module.title}</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  {module.description}
+                </p>
               </div>
-              <div className="ml-12 w-full">
-                <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:border-primary/20 bg-card group">
-                  <div className="space-y-4">
-                    {/* Module Header */}
-                    <div className="flex flex-col md:flex-row md:items-start gap-4">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold group-hover:text-primary transition-colors">{module.title}</h3>
-                        <p className="text-muted-foreground">{module.description}</p>
-                      </div>
-                      <div className="md:ml-auto flex items-center gap-2">
-                        <Badge variant="outline" className="bg-primary/5">
-                          {module.lessons.length} Lessons
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Module Details */}
-                    <div className="space-y-4">
-                      <div className="bg-muted/50 rounded-lg p-4">
-                        <p className="font-semibold text-primary mb-2">Objective:</p>
-                        <p className="text-muted-foreground">{module.objective}</p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <p className="text-sm leading-relaxed text-muted-foreground">
-                          {module.mainDescription}
-                        </p>
-                      </div>
-
-                      <div className="bg-primary/5 rounded-lg p-4">
-                        <p className="font-semibold text-primary mb-2">What You'll Create:</p>
-                        <p className="text-muted-foreground">{module.output}</p>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Module Content */}
-                    <CourseModuleContent lessons={module.lessons} moduleNumber={index} />
-                  </div>
-                </Card>
+              
+              <div className="space-y-3">
+                <p className="text-sm font-medium">Includes:</p>
+                <ul className="space-y-2">
+                  {module.features.map((feature, i) => (
+                    <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-primary" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            </Card>
           ))}
+        </div>
+
+        <div className="mt-16 text-center">
+          <Button size="lg" className="text-lg px-8" asChild>
+            <a href="#pricing">
+              Get Complete System
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </a>
+          </Button>
+          <p className="mt-4 text-sm text-muted-foreground">
+            One-time payment. Lifetime access. No subscriptions.
+          </p>
         </div>
       </div>
     </section>
   );
-}
-
-import { Check } from "lucide-react"; 
+} 

@@ -1,5 +1,5 @@
 // Add 'use client' directive for React Server Components
-"use client";
+"use client";  
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";

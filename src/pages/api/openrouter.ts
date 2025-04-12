@@ -21,6 +21,7 @@ interface ChatRequest {
   addSystemPrompt?: boolean;
   addBusinessPrompt?: boolean;
   content?: string;
+  attachedImageData?: string;
 }
 
 interface ExtendedMessage extends Message {
@@ -195,6 +196,19 @@ export const POST: APIRoute = async ({ request }) => {
         }]
       };
     });
+
+    // Include image data in the request if available
+    if (requestData.attachedImageData) {
+      console.log('Including image data in the request');
+      formattedMessages.push({
+        id: 'image-1',
+        role: 'user',
+        content: [{
+          type: 'text',
+          text: `Image URL: ${requestData.attachedImageData}`
+        }]
+      });
+    }
 
     const handler = createEdgeRuntimeAPI({
       model: getProvider(requestData),

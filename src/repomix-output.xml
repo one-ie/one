@@ -102,6 +102,7 @@ components/
     FAQSection.tsx
     FinalCTA.tsx
     FrameworkOverview.tsx
+    FrameworkOverviewLong.tsx
     HeroSection.tsx
     HeroSection2.tsx
     HowFrameworkWorks.tsx
@@ -338,6 +339,7 @@ layouts/
   Blog.astro
   Chat.astro
   Docs.astro
+  DocsChat.astro
   DocsLayout.astro
   Landing.astro
   Landing1.astro
@@ -347,6 +349,8 @@ layouts/
   New.astro
   RightPanel.astro
   Text.astro
+  Three.astro
+  Two.astro
 lib/
   icons.ts
   jsx-utils.ts
@@ -384,6 +388,8 @@ pages/
   enterprise-license.md
   find.md
   free-license.md
+  gemini.astro
+  hillkoff.astro
   index.astro
   indexhome.astro
   menu.astro
@@ -9461,15 +9467,15 @@ My goal is to keep running and enhancing and removing bugs and testing and makin
 
 <file path="components/chat/chat-input.tsx">
 // Add 'use client' directive for React Server Components
-"use client";
+"use client";  
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useTextareaResize } from "@/hooks/use-textarea-resize";
-import { SendIcon, StopCircleIcon } from "lucide-react";
+import { SendIcon, StopCircleIcon, Paperclip, XIcon } from "lucide-react"; // Added Paperclip, XIcon
 import type React from "react";
-import { createContext, useContext, forwardRef, useEffect } from "react";
+import { createContext, useContext, forwardRef, useEffect, useState, useRef, ChangeEvent } from "react"; // Added useState, useRef, ChangeEvent
 
 interface ChatInputContextValue {
   value?: string;
@@ -9488,6 +9494,8 @@ interface ChatInputProps extends Omit<ChatInputContextValue, "variant"> {
   className?: string;
   variant?: "default" | "unstyled";
   rows?: number;
+  // Add a prop to pass the image data up
+  onImageChange?: (fileData: string | null) => void;
 }
 
 const ChatInput = function ChatInput({
@@ -9500,7 +9508,44 @@ const ChatInput = function ChatInput({
   loading,
   onStop,
   rows = 1,
+  onImageChange // Destructure the new prop
 }: ChatInputProps) {
+    // State for image preview and data
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageData, setImageData] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                setImagePreview(base64String);
+                setImageData(base64String);
+                onImageChange?.(base64String); // Pass Base64 data up
+            };
+            reader.readAsDataURL(file); // Reads as Base64 data URL
+        }
+        // Reset the input value so the same file can be selected again
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current?.click();
+    };
+
+    const removeImage = () => {
+        setImagePreview(null);
+        setImageData(null);
+        onImageChange?.(null); // Signal image removal
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+    };
+
   const contextValue: ChatInputContextValue = {
     value,
     onChange,
@@ -9509,18 +9554,53 @@ const ChatInput = function ChatInput({
     onStop,
     variant,
     rows,
+    // You might add imageData/setImageData to context if sub-components need it
   };
 
   return (
     <ChatInputContext.Provider value={contextValue}>
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className="hidden"
+        accept="image/*"
+      />
       <div
         className={cn(
           variant === "default" &&
-            "flex items-center gap-2 w-full p-3 rounded-full bg-[#2a2a2a] focus-within:ring-1 focus-within:ring-blue-600/30 focus-within:outline-none transition-all duration-200 shadow-md hover:shadow-lg",
-          variant === "unstyled" && "flex items-start gap-2 w-full",
+            "flex items-end gap-2 w-full p-3 rounded-lg bg-[#2a2a2a] focus-within:ring-1 focus-within:ring-blue-600/30 focus-within:outline-none transition-all duration-200 shadow-md hover:shadow-lg",
+          variant === "unstyled" && "flex items-end gap-2 w-full", // Changed items-start to items-end
           className,
         )}
       >
+        {/* Image Preview Area */}
+        {imagePreview && (
+          <div className="relative mb-1 shrink-0">
+            <img src={imagePreview} alt="Preview" className="h-12 w-12 rounded object-cover" />
+            <Button
+              variant="destructive"
+              size="icon"
+              className="absolute -top-2 -right-2 h-5 w-5 rounded-full"
+              onClick={removeImage}
+            >
+              <XIcon className="h-3 w-3" />
+            </Button>
+          </div>
+        )}
+
+        {/* Attach Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-10 w-10 shrink-0 rounded-full"
+          onClick={triggerFileInput}
+        >
+          <Paperclip className="h-5 w-5" />
+        </Button>
+
+        {/* The rest of the children (TextArea and Submit button) */}
         {children}
       </div>
     </ChatInputContext.Provider>
@@ -11462,6 +11542,92 @@ export function FrameworkOverview() {
               </div>
             </div>
           </div>
+</div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="components/course/FrameworkOverviewLong.tsx">
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { ArrowRight, GraduationCap, Trophy, Check } from "lucide-react";
+import Elevate from "./Elevate";
+
+export function FrameworkOverview() {
+  return (
+    <section className="py-20 relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+      <div className="container px-4 mx-auto relative">
+        <h2 className="text-3xl lg:text-4xl font-bold text-center mb-6">The Elevate Ecommerce Framework</h2>
+        <p className="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
+          Your Complete AI Growth System
+          Transform random AI experiments into a systematic approach for predictable ecommerce growth
+        </p>
+        <Elevate />
+
+        {/* Framework Overview */}
+        <div className="mt-20 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Strategic Framework */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 text-primary">
+                <GraduationCap className="w-5 h-5" />
+                <h3 className="text-lg font-semibold">Strategic Framework</h3>
+              </div>
+              <div className="space-y-4">
+                <h4 className="text-2xl font-bold">The Strategic Map for Growth</h4>
+                <p className="text-muted-foreground leading-relaxed">
+                  The Elevate Ecommerce Framework provides your complete roadmap for systematic ecommerce growth. It transforms scattered marketing efforts into a cohesive, predictable system that consistently delivers results.
+                </p>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p className="text-sm">Clear, logical 9-step process covering your entire customer journey</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p className="text-sm">Proven sequence that builds momentum and compounds results</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p className="text-sm">Strategic checkpoints to ensure consistent progress</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Prompt Playbook For Ecommerce */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 text-primary">
+                <Trophy className="w-5 h-5" />
+                <h3 className="text-lg font-semibold">AI Prompt Playbook For Ecommerce</h3>
+              </div>
+              <div className="space-y-4">
+                <h4 className="text-2xl font-bold">The High-Speed Engine</h4>
+                <p className="text-muted-foreground leading-relaxed">
+                  While the framework provides direction, the AI Prompt Playbook For Ecommerce delivers the tools for rapid execution. Get field-tested prompts designed specifically for each step of your journey.
+                </p>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p className="text-sm">200+ proven prompts optimized for ecommerce growth</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p className="text-sm">Step-by-step implementation guides for each framework stage</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-primary mt-1" />
+                    <p className="text-sm">Ready-to-use templates for instant deployment</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Combined Power */}
           <div className="mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
@@ -12114,10 +12280,10 @@ export function PreLaunchOffer() {
             ONLY 4 SPOTS AVAILABLE WORLDWIDE
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text">
-            ULTRA-EXCLUSIVE PRE-LAUNCH: Implement the AI Growth System 1:1 Directly with Anthony O'Connell
+           PRE-LAUNCH Offer: Implement the AI Growth System 1:1 Directly with Anthony O'Connell
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            To get some early feedback and to refine the course I am offering personalized implementation sessions with me. This is your <span className="font-bold">single opportunity</span> before May 2025 to bypass the queue and have The Elevate Ecommerce Framework & AI Prompt Playbook For Ecommerce system <span className="font-bold">personally architected and implemented for YOUR business, directly by me.</span>
+            To get some early feedback and to refine the course I am offering personalised implementation sessions with me. This is your <span className="font-bold">single opportunity</span> before May 2025 to bypass the queue and have The Elevate Ecommerce Framework & AI Prompt Playbook For Ecommerce system <span className="font-bold">personally architected and implemented for YOUR business, directly by me.</span>
           </p>
         </div>
 
@@ -12548,7 +12714,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
                     </div>
                     <div className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-primary" />
-                      <span>Ecwid</span>
+                      <span>Webflow</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Check className="w-4 h-4 text-primary" />
@@ -21022,10 +21188,10 @@ import {
   ChatMessageTyping,
 } from "@/components/chat/chat-message";
 import { Button } from "@/components/ui/button";
-import { useChat } from '@ai-sdk/react';
+import { useChat, type Message } from '@ai-sdk/react'; // Import Message
 import { ChevronDown } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react"; // useState already imported
 import type { ChatConfig } from "@/schema/chat";
 import { cn } from "@/lib/utils";
 
@@ -21071,7 +21237,10 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [editedMessages, setEditedMessages] = useState<Record<string, string>>({});
+  const [attachedImageData, setAttachedImageData] = useState<string | null>(null); // State for image data
   const [inputHeight, setInputHeight] = useState(76);
+  const [sentImages, setSentImages] = useState<Record<string, string>>({}); // State to track sent images
+  const lastSubmittedImageRef = useRef<string | null>(null); // Ref to hold the last submitted image data
 
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -21083,7 +21252,8 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
   const avatarUrl = chatConfig?.welcome?.avatar;
 
   // Initial messages array
-  const initialMessages: Array<{id: string; role: "assistant" | "user"; content: string}> = [];
+  // Initial messages array - Allow content to be string or array
+  const initialMessages: Array<{id: string; role: "assistant" | "user"; content: string | Array<any>}> = [];
 
   // Enhanced debug logging
   console.log('Chat initialization details:', {
@@ -21133,6 +21303,7 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
   const { messages, input, handleInputChange, handleSubmit, status, stop, setInput } =
     useChat({
       api: chatConfig?.api || "/api/openrouter",
+      // Add attachedImageData to the body sent to the API
       body: {
         config: chatConfig,
         provider: chatConfig?.provider,
@@ -21143,9 +21314,16 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
         systemPrompt: processedSystemPrompt,
         addSystemPrompt: chatConfig?.addSystemPrompt,
         addBusinessPrompt: chatConfig?.addBusinessPrompt,
-        content: sanitizedContent // Pass the sanitized content to the API
+        content: sanitizedContent, // Pass the sanitized content to the API
+        // Include image data here for the API route to process
+        attachedImageData: attachedImageData
       },
-      initialMessages
+      initialMessages: initialMessages as Message[],
+      // Send attachedImageData with each request body update
+      // Note: This sends the *current* image data when the hook initializes or re-evaluates.
+      // For sending it *only* with the specific submit action, modifying the API call directly
+      // or using the 'data' field in handleSubmit (if supported correctly) is needed.
+      // Let's stick to modifying the API route to check the body for now.
     });
 
   // Log chat state after initialization
@@ -21270,9 +21448,10 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
     if (status === 'streaming' || status === 'submitted') {
       return;
     }
-    handleSubmit();
+    // Use the new handler
+    handleSubmitWithImage();
     // Always scroll to bottom when user sends a message
-    setTimeout(scrollToBottom, 100);
+    // setTimeout(scrollToBottom, 100); // Handled within handleSubmitWithImage
   };
 
   // Handle message content editing
@@ -21294,6 +21473,74 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
       scrollToBottom();
     }, 50);
   };
+
+  // Modified handleSubmit to include image data
+  const handleSubmitWithImage = (e?: React.FormEvent<HTMLFormElement>) => {
+      e?.preventDefault();
+      if (input.trim() === "" && !attachedImageData) return; // Prevent empty submission
+
+      // Store the image data being submitted before clearing state
+      lastSubmittedImageRef.current = attachedImageData;
+
+      // Log the image data being submitted
+      console.log('Submitting image data:', attachedImageData);
+
+      const messageContent: Array<any> = []; // Use array for content
+
+      if (input.trim()) {
+          messageContent.push({ type: 'text', text: input });
+      }
+      if (attachedImageData) {
+          // Ensure the base64 string is correctly formatted if needed by the API
+          // e.g., some APIs might expect just the data part without the `data:image/...;base64,` prefix
+          // Standard format for OpenAI GPT-4o Vision API
+          messageContent.push({ type: 'image_url', image_url: { url: attachedImageData } });
+      }
+
+      // Call original handleSubmit with the new message structure
+      // The Vercel AI SDK's useChat hook expects the message content to be passed
+      // via the last argument's `options.body.messages` or similar,
+      // or it constructs the message based on the `input` state.
+      // We need to append a message manually or modify how useChat sends data.
+      // A common pattern is to let useChat handle text and manually append/modify for images.
+      // Let's adjust to send a structured message directly if the API route handles it.
+      
+      // We will modify the messages array directly before sending if useChat doesn't support structured content input easily.
+      // For now, let's assume the API route /api/chat will receive the standard messages array
+      // and the *last* message will contain our structured content.
+      // We'll override the content of the message being sent.
+      
+      // Call handleSubmit with only the event object
+      handleSubmit(e);
+
+
+      // Reset input and image *after* submit
+      setInput('');
+      setAttachedImageData(null);
+      // Ensure ChatInput clears its preview - this needs coordination or passing a reset trigger down.
+      // For now, assuming ChatInput handles its own preview reset on file input change/removal.
+
+      setTimeout(scrollToBottom, 100); // Scroll after submission attempt
+  };
+
+  // Effect to associate the submitted image with the new user message
+  useEffect(() => {
+    // Check if an image was just submitted and if there are messages
+    if (lastSubmittedImageRef.current && messages.length > 0) {
+      const lastMessage = messages[messages.length - 1];
+      // Ensure the last message is a user message and doesn't already have an image associated
+      // This assumes the hook adds the user message quickly after handleSubmit is called
+      if (lastMessage.role === 'user' && !sentImages[lastMessage.id]) {
+        console.log(`Associating image with new message ID: ${lastMessage.id}`);
+        setSentImages(prev => ({
+          ...prev,
+          [lastMessage.id]: lastSubmittedImageRef.current! // Store the image data with the message ID
+        }));
+        lastSubmittedImageRef.current = null; // Clear the ref after association
+      }
+    }
+    // Depend on messages array content (or length) to detect new messages
+  }, [messages, sentImages]);
 
   // Render suggestions if available
   const renderSuggestions = () => {
@@ -21342,28 +21589,39 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
           {messages.map((message) => {
             const isAssistant = message.role === "assistant";
             const isWelcomeMessage = isAssistant && message.id === "welcome";
+
+            // message.content from useChat hook is a string.
+            const textContent = message.content;
+            
+            // Reset image rendering logic here, as message.content is string
+            // Displaying images sent *by the AI* would require parsing textContent
+            // for image URLs or using tool calls / structured responses.
             
             return (
-              <div key={message.id}>
-                <ChatMessage
-                  id={message.id}
-                  variant="bubble"
-                  type={isAssistant ? undefined : "outgoing"}
-                  className={isAssistant ? "animate-fade-in" : "animate-slide-in"}
-                >
-                  <div className={isWelcomeMessage ? "welcome-message" : ""}>
-                    <ChatMessageContent
-                      content={isAssistant ? message.content : (editedMessages[message.id] || message.content)}
-                      className={cn(
-                        isAssistant ? "prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500" : "font-medium text-base",
-                        isWelcomeMessage ? "[&_button]:hidden" : ""
-                      )}
-                      onContentChange={isAssistant ? undefined : handleMessageEdit}
-                      onResubmit={isAssistant && !isWelcomeMessage ? handleResubmit : undefined}
-                    />
-                  </div>
-                  {!isAssistant && <ChatMessageAvatar />}
-                </ChatMessage>
+               <div key={message.id}>
+                   <ChatMessage
+                      id={message.id}
+                      variant="bubble"
+                      type={isAssistant ? undefined : "outgoing"}
+                      className={isAssistant ? "animate-fade-in" : "animate-slide-in"}
+                   >
+                       {/* Render Avatar */}
+                       {isAssistant ? <ChatMessageAvatar icon={undefined /* Pass icon if available */} imageSrc={avatarUrl} /> : <ChatMessageAvatar />}
+
+                       {/* Render Content - Only pass text content */}
+                       <ChatMessageContent
+                            content={isAssistant ? textContent : (editedMessages[message.id] || textContent)}
+                            id={message.id}
+                            className={cn(
+                              isAssistant ? "prose prose-base dark:prose-invert max-w-none prose-a:text-blue-500" : "font-medium text-base",
+                              isWelcomeMessage ? "[&_button]:hidden" : ""
+                            )}
+                            onContentChange={isAssistant ? undefined : handleMessageEdit}
+                            onResubmit={isAssistant && !isWelcomeMessage ? handleResubmit : undefined}
+                        >
+                            {/* Image rendering logic removed from here - needs specific handling for AI responses */}
+                       </ChatMessageContent>
+                   </ChatMessage>
 
                 {/* Show suggestions after welcome message */}
                 {isWelcomeMessage && (
@@ -21413,26 +21671,29 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
       {/* Input area */}
       <div className="absolute bottom-0 left-0 right-0 py-3 bg-background chat-input-container">
         <div className="px-4 w-full max-w-2xl mx-auto">
-          <ChatInput
-            value={input}
-            onChange={handleInputChange}
-            onSubmit={handleSubmitMessage}
-            loading={isLoading}
-            onStop={stop}
-            variant="unstyled"
-            className="transition-all duration-300 border-0 shadow-none bg-[#2a2a2a] p-3 rounded-full"
-          >
-            <ChatInputTextArea 
-              placeholder="Type a message..." 
-              className="focus:ring-0 focus:outline-none focus:border-0 transition-all text-base border-0 text-white placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-            />
-            <ChatInputSubmit
-              className="bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white w-10 h-10 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors duration-200"
-              aria-label="Send message"
-              role="button"
-              tabIndex={0}
-            />
-          </ChatInput>
+          {/* Pass the image handler to ChatInput */}
+          <form onSubmit={handleSubmitWithImage}> {/* Use form to handle native submit */}
+              <ChatInput
+                  value={input}
+                  onChange={handleInputChange}
+                  onSubmit={handleSubmitWithImage} // Can still trigger via JS
+                  loading={isLoading}
+                  onStop={stop}
+                  variant="unstyled"
+                  className="transition-all duration-300 border-0 shadow-none bg-[#2a2a2a] p-3 rounded-lg" // Rounded-lg fits preview better
+                  onImageChange={setAttachedImageData} // Handle image state change
+              >
+                  <ChatInputTextArea
+                      placeholder="Type a message or attach an image..."
+                      className="focus:ring-0 focus:outline-none focus:border-0 transition-all text-base border-0 text-white placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                  <ChatInputSubmit
+                      className="bg-blue-700 hover:bg-blue-800 active:bg-blue-900 text-white w-10 h-10 rounded-full flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-colors duration-200"
+                      aria-label="Send message"
+                      type="submit" // Make it a submit button
+                  />
+              </ChatInput>
+           </form>
         </div>
       </div>
     </div>
@@ -21875,18 +22136,19 @@ const outerStartAngles = [0, 72, 144, 216, 288]; // 5 AI providers
 
 // Define logo arrays with names for inner and outer circles
 const innerLogos = [
-    { path: "/logos/shopify-logo.svg", name: "Shopify" },
-    { path: "/logos/woocommerce-logo.svg", name: "WooCommerce" },
-    { path: "/logos/magento-logo.svg", name: "Magento" },
-    { path: "/logos/prestashop-logo.svg", name: "PrestaShop" }
+    { path: "/logos/shopify.svg", name: "Shopify" },
+    { path: "/logos/woocommerce.svg", name: "WooCommerce" },
+    { path: "/logos/magento.svg", name: "Magento" },
+    { path: "/logos/stripe.svg", name: "Stripe" },
+    { path: "/logos/prestashop.svg", name: "PrestaShop" }
 ];
 
 const outerLogos = [
-    { path: "/logos/openai-logo-rounded.svg", name: "OpenAI" },
-    { path: "/logos/anthropic-logo-round.svg", name: "Anthropic" },
-    { path: "/logos/gemini-logo-round.svg", name: "Gemini" },
-    { path: "/logos/mistral-logo-round.svg", name: "Mistral AI" },
-    { path: "/logos/deepseek-logo-round.svg", name: "DeepSeek" }
+    { path: "/logos/openai.svg", name: "OpenAI" },
+    { path: "/logos/anthropic.svg", name: "Anthropic" },
+    { path: "/logos/gemini.svg", name: "Gemini" },
+    { path: "/logos/mistral.svg", name: "Mistral AI" },
+    { path: "/logos/deepseek.svg", name: "DeepSeek" }
 ];
 
 // Use fixed values instead of random ones
@@ -21926,7 +22188,7 @@ const outerRadii = outerStartAngles.map(() => BASE_OUTER_RADIUS);
     {/* Center Logo */}
     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
         <img
-            src="/icons/one.svg"
+            src="/logos/one.svg"
             alt="ONE Logo"
             class="size-[76px] opacity-90 hover:scale-110 transition-transform duration-300"
         />
@@ -21973,12 +22235,12 @@ const outerRadii = outerStartAngles.map(() => BASE_OUTER_RADIUS);
                 client:load
             >
                 <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                    <div class="h-14 w-14 rounded-full hover:scale-110 transition-all duration-300">
-                        <img
-                            src={outerLogos[i].path}
-                            alt={outerLogos[i].name}
-                            class="h-full w-full"
-                        />
+                    <div class="h-14 w-14 rounded-full hover:scale-110 transition-all duration-300 text-black dark:text-white">
+                    	<img
+                    		src={outerLogos[i].path}
+                    		alt={outerLogos[i].name}
+                    		class="h-full w-full"
+                    	/>
                     </div>
                     <span class="block mt-2 text-sm font-medium text-muted-foreground whitespace-nowrap">
                         {outerLogos[i].name}
@@ -27242,7 +27504,7 @@ export function TabsWrapper({ data }: TabsWrapperProps) {
     
     <!-- Introduction -->
     <p class="text-lg leading-relaxed text-center mb-12 max-w-2xl mx-auto text-muted-foreground dark:text-muted-foreground/90">
-      Hi. I'm Anthony O'Connell. I help companies attract, convert and grow customers using the web and AI. I founded and built ONE. I will be your teacher.
+      Hi. I'm Anthony O'Connell. I am founder of ONE and author of ONE AI Playbook.
     </p>
     
     <!-- Image -->
@@ -27264,25 +27526,29 @@ export function TabsWrapper({ data }: TabsWrapperProps) {
     <!-- Content -->
     <div class="max-w-3xl mx-auto">
       <div class="prose prose-lg dark:prose-invert dark:text-muted-foreground/90 mx-auto">
-        <p>I've been working as a web designer, engineer, marketer, and educator for 30 years already. I began crafting the web after I graduated with a degree in marketing from Portobello College (Ireland) in 1994.</p>
 
-        <p class="font-medium text-foreground dark:text-foreground/90">Here's a few things I did first:</p>
+        <p class="font-medium text-foreground dark:text-foreground/90">I will teach you how to use a simple, neat, visual system to sell more products using AI. Here's a few highlights of my career...</p>
         <ul>
-          <li>I setup Indigo, Ireland's first internet marketing agency.</li>
+          <li>In 1994, I built a prototype mobile office (a laptop computer in a briefcase with a mobile phone and a printer) with my friend. </li>
+          <li>The CEO of Ireland On Line, Ireland's first ISP came to my home and installed the internet. </li>
+          <li>I built websites before there was CSS and Javascript, when forms were processed using Perl scripts written by a 15 year old. </li>
+          <li>I setup Indigo, Ireland's first internet marketing agency (not Indigo Ireland's 2nd ISP who came after). </li>
           <li>I setup Ogilvy Interactive Research, Ireland's first Internet research company.</li>
-          <li>I developed the strategy to setup EuroMBA, Europe's first online MBA program.</li>
-          <li>I was one of Netscape's first customers for their Commerce Server (before this the Web didn't have SSL).</li>
-          <li>I was accepted into Instagram's chat early access program (before this I was building chatbots with Messenger).</li>
-          <li>I was one of the first users of GPT 3 (I got early access to their API), before this I was building AI applications with Google Dialogflow.</li>
+          <li>I began working remotely from an island in Thailand in 1998 and travelled the world for 10 years.</li>
+          <li>I developed the strategy to setup and market EuroMBA, Europe's first online MBA program for a consortium of universities that included EADA Business School Barcelona (Spain), SMURFIT Business School (University College Dublin, Ireland), Frankfurt School of Finance & Management (Germany), ESCP Business School (France) and University of Strathclyde Business School (Scotland, UK).</li>
+          <li>I used the Internet before SSL and bought Netscape Commerce Server - the web's first server with the security needed to accept credit cards.</li>
+          <li>I was acceppted into Instagram's Early Access Program for Chat.</li>
+          <li>I was given early access to GPT 3 and used it to write content and books.</li>
+          <li>In 2023 I guessed that AI was going to write code better than humans, so studied engineering, and a year later, when Claude Sonnet 3.5 was released, I started to write code using chat and my voice.</ai>
         </ul>
 
         <p>In 2009 I was asked to join the Education and Business Advisory Boards of the Lifeboat Foundation, a nonprofit nongovernmental organization. The Lifeboat Foundation is dedicated to ensuring that humanity safely adopts increasingly powerful technologies, including genetics/biotechnology, nanotechnology, and robotics/AI. I was really honoured to join other board members including inventor/futurist Ray Kurzweil, Director of Engineering at Google; Alex Wolszczan, discoverer of the first planets ever found outside our solar system; Ian Foster, "father of grid computing," Frank Wilczek, winner of the 2004 Nobel Prize in Physics; and Sir Clive W.J. Granger, winner of the 2003 Nobel Prize in Economics.</p>
 
-        <p>I have specialised in Internet strategy, marketing, ecommerce and education. I built and managed and market ecommerce websites for companies like Gemcal (Thailand) Wonderfully Diamonds (UK), Mid-century Online (UK) and The Vintage Hub (Ireland).</p>
+        <p>I have specialised in Internet strategy, marketing, ecommerce and education for the last 30 years. I built and managed and market ecommerce websites for companies like Gemcal (Thailand) Wonderfully Diamonds (UK), Mid-century Online (UK) and The Vintage Hub (Ireland).</p>
 
-        <p>I worked as an internet strategist for the EuroMBA Consortium, EADA Business School (Spain), and TEFL (Ireland). I worked as a curriculum designer and teacher of animation at Saint Gabriel's College (Thailand). I set up & managed marketing & research companies for Ogilvy (Ireland) and iMarketing (Australia). I developed strategies for companies in a diverse range of industries from smart drugs e.g. Prymd Labs (US) to consumer products e.g. Unilever (US), to media e.g. The Government of Thailand.</p>
+        <p>I worked as an internet strategist for the EuroMBA Consortium, EADA Business School (Spain), and TEFL (Ireland). I worked as a curriculum designer and teacher of animation at Saint Gabriel's College (Thailand). I set up & managed marketing & research companies for Ogilvy (Ireland) and iMarketing.com (Australia). I developed strategies for companies in a diverse range of industries from smart drugs e.g. Prymd Labs (US) to consumer products e.g. Unilever (US), to media e.g. The Government of Thailand.</p>
 
-        <p>My career has brought me to the intersection of marketing, education, and artificial intelligence. I lead the research and development of ONE's strategy, design, website, engineering, AI, marketing and education. My passion is for teaching - both kids and executives. My goal is to help you grow your skills and business with AI.</p>
+        <p>My career has brought me to the intersection of marketing, education, crypto and AI. I lead the research and development of ONE's strategy, design, website, engineering, AI, marketing and education. My passion is for teaching - both kids and executives. My goal is to help you sell products, services and ideas with AI.</p>
       </div>
     </div>
   </div>
@@ -38021,15 +38287,19 @@ import Layout from "@layouts/1.left.astro";
 import { Chat as ChatComponent } from "@/components/Chat";
 import { normalizeConfig } from "@/schema/chat";
 
+import type { ChatConfig } from "@/schema/chat"; // Import the type
+
 interface Props {
-  frontmatter: any;
+  frontmatter?: any; // Make frontmatter optional as config might come via chatConfig prop
+  chatConfig?: ChatConfig; // Add chatConfig prop
   // For MDX files
   Content?: any;
-  // Raw content 
+  // Raw content
   content?: string;
 }
 
-const { frontmatter, Content, content } = Astro.props;
+// Destructure props, getting chatConfig directly if passed
+const { chatConfig: passedChatConfig, Content, content } = Astro.props;
 
 // Get the raw content
 let rawContent = '';
@@ -38067,11 +38337,11 @@ try {
   console.error('[Content extraction failed]:', error);
 }
 
-// Always normalize the configuration from frontmatter
+// Use the passed chatConfig prop directly, merging with potential rawContent
 const chatConfig = normalizeConfig({
-  ...frontmatter,
-  // If includeContent is true, add the content to chat context
-  ...(frontmatter.includeContent && rawContent ? { content: rawContent } : {})
+  ...(passedChatConfig || {}), // Use the passed config object
+  // If includeContent is true (based on the passed config), add the raw slot content
+  ...(passedChatConfig?.includeContent && rawContent ? { content: rawContent } : {})
 });
 
 // Debug final state
@@ -38079,23 +38349,24 @@ console.log('Content processing:', {
   type: typeof rawContent,
   rawLength: rawContent?.length || 0,
   rawPreview: rawContent ? rawContent.substring(0, 100) : 'N/A',
-  includeContent: Boolean(frontmatter.includeContent),
+  includeContent: Boolean(passedChatConfig?.includeContent),
   isJSON: typeof rawContent === 'string' && rawContent.startsWith('{'),
   contentSettings: {
     hasContent: Boolean(rawContent),
-    includeContent: Boolean(frontmatter.includeContent)
+    includeContent: Boolean(passedChatConfig?.includeContent)
   }
 });
 ---
 
-<Layout title={frontmatter.title} description={frontmatter.description}>
+{/* Use the normalized chatConfig for title, description etc. */}
+<Layout title={chatConfig.title ?? ''} description={chatConfig.description ?? ''}>
   <div class="flex items-center justify-center h-screen">
     <!-- Centered chat window -->
     <div class="w-full max-w-2xl h-[90vh]">
       <ChatComponent
         client:load
         chatConfig={chatConfig}
-        content={frontmatter.includeContent ? rawContent : undefined}
+        content={chatConfig.includeContent ? rawContent : undefined}
         className="h-full"
       />
     </div>
@@ -38116,6 +38387,283 @@ console.log('Content processing:', {
 </file>
 
 <file path="layouts/Docs.astro">
+---
+import Layout from "./Layout.astro";
+import { ChatConfigSchema, type Chat } from "../schema/chat";
+import CopyButton from "../components/CopyButton";
+
+interface Props {
+  title: string;
+  description?: string;
+  children: any;
+  header?: boolean;
+  footer?: boolean;
+  chatConfig?: Chat;
+  rightPanelMode?: "hidden" | "full" | "half" | "quarter" | "floating" | "icon";
+  content?: string;
+  // For MDX files
+  Content?: any;
+}
+
+const { title, description, header = true, footer = true, Content } = Astro.props;
+
+// Get the raw content with fallbacks
+let rawContent = '';
+
+try {
+  // First try: Direct content if provided
+  if (Astro.props.content && typeof Astro.props.content === 'string') {
+    rawContent = Astro.props.content;
+  }
+  
+  // Second try: MDX/Markdown Content component
+  if (!rawContent && Content) {
+    try {
+      if (Content.rawContent) {
+        rawContent = await Content.rawContent();
+      } else if (Content.render) {
+        const rendered = await Content.render();
+        rawContent = rendered.props.markdown;
+      }
+    } catch (error) {
+      console.error('[Content extraction warning]:', error);
+    }
+  }
+  
+  // Last try: Render default slot
+  if (!rawContent) {
+    try {
+      rawContent = await Astro.slots.render('default');
+    } catch (error) {
+      console.error('[Slot rendering warning]:', error);
+      rawContent = '';
+    }
+  }
+} catch (error) {
+  console.error('[Content extraction failed]:', error);
+}
+
+// Create docs-specific chat configuration
+const docsConfig = ChatConfigSchema.parse({
+  aiProvider: "openrouter",
+  aiModel: "google/gemini-2.0-flash-001",
+  systemPrompt: `You are ONE's documentation specialist, helping users understand our comprehensive toolkit for building AI-powered brands. Your role is to guide users through the documentation and help them understand:
+
+• Toolkit Components
+  - Rich prompt library and templates
+  - AI agent frameworks and automation
+  - Content generation and optimization tools
+  - Modern UI components and layouts
+  - Payment processing integrations
+  - Multi-platform deployment options
+
+• Key Benefits
+  - 100% free and open source
+  - No platform fees or restrictions
+  - Deploy anywhere (local/cloud/edge)
+  - Full code ownership
+  - Commercial use allowed
+  - Active community support
+
+• Implementation Areas
+  - Content creation and management
+  - Course and product development
+  - Website and application building
+  - AI agent deployment
+  - Payment system integration
+  - Business automation
+
+Your goal is to help users understand the documentation and how to leverage ONE's toolkit while emphasizing our commitment to being free, open-source, and restriction-free.
+
+Here is the documentation content you should reference:
+${rawContent}`,
+  welcomeMessage: "👋 Welcome! I'm here to help you understand ONE's documentation. What would you like to know?",
+  avatar: "/icon.svg",
+  suggestions: [
+    {
+      label: "📖 Explain This",
+      prompt: "Can you explain what this documentation page is about?"
+    },
+    {
+      label: "🔍 Key Points",
+      prompt: "What are the key points covered in this documentation?"
+    },
+    {
+      label: "💡 Examples",
+      prompt: "Can you show me some examples from this documentation?"
+    }
+  ],
+  includeContent: true
+});
+// Create page data with async children
+const children = await Astro.slots.render('default');
+
+const pageData = {
+  title,
+  description,
+  header,
+  footer,
+  children,
+  chatConfig: docsConfig,
+  rightPanelMode: "quarter" as const,
+  content: rawContent // This will be passed to Right component through Layout
+} satisfies Props;
+
+---
+
+<Layout {...pageData}>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-end py-4">
+      <CopyButton
+        client:load
+        content={rawContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()}
+        label="Copy Text Content"
+        className="px-4 py-2 text-base bg-[#1a1a1a] text-white hover:bg-[#252525] rounded-lg"
+      />
+    </div>
+    <article class="prose dark:prose-invert prose-slate max-w-none py-8">
+      <slot />
+    </article>
+    <div class="flex justify-end py-8">
+      <CopyButton
+        client:load
+        content={rawContent.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()}
+        label="Copy Text Content"
+        className="px-4 py-2 text-base bg-[#1a1a1a] text-white hover:bg-[#252525] rounded-lg"
+      />
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function wrapCodeBlocks() {
+    document.querySelectorAll('pre').forEach(pre => {
+      // Only wrap if not already wrapped
+      if (!pre.parentElement?.classList.contains('code-block-wrapper')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper relative';
+        pre.parentNode?.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+        
+        // Add copy button container
+        const copyContainer = document.createElement('div');
+        copyContainer.className = 'copy-button-container absolute top-2 right-2';
+        copyContainer.innerHTML = `
+          <button class="relative inline-flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-slate-700/50"
+                  onclick="
+                    const btn = this;
+                    const pre = btn.closest('.code-block-wrapper').querySelector('pre');
+                    navigator.clipboard.writeText(pre.textContent).then(() => {
+                      // Show tooltip
+                      const tooltip = document.createElement('span');
+                      tooltip.className = 'copy-tooltip';
+                      tooltip.textContent = 'Copied!';
+                      btn.appendChild(tooltip);
+
+                      // Animate icon
+                      btn.querySelector('svg').style.color = '#22c55e';
+                      btn.querySelector('svg').style.animation = 'copy-feedback 0.2s ease';
+                      
+                      // Reset after animation
+                      setTimeout(() => {
+                        btn.querySelector('svg').style.color = '';
+                        btn.querySelector('svg').style.animation = '';
+                        tooltip.remove();
+                      }, 1000);
+                    });
+                  ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="text-slate-400">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </svg>
+          </button>
+        `;
+        wrapper.appendChild(copyContainer);
+      }
+    });
+  }
+
+  // Run on page load and after navigation
+  wrapCodeBlocks();
+  document.addEventListener('astro:page-load', wrapCodeBlocks);
+</script>
+
+<style is:global>
+  .astro-code {
+    background-color: #1a1a1a !important;
+    padding: 1.5rem !important;
+    margin: 0;
+    border-radius: 0.5rem;
+  }
+
+  .code-block-wrapper {
+    position: relative;
+  }
+
+  .copy-button-container {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .code-block-wrapper:hover .copy-button-container {
+    opacity: 1;
+  }
+
+  .copy-button-container button {
+    transition: all 0.2s;
+  }
+
+  .copy-button-container button:active {
+    transform: scale(0.95);
+  }
+
+  /* Add animation for copy feedback */
+  @keyframes copy-feedback {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  @keyframes tooltip-slide {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .copy-tooltip {
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #22c55e;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: tooltip-slide 0.2s ease;
+  }
+
+  .copy-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #22c55e transparent transparent transparent;
+  }
+
+  .copy-button-container button:active svg {
+    animation: copy-feedback 0.2s ease;
+    color: #22c55e;
+  }
+</style>
+</file>
+
+<file path="layouts/DocsChat.astro">
 ---
 import Layout from "./Layout.astro";
 import { ChatConfigSchema, type Chat } from "../schema/chat";
@@ -39343,6 +39891,216 @@ const chatConfig = normalizeConfig({
 </style>
 </file>
 
+<file path="layouts/Three.astro">
+---
+import Layout from "@layouts/1.left.astro";
+import { Chat as ChatComponent } from "@/components/Chat";
+import { normalizeConfig } from "@/schema/chat";
+
+import type { ChatConfig } from "@/schema/chat"; // Import the type
+
+interface Props {
+  frontmatter?: any; // Make frontmatter optional as config might come via chatConfig prop
+  chatConfig?: ChatConfig; // Add chatConfig prop
+  // For MDX files
+  Content?: any;
+  // Raw content
+  content?: string;
+}
+
+// Destructure props, getting chatConfig directly if passed
+const { chatConfig: passedChatConfig, Content, content } = Astro.props;
+
+// Get the raw content
+let rawContent = '';
+
+try {
+  // First try: Direct content if provided
+  if (content && typeof content === 'string') {
+    rawContent = content;
+    console.log('[Direct content found]', {
+      length: content.length,
+      preview: content.substring(0, 100)
+    });
+  }
+  
+  // Second try: MDX/Markdown Content component
+  if (!rawContent && Content?.rawContent) {
+    rawContent = await Content.rawContent();
+    console.log('[Markdown content found]', {
+      length: rawContent.length,
+      preview: rawContent.substring(0, 100)
+    });
+  }
+  
+  // Last try: Render default slot
+  if (!rawContent) {
+    rawContent = await Astro.slots.render('default');
+    if (rawContent) {
+      console.log('[Slot content found]', {
+        length: rawContent.length,
+        preview: rawContent.substring(0, 100)
+      });
+    }
+  }
+} catch (error) {
+  console.error('[Content extraction failed]:', error);
+}
+
+// Use the passed chatConfig prop directly, merging with potential rawContent
+const chatConfig = normalizeConfig({
+  ...(passedChatConfig || {}), // Use the passed config object
+  // If includeContent is true (based on the passed config), add the raw slot content
+  ...(passedChatConfig?.includeContent && rawContent ? { content: rawContent } : {})
+});
+
+// Debug final state
+console.log('Content processing:', {
+  type: typeof rawContent,
+  rawLength: rawContent?.length || 0,
+  rawPreview: rawContent ? rawContent.substring(0, 100) : 'N/A',
+  includeContent: Boolean(passedChatConfig?.includeContent),
+  isJSON: typeof rawContent === 'string' && rawContent.startsWith('{'),
+  contentSettings: {
+    hasContent: Boolean(rawContent),
+    includeContent: Boolean(passedChatConfig?.includeContent)
+  }
+});
+---
+
+{/* Use the normalized chatConfig for title, description etc. */}
+<Layout title={chatConfig.title ?? ''} description={chatConfig.description ?? ''}>
+  <div class="flex items-center justify-center h-screen">
+    <!-- Centered chat window -->
+    <div class="w-full max-w-2xl h-[90vh]">
+      <ChatComponent
+        client:load
+        chatConfig={chatConfig}
+        content={chatConfig.includeContent ? rawContent : undefined}
+        className="h-full"
+      />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Hide scrollbars but keep functionality */
+  :global(*::-webkit-scrollbar) {
+    display: none;
+  }
+  
+  :global(*) {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+</style>
+</file>
+
+<file path="layouts/Two.astro">
+---
+import Layout from "@layouts/1.left.astro";
+import { Chat as ChatComponent } from "@/components/Chat";
+import { normalizeConfig } from "@/schema/chat";
+
+import type { ChatConfig } from "@/schema/chat"; // Import the type
+
+interface Props {
+  frontmatter?: any; // Make frontmatter optional as config might come via chatConfig prop
+  chatConfig?: ChatConfig; // Add chatConfig prop
+  // For MDX files
+  Content?: any;
+  // Raw content
+  content?: string;
+}
+
+// Destructure props, getting chatConfig directly if passed
+const { chatConfig: passedChatConfig, Content, content } = Astro.props;
+
+// Get the raw content
+let rawContent = '';
+
+try {
+  // First try: Direct content if provided
+  if (content && typeof content === 'string') {
+    rawContent = content;
+    console.log('[Direct content found]', {
+      length: content.length,
+      preview: content.substring(0, 100)
+    });
+  }
+  
+  // Second try: MDX/Markdown Content component
+  if (!rawContent && Content?.rawContent) {
+    rawContent = await Content.rawContent();
+    console.log('[Markdown content found]', {
+      length: rawContent.length,
+      preview: rawContent.substring(0, 100)
+    });
+  }
+  
+  // Last try: Render default slot
+  if (!rawContent) {
+    rawContent = await Astro.slots.render('default');
+    if (rawContent) {
+      console.log('[Slot content found]', {
+        length: rawContent.length,
+        preview: rawContent.substring(0, 100)
+      });
+    }
+  }
+} catch (error) {
+  console.error('[Content extraction failed]:', error);
+}
+
+// Use the passed chatConfig prop directly, merging with potential rawContent
+const chatConfig = normalizeConfig({
+  ...(passedChatConfig || {}), // Use the passed config object
+  // If includeContent is true (based on the passed config), add the raw slot content
+  ...(passedChatConfig?.includeContent && rawContent ? { content: rawContent } : {})
+});
+
+// Debug final state
+console.log('Content processing:', {
+  type: typeof rawContent,
+  rawLength: rawContent?.length || 0,
+  rawPreview: rawContent ? rawContent.substring(0, 100) : 'N/A',
+  includeContent: Boolean(passedChatConfig?.includeContent),
+  isJSON: typeof rawContent === 'string' && rawContent.startsWith('{'),
+  contentSettings: {
+    hasContent: Boolean(rawContent),
+    includeContent: Boolean(passedChatConfig?.includeContent)
+  }
+});
+---
+
+{/* Use the normalized chatConfig for title, description etc. */}
+<Layout title={chatConfig.title ?? ''} description={chatConfig.description ?? ''}>
+  <div class="flex items-center justify-center h-screen">
+    <!-- Centered chat window -->
+    <div class="w-full max-w-2xl h-[90vh]">
+      <ChatComponent
+        client:load
+        chatConfig={chatConfig}
+        content={chatConfig.includeContent ? rawContent : undefined}
+        className="h-full"
+      />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Hide scrollbars but keep functionality */
+  :global(*::-webkit-scrollbar) {
+    display: none;
+  }
+  
+  :global(*) {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+</style>
+</file>
+
 <file path="lib/icons.ts">
 import {
   PanelRightClose,
@@ -40084,6 +40842,7 @@ interface ChatRequest {
   addSystemPrompt?: boolean;
   addBusinessPrompt?: boolean;
   content?: string;
+  attachedImageData?: string;
 }
 
 interface ExtendedMessage extends Message {
@@ -40258,6 +41017,19 @@ export const POST: APIRoute = async ({ request }) => {
         }]
       };
     });
+
+    // Include image data in the request if available
+    if (requestData.attachedImageData) {
+      console.log('Including image data in the request');
+      formattedMessages.push({
+        id: 'image-1',
+        role: 'user',
+        content: [{
+          type: 'text',
+          text: `Image URL: ${requestData.attachedImageData}`
+        }]
+      });
+    }
 
     const handler = createEdgeRuntimeAPI({
       model: getProvider(requestData),
@@ -42982,6 +43754,149 @@ Building something big? We're here to help:
 Contact [agent@one.ie](mailto:agent@one.ie) to share your needs.
 </file>
 
+<file path="pages/gemini.astro">
+---
+// src/pages/gemini.astro
+// This page provides a dedicated chat interface configured for Google Gemini models.
+
+import Layout from "../layouts/Chat.astro"; // Using the Chat layout
+import { normalizeConfig } from "@/schema/chat"; // Import schema normalizer
+
+// Define chat configuration specifically for Google Gemini
+const chatConfig = normalizeConfig({
+  title: "Google Gemini Chat",
+  description: "Chat directly with Google's Gemini Pro model.",
+  
+  // --- AI Configuration ---
+  provider: "gemini", // Use direct Gemini integration
+  model: "gemini-pro-vision", // The model we've configured in openrouter.ts
+  temperature: 0.7,
+  maxTokens: 12000,
+
+  // --- Prompt Configuration ---
+  // Define the AI's role and context
+  systemPrompt: `You are Google Gemini, a large language model trained by Google. 
+                 You can understand both text and images.
+                 Respond helpfully, accurately, and concisely.`,
+  // Don't add the generic system/business prompts for this specific agent page
+  addSystemPrompt: false, 
+  addBusinessPrompt: false, 
+  includeContent: false, 
+
+  // --- UI Configuration ---
+  welcome: {
+    message: "👋 Hi! I'm Google Gemini. I can help you with both text and images. What would you like to explore?",
+    avatar: "/logos/gemini-logo-round.svg", // Assuming you have a Gemini logo here
+    suggestions: [
+      { label: "🖼️ Image Analysis", prompt: "Upload an image and I'll analyze it for you." },
+      { label: "💡 Capabilities", prompt: "What can you do with both text and images?" },
+      { label: "🤖 About Gemini", prompt: "Tell me about Google's Gemini model." },
+      { label: "💻 Code Example", prompt: "Show me a Python code example." }
+    ]
+  }
+});
+---
+
+<Layout
+  chatConfig={chatConfig}
+>
+  <!-- 
+    The Chat.astro layout handles rendering the actual Chat component. 
+    No additional content is needed here unless you want to add specific 
+    UI elements around the chat interface for this particular page.
+  -->
+</Layout>
+</file>
+
+<file path="pages/hillkoff.astro">
+---
+// src/pages/hillkoff.astro
+// This page provides a dedicated chat interface configured for the Hillkoff Farmer Support Assistant.
+
+import Layout from "../layouts/Chat.astro"; // Using the Chat layout
+import { normalizeConfig } from "@/schema/chat"; // Import schema normalizer
+
+// Define chat configuration specifically for the Hillkoff Farmer Support Assistant
+const chatConfig = normalizeConfig({
+  title: "Hillkoff Farmer Support",
+  description: "AI Assistant providing education and support for Hillkoff partner farmers.",
+  
+  // --- AI Configuration ---
+  aiProvider: "openrouter", // Assuming OpenRouter is used to access Gemini
+  aiModel: "google/gemini-2.5-pro-preview-03-25", // The specific model from your curl script
+  apiEndpoint: "https://openrouter.ai/api/v1", // Standard OpenRouter endpoint
+  temperature: 0.5, // Slightly lower temperature for more factual, consistent advice
+  maxTokens: 4000, // Allow reasonably detailed responses
+
+  // --- Prompt Configuration ---
+  // Define the AI's role, knowledge, principles, and boundaries based on the provided prompt
+  systemPrompt: `You are an AI assistant representing Hillkoff, based in Chiang Mai, Thailand. Your primary role is to serve as a knowledgeable, supportive, and reliable resource for our valued partner farmers, primarily those cultivating Arabica coffee in the highlands of Northern Thailand. Act as an extension of Hillkoff's long-standing commitment to the farming community, embodying our values of sustainability, quality, innovation, and partnership.
+
+Your Objective: Educate and empower farmers with best practices, innovative techniques, and relevant information to improve coffee quality, increase sustainable yields, enhance their livelihoods, and foster environmental stewardship, in alignment with Hillkoff's vision and standards.
+
+Core Knowledge Areas:
+- Sustainable Coffee Cultivation: Agronomy specific to Northern Thai highlands (soil health, water management, pest/disease control using integrated and eco-friendly methods, shade management, appropriate planting techniques).
+- Harvesting & Post-Harvest Processing: Best practices for selective picking of ripe cherries, understanding different processing methods (washed, natural, honey) and their impact on quality, proper drying techniques.
+- Coffee Quality: Factors influencing bean quality (ripeness, processing, drying, defect prevention), how Hillkoff assesses quality (e.g., focus on sweetness, bean characteristics), and how farmers can achieve higher quality standards.
+- Sustainability & Environment: Agroforestry benefits, intercropping possibilities (e.g., with bananas, other fruit trees), soil conservation, water conservation techniques, biodiversity promotion.
+- Hillkoff's Zero-Waste & Innovation Initiatives: Explain the value and methods for utilizing coffee byproducts (pulp, husks) for things like cascara, natural fertilizers, animal feed supplements, biochar, and potentially Coffogenic. Explain the benefits for income diversification and environmental health.
+- Climate Change Adaptation: Provide guidance on strategies to mitigate the impacts of changing weather patterns (e.g., drought-resistant practices, shade management adjustments).
+- Hillkoff Partnership: Explain Hillkoff's approach to buying coffee (fair value, quality incentives), relevant company updates, and available support programs or training opportunities.
+- Basic Market Understanding: Provide general insights into how quality and sustainability practices relate to market value (without making specific price guarantees).
+
+Key Principles & Values:
+- Partnership: Address farmers respectfully as partners. Acknowledge their experience.
+- Sustainability First: Integrate environmental protection and long-term ecological health. Promote zero-waste goals.
+- Quality Focused: Emphasize the link between good practices and high-quality coffee.
+- Practical & Actionable: Provide clear, concise, practical advice. Explain technical terms simply.
+- Supportive & Encouraging: Foster a positive and helpful tone.
+- Long-Term Vision: Frame advice within the context of long-term farm health and sustainable income.
+- Transparency (within limits): Be open about Hillkoff's quality standards and sustainable sourcing goals.
+
+Interaction Style & Tone:
+- Language: Primarily communicate in Thai (respond in English for this simulation, but maintain the appropriate tone). Ensure clarity and simplicity.
+- Tone: Respectful, patient, knowledgeable, trustworthy, helpful, encouraging, and culturally sensitive.
+
+Boundaries:
+- Do NOT provide specific financial advice unrelated to crop quality/yield improvements.
+- Do NOT make definitive price guarantees for coffee.
+- Do NOT discuss confidential Hillkoff business strategies unrelated to farmer support.
+- Do NOT provide advice on topics outside your core knowledge areas.
+- Base information on established best practices and Hillkoff's known approaches.
+- Direct farmers to further resources or Hillkoff contacts if the query is beyond your scope.`,
+  // Don't add the generic system/business prompts for this specific agent page
+  addSystemPrompt: false, 
+  addBusinessPrompt: false, 
+  // This page likely doesn't have specific markdown content to include by default
+  includeContent: false, 
+
+  // --- UI Configuration ---
+  welcomeMessage: "สวัสดีครับ/ค่ะ ผม/ดิฉันคือผู้ช่วยเกษตรกรของฮิลล์คอฟฟ์ครับ/ค่ะ มีอะไรให้ช่วยเหลือวันนี้ครับ/คะ? สนใจเรียนรู้เกี่ยวกับการปรับปรุงสุขภาพดิน เทคนิคการแปรรูปเชอร์รี่กาแฟ หรือวิธีการใช้เปลือกกาแฟอย่างยั่งยืนไหมครับ/คะ? (Sawasdee krap/ka, I am the Hillkoff Farmer Support Assistant. How can I help you today? Are you interested in learning about improving soil health, techniques for processing your coffee cherries, or perhaps how to use coffee pulp sustainably?)",
+  avatar: "/logos/hillkoff.svg", // Assuming a Hillkoff logo exists here
+  suggestions: [
+    { label: "🌱 ปรับปรุงดิน (Improve Soil)", prompt: "บอกวิธีปรับปรุงสุขภาพดินสำหรับกาแฟหน่อย (Tell me ways to improve soil health for coffee.)" },
+    { label: "🍒 การเก็บเกี่ยว (Harvesting)", prompt: "วิธีที่ดีที่สุดในการเก็บเกี่ยวเมล็ดกาแฟคืออะไร? (What is the best way to harvest coffee cherries?)" },
+    { label: "💧 การใช้น้ำ (Water Use)", prompt: "มีเทคนิคการประหยัดน้ำในการปลูกกาแฟไหม? (Are there water-saving techniques for growing coffee?)" },
+    { label: "♻️ กากกาแฟ (Pulp Use)", prompt: "ฉันจะใช้กากกาแฟ (เปลือกกาแฟ) ให้เกิดประโยชน์ได้อย่างไร? (How can I use coffee pulp beneficially?)" },
+    { label: "☀️ การจัดการร่มเงา (Shade Management)", prompt: "การจัดการร่มเงาสำคัญอย่างไร? (Why is shade management important?)" },
+    { label: "🐛 ควบคุมศัตรูพืช (Pest Control)", prompt: "มีวิธีควบคุมศัตรูพืชแบบธรรมชาติไหม? (Are there natural ways to control pests?)" }
+  ]
+});
+---
+
+{/* Use the Chat layout, passing the Hillkoff-specific config */}
+<Layout
+  chatConfig={chatConfig}
+>
+  {/* 
+    The Chat.astro layout handles rendering the actual Chat component. 
+    No additional content is needed here unless you want to add specific 
+    UI elements around the chat interface for this particular page, 
+    like Hillkoff branding or specific farmer resources.
+  */}
+</Layout>
+</file>
+
 <file path="pages/index.astro">
 ---
 import Layout from "../layouts/LayoutCourse.astro";
@@ -43223,24 +44138,14 @@ export const pricingData = {
   totalValue: "5,189",
   valueBreakdown: [
     { 
-      item: "The Complete Elevate Framework Course (9 Modules)",
+      item: "The Complete Elevate Framework Course (10 Modules)",
       value: "1,999",
-      description: "Master the strategic 9-step system (Hook to Share) for systematic Ecom growth. Step-by-step video training and implementation guidance."
+      description: "Master the strategic 9-step system (Find to Share) for systematic Ecom growth. Step-by-step video training and implementation guidance."
     },
     { 
       item: "The AI Prompt Playbook For Ecommerce Library (200+ Tested Prompts)",
       value: "999",
       description: "Your copy-paste library of field-tested prompts for ChatGPT, Claude & Gemini, specifically engineered for each step of The Elevate Ecommerce Framework."
-    },
-    { 
-      item: "Implementation Guides & Checklists",
-      value: "499",
-      description: "Ensure flawless execution with detailed guides and actionable checklists for implementing the framework and leveraging the prompts effectively."
-    },
-    { 
-      item: "Foundation Blueprint Worksheets",
-      value: "199",
-      description: "Quickly establish your essential Customer Avatar, Company Context, and Market Awareness inputs to fuel effective AI generation."
     },
     { 
       item: "Lifetime Access & FREE Updates",
@@ -43389,10 +44294,6 @@ I'm here to understand your specific needs and show you how the AI Prompt Playbo
       <HowFrameworkWorks client:visible />
     </div>
 
-    {/* Why It Works */}
-    <div id="why-it-works">
-      <WhyItWorks client:visible />
-    </div>
 
     {/* Business Transformation */}
     <div id="transformation">
@@ -43419,8 +44320,6 @@ I'm here to understand your specific needs and show you how the AI Prompt Playbo
       originalPrice={pricingData.originalPrice}
     />
 
-    {/* Pre-Launch Offer */}
-    <PreLaunchOffer client:visible />
 
     {/* FAQs Section */}
     <div id="faq" class="min-h-screen">
@@ -48323,7 +49222,7 @@ Hi. I'm Anthony O'Connell. I help companies attract, convert and grow customers 
 
 I've been working as a web designer, engineer, marketer, and educator for 30 years already. I began crafting the web after I graduated with a degree in marketing from Portobello College (Ireland) in 1994.
 
-Here's a few things I did first. 
+Here's a few things I did first.
 
 I setup Indigo, Ireland's first internet marketing agency. 
 I setup Ogilvy Interactive Research, Ireland's first Internet research company. 

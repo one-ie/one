@@ -5,43 +5,41 @@
 import Layout from "../layouts/Chat.astro"; // Using the Chat layout
 import { normalizeConfig } from "@/schema/chat"; // Import schema normalizer
 
-// Define chat configuration specifically for Google Gemini via OpenRouter
-// Uses the model specified in your curl script example.
+// Define chat configuration specifically for Google Gemini
 const chatConfig = normalizeConfig({
   title: "Google Gemini Chat",
-  description: "Chat directly with Google's Gemini Pro model via OpenRouter.",
+  description: "Chat directly with Google's Gemini Pro model.",
   
   // --- AI Configuration ---
-  aiProvider: "openrouter", // Assuming OpenRouter is used to access Gemini
-  aiModel: "google/gemini-2.5-pro-preview-03-25", // The specific model from your curl script
-  apiEndpoint: "https://openrouter.ai/api/v1", // Standard OpenRouter endpoint
-  temperature: 0.7, // Standard default temperature
-  maxTokens: 100000, // Allow potentially long responses
+  provider: "gemini", // Use direct Gemini integration
+  model: "gemini-pro-vision", // The model we've configured in openrouter.ts
+  temperature: 0.7,
+  maxTokens: 12000,
 
   // --- Prompt Configuration ---
   // Define the AI's role and context
   systemPrompt: `You are Google Gemini, a large language model trained by Google. 
-                 Respond helpfully, accurately, and concisely. 
-                 You are being accessed via the OpenRouter API.`,
+                 You can understand both text and images.
+                 Respond helpfully, accurately, and concisely.`,
   // Don't add the generic system/business prompts for this specific agent page
   addSystemPrompt: false, 
   addBusinessPrompt: false, 
-  // This page likely doesn't have specific markdown content to include
   includeContent: false, 
 
   // --- UI Configuration ---
-  welcomeMessage: "👋 Hi! I'm Google Gemini, accessed via OpenRouter. How can I assist you?",
-  avatar: "/logos/gemini-logo-round.svg", // Assuming you have a Gemini logo here
-  suggestions: [
-    { label: "What can you do?", prompt: "List some of your capabilities." },
-    { label: "Explain LLMs", prompt: "Explain Large Language Models simply." },
-    { label: "Fun Fact", prompt: "Tell me an interesting fun fact." },
-    { label: "Code Example", prompt: "Show me a Python code example for reading a file." }
-  ]
+  welcome: {
+    message: "👋 Hi! I'm Google Gemini. I can help you with both text and images. What would you like to explore?",
+    avatar: "/logos/gemini-logo-round.svg", // Assuming you have a Gemini logo here
+    suggestions: [
+      { label: "🖼️ Image Analysis", prompt: "Upload an image and I'll analyze it for you." },
+      { label: "💡 Capabilities", prompt: "What can you do with both text and images?" },
+      { label: "🤖 About Gemini", prompt: "Tell me about Google's Gemini model." },
+      { label: "💻 Code Example", prompt: "Show me a Python code example." }
+    ]
+  }
 });
 ---
 
-{/* Use the Chat layout, passing the Gemini-specific config */}
 <Layout
   chatConfig={chatConfig}
 >
