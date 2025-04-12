@@ -1,79 +1,90 @@
-import React from "react";
+import { ModuleContentProps } from "@/types/course";
+import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle } from "lucide-react";
 
-interface ModuleContentProps {
-  module: {
-    title: string;
-    description: string;
-    features: string[];
-    details: {
-      overview: string;
-      benefits: string[];
-      implementation: string[];
-    };
-  };
-}
-
-export function CourseModuleContent({ module }: ModuleContentProps) {
-  return (
-    <Card className="p-8">
-      <div className="max-w-3xl mx-auto">
-        {/* Module Header */}
-        <div className="text-center mb-12">
-          <h3 className="text-3xl font-bold mb-4">{module.title}</h3>
-          <p className="text-xl text-muted-foreground">{module.description}</p>
-        </div>
-
-        {/* Overview Section */}
-        <div className="mb-12">
-          <h4 className="text-xl font-semibold mb-4">Overview</h4>
-          <p className="text-muted-foreground leading-relaxed">{module.details.overview}</p>
-        </div>
-
-        {/* Key Benefits */}
-        <div className="mb-12">
-          <h4 className="text-xl font-semibold mb-4">Key Benefits</h4>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {module.details.benefits.map((benefit, index) => (
-              <div key={index} className="flex items-start gap-3">
-                <div className="mt-1">
-                  <Check className="w-5 h-5 text-primary" />
-                </div>
-                <p className="text-muted-foreground">{benefit}</p>
+export function CourseModuleContent({ module, lessons, moduleNumber }: ModuleContentProps) {
+  // Handle legacy format
+  if (lessons) {
+    return (
+      <div className="space-y-4">
+        {lessons.map((lesson, index) => (
+          <Card key={index} className="p-4">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <CheckCircle className="h-6 w-6 text-green-500" />
               </div>
-            ))}
-          </div>
+              <div>
+                <h3 className="font-semibold">{lesson.name}</h3>
+                <p className="text-muted-foreground">{lesson.value}</p>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  // Handle new format
+  if (module) {
+    return (
+      <div className="space-y-8">
+        {/* Overview */}
+        <div>
+          <h3 className="text-lg font-semibold mb-2">Overview</h3>
+          <p className="text-muted-foreground">{module.details?.overview}</p>
         </div>
+
+        {/* Benefits */}
+        {module.details?.benefits && (
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Key Benefits</h3>
+            <div className="grid gap-3">
+              {module.details.benefits.map((benefit, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                  <p>{benefit}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Implementation Steps */}
-        <div className="mb-12">
-          <h4 className="text-xl font-semibold mb-4">Implementation Steps</h4>
-          <div className="space-y-4">
-            {module.details.implementation.map((step, index) => (
-              <div key={index} className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <span className="font-bold text-primary">{index + 1}</span>
-                </div>
-                <p className="text-muted-foreground pt-1">{step}</p>
-              </div>
-            ))}
+        {module.details?.implementation && (
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Implementation</h3>
+            <div className="space-y-4">
+              {module.details.implementation.map((step, index) => (
+                <Card key={index} className="p-4">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="font-semibold text-primary">{index + 1}</span>
+                    </div>
+                    <p>{step}</p>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Features List */}
+        {/* Features */}
         <div>
-          <h4 className="text-xl font-semibold mb-4">What's Included</h4>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <h3 className="text-lg font-semibold mb-2">Features</h3>
+          <div className="grid gap-3">
             {module.features.map((feature, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                <p className="text-muted-foreground">{feature}</p>
+              <div key={index} className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                <p>{feature}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
-    </Card>
-  );
+    );
+  }
+
+  return null;
 } 

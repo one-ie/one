@@ -11,7 +11,7 @@ export function FrameworkOverview() {
       <div className="container px-4 mx-auto relative">
         <h2 className="text-3xl lg:text-4xl font-bold text-center mb-6">Your AI Growth System: Playbook, Ebook, Community</h2>
         <p className="text-xl text-center text-muted-foreground mb-12 max-w-3xl mx-auto">
-          The ONE Playbook System is your complete toolkit designed to systematize and accelerate your e-commerce growth using Artificial Intelligence effectively.
+          The ONE Playbook is your complete toolkit designed to systematize and accelerate your e-commerce growth using Artificial Intelligence effectively.
         </p>
 
         {/* System Components */}
@@ -105,7 +105,7 @@ export function FrameworkOverview() {
           <div className="mt-12 p-6 bg-primary/5 rounded-lg border border-primary/10">
             <h3 className="text-xl font-bold mb-4 text-center">The Power of System + Support</h3>
             <p className="text-center text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              The ONE Playbook System combines strategic knowledge, proven prompts, and community support to create a complete solution for achieving predictable, scalable e-commerce growth with AI.
+              The ONE Playbook combines strategic knowledge, proven prompts, and community support to create a complete solution for achieving predictable, scalable e-commerce growth with AI.
             </p>
             <div className="grid md:grid-cols-3 gap-6 mt-8">
               <Card className="p-4 text-center">
