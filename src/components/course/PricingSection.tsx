@@ -160,7 +160,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
                 <div className="space-y-4">
                   <a href="/pay-course">
                     <Button className="w-full text-lg h-12 bg-[#1E3A8A] hover:bg-[#1e3a8aee] text-white border border-white/10 hover:border-white/20" size="lg">
-                      Lock In Your Pre-Launch Price Now →
+                      Lock In Pre-Launch Price →
                     </Button>
                   </a>
                   <p className="text-sm text-center text-muted-foreground">

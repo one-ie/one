@@ -4,7 +4,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock } from "lucide-react";
+import { Clock, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface TimeLeft {
   days: number;
@@ -24,57 +25,57 @@ interface CountdownTimerProps {
 export function CountdownTimer({ 
   className = '', 
   onComplete, 
-  targetDate = '2025-05-01T00:00:00', 
+  targetDate = '2025-05-01T00:00:00',
   currentPrice = '999', 
   originalPrice = '1,999' 
 }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
-    const targetDateTime = new Date(targetDate);
-
-    const updateCountdown = () => {
+    const calculateTimeLeft = () => {
       try {
-        const now = new Date();
-        console.log('Target Date:', targetDateTime);
-        console.log('Current Date:', now);
-        let difference = targetDateTime.getTime() - now.getTime();
-        console.log('Time Difference (ms):', difference);
-        
-        // If countdown is finished
+        const now = new Date().getTime();
+        const target = new Date(targetDate).getTime();
+        const difference = target - now;
+
+        // Check if countdown has expired
         if (difference <= 0) {
-          console.log('Countdown finished');
+          setIsExpired(true);
           setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
           if (onComplete) onComplete();
           return;
         }
 
-        // Calculate all units
+        // Calculate time units
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        difference -= days * (1000 * 60 * 60 * 24);
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        const hours = Math.floor(difference / (1000 * 60 * 60));
-        difference -= hours * (1000 * 60 * 60);
-
-        const minutes = Math.floor(difference / (1000 * 60));
-        difference -= minutes * (1000 * 60);
-
-        const seconds = Math.floor(difference / 1000);
-
-        console.log('Calculated time left:', { days, hours, minutes, seconds });
         setTimeLeft({ days, hours, minutes, seconds });
       } catch (error) {
-        console.error('Error updating countdown:', error);
+        console.error('Error calculating time left:', error);
       }
     };
 
     // Update immediately and then every second
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
 
-    // Cleanup on unmount
-    return () => clearInterval(interval);
+    // Cleanup
+    return () => clearInterval(timer);
   }, [targetDate, onComplete]);
+
+  const formatNumber = (num: number) => num.toString().padStart(2, '0');
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString('en-US', { 
+      month: 'long', 
+      day: 'numeric', 
+      year: 'numeric',
+      timeZone: 'UTC'
+    });
+  };
 
   const timeUnits = [
     { value: timeLeft.days, label: 'Days' },
@@ -83,45 +84,61 @@ export function CountdownTimer({
     { value: timeLeft.seconds, label: 'Seconds' }
   ];
 
+  if (isExpired) {
+    return (
+      <section className={`py-12 ${className}`}>
+        <Card className="max-w-4xl mx-auto p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">Launch Price Now Active</h2>
+          <p className="text-lg text-muted-foreground mb-6">
+            The pre-launch offer has ended. Current price: ${originalPrice}
+          </p>
+          <a href="#pricing" className="no-underline">
+            <Button size="lg" className="bg-primary hover:bg-primary/90">
+              Get Started Now <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </a>
+        </Card>
+      </section>
+    );
+  }
+
   return (
     <section className={`py-12 ${className}`}>
-      <Card className="max-w-4xl mx-auto p-8">
-        <div className="text-center mb-6">
-          <Badge variant="outline" className="mb-2">
-            <Clock className="w-4 h-4 mr-1" />
-            Pre-Launch Special Offer
-          </Badge>
-          <h3 className="text-2xl font-bold mb-2">Lock In Your Pre-Launch Price</h3>
-          <div className="flex justify-center items-center gap-4 mb-4">
-            <span className="text-2xl font-bold text-primary">${currentPrice}</span>
-            <span className="text-lg text-muted-foreground line-through">${originalPrice}</span>
-          </div>
-          <p className="text-muted-foreground">
-            Price increases after launch on {new Date(targetDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-          </p>
+      <Card className="max-w-4xl mx-auto p-8 text-center bg-gradient-to-b from-primary/5 to-background border-2 border-primary/20">
+        <h2 className="text-2xl font-bold mb-2">Pre-Launch Special Offer</h2>
+        <p className="text-lg text-muted-foreground mb-6">Lock In Pre-Launch Price</p>
+        
+        <div className="flex justify-center items-center gap-4 mb-8">
+          <span className="text-4xl font-bold text-primary">${currentPrice}</span>
+          <span className="text-xl text-muted-foreground line-through">${originalPrice}</span>
         </div>
 
-        <div className="flex items-center justify-center gap-4 flex-wrap">
-          {timeUnits.map((unit, index) => (
-            <div key={unit.label} className="flex items-center">
-              <div className="bg-primary/5 border border-primary/10 px-6 py-4 rounded-xl text-center min-w-[120px]">
-                <div className="text-4xl font-bold text-primary">
-                  {unit.value.toString().padStart(2, '0')}
-                </div>
-                <div className="text-sm text-muted-foreground uppercase tracking-wide">
-                  {unit.label}
-                </div>
+        <p className="text-sm text-muted-foreground mb-8">
+          Price increases after launch on {formatDate(targetDate)}
+        </p>
+
+        <div className="grid grid-cols-4 gap-4 max-w-2xl mx-auto mb-8">
+          {timeUnits.map((unit) => (
+            <div key={unit.label} className="text-center">
+              <div className="text-3xl md:text-4xl font-bold bg-primary/10 rounded-lg p-4 mb-2">
+                {formatNumber(unit.value)}
               </div>
-              {index < timeUnits.length - 1 && (
-                <div className="text-3xl font-bold text-primary/50 mx-2">:</div>
-              )}
+              <div className="text-sm text-muted-foreground">
+                {unit.label}
+              </div>
             </div>
           ))}
         </div>
 
-        <p className="text-center text-sm text-muted-foreground mt-6">
-          Lock in your pre-launch price now and get full access when the course launches
+        <p className="text-sm text-muted-foreground mb-8">
+          Lock in pre-launch price and get full access when the course launches
         </p>
+
+        <a href="#pricing" className="no-underline">
+          <Button size="lg" className="bg-primary hover:bg-primary/90">
+            Lock In Pre-Launch Price <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </a>
       </Card>
     </section>
   );

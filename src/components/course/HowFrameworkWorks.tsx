@@ -32,7 +32,7 @@ export function HowFrameworkWorks() {
     <section className="py-20 relative">
       <div className="container px-4 mx-auto">
         <div className="max-w-4xl mx-auto text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">How the ONE Playbook System Works</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">How the ONE Playbook Works</h2>
           <p className="text-xl text-muted-foreground">
             Your Simplified Path to AI-Powered Ecom Growth
           </p>

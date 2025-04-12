@@ -6,10 +6,26 @@ import {
   Shield,
   LayoutGrid,
   CreditCard,
-  MessageSquare
+  MessageSquare,
+  PlayCircle,
+  BookOpen,
+  DollarSign,
+  HelpCircle,
+  Star,
+  Lightbulb
 } from "lucide-react";
 
-// Default navigation items
+// Course navigation items (for index page)
+const courseNavigation = [
+  { title: "AI Growth System", path: "#system", icon: Lightbulb },
+  { title: "How It Works", path: "#how-it-works", icon: PlayCircle },
+  { title: "Features", path: "#features", icon: Star },
+  { title: "Modules", path: "#modules", icon: BookOpen },
+  { title: "Pricing", path: "#pricing", icon: DollarSign },
+  { title: "FAQ", path: "#faq", icon: HelpCircle }
+];
+
+// Default navigation items for other pages
 const defaultNavigation = [
   { title: "Chat", path: "/ai", icon: MessageSquare },
   { title: "Course", path: "/course", icon: Newspaper },
@@ -22,6 +38,8 @@ const defaultNavigation = [
 ];
 
 const currentPath = Astro.url.pathname;
+const isCoursePage = currentPath === "/";
+const navigationItems = isCoursePage ? courseNavigation : defaultNavigation;
 ---
 
 <aside
@@ -45,13 +63,13 @@ const currentPath = Astro.url.pathname;
     <!-- Navigation Items -->
     <div class="flex-1 flex flex-col">
       {
-        defaultNavigation.map(({ title, path, icon: Icon }) => (
+        navigationItems.map(({ title, path, icon: Icon }) => (
           <a
             href={path}
             class:list={[
               "w-[var(--one-sidebar-width)] h-16 flex items-center justify-center transition-colors duration-200 group relative",
               "hover:bg-[hsla(0,0%,14%,0.5)]",
-              { "bg-[#1E3A8A]": currentPath === path }, // Updated background color
+              { "bg-[#1E3A8A]": currentPath === path || (isCoursePage && path.startsWith("#") && Astro.url.hash === path.substring(1)) },
             ]}
             data-tooltip={title}
             aria-label={title}
@@ -167,12 +185,36 @@ const currentPath = Astro.url.pathname;
 </style>
 
 <script>
+  // Theme toggle functionality
   const themeToggle = document.getElementById("theme-toggle");
 
-  // Use the global theme cycle function
   themeToggle?.addEventListener("click", () => {
     if (window.cycleTheme) {
       window.cycleTheme();
+    }
+  });
+
+  // Smooth scroll for anchor links
+  document.addEventListener('astro:page-load', () => {
+    const isCoursePage = window.location.pathname === '/';
+    if (isCoursePage) {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = anchor.getAttribute('href')?.substring(1);
+          const targetElement = document.getElementById(targetId || '');
+          
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            
+            // Update URL without triggering scroll
+            history.pushState(null, '', `#${targetId}`);
+          }
+        });
+      });
     }
   });
 </script>

@@ -51,7 +51,7 @@ export function CourseModules() {
       <div className="container px-4 mx-auto">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-            Inside the ONE Playbook System
+            Inside the ONE Playbook
           </h2>
           <p className="text-xl text-muted-foreground">
             Everything you need to transform your e-commerce business with AI
