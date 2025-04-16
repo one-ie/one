@@ -10,11 +10,16 @@ import { CourseHeroSection } from "../components/course/HeroSection";
 import { FrameworkOverview } from "../components/course/FrameworkOverview";
 import { HowFrameworkWorks } from "../components/course/HowFrameworkWorks";
 import { CourseModules } from "../components/course/CourseModules";
+import { CourseModuleContent } from "../components/course/CourseModuleContent";
+import type { ModuleContentProps } from "@/types/course";
+import Elevate from "../components/course/Elevate";
 import { FAQSection } from "../components/course/FAQSection";
 import { PricingSection } from "../components/course/PricingSection";
 import { FinalCTA } from "../components/course/FinalCTA";
 import FaqAccordion from "@/components/FaqAccordion";
 import Circles from "@/components/Circles.astro";
+import { Transformation } from "../components/course/Transformation";
+import Teacher from "../components/Teacher.astro";
 import { CountdownTimer } from "../components/course/CountdownTimer";
 
 const title = "The AI Prompt Playbook For Ecommerce for Ecom Growth";
@@ -267,6 +272,231 @@ Let's start by understanding your specific needs. What aspect of AI-powered grow
   runtime: "edge",
   includeContent: true
 };
+
+// Course modules data
+const courseModulesData: ModuleContentProps['module'][] = [
+  {
+    title: "FOUNDATION – Building Your Growth Bedrock",
+    description: "Establish deep strategic clarity before action",
+    features: [
+      "Ideal Customer Avatar Deep Dive",
+      "Company Context Definition",
+      "Market Awareness Integration"
+    ],
+    details: {
+      overview: "Stop guessing, start knowing. Build the essential foundation for AI-powered success.",
+      benefits: [
+        "Deep dive into customer pains, desires, and behaviors",
+        "Define your unique offer and powerful brand voice",
+        "Integrate vital market insights for maximum impact"
+      ],
+      implementation: [
+        "In this crucial foundational module, you'll forge the essential bedrock for all future success.",
+        "We guide you to deeply understand your Ideal Customer Avatar ('Sam Store'), Company Context, and Market Awareness.",
+        "Your comprehensive Customer & Company Blueprint, ready to inform hyper-effective AI generation"
+      ]
+    }
+  },
+  {
+    title: "HOOK – Capturing Attention & Defining Your Angle",
+    description: "Stop the scroll and spark immediate interest",
+    features: [
+      "Hook Generation System",
+      "Channel Selection Strategy",
+      "Creative Development Process"
+    ],
+    details: {
+      overview: "Command attention in crowded feeds with irresistible hooks",
+      benefits: [
+        "Create scroll-stopping headlines with AI",
+        "Choose optimal platforms for maximum visibility",
+        "Craft compelling ad creative that converts"
+      ],
+      implementation: [
+        "Transform your Foundation insights into irresistible Hooks using targeted AI prompts.",
+        "Generate powerful headlines, compelling ad openers, and unique messaging angles that resonate deeply.",
+        "A validated set of high-impact hooks and attention-grabbing ad creative"
+      ]
+    }
+  },
+  {
+    title: "GIFT – Delivering Instant Value",
+    description: "Convert attention into genuine interest",
+    features: [
+      "Lead Magnet Creation",
+      "Landing Page Optimization",
+      "Promotional Strategy"
+    ],
+    details: {
+      overview: "Create high-value lead magnets that actually convert",
+      benefits: [
+        "Design irresistible free offers",
+        "Write high-converting landing pages",
+        "Plan effective distribution"
+      ],
+      implementation: [
+        "Use AI prompts to rapidly brainstorm, outline, and draft content for high-value Lead Magnets.",
+        "Craft compelling landing pages and promotional messages.",
+        "Ready-to-deploy lead magnet and landing page copy"
+      ]
+    }
+  },
+  {
+    title: "IDENTIFY – Capturing Future Customers",
+    description: "Convert interested prospects into leads",
+    features: [
+      "Form Optimization",
+      "Welcome Sequence Design",
+      "Lead Tagging System"
+    ],
+    details: {
+      overview: "Master the art of the low-friction ask",
+      benefits: [
+        "Create frictionless opt-in experiences",
+        "Design engaging welcome flows",
+        "Implement smart segmentation"
+      ],
+      implementation: [
+        "Use AI-assisted copy prompts to optimize opt-in forms and messaging.",
+        "Set up basic tagging and welcome emails for smooth lead flow.",
+        "Optimized lead capture process and initial prospect list"
+      ]
+    }
+  },
+  {
+    title: "ENGAGE – Activating Leads Instantly",
+    description: "Build immediate rapport post-identification",
+    features: [
+      "Instant Response System",
+      "Chatbot Integration",
+      "Follow-up Strategy"
+    ],
+    details: {
+      overview: "Capitalize on peak interest immediately",
+      benefits: [
+        "Create immediate value delivery",
+        "Set up intelligent conversations",
+        "Design effective nurture paths"
+      ],
+      implementation: [
+        "Implement immediate engagement strategies right after opt-in.",
+        "Use AI for impactful welcome messages and follow-up sequences.",
+        "Automated engagement assets and qualification insights"
+      ]
+    }
+  },
+  {
+    title: "SELL – Engineering Conversions",
+    description: "Maximize purchase conversions",
+    features: [
+      "Sales Copy Generation",
+      "Objection Handling",
+      "Checkout Optimization"
+    ],
+    details: {
+      overview: "Transform product pages into conversion engines",
+      benefits: [
+        "Write compelling product descriptions",
+        "Address concerns proactively",
+        "Optimize the purchase process"
+      ],
+      implementation: [
+        "Leverage AI prompts to craft persuasive sales copy, handle objections, and optimize CTAs.",
+        "Learn to streamline checkout flow and build trust.",
+        "High-converting sales page copy and optimized checkout"
+      ]
+    }
+  },
+  {
+    title: "NURTURE – Converting the Not Ready",
+    description: "Build trust over time",
+    features: [
+      "Email Sequence Design",
+      "Retargeting Strategy",
+      "Content Planning"
+    ],
+    details: {
+      overview: "Master the art of follow-up",
+      benefits: [
+        "Create engaging nurture flows",
+        "Design effective ad campaigns",
+        "Plan valuable content delivery"
+      ],
+      implementation: [
+        "Use AI-powered nurturing to draft value-driven email sequences.",
+        "Create retargeting campaigns that convert prospects over time.",
+        "Automated nurture sequences and retargeting copy"
+      ]
+    }
+  },
+  {
+    title: "UPSELL – Maximizing Customer Value",
+    description: "Increase Average Order Value instantly",
+    features: [
+      "Upsell Strategy",
+      "Timing Optimization",
+      "Value Maximization"
+    ],
+    details: {
+      overview: "Boost profitability with smart offers",
+      benefits: [
+        "Design irresistible upsells",
+        "Optimize offer presentation",
+        "Maximize customer profitability"
+      ],
+      implementation: [
+        "Use AI prompts to create compelling post-purchase upsell and cross-sell offers.",
+        "Learn optimal timing and presentation for maximum impact.",
+        "High-converting upsell offers and promotional copy"
+      ]
+    }
+  },
+  {
+    title: "UNDERSTAND – Driving Customer Success",
+    description: "Maximize loyalty through insight",
+    features: [
+      "Onboarding Flow Design",
+      "Feedback Analysis",
+      "Retention Strategy"
+    ],
+    details: {
+      overview: "Turn buyers into loyal fans",
+      benefits: [
+        "Create success-focused sequences",
+        "Generate actionable insights",
+        "Implement proactive support"
+      ],
+      implementation: [
+        "Craft exceptional customer onboarding sequences.",
+        "Analyze feedback for continuous improvement and proactive communication.",
+        "Effective onboarding system and insight strategy"
+      ]
+    }
+  },
+  {
+    title: "SHARE – Growing Through Advocacy",
+    description: "Leverage social proof for growth",
+    features: [
+      "Review Generation",
+      "Social Proof Creation",
+      "Referral System"
+    ],
+    details: {
+      overview: "Transform customers into advocates",
+      benefits: [
+        "Collect powerful testimonials",
+        "Create compelling success stories",
+        "Build automated word-of-mouth"
+      ],
+      implementation: [
+        "Use AI to streamline review collection and turn feedback into compelling social proof.",
+        "Build systematic referral programs.",
+        "Review templates and referral campaign assets"
+      ]
+    }
+  }
+];
+
 ---
 <Layout
   title="ONE - The AI Playbook for Ecommerce"
@@ -284,14 +514,103 @@ Let's start by understanding your specific needs. What aspect of AI-powered grow
       <FrameworkOverview client:load />
     </div>
 
+    {/* ELEVATE Framework */}
+    <div id="elevate" class="py-20">
+      <Elevate client:visible />
+    </div>
+
     {/* How It Works */}
     <div id="how-it-works">
       <HowFrameworkWorks client:visible />
     </div>
 
-    {/* Inside the System */}
-    <div id="modules">
-      <CourseModules client:visible />
+    {/* Business Transformation */}
+    <div id="transformation">
+      <Transformation client:visible />
+    </div>
+
+    <Teacher />
+
+    {/* Course Modules */}
+    <div id="modules" class="relative py-20 bg-gradient-to-b from-background to-background/80">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <Badge variant="outline" className="mb-4">
+            Complete Framework
+          </Badge>
+          <h2 class="text-4xl font-bold mb-4">Master The ELEVATE Framework</h2>
+          <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+            A systematic approach to transform your ecommerce growth through AI-powered automation
+          </p>
+        </div>
+
+        <div class="grid gap-16">
+          {courseModulesData?.map((module, index: number) => module && (
+            <div class="relative">
+              {/* Module Header */}
+              <div class="flex items-center gap-6 mb-8">
+                <div class="flex-shrink-0 w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <span class="text-2xl font-bold text-primary">{index.toString().padStart(2, '0')}</span>
+                </div>
+                <div>
+                  <h3 class="text-3xl font-bold mb-2">{module.title}</h3>
+                  <p class="text-xl text-muted-foreground">{module.description}</p>
+                </div>
+              </div>
+
+              {/* Module Content */}
+              <Card className="p-8">
+                <div class="grid md:grid-cols-2 gap-8">
+                  {/* Left Column */}
+                  <div>
+                    <h4 class="text-xl font-semibold mb-4">Overview</h4>
+                    <p class="text-muted-foreground mb-6">{module.details?.overview}</p>
+                    
+                    <h4 class="text-xl font-semibold mb-4">Key Features</h4>
+                    <ul class="space-y-3">
+                      {module.features.map((feature) => (
+                        <li class="flex items-start gap-3">
+                          <Check className="w-5 h-5 text-primary mt-1" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Right Column */}
+                  <div>
+                    <h4 class="text-xl font-semibold mb-4">What You'll Learn</h4>
+                    <ul class="space-y-4">
+                      {module.details?.benefits.map((benefit) => (
+                        <li class="flex items-start gap-3">
+                          <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-4 h-4 text-primary" />
+                          </div>
+                          <span class="text-muted-foreground">{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div class="mt-8 p-4 bg-muted/50 rounded-lg">
+                      <h4 class="text-xl font-semibold mb-3">Implementation</h4>
+                      <ul class="space-y-3">
+                        {module.details?.implementation.map((step) => (
+                          <li class="text-sm text-muted-foreground">{step}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Module Connector Line */}
+              {index < courseModulesData.length - 1 && (
+                <div class="absolute left-8 top-[90px] bottom-0 w-px bg-border" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
 
     {/* Pricing Section */}
@@ -408,6 +727,33 @@ Let's start by understanding your specific needs. What aspect of AI-powered grow
     font-weight: 500;
     letter-spacing: 0.025em;
   }
+
+  /* Add smooth reveal animation for modules */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  #modules .relative {
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  #modules .relative:nth-child(1) { animation-delay: 0.1s; }
+  #modules .relative:nth-child(2) { animation-delay: 0.2s; }
+  #modules .relative:nth-child(3) { animation-delay: 0.3s; }
+  #modules .relative:nth-child(4) { animation-delay: 0.4s; }
+  #modules .relative:nth-child(5) { animation-delay: 0.5s; }
+  #modules .relative:nth-child(6) { animation-delay: 0.6s; }
+  #modules .relative:nth-child(7) { animation-delay: 0.7s; }
+  #modules .relative:nth-child(8) { animation-delay: 0.8s; }
+  #modules .relative:nth-child(9) { animation-delay: 0.9s; }
 </style>
 
 <script>
