@@ -560,7 +560,8 @@ const courseModulesData: ModuleContentProps['module'][] = [
 
               {/* Module Content */}
               <Card className="p-8">
-                <div class="grid md:grid-cols-2 gap-8">
+                {/* Two Column Content */}
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
                   {/* Left Column */}
                   <div>
                     <h4 class="text-xl font-semibold mb-4">Overview</h4>
@@ -590,14 +591,29 @@ const courseModulesData: ModuleContentProps['module'][] = [
                         </li>
                       ))}
                     </ul>
+                  </div>
+                </div>
 
-                    <div class="mt-8 p-4 bg-muted/50 rounded-lg">
-                      <h4 class="text-xl font-semibold mb-3">Implementation</h4>
-                      <ul class="space-y-3">
-                        {module.details?.implementation.map((step) => (
-                          <li class="text-sm text-muted-foreground">{step}</li>
-                        ))}
-                      </ul>
+                {/* Implementation Section - Full Width */}
+                <div class="border-t pt-8">
+                  <div class="bg-muted/50 rounded-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                      <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Check className="w-5 h-5 text-primary" />
+                      </div>
+                      <h4 class="text-xl font-semibold">Implementation Steps</h4>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                      {module.details?.implementation.map((step, stepIndex) => (
+                        <div class="relative">
+                          <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-primary/5 flex items-center justify-center flex-shrink-0 border border-primary/10">
+                              <span class="text-sm font-medium text-primary">{stepIndex + 1}</span>
+                            </div>
+                            <p class="text-muted-foreground">{step}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
