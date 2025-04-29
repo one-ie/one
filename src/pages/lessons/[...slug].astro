@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import DocsPage from '../../layouts/LayoutCourse.astro';
 import type { CollectionEntry } from 'astro:content';
 import { ChatConfigSchema } from '../../schema/chat';
+import LessonContent from '@/components/lessons/LessonContent.astro';
 
 export const prerender = true;
 
@@ -36,7 +37,7 @@ const chatConfig = ChatConfigSchema.parse({
   maxTokens: entry.data.maxTokens || 4000,
 
   // Prompt Config
-  systemPrompt: entry.data.systemPrompt || [
+  systemPrompt: entry.data.aiConfig?.systemPrompt || [
     {
       type: "text",
       text: `I am your AI Learning Assistant for "${entry.data.title || 'this lesson'}". I'm here to help you understand and apply the concepts covered in this lesson.
@@ -55,9 +56,9 @@ I have deep knowledge of this lesson's content and can help you master the mater
   addBusinessPrompt: true,
 
   // Welcome Config
-  welcomeMessage: entry.data.welcomeMessage || `👋 Welcome to "${entry.data.title || 'this lesson'}"! How can I help you understand this topic better?`,
-  avatar: entry.data.avatar || "/icon.svg",
-  suggestions: entry.data.suggestions || [
+  welcomeMessage: entry.data.aiConfig?.welcomeMessage || `👋 Welcome to "${entry.data.title || 'this lesson'}"! How can I help you understand this topic better?`,
+  avatar: entry.data.aiConfig?.avatar || "/icon.svg",
+  suggestions: entry.data.aiConfig?.suggestions || [
     { 
       label: "📚 Key Concepts", 
       prompt: "What are the main concepts covered in this lesson?" 
@@ -89,6 +90,12 @@ I have deep knowledge of this lesson's content and can help you master the mater
   rightPanelMode={entry.data.rightPanelMode || "quarter"}
 >
   <div class="px-4 sm:px-6">
-    <Content />
+    {entry.data.lessonContent ? (
+      <LessonContent content={entry.data.lessonContent} />
+    ) : (
+      <div class="prose dark:prose-invert max-w-none">
+        <Content />
+      </div>
+    )}
   </div>
 </DocsPage>

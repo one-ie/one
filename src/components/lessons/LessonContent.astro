@@ -1,0 +1,169 @@
+---
+import type { LessonContent } from '@/schema/lesson';
+import VideoEmbed from './VideoEmbed.astro';
+import { Card } from '@/components/ui/card';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from '@/components/ui/button';
+
+interface Props {
+  content: LessonContent;
+}
+
+const { content = [] } = Astro.props;
+---
+
+<div class="space-y-8">
+  {content.map((block) => {
+    switch (block.type) {
+      case 'video':
+        return (
+          <VideoEmbed
+            id={block.id}
+            title={block.title}
+            description={block.description}
+            timestamp={block.timestamp}
+            params={block.params}
+          />
+        );
+      
+      case 'text':
+        return (
+          <Card className="p-6">
+            {block.title && (
+              <h3 class="text-xl font-semibold mb-4">{block.title}</h3>
+            )}
+            <div class="prose dark:prose-invert max-w-none">
+              {block.content}
+            </div>
+          </Card>
+        );
+      
+      case 'quiz':
+        return (
+          <div class="quiz-block" data-quiz={JSON.stringify(block)}>
+            <Card className="p-6">
+              <h3 class="text-xl font-semibold mb-2">{block.title}</h3>
+              {block.description && (
+                <p class="text-muted-foreground mb-6">{block.description}</p>
+              )}
+              
+              <div class="space-y-6">
+                {block.questions.map((question, qIndex) => (
+                  <div class="quiz-question" data-index={qIndex}>
+                    <h4 class="font-medium mb-4">
+                      Question {qIndex + 1}: {question.question}
+                    </h4>
+                    <div class="space-y-2">
+                      {question.options.map((option, oIndex) => (
+                        <Button
+                          variant="outline"
+                          className="w-full justify-start quiz-option"
+                          data-index={oIndex}
+                          data-correct={oIndex === question.correctAnswer}
+                        >
+                          {option}
+                        </Button>
+                      ))}
+                    </div>
+                    <div class="quiz-explanation hidden mt-4 text-sm text-muted-foreground">
+                      {question.explanation}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div class="mt-6 flex gap-4">
+                <Button className="quiz-check">Check Answers</Button>
+                <Button variant="outline" className="quiz-reset hidden">Try Again</Button>
+              </div>
+            </Card>
+          </div>
+        );
+    }
+  })}
+</div>
+
+<script>
+  function initializeQuizzes() {
+    document.querySelectorAll('.quiz-block').forEach(quizBlock => {
+      const quizData = JSON.parse(quizBlock.getAttribute('data-quiz') || '{}');
+      const checkButton = quizBlock.querySelector('.quiz-check');
+      const resetButton = quizBlock.querySelector('.quiz-reset');
+      let selectedAnswers = new Array(quizData.questions.length).fill(-1);
+      let showingResults = false;
+
+      // Handle option selection
+      quizBlock.querySelectorAll('.quiz-option').forEach(option => {
+        option.addEventListener('click', () => {
+          if (showingResults) return;
+          
+          const questionIndex = (option.closest('.quiz-question') as HTMLElement)?.dataset.index;
+          const optionIndex = (option as HTMLElement).dataset.index;
+          
+          if (questionIndex !== undefined && optionIndex !== undefined) {
+            selectedAnswers[parseInt(questionIndex)] = parseInt(optionIndex);
+            
+            // Update UI
+            const questionDiv = option.closest('.quiz-question');
+            questionDiv?.querySelectorAll('.quiz-option').forEach(opt => {
+              opt.classList.remove('bg-primary', 'text-primary-foreground');
+            });
+            option.classList.add('bg-primary', 'text-primary-foreground');
+          }
+        });
+      });
+
+      // Handle check answers
+      checkButton?.addEventListener('click', () => {
+        if (selectedAnswers.includes(-1)) return;
+        showingResults = true;
+        
+        quizBlock.querySelectorAll('.quiz-question').forEach((question, qIndex) => {
+          const selected = selectedAnswers[qIndex];
+          const correct = quizData.questions[qIndex].correctAnswer;
+          
+          question.querySelectorAll('.quiz-option').forEach((option, oIndex) => {
+            if (oIndex === correct) {
+              option.classList.add('bg-green-500', 'text-white');
+            } else if (oIndex === selected) {
+              option.classList.add('bg-red-500', 'text-white');
+            }
+          });
+          
+          question.querySelector('.quiz-explanation')?.classList.remove('hidden');
+        });
+        
+        checkButton.classList.add('hidden');
+        resetButton?.classList.remove('hidden');
+      });
+
+      // Handle reset
+      resetButton?.addEventListener('click', () => {
+        showingResults = false;
+        selectedAnswers = new Array(quizData.questions.length).fill(-1);
+        
+        quizBlock.querySelectorAll('.quiz-option').forEach(option => {
+          option.classList.remove(
+            'bg-primary', 'text-primary-foreground',
+            'bg-green-500', 'bg-red-500', 'text-white'
+          );
+        });
+        
+        quizBlock.querySelectorAll('.quiz-explanation').forEach(exp => {
+          exp.classList.add('hidden');
+        });
+        
+        checkButton?.classList.remove('hidden');
+        resetButton?.classList.add('hidden');
+      });
+    });
+  }
+
+  // Initialize quizzes when the page loads
+  document.addEventListener('DOMContentLoaded', initializeQuizzes);
+</script> 

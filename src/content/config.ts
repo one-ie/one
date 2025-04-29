@@ -1,4 +1,6 @@
 import { defineCollection, z } from 'astro:content';
+import { LessonSchema } from '../schema/lesson';
+import { CourseSchema } from '../schema/course';
 
 /**
  * Common Fields – Shared Across Content Types
@@ -158,6 +160,16 @@ const EventsSchema = z.object({
 });
 
 // Define collections
+const lessonsCollection = defineCollection({
+  type: 'content',
+  schema: LessonSchema
+});
+
+const coursesCollection = defineCollection({
+  type: 'data',
+  schema: CourseSchema
+});
+
 export const pages = defineCollection({ type: 'content', schema: PagesSchema });
 export const blog = defineCollection({ type: 'content', schema: BlogSchema });
 export const docs = defineCollection({ type: 'content', schema: DocsSchema });
@@ -165,7 +177,6 @@ export const videos = defineCollection({ type: 'content', schema: VideosSchema }
 export const podcasts = defineCollection({ type: 'content', schema: PodcastsSchema });
 export const software = defineCollection({ type: 'content', schema: SoftwareSchema });
 export const courses = defineCollection({ type: 'content', schema: CoursesSchema });
-export const lessons = defineCollection({ type: 'content', schema: LessonsSchema });
 export const news = defineCollection({ type: 'content', schema: NewsSchema });
 export const prompts = defineCollection({ type: 'content', schema: PromptsSchema });
 export const tutorials = defineCollection({ type: 'content', schema: TutorialsSchema });
@@ -179,8 +190,8 @@ export const collections = {
   videos,
   podcasts,
   software,
-  courses,
-  lessons,
+  courses: coursesCollection,
+  lessons: lessonsCollection,
   news,
   prompts,
   tutorials,
@@ -195,7 +206,6 @@ export type Videos = z.infer<typeof VideosSchema>;
 export type Podcasts = z.infer<typeof PodcastsSchema>;
 export type Software = z.infer<typeof SoftwareSchema>;
 export type Courses = z.infer<typeof CoursesSchema>;
-export type Lessons = z.infer<typeof LessonsSchema>;
 export type News = z.infer<typeof NewsSchema>;
 export type Prompts = z.infer<typeof PromptsSchema>;
 export type Tutorials = z.infer<typeof TutorialsSchema>;

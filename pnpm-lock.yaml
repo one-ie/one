@@ -35,6 +35,9 @@ importers:
       '@assistant-ui/react-syntax-highlighter':
         specifier: ^0.8.0
         version: 0.8.0(@assistant-ui/react-markdown@0.8.0(@assistant-ui/react@0.8.11(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1)))(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@assistant-ui/react@0.8.11(@types/react-dom@18.3.5(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1)))(@types/react-syntax-highlighter@15.5.13)(@types/react@18.3.20)(react-syntax-highlighter@15.6.1(react@18.3.1))(react@18.3.1)
+      '@astro-community/astro-embed-youtube':
+        specifier: ^0.5.6
+        version: 0.5.6(astro@5.5.6(@types/node@22.13.16)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.38.0)(typescript@5.8.2)(yaml@2.7.1))
       '@astrojs/check':
         specifier: ^0.9.4
         version: 0.9.4(typescript@5.8.2)
@@ -482,6 +485,11 @@ packages:
         optional: true
       '@types/react-dom':
         optional: true
+
+  '@astro-community/astro-embed-youtube@0.5.6':
+    resolution: {integrity: sha512-/mRfCl/eTBUz0kmjD1psOy0qoDDBorVp0QumUacjFcIkBullYtbeFQ2ZGZ+3N/tA6cR/OIyzr2QA4dQXlY6USg==}
+    peerDependencies:
+      astro: ^2.0.0 || ^3.0.0-beta || ^4.0.0-beta || ^5.0.0-beta
 
   '@astrojs/check@0.9.4':
     resolution: {integrity: sha512-IOheHwCtpUfvogHHsvu0AbeRZEnjJg3MopdLddkJE70mULItS/Vh37BHcI00mcOJcH1vhD3odbpvWokpxam7xA==}
@@ -3392,6 +3400,9 @@ packages:
     resolution: {integrity: sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==}
     engines: {node: '>=14'}
 
+  lite-youtube-embed@0.3.3:
+    resolution: {integrity: sha512-gFfVVnj6NRjxVfJKo3qoLtpi0v5mn3AcR4eKD45wrxQuxzveFJUb+7Cr6uV6n+DjO8X3p0UzPPquhGt0H/y+NA==}
+
   lodash.castarray@4.4.0:
     resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
 
@@ -5151,6 +5162,11 @@ snapshots:
     transitivePeerDependencies:
       - immer
       - use-sync-external-store
+
+  '@astro-community/astro-embed-youtube@0.5.6(astro@5.5.6(@types/node@22.13.16)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.38.0)(typescript@5.8.2)(yaml@2.7.1))':
+    dependencies:
+      astro: 5.5.6(@types/node@22.13.16)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.38.0)(typescript@5.8.2)(yaml@2.7.1)
+      lite-youtube-embed: 0.3.3
 
   '@astrojs/check@0.9.4(typescript@5.8.2)':
     dependencies:
@@ -8302,6 +8318,8 @@ snapshots:
       lightningcss-win32-x64-msvc: 1.29.2
 
   lilconfig@3.1.3: {}
+
+  lite-youtube-embed@0.3.3: {}
 
   lodash.castarray@4.4.0: {}
 

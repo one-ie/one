@@ -1,0 +1,47 @@
+---
+import { YouTube } from '@astro-community/astro-embed-youtube';
+import { cn } from '@/lib/utils';
+
+interface Props {
+  id: string;
+  title?: string;
+  description?: string;
+  timestamp?: string;
+  className?: string;
+  posterQuality?: 'max' | 'high' | 'default' | 'low';
+  params?: string;
+}
+
+const {
+  id,
+  title,
+  description,
+  timestamp,
+  className,
+  posterQuality = 'high',
+  params
+} = Astro.props;
+---
+
+<div class={cn("rounded-lg border bg-card text-card-foreground shadow", className)}>
+  <div class="relative">
+    <YouTube 
+      id={id}
+      title={title}
+      posterQuality={posterQuality}
+      params={params}
+      playlabel="Play video"
+    />
+  </div>
+  {(title || description) && (
+    <div class="p-4">
+      {title && <h3 class="font-semibold mb-2">{title}</h3>}
+      {description && <p class="text-sm text-muted-foreground">{description}</p>}
+      {timestamp && (
+        <div class="mt-2 text-xs text-muted-foreground">
+          <span class="font-medium">Timestamp:</span> {timestamp}
+        </div>
+      )}
+    </div>
+  )}
+</div> 

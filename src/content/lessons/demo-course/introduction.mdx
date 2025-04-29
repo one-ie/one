@@ -1,18 +1,86 @@
 ---
-title: "Demo Lesson"
-description: "This is a demo lesson."
+title: "Introduction to Web Development"
+description: "Learn the fundamentals of modern web development with practical examples and hands-on exercises."
 date: 2024-03-19
 status: "public"
 courseId: "demo-course"
 moduleId: "introduction"
 duration: 60
 order: 1
-content: |
-  This is the content of the demo lesson.
-  It can contain multiple lines of text and markdown.
-tags: ["demo", "lesson", "example"]
+lessonContent: [
+  {
+    type: "text",
+    title: "Welcome to Web Development",
+    content: "In this lesson, we'll explore the fundamentals of web development. We'll cover HTML, CSS, and JavaScript - the three core technologies that power the modern web."
+  },
+  {
+    type: "video",
+    id: "TtRtkTzHVBU",
+    title: "Getting Started with Web Development",
+    description: "A comprehensive introduction to web development fundamentals",
+    timestamp: "0:00 - Introduction\n2:15 - HTML Basics\n5:30 - CSS Fundamentals\n8:45 - JavaScript Overview"
+  },
+  {
+    type: "text",
+    title: "Key Concepts",
+    content: "Before we dive deeper, let's understand some key concepts:\n\n- **HTML**: Structure and content\n- **CSS**: Styling and layout\n- **JavaScript**: Interactivity and behavior\n\nThese technologies work together to create modern web applications."
+  },
+  {
+    type: "quiz",
+    title: "Check Your Understanding",
+    description: "Test your knowledge of web development basics",
+    questions: [
+      {
+        question: "What does HTML stand for?",
+        options: [
+          "Hyper Text Markup Language",
+          "High Tech Modern Language",
+          "Hyperlink and Text Markup Language",
+          "Home Tool Markup Language"
+        ],
+        correctAnswer: 0,
+        explanation: "HTML (Hyper Text Markup Language) is the standard markup language for creating web pages."
+      },
+      {
+        question: "Which technology is used for styling web pages?",
+        options: [
+          "JavaScript",
+          "Python",
+          "CSS",
+          "Java"
+        ],
+        correctAnswer: 2,
+        explanation: "CSS (Cascading Style Sheets) is used to control the visual presentation of HTML elements."
+      }
+    ]
+  }
+]
+tags: ["web-development", "html", "css", "javascript"]
+aiConfig: {
+  systemPrompt: [
+    {
+      type: "text",
+      text: "I am your Web Development Learning Assistant. I can help you understand HTML, CSS, and JavaScript concepts, provide coding examples, and explain web development best practices. Feel free to ask questions about any topic covered in this lesson!"
+    }
+  ],
+  welcomeMessage: "👋 Welcome to Web Development! I'm here to help you understand the fundamentals. What would you like to learn about?",
+  suggestions: [
+    {
+      label: "🌐 HTML Basics",
+      prompt: "Can you explain the basic structure of an HTML document?"
+    },
+    {
+      label: "🎨 CSS Overview",
+      prompt: "What are the different ways to style HTML elements with CSS?"
+    },
+    {
+      label: "⚡ JavaScript Role",
+      prompt: "How does JavaScript make websites interactive?"
+    }
+  ]
+}
 ---
 
-# Demo Lesson
+import LessonContent from '@/components/lessons/LessonContent.astro';
 
-This section could contain additional information about the lesson. 
+<LessonContent content={frontmatter.lessonContent} /> 
