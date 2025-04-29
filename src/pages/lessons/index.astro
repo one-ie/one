@@ -102,34 +102,93 @@ const orderedFolders = Object.entries(folders)
   .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}) as Record<string, DocEntry[]>;
 
 // Configure AI assistant for lessons
-const chatConfig = ChatConfigSchema.parse({
+const chat = {
+  // Layout and Meta
+  layout: "documentation",
+  title: "Documentation - ONE Framework",
+  description: "Everything you need to build intelligent applications",
+  
+  // AI Config
+  aiProvider: "openrouter",
+  aiModel: "google/gemini-2.0-flash-001",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 900000,
+
+  // Prompt Config
   systemPrompt: [{
-    type: "text" as const,
-    text: `You are a documentation expert for ONE framework, helping users navigate and understand the documentation. Focus on:
-- Explaining documentation sections and their relationships
-- Providing quick access to relevant documentation
-- Clarifying technical concepts
-- Suggesting next steps in the learning path`
+    type: "text",
+    text: `I am your Documentation Guide for ONE Framework, a specialized AI assistant focused on helping you navigate and understand our documentation. I lead a team of specialized documentation experts:
+
+🎯 Our Documentation Team:
+- Alex (Getting Started): Helps you begin your journey with ONE
+- Sarah (Core Concepts): Explains fundamental framework concepts
+- Max (Advanced Topics): Guides through complex implementations
+- Emma (Tutorials): Assists with hands-on learning
+- Tom (Troubleshooting): Helps resolve common issues
+
+I can help you:
+1. Find relevant documentation quickly
+2. Understand complex concepts
+3. Navigate between related topics
+4. Follow the recommended learning path
+5. Troubleshoot common issues
+6. Implement specific features
+
+The documentation is organized into key sections:
+- Getting Started: Quick setup and basic concepts
+- Core Concepts: Essential framework features
+- Advanced Topics: In-depth technical details
+- Tutorials: Step-by-step guides
+- Troubleshooting: Common issues and solutions
+
+Let me know what you'd like to learn about, and I'll guide you to the right resources.`
   }],
-  welcome: {
-    message: "👋 Need help finding documentation? Ask me anything!",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "🚀 Quick Start",
-        prompt: "How do I get started with ONE?"
-      },
-      {
-        label: "📚 Learning Path",
-        prompt: "What's the recommended learning path?"
-      },
-      {
-        label: "💡 Features",
-        prompt: "What are ONE's main features?"
-      }
-    ]
-  }
-});
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+
+  // Welcome Config
+  welcomeMessage: "👋 Welcome to ONE Framework Documentation! I'm your Documentation Guide. How can I help you today?",
+  avatar: "/icon.svg",
+  suggestions: [
+    { 
+      label: "🚀 Quick Start", 
+      prompt: "I'm new to ONE Framework. Where should I start?" 
+    },
+    { 
+      label: "📚 Learning Path", 
+      prompt: "What's the recommended learning path for mastering ONE Framework?" 
+    },
+    { 
+      label: "🔍 Find Docs", 
+      prompt: "I'm looking for documentation about a specific topic..." 
+    },
+    { 
+      label: "💡 Core Concepts", 
+      prompt: "What are the core concepts I need to understand?" 
+    },
+    { 
+      label: "📖 Tutorials", 
+      prompt: "Show me available tutorials and guides" 
+    },
+    { 
+      label: "❓ Common Issues", 
+      prompt: "What are some common issues and their solutions?" 
+    },
+    { 
+      label: "🛠️ Advanced Topics", 
+      prompt: "I want to learn about advanced features and implementations" 
+    },
+    { 
+      label: "🎯 Best Practices", 
+      prompt: "What are the recommended best practices for using ONE Framework?" 
+    }
+  ],
+
+  // Optional Config
+  runtime: "edge",
+  includeContent: true
+};
 
 // Get appropriate icon based on folder name
 function getFolderIcon(folder: string) {
@@ -176,7 +235,7 @@ function createFolderUrl(folder: string): string {
 <Layout
   title="Documentation - ONE Framework"
   description="Learn how to build AI-powered applications with ONE framework"
-  chatConfig={chatConfig}
+  chatConfig={chat}
   rightPanelMode="quarter"
 >
   <div class="max-w-full px-3 sm:px-4 pt-4 pb-2">
