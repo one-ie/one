@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import DocsPage from '../../layouts/Docs.astro';
+import type { CollectionEntry } from 'astro:content';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const lessons = await getCollection('lessons');
+  return lessons.map((entry: CollectionEntry<'lessons'>) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+type Props = {
+  entry: CollectionEntry<'lessons'>;
+};
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<DocsPage title={entry.title}>
+  <div class="px-4 sm:px-6">
+    <Content />
+  </div>
+</DocsPage>
