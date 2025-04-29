@@ -106,16 +106,16 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroSectionProps>(
 
               {/* Video/Image Preview */}
               {bottomImage && (
-                <div className="relative aspect-video max-w-3xl mx-auto mt-8 mb-12 rounded-xl overflow-hidden one-glass-card animate-fade-in [--animation-delay:800ms]">
+                <div className="relative max-w-3xl mx-auto mt-8 mb-12 rounded-xl overflow-hidden one-glass-card animate-fade-in [--animation-delay:800ms]" style={{ paddingBottom: "56.25%" }}>
                   <div className="absolute inset-0 bg-primary/10" />
                   <img
                     src={bottomImage.light}
-                    className="w-full h-full object-cover dark:hidden"
+                    className="w-full h-full object-cover dark:hidden absolute inset-0"
                     alt="Preview"
                   />
                   <img
                     src={bottomImage.dark}
-                    className="hidden w-full h-full object-cover dark:block"
+                    className="hidden w-full h-full object-cover dark:block absolute inset-0"
                     alt="Preview"
                   />
                   {videoSrc && (

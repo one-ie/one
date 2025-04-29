@@ -107,12 +107,12 @@
     "stripe": "^17.7.0",
     "tailwind-merge": "^3.1.0",
     "tailwindcss": "4.0.9",
-    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.8.2",
     "vaul": "^1.1.2",
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/postcss": "^4.0.17",
     "@tailwindcss/typography": "^0.5.16",
@@ -128,6 +128,7 @@
     "postcss": "^8.5.3",
     "postcss-import": "^16.1.0",
     "postcss-nested": "^7.0.2",
+    "tailwindcss-animate": "^1.0.7",
     "vite": "^6.2.4",
     "vitest": "^3.1.1"
   },
