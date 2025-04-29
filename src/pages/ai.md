@@ -14,7 +14,7 @@ aiProvider: openrouter
 aiModel: google/gemini-2.0-flash-001
 apiEndpoint: https://openrouter.ai/api/v1
 temperature: 0.7
-maxTokens: 4000
+maxTokens: 14000
 systemPrompt: |
   You are ONE's AI assistant, skilled in rich communication using markdown, images, and code blocks. Demonstrate:
 

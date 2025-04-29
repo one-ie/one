@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import DocsPage from '../../layouts/LayoutCourse.astro';
 import type { CollectionEntry } from 'astro:content';
+import { ChatConfigSchema } from '../../schema/chat';
 
 export const prerender = true;
 
@@ -20,24 +21,25 @@ type Props = {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 
-// Chat configuration for lessons
-const chat = {
+// Get chat configuration from frontmatter or use defaults
+const chatConfig = ChatConfigSchema.parse({
   // Layout and Meta
-  layout: "lesson",
+  layout: entry.data.layout || "lesson",
   title: entry.data.title || "Lesson",
   description: entry.data.description || "Learn more about this topic",
   
   // AI Config
-  aiProvider: "openrouter",
-  aiModel: "google/gemini-2.0-flash-001",
-  apiEndpoint: "https://api.openai.com/v1",
-  temperature: 0.7,
-  maxTokens: 900000,
+  aiProvider: entry.data.aiProvider || "openrouter",
+  aiModel: entry.data.aiModel || "google/gemini-2.0-flash-001",
+  apiEndpoint: entry.data.apiEndpoint || "https://openrouter.ai/api/v1",
+  temperature: entry.data.temperature || 0.7,
+  maxTokens: entry.data.maxTokens || 4000,
 
   // Prompt Config
-  systemPrompt: [{
-    type: "text",
-    text: `I am your AI Learning Assistant for this lesson on "${entry.data.title}". I'm here to help you understand and apply the concepts covered in this lesson.
+  systemPrompt: entry.data.systemPrompt || [
+    {
+      type: "text",
+      text: `I am your AI Learning Assistant for "${entry.data.title || 'this lesson'}". I'm here to help you understand and apply the concepts covered in this lesson.
 
 My role is to:
 1. Answer questions about the lesson content
@@ -47,14 +49,15 @@ My role is to:
 5. Clarify any confusing points
 
 I have deep knowledge of this lesson's content and can help you master the material. What would you like to learn more about?`
-  }],
+    }
+  ],
   addSystemPrompt: true,
   addBusinessPrompt: true,
 
   // Welcome Config
-  welcomeMessage: `👋 Welcome to the lesson on "${entry.data.title}". I'm your AI Learning Assistant. How can I help you understand this topic better?`,
-  avatar: "/icon.svg",
-  suggestions: [
+  welcomeMessage: entry.data.welcomeMessage || `👋 Welcome to "${entry.data.title || 'this lesson'}"! How can I help you understand this topic better?`,
+  avatar: entry.data.avatar || "/icon.svg",
+  suggestions: entry.data.suggestions || [
     { 
       label: "📚 Key Concepts", 
       prompt: "What are the main concepts covered in this lesson?" 
@@ -76,14 +79,14 @@ I have deep knowledge of this lesson's content and can help you master the mater
   // Optional Config
   runtime: "edge",
   includeContent: true
-};
+});
 ---
 
 <DocsPage 
   title={entry.data.title}
   description={entry.data.description}
-  chatConfig={chat}
-  rightPanelMode="quarter"
+  chatConfig={chatConfig}
+  rightPanelMode={entry.data.rightPanelMode || "quarter"}
 >
   <div class="px-4 sm:px-6">
     <Content />
