@@ -1,6 +1,4 @@
 import { defineCollection, z } from 'astro:content';
-import { LessonSchema } from '../schema/lesson';
-import { CourseSchema } from '../schema/course';
 
 /**
  * Common Fields – Shared Across Content Types
@@ -8,12 +6,12 @@ import { CourseSchema } from '../schema/course';
  * These fields provide consistent metadata across all content types.
  */
 const CommonFields = {
-  title: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  date: z.date().optional().nullable(),
-  status: z.enum(['private', 'public']).default('private'),
-  tags: z.array(z.string()).optional().nullable(),
-  image: z.string().optional().nullable(),
+  title: z.string(),
+  description: z.string().optional(),
+  date: z.date().or(z.string()).optional(),
+  status: z.enum(['draft', 'public', 'private']).default('draft'),
+  tags: z.array(z.string()).optional(),
+  image: z.string().optional(),
 };
 
 /**
@@ -33,9 +31,9 @@ const PagesSchema = z.object({
  */
 const BlogSchema = z.object({
   ...CommonFields,
-  author: z.string().optional().nullable(),
-  category: z.string().optional().nullable(),
-  featured: z.boolean().optional().nullable(),
+  author: z.string().optional(),
+  category: z.string().optional(),
+  featured: z.boolean().optional(),
 });
 
 const TabSchema = z.object({
@@ -50,8 +48,8 @@ const TabSchema = z.object({
  */
 const DocsSchema = z.object({
   ...CommonFields,
-  section: z.string().optional().nullable(),
-  order: z.number().optional().nullable(),
+  section: z.string().optional(),
+  order: z.number().optional(),
   tabs: z.array(TabSchema).optional(),
 });
 
@@ -89,32 +87,6 @@ const SoftwareSchema = z.object({
   license: z.string().optional(),
   language: z.string().optional(),
   video: z.string().optional()
-});
-
-/**
- * Courses Schema
- * For structured learning content
- */
-const CoursesSchema = z.object({
-  ...CommonFields,
-  duration: z.string().optional(),
-  level: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
-  prerequisites: z.array(z.string()).optional(),
-  modules: z.array(z.string()).optional(),
-  instructor: z.string().optional()
-});
-
-/**
- * Lessons Schema
- * For individual course lessons
- */
-const LessonsSchema = z.object({
-  ...CommonFields,
-  courseId: z.string(),
-  moduleId: z.string().optional(),
-  duration: z.number().optional(),
-  order: z.number(),
-  content: z.string().optional()
 });
 
 /**
@@ -159,6 +131,39 @@ const EventsSchema = z.object({
   virtual: z.boolean().optional()
 });
 
+// --- LMS SCHEMAS ---
+
+// Lesson Schema
+const LessonSchema = z.object({
+  ...CommonFields,
+  slug: z.string(), // for routing
+  courseId: z.string(),
+  order: z.number().optional(),
+  content: z.string().optional(), // fallback for MDX body
+  video: z.object({
+    platform: z.enum(['youtube', 'vimeo']).default('youtube'),
+    id: z.string(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    timestamp: z.string().optional(),
+    params: z.string().optional(),
+  }).optional(),
+  aiConfig: z.any().optional(),
+});
+
+// Course Schema (no modules)
+const CourseSchema = z.object({
+  ...CommonFields,
+  id: z.string(),
+  lessons: z.array(z.string()), // array of lesson slugs/ids
+  instructors: z.array(z.object({
+    name: z.string(),
+    avatar: z.string().optional(),
+    bio: z.string().optional(),
+  })).optional(),
+  aiConfig: z.any().optional(),
+});
+
 // Define collections
 const lessonsCollection = defineCollection({
   type: 'content',
@@ -176,7 +181,6 @@ export const docs = defineCollection({ type: 'content', schema: DocsSchema });
 export const videos = defineCollection({ type: 'content', schema: VideosSchema });
 export const podcasts = defineCollection({ type: 'content', schema: PodcastsSchema });
 export const software = defineCollection({ type: 'content', schema: SoftwareSchema });
-export const courses = defineCollection({ type: 'content', schema: CoursesSchema });
 export const news = defineCollection({ type: 'content', schema: NewsSchema });
 export const prompts = defineCollection({ type: 'content', schema: PromptsSchema });
 export const tutorials = defineCollection({ type: 'content', schema: TutorialsSchema });
@@ -205,7 +209,6 @@ export type Docs = z.infer<typeof DocsSchema>;
 export type Videos = z.infer<typeof VideosSchema>;
 export type Podcasts = z.infer<typeof PodcastsSchema>;
 export type Software = z.infer<typeof SoftwareSchema>;
-export type Courses = z.infer<typeof CoursesSchema>;
 export type News = z.infer<typeof NewsSchema>;
 export type Prompts = z.infer<typeof PromptsSchema>;
 export type Tutorials = z.infer<typeof TutorialsSchema>;
@@ -220,8 +223,7 @@ export type StreamItem = {
         z.infer<typeof VideosSchema> |
         z.infer<typeof PodcastsSchema> |
         z.infer<typeof SoftwareSchema> |
-        z.infer<typeof CoursesSchema> |
-        z.infer<typeof LessonsSchema> |
+        z.infer<typeof LessonSchema> |
         z.infer<typeof NewsSchema> |
         z.infer<typeof PromptsSchema> |
         z.infer<typeof TutorialsSchema> |
