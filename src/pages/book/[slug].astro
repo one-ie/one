@@ -33,14 +33,6 @@ const { Content } = await currentPage.render();
 <Book
   title={currentPage.data.title}
   description={currentPage.data.description}
-  prevPage={prevPage ? {
-    title: prevPage.data.title,
-    slug: prevPage.slug
-  } : null}
-  nextPage={nextPage ? {
-    title: nextPage.data.title,
-    slug: nextPage.slug
-  } : null}
 >
   <Content />
 </Book> 
