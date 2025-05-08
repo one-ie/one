@@ -107,6 +107,29 @@ const NewsSchema = z.object({
  */
 const PromptsSchema = z.object({
   ...CommonFields,
+  role: z.string().optional(),
+  style: z.string().optional(),
+  goal: z.string().optional(),
+  maxResponseLength: z.number().optional(),
+  tools: z.array(z.string()).optional(),
+  context: z.string().optional(),
+  sources: z.array(z.object({
+    type: z.string().optional(),
+    url: z.string().url().optional(),
+    format: z.string().optional(),
+    frequency: z.string().optional()
+  })).optional(),
+  aiConfig: z.object({
+    systemPrompt: z.array(z.object({
+      type: z.literal('text'),
+      text: z.string()
+    })).optional(),
+    welcomeMessage: z.string().optional(),
+    suggestions: z.array(z.object({
+      label: z.string(),
+      prompt: z.string()
+    })).optional()
+  }).optional()
 });
 
 /**
@@ -128,6 +151,55 @@ const EventsSchema = z.object({
   endDate: z.date().optional(),
   location: z.string().optional(),
   virtual: z.boolean().optional()
+});
+
+/**
+ * Book Schema
+ * For ebook content and chapters
+ */
+const BookSchema = z.object({
+  ...CommonFields,
+  author: z.string().default("Anthony O'Connell"),
+  language: z.string().default('en-US'),
+  publisher: z.string().default('ONE Publishing'),
+  rights: z.string().default("© 2024 Anthony O'Connell. All rights reserved."),
+  identifier: z.object({
+    scheme: z.string().default('ISBN-13'),
+    text: z.string().default('978-1-916-12345-6')
+  }).default({}),
+  creator: z.string().default("Anthony O'Connell"),
+  contributor: z.string().default('ONE Team'),
+  subject: z.string().default('Ecommerce, AI, Business Growth, Digital Marketing'),
+  css: z.string().optional(),
+  coverImage: z.string().optional(),
+  chapter: z.number().optional(),
+  order: z.number().optional(),
+  status: z.enum(['draft', 'review', 'published']).default('draft'),
+
+  // Schema.org fields
+  '@type': z.literal('Book').optional(),
+  '@context': z.literal('https://schema.org').optional(),
+  bookFormat: z.enum(['EBook', 'Paperback', 'Hardcover']).optional(),
+  inLanguage: z.string().optional(),
+  datePublished: z.string().optional(),
+  dateModified: z.string().optional(),
+  numberOfPages: z.number().optional(),
+  bookEdition: z.string().optional(),
+  isbn: z.string().optional(),
+  price: z.object({
+    amount: z.number().optional(),
+    currency: z.string().optional()
+  }).optional(),
+  audience: z.object({
+    '@type': z.literal('Audience').optional(),
+    audienceType: z.string().optional()
+  }).optional(),
+  workExample: z.array(z.object({
+    '@type': z.literal('Chapter').optional(),
+    name: z.string(),
+    position: z.number(),
+    url: z.string().optional()
+  })).optional()
 });
 
 // --- LMS SCHEMAS ---
@@ -184,6 +256,10 @@ export const news = defineCollection({ type: 'content', schema: NewsSchema });
 export const prompts = defineCollection({ type: 'content', schema: PromptsSchema });
 export const tutorials = defineCollection({ type: 'content', schema: TutorialsSchema });
 export const events = defineCollection({ type: 'content', schema: EventsSchema });
+export const book = defineCollection({
+  type: 'content',
+  schema: BookSchema
+});
 
 // Export collections object
 export const collections = {
@@ -199,6 +275,7 @@ export const collections = {
   prompts,
   tutorials,
   events,
+  book
 };
 
 // Export type inference
@@ -212,6 +289,7 @@ export type News = z.infer<typeof NewsSchema>;
 export type Prompts = z.infer<typeof PromptsSchema>;
 export type Tutorials = z.infer<typeof TutorialsSchema>;
 export type Events = z.infer<typeof EventsSchema>;
+export type Book = z.infer<typeof BookSchema>;
 
 // Stream type for unified content
 export type StreamItem = {
@@ -226,5 +304,6 @@ export type StreamItem = {
         z.infer<typeof NewsSchema> |
         z.infer<typeof PromptsSchema> |
         z.infer<typeof TutorialsSchema> |
-        z.infer<typeof EventsSchema>;
+        z.infer<typeof EventsSchema> |
+        z.infer<typeof BookSchema>;
 };
