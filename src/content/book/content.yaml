@@ -1,0 +1,41 @@
+---
+title: "Elevate Ecommerce: The Proven Framework for AI-Powered Growth"
+description: "A comprehensive framework for building and scaling AI-powered ecommerce businesses"
+date: "2024-05-08"
+status: "draft"
+tags: 
+  - "ecommerce"
+  - "artificial intelligence"
+  - "business growth"
+  - "digital marketing"
+  - "automation"
+  - "sales"
+  - "customer acquisition"
+  - "conversion optimization"
+collection:
+  name: "book"
+  type: "ebook"
+  order: 1
+seo:
+  canonical: "https://one.ie/book/elevate-ecommerce"
+  title: "Elevate Ecommerce: The Proven Framework for AI-Powered Growth"
+  metaTitle: "Elevate Ecommerce: Build AI-Powered Growth Systems"
+  metaDescription: "A comprehensive framework for building and scaling AI-powered ecommerce businesses with automated systems and intelligent growth strategies."
+  metaKeywords: ["ecommerce", "artificial intelligence", "business growth", "digital marketing", "automation"]
+  openGraph:
+    type: "book"
+    title: "Elevate Ecommerce: The Proven Framework for AI-Powered Growth"
+    description: "Build and scale your ecommerce business with AI-powered systems"
+    image:
+      url: "https://one.ie/book/cover.svg"
+      width: 1600
+      height: 2560
+      alt: "Elevate Ecommerce Book Cover"
+  twitter:
+    card: "summary_large_image"
+    site: "@onedotie"
+    creator: "@tonyoconnell"
+    title: "Elevate Ecommerce: AI-Powered Growth Framework"
+    description: "Build and scale your ecommerce business with AI-powered systems"
+    image: "https://one.ie/book/cover.svg"
+--- 

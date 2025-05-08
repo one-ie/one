@@ -1,0 +1,12 @@
+{
+    "output": {
+      "style": "markdown",
+      "filePath": "repomix.md",
+      "removeComments": true,
+      "showLineNumbers": true,
+      "topFilesLength": 10
+    },
+    "ignore": {
+      "customPatterns": ["*.test.ts", "*.md", "docs/**", "public", "pnpm-lock.yaml", "blocks", "dist"]
+    }
+  }

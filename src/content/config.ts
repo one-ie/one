@@ -6,10 +6,10 @@ import { defineCollection, z } from 'astro:content';
  * These fields provide consistent metadata across all content types.
  */
 const CommonFields = {
-  title: z.string(),
+  title: z.string().optional(),
   description: z.string().optional(),
   date: z.date().or(z.string()).optional(),
-  status: z.enum(['draft', 'public', 'private']).default('draft'),
+  status: z.enum(['draft', 'public', 'private']).default('draft').optional(),
   tags: z.array(z.string()).optional(),
   image: z.string().optional(),
 };
@@ -107,7 +107,6 @@ const NewsSchema = z.object({
  */
 const PromptsSchema = z.object({
   ...CommonFields,
-  category: z.string().optional()
 });
 
 /**

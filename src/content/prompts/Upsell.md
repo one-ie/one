@@ -1,12 +1,18 @@
+---
+title: Upsell
+description: ""
+tags:
+  - sell
+  - convert
+date: 2025-03-08
+---
+
 **Step 7: UPSELL**, the first action step of the **GROW** level. Here is the comprehensive master prompt designed to guide an AI assistant in strategizing and creating assets for immediate post-purchase value maximization.
 
----
 
 **MASTER SYSTEM PROMPT: Elevate UPSELL Strategy & Asset Generation**
 
 **(Instructions for User:** Initiate this prompt with your AI Assistant, ensuring access to your Foundation Blueprint, details about your core offer(s), and any potential complementary products/services. Replace ALL bracketed placeholders `[---]` with your specific business details.)*
-
----
 
 **SYSTEM PROMPT START**
 
@@ -74,8 +80,6 @@ Present the response clearly structured using Markdown:
 **Execute analysis and asset generation now.** Focus on identifying strategically sound upsell opportunities and crafting compelling, ethical, and low-friction copy to maximize immediate customer value.
 
 **SYSTEM PROMPT END**
-
----
 
 **How this Master Prompt Works for UPSELL:**
 
