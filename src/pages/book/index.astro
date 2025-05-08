@@ -1,0 +1,127 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+// Get all book content from book collection
+const bookContent = await getCollection('book');
+
+// Sort content by order if available
+const sortedContent = bookContent.sort((a: CollectionEntry<'book'>, b: CollectionEntry<'book'>) => {
+  const orderA = a.data.order || 0;
+  const orderB = b.data.order || 0;
+  return orderA - orderB;
+});
+
+// Download options
+const downloadOptions = [
+  {
+    title: "EPUB",
+    description: "For e-readers and mobile devices",
+    format: "epub",
+    href: "/book/download/epub"
+  },
+  {
+    title: "PDF",
+    description: "For printing and desktop reading",
+    format: "pdf",
+    href: "/book/download/pdf"
+  },
+  {
+    title: "Markdown",
+    description: "For developers and customization",
+    format: "md",
+    href: "/book/download/md"
+  }
+];
+---
+
+<Layout title="ONE Book - AI-Powered Business Guide">
+  <div class="container mx-auto px-4 py-12">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">
+        ONE Book: AI-Powered Business Guide
+      </h1>
+      <p class="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+        A comprehensive guide to building AI-powered businesses with ONE. Learn how to leverage AI agents, automated content, and crypto payments to grow your business.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        {downloadOptions.map(option => (
+          <a href={option.href} class="inline-block">
+            <Button size="lg" variant="outline" className="group">
+              {option.format === 'epub' && (
+                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              )}
+              {option.format === 'pdf' && (
+                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              )}
+              {option.format === 'md' && (
+                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              )}
+              Download {option.title}
+            </Button>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Content Preview -->
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+      <div>
+        <h2 class="text-2xl font-bold mb-4">Table of Contents</h2>
+        <div class="space-y-4">
+          {sortedContent.map((page: CollectionEntry<'book'>) => (
+            <a
+              href={`/book/${page.slug}`}
+              class="block p-6 rounded-lg border hover:border-primary hover:bg-primary/5 transition-all"
+            >
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium flex-shrink-0">
+                  {page.data.chapter}
+                </div>
+                <div class="space-y-2">
+                  <h4 class="text-lg font-semibold">{page.data.title}</h4>
+                  <p class="text-muted-foreground">
+                    {page.data.description}
+                  </p>
+                  {page.data.tags && (
+                    <div class="flex flex-wrap gap-2 mt-2">
+                      {page.data.tags.map((tag: string) => (
+                        <span class="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold mb-4">About This Book</h2>
+        <Card className="p-6">
+          <p class="text-muted-foreground mb-4">
+            This book provides a comprehensive guide to building AI-powered businesses using the ONE framework. Learn how to:
+          </p>
+          <ul class="list-disc list-inside space-y-2 text-muted-foreground">
+            <li>Deploy AI agents for sales and support</li>
+            <li>Generate and optimize content automatically</li>
+            <li>Integrate crypto and traditional payments</li>
+            <li>Build scalable AI-powered applications</li>
+            <li>Leverage advanced AI capabilities</li>
+          </ul>
+        </Card>
+      </div>
+    </div>
+  </div>
+</Layout> 

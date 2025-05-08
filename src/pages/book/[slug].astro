@@ -1,0 +1,46 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Book from '../../layouts/Docs.astro';
+
+// Get all book content
+const bookContent = await getCollection('book');
+
+// Sort content by order
+const sortedContent = bookContent.sort((a: CollectionEntry<'book'>, b: CollectionEntry<'book'>) => {
+  const orderA = a.data.order || 0;
+  const orderB = b.data.order || 0;
+  return orderA - orderB;
+});
+
+// Get current page
+const { slug } = Astro.params;
+const currentPage = bookContent.find((page: CollectionEntry<'book'>) => page.slug === slug);
+
+// If page not found, redirect to 404
+if (!currentPage) {
+  return Astro.redirect('/404');
+}
+
+// Find previous and next pages
+const currentIndex = sortedContent.findIndex((page: CollectionEntry<'book'>) => page.slug === slug);
+const prevPage = currentIndex > 0 ? sortedContent[currentIndex - 1] : null;
+const nextPage = currentIndex < sortedContent.length - 1 ? sortedContent[currentIndex + 1] : null;
+
+// Get the content
+const { Content } = await currentPage.render();
+---
+
+<Book
+  title={currentPage.data.title}
+  description={currentPage.data.description}
+  prevPage={prevPage ? {
+    title: prevPage.data.title,
+    slug: prevPage.slug
+  } : null}
+  nextPage={nextPage ? {
+    title: nextPage.data.title,
+    slug: nextPage.slug
+  } : null}
+>
+  <Content />
+</Book> 

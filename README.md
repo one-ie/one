@@ -386,6 +386,133 @@ src/
 - Check [Astro Documentation](https://docs.astro.build)
 - File an [Issue on GitHub](https://github.com/one-ie/one/issues)
 
+## AI Book Generation with Pandoc
+
+ONE includes powerful book generation capabilities that combine Astro's content collections with Pandoc to create beautifully formatted ebooks. This system allows you to:
+- Manage book content through Astro's content collections
+- Generate professional EPUB files with proper metadata
+- Maintain consistent styling across formats
+- Automate the book generation process
+
+### Book Content Structure
+
+```
+src/content/book/
+├── chapters/           # Book chapters in markdown
+├── assets/            # Images and resources
+├── epub-style.css     # EPUB-specific styling
+└── config.ts          # Book configuration
+```
+
+### Book Schema Configuration
+
+```typescript
+// src/content/config.ts
+const BookSchema = z.object({
+  ...CommonFields,
+  author: z.string(),
+  language: z.string(),
+  publisher: z.string(),
+  rights: z.string(),
+  identifier: z.object({
+    scheme: z.string(),
+    text: z.string()
+  }),
+  creator: z.string(),
+  contributor: z.string(),
+  subject: z.string(),
+  css: z.string().optional(),
+  coverImage: z.string().optional(),
+  chapter: z.number().optional(),
+  order: z.number().optional(),
+  status: z.enum(['draft', 'review', 'published']).default('draft')
+});
+```
+
+### EPUB Generation
+
+1. **Install Pandoc**
+   ```bash
+   # macOS
+   brew install pandoc
+   
+   # Ubuntu/Debian
+   sudo apt-get install pandoc
+   ```
+
+2. **Generate EPUB**
+   ```bash
+   pandoc \
+     --resource-path=.:assets \
+     --toc \
+     --toc-depth=2 \
+     --split-level=1 \
+     --css=epub-style.css \
+     --epub-cover-image=assets/cover.png \
+     -o output.epub \
+     chapters/*.md
+   ```
+
+### EPUB Styling
+
+```css
+/* src/content/book/epub-style.css */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    line-height: 1.5;
+    color: #333;
+    margin: 0;
+    padding: 1em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    color: #000;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.2;
+}
+```
+
+### Features
+
+- ✅ Content management through Astro collections
+- ✅ Automatic table of contents generation
+- ✅ Custom styling with CSS
+- ✅ Cover image support
+- ✅ Proper metadata handling
+- ✅ Chapter organization
+- ✅ Resource management
+- ✅ Multiple output formats
+
+### Best Practices
+
+1. **Content Organization**
+   - Use clear chapter naming conventions
+   - Maintain consistent formatting
+   - Keep images in the assets directory
+   - Use relative paths for resources
+
+2. **Metadata Management**
+   - Define comprehensive book metadata
+   - Include all required fields
+   - Use proper identifiers (ISBN, etc.)
+   - Maintain copyright information
+
+3. **Styling**
+   - Use system fonts for best compatibility
+   - Define consistent typography
+   - Ensure proper spacing
+   - Test on multiple devices
+
+4. **Build Process**
+   - Automate EPUB generation
+   - Implement version control
+   - Add build scripts to package.json
+   - Include validation steps
+
+For more details and advanced features, check out the [book generation documentation](/docs/book-generation).
+
 ---
 
 Built with 🚀 Astro, 🎨 Shadcn/UI and Vercel AI SDK by [ONE](https://one.ie)

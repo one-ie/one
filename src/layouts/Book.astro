@@ -1,0 +1,135 @@
+---
+import Layout from "./Layout.astro";
+import { Button } from "@/components/ui/button";
+
+interface Props {
+  title: string;
+  description?: string;
+  prevPage: { title: string; slug: string } | null;
+  nextPage: { title: string; slug: string } | null;
+}
+
+const { title, description, prevPage, nextPage } = Astro.props;
+---
+
+<Layout title={title}>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Navigation -->
+    <div class="flex items-center justify-between mb-8">
+      <a href="/book" class="text-muted-foreground hover:text-foreground">
+        ← Back to Book
+      </a>
+      <div class="flex gap-4">
+        <a href="/book/download/epub" class="text-muted-foreground hover:text-foreground">
+          Download EPUB
+        </a>
+        <a href="/book/download/pdf" class="text-muted-foreground hover:text-foreground">
+          Download PDF
+        </a>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <article class="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
+      <h1>{title}</h1>
+      {description && <p class="lead">{description}</p>}
+      <slot />
+    </article>
+
+    <!-- Chapter Navigation -->
+    <div class="max-w-3xl mx-auto mt-16 flex items-center justify-between">
+      {prevPage ? (
+        <a href={`/book/${prevPage.slug}`} class="group">
+          <Button variant="outline" className="group-hover:bg-primary/5">
+            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            {prevPage.title}
+          </Button>
+        </a>
+      ) : <div />}
+      
+      {nextPage ? (
+        <a href={`/book/${nextPage.slug}`} class="group">
+          <Button variant="outline" className="group-hover:bg-primary/5">
+            {nextPage.title}
+            <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </Button>
+        </a>
+      ) : <div />}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Typography styles for better reading experience */
+  .prose {
+    @apply mx-auto;
+  }
+  
+  .prose h1 {
+    @apply text-3xl font-bold mb-8;
+  }
+  
+  .prose h2 {
+    @apply text-2xl font-semibold mt-12 mb-6;
+  }
+  
+  .prose h3 {
+    @apply text-xl font-semibold mt-10 mb-4;
+  }
+  
+  .prose p {
+    @apply my-6 leading-relaxed;
+  }
+  
+  .prose ul, .prose ol {
+    @apply my-6 ml-6;
+  }
+  
+  .prose li {
+    @apply my-2;
+  }
+  
+  .prose code {
+    @apply px-1.5 py-0.5 rounded bg-muted text-sm font-mono;
+  }
+  
+  .prose pre {
+    @apply p-4 rounded-lg bg-muted my-6 overflow-x-auto;
+  }
+  
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+  
+  .prose blockquote {
+    @apply border-l-4 border-primary/20 pl-4 italic my-6;
+  }
+  
+  .prose img {
+    @apply rounded-lg my-8;
+  }
+  
+  .prose a {
+    @apply text-primary hover:underline;
+  }
+  
+  .prose table {
+    @apply w-full my-6;
+  }
+  
+  .prose th {
+    @apply bg-muted px-4 py-2 text-left font-semibold;
+  }
+  
+  .prose td {
+    @apply border-t px-4 py-2;
+  }
+  
+  .lead {
+    @apply text-lg text-muted-foreground mb-8;
+  }
+</style> 

@@ -246,36 +246,18 @@ const coursesCollection = defineCollection({
   schema: CourseSchema
 });
 
-export const pages = defineCollection({ type: 'content', schema: PagesSchema });
-export const blog = defineCollection({ type: 'content', schema: BlogSchema });
-export const docs = defineCollection({ type: 'content', schema: DocsSchema });
-export const videos = defineCollection({ type: 'content', schema: VideosSchema });
-export const podcasts = defineCollection({ type: 'content', schema: PodcastsSchema });
-export const software = defineCollection({ type: 'content', schema: SoftwareSchema });
-export const news = defineCollection({ type: 'content', schema: NewsSchema });
-export const prompts = defineCollection({ type: 'content', schema: PromptsSchema });
-export const tutorials = defineCollection({ type: 'content', schema: TutorialsSchema });
-export const events = defineCollection({ type: 'content', schema: EventsSchema });
-export const book = defineCollection({
-  type: 'content',
-  schema: BookSchema
-});
-
-// Export collections object
 export const collections = {
-  pages,
-  blog,
-  docs,
-  videos,
-  podcasts,
-  software,
-  courses: coursesCollection,
-  lessons: lessonsCollection,
-  news,
-  prompts,
-  tutorials,
-  events,
-  book
+  pages: defineCollection({ schema: PagesSchema }),
+  blog: defineCollection({ schema: BlogSchema }),
+  docs: defineCollection({ schema: DocsSchema }),
+  videos: defineCollection({ schema: VideosSchema }),
+  podcasts: defineCollection({ schema: PodcastsSchema }),
+  software: defineCollection({ schema: SoftwareSchema }),
+  news: defineCollection({ schema: NewsSchema }),
+  prompts: defineCollection({ schema: PromptsSchema }),
+  tutorials: defineCollection({ schema: TutorialsSchema }),
+  events: defineCollection({ schema: EventsSchema }),
+  book: defineCollection({ schema: BookSchema })
 };
 
 // Export type inference

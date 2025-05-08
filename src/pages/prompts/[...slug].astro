@@ -9,7 +9,11 @@ export const prerender = true;
 
 export async function getStaticPaths() {
   const prompts = await getCollection('prompts');
-  const sortedPrompts = prompts.sort((a: CollectionEntry<'prompts'>, b: CollectionEntry<'prompts'>) => b.data.date.getTime() - a.data.date.getTime());
+  const sortedPrompts = prompts.sort((a: CollectionEntry<'prompts'>, b: CollectionEntry<'prompts'>) => {
+    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+    return dateB - dateA;
+  });
   
   return sortedPrompts.map((entry: CollectionEntry<'prompts'>, index: number) => {
     const prev = index < sortedPrompts.length - 1 ? sortedPrompts[index + 1] : null;
@@ -30,12 +34,13 @@ type Props = {
 const { entry, prev, next } = Astro.props;
 const { Content } = await entry.render();
 
-function formatDate(date: Date) {
+function formatDate(date: Date | string | undefined) {
+  if (!date) return '';
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
-  }).format(date);
+  }).format(new Date(date));
 }
 ---
 
