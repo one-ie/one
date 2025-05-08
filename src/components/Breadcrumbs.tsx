@@ -1,5 +1,5 @@
 import { cn } from '../lib/utils';
-import { Home } from 'lucide-react';
+import { Home, Folder } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export function Breadcrumbs() {
@@ -7,12 +7,19 @@ export function Breadcrumbs() {
   const [isHome, setIsHome] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [title, setTitle] = useState<string>('');
 
   useEffect(() => {
     const updatePath = () => {
       const currentPath = window.location.pathname;
       setPathSegments(currentPath.split('/').filter(Boolean));
       setIsHome(currentPath === '/');
+      
+      // Get the document title from meta
+      const titleElement = document.querySelector('title');
+      if (titleElement) {
+        setTitle(titleElement.textContent || '');
+      }
     };
 
     // Initial path update
@@ -47,22 +54,22 @@ export function Breadcrumbs() {
     text: React.ReactNode;
     href: string;
     key?: string;
+    icon?: React.ReactNode;
   }
 
   const breadcrumbs: Breadcrumb[] = [
-    { text: <Home className="h-4 w-4" />, href: '/', key: 'home' }
+    { text: 'Home', href: '/', key: 'home', icon: <Home className="h-4 w-4" /> }
   ];
 
-  // Add section (blog or docs)
+  // Add section (book, blog, or docs)
   if (pathSegments[0]) {
     const section = pathSegments[0];
-    if (section === 'blog' || section === 'docs') {
-      breadcrumbs.push({
-        text: section.charAt(0).toUpperCase() + section.slice(1),
-        href: `/${section}`,
-        key: section
-      });
-    }
+    breadcrumbs.push({
+      text: section.charAt(0).toUpperCase() + section.slice(1),
+      href: `/${section}`,
+      key: section,
+      icon: <Folder className="h-4 w-4" />
+    });
   }
 
   // Add intermediate segments (if any)
@@ -71,22 +78,26 @@ export function Breadcrumbs() {
     breadcrumbs.push({
       key: segment,
       text: segment
-        .split('-')
+        .split(/[-_.]/)
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' '),
-      href: '/' + pathSegments.slice(0, i + 1).join('/')
+      href: '/' + pathSegments.slice(0, i + 1).join('/'),
+      icon: <Folder className="h-4 w-4" />
     });
   }
 
   // Add the current page name if it exists
   const currentPage = pathSegments[pathSegments.length - 1];
   if (currentPage && pathSegments.length > 0) {
+    // Use the document title if available, otherwise format the URL segment
+    const displayText = title || currentPage
+      .split(/[-_.]/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+      
     breadcrumbs.push({
       key: currentPage,
-      text: currentPage
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' '),
+      text: displayText,
       href: '/' + pathSegments.join('/')
     });
   }
@@ -99,31 +110,33 @@ export function Breadcrumbs() {
 
   return (
     <div className={cn(
-      "h-16",
+      "h-12",
       "flex items-center",
       "bg-transparent",
       "transition-opacity duration-300",
+      "pl-8",
+      "pt-[9px]",
       isVisible ? "opacity-100" : "opacity-0"
     )}>
       <nav
         aria-label="Breadcrumb"
-        className="flex items-center px-4 gap-2 text-sm text-muted-foreground"
+        className="flex items-center gap-1.5 text-sm text-muted-foreground"
       >
         {breadcrumbs.map((crumb, index) => (
           <div key={crumb.key || crumb.href} className="flex items-center">
             {index > 0 && (
-              <span className="text-muted-foreground/50 mx-2">/</span>
+              <span className="text-muted-foreground/50 mx-1.5">/</span>
             )}
             <a
               href={crumb.href}
               className={cn(
-                'hover:text-foreground transition-colors',
-                { 'flex items-center': index === 0 },
+                'hover:text-foreground transition-colors flex items-center gap-1.5',
                 { 'text-foreground font-medium': index === breadcrumbs.length - 1 }
               )}
               aria-current={index === breadcrumbs.length - 1 ? 'page' : undefined}
             >
-              {crumb.text}
+              {crumb.icon}
+              <span>{crumb.text}</span>
             </a>
           </div>
         ))}
