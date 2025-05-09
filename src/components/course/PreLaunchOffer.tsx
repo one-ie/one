@@ -128,7 +128,7 @@ export function PreLaunchOffer() {
           <Card className="bg-destructive/5 p-6 mb-12">
             <h3 className="text-xl font-bold text-destructive mb-4 flex items-center gap-2">
               <AlertTriangle className="w-5 h-5" />
-              EXTREME SCARCITY: ONLY 4 SPOTS. PERIOD.
+              ONLY 4 SPOTS. PERIOD.
             </h3>
             <p className="text-sm mb-4">
               Let me be blunt: My time for 1:1 work is severely limited. I am making <span className="font-bold">only four (4)</span> of these personalized coaching spots available before the official course launch.
