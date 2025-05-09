@@ -75,21 +75,21 @@ const downloadOptions = [
         {sortedContent.map((page: BookEntry) => (
           <a
             href={`/book/${page.slug}`}
-            class="block p-6 rounded-lg border hover:border-primary hover:bg-primary/5 transition-all"
+            class="block p-6 rounded-lg border hover:border-primary hover:bg-primary/5 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40"
           >
             <div class="flex items-start gap-4">
               <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium flex-shrink-0">
                 {page.data.chapter}
               </div>
               <div class="space-y-2">
-                <h4 class="text-lg font-semibold">{page.data.title}</h4>
+                <h4 class="text-lg font-semibold group-hover:text-primary transition-colors">{page.data.title}</h4>
                 <p class="text-muted-foreground">
                   {page.data.description}
                 </p>
                 {page.data.tags && (
                   <div class="flex flex-wrap gap-2 mt-2">
                     {page.data.tags.map((tag: string) => (
-                      <span class="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary">
+                      <span class="px-2 py-0.5 text-[10px] font-medium rounded-full border border-primary/20 bg-primary/5 text-primary tracking-wide uppercase">
                         {tag}
                       </span>
                     ))}

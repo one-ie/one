@@ -5,7 +5,7 @@ tags: ["ONE"]
 date: 2025-03-08
 ---
 
-**HOOK Module AI Prompts (Formatted using ROCKET)**
+HOOK Module AI Prompts 
 
 **Prompt H1: Generate Pain-Focused Ad Headlines**
 
