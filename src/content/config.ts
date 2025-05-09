@@ -216,8 +216,52 @@ const LessonSchema = z.object({
     id: z.string(),
     title: z.string().optional(),
     description: z.string().optional(),
-    timestamp: z.string().optional(),
-    params: z.string().optional(),
+    captions: z.string().optional()
+  }).optional(),
+  bookChapter: z.object({
+    url: z.string().url(),
+    title: z.string().optional(),
+    description: z.string().optional()
+  }).optional(),
+  worksheet: z.object({
+    url: z.string().url(),
+    title: z.string().optional(),
+    description: z.string().optional()
+  }).optional(),
+  prompts: z.object({
+    tag: z.string(),
+    url: z.string().url(),
+    description: z.string().optional()
+  }).optional(),
+  checklist: z.object({
+    url: z.string().url(),
+    title: z.string().optional(),
+    description: z.string().optional()
+  }).optional(),
+  resources: z.array(z.object({
+    title: z.string(),
+    url: z.string().url(),
+    description: z.string().optional(),
+    type: z.enum(['article', 'video', 'tool', 'template', 'other']).optional()
+  })).optional(),
+  audio: z.object({
+    url: z.string().url(),
+    title: z.string().optional(),
+    duration: z.number().optional(),
+    description: z.string().optional()
+  }).optional(),
+  assignments: z.array(z.object({
+    title: z.string(),
+    description: z.string(),
+    dueDate: z.string().optional(),
+    points: z.number().optional(),
+    type: z.enum(['individual', 'group', 'quiz', 'project']).optional()
+  })).optional(),
+  community: z.object({
+    engagementInstructions: z.string(),
+    url: z.string().url(),
+    platform: z.enum(['discord', 'slack', 'forum', 'other']).optional(),
+    description: z.string().optional()
   }).optional(),
   aiConfig: z.any().optional(),
 });

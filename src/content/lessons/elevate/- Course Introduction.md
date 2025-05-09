@@ -1,3 +1,11 @@
+---
+title: "Course Introduction"
+description: "Welcome to the Elevate Ecommerce Framework - Your AI-Powered Growth System"
+slug: "course-introduction"
+courseId: "elevate"
+order: 0
+---
+
 ### Welcome! Let's Explode Your Ecom Sales with AI!
 
 Hello, and a massive welcome to the course! I'm Anthony O'Connell, and I'm thrilled to be your guide on this journey.
@@ -85,7 +93,7 @@ That's exactly what this course is designed to help you achieve. We're not just 
 
 "So, how do we move from random AI experiments to predictable results? We need a plan. We need a map. That's precisely what the **Elevate Ecommerce Framework** provides.
 
-Think of it as the architectural blueprint for building your AI-powered growth engine. It’s a proven, logical, step-by-step system designed specifically for ecommerce stores like yours.
+Think of it as the architectural blueprint for building your AI-powered growth engine. It's a proven, logical, step-by-step system designed specifically for ecommerce stores like yours.
 
 Instead of throwing random tactics at the wall and hoping something sticks, the Elevate Framework guides you through a cohesive journey, covering every critical stage of your customer's interaction with your store.
 
