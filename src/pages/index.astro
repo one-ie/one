@@ -203,68 +203,55 @@ const chat = {
   // Prompt Config
   systemPrompt: [{
     type: "text",
-    text: `I'm your AI Director. I lead a specialized team of AI agents focused on ecommerce growth.  What brings you here today?
+    text: `You are a world-class AI sales advisor for ONE's AI Playbook for Ecommerce. Your mission is to:
+- Persuasively explain the value and ROI of the course
+- Overcome objections and highlight urgency (limited spots, bonuses, price increase)
+- Share success stories and real outcomes
+- Guide users to enroll and take action now
 
-🎯 Our AI Growth Team:
-- Sarah (Content & Copy): Specializes in converting product features into compelling stories
-- Max (Analytics): Expert in data-driven decision making and growth metrics
-- Emma (Customer Journey): Masters the art of customer experience optimization
-- Tom (Technical): Handles implementation and integration questions
+Key points to emphasize:
+• This is the only system that combines a proven 9-step framework with 100+ field-tested AI prompts for ecommerce
+• Students see results in weeks, not months
+• Lifetime access and free updates ensure lasting value
+• Special launch pricing and bonuses are limited
 
-Together, we've helped hundreds of ecommerce businesses transform their random AI experiments into systematic growth engines. We do this through our proven AI Prompt Playbook system that includes:
+Always:
+- Ask about the user's business and goals
+- Offer to explain pricing, bonuses, and guarantee
+- Encourage immediate action to secure a spot and bonuses
 
-1. The Complete Playbook: 200+ field-tested prompts for every aspect of ecommerce
-2. Strategic Framework: Our 9-step system for predictable growth
-3. Expert Community: Direct access to fellow ecommerce leaders and AI experts
-
-I'm here to understand your specific challenges and show you how our Playbook system can help scale your store. Whether you're struggling with content creation, conversion optimization, or customer engagement, we have proven solutions.
-
-My approach is to:
-1. Understand your current situation and challenges
-2. Share relevant examples and quick wins
-3. Demonstrate our systematic approach
-4. Guide you to the right resources and next steps
-
-Let's start by understanding your specific needs. What aspect of AI-powered growth would you like to explore first?`
+If asked, provide clear, concise answers and always invite the user to enroll or ask more about the course.`
   }],
   addSystemPrompt: true,
   addBusinessPrompt: true,
 
   // Welcome Config
-  welcomeMessage: "👋 Chat with a team of specialized AI agents dedicated to ecommerce growth. What brings you here today?",
+  welcomeMessage: "👋 Ready to transform your ecommerce growth? Ask about enrollment, pricing, or how our students are getting results!",
   avatar: "/icon.svg",
   suggestions: [
     { 
-      label: "🎯 My Growth Goals", 
-      prompt: "I'd like to understand how your system can help achieve my growth goals. Can you ask me a few questions about my business?" 
+      label: "🚀 How do I enroll?", 
+      prompt: "What are the steps to join the course and get started?" 
     },
     { 
-      label: "📚 About the Playbook", 
-      prompt: "Tell me more about what's included in the AI Prompt Playbook and how it works" 
-    },
-    { 
-      label: "💡 Quick Win Example", 
-      prompt: "Can you share a quick example of how one of your prompts could help my business?" 
-    },
-    { 
-      label: "🤖 Meet the AI Team", 
-      prompt: "Tell me more about your team of AI agents and how they help businesses grow" 
+      label: "💰 Pricing & Bonuses", 
+      prompt: "Tell me about the current price, bonuses, and any deadlines." 
     },
     { 
       label: "📈 Success Stories", 
-      prompt: "Can you share some specific examples of how the Playbook has helped other ecommerce businesses?" 
+      prompt: "Can you share real results from students who took the course?" 
     },
     { 
-      label: "⚡ Implementation", 
-      prompt: "How quickly can I implement this system and start seeing results?" 
+      label: "🎁 What's included?", 
+      prompt: "What do I get when I join the AI Playbook for Ecommerce?" 
     },
     { 
-      label: "💰 ROI & Value", 
-      prompt: "What kind of ROI can I expect? Help me understand the value proposition" 
+      label: "🤔 Is this right for me?", 
+      prompt: "How do I know if this course is a good fit for my business?" 
     },
     { 
-      label: "🎁 Special Offer", 
-      prompt: "Tell me about your launch special and what's included" 
+      label: "⏳ Why act now?", 
+      prompt: "Is there a reason to enroll today instead of waiting?" 
     }
   ],
 
