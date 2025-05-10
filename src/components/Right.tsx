@@ -22,13 +22,13 @@ const Right: React.FC<RightPanelProps> = (props) => {
     Object.entries(props).filter(([key]) => !key.startsWith("client:"))
   ) as Omit<RightPanelProps, "client:load" | "client:idle" | "client:only">;
 
-  // Initialize with undefined to avoid hydration mismatch
-  const [hydratedChatConfig, setHydratedChatConfig] = useState<ChatConfig | undefined>(undefined);
-
   const { rightPanelMode, chatConfig } = componentProps;
   const layout = useStore(layoutStore);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  // Initialize chat config immediately
+  const [hydratedChatConfig] = useState<ChatConfig | undefined>(chatConfig);
 
   useEffect(() => {
     setMounted(true);
@@ -36,7 +36,7 @@ const Right: React.FC<RightPanelProps> = (props) => {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    // Enhanced debug logging
+    // Debug logging
     if (chatConfig) {
       console.log('Right component - Chat config details:', {
         welcome: chatConfig.welcome,
@@ -44,19 +44,12 @@ const Right: React.FC<RightPanelProps> = (props) => {
         suggestions: chatConfig.welcome?.suggestions?.map(s => 
           typeof s === 'string' ? s : s.label
         ),
-        mounted,
-        previousConfig: hydratedChatConfig ? true : false
+        mounted
       });
-      
-      // Only update if config changed
-      if (JSON.stringify(chatConfig) !== JSON.stringify(hydratedChatConfig)) {
-        console.log('Updating hydrated config');
-        setHydratedChatConfig(chatConfig);
-      }
     }
     
     return () => window.removeEventListener('resize', checkMobile);
-  }, [chatConfig, mounted, hydratedChatConfig]);
+  }, [chatConfig, mounted]);
 
   useEffect(() => {
     if (mounted) {
@@ -180,11 +173,13 @@ const Right: React.FC<RightPanelProps> = (props) => {
           <main 
             className="flex-1 overflow-hidden mx-auto w-full max-w-[850px] right-panel-bg"
           >
-            <Chat
-              className="right-panel-bg"
-              chatConfig={hydratedChatConfig}
-              key={hydratedChatConfig ? JSON.stringify(hydratedChatConfig.welcome) : 'initial'}
-            />
+            {hydratedChatConfig && (
+              <Chat
+                className="right-panel-bg"
+                chatConfig={hydratedChatConfig}
+                key={JSON.stringify(hydratedChatConfig.welcome)}
+              />
+            )}
           </main>
         </div>
       )}

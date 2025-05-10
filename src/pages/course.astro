@@ -1,0 +1,257 @@
+---
+import Layout from "../layouts/LayoutCourse.astro";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { AccordionWrapper } from "@/components/AccordionWrapper";
+import { CourseModuleContent } from "@/components/course/CourseModuleContent";
+import { ChatConfigSchema } from '../schema/chat';
+
+// Course data structure
+const courseModules = [
+  {
+    title: "Module 0: FOUNDATION – Building Your Strategic Bedrock",
+    description: "Stop guessing, start knowing. Build the essential foundation for targeted AI generation and strategic decision-making.",
+    lessons: [
+      { name: "Foundation", value: "Building your strategic bedrock" },
+      { name: "Workflow", value: "Understanding the course workflow" },
+      { name: "Company", value: "Defining your company context" },
+      { name: "Customer", value: "Understanding your ideal customer" },
+      { name: "Find Customers", value: "Identifying your target market" }
+    ]
+  },
+  {
+    title: "Module 1: HOOK – Locating Prospects & Initiating Engagement",
+    description: "Strategically identify where your ideal customers are and craft compelling initial messages to capture relevant attention.",
+    lessons: [
+      { name: "Hook", value: "Creating attention-grabbing hooks" },
+      { name: "Hook Grid", value: "Organizing your hook strategy" }
+    ]
+  },
+  {
+    title: "Module 2: GIFT – Delivering Instant Value & Building Interest",
+    description: "Convert initial attention into genuine interest with high-value, problem-solving lead magnets.",
+    lessons: [
+      { name: "Gift", value: "Creating valuable lead magnets" }
+    ]
+  },
+  {
+    title: "Module 3: IDENTIFY – Seamlessly Capturing Your Future Customers",
+    description: "Convert interested prospects into known, contactable leads efficiently and ethically.",
+    lessons: [
+      { name: "Identify", value: "Capturing and qualifying leads" }
+    ]
+  },
+  {
+    title: "Module 4: ENGAGE – Reducing Friction & Closing the Sale",
+    description: "Interact effectively during critical moments of the buying process to address hesitations and maximize completed purchases.",
+    lessons: [
+      { name: "Engage", value: "Engaging prospects during purchase" },
+      { name: "Engage Purchase Psychology", value: "Understanding purchase psychology" }
+    ]
+  },
+  {
+    title: "Module 5: SELL – Engineering Your High-Conversion Sales Environment",
+    description: "Transform your product/sales pages into powerful conversion engines by optimizing the core offer presentation.",
+    lessons: [
+      { name: "Sell", value: "Creating high-converting sales pages" }
+    ]
+  },
+  {
+    title: "Module 6: NURTURE – Systematically Converting the 'Not Yet Ready'",
+    description: "Build trust, deliver value, and convert prospects over time through targeted campaigns.",
+    lessons: [
+      { name: "Nurture", value: "Nurturing leads into customers" }
+    ]
+  },
+  {
+    title: "Module 7: UPSELL – Instantly Maximizing Profit Per Customer",
+    description: "Increase Average Order Value (AOV) and customer profitability immediately post-purchase.",
+    lessons: [
+      { name: "Upsell", value: "Creating effective upsell strategies" }
+    ]
+  },
+  {
+    title: "Module 8: EDUCATE – Driving Loyalty Through Onboarding & Insight",
+    description: "Maximize customer success through effective onboarding and gather actionable data for retention.",
+    lessons: [
+      { name: "Educate", value: "Educating and onboarding customers" }
+    ]
+  },
+  {
+    title: "Module 9: SHARE – Amplifying Growth Through Advocacy",
+    description: "Systematically leverage happy customers to drive exponential growth via social proof and referrals.",
+    lessons: [
+      { name: "Share", value: "Building customer advocacy" }
+    ]
+  }
+];
+
+// Course metadata
+const courseMetadata = {
+  title: "AI-Powered Ecom Growth System",
+  description: "Transform Random AI Experiments into a Systematic Growth Engine. Stop wasting time with trial-and-error AI prompts. Our proven 10-module system gives you everything you need to systematically scale your ecommerce store using AI.",
+  duration: "10 Modules",
+  level: "Intermediate",
+  prerequisites: [
+    "Basic understanding of ecommerce",
+    "Familiarity with AI tools",
+    "Access to an ecommerce store or business"
+  ]
+};
+
+// Configure AI assistant for course
+const chatConfig = ChatConfigSchema.parse({
+  // Layout and Meta
+  layout: "course",
+  title: "AI-Powered Ecom Growth System",
+  description: "Transform Random AI Experiments into a Systematic Growth Engine",
+  
+  // AI Config
+  provider: "openrouter",
+  model: "google/gemini-2.0-flash-001",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 900000,
+  runtime: "edge",
+  includeContent: true,
+
+  // Prompt Config
+  systemPrompt: [{
+    type: "text",
+    text: `I'm your AI Course Instructor, dedicated to helping you master the AI-Powered Ecom Growth System. I've helped hundreds of ecommerce businesses transform their random AI experiments into systematic growth engines.
+
+🎯 Course Overview:
+- 10 Comprehensive Modules
+- 200+ Field-Tested AI Prompts
+- Step-by-Step Implementation Guides
+- Expert Community Support
+
+I'm here to:
+1. Guide you through each module
+2. Answer your questions
+3. Provide practical examples
+4. Help you implement the strategies
+5. Ensure your success
+
+My teaching approach:
+- Focus on practical application
+- Provide real-world examples
+- Break down complex concepts
+- Offer step-by-step guidance
+- Support your implementation
+
+Let's start by understanding your goals. What would you like to learn about first?`
+  }],
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+
+  // Welcome Config
+  welcomeMessage: "👋 Welcome to the AI-Powered Ecom Growth System! I'm your course instructor. What would you like to learn about?",
+  avatar: "/icon.svg",
+  suggestions: [
+    {
+      label: "🎯 Module 0: Foundation",
+      prompt: "Tell me about building my strategic bedrock and understanding my ideal customer"
+    },
+    {
+      label: "🎣 Module 1: Hook",
+      prompt: "How do I locate prospects and create compelling initial messages?"
+    },
+    {
+      label: "🎁 Module 2: Gift",
+      prompt: "What makes an effective lead magnet for my target audience?"
+    },
+    {
+      label: "📝 Module 3: Identify",
+      prompt: "How can I efficiently capture and qualify leads?"
+    },
+    {
+      label: "💬 Module 4: Engage",
+      prompt: "What's the best way to reduce friction during the sales process?"
+    },
+    {
+      label: "💰 Module 5: Sell",
+      prompt: "How do I create high-converting sales pages?"
+    },
+    {
+      label: "🌱 Module 6: Nurture",
+      prompt: "What's the best strategy for converting not-yet-ready prospects?"
+    },
+    {
+      label: "📈 Module 7: Upsell",
+      prompt: "How can I maximize profit per customer?"
+    },
+    {
+      label: "🎓 Module 8: Educate",
+      prompt: "What's the best way to onboard customers and drive loyalty?"
+    },
+    {
+      label: "🌟 Module 9: Share",
+      prompt: "How can I leverage customer advocacy for growth?"
+    }
+  ]
+});
+---
+
+<Layout
+  title={courseMetadata.title}
+  description={courseMetadata.description}
+  rightPanelMode="half"
+  chatConfig={chatConfig}
+>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Course Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold mb-4">{courseMetadata.title}</h1>
+      <p class="text-xl text-muted-foreground mb-6">{courseMetadata.description}</p>
+      
+      <div class="flex flex-wrap gap-4 mb-6">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{courseMetadata.duration}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span>{courseMetadata.level}</span>
+        </div>
+      </div>
+
+      <!-- Prerequisites -->
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Prerequisites</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul class="list-disc list-inside space-y-2">
+            {courseMetadata.prerequisites.map(prereq => (
+              <li class="text-muted-foreground">{prereq}</li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+    </div>
+
+    <!-- Course Content -->
+    <div class="space-y-8">
+      <h2 class="text-2xl font-bold mb-4">Course Content</h2>
+      <AccordionWrapper client:load items={courseModules} />
+    </div>
+
+    <!-- Start Learning Button -->
+    <div class="mt-8 text-center">
+      <Button size="lg" className="px-8">
+        Start Learning
+      </Button>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+  }
+</style> 

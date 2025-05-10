@@ -1,9 +1,98 @@
 ---
-import Layout from "../layouts/1.blank.astro";
-import Page from "../components/ChatPage";
+import { ChatConfigSchema } from '../schema/chat';
 
+// Configure AI assistant for chat
+const chatConfig = ChatConfigSchema.parse({
+  // Layout and Meta
+  layout: "chat",
+  title: "ONE Chat",
+  description: "Your AI-powered chat assistant",
+  
+  // AI Config
+  aiProvider: "openrouter",
+  aiModel: "google/gemini-2.0-flash-001",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 900000,
+  runtime: "edge",
+  includeContent: true,
+
+  // Prompt Config
+  systemPrompt: [{
+    type: "text",
+    text: `I am Agent ONE, your AI assistant. I'm here to help you with:
+
+🎯 Core Capabilities:
+- Answer questions about ONE framework
+- Help with code and development
+- Guide you through documentation
+- Assist with AI integration
+- Support your projects
+
+I aim to:
+1. Provide clear, accurate information
+2. Give practical, actionable advice
+3. Share relevant examples
+4. Help solve problems
+5. Support your success
+
+How can I assist you today?`
+  }],
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+
+  // Welcome Config
+  welcomeMessage: "👋 Hello! I'm Agent ONE. How can I help you today?",
+  avatar: "/icon.svg",
+  suggestions: [
+    {
+      label: "🚀 Quick Start",
+      prompt: "How do I get started with ONE?"
+    },
+    {
+      label: "💡 Features",
+      prompt: "What are the key features of ONE?"
+    },
+    {
+      label: "🤖 AI Integration",
+      prompt: "How do I integrate AI into my ONE project?"
+    },
+    {
+      label: "📚 Documentation",
+      prompt: "Where can I find the documentation?"
+    },
+    {
+      label: "💻 Development",
+      prompt: "How do I set up my development environment?"
+    },
+    {
+      label: "🎨 Styling",
+      prompt: "How do I customize the UI and styling?"
+    }
+  ]
+});
 ---
 
-<Layout title="ONE - Chat">
-    <Page client:load />
+<Layout
+  title="ONE Chat"
+  description="Your AI-powered chat assistant"
+  rightPanelMode="full"
+  chatConfig={chatConfig}
+>
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold mb-4">ONE Chat</h1>
+        <p class="text-xl text-muted-foreground">
+          Your AI-powered assistant for ONE framework
+        </p>
+      </div>
+    </div>
+  </div>
 </Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+  }
+</style>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GitHubLogoIcon, CheckIcon } from "@radix-ui/react-icons";
 import { GitSection } from "@/components/GitSection";
+import { ChatConfigSchema } from '../schema/chat';
 
 // Import license content
 import License from "../../LICENSE?raw";
@@ -44,9 +45,24 @@ const INSTALLATION_STEPS = [
 const GITHUB_URL = "https://github.com/one-ie/one";
 
 // Configure chat
-const chatConfig = {
+const chatConfig = ChatConfigSchema.parse({
+  // Layout and Meta
+  layout: "download",
+  title: "Download ONE",
+  description: "Get started with ONE framework",
+  
+  // AI Config
+  aiProvider: "openrouter",
+  aiModel: "google/gemini-2.0-flash-001",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 900000,
+  runtime: "edge",
+  includeContent: true,
+
+  // Prompt Config
   systemPrompt: [{
-    type: "text" as const,
+    type: "text",
     text: `You are ONE's setup specialist, helping users build AI-powered businesses. Your role includes:
     
     - Fast framework installation and deployment
@@ -80,38 +96,40 @@ const chatConfig = {
     Installation Steps:
     ${JSON.stringify(INSTALLATION_STEPS, null, 2)}
     
-    Focus on helping users deploy their first AI agent and set up payment processing. Guide them through token system benefits.`,
+    Focus on helping users deploy their first AI agent and set up payment processing. Guide them through token system benefits.`
   }],
-  welcome: {
-    message: "👋 Ready to build your AI-powered business? I'll help you get started with AI agents, payments, and token features.",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "🤖 AI Agent Setup",
-        prompt: "How do I create my first AI sales agent?",
-      },
-      {
-        label: "💳 Payment Integration",
-        prompt: "Guide me through setting up crypto and traditional payments",
-      },
-      {
-        label: "🪙 Token Features",
-        prompt: "Explain how the token system works for unlocking features",
-      },
-      {
-        label: "📥 Quick Install",
-        prompt: "What's the fastest way to get started with ONE?",
-      },
-    ],
-  },
-} as const;
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+
+  // Welcome Config
+  welcomeMessage: "👋 Ready to build your AI-powered business? I'll help you get started with AI agents, payments, and token features.",
+  avatar: "/icon.svg",
+  suggestions: [
+    {
+      label: "🤖 AI Agent Setup",
+      prompt: "How do I create my first AI sales agent?"
+    },
+    {
+      label: "💳 Payment Integration",
+      prompt: "Guide me through setting up crypto and traditional payments"
+    },
+    {
+      label: "🪙 Token Features",
+      prompt: "Explain how the token system works for unlocking features"
+    },
+    {
+      label: "📥 Quick Install",
+      prompt: "What's the fastest way to get started with ONE?"
+    }
+  ]
+});
 ---
 
 <Layout
   title="Download ONE - AI Agents & Crypto Commerce Toolbox"
   description="Download the first framework for building intelligent AI agents that generate content, engage customers, and process crypto payments. Free and open source."
+  rightPanelMode="half"
   chatConfig={chatConfig}
-  rightPanelMode="quarter"
 >
   <main class="container mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-[1800px]">
      <GitSection client:load />

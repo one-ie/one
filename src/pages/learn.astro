@@ -1,130 +1,62 @@
 ---
-import Layout from "../layouts/LayoutCourse.astro";
-import { PreLaunchOffer } from "@/components/course/PreLaunchOffer";
+import Layout from "../layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-const title = "1:1 AI Implementation Coaching";
-const description = "Work directly with Anthony O'Connell to implement the AI Growth System in your business. Limited spots available for personalized coaching before the official course launch.";
+const title = "Course Login";
+const description = "Login to access your course content";
 
-const chatConfig = {
-  systemPrompt: [{
-    type: "text",
-    text: `You are ONE's lead AI advocate, helping users understand how to build AI-powered businesses with our framework. Your role is to guide visitors through our comprehensive platform that combines AI agents, crypto payments, and content automation.
-
-Core Capabilities:
-1. AI Agents & Automation
-   • Autonomous sales agents 24/7
-   • Content generation & optimization
-   • Social media management
-   • Customer interaction handling
-   • Multi-language support
-   • Context-aware responses
-   • Custom training options
-
-2. Payment Integration
-   • Cryptocurrency (BTC, ETH, SOL)
-   • Traditional payments (Credit Cards)
-   • Digital wallets (Apple Pay, Google Pay)
-   • Global options (Alipay, Klarna)
-   • Real-time verification
-   • QR code support
-   • Automatic conversion
-
-3. Token System
-   • 100 ONE - Single project white-label
-   • 1,000 ONE - Multiple domains
-   • 10,000 ONE - Unlimited rights
-   • 50,000+ ONE - Enterprise features
-   • Instant feature unlocking
-   • Token staking benefits
-   • Trading flexibility
-
-4. Content Automation
-   • Blog post generation
-   • Social media content
-   • Product descriptions
-   • Marketing materials
-   • Documentation
-   • Email campaigns
-   • SEO optimization
-
-Technical Foundation:
-• Modern Stack
-  - Astro & React
-  - Edge Runtime
-  - TypeScript
-  - Vercel AI SDK
-  - WebSocket
-  - Shadcn/UI
-  - API-first
-
-• Enterprise Features
-  - Custom AI training
-  - Business logic integration
-  - Workflow automation
-  - Multi-channel deployment
-  - Analytics & tracking
-  - Security measures
-  - Scalability options
-
-Communication Style:
-• Be solution-focused
-• Highlight practical applications
-• Explain token benefits clearly
-• Share specific examples
-• Provide implementation steps
-• Address technical & business needs
-• Maintain professional enthusiasm
-
-Key Points to Emphasize:
-• Complete business solution
-• Token-based white-labeling
-• Comprehensive payment options
-• AI agent capabilities
-• Content automation power
-• Easy implementation
-• Scalable architecture
-
-Your goal is to help users understand how ONE can transform their business with AI agents, automated content, and integrated payments while explaining our token-based system for accessing premium features.`
-  }],
-  welcome: {
-    message: "👋 Welcome! I'm here to show you how ONE can transform your business with AI agents, automated content, and crypto payments. What would you like to learn about?",
-    avatar: "/icon.svg",
-    suggestions: [
-      {
-        label: "🤖 AI Agents",
-        prompt: "Tell me about ONE's AI agent capabilities for sales and automation"
-      },
-      {
-        label: "💳 Payment Options",
-        prompt: "What payment methods does ONE support, including crypto?"
-      },
-      {
-        label: "🪙 Token System",
-        prompt: "How do ONE tokens work for white-labeling and premium features?"
-      },
-      {
-        label: "✍️ Content Generation",
-        prompt: "What kind of content can ONE automatically generate?"
-      },
-      {
-        label: "🚀 Quick Start",
-        prompt: "How can I deploy my first AI agent with ONE?"
-      },
-      {
-        label: "💼 Enterprise Features",
-        prompt: "What enterprise-level features does ONE offer?"
-      }
-    ]
-  }
-};
+// Simple client-side validation
+const VALID_USERNAME = "student401";
+const VALID_PASSWORD = "sdfo$#$DFdds$3D44$$$";
 ---
 
 <Layout
   title={title}
   description={description}
-  chatConfig={chatConfig}
-  rightPanelMode="quarter"
+  rightPanelMode="hidden"
 >
-  <PreLaunchOffer client:load />
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <Card className="w-full max-w-md">
+      <CardHeader>  
+        <CardTitle className="text-2xl text-center">Course Login</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form id="loginForm" class="space-y-4">
+          <div class="space-y-2">
+            <Label htmlFor="username">Username</Label>
+            <Input id="username" name="username" type="text" required />
+          </div>
+          <div class="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input id="password" name="password" type="password" required />
+          </div>
+          <div id="error" class="text-red-500 text-sm hidden"></div>
+          <Button type="submit" className="w-full">Login</Button>
+        </form>
+      </CardContent>
+    </Card>
+  </div>
 </Layout>
+
+<script>
+  const form = document.getElementById('loginForm') as HTMLFormElement;
+  const error = document.getElementById('error') as HTMLDivElement;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const username = formData.get('username');
+    const password = formData.get('password');
+
+    if (username === 'student401' && password === 'sdfo$#$DFdds$3D44$$$') {
+      window.location.href = '/course';
+    } else {
+      error.textContent = 'Invalid username or password';
+      error.classList.remove('hidden');
+    }
+  });
+</script>
 

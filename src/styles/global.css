@@ -87,7 +87,7 @@
   /* Layout dimensions */
   --one-sidebar-width: 64px;
   --one-panel-quarter-width: 350px;
-  --one-panel-half-width: 50%;
+  --one-panel-half-width: calc(50% - 100px);
   --one-panel-full-width: 100%;
   --one-panel-floating-width: 400px;
   --one-panel-floating-height: 600px;
@@ -621,7 +621,7 @@
 }
 
 .main-grid[data-panel-mode="Half"] {
-  grid-template-columns: minmax(0, var(--one-panel-half-width));
+  grid-template-columns: 1fr var(--one-panel-half-width);
 }
 
 .main-grid[data-panel-mode="Full"] {
