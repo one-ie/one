@@ -7,7 +7,7 @@ import { CourseModuleContent } from "@/components/course/CourseModuleContent";
 import { ChatConfigSchema } from '../schema/chat';
 
 // Course data structure
-const courseModules = [
+const courseModulesData = [
   {
     title: "Part 1: Welcome",
     description: "Introduction and overview of the course",
@@ -60,6 +60,15 @@ const courseModules = [
     ]
   }
 ];
+
+// Transform courseModulesData to fit SimpleAccordionItem structure
+const courseModules = courseModulesData.map(module => ({
+  title: module.title,
+  content: module.description, // Using description as content
+  // If you need to include lesson details in the content, you'll need to format them here.
+  // For example:
+  // content: `${module.description}\n\nLessons:\n${module.lessons.map(lesson => `- ${lesson.name}`).join('\n')}`
+}));
 
 // Course metadata
 const courseMetadata = {
