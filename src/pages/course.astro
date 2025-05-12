@@ -9,46 +9,54 @@ import { ChatConfigSchema } from '../schema/chat';
 // Course data structure
 const courseModules = [
   {
+    title: "Part 1: Welcome",
+    description: "Introduction and overview of the course",
+    lessons: [
+      { name: "Welcome", value: "Introduction and overview", slug: "elevate/welcome" },
+    ]
+  },
+  {
     title: "Part 2: You",
     description: "Understanding yourself and your business",
     lessons: [
-      { name: "Introduction", value: "Getting started", slug: "0.-Introduction" },
-      { name: "Architecture", value: "System design", slug: "1.-Architecture" },
-      { name: "Foundation", value: "Core setup", slug: "2.-Foundation" },
-      { name: "Company", value: "Business structure", slug: "3.-Company" },
-      { name: "Market", value: "Market analysis", slug: "4.-Market" },
-      { name: "Customer", value: "Customer understanding", slug: "5.-Customer" },
-      { name: "Alignment", value: "Business alignment", slug: "6.-Alignment" }
+      { name: "Introduction", value: "Getting started", slug: "elevate/0. Introduction" },
+      { name: "Architecture", value: "System design", slug: "elevate/1. Architecture" },
+      { name: "Foundation", value: "Core setup", slug: "elevate/2. Foundation" },
+      { name: "Company", value: "Business structure", slug: "elevate/3. Company" },
+      { name: "Company Worksheet", value: "Implementation guide", slug: "elevate/3.1. Company Worksheet" },
+      { name: "Market", value: "Market analysis", slug: "elevate/4. Market" },
+      { name: "Customer", value: "Customer understanding", slug: "elevate/5. Customer" },
+      { name: "Alignment", value: "Business alignment", slug: "elevate/6. Alignment" }
     ]
   },
   {
     title: "Part 3: Attract",
-    description: "Customer acquisition and engagement",
+    description: "Customer acquisition and engagement strategies",
     lessons: [
-      { name: "Attract", value: "Customer acquisition", slug: "7.-Attract" },
-      { name: "Hook", value: "Creating hooks", slug: "8.-Hook" },
-      { name: "Gift", value: "Offering value", slug: "9.-Gift" },
-      { name: "Identify", value: "Customer identification", slug: "10.-Identify" }
+      { name: "Attract", value: "Customer acquisition", slug: "elevate/7. Attract" },
+      { name: "Hook", value: "Creating hooks", slug: "elevate/8. Hook" },
+      { name: "Gift", value: "Offering value", slug: "elevate/9. Gift" },
+      { name: "Identify", value: "Customer identification", slug: "elevate/10. Identify" }
     ]
   },
   {
     title: "Part 4: Convert",
-    description: "Conversion optimization and sales",
+    description: "Optimizing conversion and sales processes",
     lessons: [
-      { name: "Convert", value: "Conversion optimization", slug: "11.-Convert" },
-      { name: "Engage", value: "Customer engagement", slug: "12.-Engage" },
-      { name: "Sell", value: "Sales process", slug: "13.-Sell" }
+      { name: "Convert", value: "Conversion optimization", slug: "elevate/11. Convert" },
+      { name: "Engage", value: "Customer engagement", slug: "elevate/12. Engage" },
+      { name: "Sell", value: "Sales process", slug: "elevate/13. Sell" }
     ]
   },
   {
     title: "Part 5: Grow",
-    description: "Customer nurturing and growth",
+    description: "Strategies for customer nurturing and business growth",
     lessons: [
-      { name: "Nurture", value: "Customer nurturing", slug: "14.-Nurture" },
-      { name: "Upsell", value: "Upselling strategies", slug: "15.-Upsell" },
-      { name: "Educate", value: "Customer education", slug: "16.-Educate" },
-      { name: "Share", value: "Sharing and referrals", slug: "17.-Share" },
-      { name: "Optimise", value: "Business optimization", slug: "18.-Optimise" }
+      { name: "Nurture", value: "Customer nurturing", slug: "elevate/14. Nurture" },
+      { name: "Upsell", value: "Upselling strategies", slug: "elevate/15. Upsell" },
+      { name: "Educate", value: "Customer education", slug: "elevate/16. Educate" },
+      { name: "Share", value: "Sharing and referrals", slug: "elevate/17. Share" },
+      { name: "Optimise", value: "Business optimization", slug: "elevate/18. Optimise" }
     ]
   }
 ];

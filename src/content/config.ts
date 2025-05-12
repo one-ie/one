@@ -37,9 +37,9 @@ const BlogSchema = z.object({
 });
 
 const TabSchema = z.object({
-  value: z.string(),
-  label: z.string(),
-  content: z.string()
+  value: z.string().optional(),
+  label: z.string().optional(),
+  content: z.string().optional()
 });
 
 /**
@@ -59,7 +59,7 @@ const DocsSchema = z.object({
  */
 const VideosSchema = z.object({
   ...CommonFields,
-  url: z.string(),
+  url: z.string().optional(),
   duration: z.number().optional(),
   thumbnail: z.string().optional(),
   transcript: z.string().optional()
@@ -71,8 +71,8 @@ const VideosSchema = z.object({
  */
 const PodcastsSchema = z.object({
   ...CommonFields,
-  audioUrl: z.string(),
-  duration: z.number(),
+  audioUrl: z.string().optional(),
+  duration: z.number().optional(),
   transcript: z.string().optional()
 });
 
@@ -115,19 +115,19 @@ const PromptsSchema = z.object({
   context: z.string().optional(),
   sources: z.array(z.object({
     type: z.string().optional(),
-    url: z.string().url().optional(),
+    url: z.string().optional(), // Removed .url() as it conflicts with optional
     format: z.string().optional(),
     frequency: z.string().optional()
   })).optional(),
   aiConfig: z.object({
     systemPrompt: z.array(z.object({
-      type: z.literal('text'),
-      text: z.string()
+      type: z.literal('text').optional(),
+      text: z.string().optional()
     })).optional(),
     welcomeMessage: z.string().optional(),
     suggestions: z.array(z.object({
-      label: z.string(),
-      prompt: z.string()
+      label: z.string().optional(),
+      prompt: z.string().optional()
     })).optional()
   }).optional()
 });
@@ -147,8 +147,8 @@ const TutorialsSchema = z.object({
  */
 const EventsSchema = z.object({
   ...CommonFields,
-  startDate: z.date(),
-  endDate: z.date().optional(),
+  startDate: z.date().or(z.string()).optional(), // Allow string date too, make optional
+  endDate: z.date().or(z.string()).optional(),
   location: z.string().optional(),
   virtual: z.boolean().optional()
 });
@@ -196,8 +196,8 @@ const BookSchema = z.object({
   }).optional(),
   workExample: z.array(z.object({
     '@type': z.literal('Chapter').optional(),
-    name: z.string(),
-    position: z.number(),
+    name: z.string().optional(),
+    position: z.number().optional(),
     url: z.string().optional()
   })).optional()
 });
@@ -207,59 +207,59 @@ const BookSchema = z.object({
 // Lesson Schema
 const LessonSchema = z.object({
   ...CommonFields,
-  slug: z.string(), // for routing
-  courseId: z.string(),
+  slug: z.string().optional(), // for routing
+  courseId: z.string().optional(),
   order: z.number().optional(),
   content: z.string().optional(), // fallback for MDX body
   video: z.object({
     platform: z.enum(['youtube', 'vimeo']).default('youtube'),
-    id: z.string(),
+    id: z.string().optional(),
     title: z.string().optional(),
     description: z.string().optional(),
     captions: z.string().optional()
   }).optional(),
   bookChapter: z.object({
-    url: z.string().url(),
+    url: z.string().url().optional(),
     title: z.string().optional(),
     description: z.string().optional()
   }).optional(),
   worksheet: z.object({
-    url: z.string().url(),
+    url: z.string().url().optional(),
     title: z.string().optional(),
     description: z.string().optional()
   }).optional(),
   prompts: z.object({
-    tag: z.string(),
-    url: z.string().url(),
+    tag: z.string().optional(),
+    url: z.string().url().optional(),
     description: z.string().optional()
   }).optional(),
   checklist: z.object({
-    url: z.string().url(),
+    url: z.string().url().optional(),
     title: z.string().optional(),
     description: z.string().optional()
   }).optional(),
   resources: z.array(z.object({
-    title: z.string(),
-    url: z.string().url(),
+    title: z.string().optional(),
+    url: z.string().url().optional(),
     description: z.string().optional(),
     type: z.enum(['article', 'video', 'tool', 'template', 'other']).optional()
   })).optional(),
   audio: z.object({
-    url: z.string().url(),
+    url: z.string().url().optional(),
     title: z.string().optional(),
     duration: z.number().optional(),
     description: z.string().optional()
   }).optional(),
   assignments: z.array(z.object({
-    title: z.string(),
-    description: z.string(),
+    title: z.string().optional(),
+    description: z.string().optional(),
     dueDate: z.string().optional(),
     points: z.number().optional(),
     type: z.enum(['individual', 'group', 'quiz', 'project']).optional()
   })).optional(),
   community: z.object({
-    engagementInstructions: z.string(),
-    url: z.string().url(),
+    engagementInstructions: z.string().optional(),
+    url: z.string().url().optional(),
     platform: z.enum(['discord', 'slack', 'forum', 'other']).optional(),
     description: z.string().optional()
   }).optional(),
@@ -269,10 +269,10 @@ const LessonSchema = z.object({
 // Course Schema (no modules)
 const CourseSchema = z.object({
   ...CommonFields,
-  id: z.string(),
-  lessons: z.array(z.string()), // array of lesson slugs/ids
+  id: z.string().optional(),
+  lessons: z.array(z.string()).optional(), // array of lesson slugs/ids
   instructors: z.array(z.object({
-    name: z.string(),
+    name: z.string().optional(),
     avatar: z.string().optional(),
     bio: z.string().optional(),
   })).optional(),
