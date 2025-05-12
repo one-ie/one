@@ -6,6 +6,116 @@ date: 2024-05-08
 status: "public"
 ---
 
+# Book Generation Guide
+
+## Book Structure
+
+The book is organized into the following files:
+
+## Part 1: Welcome
+- `welcome.md` - Introduction and overview
+  - Image: `assets/Playbook.png`
+
+## Part 2: You
+- `0. Introduction.md` - Getting started
+- `1. Architecture.md` - System design
+- `2. Foundation.md` - Core setup
+  - Image: `assets/Foundation.png`
+- `3. Company.md` - Business structure
+  - Image: `assets/Company.png`
+- `3.1. Company Worksheet.md` - Implementation guide
+- `4. Market.md` - Market analysis
+  - Image: `assets/Market.png`
+- `5. Customer.md` - Customer understanding
+  - Image: `assets/Customer.png`
+- `6. Alignment.md` - Business alignment
+
+## Part 3: Attract
+- `7. Attract.md` - Customer acquisition
+  - Image: `assets/Attract.png`
+- `8. Hook.md` - Creating hooks
+  - Image: `assets/Hook.png`
+- `9. Gift.md` - Offering value
+  - Image: `assets/Gift.png`
+- `10. Identify.md` - Customer identification
+  - Image: `assets/Identify.png`
+
+## Part 4: Convert
+- `11. Convert.md` - Conversion optimization
+  - Image: `assets/Convert.png`
+- `12. Engage.md` - Customer engagement
+  - Image: `assets/Engaage.png`
+- `13. Sell.md` - Sales process
+  - Image: `assets/Sell.png`
+
+## Part 5: Grow
+- `14. Nurture.md` - Customer nurturing
+  - Image: `assets/Nurture.png`
+- `15. Upsell.md` - Upselling strategies
+  - Image: `assets/Upsell.png`
+- `16. Educate.md` - Customer education
+  - Image: `assets/Educate.png`
+- `17. Share.md` - Sharing and referrals
+  - Image: `assets/Share.png`
+- `18. Optimise.md` - Business optimization
+  - Image: `assets/Grow.png`
+
+## Generation Command
+
+To generate the EPUB file, use the following Pandoc command:
+
+```bash
+cd src/content/book && pandoc \
+  "welcome.md" \
+  "0. Introduction.md" \
+  "1. Architecture.md" \
+  "2. Foundation.md" \
+  "3. Company.md" \
+  "3.1. Company Worksheet.md" \
+  "4. Market.md" \
+  "5. Customer.md" \
+  "6. Alignment.md" \
+  "7. Attract.md" \
+  "8. Hook.md" \
+  "9. Gift.md" \
+  "10. Identify.md" \
+  "11. Convert.md" \
+  "12. Engage.md" \
+  "13. Sell.md" \
+  "14. Nurture.md" \
+  "15. Upsell.md" \
+  "16. Educate.md" \
+  "17. Share.md" \
+  "18. Optimise.md" \
+  --resource-path=.:assets \
+  --toc \
+  --toc-depth=2 \
+  --split-level=1 \
+  --css=epub-style.css \
+  --epub-cover-image=assets/book-cover.png \
+  -o TheElevatePlaybook.epub
+```
+
+## Opening the EPUB
+
+After generation, open the EPUB file:
+
+- **macOS**: `open TheElevatePlaybook.epub`
+- **Windows**: `start TheElevatePlaybook.epub`
+- **Linux**: `xdg-open TheElevatePlaybook.epub`
+
+## EPUB Features
+
+The generated EPUB includes:
+- Interactive table of contents
+- Custom styling with epub-style.css
+- High-resolution cover image
+- Chapter navigation
+- Responsive layout
+- Search functionality
+- Bookmark support
+- Chapter images and illustrations
+
 # Implementation Success 🎉
 
 We have successfully:
@@ -111,75 +221,6 @@ chapter: 0
 order: 0
 ---
 ```
-
-### Pandoc Generation Command
-```bash
-# Generate the EPUB
-pandoc metadata.yaml \
-  "0. Introduction.md" \
-  "1. Architecture.md" \
-  "2. Foundation.md" \
-  "3.  Company.md" \
-  "3.1. Company Worksheet.md" \
-  "4. Market.md" \
-  "5. Customer.md" \
-  "6. Alignment.md" \
-  "7.  Attract.md" \
-  "8. Hook.md" \
-  "9. Gift.md" \
-  "10.  Identify.md" \
-  "11. Convert.md" \
-  "12. Engage.md" \
-  "13.  Sell.md" \
-  "14.  Nurture.md" \
-  "15. Upsell.md" \
-  "16.  Educate.md" \
-  "17.  Share.md" \
-  "18. Optimise.md" \
-  --resource-path=.:assets \
-  --toc \
-  --toc-depth=2 \
-  --split-level=1 \
-  --css=epub-style.css \
-  --epub-cover-image=assets/book-cover.png \
-  -o TheElevatePlaybook.epub && open TheElevatePlaybook.epub
-```
-
-### Opening the EPUB
-
-The EPUB file will automatically open in your default EPUB reader after generation. If you need to open it manually:
-
-## macOS
-```bash
-open TheElevatePlaybook.epub
-```
-
-## Windows
-```bash
-start TheElevatePlaybook.epub
-```
-
-## Linux
-```bash
-xdg-open TheElevatePlaybook.epub
-```
-
-You can also open the EPUB file using any of these readers:
-- Apple Books (macOS)
-- Google Play Books
-- Calibre
-- Adobe Digital Editions
-
-# EPUB Features
-
-The generated EPUB includes:
-- Interactive table of contents
-- Custom styling with epub-style.css
-- High-resolution cover image
-- Chapter navigation
-- Responsive layout
-- Search functionality
-- Bookmark support
 
 ### CSS Styling
 ```css
