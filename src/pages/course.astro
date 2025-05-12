@@ -9,79 +9,46 @@ import { ChatConfigSchema } from '../schema/chat';
 // Course data structure
 const courseModules = [
   {
-    title: "Module 0: FOUNDATION – Building Your Strategic Bedrock",
-    description: "Stop guessing, start knowing. Build the essential foundation for targeted AI generation and strategic decision-making.",
+    title: "Part 2: You",
+    description: "Understanding yourself and your business",
     lessons: [
-      { name: "Foundation", value: "Building your strategic bedrock" },
-      { name: "Workflow", value: "Understanding the course workflow" },
-      { name: "Company", value: "Defining your company context" },
-      { name: "Customer", value: "Understanding your ideal customer" },
-      { name: "Find Customers", value: "Identifying your target market" }
+      { name: "Introduction", value: "Getting started", slug: "0.-Introduction" },
+      { name: "Architecture", value: "System design", slug: "1.-Architecture" },
+      { name: "Foundation", value: "Core setup", slug: "2.-Foundation" },
+      { name: "Company", value: "Business structure", slug: "3.-Company" },
+      { name: "Market", value: "Market analysis", slug: "4.-Market" },
+      { name: "Customer", value: "Customer understanding", slug: "5.-Customer" },
+      { name: "Alignment", value: "Business alignment", slug: "6.-Alignment" }
     ]
   },
   {
-    title: "Module 1: HOOK – Locating Prospects & Initiating Engagement",
-    description: "Strategically identify where your ideal customers are and craft compelling initial messages to capture relevant attention.",
+    title: "Part 3: Attract",
+    description: "Customer acquisition and engagement",
     lessons: [
-      { name: "Hook", value: "Creating attention-grabbing hooks" },
-      { name: "Hook Grid", value: "Organizing your hook strategy" }
+      { name: "Attract", value: "Customer acquisition", slug: "7.-Attract" },
+      { name: "Hook", value: "Creating hooks", slug: "8.-Hook" },
+      { name: "Gift", value: "Offering value", slug: "9.-Gift" },
+      { name: "Identify", value: "Customer identification", slug: "10.-Identify" }
     ]
   },
   {
-    title: "Module 2: GIFT – Delivering Instant Value & Building Interest",
-    description: "Convert initial attention into genuine interest with high-value, problem-solving lead magnets.",
+    title: "Part 4: Convert",
+    description: "Conversion optimization and sales",
     lessons: [
-      { name: "Gift", value: "Creating valuable lead magnets" }
+      { name: "Convert", value: "Conversion optimization", slug: "11.-Convert" },
+      { name: "Engage", value: "Customer engagement", slug: "12.-Engage" },
+      { name: "Sell", value: "Sales process", slug: "13.-Sell" }
     ]
   },
   {
-    title: "Module 3: IDENTIFY – Seamlessly Capturing Your Future Customers",
-    description: "Convert interested prospects into known, contactable leads efficiently and ethically.",
+    title: "Part 5: Grow",
+    description: "Customer nurturing and growth",
     lessons: [
-      { name: "Identify", value: "Capturing and qualifying leads" }
-    ]
-  },
-  {
-    title: "Module 4: ENGAGE – Reducing Friction & Closing the Sale",
-    description: "Interact effectively during critical moments of the buying process to address hesitations and maximize completed purchases.",
-    lessons: [
-      { name: "Engage", value: "Engaging prospects during purchase" },
-      { name: "Engage Purchase Psychology", value: "Understanding purchase psychology" }
-    ]
-  },
-  {
-    title: "Module 5: SELL – Engineering Your High-Conversion Sales Environment",
-    description: "Transform your product/sales pages into powerful conversion engines by optimizing the core offer presentation.",
-    lessons: [
-      { name: "Sell", value: "Creating high-converting sales pages" }
-    ]
-  },
-  {
-    title: "Module 6: NURTURE – Systematically Converting the 'Not Yet Ready'",
-    description: "Build trust, deliver value, and convert prospects over time through targeted campaigns.",
-    lessons: [
-      { name: "Nurture", value: "Nurturing leads into customers" }
-    ]
-  },
-  {
-    title: "Module 7: UPSELL – Instantly Maximizing Profit Per Customer",
-    description: "Increase Average Order Value (AOV) and customer profitability immediately post-purchase.",
-    lessons: [
-      { name: "Upsell", value: "Creating effective upsell strategies" }
-    ]
-  },
-  {
-    title: "Module 8: EDUCATE – Driving Loyalty Through Onboarding & Insight",
-    description: "Maximize customer success through effective onboarding and gather actionable data for retention.",
-    lessons: [
-      { name: "Educate", value: "Educating and onboarding customers" }
-    ]
-  },
-  {
-    title: "Module 9: SHARE – Amplifying Growth Through Advocacy",
-    description: "Systematically leverage happy customers to drive exponential growth via social proof and referrals.",
-    lessons: [
-      { name: "Share", value: "Building customer advocacy" }
+      { name: "Nurture", value: "Customer nurturing", slug: "14.-Nurture" },
+      { name: "Upsell", value: "Upselling strategies", slug: "15.-Upsell" },
+      { name: "Educate", value: "Customer education", slug: "16.-Educate" },
+      { name: "Share", value: "Sharing and referrals", slug: "17.-Share" },
+      { name: "Optimise", value: "Business optimization", slug: "18.-Optimise" }
     ]
   }
 ];

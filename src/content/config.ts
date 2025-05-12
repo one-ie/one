@@ -301,7 +301,9 @@ export const collections = {
   prompts: defineCollection({ schema: PromptsSchema }),
   tutorials: defineCollection({ schema: TutorialsSchema }),
   events: defineCollection({ schema: EventsSchema }),
-  book: defineCollection({ schema: BookSchema })
+  book: defineCollection({ schema: BookSchema }),
+  lessons: lessonsCollection,
+  courses: coursesCollection
 };
 
 // Export type inference

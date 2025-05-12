@@ -2,7 +2,7 @@
 
 import React from 'react';
 import * as Accordion from '@radix-ui/react-accordion';
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon, BookOpen, FileText } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { CourseModuleContent } from './course/CourseModuleContent';
 import {
@@ -11,8 +11,10 @@ import {
   AccordionItem as UiAccordionItem,
   AccordionTrigger as UiAccordionTrigger
 } from "./ui/accordion";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-interface AccordionItem {
+interface SimpleAccordionItem {
   title: string;
   content: string;
 }
@@ -24,8 +26,20 @@ interface CourseModule {
   moduleNumber: number;
 }
 
+interface Lesson {
+  name: string;
+  value: string;
+  slug: string;
+}
+
+interface Module {
+  title: string;
+  description: string;
+  lessons: Lesson[];
+}
+
 // Using custom Radix UI implementation
-export function CustomAccordionWrapper({ items }: { items: AccordionItem[] }) {
+export function CustomAccordionWrapper({ items }: { items: SimpleAccordionItem[] }) {
   return (
     <Accordion.Root
       className="space-y-4"
@@ -72,8 +86,8 @@ export function CourseModulesAccordion({ modules }: { modules: CourseModule[] })
           </CustomAccordionTrigger>
           <CustomAccordionContent className="px-6 py-4 bg-[hsla(var(--one-white),0.03)]">
             <div className="mb-4 text-[#888888]">{module.description}</div>
-            <CourseModuleContent 
-              lessons={module.lessons} 
+            <CourseModuleContent
+              lessons={module.lessons}
               moduleNumber={module.moduleNumber}
             />
           </CustomAccordionContent>
@@ -145,47 +159,25 @@ CustomAccordionContent.displayName = "CustomAccordionContent";
 
 // Using shadcn/ui components
 interface AccordionWrapperProps {
-  items: {
-    title: string;
-    content: string;
-  }[] | {
-    title: string;
-    description: string;
-    lessons: { name: string; value: string; }[];
-    moduleNumber?: number;
-  }[];
-  type?: "faq" | "module";
+  items: SimpleAccordionItem[];
 }
 
 // This is the component we'll use in the course.astro page
 export function AccordionWrapper({ items }: AccordionWrapperProps) {
   return (
     <UiAccordion type="single" collapsible className="w-full">
-      {items.map((item, index) => {
-        // Check if this is a module item with lessons
-        const isModule = 'lessons' in item;
-        
-        return (
-          <UiAccordionItem value={`item-${index}`} key={index}>
-            <UiAccordionTrigger className="text-left font-medium text-white">
-              {item.title}
-            </UiAccordionTrigger>
-            <UiAccordionContent className="text-[#aaaaaa]">
-              {isModule ? (
-                <>
-                  <p className="mb-4 text-[#888888]">{(item as any).description}</p>
-                  <CourseModuleContent 
-                    lessons={(item as any).lessons} 
-                    moduleNumber={index + 1}
-                  />
-                </>
-              ) : (
-                <p>{(item as any).content}</p>
-              )}
-            </UiAccordionContent>
-          </UiAccordionItem>
-        );
-      })}
+      {items.map((item, index) => (
+        <UiAccordionItem key={index} value={`item-${index}`}>
+          <UiAccordionTrigger className="text-xl font-semibold">
+            {item.title}
+          </UiAccordionTrigger>
+          <UiAccordionContent>
+            <Card className="p-6">
+              {item.content}
+            </Card>
+          </UiAccordionContent>
+        </UiAccordionItem>
+      ))}
     </UiAccordion>
   );
-} 
+}
