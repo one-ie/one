@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import Book from '../../layouts/Docs.astro';
+import { ChatConfigSchema } from '../../schema/chat';
 
 // Get all book content
 const bookContent = await getCollection('book');
@@ -28,11 +29,107 @@ const nextPage = currentIndex < sortedContent.length - 1 ? sortedContent[current
 
 // Get the content
 const { Content } = await currentPage.render();
+
+// Configure AI assistant for the book chapter
+const chatConfig = ChatConfigSchema.parse({
+  // Layout and Meta
+  layout: "book",
+  title: currentPage.data.title,
+  description: currentPage.data.description,
+  
+  // AI Config
+  aiProvider: "openrouter",
+  aiModel: "google/gemini-2.0-flash-001",
+  apiEndpoint: "https://api.openai.com/v1",
+  temperature: 0.7,
+  maxTokens: 2000,
+  runtime: "edge",
+  includeContent: true,
+
+  // Prompt Config
+  systemPrompt: [{
+    type: "text",
+    text: `You are an expert guide for The Elevate Playbook, specifically focused on the chapter "${currentPage.data.title}". Your role is to help readers understand and implement the strategies outlined in this chapter.
+
+Core Capabilities:
+1. Chapter Navigation
+   • Key concepts
+   • Implementation steps
+   • Best practices
+   • Related resources
+
+2. Strategy Guidance
+   • Business planning
+   • AI integration
+   • Growth tactics
+   • Success metrics
+
+3. Technical Support
+   • Code examples
+   • Architecture design
+   • Implementation help
+   • Troubleshooting
+
+4. Reader Support
+   • Clear explanations
+   • Practical examples
+   • Step-by-step guidance
+   • Resource recommendations
+
+Communication Style:
+• Be clear and concise
+• Provide actionable advice
+• Use relevant examples
+• Maintain professional tone
+• Focus on practical implementation
+
+Key Principles:
+• Reader success first
+• Practical implementation
+• Clear guidance
+• Best practices
+• Security awareness`
+  }],
+  addSystemPrompt: true,
+  addBusinessPrompt: true,
+
+  // Welcome Config
+  welcomeMessage: `👋 Welcome to Chapter ${currentPage.data.chapter}: ${currentPage.data.title}! I'm your AI guide to help you understand and implement the strategies in this chapter. What would you like to learn about?`,
+  avatar: "/icon.svg",
+  suggestions: [
+    {
+      label: "📚 Chapter Overview",
+      prompt: `Give me an overview of Chapter ${currentPage.data.chapter} and its key concepts`
+    },
+    {
+      label: "🎯 Getting Started",
+      prompt: "What are the first steps to implementing the strategies in this chapter?"
+    },
+    {
+      label: "🤖 AI Integration",
+      prompt: "How do I integrate AI into my business using this chapter's approach?"
+    },
+    {
+      label: "💡 Best Practices",
+      prompt: "What are the key best practices for implementing this chapter's strategies?"
+    },
+    {
+      label: "📈 Growth Strategy",
+      prompt: "How can I use this chapter's strategies to grow my business?"
+    },
+    {
+      label: "🔧 Technical Setup",
+      prompt: "What technical setup do I need to implement this chapter's strategies?"
+    }
+  ]
+});
 ---
 
 <Book
   title={currentPage.data.title}
   description={currentPage.data.description}
+  chatConfig={chatConfig}
+  rightPanelMode="half"
 >
   <Content />
 </Book> 

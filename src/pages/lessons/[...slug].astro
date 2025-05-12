@@ -22,64 +22,106 @@ type Props = {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 
+// Get the system prompt from the content collection
+const systemPrompt = await getCollection('prompts', ({ slug }: { slug: string }) => slug === '-SystemPrompt');
+const systemPromptContent = systemPrompt[0]?.body || '';
+
 // Get chat configuration from frontmatter or use defaults
 const chatConfig = ChatConfigSchema.parse({
   // Layout and Meta
   layout: entry.data.layout || "lesson",
   title: entry.data.title || "Lesson",
-  description: entry.data.description || "Learn more about this topic",
+  description: entry.data.description || "Interactive lesson on this topic",
   
   // AI Config
   aiProvider: entry.data.aiProvider || "openrouter",
   aiModel: entry.data.aiModel || "google/gemini-2.0-flash-001",
-  apiEndpoint: entry.data.apiEndpoint || "https://openrouter.ai/api/v1",
+  apiEndpoint: entry.data.apiEndpoint || "https://api.openai.com/v1",
   temperature: entry.data.temperature || 0.7,
   maxTokens: entry.data.maxTokens || 4000,
+  runtime: "edge",
+  includeContent: true,
 
   // Prompt Config
   systemPrompt: entry.data.aiConfig?.systemPrompt || [
     {
       type: "text",
-      text: `I am your AI Learning Assistant for "${entry.data.title || 'this lesson'}". I'm here to help you understand and apply the concepts covered in this lesson.
+      text: `${systemPromptContent}
 
-My role is to:
-1. Answer questions about the lesson content
-2. Provide additional examples and explanations
-3. Help you apply concepts to real-world scenarios
-4. Guide you through practical exercises
-5. Clarify any confusing points
+You are ONE's lesson guide for "${entry.data.title || 'this lesson'}". Your role is to help users learn and master the concepts covered in this specific lesson.
 
-I have deep knowledge of this lesson's content and can help you master the material. What would you like to learn more about?`
+Core Capabilities:
+1. Lesson Content
+   • Key concepts
+   • Learning objectives
+   • Step-by-step guidance
+   • Interactive exercises
+
+2. Learning Support
+   • Clear explanations
+   • Practical examples
+   • Progress tracking
+   • Skill assessment
+
+3. Implementation Help
+   • Code examples
+   • Best practices
+   • Troubleshooting
+   • Common pitfalls
+
+4. Next Steps
+   • Related lessons
+   • Practice exercises
+   • Further reading
+   • Skill development
+
+Communication Style:
+• Be clear and concise
+• Provide actionable advice
+• Use relevant examples
+• Maintain professional tone
+• Focus on practical learning
+
+Key Principles:
+• Student success first
+• Practical implementation
+• Clear guidance
+• Best practices
+• Security awareness`
     }
   ],
   addSystemPrompt: true,
   addBusinessPrompt: true,
 
   // Welcome Config
-  welcomeMessage: entry.data.aiConfig?.welcomeMessage || `👋 Welcome to "${entry.data.title || 'this lesson'}"! How can I help you understand this topic better?`,
+  welcomeMessage: entry.data.aiConfig?.welcomeMessage || `👋 Welcome to "${entry.data.title || 'this lesson'}"! I'm your AI guide to help you learn and master the concepts in this lesson. What would you like to explore?`,
   avatar: entry.data.aiConfig?.avatar || "/icon.svg",
   suggestions: entry.data.aiConfig?.suggestions || [
     { 
-      label: "📚 Key Concepts", 
-      prompt: "What are the main concepts covered in this lesson?" 
+      label: "📚 Lesson Overview", 
+      prompt: "What are the main concepts and learning objectives of this lesson?" 
     },
     { 
       label: "💡 Examples", 
-      prompt: "Can you provide some practical examples from this lesson?" 
+      prompt: "Can you show me some practical examples from this lesson?" 
+    },
+    { 
+      label: "🔧 Implementation", 
+      prompt: "How do I implement the concepts from this lesson?" 
     },
     { 
       label: "❓ Questions", 
       prompt: "I have a question about something in this lesson..." 
     },
     { 
-      label: "🔍 Deep Dive", 
-      prompt: "Let's explore this topic in more detail" 
+      label: "🎯 Practice", 
+      prompt: "What exercises can I do to practice these concepts?" 
+    },
+    { 
+      label: "📈 Next Steps", 
+      prompt: "What should I learn next after completing this lesson?" 
     }
-  ],
-
-  // Optional Config
-  runtime: "edge",
-  includeContent: true
+  ]
 });
 ---
 

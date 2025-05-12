@@ -14,13 +14,13 @@ const description = "Choose the perfect plan for your AI business needs";
 // Testimonials data
 const testimonials = [
   {
-    quote: "The Professional plan completely transformed our customer service. Our AI agents handle 80% of inquiries automatically now.",
+    quote: "The AI Agent plan has transformed our customer service. Our AI agents handle 80% of inquiries automatically now.",
     author: "Michael Thompson",
     role: "CEO, TechFlow",
     initial: "M"
   },
   {
-    quote: "We started with the Starter plan and quickly upgraded to Enterprise as we saw the incredible ROI. Best decision we made this year.",
+    quote: "We started with the Book plan and quickly upgraded to the AI Agent plan as we saw the incredible ROI. Best decision we made this year.",
     author: "Sarah Johnson",
     role: "Marketing Director, Elevate",
     initial: "S"
@@ -30,70 +30,86 @@ const testimonials = [
 // Plans data
 const plans: PricingPlan[] = [
   {
-    name: "Starter",
-    price: "49",
-    period: "per month",
-    description: "Perfect for individuals and small businesses just getting started with AI",
+    name: "Software",
+    price: "0",
+    period: "forever free",
+    description: "Perfect for developers and small businesses getting started with AI",
     features: [
-      "3 AI Agents",
-      "Basic customization",
+      "Open source code",
+      "Basic AI integration",
+      "Community support",
       "Standard response time",
-      "Email support",
-      "5,000 messages/month"
+      "Basic customization"
     ],
     cta: "Get Started",
     popular: false
   },
   {
-    name: "Professional",
-    price: "99",
-    period: "per month",
-    description: "Ideal for growing businesses that need more advanced AI capabilities",
+    name: "Book",
+    price: "50",
+    period: "one-time payment",
+    description: "Comprehensive guide to building AI-powered businesses",
     features: [
-      "10 AI Agents",
-      "Advanced customization",
-      "Faster response time",
-      "Priority support",
-      "25,000 messages/month",
-      "Custom training data",
-      "Analytics dashboard"
+      "Complete framework guide",
+      "Step-by-step tutorials",
+      "Best practices",
+      "Implementation examples",
+      "Lifetime updates",
+      "Community access"
     ],
-    cta: "Upgrade Now",
-    popular: true
+    cta: "Buy Now",
+    popular: false
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    period: "tailored pricing",
-    description: "For organizations requiring enterprise-grade AI solutions at scale",
+    name: "Prompts",
+    price: "100",
+    period: "one-time payment",
+    description: "Access to our complete prompt library and templates",
     features: [
-      "Unlimited AI Agents",
-      "Full customization",
+      "200+ tested prompts",
+      "Custom templates",
+      "Industry-specific prompts",
+      "Regular updates",
+      "Implementation guides",
+      "Priority support"
+    ],
+    cta: "Get Access",
+    popular: false
+  },
+  {
+    name: "AI Agent",
+    price: "100",
+    period: "per month",
+    description: "Complete AI agent solution for your business",
+    features: [
+      "100 AI Agents",
+      "100 users included",
+      "Advanced customization",
       "Fastest response time",
       "24/7 dedicated support",
       "Unlimited messages",
       "Advanced analytics",
       "Custom integrations",
-      "SLA guarantees",
-      "Dedicated account manager"
+      "White labeling",
+      "API access"
     ],
-    cta: "Contact Sales",
-    popular: false
+    cta: "Start Free Trial",
+    popular: true
   }
 ];
 
 // Feature comparison
 const featureComparison: FeatureItem[] = [
-  { name: "AI Agents", starter: "3", pro: "10", enterprise: "Unlimited" },
-  { name: "Messages per month", starter: "5,000", pro: "25,000", enterprise: "Unlimited" },
-  { name: "Custom training", starter: "Basic", pro: "Advanced", enterprise: "Enterprise-grade" },
-  { name: "Response time", starter: "Standard", pro: "Fast", enterprise: "Fastest" },
-  { name: "Support", starter: "Email", pro: "Priority", enterprise: "24/7 Dedicated" },
-  { name: "Analytics", starter: "Basic", pro: "Advanced", enterprise: "Custom" },
-  { name: "White labeling", starter: "❌", pro: "✓", enterprise: "✓" },
-  { name: "API access", starter: "❌", pro: "✓", enterprise: "✓" },
-  { name: "Custom domain", starter: "❌", pro: "✓", enterprise: "✓" },
-  { name: "SLA guarantee", starter: "❌", pro: "❌", enterprise: "✓" }
+  { name: "AI Agents", software: "Basic", book: "❌", prompts: "❌", agent: "100" },
+  { name: "Users", software: "Unlimited", book: "1", prompts: "1", agent: "100" },
+  { name: "Custom training", software: "Basic", book: "❌", prompts: "Advanced", agent: "Enterprise" },
+  { name: "Response time", software: "Standard", book: "❌", prompts: "❌", agent: "Fastest" },
+  { name: "Support", software: "Community", book: "Email", prompts: "Priority", agent: "24/7 Dedicated" },
+  { name: "Analytics", software: "Basic", book: "❌", prompts: "❌", agent: "Advanced" },
+  { name: "White labeling", software: "❌", book: "❌", prompts: "❌", agent: "✓" },
+  { name: "API access", software: "Basic", book: "❌", prompts: "❌", agent: "✓" },
+  { name: "Custom domain", software: "❌", book: "❌", prompts: "❌", agent: "✓" },
+  { name: "SLA guarantee", software: "❌", book: "❌", prompts: "❌", agent: "✓" }
 ];
 
 // FAQ items
@@ -104,7 +120,7 @@ const faqs = [
   },
   {
     title: "Is there a free trial?",
-    content: "We offer a 14-day free trial on all plans. No credit card required to start your trial."
+    content: "We offer a 14-day free trial on the AI Agent plan. No credit card required to start your trial."
   },
   {
     title: "How do I cancel my subscription?",
@@ -112,7 +128,7 @@ const faqs = [
   },
   {
     title: "Do you offer refunds?",
-    content: "We offer a 30-day money-back guarantee. If you're not satisfied with our service, contact us within 30 days of your purchase for a full refund."
+    content: "We offer a 30-day money-back guarantee on all paid plans. If you're not satisfied with our service, contact us within 30 days of your purchase for a full refund."
   },
   {
     title: "What payment methods do you accept?",
@@ -132,19 +148,10 @@ const faqs = [
         <p class="text-xl text-muted-foreground mb-12">
           Choose the perfect plan for your business needs with no hidden fees or surprises
         </p>
-        
-        <!-- Pricing Toggle -->
-        <div class="flex items-center justify-center mb-16">
-          <span class="text-sm font-medium mr-3">Monthly</span>
-          <div class="w-12 h-6 bg-muted rounded-full p-1 cursor-pointer">
-            <div class="w-4 h-4 bg-white rounded-full"></div>
-          </div>
-          <span class="text-sm font-medium ml-3">Annual <Badge variant="outline" className="ml-2 text-xs">Save 20%</Badge></span>
-        </div>
       </div>
       
       <!-- Pricing Cards -->
-      <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+      <div class="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {plans.map((plan) => (
           <PricingCard plan={plan} />
         ))}

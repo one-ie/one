@@ -1,0 +1,33 @@
+---
+title: 'Elevate Ecommerce: The Proven Framework for AI-Powered Growth'
+description: 'A comprehensive guide to building AI-powered ecommerce businesses'
+date: '2024-05-08'
+status: 'published'
+tags: ['ecommerce', 'ai', 'business', 'growth']
+image: 'assets/book-cover.png'
+
+# Book specific fields
+author: 'Anthony O''Connell'
+language: 'en-US'
+publisher: 'ONE Publishing'
+rights: '© 2025 Anthony O''Connell. All rights reserved.'
+identifier:
+  scheme: 'ISBN-13'
+  text: '978-1-916-12345-6'
+creator: 'Anthony O''Connell'
+contributor: 'ONE Team'
+subject: 'Ecommerce, AI, Business Growth, Digital Marketing'
+
+# Optional fields
+css: 'epub-style.css'
+coverImage: 'assets/book-cover.png'
+chapter: 0
+order: 0
+
+# Schema.org fields
+'@type': 'Book'
+'@context': 'https://schema.org'
+bookFormat: 'EBook'
+inLanguage: 'en-US'
+datePublished: '2024-05-08'
+--- 
