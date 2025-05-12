@@ -120,6 +120,7 @@ pandoc metadata.yaml \
   "1. Architecture.md" \
   "2. Foundation.md" \
   "3.  Company.md" \
+  "3.1. Company Worksheet.md" \
   "4. Market.md" \
   "5. Customer.md" \
   "6. Alignment.md" \
@@ -141,44 +142,39 @@ pandoc metadata.yaml \
   --split-level=1 \
   --css=epub-style.css \
   --epub-cover-image=assets/book-cover.png \
-  -o TheElevatePlaybook.epub
-
-# Open the EPUB (macOS)
-open TheElevatePlaybook.epub
-
-# Open the EPUB (Linux)
-xdg-open TheElevatePlaybook.epub
-
-# Open the EPUB (Windows)
-start TheElevatePlaybook.epub
+  -o TheElevatePlaybook.epub && open TheElevatePlaybook.epub
 ```
 
 ### Opening the EPUB
 
-The generated EPUB file can be opened using:
+The EPUB file will automatically open in your default EPUB reader after generation. If you need to open it manually:
 
-1. **macOS**:
-   - Double-click the file to open in Books app
-   - Or use `open TheElevatePlaybook.epub` in terminal
+## macOS
+```bash
+open TheElevatePlaybook.epub
+```
 
-2. **Windows**:
-   - Double-click to open in Microsoft Edge
-   - Or use `start TheElevatePlaybook.epub` in command prompt
+## Windows
+```bash
+start TheElevatePlaybook.epub
+```
 
-3. **Linux**:
-   - Use `xdg-open TheElevatePlaybook.epub` in terminal
-   - Or open with your preferred EPUB reader
+## Linux
+```bash
+xdg-open TheElevatePlaybook.epub
+```
 
-4. **EPUB Readers**:
-   - Apple Books (macOS/iOS)
-   - Google Play Books (Android)
-   - Calibre (Cross-platform)
-   - Adobe Digital Editions (Cross-platform)
-   - Kindle (with conversion)
+You can also open the EPUB file using any of these readers:
+- Apple Books (macOS)
+- Google Play Books
+- Calibre
+- Adobe Digital Editions
 
-### EPUB Features
+# EPUB Features
+
+The generated EPUB includes:
 - Interactive table of contents
-- Custom styling with Apple system fonts
+- Custom styling with epub-style.css
 - High-resolution cover image
 - Chapter navigation
 - Responsive layout
@@ -294,3 +290,276 @@ pandoc metadata.yaml \
    - [ ] Monitor engagement
    - [ ] Collect feedback
    - [ ] Measure completion rates
+
+### Book Structure
+
+#### Part 1: Welcome
+- **Welcome Page**: Full-page design with book title and subtitle
+- **About the Author**: Professional bio with photo
+- **Foreword**: Introduction to the book's purpose
+- **How to Use This Book**: Guide for readers
+
+#### Part 2: You
+- **Part Title Page**: Black page with "YOU" in large typography
+- **Chapter 1**: Introduction
+- **Chapter 2**: Architecture
+- **Chapter 3**: Foundation
+- **Chapter 4**: Company
+- **Chapter 5**: Market
+- **Chapter 6**: Customer
+- **Chapter 7**: Alignment
+
+#### Part 3: Attract
+- **Part Title Page**: Black page with "ATTRACT" in large typography
+- **Chapter 8**: Attract
+- **Chapter 9**: Hook
+- **Chapter 10**: Gift
+
+#### Part 4: Convert
+- **Part Title Page**: Black page with "CONVERT" in large typography
+- **Chapter 11**: Identify
+- **Chapter 12**: Convert
+- **Chapter 13**: Engage
+- **Chapter 14**: Sell
+
+#### Part 5: Grow
+- **Part Title Page**: Black page with "GROW" in large typography
+- **Chapter 15**: Nurture
+- **Chapter 16**: Upsell
+- **Chapter 17**: Educate
+- **Chapter 18**: Share
+- **Chapter 19**: Optimise
+
+### Enhanced Styling
+
+```css
+/* src/content/book/epub-style.css */
+
+/* Part Title Pages */
+.part-title {
+    background-color: #000;
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2em;
+}
+
+.part-title h1 {
+    font-size: 4em;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5em;
+}
+
+.part-title p {
+    font-size: 1.5em;
+    max-width: 600px;
+    line-height: 1.4;
+}
+
+/* Chapter Title Pages */
+.chapter-title {
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4em 2em;
+}
+
+.chapter-title h1 {
+    font-size: 3em;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.chapter-title p {
+    font-size: 1.2em;
+    max-width: 600px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.chapter-image {
+    max-width: 80%;
+    height: auto;
+    margin: 2em auto;
+}
+
+/* Regular Content */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 2em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    color: #000;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.2;
+}
+
+/* Typography */
+h1 { font-size: 2.5em; }
+h2 { font-size: 2em; }
+h3 { font-size: 1.75em; }
+h4 { font-size: 1.5em; }
+h5 { font-size: 1.25em; }
+h6 { font-size: 1.1em; }
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 2em auto;
+    display: block;
+}
+
+/* Blockquotes */
+blockquote {
+    border-left: 4px solid #000;
+    margin: 2em 0;
+    padding: 1em 2em;
+    font-style: italic;
+    background: #f9f9f9;
+}
+
+/* Code Blocks */
+pre {
+    background: #f5f5f5;
+    padding: 1em;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9em;
+}
+
+/* Lists */
+ul, ol {
+    margin: 1em 0;
+    padding-left: 2em;
+}
+
+li {
+    margin: 0.5em 0;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em 0;
+}
+
+th, td {
+    padding: 0.75em;
+    border: 1px solid #ddd;
+}
+
+th {
+    background: #f5f5f5;
+    font-weight: 600;
+}
+```
+
+### Chapter Title Page Template
+
+Each chapter should have a title page with the following structure:
+
+```markdown
+---
+layout: chapter-title
+title: "Chapter Title"
+description: "Chapter description goes here"
+image: "assets/chapter-title.png"
+---
+
+# Chapter Title
+
+Chapter description goes here. This provides context and sets expectations for the chapter content.
+
+![Chapter Title Image](assets/chapter-title.png)
+```
+
+### Part Title Page Template
+
+Each part should have a title page with the following structure:
+
+```markdown
+---
+layout: part-title
+title: "PART TITLE"
+description: "Part description goes here"
+---
+
+# PART TITLE
+
+Part description goes here. This provides an overview of the section and its importance.
+```
+
+### Image Specifications
+
+#### Chapter Title Images
+- **Dimensions**: 1600px × 900px (16:9 ratio)
+- **Resolution**: 300 DPI
+- **Format**: PNG with transparency
+- **Style**: Centered composition with chapter title and description
+- **File Naming**: `chapter-{number}-title.png`
+
+#### Part Title Images
+- **Dimensions**: 1600px × 1600px (1:1 ratio)
+- **Resolution**: 300 DPI
+- **Format**: PNG with transparency
+- **Style**: Bold typography with part title
+- **File Naming**: `part-{number}-title.png`
+
+### Pandoc Generation Command
+```bash
+# Generate the EPUB with enhanced styling
+pandoc metadata.yaml \
+  "welcome.md" \
+  "part1-title.md" \
+  "0. Introduction.md" \
+  "1. Architecture.md" \
+  "2. Foundation.md" \
+  "3.  Company.md" \
+  "3.1. Company Worksheet.md" \
+  "4. Market.md" \
+  "5. Customer.md" \
+  "6. Alignment.md" \
+  "part2-title.md" \
+  "7.  Attract.md" \
+  "8. Hook.md" \
+  "9. Gift.md" \
+  "part3-title.md" \
+  "10.  Identify.md" \
+  "11. Convert.md" \
+  "12. Engage.md" \
+  "13.  Sell.md" \
+  "part4-title.md" \
+  "14.  Nurture.md" \
+  "15. Upsell.md" \
+  "16.  Educate.md" \
+  "17.  Share.md" \
+  "18. Optimise.md" \
+  --resource-path=.:assets \
+  --toc \
+  --toc-depth=2 \
+  --split-level=1 \
+  --css=epub-style.css \
+  --epub-cover-image=assets/book-cover.png \
+  -o TheElevatePlaybook.epub
+```
