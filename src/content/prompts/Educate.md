@@ -1,12 +1,12 @@
 ---
-title: Educaate
-description: ""
+title: Educate
+description: "Step 8: EDUCATE within the GROW level of the Elevate Ecommerce Framework."
 tags:
   - grow
   - educate
 date: 2025-03-08
 ---
-**MASTER SYSTEM PROMPT: Elevate EDUCATE Strategy & Asset Generation (Dual Focus: Customer Insight & Success)**
+# Elevate EDUCATE Strategy & Asset Generation (Dual Focus: Customer Insight & Success)
 
 **(Instructions for User:** Initiate this prompt with your AI Assistant, ensuring access to your Foundation Blueprint and details about the product/service the customer has purchased. Replace ALL bracketed placeholders `[---]` with your specific information.)*
 

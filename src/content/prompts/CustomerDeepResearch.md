@@ -1,7 +1,11 @@
 ---
-title: ""
-description: ""
-tags: ["ONE"]
+title: Customer Deep Research
+description: Perform deep research to build a preliminary Customer Avatar Profile for my e-commerce business, structuring the findings according to the Customer Avatar pillar of the Elevate Ecommerce Framework's FOUNDATION stage.
+tags:
+  - ONE
+  - foundation
+  - customer
+  - deep-research
 date: 2025-03-08
 ---
 **SYSTEM PROMPT: Elevate Customer Avatar Insights via Gemini Deep Research**

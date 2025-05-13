@@ -1,7 +1,10 @@
 ---
-title: ""
-description: ""
-tags: ["ONE"]
+title: Identify
+description: "Focus is on **Step 3: IDENTIFY** of the **Elevate Ecommerce Framework**"
+tags:
+  - ONE
+  - attract
+  - identify
 date: 2025-03-08
 ---
 **Step 3: IDENTIFY**. This prompt will guide a capable AI (like GPT-4, Claude 3, or Gemini acting as a standard LLM without explicit Deep Research invocation) to generate the necessary assets for this step, focusing on copy optimization and strategic considerations, assuming the GIFT strategy and assets are already defined from the previous step.

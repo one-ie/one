@@ -1,11 +1,12 @@
 ---
-title: ""
-description: ""
-tags: ["ONE"]
+title: Gift
+description: " Elevate GIFT Strategy & Asset Generation"
+tags:
+  - ONE
+  - gift
+  - foundation
 date: 2025-03-08
 ---
-
-**MASTER SYSTEM PROMPT: Elevate GIFT Strategy & Asset Generation (via Deep Research & Synthesis)**
 
 **(Instructions for User:** Initiate this prompt within the Gemini Deep Research interface, following the completion of the HOOK step (or having those outputs available). Replace ALL bracketed placeholders `[---]` with your specific Foundation Blueprint details and the key outputs/decisions from the HOOK step.)*
 

@@ -6,11 +6,8 @@ tags:
   - customer
 date: 2025-03-08
 ---
-Okay, let's create the specific ROCKET prompt for **Agent: Foundation Analyst** focusing on the **Customer Avatar Synthesis**. This assumes the user has conducted research (interviews, surveys, analyzing reviews, observing 'watering holes') and provides that data for the AI to structure and synthesize according to the Customer Avatar Grid components.
 
----
-
-**Prompt FC3: Synthesize Customer Avatar Profile from Provided Research**
+# Customer Avatar Profile 
 
 **(Instructions for User:** First, gather your research about your ideal customer. This might include interview summaries, survey results, key quotes from reviews or forums, observations about behavior in online groups ('watering holes'), and demographic notes. Structure and paste this information clearly into the `[--- USER RESEARCH INPUT START ---]` section below before running this prompt.)*
 

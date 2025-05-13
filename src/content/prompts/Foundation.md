@@ -1,7 +1,15 @@
 ---
-title: "ONE Lesson Guide"
-description: "A comprehensive guide for AI assistants to help users learn and master ONE framework concepts through interactive lessons"
-tags: ["ai", "lessons", "learning", "education", "tutorials", "guide", "assistant", "teaching"]
+title: Foundation
+description: Create the foundation
+tags:
+  - ai
+  - lessons
+  - learning
+  - education
+  - tutorials
+  - guide
+  - assistant
+  - teaching
 date: 2024-02-03
 ---
 The goal is to allow the AI to operate in two primary modes:

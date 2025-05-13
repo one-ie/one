@@ -1,6 +1,6 @@
 ---
 title: Market Awareness
-description: "Agent: Foundation Analyst** to perform the **Market Awareness Synthesis** task."
+description: "Agent: Foundation Analyst to perform the Market Awareness Synthesis task."
 date: 2025-05-01
 order: 2
 tags:

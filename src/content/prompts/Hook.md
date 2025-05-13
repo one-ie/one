@@ -1,7 +1,8 @@
 ---
-title: ""
-description: ""
-tags: ["ONE"]
+title: Hook
+description: Architect a comprehensive **HOOK strategy** (Elevate Framework Step 1) and generate initial **HOOK marketing assets** for my e-commerce business,
+tags:
+  - ONE
 date: 2025-03-08
 ---
 This prompt aims to be the **single, comprehensive master prompt** for the HOOK step. It incorporates the FOUNDATION directly, considers various hook strategies and channels, and aims for profound, CEO-level insights and actionable outputs, directly linking the HOOK to the intended GIFT concept.
