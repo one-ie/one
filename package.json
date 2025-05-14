@@ -11,7 +11,7 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "coverage": "vitest run --coverage",
-    "generate:epub": "tsx src/scripts/generate-epub.ts",
+    "generate:epub": "./generate-epub.sh",
     "update:book-metadata": "tsx src/scripts/update-book-metadata.ts"
   },
   "dependencies": {

@@ -398,35 +398,106 @@ ONE includes powerful book generation capabilities that combine Astro's content 
 
 ```
 src/content/book/
-├── chapters/           # Book chapters in markdown
-├── assets/            # Images and resources
-├── epub-style.css     # EPUB-specific styling
-└── config.ts          # Book configuration
+├── metadata.yaml      # Book metadata and configuration
+├── chapters/          # Book chapters in markdown
+├── assets/           # Images and resources
+├── epub-style.css    # EPUB-specific styling
+└── config.ts         # Book schema configuration
 ```
 
 ### Book Schema Configuration
 
+The book schema is defined in `src/content/config.ts` and includes comprehensive metadata support:
+
 ```typescript
 // src/content/config.ts
 const BookSchema = z.object({
-  ...CommonFields,
-  author: z.string(),
-  language: z.string(),
-  publisher: z.string(),
+  // Basic Information
+  title: z.string(),
+  description: z.string(),
+  date: z.date().or(z.string()),
+  status: z.enum(['draft', 'review', 'published']).default('draft'),
+  
+  // Author and Publishing
+  author: z.string().default("Anthony O'Connell"),
+  publisher: z.string().default('ONE Publishing'),
   rights: z.string(),
-  identifier: z.object({
-    scheme: z.string(),
-    text: z.string()
-  }),
   creator: z.string(),
   contributor: z.string(),
+  
+  // Identification
+  identifier: z.object({
+    scheme: z.string().default('ISBN-13'),
+    text: z.string()
+  }),
+  
+  // Classification
   subject: z.string(),
-  css: z.string().optional(),
+  language: z.string().default('en-US'),
+  
+  // Visual Elements
+  image: z.string().optional(),
   coverImage: z.string().optional(),
+  css: z.string().optional(),
+  
+  // Organization
   chapter: z.number().optional(),
   order: z.number().optional(),
-  status: z.enum(['draft', 'review', 'published']).default('draft')
+  
+  // Schema.org Metadata
+  '@type': z.literal('Book').optional(),
+  '@context': z.literal('https://schema.org').optional(),
+  bookFormat: z.enum(['EBook', 'Paperback', 'Hardcover']).optional(),
+  inLanguage: z.string().optional(),
+  datePublished: z.string().optional()
 });
+```
+
+### Metadata Configuration
+
+The `metadata.yaml` file defines the book's metadata and follows the BookSchema:
+
+```yaml
+# src/content/book/metadata.yaml
+---
+# Basic Book Information
+title: 'Your Book Title'
+description: 'Book description'
+date: '2024-05-08'
+status: 'published'  # draft, review, or published
+
+# Author and Publishing Information
+author: "Author Name"
+publisher: 'Publisher Name'
+rights: "© 2024 Author Name. All rights reserved."
+creator: "Author Name"
+contributor: 'Contributor Name'
+
+# Book Identification
+identifier:
+  scheme: 'ISBN-13'
+  text: '978-1-916-12345-6'
+
+# Content Classification
+subject: 'Subject Categories'
+language: 'en-US'
+
+# Visual Elements
+image: 'assets/cover.png'
+coverImage: 'assets/cover.png'
+css: 'epub-style.css'
+
+# Organization
+chapter: 0
+order: 0
+
+# Schema.org Metadata
+'@type': 'Book'
+'@context': 'https://schema.org'
+bookFormat: 'EBook'
+inLanguage: 'en-US'
+datePublished: '2024-05-08'
+---
 ```
 
 ### EPUB Generation
@@ -442,14 +513,19 @@ const BookSchema = z.object({
 
 2. **Generate EPUB**
    ```bash
+   # Using the generate-epub.sh script
+   npm run generate:epub
+   
+   # Manual generation
    pandoc \
-     --resource-path=.:assets \
+     --resource-path=assets \
      --toc \
      --toc-depth=2 \
      --split-level=1 \
      --css=epub-style.css \
      --epub-cover-image=assets/cover.png \
-     -o output.epub \
+     -o TheElevatePlaybook.epub \
+     metadata.yaml \
      chapters/*.md
    ```
 
@@ -472,6 +548,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0.5em;
     line-height: 1.2;
 }
+
+/* Add more custom styles as needed */
 ```
 
 ### Features
