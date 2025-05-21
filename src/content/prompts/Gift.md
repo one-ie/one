@@ -8,9 +8,85 @@ tags:
 date: 2025-03-08
 ---
 
-**(Instructions for User:** Initiate this prompt within the Gemini Deep Research interface, following the completion of the HOOK step (or having those outputs available). Replace ALL bracketed placeholders `[---]` with your specific Foundation Blueprint details and the key outputs/decisions from the HOOK step.)*
+This prompt is your interactive guide to architecting a powerful **GIFT strategy** (Elevate Framework Step 2) and generating your core GIFT assets. Instead of doing the work for you, this prompt will guide you step-by-step—asking questions, providing insights, and helping you think like a world-class value creator.
 
 ---
+
+**INTERACTIVE GIFT STRATEGY GUIDE**
+
+*Agent ONE will guide you through a Socratic, insight-driven process to help you create your own high-value GIFT (lead magnet, quick win, etc.) for your audience. Answer each question thoughtfully. After each answer, Agent ONE will provide insights, examples, and ask follow-up questions to deepen your thinking and creativity.*
+
+---
+
+**STEP 1: Audience Recap**
+
+Let's start by recalling the audience segment you chose in the HOOK step:
+
+- [Paste or summarize your chosen segment from HOOK step here]
+
+*Question: Is there any further detail or nuance about this audience you want to add before we design your GIFT?*
+
+---
+
+**STEP 2: Pain, Goal, and Desire Deep Dive**
+
+- What is the most urgent PAIN or frustration this audience feels (that your GIFT could help with)?
+- What is their biggest GOAL or desired quick win?
+- What would make them feel an immediate sense of progress or relief?
+
+*After you answer, Agent ONE will provide insights and examples, and ask follow-up questions to help you clarify the most compelling value proposition for your GIFT.*
+
+---
+
+**STEP 3: GIFT Format Exploration**
+
+- What type of GIFT would be most attractive and easy to consume for this audience? (e.g., Checklist, Template, Short Guide, Calculator, Mini-Video, Diagnostic, Swipe File)
+- What format would feel like a true shortcut or breakthrough for them?
+- Are there any formats your audience prefers (visual, actionable, interactive, etc.)?
+
+*Agent ONE will help you brainstorm and reflect on the best format, with examples and insights for your niche.*
+
+---
+
+**STEP 4: GIFT Idea Brainstorming & Selection**
+
+- List 2-3 possible GIFT ideas that address the pain/goal above and fit the preferred format.
+- For each, briefly describe the core promise or quick win.
+
+*Agent ONE will review your ideas, give feedback, and ask questions to help you select and refine the strongest GIFT concept.*
+
+---
+
+**STEP 5: Content Outline & Asset Drafting**
+
+For your chosen GIFT idea:
+- Outline the key sections or steps (for a checklist: list items; for a guide: chapter headings, etc.)
+- Draft a headline that promises the quick win or benefit
+- List 3-5 bullet points explaining what the user will get or achieve
+- Suggest 1-2 CTA button texts
+
+*Agent ONE will review your drafts, provide feedback, and help you iterate for clarity and impact.*
+
+---
+
+**STEP 6: Synthesis & Recommendations**
+
+- Why is this GIFT the perfect fit for your audience and their current journey?
+- How does it connect to the HOOK and set up the next step (IDENTIFY)?
+- What would make the GIFT even more irresistible or valuable?
+
+*Agent ONE will help you reflect, refine, and finalize your GIFT, and explain the strategic reasoning behind it.*
+
+---
+
+**Remember:**
+- This is a guided, interactive process. The more you engage, the better your GIFT will become.
+- At each step, Agent ONE will provide insights, examples, and ask questions to help you think like a top strategist.
+- The goal is not just to generate copy, but to help you understand and master the art of the GIFT.
+
+---
+
+*Ready? Let's begin with Step 1: Recap your audience segment from the HOOK step.*
 
 **SYSTEM PROMPT START**
 
