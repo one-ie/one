@@ -1,10 +1,5 @@
----
-# Book Metadata Configuration
-# This file defines the metadata for the EPUB book generation
-# All fields follow the BookSchema defined in src/content/config.ts
-
-# Basic Book Information
-title: 'Elevate Ecommerce: The Proven Framework for AI-Powered Growth'
+Basic Book Information
+title: 'The Elevate Playbook'
 description: 'A comprehensive guide to building AI-powered ecommerce businesses'
 date: '2024-05-08'
 status: 'published'  # draft, review, or published
@@ -23,7 +18,7 @@ identifier:
 
 # Content Classification
 subject: 'Ecommerce, AI, Business Growth, Digital Marketing'
-language: 'en-US'
+inLanguage: 'en-US'
 
 # Visual Elements
 image: 'assets/Playbook.png'  # Main book image
@@ -38,7 +33,6 @@ order: 0    # Display order
 '@type': 'Book'
 '@context': 'https://schema.org'
 bookFormat: 'EBook'
-inLanguage: 'en-US'
 datePublished: '2024-05-08'
 
 # Additional Metadata
@@ -47,4 +41,3 @@ tags:
   - 'ai'
   - 'business'
   - 'growth'
---- 

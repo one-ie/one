@@ -1,4 +1,4 @@
-# People (Focus: Customer Avatar)
+# Customer (Focus: Customer Avatar)
 
 ***Instructions:*** *This section is arguably the MOST important for driving sales with AI. Go deep. Truly understand the person you're selling your **Focus Product** (from Sec 0.1) to. Create one profile per major customer segment if needed. The richness of this profile directly impacts the quality and conversion power of your AI-generated content.*
 

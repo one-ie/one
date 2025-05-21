@@ -1,9 +1,36 @@
 ---
 title: Hook
-description: Architect a comprehensive **HOOK strategy** (Elevate Framework Step 1) and generate initial **HOOK marketing assets** for my e-commerce business,
+description: Architect a comprehensive **HOOK strategy** (Elevate Framework Step 1) and generate initial **HOOK marketing assets** for my e-commerce business.
 tags:
   - ONE
+  - marketing
+  - strategy
+  - hook
+  - elevate
+  - ecommerce
 date: 2025-03-08
+metaTitle: "Elevate Framework: HOOK Strategy & Marketing Asset Generation"
+metaDescription: "Master the HOOK step of the Elevate Framework. Architect a comprehensive hook strategy and generate actionable marketing assets for your e-commerce business."
+metaKeywords:
+  - elevate
+  - hook
+  - marketing
+  - strategy
+  - ecommerce
+  - ai
+  - growth
+  - assets
+image: "/images/elevate-hook.png"
+openGraph:
+  title: "Elevate Framework: HOOK Strategy & Marketing Asset Generation"
+  description: "Master the HOOK step of the Elevate Framework. Architect a comprehensive hook strategy and generate actionable marketing assets for your e-commerce business."
+  image: "/images/elevate-hook.png"
+  type: "article"
+twitter:
+  card: "summary_large_image"
+  title: "Elevate Framework: HOOK Strategy & Marketing Asset Generation"
+  description: "Master the HOOK step of the Elevate Framework. Architect a comprehensive hook strategy and generate actionable marketing assets for your e-commerce business."
+  image: "/images/elevate-hook.png"
 ---
 This prompt aims to be the **single, comprehensive master prompt** for the HOOK step. It incorporates the FOUNDATION directly, considers various hook strategies and channels, and aims for profound, CEO-level insights and actionable outputs, directly linking the HOOK to the intended GIFT concept.
 

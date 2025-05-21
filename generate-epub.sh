@@ -3,10 +3,10 @@ cd src/content/book
 
 pandoc \
   metadata.yaml \
-  0.\ Introduction.md \
+  0.Introduction.md \
   1.Architecture.md \
   2.Foundation.md \
-  3.1.\ Company\ Worksheet.md \
+  '3.1.Company Worksheet.md' \
   3.Company.md \
   4.Market.md \
   5.Customers.md \

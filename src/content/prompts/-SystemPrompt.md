@@ -1,5 +1,5 @@
 ---
-title: "System Prompt for ONE"
+title: "System Prompt"
 description: ""
 tags: ["ONE"]
 date: 2025-05-08

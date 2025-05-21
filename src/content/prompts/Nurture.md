@@ -1,8 +1,36 @@
 ---
-title: ""
-description: ""
-tags: ["ONE"]
+title: Nurture
+description: Architect a comprehensive NURTURE strategy (Elevate Framework Step 6) and generate nurturing and retargeting assets for your e-commerce business.
+tags:
+  - ONE
+  - nurture
+  - email
+  - retargeting
+  - elevate
+  - ecommerce
 date: 2025-03-08
+metaTitle: "Elevate Framework: NURTURE Strategy & Lead Nurturing Asset Generation"
+metaDescription: "Master the NURTURE step of the Elevate Framework. Architect a comprehensive nurture strategy and generate actionable email and retargeting assets for your e-commerce business."
+metaKeywords:
+  - elevate
+  - nurture
+  - email
+  - retargeting
+  - ecommerce
+  - ai
+  - growth
+  - assets
+image: "/images/elevate-nurture.png"
+openGraph:
+  title: "Elevate Framework: NURTURE Strategy & Lead Nurturing Asset Generation"
+  description: "Master the NURTURE step of the Elevate Framework. Architect a comprehensive nurture strategy and generate actionable email and retargeting assets for your e-commerce business."
+  image: "/images/elevate-nurture.png"
+  type: "article"
+twitter:
+  card: "summary_large_image"
+  title: "Elevate Framework: NURTURE Strategy & Lead Nurturing Asset Generation"
+  description: "Master the NURTURE step of the Elevate Framework. Architect a comprehensive nurture strategy and generate actionable email and retargeting assets for your e-commerce business."
+  image: "/images/elevate-nurture.png"
 ---
  **Step 6: NURTURE**. This prompt is designed for an agentic/context-aware AI to devise nurturing strategies (email sequences, retargeting concepts) and generate key assets, fully leveraging the Foundation and prior steps.
 

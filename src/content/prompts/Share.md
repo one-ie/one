@@ -1,8 +1,36 @@
 ---
-title: ""
-description: ""
-tags: ["ONE"]
+title: Share
+description: Architect a comprehensive SHARE strategy (Elevate Framework Step 9) to activate advocacy and generate review, testimonial, UGC, and referral assets for your e-commerce business.
+tags:
+  - ONE
+  - share
+  - advocacy
+  - reviews
+  - elevate
+  - ecommerce
 date: 2025-03-08
+metaTitle: "Elevate Framework: SHARE Strategy & Advocacy Asset Generation"
+metaDescription: "Master the SHARE step of the Elevate Framework. Architect a comprehensive advocacy strategy and generate actionable review, testimonial, UGC, and referral assets for your e-commerce business."
+metaKeywords:
+  - elevate
+  - share
+  - advocacy
+  - reviews
+  - ecommerce
+  - ai
+  - growth
+  - assets
+image: "/images/elevate-share.png"
+openGraph:
+  title: "Elevate Framework: SHARE Strategy & Advocacy Asset Generation"
+  description: "Master the SHARE step of the Elevate Framework. Architect a comprehensive advocacy strategy and generate actionable review, testimonial, UGC, and referral assets for your e-commerce business."
+  image: "/images/elevate-share.png"
+  type: "article"
+twitter:
+  card: "summary_large_image"
+  title: "Elevate Framework: SHARE Strategy & Advocacy Asset Generation"
+  description: "Master the SHARE step of the Elevate Framework. Architect a comprehensive advocacy strategy and generate actionable review, testimonial, UGC, and referral assets for your e-commerce business."
+  image: "/images/elevate-share.png"
 ---
 **Step 9: SHARE**. This prompt will guide the AI to strategize on activating customer advocacy and generate assets to encourage reviews, testimonials, UGC, and referrals, explicitly linking this back to fuel the start of the framework again (the growth loop).
 

@@ -165,7 +165,12 @@ interface AccordionWrapperProps {
 // This is the component we'll use in the course.astro page
 export function AccordionWrapper({ items }: AccordionWrapperProps) {
   return (
-    <UiAccordion type="single" collapsible className="w-full">
+    <UiAccordion
+      type="single"
+      collapsible
+      className="w-full"
+      defaultValue={items.length > 0 ? "item-0" : undefined}
+    >
       {items.map((item, index) => (
         <UiAccordionItem key={index} value={`item-${index}`}>
           <UiAccordionTrigger className="text-xl font-semibold">

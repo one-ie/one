@@ -1,180 +1,42 @@
 ---
+import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from "../layouts/Layout.astro";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AccordionWrapper } from "@/components/AccordionWrapper";
-import { CourseModuleContent } from "@/components/course/CourseModuleContent";
 import { ChatConfigSchema } from '../schema/chat';
 
-// Course data structure
-const courseModulesData = [
-  {
-    title: "Part 1: Welcome",
-    description: "Introduction and overview of the course",
-    lessons: [
-      { name: "Welcome", value: "Introduction and overview", slug: "elevate/welcome" },
-    ]
-  },
-  {
-    title: "Part 2: You",
-    description: "Understanding yourself and your business",
-    lessons: [
-      { name: "Introduction", value: "Getting started", slug: "elevate/0. Introduction" },
-      { name: "Architecture", value: "System design", slug: "elevate/1. Architecture" },
-      { name: "Foundation", value: "Core setup", slug: "elevate/2. Foundation" },
-      { name: "Company", value: "Business structure", slug: "elevate/3. Company" },
-      { name: "Company Worksheet", value: "Implementation guide", slug: "elevate/3.1. Company Worksheet" },
-      { name: "Market", value: "Market analysis", slug: "elevate/4. Market" },
-      { name: "Customer", value: "Customer understanding", slug: "elevate/5. Customer" },
-      { name: "Alignment", value: "Business alignment", slug: "elevate/6. Alignment" }
-    ]
-  },
-  {
-    title: "Part 3: Attract",
-    description: "Customer acquisition and engagement strategies",
-    lessons: [
-      { name: "Attract", value: "Customer acquisition", slug: "elevate/7. Attract" },
-      { name: "Hook", value: "Creating hooks", slug: "elevate/8. Hook" },
-      { name: "Gift", value: "Offering value", slug: "elevate/9. Gift" },
-      { name: "Identify", value: "Customer identification", slug: "elevate/10. Identify" }
-    ]
-  },
-  {
-    title: "Part 4: Convert",
-    description: "Optimizing conversion and sales processes",
-    lessons: [
-      { name: "Convert", value: "Conversion optimization", slug: "elevate/11. Convert" },
-      { name: "Engage", value: "Customer engagement", slug: "elevate/12. Engage" },
-      { name: "Sell", value: "Sales process", slug: "elevate/13. Sell" }
-    ]
-  },
-  {
-    title: "Part 5: Grow",
-    description: "Strategies for customer nurturing and business growth",
-    lessons: [
-      { name: "Nurture", value: "Customer nurturing", slug: "elevate/14. Nurture" },
-      { name: "Upsell", value: "Upselling strategies", slug: "elevate/15. Upsell" },
-      { name: "Educate", value: "Customer education", slug: "elevate/16. Educate" },
-      { name: "Share", value: "Sharing and referrals", slug: "elevate/17. Share" },
-      { name: "Optimise", value: "Business optimization", slug: "elevate/18. Optimise" }
-    ]
-  }
-];
+const courses = await getCollection('courses');
+console.log('Available course slugs:', courses.map((c: CollectionEntry<'courses'>) => c.slug));
+console.log('Available course ids:', courses.map((c: CollectionEntry<'courses'>) => c.data.id));
+const course = courses.find((c: CollectionEntry<'courses'>) => c.slug === 'elevate' || c.data.id === 'elevate');
+const lessons = await getCollection('lessons');
 
-// Transform courseModulesData to fit SimpleAccordionItem structure
-const courseModules = courseModulesData.map(module => ({
-  title: module.title,
-  content: module.description, // Using description as content
-  // If you need to include lesson details in the content, you'll need to format them here.
-  // For example:
-  // content: `${module.description}\n\nLessons:\n${module.lessons.map(lesson => `- ${lesson.name}`).join('\n')}`
-}));
+if (!course) {
+  throw new Error("No course with slug 'elevate' or id 'elevate' found in src/content/courses/. Please check your file and frontmatter.");
+}
 
-// Course metadata
+const courseLessonSlugs = course.data.lessons || [];
+const courseLessons = courseLessonSlugs
+  .map((slug: string) => lessons.find((lesson: CollectionEntry<'lessons'>) => lesson.slug === slug))
+  .filter((lesson: CollectionEntry<'lessons'> | undefined): lesson is CollectionEntry<'lessons'> => Boolean(lesson));
+
 const courseMetadata = {
-  title: "AI-Powered Ecom Growth System",
-  description: "Transform Random AI Experiments into a Systematic Growth Engine. Stop wasting time with trial-and-error AI prompts. Our proven 10-module system gives you everything you need to systematically scale your ecommerce store using AI.",
-  duration: "10 Modules",
-  level: "Intermediate",
-  prerequisites: [
-    "Basic understanding of ecommerce",
-    "Familiarity with AI tools",
-    "Access to an ecommerce store or business"
-  ]
+  title: course.data.title,
+  description: course.data.description,
+  duration: course.data.duration,
+  level: course.data.level,
+  prerequisites: course.data.prerequisites || [],
+  instructors: course.data.instructors || [],
 };
 
-// Configure AI assistant for course
-const chatConfig = ChatConfigSchema.parse({
-  // Layout and Meta
-  layout: "course",
-  title: "AI-Powered Ecom Growth System",
-  description: "Transform Random AI Experiments into a Systematic Growth Engine",
-  
-  // AI Config
-  provider: "openrouter",
-  model: "google/gemini-2.0-flash-001",
-  apiEndpoint: "https://api.openai.com/v1",
-  temperature: 0.7,
-  maxTokens: 900000,
-  runtime: "edge",
-  includeContent: true,
+const chatConfig = ChatConfigSchema.parse(course.data.aiConfig || {});
 
-  // Prompt Config
-  systemPrompt: [{
-    type: "text",
-    text: `I'm your AI Course Instructor, dedicated to helping you master the AI-Powered Ecom Growth System. I've helped hundreds of ecommerce businesses transform their random AI experiments into systematic growth engines.
-
-🎯 Course Overview:
-- 10 Comprehensive Modules
-- 200+ Field-Tested AI Prompts
-- Step-by-Step Implementation Guides
-- Expert Community Support
-
-I'm here to:
-1. Guide you through each module
-2. Answer your questions
-3. Provide practical examples
-4. Help you implement the strategies
-5. Ensure your success
-
-My teaching approach:
-- Focus on practical application
-- Provide real-world examples
-- Break down complex concepts
-- Offer step-by-step guidance
-- Support your implementation
-
-Let's start by understanding your goals. What would you like to learn about first?`
-  }],
-  addSystemPrompt: true,
-  addBusinessPrompt: true,
-
-  // Welcome Config
-  welcomeMessage: "👋 Welcome to the AI-Powered Ecom Growth System! I'm your course instructor. What would you like to learn about?",
-  avatar: "/icon.svg",
-  suggestions: [
-    {
-      label: "🎯 Module 0: Foundation",
-      prompt: "Tell me about building my strategic bedrock and understanding my ideal customer"
-    },
-    {
-      label: "🎣 Module 1: Hook",
-      prompt: "How do I locate prospects and create compelling initial messages?"
-    },
-    {
-      label: "🎁 Module 2: Gift",
-      prompt: "What makes an effective lead magnet for my target audience?"
-    },
-    {
-      label: "📝 Module 3: Identify",
-      prompt: "How can I efficiently capture and qualify leads?"
-    },
-    {
-      label: "💬 Module 4: Engage",
-      prompt: "What's the best way to reduce friction during the sales process?"
-    },
-    {
-      label: "💰 Module 5: Sell",
-      prompt: "How do I create high-converting sales pages?"
-    },
-    {
-      label: "🌱 Module 6: Nurture",
-      prompt: "What's the best strategy for converting not-yet-ready prospects?"
-    },
-    {
-      label: "📈 Module 7: Upsell",
-      prompt: "How can I maximize profit per customer?"
-    },
-    {
-      label: "🎓 Module 8: Educate",
-      prompt: "What's the best way to onboard customers and drive loyalty?"
-    },
-    {
-      label: "🌟 Module 9: Share",
-      prompt: "How can I leverage customer advocacy for growth?"
-    }
-  ]
-});
+const lessonAccordionItems = courseLessons.map((lesson: CollectionEntry<'lessons'>) => ({
+  title: lesson.data.title || lesson.slug,
+  content: lesson.data.description || '',
+  slug: lesson.slug
+}));
 ---
 
 <Layout
@@ -188,41 +50,61 @@ Let's start by understanding your goals. What would you like to learn about firs
     <div class="mb-8">
       <h1 class="text-4xl font-bold mb-4">{courseMetadata.title}</h1>
       <p class="text-xl text-muted-foreground mb-6">{courseMetadata.description}</p>
-      
       <div class="flex flex-wrap gap-4 mb-6">
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>{courseMetadata.duration}</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-          <span>{courseMetadata.level}</span>
-        </div>
+        {courseMetadata.duration && (
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{courseMetadata.duration}</span>
+          </div>
+        )}
+        {courseMetadata.level && (
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>{courseMetadata.level}</span>
+          </div>
+        )}
       </div>
-
       <!-- Prerequisites -->
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Prerequisites</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul class="list-disc list-inside space-y-2">
-            {courseMetadata.prerequisites.map(prereq => (
-              <li class="text-muted-foreground">{prereq}</li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+      {courseMetadata.prerequisites.length > 0 && (
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Prerequisites</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul class="list-disc list-inside space-y-2">
+              {courseMetadata.prerequisites.map((prereq: string) => (
+                <li class="text-muted-foreground">{prereq}</li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
     </div>
 
     <!-- Course Content -->
     <div class="space-y-8">
       <h2 class="text-2xl font-bold mb-4">Course Content</h2>
-      <AccordionWrapper client:load items={courseModules} />
+      <AccordionWrapper client:load items={lessonAccordionItems} />
+      <div class="mt-6 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {courseLessons.map((lesson: CollectionEntry<'lessons'>) => (
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                <a href={`/lessons/${lesson.slug}`} class="hover:underline text-primary">
+                  {lesson.data.title || lesson.slug}
+                </a>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p class="text-muted-foreground">{lesson.data.description}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
 
     <!-- Start Learning Button -->

@@ -175,16 +175,12 @@ const BookSchema = z.object({
   chapter: z.number().optional(),
   order: z.number().optional(),
   status: z.enum(['draft', 'review', 'published']).default('draft'),
-
-  // Schema.org fields
-  '@type': z.literal('Book').optional(),
-  '@context': z.literal('https://schema.org').optional(),
+  image: z.string().optional(),
+  // Added book/EPUB metadata fields
   bookFormat: z.enum(['EBook', 'Paperback', 'Hardcover']).optional(),
   inLanguage: z.string().optional(),
   datePublished: z.string().optional(),
   dateModified: z.string().optional(),
-  numberOfPages: z.number().optional(),
-  bookEdition: z.string().optional(),
   isbn: z.string().optional(),
   price: z.object({
     amount: z.number().optional(),
@@ -199,7 +195,12 @@ const BookSchema = z.object({
     name: z.string().optional(),
     position: z.number().optional(),
     url: z.string().optional()
-  })).optional()
+  })).optional(),
+  // Schema.org fields
+  '@type': z.literal('Book').optional(),
+  '@context': z.literal('https://schema.org').optional(),
+  numberOfPages: z.number().optional(),
+  bookEdition: z.string().optional()
 });
 
 // --- LMS SCHEMAS ---
@@ -286,7 +287,7 @@ const lessonsCollection = defineCollection({
 });
 
 const coursesCollection = defineCollection({
-  type: 'data',
+  type: 'content',
   schema: CourseSchema
 });
 
