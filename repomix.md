@@ -15563,7 +15563,7 @@ wrangler.toml
  56:     { date: "2024-05-05", desktop: 481, mobile: 390 },
  57:     { date: "2024-05-06", desktop: 498, mobile: 520 },
  58:     { date: "2024-05-07", desktop: 388, mobile: 300 },
- 59:     { date: "2024-05-08", desktop: 149, mobile: 210 },
+ 59:     { date: "2024-05-22", desktop: 149, mobile: 210 },
  60:     { date: "2024-05-09", desktop: 227, mobile: 180 },
  61:     { date: "2024-05-10", desktop: 293, mobile: 330 },
  62:     { date: "2024-05-11", desktop: 335, mobile: 270 },
@@ -20842,7 +20842,7 @@ wrangler.toml
  25:   - friction-reduction
  26:   - sales-optimization
  27: status: published
- 28: date: '2024-05-08'
+ 28: date: '2024-05-22'
  29: ---
  30: # Engage
  31: ![[src/content/book/assets/Engaage.png]]
@@ -20966,7 +20966,7 @@ wrangler.toml
  25:   - user-experience
  26:   - purchase-journey
  27: status: published
- 28: date: '2024-05-08'
+ 28: date: '2024-05-22'
  29: ---
  30: **Step 5: SELL – Engineering Your High-Conversion Sales Environment**
  31: 
@@ -21079,7 +21079,7 @@ wrangler.toml
 26:   - content-strategy
 27: status:
 28:   - published
-29: date: 2024-05-08
+29: date: 2024-05-22
 30: ---
 31: # Nurture
 32: ![[src/content/book/assets/Nurture.png]] ***Step 6: NURTURE – Building Relationships, Converting Over Time***
@@ -21174,7 +21174,7 @@ wrangler.toml
  25:   - sales-psychology
  26:   - revenue-optimization
  27: status: published
- 28: date: '2024-05-08'
+ 28: date: '2024-05-22'
  29: ---
  30: # Upsell
  31: ![[src/content/book/assets/Upsell.png]]
@@ -21281,7 +21281,7 @@ wrangler.toml
 25:   - customer-retention
 26:   - user-guides
 27: status: published
-28: date: '2024-05-08'
+28: date: '2024-05-22'
 29: ---
 30: # Educate
 31: ![[src/content/book/assets/Educate.png]]
@@ -21383,7 +21383,7 @@ wrangler.toml
 25:   - word-of-mouth
 26:   - growth-loops
 27: status: published
-28: date: '2024-05-08'
+28: date: '2024-05-22'
 29: ---
 30: # Share
 31: 
@@ -21475,7 +21475,7 @@ wrangler.toml
  25:   - performance-metrics
  26:   - business-automation
  27: status: published
- 28: date: '2024-05-08'
+ 28: date: '2024-05-22'
  29: ---
  30: # Kickstart Your Engine
  31: 
@@ -42634,7 +42634,7 @@ wrangler.toml
  1: ---
  2: title: "Elevate Ecommerce: The Proven Framework for AI-Powered Growth"
  3: description: "A comprehensive framework for building and scaling AI-powered ecommerce businesses"
- 4: date: "2024-05-08"
+ 4: date: "2024-05-22"
  5: status: "draft"
  6: tags:
  7:   - "ecommerce"
@@ -57723,7 +57723,7 @@ wrangler.toml
 25:   - performance-metrics
 26:   - business-automation
 27: status: published
-28: date: '2024-05-08'
+28: date: '2024-05-22'
 29: ---
 30: 
 31: # Kickstart Your Engine
@@ -63848,7 +63848,7 @@ wrangler.toml
 25:   - strategic-planning
 26:   - business-foundation
 27: status: published
-28: date: '2024-05-08'
+28: date: '2024-05-22'
 29: ---
 30: **Purpose:** Gain absolute clarity on your business's core offerings, unique value delivery, and brand identity. Fill this out thoroughly before proceeding with Market or Customer analysis.
 31: 
@@ -63874,7 +63874,7 @@ wrangler.toml
  1: ---
  2: title: 'Elevate Ecommerce: The Proven Framework for AI-Powered Growth'
  3: description: 'A comprehensive guide to building AI-powered ecommerce businesses'
- 4: date: '2024-05-08'
+ 4: date: '2024-05-22'
  5: status: 'published'
  6: tags: ['ecommerce', 'ai', 'business', 'growth']
  7: image: 'assets/book-cover.png'
@@ -63902,7 +63902,7 @@ wrangler.toml
 29: '@context': 'https://schema.org'
 30: bookFormat: 'EBook'
 31: inLanguage: 'en-US'
-32: datePublished: '2024-05-08'
+32: datePublished: '2024-05-22'
 33: ---
 `````
 
@@ -68869,7 +68869,7 @@ wrangler.toml
  42:   image: assets/Playbook.png
  43: title: "Beyond Funnels: Architecting Your Predictable Ecommerce Growth System"
  44: description: "A comprehensive guide to building a robust e-commerce growth system using the Elevate Framework"
- 45: date: '2024-05-08'
+ 45: date: '2024-05-22'
  46: tags:
  47:   - introduction
  48:   - framework

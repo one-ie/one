@@ -463,7 +463,7 @@ The `metadata.yaml` file defines the book's metadata and follows the BookSchema:
 # Basic Book Information
 title: 'Your Book Title'
 description: 'Book description'
-date: '2024-05-08'
+date: '2024-05-22'
 status: 'published'  # draft, review, or published
 
 # Author and Publishing Information
@@ -496,7 +496,7 @@ order: 0
 '@context': 'https://schema.org'
 bookFormat: 'EBook'
 inLanguage: 'en-US'
-datePublished: '2024-05-08'
+datePublished: '2024-05-22'
 ---
 ```
 

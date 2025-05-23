@@ -1,17 +1,17 @@
 #!/bin/sh
 cd src/content/book
 
-# Relaxed: Warn (but do not exit) if book-level metadata is found in chapter frontmatter
+# Warn if book-level metadata is found in chapter frontmatter
 for file in *.md; do
   if [ "$file" = "metadata.yaml" ]; then continue; fi
   if grep -qE '^---' "$file"; then
     if grep -qE '^(author|publisher|rights|identifier|bookFormat):' "$file"; then
-      echo "\033[0;33mWARNING: Book-level metadata found in $file. Only metadata.yaml will be used for EPUB metadata.\033[0m"
+      echo "\033[0;33mWARNING: Book-level metadata found in $file. Only metadata.yaml will be used for PDF metadata.\033[0m"
     fi
   fi
 done
 
-# Use --metadata-file instead of passing metadata.yaml as a content file
+# Generate PDF with Pandoc (using XeLaTeX)
 pandoc \
   --metadata-file=metadata.yaml \
   --metadata=title:"The Elevate Playbook" \
@@ -38,10 +38,8 @@ pandoc \
   --resource-path=assets \
   --toc \
   --toc-depth=2 \
-  --split-level=1 \
-  --css=epub-style.css \
-  --epub-cover-image=assets/book-cover.png \
-  -o TheElevatePlaybook.epub
+  --pdf-engine=xelatex \
+  --output=TheElevatePlaybook.pdf
 
-# Open the generated EPUB file
-open TheElevatePlaybook.epub 
+# Open the generated PDF file
+open TheElevatePlaybook.pdf 

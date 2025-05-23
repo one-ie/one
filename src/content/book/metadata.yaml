@@ -1,43 +1,8 @@
-Basic Book Information
 title: 'The Elevate Playbook'
-description: 'A comprehensive guide to building AI-powered ecommerce businesses'
-date: '2024-05-08'
-status: 'published'  # draft, review, or published
-
-# Author and Publishing Information
 author: "Anthony O'Connell"
+date: '2025-05-18'
+language: 'en-US'
 publisher: 'ONE Publishing'
-rights: "© 2024 Anthony O'Connell. All rights reserved."
-creator: "Anthony O'Connell"
-contributor: 'ONE Team'
-
-# Book Identification
-identifier:
-  scheme: 'ISBN-13'
-  text: '978-1-916-12345-6'
-
-# Content Classification
-subject: 'Ecommerce, AI, Business Growth, Digital Marketing'
-inLanguage: 'en-US'
-
-# Visual Elements
-image: 'assets/Playbook.png'  # Main book image
-coverImage: 'assets/Playbook.png'  # EPUB cover image
-css: 'epub-style.css'  # EPUB styling
-
-# Organization
-chapter: 0  # Chapter number
-order: 0    # Display order
-
-# Schema.org Metadata
-'@type': 'Book'
-'@context': 'https://schema.org'
-bookFormat: 'EBook'
-datePublished: '2024-05-08'
-
-# Additional Metadata
-tags:
-  - 'ecommerce'
-  - 'ai'
-  - 'business'
-  - 'growth'
+rights: "© 2025 Anthony O'Connell. All rights reserved."
+identifier: '978-1-916-12345-6'
+cover-image: 'assets/book-cover.png'
