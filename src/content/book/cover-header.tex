@@ -1,0 +1,33 @@
+\usepackage{eso-pic}
+\usepackage{graphicx}
+\usepackage{geometry}
+
+% Suppress automatic title page (we'll manually place it after cover)
+\renewcommand{\maketitle}{}
+
+% Full page cover setup
+\newcommand\FullPageCover{%
+  \newgeometry{margin=0pt}%
+  \thispagestyle{empty}%
+  \AddToShipoutPictureBG*{%
+    \AtPageLowerLeft{%
+      \includegraphics[width=\paperwidth,height=\paperheight]{assets/book-cover.png}%
+    }%
+  }%
+  \null\newpage%
+  \restoregeometry%
+}
+
+% Manual title page command (to be used in 01.Title.md)
+\newcommand\ManualTitle{%
+  \begin{titlepage}
+  \centering
+  \vspace*{\fill}
+  {\Huge\bfseries The Elevate Playbook\par}
+  \vspace{2cm}
+  {\Large Anthony O'Connell\par}
+  \vspace{1cm}
+  {\large 2025-05-22\par}
+  \vspace*{\fill}
+  \end{titlepage}
+} 

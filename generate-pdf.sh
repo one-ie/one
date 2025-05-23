@@ -15,6 +15,10 @@ done
 pandoc \
   --metadata-file=metadata.yaml \
   --metadata=title:"The Elevate Playbook" \
+  --include-in-header=cover-header.tex \
+  00.Cover.md \
+  01.Title.md \
+  02.TOC.md \
   0.Introduction.md \
   1.Architecture.md \
   2.Foundation.md \
@@ -36,7 +40,6 @@ pandoc \
   17.Share.md \
   18.Optimise.md \
   --resource-path=assets \
-  --toc \
   --toc-depth=2 \
   --pdf-engine=xelatex \
   --output=TheElevatePlaybook.pdf
