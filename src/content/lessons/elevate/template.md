@@ -18,64 +18,50 @@ video:
   title: "Lesson Video Title"
   description: "A short description of the lesson video."
   captions: "lesson-captions.vtt"
-bookChapter:
-  url: "https://example.com/book/chapter-1"
-  title: "Book Chapter Title"
-  description: "Description of the related book chapter."
-worksheet:
-  url: "https://example.com/worksheet.pdf"
-  title: "Worksheet Title"
-  description: "Description of the worksheet."
-prompts:
-  tag: "hook"
-  url: "https://example.com/prompts/hook"
-  description: "Prompt description for this lesson."
-checklist:
-  url: "https://example.com/checklist.pdf"
-  title: "Checklist Title"
-  description: "Checklist for this lesson."
 resources:
-  - title: "Resource Article"
-    url: "https://example.com/article"
-    description: "A helpful article."
-    type: article
-  - title: "Resource Video"
-    url: "https://example.com/video"
-    description: "A helpful video."
-    type: video
-  - title: "Resource Tool"
-    url: "https://example.com/tool"
-    description: "A useful tool."
-    type: tool
-  - title: "Resource Template"
-    url: "https://example.com/template"
-    description: "A template file."
-    type: template
-  - title: "Other Resource"
-    url: "https://example.com/other"
-    description: "Other type of resource."
-    type: other
+  - title: "Hook Prompt"
+    url: "https://example.com/prompts/hook"
+    description: "Prompt description for this lesson."
+    type: prompt
+    tag: "hook"
+  - title: "Book Chapter Resource"
+    url: "https://example.com/book/chapter-1"
+    description: "Description of the related book chapter."
+    type: bookChapter
+    bookTitle: "Book Chapter Title"
+  - title: "Worksheet Resource"
+    url: "https://example.com/worksheet.pdf"
+    description: "Description of the worksheet."
+    type: worksheet
+    worksheetTitle: "Worksheet Title"
+  - title: "Checklist Resource"
+    url: "https://example.com/checklist.pdf"
+    description: "Checklist for this lesson."
+    type: checklist
+    checklistTitle: "Checklist Title"
+  - title: "Quiz Assignment"
+    description: "First quiz assignment."
+    type: assignment
+    dueDate: "2024-06-10"
+    points: 10
+    assignmentType: quiz
+  - title: "Project Assignment"
+    description: "Main project assignment."
+    type: assignment
+    dueDate: "2024-06-20"
+    points: 50
+    assignmentType: project
+  - title: "Community Resource"
+    url: "https://discord.gg/example"
+    description: "Community platform for this lesson."
+    type: community
+    engagementInstructions: "Join the discussion on Discord."
+    platform: discord
 audio:
   url: "https://example.com/audio.mp3"
   title: "Audio Title"
   duration: 180
   description: "Audio description."
-assignments:
-  - title: "Quiz 1"
-    description: "First quiz assignment."
-    dueDate: "2024-06-10"
-    points: 10
-    type: quiz
-  - title: "Project 1"
-    description: "Main project assignment."
-    dueDate: "2024-06-20"
-    points: 50
-    type: project
-community:
-  engagementInstructions: "Join the discussion on Discord."
-  url: "https://discord.gg/example"
-  platform: discord
-  description: "Community platform for this lesson."
 aiConfig:
   provider: openai
   model: "gpt-4o-mini"

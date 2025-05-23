@@ -1,9 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import DocsPage from '../../layouts/Docs.astro';
-import type { CollectionEntry } from 'astro:content';
 import { ChatConfigSchema } from '../../schema/chat';
 import LessonContent from '@/components/lessons/LessonContent.astro';
+import VideoEmbed from '@/components/lessons/VideoEmbed.astro';
+import { Card } from '@/components/ui/card';
 
 export const prerender = true;
 
@@ -21,6 +22,20 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+
+// Get all lessons and sort by order, then slug
+const allLessons: CollectionEntry<'lessons'>[] = await getCollection('lessons');
+const sortedLessons = allLessons
+  .slice()
+  .sort((a: CollectionEntry<'lessons'>, b: CollectionEntry<'lessons'>) => {
+    const orderA = a.data.order ?? 0;
+    const orderB = b.data.order ?? 0;
+    if (orderA !== orderB) return orderA - orderB;
+    return a.slug.localeCompare(b.slug);
+  });
+const currentIndex = sortedLessons.findIndex((l: CollectionEntry<'lessons'>) => l.slug === entry.slug);
+const prevLesson = currentIndex > 0 ? sortedLessons[currentIndex - 1] : null;
+const nextLesson = currentIndex < sortedLessons.length - 1 ? sortedLessons[currentIndex + 1] : null;
 
 // Get the system prompt from the content collection
 const systemPrompt = await getCollection('prompts', ({ slug }: { slug: string }) => slug === '-SystemPrompt');
@@ -48,7 +63,7 @@ const chatConfig = ChatConfigSchema.parse({
       type: "text",
       text: `${systemPromptContent}
 
-You are ONE's lesson guide for "${entry.data.title || 'this lesson'}". Your role is to help users learn and master the concepts covered in this specific lesson.
+You are ONE's lesson guide for \"${entry.data.title || 'this lesson'}\". Your role is to help users learn and master the concepts covered in this specific lesson.
 
 Core Capabilities:
 1. Lesson Content
@@ -94,7 +109,7 @@ Key Principles:
   addBusinessPrompt: true,
 
   // Welcome Config
-  welcomeMessage: entry.data.aiConfig?.welcomeMessage || `👋 Welcome to "${entry.data.title || 'this lesson'}"! I'm your AI guide to help you learn and master the concepts in this lesson. What would you like to explore?`,
+  welcomeMessage: entry.data.aiConfig?.welcomeMessage || `👋 Welcome to \"${entry.data.title || 'this lesson'}\"! I'm your AI guide to help you learn and master the concepts in this lesson. What would you like to explore?`,
   avatar: entry.data.aiConfig?.avatar || "/icon.svg",
   suggestions: entry.data.aiConfig?.suggestions || [
     { 
@@ -131,13 +146,105 @@ Key Principles:
   chatConfig={chatConfig}
   rightPanelMode={entry.data.rightPanelMode || "quarter"}
 >
-  <div class="px-4 sm:px-6">
+  <div class="px-4 sm:px-6 max-w-3xl mx-auto space-y-10">
+    {entry.data.video?.id && (
+      <VideoEmbed 
+        id={entry.data.video.id}
+        params={entry.data.video.params}
+      />
+    )}
+
     {entry.data.lessonContent ? (
       <LessonContent content={entry.data.lessonContent} />
     ) : (
       <div class="prose dark:prose-invert max-w-none">
         <Content />
       </div>
+    )}
+
+    {entry.data.resources && entry.data.resources.length > 0 && (
+      <section class="mt-12">
+        <ul class="space-y-4">
+          {entry.data.resources.map((resource: any) => (
+            <li>
+              <Card className="p-4 flex flex-col gap-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="font-semibold">{resource.title}</span>
+                  {resource.type && (
+                    <span class="ml-2 px-2 py-0.5 rounded-full text-xs bg-primary/10 text-primary capitalize">{resource.type}</span>
+                  )}
+                </div>
+                {resource.description && <p class="text-muted-foreground text-sm mb-1">{resource.description}</p>}
+                {resource.url && (
+                  <a href={resource.url} class="text-blue-600 hover:underline text-sm" target="_blank" rel="noopener noreferrer">Open Resource</a>
+                )}
+                {resource.type === 'prompt' && resource.tag && (
+                  <div class="text-xs text-muted-foreground">Prompt Tag: <span class="font-mono">{resource.tag}</span></div>
+                )}
+                {resource.type === 'bookChapter' && resource.bookTitle && (
+                  <div class="text-xs text-muted-foreground">Book: <span class="font-mono">{resource.bookTitle}</span></div>
+                )}
+                {resource.type === 'worksheet' && resource.worksheetTitle && (
+                  <div class="text-xs text-muted-foreground">Worksheet: <span class="font-mono">{resource.worksheetTitle}</span></div>
+                )}
+                {resource.type === 'checklist' && resource.checklistTitle && (
+                  <div class="text-xs text-muted-foreground">Checklist: <span class="font-mono">{resource.checklistTitle}</span></div>
+                )}
+                {resource.type === 'assignment' && (
+                  <div class="text-xs text-muted-foreground">
+                    {resource.assignmentType && <span>Type: <span class="font-mono">{resource.assignmentType}</span></span>}
+                    {resource.dueDate && <span class="ml-2">Due: <span class="font-mono">{resource.dueDate}</span></span>}
+                    {resource.points !== undefined && <span class="ml-2">Points: <span class="font-mono">{resource.points}</span></span>}
+                  </div>
+                )}
+                {resource.type === 'community' && (
+                  <div class="text-xs text-muted-foreground">
+                    {resource.platform && <span>Platform: <span class="font-mono">{resource.platform}</span></span>}
+                    {resource.engagementInstructions && <span class="ml-2">{resource.engagementInstructions}</span>}
+                  </div>
+                )}
+              </Card>
+            </li>
+          ))}
+        </ul>
+        <nav class="flex justify-center items-center gap-8 mt-10">
+          {prevLesson ? (
+            <a href={"/lessons/" + prevLesson.slug} class="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted hover:bg-primary/10 text-primary transition-all shadow-sm">
+              <span class="text-2xl">&#8592;</span>
+              <div class="flex flex-col items-start">
+                <span class="text-xs text-muted-foreground">Previous</span>
+                <span class="font-semibold line-clamp-1 max-w-[160px]">{prevLesson.data.title || 'Previous Lesson'}</span>
+              </div>
+            </a>
+          ) : (
+            <span class="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted text-gray-400 cursor-not-allowed shadow-sm">
+              <span class="text-2xl">&#8592;</span>
+              <div class="flex flex-col items-start">
+                <span class="text-xs">Previous</span>
+                <span class="font-semibold line-clamp-1 max-w-[160px] opacity-60">No lesson</span>
+              </div>
+            </span>
+          )}
+          <span class="hidden md:inline-block w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg mx-2">•</span>
+          {nextLesson ? (
+            <a href={"/lessons/" + nextLesson.slug} class="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted hover:bg-primary/10 text-primary transition-all shadow-sm">
+              <div class="flex flex-col items-end">
+                <span class="text-xs text-muted-foreground text-right">Next</span>
+                <span class="font-semibold line-clamp-1 max-w-[160px]">{nextLesson.data.title || 'Next Lesson'}</span>
+              </div>
+              <span class="text-2xl">&#8594;</span>
+            </a>
+          ) : (
+            <span class="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted text-gray-400 cursor-not-allowed shadow-sm">
+              <div class="flex flex-col items-end">
+                <span class="text-xs text-right">Next</span>
+                <span class="font-semibold line-clamp-1 max-w-[160px] opacity-60">No lesson</span>
+              </div>
+              <span class="text-2xl">&#8594;</span>
+            </span>
+          )}
+        </nav>
+      </section>
     )}
   </div>
 </DocsPage>
