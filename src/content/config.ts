@@ -232,6 +232,7 @@ const LessonSchema = z.object({
     description: z.string().optional(),
     captions: z.string().optional()
   }).optional(),
+  presentation: z.string().optional(), // Path or slug to a presentation
   resources: z.array(z.object({
     // Common fields
     title: z.string().optional(),

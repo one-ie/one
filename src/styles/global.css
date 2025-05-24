@@ -2,7 +2,7 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 @import "reveal.js/dist/reveal.css";
-@import "reveal.js/dist/theme/white.css";
+/* @import "reveal.js/dist/theme/white.css";  // Removed to fix PostCSS warning */
 @import "highlight.js/styles/monokai.css";
 
 @custom-variant dark (&:is(.dark *));

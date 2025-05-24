@@ -12,6 +12,7 @@ slug: "template"
 courseId: "elevate"
 order: 1
 content: "This is a fallback content string for the lesson body."
+presentation: "presentations/example-presentation"
 video:
   platform: youtube
   id: "dQw4w9WgXcQ"
@@ -86,3 +87,5 @@ aiConfig:
 Welcome to Module 1, the first actionable step in the Elevate Ecommerce Framework: **HOOK**. In Module 0 (Foundation), you built your strategic bedrock – clarifying your Company Context, Market Awareness, and Customer Avatar, including the crucial "FIND" elements of identifying *where* your ideal prospects congregate and search.
 
 Now, with that vital intelligence in hand, it's time to deploy it. The **objective of the HOOK step** is singular but critical: **to capture the attention of your defined ideal customer on the specific channels you prioritized**, using a compelling initial message ('hook') that stops them in their tracks and sparks genuine curiosity.
+
+[View the presentation for this lesson](../../presentations/example-presentation/)

@@ -22,8 +22,8 @@ const { title, description = "ONE" } = Astro.props;
     <link rel="stylesheet" href="/node_modules/reveal.js/dist/theme/black.css">
   </head>
   <body style="margin:0; padding:0; background:#111; min-height:100vh;">
-    <div class="presentation-outer flex items-center justify-center min-h-screen" style="min-height:100vh;">
-      <div class="presentation-inner" style="width:800px; height:600px; box-shadow:0 4px 32px #0008; background:#111; border-radius:12px; overflow:hidden; color:#fff!important;">
+    <div class="presentation-outer flex items-center justify-center min-h-screen" style="min-height:100vh; width:100vw; height:100vh;">
+      <div class="presentation-inner" style="width:100vw; height:100vh; background:#111; overflow:hidden; color:#fff!important;">
         <slot />
       </div>
     </div>
