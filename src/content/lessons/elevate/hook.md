@@ -1,31 +1,98 @@
 ---
-title: "Hook"
-description: "Capturing attention where it counts - crafting compelling initial messages"
-slug: "hook"
-courseId: "elevate"
-order: 5
-status: "draft"
-tags: 
+title: "Lesson Title Example"
+description: "A detailed description of the lesson."
+date: "2024-06-01"
+status: "public"
+tags:
   - "ecommerce"
   - "hook"
-image: "Hook.png"
+  - "strategy"
+image: "lesson-image.png"
+slug: "template"
+courseId: "elevate"
+order: 1
+content: "This is a fallback content string for the lesson body."
+presentation: "presentations/example-presentation"
+video:
+  platform: youtube
+  id: "dQw4w9WgXcQ"
+  title: "Lesson Video Title"
+  description: "A short description of the lesson video."
+  captions: "lesson-captions.vtt"
+resources:
+  - title: "Hook Prompt"
+    url: "https://example.com/prompts/hook"
+    description: "Prompt description for this lesson."
+    type: prompt
+    tag: "hook"
+  - title: "Book Chapter Resource"
+    url: "https://example.com/book/chapter-1"
+    description: "Description of the related book chapter."
+    type: bookChapter
+    bookTitle: "Book Chapter Title"
+  - title: "Worksheet Resource"
+    url: "https://example.com/worksheet.pdf"
+    description: "Description of the worksheet."
+    type: worksheet
+    worksheetTitle: "Worksheet Title"
+  - title: "Checklist Resource"
+    url: "https://example.com/checklist.pdf"
+    description: "Checklist for this lesson."
+    type: checklist
+    checklistTitle: "Checklist Title"
+  - title: "Quiz Assignment"
+    description: "First quiz assignment."
+    type: assignment
+    dueDate: "2024-06-10"
+    points: 10
+    assignmentType: quiz
+  - title: "Project Assignment"
+    description: "Main project assignment."
+    type: assignment
+    dueDate: "2024-06-20"
+    points: 50
+    assignmentType: project
+  - title: "Community Resource"
+    url: "https://discord.gg/example"
+    description: "Community platform for this lesson."
+    type: community
+    engagementInstructions: "Join the discussion on Discord."
+    platform: discord
+audio:
+  url: "https://example.com/audio.mp3"
+  title: "Audio Title"
+  duration: 180
+  description: "Audio description."
+aiConfig:
+  provider: openai
+  model: "gpt-4o-mini"
+  temperature: 0.7
+  maxTokens: 2000
+  systemPrompt:
+    - type: text
+      text: "You are an expert on this lesson's topic."
+  welcome:
+    message: "👋 Welcome to the lesson! How can I help you?"
+    avatar: "/icon.svg"
+    suggestions:
+      - label: "💡 Key Concept"
+        prompt: "Explain the main concept of this lesson."
+      - label: "📝 Worksheet"
+        prompt: "Where can I find the worksheet?"
 ---
 
-Okay, let's build out the content for **Module 1: HOOK** following the structure you provided and incorporating the revised framework (with FIND elements in Foundation).
+# Module 1: HOOK (Step 1)
+**1. Intro | Module Introduction**
 
----
+Welcome to Module 1, the first actionable step in the Elevate Ecommerce Framework: **HOOK**. In Module 0 (Foundation), you built your strategic bedrock – clarifying your Company Context, Market Awareness, and Customer Avatar, including the crucial "FIND" elements of identifying *where* your ideal prospects congregate and search.
 
-**Module 1: HOOK (Step 1) – Capturing Attention Where It Counts**
+Now, with that vital intelligence in hand, it's time to deploy it. The **objective of the HOOK step** is singular but critical: **to capture the attention of your defined ideal customer on the specific channels you prioritized**, using a compelling initial message ('hook') that stops them in their tracks and sparks genuine curiosity.
 
-**(1. Intro | Module Introduction)**
+[View the presentation for this lesson](../../presentations/hook/)
 
-*   **Format:** Text
-*   **Content:**
-    Welcome to Module 1, the first actionable step in the Elevate Ecommerce Framework: **HOOK**. In Module 0 (Foundation), you built your strategic bedrock – clarifying your Company Context, Market Awareness, and Customer Avatar, including the crucial "FIND" elements of identifying *where* your ideal prospects congregate and search.
-    Now, with that vital intelligence in hand, it's time to deploy it. The **objective of the HOOK step** is singular but critical: **to capture the attention of your defined ideal customer on the specific channels you prioritized**, using a compelling initial message ('hook') that stops them in their tracks and sparks genuine curiosity.
-    Getting the Hook right is essential. It's the gateway to the entire customer journey. A weak hook on the perfect channel still fails. A brilliant hook on the wrong channel never gets seen. This module focuses on crafting that initial, powerful message, leveraging AI for speed and options, but always guided by your Foundation strategy. Successfully capturing relevant attention here directly sets the stage for presenting your valuable **GIFT** in Module 2. Let's create some scroll-stopping hooks!
+Getting the Hook right is essential. It's the gateway to the entire customer journey. A weak hook on the perfect channel still fails. A brilliant hook on the wrong channel never gets seen. This module focuses on crafting that initial, powerful message, leveraging AI for speed and options, but always guided by your Foundation strategy. Successfully capturing relevant attention here directly sets the stage for presenting your valuable **GIFT** in Module 2. Let's create some scroll-stopping hooks!
 
-**(2. Video | Core Concept Explanation)**
+**2. Video | Core Concept Explanation**
 
 *   **Format:** Primary Video Lesson, Support Text Summary
 *   **Video Script Outline:**
@@ -54,7 +121,7 @@ Okay, let's build out the content for **Module 1: HOOK** following the structure
         *   "Now, go craft *your* compelling hooks!"
 *   **Support Text:** Summarize key concepts: Hook importance, types of hooks, leveraging Foundation context in AI prompts, refinement necessity, connection to GIFT.
 
-**(3. Grid | Step-Specific 3x3 Grid - HOOK Crafting)**
+**3. Grid | Step-Specific 3x3 Grid - HOOK Crafting**
 
 *   **Format:** Visual Graphic, Text Explanation
 *   **Content:**
@@ -71,7 +138,7 @@ Okay, let's build out the content for **Module 1: HOOK** following the structure
 
     *   **How to Use:** 1) Select the primary **Customer Driver** (A) from your Foundation. 2) Define your strategic **Angle & Core Message** (B). 3) Use corresponding **AI Playbook prompts** (see section 5) to generate **Channel-Specific Output examples** (C) for the channels identified in Foundation/FIND.
 
-**(4. Checklist | Actionable Task Checklist)**
+**4. Checklist | Actionable Task Checklist**
 
 *   **Format:** Text List, Downloadable Sheet
 *   **Content:**
@@ -88,7 +155,7 @@ Okay, let's build out the content for **Module 1: HOOK** following the structure
         *   *Video:* Outline the first 5-15 seconds incorporating the hook.
     *   ☐ **Output Check:** Ensure you have your selected Hooks list and draft Act 1 creative snippets ready.
 
-**(5. Prompts | AI Prompt Playbook Section)**
+**5. Prompts | AI Prompt Playbook Section**
 
 *   **Format:** Text, Links/Embeds (Link to specific prompts in full Playbook if separate)
 *   **Content:**
@@ -102,14 +169,14 @@ Okay, let's build out the content for **Module 1: HOOK** following the structure
         *   `Prompt H6: Social Media Post Openers` - Drafts engaging first lines for organic social posts based on an angle. *Requires: Selected Hook Angle, Target Platform.*
     *   ***Reminder:*** *Always input your detailed Foundation context (Customer, Company, Market) into prompts for best results and refine AI output.*
 
-**(6. Worksheet | Worksheet(s) / Template(s))**
+**6. Worksheet | Worksheet(s) / Template(s)**
 
 *   **Format:** Downloadable PDF/Doc
 *   **Content:**
     *   **HOOK Evaluation Matrix:** A simple table to list generated hooks and evaluate them based on criteria like Target Channel, Angle Type, Relevance (to Avatar/Pain), Clarity, Brand Voice Fit, and a selection checkbox. Helps objectively choose the best options.
     *   **Act 1 Creative Snippet Template:** A basic template with sections for Ad Platform/Content Type, Target Audience Segment, Chosen Hook Text, Draft Headline(s), Draft Opening Line(s)/Paragraph/Video Scene.
 
-**(7. Examples | Output Definition & Examples)**
+**7. Examples | Output Definition & Examples**
 
 *   **Format:** Text, Visual Examples
 *   **Content:**
@@ -125,7 +192,7 @@ Okay, let's build out the content for **Module 1: HOOK** following the structure
         *   *Draft Title:* Unlock Predictable MRR Growth: The [Your Mechanism Name] Method
         *   *Draft Intro Paragraph:* Imagine knowing exactly what levers to pull each month to consistently grow your SaaS revenue, without relying on guesswork or complex funnels. Achieving predictable growth often feels elusive, but it starts with...
 
-**(8. Implementation | Implementation Guidance ("Now What?"))**
+**8. Implementation | Implementation Guidance ("Now What?")**
 
 *   **Format:** Text, Optional Short Video
 *   **Content:**
@@ -137,7 +204,7 @@ Okay, let's build out the content for **Module 1: HOOK** following the structure
     *   **Crucial Link:** Remember, your Hooks must align visually and thematically with the assets you'll deploy alongside them (images/videos in ads) and logically lead the prospect towards the GIFT offer (Step 2).
     *   **Refine, Don't Just Use:** *Always* give the AI-generated drafts a final human polish to perfectly match your voice and intent before launching.
 
-**(9. Transition | Module Summary & Transition)**
+**9. Transition | Module Summary & Transition**
 
 *   **Format:** Text
 *   **Content:**
@@ -147,7 +214,7 @@ Okay, let's build out the content for **Module 1: HOOK** following the structure
     *   Refine AI outputs and draft initial "Act 1" creative assets.
     You now have the crucial first touchpoint designed to stop your ideal customer and spark their curiosity. With attention captured, you're perfectly prepared to move into **Module 2: GIFT**, where you'll design and offer a high-value lead magnet that converts that initial interest into tangible engagement. Let's build your irresistible Gift!
 
-**(10. Book\_Chapter | Book Chapter Content Draft)**
+**10. Book\_Chapter | Book Chapter Content Draft**
 
 *   **Format:** Text (Source Material for Book)
 *   **Content:** *(Placeholder - This would contain the detailed, expanded prose version of all the concepts, strategies, examples, and guidance covered in points 1-9 above, written specifically for the book chapter covering Step 1: HOOK).*

@@ -1,8 +1,7 @@
-/* ========== IMPORTS ========== */
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 @import "reveal.js/dist/reveal.css";
-/* @import "reveal.js/dist/theme/white.css";  // Removed to fix PostCSS warning */
+@import "reveal.js/dist/theme/white.css";
 @import "highlight.js/styles/monokai.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -926,6 +925,18 @@ body {
 /* === Presentation Reveal.js Dark Theme Overrides === */
 .presentation-inner, .presentation-inner * {
   color: #fff !important;
+}
+.presentation-inner {
+  font-size: 1.05rem;
+}
+.presentation-inner h1 {
+  font-size: 4.2rem;
+}
+.presentation-inner h2 {
+  font-size: 1.7rem;
+}
+.presentation-inner h3 {
+  font-size: 1.3rem;
 }
 .presentation-inner a {
   color: #4fd1ff !important;
