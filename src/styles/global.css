@@ -1,5 +1,9 @@
+/* ========== IMPORTS ========== */
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
+@import "reveal.js/dist/reveal.css";
+@import "reveal.js/dist/theme/white.css";
+@import "highlight.js/styles/monokai.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -918,3 +922,15 @@ body {
   border: none;
   color: inherit;
 }
+
+/* === Presentation Reveal.js Dark Theme Overrides === */
+.presentation-inner, .presentation-inner * {
+  color: #fff !important;
+}
+.presentation-inner a {
+  color: #4fd1ff !important;
+}
+.presentation-inner code {
+  color: #ffeb3b !important;
+}
+/* === End Presentation Overrides === */

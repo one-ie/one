@@ -1,0 +1,33 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from 'astro:content';
+import type { Presentations } from '../../content/config';
+
+const presentations = await getCollection('presentations');
+type PresentationEntry = { slug: string; data: Presentations };
+const typedPresentations = presentations as PresentationEntry[];
+---
+
+<Layout title="Presentations" description="Browse all available Reveal.js presentations.">
+  <div class="max-w-4xl mx-auto py-12 px-4">
+    <h1 class="text-4xl font-bold mb-4">Presentations</h1>
+    <p class="mb-8 text-muted-foreground">Browse all available Reveal.js presentations.</p>
+    <div class="grid gap-8">
+      {typedPresentations.map((item) => (
+        <a href={`/presentations/${item.slug}/`} class="block border rounded-lg p-6 hover:shadow-lg transition-shadow bg-background">
+          {item.data.coverImage && (
+            <img src={item.data.coverImage} alt={item.data.title} class="w-full h-48 object-cover rounded mb-4" loading="lazy" />
+          )}
+          <h2 class="text-2xl font-semibold mb-2">{item.data.title}</h2>
+          {item.data.authors && item.data.authors.length > 0 && (
+            <div class="text-sm text-muted-foreground mb-1">By {item.data.authors.join(', ')}</div>
+          )}
+          {item.data.description && (
+            <p class="mb-2 text-muted-foreground">{item.data.description}</p>
+          )}
+          <span class="inline-block mt-2 text-blue-600 hover:underline">View Presentation →</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout> 

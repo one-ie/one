@@ -1,0 +1,47 @@
+---
+// Minimal Reveal.js test page
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reveal.js Test</title>
+  <link rel="stylesheet" href="/node_modules/reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="/node_modules/reveal.js/dist/theme/white.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h1>Slide 1</h1>
+        <p>First slide content</p>
+      </section>
+      <section>
+        <h1>Slide 2</h1>
+        <p>Second slide content</p>
+      </section>
+      <section>
+        <h1>Slide 3</h1>
+        <p>Third slide content</p>
+      </section>
+    </div>
+  </div>
+
+  <script type="module">
+    import Reveal from '/node_modules/reveal.js/dist/reveal.esm.js';
+    
+    console.log('🔍 Starting minimal Reveal.js test...');
+    
+    const deck = new Reveal({
+      controls: true,
+      progress: true,
+      center: true,
+      transition: 'slide'
+    });
+    
+    deck.initialize().then(() => {
+      console.log('✅ Minimal Reveal.js initialized successfully');
+    });
+  </script>
+</body>
+</html> 

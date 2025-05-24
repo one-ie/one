@@ -1,0 +1,58 @@
+---
+import PresentationLayout from "../../layouts/PresentationLayout.astro";
+import { getEntryBySlug } from 'astro:content';
+import { marked } from 'marked';
+
+const { slug } = Astro.params;
+const entry = await getEntryBySlug('presentations', slug);
+const data = entry?.data;
+const body = entry?.body || "";
+
+// Split slides by delimiter (--- on its own line)
+const slides: string[] = body
+  .split(/^---$/m)
+  .map((slide: string) => slide.trim())
+  .filter((slide: string) => Boolean(slide));
+---
+
+<PresentationLayout title={data?.title ?? "Presentation"}>
+  <span slot="title">{data?.title ?? "Presentation"}</span>
+  {data ? (
+    <>
+      <div class="reveal">
+        <div class="slides">
+          {slides.map((slide: string, idx: number) => (
+            <section set:html={marked.parse(slide)} />
+          ))}
+        </div>
+      </div>
+      <script type="module" is:inline>
+        import Reveal from '/node_modules/reveal.js/dist/reveal.esm.js';
+        import RevealHighlight from '/node_modules/reveal.js/plugin/highlight/highlight.esm.js';
+        
+        console.log('🔍 Presentation Reveal.js starting...');
+        
+        const deck = new Reveal({
+          plugins: [RevealHighlight],
+          controls: true,
+          progress: true,
+          center: true,
+          hash: true,
+          transition: 'slide',
+          backgroundTransition: 'fade'
+        });
+        
+        deck.initialize().then(() => {
+          console.log('✅ Presentation Reveal.js initialized successfully');
+          console.log('🔍 Controls:', document.querySelector('.controls'));
+          console.log('🔍 Progress:', document.querySelector('.progress'));
+        });
+      </script>
+    </>
+  ) : (
+    <div class="text-center py-20">
+      <h2 class="text-2xl font-bold mb-4">Presentation Not Found</h2>
+      <p class="text-muted-foreground">Sorry, we couldn't find this presentation.</p>
+    </div>
+  )}
+</PresentationLayout> 

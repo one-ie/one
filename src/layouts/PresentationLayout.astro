@@ -1,0 +1,31 @@
+---
+import "../styles/global.css";
+import ThemeInit from "@/components/Theme.astro";
+
+interface Props {
+    title: string;
+    description?: string;
+    children: any;
+    header?: boolean;
+    footer?: boolean;
+}
+
+const { title, description = "ONE" } = Astro.props;
+---
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title><slot name="title" /></title>
+    <ThemeInit />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/node_modules/reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="/node_modules/reveal.js/dist/theme/black.css">
+  </head>
+  <body style="margin:0; padding:0; background:#111; min-height:100vh;">
+    <div class="presentation-outer flex items-center justify-center min-h-screen" style="min-height:100vh;">
+      <div class="presentation-inner" style="width:800px; height:600px; box-shadow:0 4px 32px #0008; background:#111; border-radius:12px; overflow:hidden; color:#fff!important;">
+        <slot />
+      </div>
+    </div>
+  </body>
+</html> 

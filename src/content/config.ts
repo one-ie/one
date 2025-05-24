@@ -203,6 +203,19 @@ const BookSchema = z.object({
   bookEdition: z.string().optional()
 });
 
+/**
+ * Presentations Schema
+ * For Reveal.js presentations
+ */
+const PresentationsSchema = z.object({
+  ...CommonFields,
+  authors: z.array(z.string()).optional(),
+  publishedAt: z.date().or(z.string()).optional(),
+  draft: z.boolean().default(false).optional(),
+  slides: z.array(z.string()).optional(), // Array of slide file paths or IDs
+  coverImage: z.string().optional(),
+});
+
 // --- LMS SCHEMAS ---
 
 // Lesson Schema
@@ -268,6 +281,11 @@ const coursesCollection = defineCollection({
   schema: CourseSchema
 });
 
+const presentationsCollection = defineCollection({
+  type: 'content',
+  schema: PresentationsSchema
+});
+
 export const collections = {
   pages: defineCollection({ schema: PagesSchema }),
   blog: defineCollection({ schema: BlogSchema }),
@@ -281,7 +299,8 @@ export const collections = {
   events: defineCollection({ schema: EventsSchema }),
   book: defineCollection({ schema: BookSchema }),
   lessons: lessonsCollection,
-  courses: coursesCollection
+  courses: coursesCollection,
+  presentations: presentationsCollection,
 };
 
 // Export type inference
@@ -296,6 +315,7 @@ export type Prompts = z.infer<typeof PromptsSchema>;
 export type Tutorials = z.infer<typeof TutorialsSchema>;
 export type Events = z.infer<typeof EventsSchema>;
 export type Book = z.infer<typeof BookSchema>;
+export type Presentations = z.infer<typeof PresentationsSchema>;
 
 // Stream type for unified content
 export type StreamItem = {
@@ -311,5 +331,6 @@ export type StreamItem = {
         z.infer<typeof PromptsSchema> |
         z.infer<typeof TutorialsSchema> |
         z.infer<typeof EventsSchema> |
-        z.infer<typeof BookSchema>;
+        z.infer<typeof BookSchema> |
+        z.infer<typeof PresentationsSchema>;
 };
