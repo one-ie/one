@@ -53,15 +53,32 @@ const DocsSchema = z.object({
   tabs: z.array(TabSchema).optional(),
 });
 
+// --- URL VALIDATOR: Accepts both relative and absolute URLs, and asset paths like 'assets/Playbook.png' ---
+const urlOrPath = z.string().refine(
+  (val) => {
+    if (!val) return false;
+    // Absolute URL
+    if (/^https?:\/\//.test(val)) return true;
+    // Relative path (starts with /, ./, ../)
+    if (/^(\/|\.\/|\.\.)/.test(val)) return true;
+    // Asset or filename with extension (e.g., assets/foo.png, foo.jpg)
+    if (/^[\w\-./]+\.[\w]+$/.test(val)) return true;
+    return false;
+  },
+  {
+    message: 'Must be a valid absolute URL (http/https), a relative path, or an asset/filename with extension.'
+  }
+);
+
 /**
  * Videos Schema
  * For video content across platforms
  */
 const VideosSchema = z.object({
   ...CommonFields,
-  url: z.string().optional(),
+  url: urlOrPath.optional(),
   duration: z.number().optional(),
-  thumbnail: z.string().optional(),
+  thumbnail: urlOrPath.optional(),
   transcript: z.string().optional()
 });
 
@@ -71,7 +88,7 @@ const VideosSchema = z.object({
  */
 const PodcastsSchema = z.object({
   ...CommonFields,
-  audioUrl: z.string().optional(),
+  audioUrl: urlOrPath.optional(),
   duration: z.number().optional(),
   transcript: z.string().optional()
 });
@@ -82,11 +99,11 @@ const PodcastsSchema = z.object({
  */
 const SoftwareSchema = z.object({
   ...CommonFields,
-  url: z.string().optional(),
-  repository: z.string().optional(),
+  url: urlOrPath.optional(),
+  repository: urlOrPath.optional(),
   license: z.string().optional(),
   language: z.string().optional(),
-  video: z.string().optional()
+  video: urlOrPath.optional()
 });
 
 /**
@@ -98,7 +115,7 @@ const NewsSchema = z.object({
   category: z.string().optional(),
   featured: z.boolean().optional(),
   author: z.string().optional(),
-  source: z.string().optional()
+  source: urlOrPath.optional()
 });
 
 /**
@@ -115,7 +132,7 @@ const PromptsSchema = z.object({
   context: z.string().optional(),
   sources: z.array(z.object({
     type: z.string().optional(),
-    url: z.string().optional(), // Removed .url() as it conflicts with optional
+    url: urlOrPath.optional(),
     format: z.string().optional(),
     frequency: z.string().optional()
   })).optional(),
@@ -156,51 +173,29 @@ const EventsSchema = z.object({
 /**
  * Book Schema
  * For ebook content and chapters
+ * Compatible with all book frontmatter files (e.g., 3.0.Company.md, 4.Market.md)
  */
 const BookSchema = z.object({
-  ...CommonFields,
-  author: z.string().default("Anthony O'Connell"),
-  language: z.string().default('en-US'),
-  publisher: z.string().default('ONE Publishing'),
-  rights: z.string().default("© 2024 Anthony O'Connell. All rights reserved."),
+  author: z.string().optional(),
+  language: z.string().optional(),
+  publisher: z.string().optional(),
+  rights: z.string().optional(),
   identifier: z.object({
-    scheme: z.string().default('ISBN-13'),
-    text: z.string().default('978-1-916-12345-6')
-  }).default({}),
-  creator: z.string().default("Anthony O'Connell"),
-  contributor: z.string().default('ONE Team'),
-  subject: z.string().default('Ecommerce, AI, Business Growth, Digital Marketing'),
+    scheme: z.string().optional(),
+    text: z.string().optional()
+  }).optional(),
+  creator: z.string().optional(),
+  contributor: z.string().optional(),
+  subject: z.string().optional(),
   css: z.string().optional(),
-  coverImage: z.string().optional(),
+  coverImage: urlOrPath.optional(),
+  title: z.string().optional(),
+  description: z.string().optional(),
   chapter: z.number().optional(),
   order: z.number().optional(),
-  status: z.enum(['draft', 'review', 'published']).default('draft'),
-  image: z.string().optional(),
-  // Added book/EPUB metadata fields
-  bookFormat: z.enum(['EBook', 'Paperback', 'Hardcover']).optional(),
-  inLanguage: z.string().optional(),
-  datePublished: z.string().optional(),
-  dateModified: z.string().optional(),
-  isbn: z.string().optional(),
-  price: z.object({
-    amount: z.number().optional(),
-    currency: z.string().optional()
-  }).optional(),
-  audience: z.object({
-    '@type': z.literal('Audience').optional(),
-    audienceType: z.string().optional()
-  }).optional(),
-  workExample: z.array(z.object({
-    '@type': z.literal('Chapter').optional(),
-    name: z.string().optional(),
-    position: z.number().optional(),
-    url: z.string().optional()
-  })).optional(),
-  // Schema.org fields
-  '@type': z.literal('Book').optional(),
-  '@context': z.literal('https://schema.org').optional(),
-  numberOfPages: z.number().optional(),
-  bookEdition: z.string().optional()
+  tags: z.array(z.string()).optional(),
+  image: urlOrPath.optional(),
+  // Add any additional fields found in book frontmatter as optional
 });
 
 /**
@@ -212,8 +207,8 @@ const PresentationsSchema = z.object({
   authors: z.array(z.string()).optional(),
   publishedAt: z.date().or(z.string()).optional(),
   draft: z.boolean().default(false).optional(),
-  slides: z.array(z.string()).optional(), // Array of slide file paths or IDs
-  coverImage: z.string().optional(),
+  slides: z.array(urlOrPath).optional(), // Array of slide file paths or IDs
+  coverImage: urlOrPath.optional(),
 });
 
 // --- LMS SCHEMAS ---
@@ -232,15 +227,15 @@ const LessonSchema = z.object({
     description: z.string().optional(),
     captions: z.string().optional()
   }).optional(),
-  presentation: z.string().optional(), // Path or slug to a presentation
+  presentation: urlOrPath.optional(), // Path or slug to a presentation
   resources: z.array(z.object({
     // Common fields
     title: z.string().optional(),
-    url: z.string().url().optional(),
+    url: urlOrPath.optional(),
     description: z.string().optional(),
     type: z.enum([
       'article', 'video', 'tool', 'template', 'other',
-      'prompt', 'bookChapter', 'worksheet', 'checklist', 'assignment', 'community'
+      'prompt', 'bookChapter', 'worksheet', 'checklist', 'assignment', 'community', 'swipefile'
     ]).optional(),
     dueDate: z.string().optional(),
     points: z.number().optional(),
@@ -250,7 +245,7 @@ const LessonSchema = z.object({
     platform: z.enum(['discord', 'slack', 'forum', 'other']).optional(),
   })).optional(),
   audio: z.object({
-    url: z.string().url().optional(),
+    url: urlOrPath.optional(),
     title: z.string().optional(),
     duration: z.number().optional(),
     description: z.string().optional()

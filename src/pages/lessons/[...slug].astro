@@ -1,9 +1,10 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import DocsPage from '../../layouts/Docs.astro';
+import { getCollection, type CollectionEntry, getEntryBySlug } from 'astro:content';
+import DocsPage from '../../layouts/1.astro';
 import { ChatConfigSchema } from '../../schema/chat';
 import LessonContent from '@/components/lessons/LessonContent.astro';
 import VideoEmbed from '@/components/lessons/VideoEmbed.astro';
+import RevealPresentation from '@/components/lessons/RevealPresentation.tsx';
 import { Card } from '@/components/ui/card';
 
 export const prerender = true;
@@ -22,6 +23,42 @@ type Props = {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+
+// Get presentation content if it exists
+let presentationSlides: string[] = [];
+if (entry.data.presentation) {
+  try {
+    console.log('🔍 Presentation path from lesson:', entry.data.presentation);
+    
+    // Extract the slug from the presentation path (e.g., "/presentations/stop" -> "stop")
+    const presentationSlug = entry.data.presentation.replace('/presentations/', '').replace('/', '');
+    console.log('📋 Extracted presentation slug:', presentationSlug);
+    
+    const presentationEntry = await getEntryBySlug('presentations', presentationSlug);
+    console.log('📄 Presentation entry found:', !!presentationEntry);
+    
+    if (presentationEntry) {
+      console.log('📝 Raw presentation body length:', presentationEntry.body.length);
+      console.log('📝 First 200 chars of body:', presentationEntry.body.substring(0, 200));
+      
+      // Split slides by delimiter (--- on its own line)
+      presentationSlides = presentationEntry.body
+        .split(/^---$/m)
+        .map((slide: string) => slide.trim())
+        .filter((slide: string) => Boolean(slide));
+        
+      console.log('📊 Number of slides extracted:', presentationSlides.length);
+      console.log('📋 First slide preview:', presentationSlides[0]?.substring(0, 100));
+      console.log('📋 Second slide preview:', presentationSlides[1]?.substring(0, 100));
+    } else {
+      console.log('❌ No presentation entry found for slug:', presentationSlug);
+    }
+  } catch (error) {
+    console.warn('❌ Could not load presentation:', error);
+  }
+} else {
+  console.log('📭 No presentation path specified in lesson data');
+}
 
 // Get all lessons and sort by order, then slug
 const allLessons: CollectionEntry<'lessons'>[] = await getCollection('lessons');
@@ -147,14 +184,13 @@ Key Principles:
   rightPanelMode={entry.data.rightPanelMode || "quarter"}
 >
   <div class="px-4 sm:px-6 max-w-3xl mx-auto space-y-10">
-    {entry.data.presentation ? (
+    {presentationSlides.length > 0 ? (
       <div class="w-full" style="aspect-ratio: 4/3; max-width: 100%; margin-bottom: 2rem;">
-        <iframe
-          src={`/${entry.data.presentation}/`}
-          title="Lesson Presentation"
-          style="width:100%; height:100%; min-height:400px; border:none; background:#111; border-radius:12px; box-shadow:0 4px 32px #0008;"
-          allowfullscreen
-        ></iframe>
+        <RevealPresentation 
+          slides={presentationSlides}
+          title={entry.data.title}
+          client:load
+        />
       </div>
     ) : entry.data.video?.id && (
       <VideoEmbed 
