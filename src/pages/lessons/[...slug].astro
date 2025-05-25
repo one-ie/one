@@ -6,6 +6,8 @@ import LessonContent from '@/components/lessons/LessonContent.astro';
 import VideoEmbed from '@/components/lessons/VideoEmbed.astro';
 import RevealPresentation from '@/components/lessons/RevealPresentation.tsx';
 import { Card } from '@/components/ui/card';
+import fs from 'fs/promises';
+import path from 'path';
 
 export const prerender = true;
 
@@ -78,6 +80,36 @@ const nextLesson = currentIndex < sortedLessons.length - 1 ? sortedLessons[curre
 const systemPrompt = await getCollection('prompts', ({ slug }: { slug: string }) => slug === '-SystemPrompt');
 const systemPromptContent = systemPrompt[0]?.body || '';
 
+// Load prompt file if specified in frontmatter
+let promptContent = '';
+if (entry.data.prompt || entry.data.prompts) {
+  const promptPath = entry.data.prompt || (Array.isArray(entry.data.prompts) ? entry.data.prompts[0] : entry.data.prompts);
+  if (promptPath && promptPath.startsWith('/prompts/')) {
+    try {
+      const absPromptPath = path.join(import.meta.env.SITE_ROOT || process.cwd(), 'src/content', promptPath + '.md');
+      promptContent = await fs.readFile(absPromptPath, 'utf8');
+    } catch (e) {
+      console.warn('Could not load prompt file:', promptPath, e);
+    }
+  }
+}
+
+// Get the full markdown body as context
+const lessonBody = entry.body || '';
+
+// Extract welcome message, suggestions, and starterMessages from aiConfig.welcome if present
+const aiWelcome = entry.data.aiConfig?.welcome || {};
+const welcomeMessage = aiWelcome.message || entry.data.aiConfig?.welcomeMessage || `👋 Welcome to "${entry.data.title || 'this lesson'}"! I'm your AI guide to help you learn and master the concepts in this lesson. What would you like to explore?`;
+const suggestions = aiWelcome.suggestions || entry.data.aiConfig?.suggestions || [
+  { label: "📚 Lesson Overview", prompt: "What are the main concepts and learning objectives of this lesson?" },
+  { label: "💡 Examples", prompt: "Can you show me some practical examples from this lesson?" },
+  { label: "🔧 Implementation", prompt: "How do I implement the concepts from this lesson?" },
+  { label: "❓ Questions", prompt: "I have a question about something in this lesson..." },
+  { label: "🎯 Practice", prompt: "What exercises can I do to practice these concepts?" },
+  { label: "📈 Next Steps", prompt: "What should I learn next after completing this lesson?" }
+];
+const starterMessages = aiWelcome.starterMessages || entry.data.aiConfig?.starterMessages || entry.data.starterMessages || [];
+
 // Get chat configuration from frontmatter or use defaults
 const chatConfig = ChatConfigSchema.parse({
   // Layout and Meta
@@ -95,85 +127,19 @@ const chatConfig = ChatConfigSchema.parse({
   includeContent: true,
 
   // Prompt Config
-  systemPrompt: entry.data.aiConfig?.systemPrompt || [
-    {
-      type: "text",
-      text: `${systemPromptContent}
-
-You are ONE's lesson guide for \"${entry.data.title || 'this lesson'}\". Your role is to help users learn and master the concepts covered in this specific lesson.
-
-Core Capabilities:
-1. Lesson Content
-   • Key concepts
-   • Learning objectives
-   • Step-by-step guidance
-   • Interactive exercises
-
-2. Learning Support
-   • Clear explanations
-   • Practical examples
-   • Progress tracking
-   • Skill assessment
-
-3. Implementation Help
-   • Code examples
-   • Best practices
-   • Troubleshooting
-   • Common pitfalls
-
-4. Next Steps
-   • Related lessons
-   • Practice exercises
-   • Further reading
-   • Skill development
-
-Communication Style:
-• Be clear and concise
-• Provide actionable advice
-• Use relevant examples
-• Maintain professional tone
-• Focus on practical learning
-
-Key Principles:
-• Student success first
-• Practical implementation
-• Clear guidance
-• Best practices
-• Security awareness`
-    }
+  systemPrompt: [
+    ...(promptContent ? [{ type: 'text', text: promptContent }] : []),
+    ...(lessonBody ? [{ type: 'text', text: lessonBody }] : []),
+    ...(entry.data.aiConfig?.systemPrompt || []),
   ],
   addSystemPrompt: true,
   addBusinessPrompt: true,
 
   // Welcome Config
-  welcomeMessage: entry.data.aiConfig?.welcomeMessage || `👋 Welcome to \"${entry.data.title || 'this lesson'}\"! I'm your AI guide to help you learn and master the concepts in this lesson. What would you like to explore?`,
+  welcomeMessage,
   avatar: entry.data.aiConfig?.avatar || "/icon.svg",
-  suggestions: entry.data.aiConfig?.suggestions || [
-    { 
-      label: "📚 Lesson Overview", 
-      prompt: "What are the main concepts and learning objectives of this lesson?" 
-    },
-    { 
-      label: "💡 Examples", 
-      prompt: "Can you show me some practical examples from this lesson?" 
-    },
-    { 
-      label: "🔧 Implementation", 
-      prompt: "How do I implement the concepts from this lesson?" 
-    },
-    { 
-      label: "❓ Questions", 
-      prompt: "I have a question about something in this lesson..." 
-    },
-    { 
-      label: "🎯 Practice", 
-      prompt: "What exercises can I do to practice these concepts?" 
-    },
-    { 
-      label: "📈 Next Steps", 
-      prompt: "What should I learn next after completing this lesson?" 
-    }
-  ]
+  suggestions,
+  starterMessages,
 });
 ---
 
