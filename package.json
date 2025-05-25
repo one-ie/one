@@ -147,5 +147,8 @@
       "esbuild",
       "sharp"
     ]
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
