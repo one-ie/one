@@ -45,27 +45,62 @@ aiConfig:
   provider: openai
   model: "gpt-4o-mini"
   temperature: 0.7
-  maxTokens: 212000
+  maxTokens: 4000
   systemPrompt:
     - type: text
-      text: "You are an expert on scroll-stopping marketing and customer journey design."
+      text: |
+        You are Agent ONE, an expert Scroll-Stopping Marketing Strategist and Creative Director specializing in the STOP step of the Elevate Ecommerce Framework. Your job is to help users master the art of stopping the scroll and creating high-performing hooks that begin the customer journey.
+
+        ## Your Capabilities
+        - Guide users through the STOP Decision Grid™ (TARGET, ANGLE, TIMING)
+        - Analyze Foundation data to recommend strategic options for each layer
+        - Advise on emotional triggers (Fear, Desire, Curiosity) and specificity (Broad, Niche, Hyper-targeted)
+        - Recommend message formats (Question, Statement, Statistic) and channel adaptation
+        - Generate scroll-stopping hooks for prioritized channels using proven templates
+        - Provide a testing and optimization roadmap (A/B testing, quick wins, performance metrics)
+        - Explain how hooks connect to GIFT, IDENTIFY, NURTURE, and SHARE steps
+        - Use brand voice and context from Foundation
+
+        ## Guidance Style
+        - Socratic, strategic, and actionable
+        - Use structured markdown with clear sections
+        - Always connect advice to the customer journey
+        - Provide examples and quick wins
+
+        ## Example Tasks
+        - Complete the STOP Decision Grid for a user
+        - Generate 3-5 hooks for a given channel and audience
+        - Recommend which hooks to test first and how to measure success
+        - Explain the impact of STOP quality on downstream steps
+
+        ## Constraints
+        - All hooks must be scroll-stoppers that reflect the user's unique angle
+        - Always clarify which channel, audience, and emotional trigger is being used
+        - Use Foundation and lesson context for all recommendations
+
   welcome:
-    message: "👋 Welcome to STOP! Ready to master the art of stopping the scroll?"
+    message: "👋 Welcome to the STOP lesson! I'm your AI guide to scroll-stopping marketing. What would you like to do?"
     avatar: "/icon.svg"
     suggestions:
-      - label: "💡 What is a HOOK?"
-        prompt: "Explain the STOP step and why it matters."
-      - label: "📝 Decision Grid"
-        prompt: "How do I fill out the STOP Decision Grid?"
-      - label: "🚀 AI Prompt"
-        prompt: "How can I use AI to generate STOP messages?"
+      - label: "🧩 Complete Decision Grid"
+        prompt: "Guide me through the STOP Decision Grid for my business."
+      - label: "🎯 Target Audience"
+        prompt: "Help me choose the best audience and pain point for my STOP."
+      - label: "💡 Generate Hooks"
+        prompt: "Generate 5 scroll-stopping hooks for my main channel."
+      - label: "📊 Testing Plan"
+        prompt: "How should I test and optimize my STOP hooks?"
+      - label: "🔗 Connect to GIFT"
+        prompt: "How does my STOP connect to the GIFT step in the journey?"
+      - label: "📚 See Examples"
+        prompt: "Show me examples of high-performing STOP hooks."
 ---
 
 # STOP!
 
-STOP is your digital handbrake—the message that makes your ideal customer pause mid-scroll and pay attention. In a world where people see 5,000+ marketing messages daily, your STOP is the difference between invisibility and impact.
+STOP is your digital handbrake—the message that makes your ideal customer pause mid-scroll and pay attention. In a world where people see 5,000+ marketing messages daily, your HOOK is the difference between invisibility and impact.
 
-Think of it as the first domino in a carefully designed journey. When you master the STOP, you don't just capture attention—you begin a relationship that transforms scrollers into customers, and customers into advocates.
+Think of it as the first domino in a carefully designed journey. When you master the HOOK, you don't just capture attention—you begin a relationship that transforms scrollers into customers, and customers into advocates.
 
 ![STOP Lesson Cover](/book/Stop.png)
 
@@ -113,9 +148,32 @@ A 1% improvement in STOP rate creates exponential impact:
 - 40% higher lifetime value (better initial targeting)
 - 70% more likely to become advocates (started with resonance)
 
-Remember: The quality of your STOP determines the quality of your entire customer journey.
+---
 
-# The STOP Decision Grid™
+## The Domino Effect (Explained)
+
+<div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+  <div>
+    <span style="font-weight: bold; font-size: 1.1em; color: #4fd1ff;">50% lower customer acquisition cost</span><br/>
+    <span style="font-size:90%; color: #aaa;">A 1% absolute increase in STOP rate (e.g., from 1% to 2%) means you need half as many impressions to get the same number of customers, so your CAC drops by 50%.</span>
+  </div>
+  <div>
+    <span style="font-weight: bold; font-size: 1.1em; color: #4fd1ff;">2-3x more qualified leads</span><br/>
+    <span style="font-size:90%; color: #aaa;">Doubling or tripling your STOP rate means 2-3x as many people enter your funnel and become leads, with the same ad spend.</span>
+  </div>
+  <div>
+    <span style="font-weight: bold; font-size: 1.1em; color: #4fd1ff;">40% higher lifetime value</span><br/>
+    <span style="font-size:90%; color: #aaa;">A higher STOP rate means you attract more engaged, better-fit customers who are more likely to buy again, refer others, and stay loyal—so your average customer spends more over their lifetime (e.g., if your average LTV is $1,000, a 40% increase means $1,400 per customer).</span>
+  </div>
+  <div>
+    <span style="font-weight: bold; font-size: 1.1em; color: #4fd1ff;">70% more likely to become advocates</span><br/>
+    <span style="font-size:90%; color: #aaa;">People who stop and engage deeply with your message are much more likely to feel a connection, have a positive experience, and share or recommend your brand to others—so your pool of brand advocates grows dramatically (e.g., if 10 out of 100 customers become advocates, a 70% increase means 17 out of 100).</span>
+  </div>
+</div>
+
+> <span style="font-size:95%; color:#4fd1ff; font-weight:bold;">Remember:</span> <span style="font-size:95%">The quality of your STOP determines the quality of your entire customer journey.</span>
+
+# The STOP Decision Grid
 
 Fill in this grid to design your scroll-stopping strategy. Each decision shapes your approach and results:
 
@@ -335,7 +393,7 @@ Test these elements in order of impact:
 
 ## With AI (Transformed Approach)
 **The New Reality:**
-- **Time:** 10 minutes for 100+ variations
+- **Time:** 20 minutes for 100+ variations
 - **Cost:** $50 for AI tools + 1 hour oversight
 - **Testing:** Predictive performance scoring
 - **Personalization:** Dynamic messages by segment
@@ -364,24 +422,6 @@ Test these elements in order of impact:
 - Predicting performance patterns
 - Optimizing based on data
 
-## ROI Calculator
-**Traditional Campaign:**
-- Copywriter: $500 × 10 hours = $5,000
-- Testing delays: 2 weeks = $10,000 opportunity cost
-- Limited variations: 5-10 messages
-- Total cost: $15,000+
-
-**AI-Enhanced Campaign:**
-- AI tools: $50/month
-- Human oversight: 2 hours × $250 = $500
-- Instant testing: 0 delay
-- Unlimited variations: 100+ messages
-- Total cost: $550
-- **Savings: 96% cost reduction + 10x more options**
-
-## Real Client Results
-"We went from spending $5K per campaign on copywriters to generating better-performing ads in minutes. Our CTR improved 40% just from testing more variations." - Sarah, E-commerce Director
-
 # Action Lab
 
 ## 1. Understand: Complete Your STOP Decision Grid (15 minutes)
@@ -404,7 +444,7 @@ Circle your choices:
 Write your rationale:
 _________________________________________________
 
-## 3. Implement: Create Your First STOPs (20 minutes)
+## 3. Implement: Create Your First HOOKs (20 minutes)
 
 **Step 1:** Access the STOP AI Prompt
 - Go to [/prompts/stop](/prompts/stop)
@@ -421,34 +461,11 @@ _________________________________________________
 - Split test your top 3
 - Set 48-hour check-in
 
-# Success Path
 
-## Quick Win (Today)
-✓ Complete your Decision Grid
-✓ Generate 20 STOP variations
-✓ Launch a $20 test campaign
-✓ Install tracking for thumb-stop rate
-
-**Expected Result:** First data within 24 hours
-
-## Next Level (30 Days)
-- Test 10+ message variations
-- Achieve 2%+ CTR consistently
-- Reduce CPA by 30%
-- Build a STOP swipe file
-
-**Milestone:** Find your winning angle
-
-## Mastery (90+ Days)
-- Dynamic STOPs by segment
-- AI-powered optimization loop
-- 5%+ CTR benchmarks
-- Predictable lead flow
-
-**Achievement:** STOP creation becomes second nature
+**Achievement:** HOOK creation becomes second nature
 
 ## Your Next Step
-→ **GIFT Lesson:** Now that you can stop the scroll, learn to deliver immediate value that builds trust and captures leads. Your STOP creates the promise—your GIFT must deliver on it.
+→ **GIFT Lesson:** Now that you can stop the scroll, learn to deliver immediate value that builds trust and captures leads. Your HOOK creates the promise—your GIFT must deliver on it.
 
 ---
 
@@ -463,6 +480,47 @@ _________________________________________________
 ## Remember This
 Every great customer journey begins with a single moment—the moment they stop scrolling. Master this moment, and you master the beginning of a relationship that can transform your business.
 
-Your STOP isn't just about getting attention. It's about getting the RIGHT attention from the RIGHT people at the RIGHT time. When you nail this, everything that follows—from GIFT to SHARE—becomes exponentially easier.
+Your HOOK isn't just about getting attention. It's about getting the RIGHT attention from the RIGHT people at the RIGHT time. When you nail this, everything that follows—from GIFT to SHARE—becomes exponentially easier.
 
-Now stop reading. Start stopping scrolls. 
+Now stop reading. Start stopping scrolls.
+
+# Decide how to stop the scroll™
+
+<div style="overflow-x:auto; margin-bottom:2rem;">
+  <table style="width:100%; font-size:90%; border-collapse:collapse; margin-bottom:1.5rem;">
+    <thead style="background:#18181b; color:#fff;">
+      <tr>
+        <th style="padding:0.75em 1em; border-bottom:1px solid #333;">Layer</th>
+        <th style="padding:0.75em 1em; border-bottom:1px solid #333;">WHO</th>
+        <th style="padding:0.75em 1em; border-bottom:1px solid #333;">WHY</th>
+        <th style="padding:0.75em 1em; border-bottom:1px solid #333;">HOW</th>
+        <th style="padding:0.75em 1em; border-bottom:1px solid #333;">WHAT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:0.75em 1em; font-weight:bold;">TARGET 🎯</td>
+        <td style="padding:0.75em 1em;">Specific segment</td>
+        <td style="padding:0.75em 1em;">#1 pain/desire</td>
+        <td style="padding:0.75em 1em;">Best channel</td>
+        <td style="padding:0.75em 1em;">Scroll-Stop Rate</td>
+      </tr>
+      <tr>
+        <td style="padding:0.75em 1em; font-weight:bold;">ANGLE 📐</td>
+        <td style="padding:0.75em 1em;">Awareness level</td>
+        <td style="padding:0.75em 1em;">Emotion trigger</td>
+        <td style="padding:0.75em 1em;">Message style</td>
+        <td style="padding:0.75em 1em;">Click-Through Rate</td>
+      </tr>
+      <tr>
+        <td style="padding:0.75em 1em; font-weight:bold;">TIMING ⏰</td>
+        <td style="padding:0.75em 1em;">Journey stage</td>
+        <td style="padding:0.75em 1em;">Why now?</td>
+        <td style="padding:0.75em 1em;">Frequency</td>
+        <td style="padding:0.75em 1em;">Cost Per Click</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+*Each decision shapes your entire approach* 

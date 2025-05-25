@@ -14,7 +14,7 @@ resources:
 *Your customer journey begins with a single moment of attention*
 
 ---  
-
+---
 # The Challenge
 
 ## 5,000
@@ -60,42 +60,17 @@ GROW
 
 ## The Domino Effect
 
-**1% better STOP rate =**
-- 50% lower customer acquisition cost (A 1% absolute increase in STOP rate (e.g., from 1% to 2%) means you need half as many impressions to get the same number of customers, so your CAC drops by 50%.)*
-- 2-3x more qualified leads (because doubling or tripling your STOP rate means 2-3x as many people enter your funnel and become leads, with the same ad spend)
-- 40% higher lifetime value (because a higher STOP rate means you attract more engaged, better-fit customers who are more likely to buy again, refer others, and stay loyal—so your average customer spends more over their lifetime; e.g., if your average LTV is $1,000, a 40% increase means $1,400 per customer)
-- 70% more likely to become advocates (because people who stop and engage deeply with your message are much more likely to feel a connection, have a positive experience, and share or recommend your brand to others—so your pool of brand advocates grows dramatically; e.g., if 10 out of 100 customers become advocates, a 70% increase means 17 out of 100)
+- 50% lower customer acquisition cost
+- 2-3x more qualified leads
+- 40% higher lifetime value
+- 70% more likely to become advocates
 
-* Here’s the example maths showing how a 1% better STOP rate can lead to a 50% reduction in Customer Acquisition Cost (CAC):
-Suppose you run an ad campaign with these numbers:
-Impressions: 10,000
-STOP rate (people who stop scrolling): 2%
-Click-Through Rate (CTR) after STOP: 10%
-Conversion Rate (after click): 10%
-Ad Spend: $1,000
-Original scenario (2% STOP rate):
-People who STOP: 10,000 × 2% = 200
-Clicks: 200 × 10% = 20
-Conversions: 20 × 10% = 2
-CAC: $1,000 / 2 = $500 per customer
-With 1% higher STOP rate (now 3%):
-People who STOP: 10,000 × 3% = 300
-Clicks: 300 × 10% = 30
-Conversions: 30 × 10% = 3
-CAC: $1,000 / 3 ≈ $333 per customer
-But to get 2 customers (like before), you now only need:
-Required conversions: 2
-Each conversion now needs 10 clicks (10% conversion), so 20 clicks
-Each click needs 10 people to STOP (10% CTR), so 200 STOPs
-At 3% STOP rate, you only need: 200 / 3% ≈ 6,667 impressions (instead of 10,000)
-Ad spend for 2 customers: (6,667 / 10,000) × $1,000 ≈ $667
-CAC: $667 / 2 = $333 per customer
-Result:
-By increasing your STOP rate from 2% to 3% (a 1% absolute increase), you reduce the number of impressions (and spend) needed to acquire each customer by about 33%. If your STOP rate doubles (e.g., from 1% to 2%), your CAC is cut in half (50% reduction).
-Why?
-Because every % increase in STOP rate means you need fewer impressions (and less spend) to get the same number of customers—so your CAC drops dramatically.
+---
 
-*One moment changes everything*
+# Why Your Hook Matters
+
+## One Moment Changes Everything
+
 
 ---
 
