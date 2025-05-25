@@ -1,5 +1,5 @@
 # Book Formatting & Language Fixes (English UK)
-@book I want to fix the formatting of the book and change the language tto english uk... i also want to fix the images they should be in this formatt  ![](assets/Playbook.png) bu some aare in this forma ![[Align.png]]  and thtis format ![[src/content/book/assets/Gift.png]]  so update all tthe imaages to be ![](assets/Gift.png)  for example. write the prompts in @book-en-uk.md with a todo list - [ ] for each chapter 
+@book I want to fix the formatting of the book and change the language tto english uk... i also want to fix the images they should be in this formatt  ![](/assets/Playbook.png) bu some aare in this forma ![[Align.png]]  and thtis format ![[src/content/book/assets/Gift.png]]  so update all tthe imaages to be ![](/assets/Gift.png)  for example. write the prompts in @book-en-uk.md with a todo list - [ ] for each chapter 
 
 there is still some stars that shouldt be there  **Company **, **Market **, and **Ideal Customer ** – providing the strategic intelligence that makes the system truly effective.
 
@@ -9,7 +9,7 @@ proofread the book ...
 
 ## TODO List
 
-- [x] 0.Introduction.md — Update language to en-GB, fix image references to ![](assets/...) format, review for UK spelling/grammar *(done)*
+- [x] 0.Introduction.md — Update language to en-GB, fix image references to ![](/assets/...) format, review for UK spelling/grammar *(done)*
 - [x] 1.Architecture.md — Update language to en-GB, fix image references, review for UK spelling/grammar *(done, including markdown formatting)*
 - [x] 2.Foundation.md — Update language to en-GB, fix image references, review for UK spelling/grammar *(done, including markdown formatting)*
 - [x] 3.0.Company.md — Update language to en-GB, fix image references, review for UK spelling/grammar *(done, including markdown formatting)*

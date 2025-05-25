@@ -316,4 +316,21 @@ Master your growth.
 5. Chat with your AI to generate hooks
 6. Paste follow-up STOP prompts from [/prompts/StopElements](/prompts/stopelements) for channel-specific, split testing, and optimization guidance
 
-*Stop reading. Start stopping scrolls.* 
+*Stop reading. Start stopping scrolls.*
+
+---
+
+# 🎧 Listen: The Story of Truth Terminal Podcast
+
+Discover how an experimental AI art project revolutionized crypto markets through ONE's advanced AI capabilities, leading to a $40M portfolio through the power of storytelling and meme culture.
+
+<p align="center">
+  <img src="/logo.svg" alt="Podcast Cover" width="180" style="border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 1rem;" />
+</p>
+
+<audio controls style="width:100%; max-width:500px; display:block; margin: 0 auto;">
+  <source src="/audio/podcast-truth-terminal.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+--- 
