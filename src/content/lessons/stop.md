@@ -31,11 +31,6 @@ resources:
     description: "Downloadable worksheet for STOP strategy."
     type: worksheet
     tag: "stop"
-  - title: "100 Proven STOP Examples"
-    url: "/resources/stop-swipe-file"
-    description: "Swipe file of high-performing STOP messages."
-    type: swipefile
-    tag: "stop"
 audio:
   url: "/audio/stop.mp3"
   title: "STOP Lesson Audio"
@@ -45,7 +40,7 @@ aiConfig:
   provider: openai
   model: "gpt-4o-mini"
   temperature: 0.7
-  maxTokens: 4000
+  maxTokens: 34000
   systemPrompt:
     - type: text
       text: |

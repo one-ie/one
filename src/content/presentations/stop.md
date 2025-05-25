@@ -285,40 +285,6 @@ GROW
 
 ---
 
-# Your Action Lab
-
-## ✅ Step 1: Understand (15 min)
-Fill your grid with options that will stop a scroll
-
-## ✅ Step 2: Decide (10 min)
-Make 3 key decisions
-
-## ✅ Step 3: Implement (20 min)
-Generate & test 20+ HOOKs
-
-*45 minutes to transform your marketing*
-
----
-
-# Success Timeline
-
-## 📅 Today (Quick Win)
-- Complete Decision Grid
-- Launch $20 test
-- First data in 24hrs
-
-## 📅 30 Days (Next Level)
-- 2%+ CTR consistently
-- 30% lower CPA
-- Winning angle found
-
-## 📅 90 Days (Mastery)
-- 5%+ CTR benchmark
-- Dynamic optimization
-- Predictable flow
-
----
-
 # The Journey Ahead
 
 ```
@@ -343,11 +309,11 @@ Master your growth.
 
 # 🚀 Your Move
 
-1. Access [STOP AI Prompt](/prompts/hook)
-2. Fill your Decision Grid
-3. Generate your first HOOKs
-4. Launch your test
-
-**Next:** GIFT - Deliver the value you promised
+1. Open [AI Studio](https://aistudio.google.com/) and create a new chat
+2. Paste the System Prompt from [/prompts/-SystemPrompt](/prompts/-systemprompt)
+3. Upload your Foundation docs: Company, Market, Customers
+4. Paste the STOP prompt from [/prompts/Stop](/prompts/stop)
+5. Chat with your AI to generate hooks
+6. Paste follow-up STOP prompts from [/prompts/StopElements](/prompts/stopelements) for channel-specific, split testing, and optimization guidance
 
 *Stop reading. Start stopping scrolls.* 
