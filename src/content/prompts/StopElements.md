@@ -10,7 +10,7 @@ HOOK Module AI Prompts
 **Prompt H1: Generate Pain-Focused Ad Headlines**
 
 ```markdown
-### ROCKET Prompt: H1 - Pain-Focused Ad Headlines
+###  Prompt: H1 - Pain-Focused Ad Headlines
 
 **ROLE:**
 Act as an expert Direct Response Copywriter specializing in high-impact ad headlines for Ecom, focusing on resonating with customer pain points.

@@ -13,6 +13,7 @@ courseId: "elevate"
 order: 1
 content: "STOP is your digital handbrake—the message that makes your ideal customer pause mid-scroll and pay attention."
 presentation: "/presentations/stop/"
+cover: "/book/Stop.png"
 video:
   platform: youtube
   id: "dQw4w9WgXcQ"
@@ -25,8 +26,8 @@ resources:
     description: "Interactive prompt for generating STOP messages."
     type: prompt
     tag: "stop"
-  - title: "STOP Decision Grid Template"
-    url: "/grids/stop-decision"
+  - title: "STOP Element Prompts"
+    url: "/prompts/stopelements"
     description: "Downloadable worksheet for STOP strategy."
     type: worksheet
     tag: "stop"
@@ -44,7 +45,7 @@ aiConfig:
   provider: openai
   model: "gpt-4o-mini"
   temperature: 0.7
-  maxTokens: 2000
+  maxTokens: 212000
   systemPrompt:
     - type: text
       text: "You are an expert on scroll-stopping marketing and customer journey design."
@@ -52,7 +53,7 @@ aiConfig:
     message: "👋 Welcome to STOP! Ready to master the art of stopping the scroll?"
     avatar: "/icon.svg"
     suggestions:
-      - label: "💡 What is STOP?"
+      - label: "💡 What is a HOOK?"
         prompt: "Explain the STOP step and why it matters."
       - label: "📝 Decision Grid"
         prompt: "How do I fill out the STOP Decision Grid?"
@@ -65,6 +66,8 @@ aiConfig:
 STOP is your digital handbrake—the message that makes your ideal customer pause mid-scroll and pay attention. In a world where people see 5,000+ marketing messages daily, your STOP is the difference between invisibility and impact.
 
 Think of it as the first domino in a carefully designed journey. When you master the STOP, you don't just capture attention—you begin a relationship that transforms scrollers into customers, and customers into advocates.
+
+![STOP Lesson Cover](/book/Stop.png)
 
 ## Where in the Playbook
 - **Level:** ATTRACT (Building Your Audience)
@@ -449,11 +452,13 @@ _________________________________________________
 
 ---
 
-## Workshop Resources
-- [STOP Decision Grid Template](/grids/stop-decision) - Downloadable worksheet
-- [STOP AI Prompt](/prompts/stop) - Interactive prompt system
-- [100 Proven STOP Examples](/resources/stop-swipe-file) - Swipe file by industry
-- [STOP Presentation](/presentations/stop) - Quick reference guide
+## Actions
+- [ ] 1. Open [AI Studio](https://aistudio.google.com/) and create a new chat
+- [ ] 2. Paste the System Prompt from [`/prompts/-SystemPrompt`](/prompts/-systemprompt)
+- [ ] 3. Upload your Foundation docs: Company, Market, Customers
+- [ ] 4. Paste the STOP prompt from [`/prompts/Stop`](/prompts/stop)
+- [ ] 5. Chat with your AI to generate hooks
+- [ ] 6. Paste follow-up STOP prompts from [`/prompts/StopElements`](/prompts/stopelements) for channel-specific, split testing, and optimization guidance
 
 ## Remember This
 Every great customer journey begins with a single moment—the moment they stop scrolling. Master this moment, and you master the beginning of a relationship that can transform your business.

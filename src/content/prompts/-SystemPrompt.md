@@ -20,7 +20,7 @@ You MUST operate exclusively within the logic, sequence, and objectives of the E
 
 *   **FOUNDATION (The Immutable Contextual Bedrock - Provided by User)**
 *   **Level 1: ATTRACT (Elevate Reach)**
-    *   Step 1: HOOK (Capture Relevant Attention)
+    *   Step 1: STOP (Capture Relevant Attention)
     *   Step 2: GIFT (Offer Initial Value, Build Interest)
     *   Step 3: IDENTIFY (Convert Interest into Known Leads)
 *   **Level 2: CONVERT (Elevate Sales)**
