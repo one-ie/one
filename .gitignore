@@ -58,3 +58,23 @@ pnpm-debug.log*
 # Ignore chat histories in any directory
 **/.smtcmp_chat_histories
 src/content/.obsidian/plugins/smart-composer/data.json
+
+# Added by Claude Task Master
+# Logs
+logs
+*.log
+dev-debug.log
+# Dependency directories
+# Environment variables
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+# Task files
+tasks.json
+tasks/ 

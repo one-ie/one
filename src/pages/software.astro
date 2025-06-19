@@ -1,0 +1,599 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Tabs } from "@/components/ui/tabs";
+import { 
+  ArrowRight, 
+  Sparkles, 
+  Users, 
+  TrendingUp, 
+  Zap,
+  Brain,
+  Code2,
+  MessageSquare,
+  BarChart3,
+  Shield,
+  Clock,
+  Check,
+  ChevronRight,
+  Rocket,
+  Building2,
+  Target,
+  Network,
+  GitBranch,
+  Database,
+  Bot,
+  Share2
+} from "lucide-react";
+
+const title = "ONE Network: AI-First Collaboration Platform";
+const description = "Discover AI insights about your business. Build with your team. Scale through viral growth. The revolutionary platform where AI reveals million-dollar opportunities in your business.";
+
+// Feature categories
+const features = [
+  {
+    icon: Brain,
+    title: "AI Insight Engine",
+    description: "Company analysis that reveals strategic opportunities worth millions",
+    highlights: [
+      "Deep business analysis from your URL",
+      "Strategic opportunities identification",
+      "48-hour urgency mechanism",
+      "Beautiful shareable insights"
+    ]
+  },
+  {
+    icon: Bot,
+    title: "Elevate Agent System",
+    description: "Specialized AI agents that work together like a real business team",
+    highlights: [
+      "Director Agent orchestration",
+      "Marketing, Sales, Operations specialists",
+      "Company-trained assistants",
+      "Tool integration ecosystem"
+    ]
+  },
+  {
+    icon: Users,
+    title: "Smart Workspaces",
+    description: "AI-powered company environments with contextual knowledge",
+    highlights: [
+      "Auto-discovery from shared insights",
+      "Team collaboration tools",
+      "Permission-based access",
+      "Real-time messaging"
+    ]
+  },
+  {
+    icon: TrendingUp,
+    title: "Visual Progress",
+    description: "Gamified business development journey with clear milestones",
+    highlights: [
+      "Candy Crush-style progression",
+      "Foundation → Attract → Convert → Grow",
+      "Achievement rewards system",
+      "Clear value gates"
+    ]
+  }
+];
+
+// Tech stack items
+const techStack = [
+  { name: "React 19", category: "Frontend" },
+  { name: "TypeScript", category: "Language" },
+  { name: "Convex", category: "Backend" },
+  { name: "OpenAI GPT-4", category: "AI" },
+  { name: "Vite", category: "Build" },
+  { name: "shadcn/ui", category: "UI" },
+  { name: "Tailwind CSS", category: "Styling" },
+  { name: "WebSockets", category: "Real-time" }
+];
+
+// Viral growth steps
+const viralSteps = [
+  {
+    number: "1",
+    title: "AI Discovery",
+    description: "Enter your company URL → Get profound strategic analysis",
+    icon: Sparkles
+  },
+  {
+    number: "2", 
+    title: "Share Insights",
+    description: "5 pre-written messages make sharing natural",
+    icon: Share2
+  },
+  {
+    number: "3",
+    title: "Team Forms",
+    description: "Recipients join your company workspace automatically",
+    icon: Users
+  },
+  {
+    number: "4",
+    title: "Collaborate",
+    description: "Turn insights into action with specialized AI agents",
+    icon: Target
+  },
+  {
+    number: "5",
+    title: "Viral Growth",
+    description: "Each insight shared creates new opportunities",
+    icon: TrendingUp
+  }
+];
+
+// Pricing tiers
+const pricingTiers = [
+  {
+    name: "Discovery",
+    price: "$0",
+    description: "Start with AI insights",
+    features: [
+      "Company analysis",
+      "3 strategic insights",
+      "Shareable reports",
+      "48-hour access"
+    ],
+    cta: "Get Free Insights",
+    highlighted: false
+  },
+  {
+    name: "Business",
+    price: "$100",
+    description: "Transform your business",
+    features: [
+      "Everything in Discovery",
+      "Full agent team access",
+      "Unlimited team members",
+      "30-day implementation",
+      "Priority support"
+    ],
+    cta: "Start Transformation",
+    highlighted: true
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    description: "Scale across organizations",
+    features: [
+      "Everything in Business",
+      "Custom AI training",
+      "API access",
+      "Dedicated success manager",
+      "SLA guarantee"
+    ],
+    cta: "Contact Sales",
+    highlighted: false
+  }
+];
+---
+
+<Layout title={title} description={description}>
+  <main class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-b from-background to-secondary/20 pb-20 pt-32">
+      <div class="container relative z-10">
+        <div class="mx-auto max-w-4xl text-center">
+          <Badge variant="secondary" className="mb-4">
+            <Sparkles className="mr-1 h-3 w-3" />
+            AI-Powered Business Intelligence
+          </Badge>
+          
+          <h1 class="mb-6 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+            AI That Reveals Your<br />
+            <span class="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              Million-Dollar Opportunities
+            </span>
+          </h1>
+          
+          <p class="mx-auto mb-8 max-w-2xl text-xl text-muted-foreground">
+            ONE Network analyzes your business and discovers strategic opportunities worth millions. 
+            Then helps you build them with your team through AI-powered collaboration.
+          </p>
+          
+          <div class="mb-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <Button size="lg" className="group">
+              Get Your Free Business Analysis
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+            <Button size="lg" variant="outline">
+              Watch Demo
+            </Button>
+          </div>
+          
+          <!-- Trust indicators -->
+          <div class="flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
+            <div class="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              <span>SOC 2 Compliant</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              <span>10,000+ Teams</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <TrendingUp className="h-4 w-4" />
+              <span>$100M+ Opportunities Found</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Background decoration -->
+      <div class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+    </section>
+
+    <!-- Viral Growth Strategy Section -->
+    <section class="py-20">
+      <div class="container">
+        <div class="mx-auto max-w-3xl text-center mb-12">
+          <Badge variant="outline" className="mb-4">
+            <Rocket className="mr-1 h-3 w-3" />
+            Viral Growth Engine
+          </Badge>
+          <h2 class="text-4xl font-bold mb-4">
+            The Strategy That Creates Exponential Growth
+          </h2>
+          <p class="text-xl text-muted-foreground">
+            Each user brings 1.5+ new users through our revolutionary value-sharing system
+          </p>
+        </div>
+        
+        <div class="grid gap-8 md:grid-cols-5">
+          {viralSteps.map((step) => (
+            <div class="relative text-center">
+              <div class="mb-4 flex justify-center">
+                <div class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <step.icon className="h-8 w-8" />
+                </div>
+              </div>
+              <div class="mb-2 text-sm font-semibold text-muted-foreground">
+                Step {step.number}
+              </div>
+              <h3 class="mb-2 font-semibold">{step.title}</h3>
+              <p class="text-sm text-muted-foreground">{step.description}</p>
+              {step.number !== "5" && (
+                <ChevronRight className="absolute -right-4 top-8 hidden h-8 w-8 text-muted-foreground/30 md:block" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Features Grid -->
+    <section class="py-20 bg-secondary/20">
+      <div class="container">
+        <div class="mx-auto max-w-3xl text-center mb-12">
+          <h2 class="text-4xl font-bold mb-4">
+            Everything You Need to Transform Your Business
+          </h2>
+          <p class="text-xl text-muted-foreground">
+            AI-powered features that work together to create unprecedented growth
+          </p>
+        </div>
+        
+        <div class="grid gap-8 md:grid-cols-2">
+          {features.map((feature) => (
+            <Card className="p-6">
+              <div class="mb-4 flex items-center gap-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <feature.icon className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 class="font-semibold">{feature.title}</h3>
+                  <p class="text-sm text-muted-foreground">{feature.description}</p>
+                </div>
+              </div>
+              <ul class="space-y-2">
+                {feature.highlights.map((highlight) => (
+                  <li class="flex items-start gap-2 text-sm">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual Journey Preview -->
+    <section class="py-20">
+      <div class="container">
+        <div class="mx-auto max-w-3xl text-center mb-12">
+          <Badge variant="outline" className="mb-4">
+            <BarChart3 className="mr-1 h-3 w-3" />
+            Visual Progress System
+          </Badge>
+          <h2 class="text-4xl font-bold mb-4">
+            Your Business Transformation Journey
+          </h2>
+          <p class="text-xl text-muted-foreground">
+            Complete 3 free levels, then unlock the full transformation path
+          </p>
+        </div>
+        
+        <div class="mx-auto max-w-4xl">
+          <div class="relative rounded-lg border bg-card p-8">
+            <div class="grid grid-cols-4 gap-4">
+              <div class="text-center">
+                <div class="mb-2 flex justify-center">
+                  <Building2 className="h-12 w-12 text-primary" />
+                </div>
+                <h4 class="font-semibold">Foundation</h4>
+                <Badge variant="secondary" className="mt-2">Free</Badge>
+              </div>
+              
+              <div class="text-center">
+                <div class="mb-2 flex justify-center">
+                  <Target className="h-12 w-12 text-primary" />
+                </div>
+                <h4 class="font-semibold">Attract</h4>
+                <Badge variant="secondary" className="mt-2">Free</Badge>
+              </div>
+              
+              <div class="text-center">
+                <div class="mb-2 flex justify-center">
+                  <GitBranch className="h-12 w-12 text-primary" />
+                </div>
+                <h4 class="font-semibold">Convert</h4>
+                <Badge variant="secondary" className="mt-2">Free</Badge>
+              </div>
+              
+              <div class="text-center opacity-50">
+                <div class="mb-2 flex justify-center">
+                  <Rocket className="h-12 w-12" />
+                </div>
+                <h4 class="font-semibold">Grow</h4>
+                <Badge variant="outline" className="mt-2">$100 Unlock</Badge>
+              </div>
+            </div>
+            
+            <div class="mt-8 text-center">
+              <p class="text-sm text-muted-foreground mb-4">
+                Complete the free levels to see your full business potential
+              </p>
+              <Button size="lg">
+                Start Your Journey
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="py-20 bg-secondary/20">
+      <div class="container">
+        <div class="mx-auto max-w-3xl text-center mb-12">
+          <Badge variant="outline" className="mb-4">
+            <Code2 className="mr-1 h-3 w-3" />
+            Modern Tech Stack
+          </Badge>
+          <h2 class="text-4xl font-bold mb-4">
+            Built with Best-in-Class Technology
+          </h2>
+          <p class="text-xl text-muted-foreground">
+            Enterprise-grade infrastructure for reliability and scale
+          </p>
+        </div>
+        
+        <div class="mx-auto max-w-4xl">
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+            {techStack.map((tech) => (
+              <Card className="p-4 text-center">
+                <div class="font-semibold">{tech.name}</div>
+                <div class="text-sm text-muted-foreground">{tech.category}</div>
+              </Card>
+            ))}
+          </div>
+          
+          <div class="mt-12 rounded-lg border bg-card p-8">
+            <h3 class="mb-4 text-xl font-semibold">Architecture Overview</h3>
+            <div class="grid gap-4 md:grid-cols-3">
+              <div class="text-center">
+                <div class="mb-2 text-2xl">🎨</div>
+                <h4 class="font-semibold">React SPA</h4>
+                <p class="text-sm text-muted-foreground">Lightning-fast UI with Vite</p>
+              </div>
+              <div class="text-center">
+                <div class="mb-2 text-2xl">⚡</div>
+                <h4 class="font-semibold">Convex Backend</h4>
+                <p class="text-sm text-muted-foreground">Real-time WebSocket database</p>
+              </div>
+              <div class="text-center">
+                <div class="mb-2 text-2xl">🤖</div>
+                <h4 class="font-semibold">AI Services</h4>
+                <p class="text-sm text-muted-foreground">OpenAI GPT-4 integration</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section class="py-20">
+      <div class="container">
+        <div class="mx-auto max-w-4xl">
+          <h2 class="text-3xl font-bold mb-8">Getting Started</h2>
+          
+          <div class="grid gap-8 md:grid-cols-2">
+            <Card className="p-6">
+              <h3 class="text-xl font-semibold mb-4">For Business Leaders 🚀</h3>
+              <ol class="space-y-3">
+                <li class="flex gap-3">
+                  <span class="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">1</span>
+                  <div>
+                    <div class="font-medium">Get Your Business Insight</div>
+                    <div class="text-sm text-muted-foreground">Free 5-minute AI analysis</div>
+                  </div>
+                </li>
+                <li class="flex gap-3">
+                  <span class="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">2</span>
+                  <div>
+                    <div class="font-medium">Share with Your Team</div>
+                    <div class="text-sm text-muted-foreground">Use our pre-written messages</div>
+                  </div>
+                </li>
+                <li class="flex gap-3">
+                  <span class="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">3</span>
+                  <div>
+                    <div class="font-medium">Collaborate on Implementation</div>
+                    <div class="text-sm text-muted-foreground">30-day AI team access for $100</div>
+                  </div>
+                </li>
+              </ol>
+              <Button className="mt-6 w-full">
+                Get Your Free Insight
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Card>
+            
+            <Card className="p-6">
+              <h3 class="text-xl font-semibold mb-4">For Developers 👨‍💻</h3>
+              <div class="rounded-lg bg-secondary/50 p-4 font-mono text-sm">
+                <div class="text-green-600"># Clone the repository</div>
+                <div>git clone https://github.com/one-network/one.git</div>
+                <div class="mt-2 text-green-600"># Install and run</div>
+                <div>cd one && bun install && bun dev</div>
+              </div>
+              <div class="mt-4 space-y-2 text-sm">
+                <div class="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-primary" />
+                  <span>Node.js LTS + Bun package manager</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-primary" />
+                  <span>Convex account for backend</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-primary" />
+                  <span>OpenAI API key for AI features</span>
+                </div>
+              </div>
+              <Button variant="outline" className="mt-6 w-full">
+                View Documentation
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-20 bg-secondary/20">
+      <div class="container">
+        <div class="mx-auto max-w-3xl text-center mb-12">
+          <h2 class="text-4xl font-bold mb-4">
+            Simple, Transparent Pricing
+          </h2>
+          <p class="text-xl text-muted-foreground">
+            Start free, scale as you grow
+          </p>
+        </div>
+        
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-8 md:grid-cols-3">
+            {pricingTiers.map((tier) => (
+              <Card className={`p-6 ${tier.highlighted ? 'border-primary shadow-lg' : ''}`}>
+                {tier.highlighted && (
+                  <Badge className="mb-4">Most Popular</Badge>
+                )}
+                <h3 class="text-2xl font-bold">{tier.name}</h3>
+                <div class="mt-2 mb-4">
+                  <span class="text-4xl font-bold">{tier.price}</span>
+                  {tier.price !== "Custom" && <span class="text-muted-foreground">/month</span>}
+                </div>
+                <p class="mb-6 text-muted-foreground">{tier.description}</p>
+                <ul class="mb-6 space-y-3">
+                  {tier.features.map((feature) => (
+                    <li class="flex items-start gap-2 text-sm">
+                      <Check className="mt-0.5 h-4 w-4 text-primary" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  variant={tier.highlighted ? "default" : "outline"} 
+                  className="w-full"
+                >
+                  {tier.cta}
+                </Button>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROI Calculator -->
+    <section class="py-20">
+      <div class="container">
+        <div class="mx-auto max-w-3xl">
+          <Card className="p-8 text-center">
+            <h2 class="text-3xl font-bold mb-4">The ONE Promise</h2>
+            <blockquote class="text-xl italic text-muted-foreground mb-6">
+              "We don't sell products. We teach mathematics."
+            </blockquote>
+            
+            <div class="grid gap-6 md:grid-cols-3 text-center">
+              <div>
+                <div class="text-3xl font-bold text-primary">$100</div>
+                <div class="text-sm text-muted-foreground">Platform Investment</div>
+              </div>
+              <div>
+                <div class="text-3xl font-bold text-primary">$10,000+</div>
+                <div class="text-sm text-muted-foreground">Average Opportunity Value</div>
+              </div>
+              <div>
+                <div class="text-3xl font-bold text-primary">100:1</div>
+                <div class="text-sm text-muted-foreground">Minimum ROI</div>
+              </div>
+            </div>
+            
+            <p class="mt-6 text-muted-foreground">
+              Every business decision comes down to numbers. ONE Network reveals the mathematical 
+              opportunities in your business through AI analysis, then provides the collaborative 
+              tools to execute on those insights with your team.
+            </p>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-primary text-primary-foreground">
+      <div class="container text-center">
+        <h2 class="text-4xl font-bold mb-4">
+          Ready to Discover Your Million-Dollar Opportunities?
+        </h2>
+        <p class="text-xl mb-8 opacity-90">
+          Join 10,000+ teams using AI to transform their business
+        </p>
+        <div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
+          <Button size="lg" variant="secondary" className="group">
+            Get Your Free Business Insight
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Button>
+          <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+            Schedule Demo
+          </Button>
+        </div>
+        
+        <div class="mt-12 flex flex-wrap justify-center gap-8 text-sm">
+          <a href="https://one.network" class="hover:underline">one.network</a>
+          <a href="mailto:support@one.network" class="hover:underline">support@one.network</a>
+          <a href="https://twitter.com/onenetwork" class="hover:underline">@onenetwork</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

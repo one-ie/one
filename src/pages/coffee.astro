@@ -1,0 +1,262 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+---
+
+<Layout title="Premium Coffee Collection - ONE Store">
+  <main>
+    <!-- Hero Section -->
+    <section class="relative h-[60vh] min-h-[500px] overflow-hidden">
+      <img 
+        src="https://images.unsplash.com/photo-1497515114629-f71d768fd07c?w=1920&q=80" 
+        alt="Coffee beans and cup" 
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-black/50"></div>
+      <div class="relative z-10 container mx-auto px-4 h-full flex items-center">
+        <div class="text-white max-w-2xl">
+          <h1 class="text-5xl md:text-6xl font-bold mb-4">Premium Coffee Collection</h1>
+          <p class="text-xl md:text-2xl mb-8">Discover our carefully curated selection of world-class coffee</p>
+          <a href="#products" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors inline-block">
+            Shop Now
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="products" class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-12">Our Coffee Selection</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Product 1 -->
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=80" 
+              alt="Ethiopian Single Origin" 
+              class="w-full h-64 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2">Ethiopian Single Origin</h3>
+              <p class="text-gray-600 mb-4">Bright, fruity notes with hints of berries and chocolate</p>
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-bold text-amber-600">$24.99</span>
+                <button class="bg-gray-900 hover:bg-gray-800 text-white py-2 px-6 rounded-lg transition-colors">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 2 -->
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1607681034540-2c46cc71896d?w=800&q=80" 
+              alt="Colombian Supremo" 
+              class="w-full h-64 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2">Colombian Supremo</h3>
+              <p class="text-gray-600 mb-4">Rich, balanced flavor with caramel sweetness and nutty finish</p>
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-bold text-amber-600">$22.99</span>
+                <button class="bg-gray-900 hover:bg-gray-800 text-white py-2 px-6 rounded-lg transition-colors">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 3 -->
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&q=80" 
+              alt="House Blend Espresso" 
+              class="w-full h-64 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2">House Blend Espresso</h3>
+              <p class="text-gray-600 mb-4">Bold, smooth espresso with dark chocolate and smoky notes</p>
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-bold text-amber-600">$19.99</span>
+                <button class="bg-gray-900 hover:bg-gray-800 text-white py-2 px-6 rounded-lg transition-colors">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 4 -->
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80" 
+              alt="Brazilian Santos" 
+              class="w-full h-64 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2">Brazilian Santos</h3>
+              <p class="text-gray-600 mb-4">Low acidity with chocolate and nut flavors, perfect for cold brew</p>
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-bold text-amber-600">$21.99</span>
+                <button class="bg-gray-900 hover:bg-gray-800 text-white py-2 px-6 rounded-lg transition-colors">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 5 -->
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&q=80" 
+              alt="Kenyan AA" 
+              class="w-full h-64 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2">Kenyan AA</h3>
+              <p class="text-gray-600 mb-4">Wine-like acidity with black currant notes and bright finish</p>
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-bold text-amber-600">$26.99</span>
+                <button class="bg-gray-900 hover:bg-gray-800 text-white py-2 px-6 rounded-lg transition-colors">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 6 -->
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80" 
+              alt="Decaf Swiss Water" 
+              class="w-full h-64 object-cover"
+            />
+            <div class="p-6">
+              <h3 class="text-2xl font-semibold mb-2">Decaf Swiss Water</h3>
+              <p class="text-gray-600 mb-4">All the flavor, none of the caffeine. Smooth and satisfying</p>
+              <div class="flex justify-between items-center">
+                <span class="text-3xl font-bold text-amber-600">$23.99</span>
+                <button class="bg-gray-900 hover:bg-gray-800 text-white py-2 px-6 rounded-lg transition-colors">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coffee Info Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-4xl font-bold mb-6">From Bean to Cup</h2>
+            <p class="text-lg text-gray-700 mb-4">
+              Our commitment to quality starts at the source. We partner directly with coffee farmers around the world to bring you the finest beans, roasted to perfection in small batches.
+            </p>
+            <p class="text-lg text-gray-700 mb-6">
+              Each blend is carefully crafted to highlight the unique characteristics of its origin, ensuring a memorable cup every time.
+            </p>
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Ethically Sourced</h3>
+                <p class="text-gray-600">Fair trade certified and sustainably grown</p>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Freshly Roasted</h3>
+                <p class="text-gray-600">Roasted weekly and shipped within 48 hours</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <img 
+              src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&q=80" 
+              alt="Coffee roasting process" 
+              class="w-full rounded-lg shadow-xl"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brewing Guide -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-12">Brewing Methods</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="text-center">
+            <img 
+              src="https://images.unsplash.com/photo-1495774856032-8b90bbb32b32?w=400&q=80" 
+              alt="French Press" 
+              class="w-32 h-32 mx-auto rounded-full object-cover mb-4"
+            />
+            <h3 class="text-xl font-semibold mb-2">French Press</h3>
+            <p class="text-gray-600">Full-bodied and rich flavor extraction</p>
+          </div>
+          
+          <div class="text-center">
+            <img 
+              src="https://images.unsplash.com/photo-1502462041640-b3d7e50d0662?w=400&q=80" 
+              alt="Pour Over" 
+              class="w-32 h-32 mx-auto rounded-full object-cover mb-4"
+            />
+            <h3 class="text-xl font-semibold mb-2">Pour Over</h3>
+            <p class="text-gray-600">Clean, bright flavors with precision control</p>
+          </div>
+          
+          <div class="text-center">
+            <img 
+              src="https://images.unsplash.com/photo-1514664966275-acc3faf9fa96?w=400&q=80" 
+              alt="Espresso" 
+              class="w-32 h-32 mx-auto rounded-full object-cover mb-4"
+            />
+            <h3 class="text-xl font-semibold mb-2">Espresso</h3>
+            <p class="text-gray-600">Concentrated, intense coffee experience</p>
+          </div>
+          
+          <div class="text-center">
+            <img 
+              src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80" 
+              alt="Cold Brew" 
+              class="w-32 h-32 mx-auto rounded-full object-cover mb-4"
+            />
+            <h3 class="text-xl font-semibold mb-2">Cold Brew</h3>
+            <p class="text-gray-600">Smooth, low-acid refreshment</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="py-16 bg-amber-600 text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-4xl font-bold mb-4">Join Our Coffee Club</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+          Get 10% off your first order and receive exclusive offers, brewing tips, and new product announcements.
+        </p>
+        <form class="max-w-md mx-auto flex gap-4">
+          <input 
+            type="email" 
+            placeholder="Enter your email" 
+            class="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+          />
+          <button 
+            type="submit" 
+            class="bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+</style>

@@ -61,7 +61,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
           </h2>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
-            Save $1,000 by securing your access today. Get the complete system when it launches June 1, 2025. 
+            Save $1,000 by securing your access today. Get the complete system when it launches August 1, 2025. 
           </p>
         </div>
 
@@ -70,7 +70,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
           <div className="space-y-8">
             <Card className="p-6">
               <h3 className="text-2xl font-bold mb-6">
-                Here's Everything You Get Access To on 1 June, 2025:
+                Here's Everything You Get Access To on 1 August, 2025:
               </h3>
               
               <div className="space-y-6">
@@ -144,7 +144,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
             <Card className="p-8 border-primary sticky top-8">
               <div className="space-y-6">
                 <div className="text-center">
-                  <p className="text-muted-foreground mb-2">Regular Launch Price (June 1, 2025)</p>
+                  <p className="text-muted-foreground mb-2">Regular Launch Price (August 1, 2025)</p>
                   <p className="text-2xl line-through text-muted-foreground">${pricingData.originalPrice}</p>
                   
                   <div className="mt-4">
@@ -164,7 +164,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
                     </Button>
                   </a>
                   <p className="text-sm text-center text-muted-foreground">
-                    Full Access Granted June 1, 2025
+                    Full Access Granted August 1, 2025
                   </p>
                 </div>
 
@@ -194,7 +194,7 @@ export function PricingSection({ pricingData }: PricingSectionProps) {
 
                
                 <p className="text-center text-xs text-muted-foreground">
-                  Launch Access June 1, 2025 | Secure Checkout | 30-Day Money-Back Guarantee
+                  Launch Access August 1, 2025 | Secure Checkout | 30-Day Money-Back Guarantee
                 </p>
               </div>
             </Card>
