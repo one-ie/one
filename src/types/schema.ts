@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { CollectionConfig } from 'astro:content';
 import type { SEO } from './seo';
 
 // Book content schema
@@ -99,7 +98,8 @@ export type Offer = z.infer<typeof offerSchema>;
 export type Author = z.infer<typeof authorSchema>;
 export type SchemaOrg = z.infer<typeof schemaOrgSchema>;
 
-export type ExtendedCollectionConfig = CollectionConfig<z.ZodObject<any>> & {
+export type ExtendedCollectionConfig = {
+  schema: z.ZodObject<any>;
   defaults?: {
     seo?: Partial<SEO>;
   };

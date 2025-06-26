@@ -83,15 +83,15 @@ function HeroGeometric({
 }) {
     const fadeUpVariants = {
         hidden: { opacity: 0, y: 30 },
-        visible: (i: number) => ({
+        visible: {
             opacity: 1,
             y: 0,
             transition: {
                 duration: 1,
-                delay: 0.5 + i * 0.2,
+                delay: 0.5,
                 ease: [0.25, 0.4, 0.25, 1],
             },
-        }),
+        },
     };
 
     return (
@@ -148,10 +148,10 @@ function HeroGeometric({
             <div className="relative z-10 container mx-auto px-4 md:px-6">
                 <div className="max-w-3xl mx-auto text-center">
                     <motion.div
-                        custom={0}
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
+                        transition={{ delay: 0.5 }}
                         className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 md:mb-12"
                     >
                         <Circle className="h-2 w-2 fill-rose-500/80" />
@@ -161,10 +161,10 @@ function HeroGeometric({
                     </motion.div>
 
                     <motion.div
-                        custom={1}
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
+                        transition={{ delay: 0.7 }}
                     >
                         <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight">
                             <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
@@ -182,10 +182,10 @@ function HeroGeometric({
                     </motion.div>
 
                     <motion.div
-                        custom={2}
                         variants={fadeUpVariants}
                         initial="hidden"
                         animate="visible"
+                        transition={{ delay: 0.9 }}
                         className="space-y-8"
                     >
                         <p className="text-base sm:text-lg md:text-xl text-white/40 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
