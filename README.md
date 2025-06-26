@@ -4,6 +4,10 @@
 
 ONE Web is a cutting-edge Astro application that combines AI chat capabilities with professional EPUB book generation. Built with modern web technologies, it provides a seamless experience for creating interactive AI-powered content and generating professional publications.
 
+Perfect for building modern web applications, from simple landing pages to complex AI-powered platforms.
+
+![ONE Screenshot](https://one.ie/screenshots/screenshot.png)
+
 ## 🌟 What Makes ONE Web Special
 
 ### 🤖 **AI-Powered Chat Interface**
