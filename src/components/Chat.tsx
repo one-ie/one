@@ -464,14 +464,14 @@ export function Chat({ className, chatConfig, content = '', ...props }: ChatProp
             <div className="flex justify-center my-4">
               <Button
                 onClick={() => {
-                  setInput("Can you give me more suggestions?");
+                  setInput("Continue this conversation. Tell me more!");
                   setTimeout(() => handleSubmit(), 50);
                 }}
                 variant="secondary"
                 size="sm"
                 className="text-sm bg-primary/5 hover:bg-primary/10 text-primary hover:text-primary"
               >
-                Show more suggestions
+                Continue
               </Button>
             </div>
           )}

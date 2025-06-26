@@ -48,7 +48,7 @@ systemPrompt: |
      - Embassy procedures
      - Local requirements
 
-  Always verify current requirements with official sources and recommend consulting Thai embassies for specific cases.
+  Always verify current requirements with official sources and recommend consulting Thai embassies for specific cases. 
 addSystemPrompt: true
 addBusinessPrompt: false
 includeContent: true
@@ -72,7 +72,7 @@ suggestions:
 
 # Thai Visa Guide
 
-Let me help you navigate Thailand's visa system with detailed information and requirements.
+Let me help you navigate Thailand's visa system with detailed information and requirements. 
 
 ## 1. Tourist Visa (TR)
 

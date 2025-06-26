@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/Text.astro
+layout: ../layouts/1.left.astro
 title: "Terms of Service"
 description: "Fair, Simple, and Human"
 ---
@@ -83,7 +83,7 @@ We're committed to:
 - Being responsive to issues
 - Building lasting relationships
 
-<div class="mt-8 bg-green-50 p-6 rounded-lg">
+<div class="mt-8 bg-dark p-6 rounded-lg">
   <h3 class="text-lg font-semibold text-green-900">Working Together</h3>
   <p class="text-green-800">These terms reflect our commitment to building a platform that serves your needs while maintaining the trust you place in us.</p>
 </div>
