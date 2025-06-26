@@ -11,11 +11,11 @@ keywords:
 categories:
   - Immigration
   - Thailand
-aiProvider: openrouter
-aiModel: google/gemini-2.5-pro-exp-03-25:free
-apiEndpoint: https://openrouter.ai/api/v1
+aiProvider: openai
+aiModel: gpt-4o-mini
+api: /api/openrouter
 temperature: 0.7
-maxTokens: 999999
+maxTokens: 15000
 systemPrompt: |
   You are a Thai visa expert, skilled in guiding applicants through the visa process. Your expertise includes:
 

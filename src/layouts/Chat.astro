@@ -14,8 +14,8 @@ interface Props {
   content?: string;
 }
 
-// Destructure props, getting chatConfig directly if passed
-const { chatConfig: passedChatConfig, Content, content } = Astro.props;
+// Destructure props, getting chatConfig and frontmatter
+const { chatConfig: passedChatConfig, frontmatter, Content, content } = Astro.props;
 
 // Get the raw content
 let rawContent = '';
@@ -53,11 +53,14 @@ try {
   console.error('[Content extraction failed]:', error);
 }
 
-// Use the passed chatConfig prop directly, merging with potential rawContent
+// For markdown pages, frontmatter contains the configuration
+// For component usage, chatConfig prop is used
+const configSource = passedChatConfig || frontmatter || {};
+
 const chatConfig = normalizeConfig({
-  ...(passedChatConfig || {}), // Use the passed config object
-  // If includeContent is true (based on the passed config), add the raw slot content
-  ...(passedChatConfig?.includeContent && rawContent ? { content: rawContent } : {})
+  ...configSource,
+  // If includeContent is true, add the raw content
+  ...(configSource?.includeContent && rawContent ? { content: rawContent } : {})
 });
 
 // Debug final state
@@ -65,11 +68,12 @@ console.log('Content processing:', {
   type: typeof rawContent,
   rawLength: rawContent?.length || 0,
   rawPreview: rawContent ? rawContent.substring(0, 100) : 'N/A',
-  includeContent: Boolean(passedChatConfig?.includeContent),
+  includeContent: Boolean(configSource?.includeContent),
   isJSON: typeof rawContent === 'string' && rawContent.startsWith('{'),
   contentSettings: {
     hasContent: Boolean(rawContent),
-    includeContent: Boolean(passedChatConfig?.includeContent)
+    includeContent: Boolean(configSource?.includeContent),
+    configSource: passedChatConfig ? 'prop' : frontmatter ? 'frontmatter' : 'none'
   }
 });
 ---
