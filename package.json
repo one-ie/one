@@ -26,7 +26,6 @@
     "@assistant-ui/react-markdown": "^0.8.1",
     "@assistant-ui/react-syntax-highlighter": "^0.8.1",
     "@astro-community/astro-embed-youtube": "^0.5.6",
-    "@astrojs/cloudflare": "^12.6.0",
     "@google/genai": "^0.8.0",
     "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^4.1.3",

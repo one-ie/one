@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
-import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node';
 
 export default defineConfig({
   integrations: [react(),mdx()],
@@ -17,11 +17,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   output: 'server',
-  adapter: cloudflare({
-    platformProxy: {
-      enabled: true
-    },
-    mode: 'directory',
-    functionPerRoute: true
+  adapter: node({
+    mode: 'standalone'
   }),
 });
