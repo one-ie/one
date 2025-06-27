@@ -1,5 +1,4 @@
- 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { layoutStore, layoutActions, PanelMode } from '../stores/layout';
 import { Maximize2, PanelRightClose, Columns, Minus, X } from 'lucide-react';

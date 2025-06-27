@@ -12,8 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useChat, type Message } from '@ai-sdk/react'; // Import Message
 import { ChevronDown } from "lucide-react";
-import type { ComponentPropsWithoutRef } from "react";
-import { useEffect, useState, useRef } from "react"; // useState already imported
+import React, { type ComponentPropsWithoutRef, useEffect, useState, useRef } from "react";
 import type { ChatConfig } from "@/schema/chat";
 import { cn } from "@/lib/utils";
 

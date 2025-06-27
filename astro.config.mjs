@@ -5,7 +5,12 @@ import tailwindcss from '@tailwindcss/vite';
 import node from '@astrojs/node';
 
 export default defineConfig({
-  integrations: [react(),mdx()],
+  integrations: [
+    react({
+      experimentalReactChildren: true
+    }),
+    mdx()
+  ],
 
   markdown: {
     shikiConfig: {
@@ -15,6 +20,12 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      noExternal: ['@ai-sdk/react']
+    },
+    optimizeDeps: {
+      include: ['react', 'react-dom', '@ai-sdk/react']
+    }
   },
   output: 'server',
   adapter: node({

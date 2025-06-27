@@ -5,8 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useTextareaResize } from "@/hooks/use-textarea-resize";
 import { SendIcon, StopCircleIcon, Paperclip, XIcon } from "lucide-react"; // Added Paperclip, XIcon
-import type React from "react";
-import { createContext, useContext, forwardRef, useEffect, useState, useRef, ChangeEvent } from "react"; // Added useState, useRef, ChangeEvent
+import React, { createContext, useContext, forwardRef, useEffect, useState, useRef, type ChangeEvent } from "react";
 
 interface ChatInputContextValue {
   value?: string;

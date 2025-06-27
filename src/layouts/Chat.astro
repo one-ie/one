@@ -84,7 +84,7 @@ console.log('Content processing:', {
     <!-- Centered chat window -->
     <div class="w-full max-w-2xl h-[90vh]">
       <ChatComponent
-        client:load
+        client:only="react"
         chatConfig={chatConfig}
         content={chatConfig.includeContent ? rawContent : undefined}
         className="h-full"

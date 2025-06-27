@@ -48,7 +48,7 @@ console.log("Default Config:", JSON.stringify(defaultConfig, null, 2));
           <h2 class="text-xl font-semibold">Custom Configuration</h2>
         </div>
         <div class="h-[550px]">
-          <Chat client:load className="h-full" chatConfig={testConfig} />
+          <Chat client:only="react" className="h-full" chatConfig={testConfig} />
         </div>
       </div>
       
@@ -57,7 +57,7 @@ console.log("Default Config:", JSON.stringify(defaultConfig, null, 2));
           <h2 class="text-xl font-semibold">Default Configuration</h2>
         </div>
         <div class="h-[550px]">
-          <Chat client:load className="h-full" chatConfig={defaultConfig} />
+          <Chat client:only="react" className="h-full" chatConfig={defaultConfig} />
         </div>
       </div>
     </div>
