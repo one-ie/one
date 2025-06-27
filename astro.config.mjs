@@ -21,10 +21,16 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     ssr: {
-      noExternal: ['@ai-sdk/react']
+      noExternal: ['@ai-sdk/react', '@nanostores/react', 'swr']
     },
     optimizeDeps: {
-      include: ['react', 'react-dom', '@ai-sdk/react']
+      include: ['react', 'react-dom', '@ai-sdk/react', '@nanostores/react', 'swr'],
+      esbuildOptions: {
+        target: 'es2020'
+      }
+    },
+    resolve: {
+      dedupe: ['react', 'react-dom']
     }
   },
   output: 'server',

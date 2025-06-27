@@ -3,9 +3,9 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const prompts = await getCollection('prompts');
-const elevatePrompts = prompts.filter(p => p.data.category === 'Elevate');
+const elevatePrompts = prompts.filter((p: any) => p.data.category === 'Elevate');
 const bookChapters = await getCollection('book');
-const elevateChapters = bookChapters.filter(chapter => 
+const elevateChapters = bookChapters.filter((chapter: any) => 
   chapter.id.includes('elevate') || 
   chapter.id.includes('hook') || 
   chapter.id.includes('gift') ||
@@ -298,7 +298,7 @@ const elevateChapters = bookChapters.filter(chapter =>
               {name: 'UPSELL', desc: 'Increase value', icon: '📈', color: 'blue'},
               {name: 'UNDERSTAND', desc: 'Gather insights', icon: '🔍', color: 'blue'},
               {name: 'SHARE', desc: 'Generate referrals', icon: '📢', color: 'blue'}
-            ].map((step, index) => (
+            ].map((step: any, index: number) => (
               <div class="text-center group cursor-pointer" data-step={step.name}>
                 <div class="relative">
                   <div class={`w-12 h-12 mx-auto bg-neutral-900 border-4 border-neutral-700 rounded-full group-hover:border-${step.color}-500 transition-all duration-300 flex items-center justify-center`}>
@@ -597,7 +597,7 @@ const elevateChapters = bookChapters.filter(chapter =>
         </p>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {elevatePrompts.slice(0, 6).map((prompt) => (
+          {elevatePrompts.slice(0, 6).map((prompt: any) => (
             <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl p-6 hover:border-cyan-500/30 transition-all duration-300">
               <h3 class="text-lg font-semibold mb-2">{prompt.data.title}</h3>
               <p class="text-sm text-neutral-400">{prompt.data.description}</p>
@@ -687,10 +687,10 @@ const elevateChapters = bookChapters.filter(chapter =>
       // Handle option clicks
       document.querySelectorAll('.diagnostic-option').forEach(option => {
         option.addEventListener('click', () => {
-          const category = option.dataset.category;
-          const score = parseInt(option.dataset.score);
+          const category = (option as HTMLElement).dataset.category;
+          const score = parseInt((option as HTMLElement).dataset.score || '0');
           
-          if (category) scores[category] += score;
+          if (category) (scores as any)[category] += score;
           
           // Hide current question
           questions[currentQuestion].classList.add('hidden');
@@ -707,8 +707,8 @@ const elevateChapters = bookChapters.filter(chapter =>
       
       // Show results
       function showResults() {
-        document.getElementById('diagnostic-quiz').classList.add('hidden');
-        results.classList.remove('hidden');
+        document.getElementById('diagnostic-quiz')!.classList.add('hidden');
+        results!.classList.remove('hidden');
         
         // Determine bottleneck
         let bottleneck = 'reach';
@@ -747,8 +747,8 @@ const elevateChapters = bookChapters.filter(chapter =>
           }
         };
         
-        const info = bottleneckInfo[bottleneck];
-        bottleneckResult.innerHTML = `
+        const info = (bottleneckInfo as any)[bottleneck];
+        bottleneckResult!.innerHTML = `
           <div class="${info.bgColor} ${info.borderColor} border rounded-xl p-6">
             <h4 class="text-xl font-bold ${info.color} mb-2">${info.title}</h4>
             <p class="text-neutral-300">${info.description}</p>
@@ -763,8 +763,8 @@ const elevateChapters = bookChapters.filter(chapter =>
         questions.forEach((q, i) => {
           q.classList.toggle('hidden', i !== 0);
         });
-        results.classList.add('hidden');
-        document.getElementById('diagnostic-quiz').classList.remove('hidden');
+        results!.classList.add('hidden');
+        document.getElementById('diagnostic-quiz')!.classList.remove('hidden');
       });
     });
     
@@ -776,9 +776,9 @@ const elevateChapters = bookChapters.filter(chapter =>
       const roiResult = document.getElementById('roi-result');
       
       function calculateROI() {
-        const visitors = parseFloat(visitorsInput?.value || 0);
-        const conversion = parseFloat(conversionInput?.value || 0) / 100;
-        const aov = parseFloat(aovInput?.value || 0);
+        const visitors = parseFloat((visitorsInput as HTMLInputElement)?.value || '0');
+        const conversion = parseFloat((conversionInput as HTMLInputElement)?.value || '0') / 100;
+        const aov = parseFloat((aovInput as HTMLInputElement)?.value || '0');
         
         const currentRevenue = visitors * conversion * aov;
         const improvedConversion = conversion * 1.35; // 35% improvement
@@ -801,9 +801,9 @@ const elevateChapters = bookChapters.filter(chapter =>
     
     // Smooth scroll for navigation
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+      anchor.addEventListener('click', function (this: HTMLElement, e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const target = document.querySelector(this.getAttribute('href') || '');
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -815,7 +815,7 @@ const elevateChapters = bookChapters.filter(chapter =>
       const scrolled = window.pageYOffset;
       const parallax = document.querySelector('.animate-float');
       if (parallax) {
-        parallax.style.transform = `translateY(${scrolled * 0.5}px) rotateY(25deg)`;
+        (parallax as HTMLElement).style.transform = `translateY(${scrolled * 0.5}px) rotateY(25deg)`;
       }
     });
   </script>

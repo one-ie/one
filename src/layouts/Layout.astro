@@ -88,7 +88,7 @@ const chatConfig = providedConfig ? ChatSchema.parse(providedConfig) : ChatSchem
         <Footer client:load />
       </div>
       <Right
-        client:load
+        client:only="react"
         chatConfig={chatConfig}
         rightPanelMode={rightPanelMode}
         content={content}

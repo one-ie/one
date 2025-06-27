@@ -22,6 +22,10 @@ interface ChatProps extends ComponentPropsWithoutRef<"div"> {
 }
 
 export function Chat({ className, chatConfig, content = '', ...props }: ChatProps) {
+  // Early return for SSR
+  if (typeof window === 'undefined') {
+    return null;
+  }
   // Process and validate content
   const sanitizedContent = (() => {
     try {
