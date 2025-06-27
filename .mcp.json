@@ -1,0 +1,76 @@
+{
+    "mcpServers": {
+      "convex": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "convex@latest",
+          "mcp",
+          "start"
+        ],
+        "description": "Convex MCP server for database exploration and query execution"
+      },
+      "Framelink Figma MCP": {
+        "command": "npx",
+        "args": ["-y", "figma-developer-mcp", "--figma-api-key=${FIGMA_PERSONAL_ACCESS_TOKEN}", "--stdio"]
+      },
+      "TalkToFigma": {
+        "command": "bunx",
+        "args": ["cursor-talk-to-figma-mcp@latest"]
+      },
+      "shadcn-ui": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["@jpisnice/shadcn-ui-mcp-server"],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+        }
+      },
+      "github": {
+        "type": "stdio",
+        "command": "npx", 
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-github"
+        ],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+        },
+        "description": "GitHub repository management server"
+      },
+      "playwright": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@executeautomation/playwright-mcp-server"
+        ],
+        "description": "Browser automation and testing server"
+      },
+      "cloudflare-docs": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/sse"]
+      },
+      "cloudflare": {
+              "command": "npx",
+              "args": ["mcp-remote", "https://observability.mcp.cloudflare.com/sse"]
+          },
+      "stripe": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@stripe/mcp",
+          "--tools=all",
+          "--api-key=${STRIPE_RK}"
+        ]
+      },
+      "sentry": {
+        "type": "stdio",
+        "command": "npx",
+        "args": ["mcp-remote@latest", "https://mcp.sentry.dev/sse"]
+      }
+    }
+  }
