@@ -1,0 +1,112 @@
+---
+import Landing from '../../layouts/Landing.astro';
+---
+
+<Landing title="ONE Playbook" header={false} footer={false}>
+  <main class="playbook-main">
+    <div class="playbook-container">
+      <!-- 4x4 Grid: Exact Figma Layout -->
+      <div class="playbook-grid">
+        <!-- Row 1: GROW + Actions -->
+        <div class="grid-item"><img src="/playbook/level-grow.svg" alt="Grow Level" /></div>
+        <div class="grid-item"><img src="/playbook/icon-upsell.svg" alt="Upsell" /></div>
+        <div class="grid-item"><img src="/playbook/icon-educate.svg" alt="Educate" /></div>
+        <div class="grid-item"><img src="/playbook/icon-share.svg" alt="Share" /></div>
+
+        <!-- Row 2: CONVERT + Actions -->
+        <div class="grid-item"><img src="/playbook/level-convert.svg" alt="Convert Level" /></div>
+        <div class="grid-item"><img src="/playbook/icon-nurture.svg" alt="Nurture" /></div>
+        <div class="grid-item"><img src="/playbook/icon-sell.svg" alt="Sell" /></div>
+        <div class="grid-item"><img src="/playbook/icon-engage.svg" alt="Engage" /></div>
+
+        <!-- Row 3: ATTRACT + Actions -->
+        <div class="grid-item"><img src="/playbook/level-attract.svg" alt="Attract Level" /></div>
+        <div class="grid-item"><img src="/playbook/icon-stop.svg" alt="Stop" /></div>
+        <div class="grid-item"><img src="/playbook/icon-gift.svg" alt="Gift" /></div>
+        <div class="grid-item"><img src="/playbook/icon-identify.svg" alt="Identify" /></div>
+
+        <!-- Row 4: Foundation -->
+        <div class="grid-item"><img src="/playbook/foundation-you.svg" alt="YOU Foundation" /></div>
+        <div class="grid-item"><img src="/playbook/foundation-company.svg" alt="Company Foundation" /></div>
+        <div class="grid-item"><img src="/playbook/foundation-market.svg" alt="Market Foundation" /></div>
+        <div class="grid-item"><img src="/playbook/foundation-customer.svg" alt="Customer Foundation" /></div>
+      </div>
+    </div>
+  </main>
+</Landing>
+
+<style>
+  .playbook-main {
+    min-height: 100vh;
+    background-color: #131313;
+    color: white;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .playbook-container {
+    max-width: 120rem;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .playbook-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    aspect-ratio: 1;
+    max-width: 100vh;
+    margin: 0 auto;
+  }
+
+  .grid-item {
+    background-color: #2B2B2B;
+    border: 2px solid #4B4B4B;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+  }
+
+  .grid-item:hover {
+    transform: scale(1.02);
+    border-color: #1C3354;
+    box-shadow: 0 4px 12px rgba(28, 51, 84, 0.3);
+  }
+
+  .grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .playbook-main {
+      padding: 1rem;
+    }
+    
+    .playbook-grid {
+      gap: 0.5rem;
+      max-width: 90vw;
+    }
+    
+    .grid-item {
+      padding: 0.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .playbook-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+  }
+</style>

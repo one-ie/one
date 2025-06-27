@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Docs.astro';
 import type { CollectionEntry } from 'astro:content';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const prerender = true;
 
@@ -34,13 +34,9 @@ type Props = {
 const { entry, prev, next } = Astro.props;
 const { Content } = await entry.render();
 
-function formatDate(date: Date | string | undefined) {
-  if (!date) return '';
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(new Date(date));
+// Function to create tag URL
+function createTagUrl(tag: string): string {
+  return `/prompts?tag=${encodeURIComponent(tag)}`;
 }
 ---
 
@@ -51,16 +47,34 @@ function formatDate(date: Date | string | undefined) {
   <div class="max-w-3xl mx-auto px-4">
     <article>
       <header class="mb-8">
-        <div class="flex flex-wrap items-center gap-3 mb-4 text-sm">
-          <span class="text-sm flex items-center text-muted-foreground/90">
-            <Calendar className="w-4 h-4 mr-1.5 text-primary/60" />
-            {formatDate(entry.data.date)}
-          </span>
-          <div class="flex flex-wrap gap-2">
-            {entry.data.tags?.map((tag: string) => (
-              <Badge variant="secondary">{tag}</Badge>
-            ))}
+        <h1 class="text-4xl font-bold mb-6 text-foreground">
+          {entry.data.title}
+        </h1>
+        
+        {entry.data.description && (
+          <p class="text-lg text-muted-foreground mb-6 leading-relaxed">
+            {entry.data.description}
+          </p>
+        )}
+        
+        {entry.data.image && (
+          <div class="mb-6 rounded-lg overflow-hidden border border-border">
+            <img 
+              src={entry.data.image} 
+              alt={entry.data.title || 'Prompt image'} 
+              class="w-full h-auto max-h-96 object-cover"
+            />
           </div>
+        )}
+        
+        <div class="flex flex-wrap gap-2 mb-6">
+          {entry.data.tags?.map((tag: string) => (
+            <a href={createTagUrl(tag)} class="no-underline">
+              <Badge variant="secondary" className="hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer">
+                {tag}
+              </Badge>
+            </a>
+          ))}
         </div>
       </header>
       <div class="prose prose-neutral dark:prose-invert max-w-none [&_pre]:bg-muted">

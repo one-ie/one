@@ -1,0 +1,822 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const prompts = await getCollection('prompts');
+const elevatePrompts = prompts.filter(p => p.data.category === 'Elevate');
+const bookChapters = await getCollection('book');
+const elevateChapters = bookChapters.filter(chapter => 
+  chapter.id.includes('elevate') || 
+  chapter.id.includes('hook') || 
+  chapter.id.includes('gift') ||
+  chapter.id.includes('identify') ||
+  chapter.id.includes('engage') ||
+  chapter.id.includes('sell') ||
+  chapter.id.includes('nurture') ||
+  chapter.id.includes('upsell') ||
+  chapter.id.includes('understand') ||
+  chapter.id.includes('share')
+);
+---
+
+<Layout 
+  title="Elevate Framework - The Complete E-commerce Growth System"
+  description="Discover the Elevate Framework: A systematic approach to transform anonymous traffic into loyal brand advocates through AI-powered strategies."
+>
+  <div class="min-h-screen bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950">
+    <!-- Floating Navigation -->
+    <nav class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-neutral-900/80 backdrop-blur-lg border border-neutral-800 rounded-full px-6 py-3">
+      <div class="flex items-center gap-6">
+        <a href="#overview" class="text-sm font-medium hover:text-purple-400 transition-colors">Overview</a>
+        <a href="#foundation" class="text-sm font-medium hover:text-amber-400 transition-colors">Foundation</a>
+        <a href="#journey" class="text-sm font-medium hover:text-pink-400 transition-colors">Journey</a>
+        <a href="#diagnostic" class="text-sm font-medium hover:text-cyan-400 transition-colors">Diagnostic</a>
+        <a href="#results" class="text-sm font-medium hover:text-green-400 transition-colors">Results</a>
+        <a href="#resources" class="text-sm font-medium hover:text-blue-400 transition-colors">Resources</a>
+      </div>
+    </nav>
+    <!-- Hero Section with 3D Visualization -->
+    <section class="relative overflow-hidden min-h-screen flex items-center">
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-blue-900/20"></div>
+      <div class="absolute inset-0">
+        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full filter blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]">
+          <div class="relative w-full h-full animate-float">
+            <!-- 3D Pyramid Structure -->
+            <div class="absolute inset-0 transform-3d rotate-y-25">
+              <!-- Base: Foundation -->
+              <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-32 bg-gradient-to-t from-amber-600/20 to-amber-500/10 border border-amber-500/30 flex items-center justify-center backdrop-blur-sm">
+                <span class="text-amber-300 font-bold text-lg">FOUNDATION</span>
+              </div>
+              <!-- Level 1: Attract -->
+              <div class="absolute bottom-32 left-1/2 transform -translate-x-1/2 w-80 h-28 bg-gradient-to-t from-purple-600/20 to-purple-500/10 border border-purple-500/30 flex items-center justify-center backdrop-blur-sm">
+                <span class="text-purple-300 font-bold">ATTRACT</span>
+              </div>
+              <!-- Level 2: Convert -->
+              <div class="absolute bottom-60 left-1/2 transform -translate-x-1/2 w-64 h-24 bg-gradient-to-t from-pink-600/20 to-pink-500/10 border border-pink-500/30 flex items-center justify-center backdrop-blur-sm">
+                <span class="text-pink-300 font-bold">CONVERT</span>
+              </div>
+              <!-- Level 3: Grow -->
+              <div class="absolute bottom-84 left-1/2 transform -translate-x-1/2 w-48 h-20 bg-gradient-to-t from-blue-600/20 to-blue-500/10 border border-blue-500/30 flex items-center justify-center backdrop-blur-sm">
+                <span class="text-blue-300 font-bold">GROW</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="relative container mx-auto px-4 py-20 lg:py-32">
+        <div class="text-center max-w-4xl mx-auto">
+          <h1 class="text-5xl lg:text-7xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent mb-6 animate-gradient">
+            The Elevate Framework
+          </h1>
+          <p class="text-xl lg:text-2xl text-neutral-300 mb-8 leading-relaxed">
+            Transform anonymous traffic into loyal brand advocates through a systematic, AI-powered approach to e-commerce growth
+          </p>
+          <div class="flex flex-wrap gap-4 justify-center">
+            <a href="#overview" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105">
+              Explore the Framework
+            </a>
+            <a href="#diagnostic" class="px-8 py-4 border border-neutral-700 rounded-lg font-semibold hover:bg-neutral-800 transition-all duration-300">
+              Take Diagnostic
+            </a>
+          </div>
+          
+          <!-- Scroll Indicator -->
+          <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Framework Overview with Animation -->
+    <section id="overview" class="container mx-auto px-4 py-20 scroll-mt-20">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+          The Three Levels of Elevation
+        </h2>
+        
+        <div class="grid md:grid-cols-3 gap-8 mb-20">
+          <!-- Level 1: Attract -->
+          <div class="group relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-purple-900/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+            <div class="relative bg-neutral-900/50 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8 hover:border-purple-500/40 transition-all duration-300 transform hover:-translate-y-1">
+              <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold mb-3 text-purple-300">Level 1: ATTRACT</h3>
+              <p class="text-neutral-400 mb-6">Elevate Your Reach</p>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <span class="text-purple-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">HOOK:</strong>
+                    <span class="text-neutral-400"> Capture attention strategically</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-purple-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">GIFT:</strong>
+                    <span class="text-neutral-400"> Offer value to build trust</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-purple-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">IDENTIFY:</strong>
+                    <span class="text-neutral-400"> Convert interest into leads</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Level 2: Convert -->
+          <div class="group relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-pink-600/20 to-pink-900/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+            <div class="relative bg-neutral-900/50 backdrop-blur-sm border border-pink-500/20 rounded-2xl p-8 hover:border-pink-500/40 transition-all duration-300 transform hover:-translate-y-1">
+              <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-700 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold mb-3 text-pink-300">Level 2: CONVERT</h3>
+              <p class="text-neutral-400 mb-6">Elevate Your Sales</p>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <span class="text-pink-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">ENGAGE:</strong>
+                    <span class="text-neutral-400"> Assist during decisions</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-pink-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">SELL:</strong>
+                    <span class="text-neutral-400"> Optimize sales environment</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-pink-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">NURTURE:</strong>
+                    <span class="text-neutral-400"> Build lasting relationships</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Level 3: Grow -->
+          <div class="group relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-blue-900/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
+            <div class="relative bg-neutral-900/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 hover:border-blue-500/40 transition-all duration-300 transform hover:-translate-y-1">
+              <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold mb-3 text-blue-300">Level 3: GROW</h3>
+              <p class="text-neutral-400 mb-6">Elevate Your Value</p>
+              <ul class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <span class="text-blue-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">UPSELL:</strong>
+                    <span class="text-neutral-400"> Maximize customer value</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-blue-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">UNDERSTAND:</strong>
+                    <span class="text-neutral-400"> Ensure success & insights</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-blue-400 mt-1">►</span>
+                  <div>
+                    <strong class="text-white">SHARE:</strong>
+                    <span class="text-neutral-400"> Generate advocacy</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Foundation Section with Interactive Cards -->
+    <section id="foundation" class="container mx-auto px-4 py-20 border-t border-neutral-800 scroll-mt-20">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+            The Strategic Foundation
+          </h2>
+          <p class="text-xl text-neutral-400">Every successful elevation begins with a solid foundation</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+          <!-- Company Context -->
+          <div class="group">
+            <div class="bg-gradient-to-br from-amber-900/10 to-amber-900/5 border border-amber-500/20 rounded-2xl p-8 h-full hover:border-amber-500/40 transition-all duration-300 transform hover:scale-105">
+              <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-amber-300">Company Context</h3>
+              <p class="text-neutral-400 leading-relaxed">
+                Understand your unique offer, brand voice, and market positioning to create authentic, compelling messaging
+              </p>
+            </div>
+          </div>
+
+          <!-- Market Landscape -->
+          <div class="group">
+            <div class="bg-gradient-to-br from-orange-900/10 to-orange-900/5 border border-orange-500/20 rounded-2xl p-8 h-full hover:border-orange-500/40 transition-all duration-300 transform hover:scale-105">
+              <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-700 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-orange-300">Market Landscape</h3>
+              <p class="text-neutral-400 leading-relaxed">
+                Analyze competition, trends, and market awareness levels to position your offer strategically
+              </p>
+            </div>
+          </div>
+
+          <!-- Ideal Customer -->
+          <div class="group">
+            <div class="bg-gradient-to-br from-red-900/10 to-red-900/5 border border-red-500/20 rounded-2xl p-8 h-full hover:border-red-500/40 transition-all duration-300 transform hover:scale-105">
+              <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-red-700 rounded-xl flex items-center justify-center mb-6">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-red-300">Ideal Customer</h3>
+              <p class="text-neutral-400 leading-relaxed">
+                Deep understanding of customer pains, desires, and contexts to create resonant messaging
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Journey with Step Details -->
+    <section id="journey" class="container mx-auto px-4 py-20 border-t border-neutral-800 scroll-mt-20">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
+          The Customer Journey
+        </h2>
+        
+        <div class="relative">
+          <!-- Journey Path -->
+          <div class="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 transform -translate-y-1/2 rounded-full"></div>
+          
+          <!-- Journey Steps -->
+          <div class="relative grid grid-cols-9 gap-4">
+            {[
+              {name: 'HOOK', desc: 'Capture attention', icon: '🎯', color: 'purple'},
+              {name: 'GIFT', desc: 'Offer value', icon: '🎁', color: 'purple'},
+              {name: 'IDENTIFY', desc: 'Get contact', icon: '📧', color: 'purple'},
+              {name: 'ENGAGE', desc: 'Assist decision', icon: '💬', color: 'pink'},
+              {name: 'SELL', desc: 'Close deal', icon: '🛒', color: 'pink'},
+              {name: 'NURTURE', desc: 'Build loyalty', icon: '🤝', color: 'pink'},
+              {name: 'UPSELL', desc: 'Increase value', icon: '📈', color: 'blue'},
+              {name: 'UNDERSTAND', desc: 'Gather insights', icon: '🔍', color: 'blue'},
+              {name: 'SHARE', desc: 'Generate referrals', icon: '📢', color: 'blue'}
+            ].map((step, index) => (
+              <div class="text-center group cursor-pointer" data-step={step.name}>
+                <div class="relative">
+                  <div class={`w-12 h-12 mx-auto bg-neutral-900 border-4 border-neutral-700 rounded-full group-hover:border-${step.color}-500 transition-all duration-300 flex items-center justify-center`}>
+                    <span class="text-lg">{step.icon}</span>
+                  </div>
+                  <div class="absolute -bottom-24 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-neutral-800 px-4 py-3 rounded-lg whitespace-nowrap z-10">
+                    <p class="text-sm font-semibold mb-1">{step.name}</p>
+                    <p class="text-xs text-neutral-400">{step.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <!-- Stage Labels -->
+          <div class="grid grid-cols-3 gap-4 mt-20">
+            <div class="text-center">
+              <p class="text-lg font-semibold text-purple-400">Anonymous Traffic</p>
+            </div>
+            <div class="text-center">
+              <p class="text-lg font-semibold text-pink-400">Qualified Leads</p>
+            </div>
+            <div class="text-center">
+              <p class="text-lg font-semibold text-blue-400">Brand Advocates</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diagnostic Tool -->
+    <section id="diagnostic" class="container mx-auto px-4 py-20 border-t border-neutral-800 scroll-mt-20">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+          Elevate Diagnostic Tool
+        </h2>
+        <p class="text-xl text-neutral-400 text-center mb-12">
+          Identify your biggest growth bottleneck in 30 seconds
+        </p>
+        
+        <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-2xl p-8">
+          <div id="diagnostic-quiz" class="space-y-6">
+            <!-- Question 1 -->
+            <div class="diagnostic-question">
+              <h3 class="text-lg font-semibold mb-4">How many unique visitors does your site get per month?</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="reach" data-score="1">
+                  Less than 1,000
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="reach" data-score="2">
+                  1,000 - 10,000
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="reach" data-score="3">
+                  10,000 - 100,000
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="reach" data-score="4">
+                  Over 100,000
+                </button>
+              </div>
+            </div>
+            
+            <!-- Question 2 -->
+            <div class="diagnostic-question hidden">
+              <h3 class="text-lg font-semibold mb-4">What's your email list to visitor conversion rate?</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="reach" data-score="1">
+                  Less than 1%
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="reach" data-score="2">
+                  1% - 3%
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="reach" data-score="3">
+                  3% - 5%
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="reach" data-score="4">
+                  Over 5%
+                </button>
+              </div>
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="diagnostic-question hidden">
+              <h3 class="text-lg font-semibold mb-4">What's your visitor to customer conversion rate?</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="sales" data-score="1">
+                  Less than 0.5%
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="sales" data-score="2">
+                  0.5% - 2%
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="sales" data-score="3">
+                  2% - 5%
+                </button>
+                <button class="diagnostic-option p-4 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all" data-category="sales" data-score="4">
+                  Over 5%
+                </button>
+              </div>
+            </div>
+            
+            <!-- Results -->
+            <div id="diagnostic-results" class="hidden">
+              <div class="text-center">
+                <h3 class="text-2xl font-bold mb-4">Your Biggest Bottleneck:</h3>
+                <div id="bottleneck-result" class="mb-6"></div>
+                <button id="restart-diagnostic" class="px-6 py-3 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition-all">
+                  Take Again
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Framework Comparison -->
+    <section class="container mx-auto px-4 py-20 border-t border-neutral-800">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+          Why Elevate Works Better
+        </h2>
+        
+        <div class="grid md:grid-cols-2 gap-12">
+          <!-- Traditional Approach -->
+          <div class="relative">
+            <h3 class="text-xl font-bold mb-6 text-red-400">Traditional Fragmented Approach</h3>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <span class="text-red-500 mt-1">✗</span>
+                <div>
+                  <strong>Random Tactics:</strong>
+                  <span class="text-neutral-400"> Disconnected marketing activities</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="text-red-500 mt-1">✗</span>
+                <div>
+                  <strong>No Clear Path:</strong>
+                  <span class="text-neutral-400"> Unclear customer journey</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="text-red-500 mt-1">✗</span>
+                <div>
+                  <strong>Guesswork:</strong>
+                  <span class="text-neutral-400"> No systematic optimization</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="text-red-500 mt-1">✗</span>
+                <div>
+                  <strong>Unpredictable:</strong>
+                  <span class="text-neutral-400"> Inconsistent results</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Visual representation -->
+            <div class="mt-8 p-6 bg-red-900/10 border border-red-500/20 rounded-xl">
+              <div class="flex justify-around items-center">
+                <div class="w-8 h-8 bg-red-500/30 rounded-full"></div>
+                <div class="w-8 h-8 bg-red-500/30 rounded-full"></div>
+                <div class="w-8 h-8 bg-red-500/30 rounded-full"></div>
+                <div class="w-8 h-8 bg-red-500/30 rounded-full"></div>
+              </div>
+              <p class="text-center text-sm text-red-400 mt-4">Disconnected efforts</p>
+            </div>
+          </div>
+          
+          <!-- Elevate Approach -->
+          <div class="relative">
+            <h3 class="text-xl font-bold mb-6 text-green-400">Elevate Systematic Approach</h3>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <span class="text-green-500 mt-1">✓</span>
+                <div>
+                  <strong>Sequential System:</strong>
+                  <span class="text-neutral-400"> Each step builds on the previous</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="text-green-500 mt-1">✓</span>
+                <div>
+                  <strong>Clear Journey:</strong>
+                  <span class="text-neutral-400"> Defined path from traffic to advocate</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="text-green-500 mt-1">✓</span>
+                <div>
+                  <strong>AI-Powered:</strong>
+                  <span class="text-neutral-400"> Data-driven optimization at each step</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="text-green-500 mt-1">✓</span>
+                <div>
+                  <strong>Predictable Growth:</strong>
+                  <span class="text-neutral-400"> Systematic, measurable results</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Visual representation -->
+            <div class="mt-8 p-6 bg-green-900/10 border border-green-500/20 rounded-xl">
+              <div class="flex justify-between items-center">
+                <div class="w-8 h-8 bg-green-500/30 rounded-full"></div>
+                <div class="w-2 h-0.5 bg-green-500/50"></div>
+                <div class="w-8 h-8 bg-green-500/40 rounded-full"></div>
+                <div class="w-2 h-0.5 bg-green-500/50"></div>
+                <div class="w-8 h-8 bg-green-500/50 rounded-full"></div>
+                <div class="w-2 h-0.5 bg-green-500/50"></div>
+                <div class="w-8 h-8 bg-green-500/60 rounded-full"></div>
+              </div>
+              <p class="text-center text-sm text-green-400 mt-4">Connected system</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Case Studies & Results -->
+    <section id="results" class="container mx-auto px-4 py-20 border-t border-neutral-800 scroll-mt-20">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl lg:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+          Real Results from Real Businesses
+        </h2>
+        
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+          <!-- Case Study 1 -->
+          <div class="bg-gradient-to-br from-green-900/10 to-green-900/5 border border-green-500/20 rounded-2xl p-8">
+            <div class="text-4xl font-bold text-green-400 mb-2">327%</div>
+            <div class="text-xl font-semibold mb-4">Revenue Increase</div>
+            <p class="text-neutral-400 mb-4">SaaS startup implemented the complete Elevate Framework and saw explosive growth in 6 months.</p>
+            <div class="flex items-center gap-2 text-sm text-green-400">
+              <span>Level 1-3 Implementation</span>
+            </div>
+          </div>
+          
+          <!-- Case Study 2 -->
+          <div class="bg-gradient-to-br from-emerald-900/10 to-emerald-900/5 border border-emerald-500/20 rounded-2xl p-8">
+            <div class="text-4xl font-bold text-emerald-400 mb-2">52%</div>
+            <div class="text-xl font-semibold mb-4">Conversion Rate Boost</div>
+            <p class="text-neutral-400 mb-4">E-commerce brand focused on Level 2 (Convert) and dramatically improved their sales funnel.</p>
+            <div class="flex items-center gap-2 text-sm text-emerald-400">
+              <span>Level 2 Focus</span>
+            </div>
+          </div>
+          
+          <!-- Case Study 3 -->
+          <div class="bg-gradient-to-br from-teal-900/10 to-teal-900/5 border border-teal-500/20 rounded-2xl p-8">
+            <div class="text-4xl font-bold text-teal-400 mb-2">8.4x</div>
+            <div class="text-xl font-semibold mb-4">Customer Lifetime Value</div>
+            <p class="text-neutral-400 mb-4">Service business mastered Level 3 (Grow) and transformed customers into advocates.</p>
+            <div class="flex items-center gap-2 text-sm text-teal-400">
+              <span>Level 3 Mastery</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- ROI Calculator -->
+        <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-6 text-center">Calculate Your Potential ROI</h3>
+          <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div>
+              <label class="block text-sm font-medium mb-2">Monthly Visitors</label>
+              <input type="number" id="calc-visitors" class="w-full px-4 py-2 bg-neutral-800 rounded-lg" placeholder="10000" value="10000">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Current Conversion Rate (%)</label>
+              <input type="number" id="calc-conversion" class="w-full px-4 py-2 bg-neutral-800 rounded-lg" placeholder="2" value="2" step="0.1">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Average Order Value ($)</label>
+              <input type="number" id="calc-aov" class="w-full px-4 py-2 bg-neutral-800 rounded-lg" placeholder="100" value="100">
+            </div>
+          </div>
+          <div class="text-center">
+            <div class="mb-4">
+              <span class="text-neutral-400">Potential Monthly Revenue Increase:</span>
+              <div class="text-4xl font-bold text-green-400 mt-2" id="roi-result">$0</div>
+            </div>
+            <p class="text-sm text-neutral-500">*Based on average 35% improvement across all Elevate Framework levels</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- AI Integration -->
+    <section id="resources" class="container mx-auto px-4 py-20 border-t border-neutral-800 scroll-mt-20">
+      <div class="max-w-6xl mx-auto text-center">
+        <h2 class="text-3xl lg:text-4xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+          AI-Powered Acceleration
+        </h2>
+        <p class="text-xl text-neutral-400 mb-12 max-w-3xl mx-auto">
+          Every step of the Elevate Framework is enhanced with AI prompts and tools designed to accelerate your growth
+        </p>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {elevatePrompts.slice(0, 6).map((prompt) => (
+            <div class="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 rounded-xl p-6 hover:border-cyan-500/30 transition-all duration-300">
+              <h3 class="text-lg font-semibold mb-2">{prompt.data.title}</h3>
+              <p class="text-sm text-neutral-400">{prompt.data.description}</p>
+            </div>
+          ))}
+        </div>
+        
+        <a href="/prompts" class="inline-flex items-center gap-2 mt-8 text-cyan-400 hover:text-cyan-300 transition-colors">
+          View All AI Prompts
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="container mx-auto px-4 py-20 border-t border-neutral-800">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+          Ready to Elevate Your Business?
+        </h2>
+        <p class="text-xl text-neutral-400 mb-8">
+          Join thousands of businesses using the Elevate Framework to systematically grow their e-commerce revenue
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a href="/book" class="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105">
+            Read the Book
+          </a>
+          <a href="/prompts" class="px-8 py-4 border border-neutral-700 rounded-lg font-semibold hover:bg-neutral-800 transition-all duration-300">
+            Explore AI Prompts
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotateY(25deg); }
+      50% { transform: translateY(-20px) rotateY(25deg); }
+    }
+    
+    .animate-gradient {
+      background-size: 200% 200%;
+      animation: gradient 8s ease infinite;
+    }
+    
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .delay-1000 {
+      animation-delay: 1s;
+    }
+    
+    .transform-3d {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    
+    .rotate-y-25 {
+      transform: rotateY(25deg);
+    }
+    
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+  
+  <script>
+    // Diagnostic Tool Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const questions = document.querySelectorAll('.diagnostic-question');
+      const results = document.getElementById('diagnostic-results');
+      const bottleneckResult = document.getElementById('bottleneck-result');
+      const restartBtn = document.getElementById('restart-diagnostic');
+      let currentQuestion = 0;
+      let scores = { reach: 0, sales: 0, value: 0 };
+      
+      // Handle option clicks
+      document.querySelectorAll('.diagnostic-option').forEach(option => {
+        option.addEventListener('click', () => {
+          const category = option.dataset.category;
+          const score = parseInt(option.dataset.score);
+          
+          if (category) scores[category] += score;
+          
+          // Hide current question
+          questions[currentQuestion].classList.add('hidden');
+          currentQuestion++;
+          
+          // Show next question or results
+          if (currentQuestion < questions.length) {
+            questions[currentQuestion].classList.remove('hidden');
+          } else {
+            showResults();
+          }
+        });
+      });
+      
+      // Show results
+      function showResults() {
+        document.getElementById('diagnostic-quiz').classList.add('hidden');
+        results.classList.remove('hidden');
+        
+        // Determine bottleneck
+        let bottleneck = 'reach';
+        let minScore = scores.reach;
+        
+        if (scores.sales < minScore) {
+          bottleneck = 'sales';
+          minScore = scores.sales;
+        }
+        if (scores.value < minScore) {
+          bottleneck = 'value';
+        }
+        
+        // Display result
+        const bottleneckInfo = {
+          reach: {
+            title: 'Level 1: ATTRACT (Reach Problem)',
+            description: 'Your biggest opportunity is getting more qualified traffic. Focus on HOOK, GIFT, and IDENTIFY steps.',
+            color: 'text-purple-400',
+            bgColor: 'bg-purple-900/20',
+            borderColor: 'border-purple-500/30'
+          },
+          sales: {
+            title: 'Level 2: CONVERT (Sales Problem)',
+            description: 'You have traffic but need to convert more visitors into customers. Focus on ENGAGE, SELL, and NURTURE.',
+            color: 'text-pink-400',
+            bgColor: 'bg-pink-900/20',
+            borderColor: 'border-pink-500/30'
+          },
+          value: {
+            title: 'Level 3: GROW (Value Problem)',
+            description: 'You\'re making sales but missing opportunities to maximize customer value. Focus on UPSELL, UNDERSTAND, and SHARE.',
+            color: 'text-blue-400',
+            bgColor: 'bg-blue-900/20',
+            borderColor: 'border-blue-500/30'
+          }
+        };
+        
+        const info = bottleneckInfo[bottleneck];
+        bottleneckResult.innerHTML = `
+          <div class="${info.bgColor} ${info.borderColor} border rounded-xl p-6">
+            <h4 class="text-xl font-bold ${info.color} mb-2">${info.title}</h4>
+            <p class="text-neutral-300">${info.description}</p>
+          </div>
+        `;
+      }
+      
+      // Restart diagnostic
+      restartBtn?.addEventListener('click', () => {
+        currentQuestion = 0;
+        scores = { reach: 0, sales: 0, value: 0 };
+        questions.forEach((q, i) => {
+          q.classList.toggle('hidden', i !== 0);
+        });
+        results.classList.add('hidden');
+        document.getElementById('diagnostic-quiz').classList.remove('hidden');
+      });
+    });
+    
+    // ROI Calculator
+    document.addEventListener('DOMContentLoaded', () => {
+      const visitorsInput = document.getElementById('calc-visitors');
+      const conversionInput = document.getElementById('calc-conversion');
+      const aovInput = document.getElementById('calc-aov');
+      const roiResult = document.getElementById('roi-result');
+      
+      function calculateROI() {
+        const visitors = parseFloat(visitorsInput?.value || 0);
+        const conversion = parseFloat(conversionInput?.value || 0) / 100;
+        const aov = parseFloat(aovInput?.value || 0);
+        
+        const currentRevenue = visitors * conversion * aov;
+        const improvedConversion = conversion * 1.35; // 35% improvement
+        const improvedRevenue = visitors * improvedConversion * aov;
+        const increase = improvedRevenue - currentRevenue;
+        
+        if (roiResult) {
+          roiResult.textContent = `$${increase.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+        }
+      }
+      
+      // Calculate on input change
+      [visitorsInput, conversionInput, aovInput].forEach(input => {
+        input?.addEventListener('input', calculateROI);
+      });
+      
+      // Initial calculation
+      calculateROI();
+    });
+    
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+    
+    // Parallax effect on scroll
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallax = document.querySelector('.animate-float');
+      if (parallax) {
+        parallax.style.transform = `translateY(${scrolled * 0.5}px) rotateY(25deg)`;
+      }
+    });
+  </script>
+</Layout>

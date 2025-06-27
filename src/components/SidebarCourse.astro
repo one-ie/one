@@ -82,23 +82,63 @@ const navigationItems = isCoursePage ? courseNavigation : mainNavigation;
       }
     </div>
 
-    <!-- Chat Link (Replacing Theme Toggle) -->
+    <!-- Theme Toggle -->
     <div
       class="flex items-center justify-center bg-[var(--one-background-nav)]"
     >
-      <a
-        href="/ai"
-        class="w-[var(--one-sidebar-width)] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,14%,0.5)] transition-colors duration-200 group relative"
-        data-tooltip="Chat with AI"
-        aria-label="Chat with AI"
+      <button
+        id="theme-toggle"
+        class="w-[var(--one-sidebar-width)] h-16 flex items-center justify-center hover:bg-[hsla(0,0%,14%,0.5)] transition-colors duration-200"
+        aria-label="Toggle theme"
       >
-        <div class="w-5 h-5 flex items-center justify-center">
-          <MessageSquare
-            className="w-full h-full text-foreground/60 group-hover:text-foreground/90 transition-colors"
-            strokeWidth={1.25}
-          />
+        <div class="w-10 h-10 flex items-center justify-center">
+          <!-- Light theme icon (sun) -->
+          <svg
+            class="w-5 h-5 text-foreground/60 dark:hidden high-contrast:hidden"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            ></path>
+          </svg>
+          <!-- Dark theme icon (moon) -->
+          <svg
+            class="w-5 h-5 text-foreground/60 hidden dark:block high-contrast:hidden"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            ></path>
+          </svg>
+          <!-- High contrast icon -->
+          <svg
+            class="w-5 h-5 text-foreground/60 hidden high-contrast:block"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
+            ></path>
+          </svg>
         </div>
-      </a>
+      </button>
     </div>
   </nav>
 </aside>
@@ -142,6 +182,15 @@ const navigationItems = isCoursePage ? courseNavigation : mainNavigation;
 </style>
 
 <script>
+  // Theme toggle functionality
+  const themeToggle = document.getElementById("theme-toggle");
+
+  themeToggle?.addEventListener("click", () => {
+    if (window.cycleTheme) {
+      window.cycleTheme();
+    }
+  });
+
   // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach((element) => {
     const anchor = element as HTMLAnchorElement;
