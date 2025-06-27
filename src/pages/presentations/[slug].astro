@@ -21,7 +21,7 @@ const slides: string[] = body
     <>
       <div class="reveal">
         <div class="slides">
-          {slides.map((slide: string, idx: number) => (
+          {slides.map((slide: string) => (
             <section set:html={marked.parse(slide)} />
           ))}
         </div>
