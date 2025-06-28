@@ -1,5 +1,7 @@
 # 🚀 ONE Web - Astro AI Chat & Book Generation Platform
 
+claude --dangerously-skip-permissions
+
 > A modern Astro application with AI-powered chat interface and professional book generation capabilities.
 
 ONE Web is a cutting-edge Astro application that combines AI chat capabilities with professional EPUB book generation. Built with modern web technologies, it provides a seamless experience for creating interactive AI-powered content and generating professional publications.

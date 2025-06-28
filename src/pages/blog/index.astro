@@ -4,15 +4,28 @@ import { getCollection } from "astro:content";
 import { Card } from "@/components/ui/card";
 import { Calendar, Clock } from "lucide-react";
 import type { CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
+// Removed Image import since we'll use regular img tags for public folder images
+
+// Helper function to safely parse dates
+function safeParseDate(dateValue: any): Date {
+  if (!dateValue) return new Date();
+  if (dateValue instanceof Date) return dateValue;
+  const parsed = new Date(dateValue);
+  return isNaN(parsed.getTime()) ? new Date() : parsed;
+}
 
 // Get all Blog entries sorted by date
 const entries = (await getCollection("blog"))
+  .filter((entry: CollectionEntry<"blog">) => 
+    // Only include entries with valid frontmatter
+    entry.data && (entry.data.title || entry.data.description)
+  )
   .sort((a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => 
-    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+    safeParseDate(b.data.date).getTime() - safeParseDate(a.data.date).getTime()
   );
 
-function formatDate(date: Date) {
+function formatDate(dateValue: any): string {
+  const date = safeParseDate(dateValue);
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "short",
@@ -20,7 +33,8 @@ function formatDate(date: Date) {
   }).format(date);
 }
 
-function estimateReadingTime(text: string): number {
+function estimateReadingTime(text: string | undefined): number {
+  if (!text) return 1;
   const wordsPerMinute = 200;
   const words = text.trim().split(/\s+/).length;
   return Math.ceil(words / wordsPerMinute);
@@ -37,14 +51,19 @@ function estimateReadingTime(text: string): number {
       <article class="mb-12 sm:mb-16 lg:mb-24">
         <a href={`/blog/${entries[0].slug}`} class="group block relative">
           <div class="relative aspect-[16/9] sm:aspect-[21/9] w-full overflow-hidden rounded-lg sm:rounded-xl">
-            {entries[0].data.picture && (
-              <Image
+            {entries[0].data.picture ? (
+              <img
                 src={entries[0].data.picture}
-                alt={entries[0].data.title}
-                width={1600}
-                height={686}
-                quality={90}
+                alt={entries[0].data.title || "Blog post image"}
                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="eager"
+              />
+            ) : (
+              <img
+                src="/images/placeholders/blog-placeholder-3.jpg"
+                alt="Blog post placeholder"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="eager"
               />
             )}
             <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent" />
@@ -57,7 +76,7 @@ function estimateReadingTime(text: string): number {
                 </div>
                 <span class="text-xs sm:text-sm flex items-center text-white/90 backdrop-blur-sm bg-black/20 px-2.5 sm:px-3 py-1 rounded-full">
                   <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 text-white/70" />
-                  {formatDate(new Date(entries[0].data.date))}
+                  {formatDate(entries[0].data.date)}
                 </span>
                 <span class="text-xs sm:text-sm flex items-center text-white/90 backdrop-blur-sm bg-black/20 px-2.5 sm:px-3 py-1 rounded-full">
                   <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 text-white/70" />
@@ -81,17 +100,23 @@ function estimateReadingTime(text: string): number {
       {entries.slice(1).map((entry: CollectionEntry<"blog">) => (
         <Card className="group overflow-hidden border-muted/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
           <a href={`/blog/${entry.slug}`} class="block">
-            {entry.data.picture && (
-              <div class="aspect-[16/9] w-full overflow-hidden">
-                <Image
+            <div class="aspect-[16/9] w-full overflow-hidden">
+              {entry.data.picture ? (
+                <img
                   src={entry.data.picture}
-                  alt={entry.data.title}
-                  width={600}
-                  height={338}
+                  alt={entry.data.title || "Blog post image"}
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
                 />
-              </div>
-            )}
+              ) : (
+                <img
+                  src="/images/placeholders/blog-placeholder-3.jpg"
+                  alt="Blog post placeholder"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              )}
+            </div>
             <div class="p-6">
               <div class="flex flex-wrap items-center gap-3 mb-4 text-sm">
                 <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-primary/10 text-primary border-transparent">
@@ -99,7 +124,7 @@ function estimateReadingTime(text: string): number {
                 </div>
                 <span class="text-sm flex items-center text-muted-foreground">
                   <Calendar className="w-4 h-4 mr-1.5 text-primary/60" />
-                  {formatDate(new Date(entry.data.date))}
+                  {formatDate(entry.data.date)}
                 </span>
               </div>
               <h2 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">

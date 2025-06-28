@@ -34,6 +34,7 @@ const BlogSchema = z.object({
   author: z.string().optional(),
   category: z.string().optional(),
   featured: z.boolean().optional(),
+  picture: z.string().optional(), // Add picture field for blog images
 });
 
 const TabSchema = z.object({
