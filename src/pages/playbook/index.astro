@@ -74,6 +74,10 @@ import Landing from '../../layouts/Landing.astro';
             <img src="/playbook/clean/icon-stop-clean.svg" alt="Stop" />
           </div>
           <span>Stop</span>
+          <!-- Person positioned at Stop -->
+          <div class="animated-person">
+            <img src="/playbook/clean/icon-person-standalone.svg" alt="Journey Person" />
+          </div>
         </div>
         <div class="grid-item action-item">
           <div class="icon-circle">
@@ -190,7 +194,7 @@ import Landing from '../../layouts/Landing.astro';
 
   /* Action Items */
   .action-item {
-    background-color: #1C3354;
+    background-color: #2B2B2B;
     border: 2px solid #4B4B4B;
     gap: 0.75rem;
     position: relative;
@@ -272,6 +276,25 @@ import Landing from '../../layouts/Landing.astro';
     text-transform: uppercase;
   }
 
+  /* Person positioned at Stop */
+  .animated-person {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    z-index: 10;
+    pointer-events: none;
+    /* Position in bottom left corner of the stop square */
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .animated-person img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  }
+
   @media (max-width: 768px) {
     .playbook-main {
       padding: 1rem;
@@ -315,6 +338,11 @@ import Landing from '../../layouts/Landing.astro';
 
     .foundation-item span {
       font-size: 1rem;
+    }
+
+    .animated-person {
+      width: 25px;
+      height: 25px;
     }
 
   }
