@@ -8,28 +8,78 @@ import Landing from '../../layouts/Landing.astro';
       <!-- 4x4 Grid: Exact Figma Layout -->
       <div class="playbook-grid">
         <!-- Row 1: GROW + Actions -->
-        <div class="grid-item"><img src="/playbook/level-grow.svg" alt="Grow Level" /></div>
-        <div class="grid-item"><img src="/playbook/icon-upsell.svg" alt="Upsell" /></div>
-        <div class="grid-item"><img src="/playbook/icon-educate.svg" alt="Educate" /></div>
-        <div class="grid-item"><img src="/playbook/icon-share.svg" alt="Share" /></div>
+        <div class="grid-item section-item">
+          <img src="/playbook/level-grow.svg" alt="Grow Level" />
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-upsell-clean.svg" alt="Upsell" />
+          </div>
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-educate-clean.svg" alt="Educate" />
+          </div>
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-share-complete.svg" alt="Share" />
+          </div>
+        </div>
 
         <!-- Row 2: CONVERT + Actions -->
-        <div class="grid-item"><img src="/playbook/level-convert.svg" alt="Convert Level" /></div>
-        <div class="grid-item"><img src="/playbook/icon-nurture.svg" alt="Nurture" /></div>
-        <div class="grid-item"><img src="/playbook/icon-sell.svg" alt="Sell" /></div>
-        <div class="grid-item"><img src="/playbook/icon-engage.svg" alt="Engage" /></div>
+        <div class="grid-item section-item">
+          <img src="/playbook/level-convert.svg" alt="Convert Level" />
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-nurture-clean.svg" alt="Nurture" />
+          </div>
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-sell-cart-fixed.svg" alt="Sell" />
+          </div>
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-engage-clean.svg" alt="Engage" />
+          </div>
+        </div>
 
         <!-- Row 3: ATTRACT + Actions -->
-        <div class="grid-item"><img src="/playbook/level-attract.svg" alt="Attract Level" /></div>
-        <div class="grid-item"><img src="/playbook/icon-stop.svg" alt="Stop" /></div>
-        <div class="grid-item"><img src="/playbook/icon-gift.svg" alt="Gift" /></div>
-        <div class="grid-item"><img src="/playbook/icon-identify.svg" alt="Identify" /></div>
+        <div class="grid-item section-item">
+          <img src="/playbook/level-attract.svg" alt="Attract Level" />
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-stop-clean.svg" alt="Stop" />
+          </div>
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-gift-clean.svg" alt="Gift" />
+          </div>
+        </div>
+        <div class="grid-item action-item">
+          <div class="icon-circle">
+            <img src="/playbook/clean/icon-identify-clean.svg" alt="Identify" />
+          </div>
+        </div>
 
         <!-- Row 4: Foundation -->
-        <div class="grid-item"><img src="/playbook/foundation-you.svg" alt="YOU Foundation" /></div>
-        <div class="grid-item"><img src="/playbook/foundation-company.svg" alt="Company Foundation" /></div>
-        <div class="grid-item"><img src="/playbook/foundation-market.svg" alt="Market Foundation" /></div>
-        <div class="grid-item"><img src="/playbook/foundation-customer.svg" alt="Customer Foundation" /></div>
+        <div class="grid-item foundation-item">
+          <img src="/playbook/foundation-you.svg" alt="YOU Foundation" />
+        </div>
+        <div class="grid-item foundation-item">
+          <img src="/playbook/foundation-company.svg" alt="Company Foundation" />
+        </div>
+        <div class="grid-item foundation-item">
+          <img src="/playbook/foundation-market.svg" alt="Market Foundation" />
+        </div>
+        <div class="grid-item foundation-item">
+          <img src="/playbook/foundation-customer.svg" alt="Customer Foundation" />
+        </div>
       </div>
     </div>
   </main>
@@ -65,13 +115,15 @@ import Landing from '../../layouts/Landing.astro';
     background-color: #2B2B2B;
     border: 2px solid #4B4B4B;
     border-radius: 0.5rem;
-    padding: 0.5rem;
+    padding: 1rem;
     transition: all 0.2s ease;
     cursor: pointer;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     aspect-ratio: 1;
+    position: relative;
   }
 
   .grid-item:hover {
@@ -80,7 +132,95 @@ import Landing from '../../layouts/Landing.astro';
     box-shadow: 0 4px 12px rgba(28, 51, 84, 0.3);
   }
 
-  .grid-item img {
+  /* Section Items (Left Column) */
+  .section-item {
+    background-color: #2B2B2B;
+    border: 2px solid #4B4B4B;
+  }
+
+  .section-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Action Items */
+  .action-item {
+    background-color: #1C3354;
+    border: 2px solid #4B4B4B;
+    gap: 0.75rem;
+    position: relative;
+  }
+
+  /* Icon Circle */
+  .icon-circle {
+    width: 120px;
+    height: 120px;
+    background-color: #222222;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+
+  .icon-circle img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+  }
+
+  /* Featured Icon Circle */
+  .featured-circle {
+    background-color: #1B3153;
+  }
+
+  /* Person Icon for Sell */
+  .person-icon {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    opacity: 0.8;
+  }
+
+  .person-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Action Item Text */
+  .action-item span {
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  /* Featured Items (Blue highlight) */
+  .featured {
+    background-color: #1C3354 !important;
+    border-color: #4B4B4B !important;
+  }
+
+  .featured:hover {
+    border-color: #1C3354 !important;
+    box-shadow: 0 4px 12px rgba(28, 51, 84, 0.3) !important;
+  }
+
+  /* Foundation Items */
+  .foundation-item {
+    background-color: #1B1B1B;
+    border: 2px solid #3B3B3B;
+  }
+
+  .foundation-item img {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -99,8 +239,26 @@ import Landing from '../../layouts/Landing.astro';
     }
     
     .grid-item {
-      padding: 0.25rem;
+      padding: 0.5rem;
     }
+
+    .icon-circle {
+      width: 120px;
+      height: 120px;
+    }
+
+    .icon-circle img {
+      width: 70px;
+      height: 70px;
+    }
+
+    .person-icon {
+      width: 30px;
+      height: 30px;
+      bottom: 10px;
+      left: 10px;
+    }
+
   }
 
   @media (max-width: 480px) {
