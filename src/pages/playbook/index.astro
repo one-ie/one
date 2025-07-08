@@ -74,10 +74,6 @@ import Landing from '../../layouts/Landing.astro';
             <img src="/playbook/clean/icon-stop-clean.svg" alt="Stop" />
           </div>
           <span>Stop</span>
-          <!-- Person positioned at Stop -->
-          <div class="animated-person">
-            <img src="/playbook/clean/icon-person-standalone.svg" alt="Journey Person" />
-          </div>
         </div>
         <div class="grid-item action-item">
           <div class="icon-circle">
@@ -105,6 +101,11 @@ import Landing from '../../layouts/Landing.astro';
         <div class="grid-item foundation-item">
           <span>Customer</span>
         </div>
+      </div>
+      
+      <!-- Person animating through Stop → Gift → Identify -->
+      <div class="animated-person">
+        <img src="/playbook/clean/icon-person-standalone.svg" alt="Journey Person" />
       </div>
     </div>
   </main>
@@ -276,16 +277,37 @@ import Landing from '../../layouts/Landing.astro';
     text-transform: uppercase;
   }
 
-  /* Person positioned at Stop */
+  /* Person animating through Stop → Gift → Identify */
   .animated-person {
     position: absolute;
     width: 100px;
     height: 100px;
     z-index: 10;
     pointer-events: none;
-    /* Position in bottom left corner of the stop square */
-    bottom: 0px;
-    left: 0px;
+    animation: attractJourney 6s ease-in-out infinite;
+  }
+
+  @keyframes attractJourney {
+    0% {
+      /* Stop position: Row 3, Column 2 */
+      left: calc(25% + 1rem);
+      bottom: calc(25% + 1rem);
+    }
+    33% {
+      /* Gift position: Row 3, Column 3 */
+      left: calc(50% + 2rem);
+      bottom: calc(25% + 1rem);
+    }
+    66% {
+      /* Identify position: Row 3, Column 4 */
+      left: calc(75% + 3rem);
+      bottom: calc(25% + 1rem);
+    }
+    100% {
+      /* Return to Stop */
+      left: calc(25% + 1rem);
+      bottom: calc(25% + 1rem);
+    }
   }
 
   .animated-person img {
