@@ -110,7 +110,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.0",
-    "@astrojs/node": "^9.2.2",
+    "@astrojs/node": "^9.4.1",
     "@astrojs/react": "^4.3.0",
     "@astrojs/tailwind": "^6.0.2",
     "@astrojs/vercel": "^8.2.0",
