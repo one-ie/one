@@ -127,7 +127,7 @@
     "@types/reveal.js": "^5.2.0",
     "@vitejs/plugin-react": "^4.6.0",
     "@vitest/ui": "^3.2.4",
-    "astro": "^5.10.1",
+    "astro": "^5.13.1",
     "autoprefixer": "^10.4.21",
     "gray-matter": "^4.0.3",
     "happy-dom": "^17.6.3",
