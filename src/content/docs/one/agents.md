@@ -6,16 +6,35 @@ tags:
   - agents
 order: 1
 ---
-**ONE Agent System - Software Documentation (Draft v0.1)**
+**ONE Agent System - Software Documentation (v2.0)**
 
 **1. Introduction & System Overview**
 
-*   **Purpose:** This document outlines the architecture, functionality, and workflow of the ONE Agent System. This system leverages a team of specialized AI agents, guided by the **Elevate Ecommerce Framework** and utilizing the **ONE AI Prompt Playbook**, to assist users (e.g., Ecom Owners, Marketers, Students) in navigating the customer journey and executing marketing/growth strategies.
+*   **Purpose:** This document outlines the architecture, functionality, and workflow of the ONE Agent System. This system leverages a team of specialized AI agents built on the **ONE Platform's 6-Dimension Ontology**, guided by the **Elevate Ecommerce Framework** and utilizing the **ONE AI Prompt Playbook**, to assist users (e.g., Ecom Owners, Marketers, Students) in navigating the customer journey and executing marketing/growth strategies.
 *   **Core Concept:** Instead of a single general AI, the system employs a collaborative team of distinct AI agents, each with a specific role and expertise. These agents interact with the user and potentially each other, orchestrated by a lead agent (**Director**), to provide guidance and generate assets aligned with the Elevate Framework.
-*   **Technology Stack:** Built using [Specify key frontend tech - e.g., Astro, React, TailwindCSS], connected to a [Specify key backend - e.g., Convex] backend for state management and AI orchestration, and leveraging AI models via [Specify primary API provider(s) - e.g., OpenAI, Anthropic, Google Gemini via appropriate APIs/SDKs].
+*   **6-Dimension Foundation:** All agents operate within the ONE Platform's 6-dimension ontology (Organizations → People → Things → Connections → Events → Knowledge), ensuring multi-tenant isolation, clear authorization, and complete audit trails.
+*   **Technology Stack:** Built using Astro, React, TypeScript, and Tailwind CSS, connected to a Convex backend for state management and AI orchestration, and leveraging AI models via OpenAI, Anthropic, and Google Gemini APIs.
 *   **Deployment:** Successfully tested in local development environments and deployed via Vercel.
 
 **2. System Architecture**
+
+**2.1 The 6-Dimension Ontology Foundation**
+
+All ONE Platform features, including the Agent System, map to the 6-dimension ontology:
+
+1. **Organizations** - Each customer company is an organization with isolated data
+2. **People** - Users with roles (platform_owner, org_owner, org_user, customer)
+3. **Things** - Agents, conversations, messages, prompts (66 entity types)
+4. **Connections** - Agent assignments, user memberships, message threads (25 types)
+5. **Events** - Message sent, agent invoked, task completed (67 event types)
+6. **Knowledge** - RAG context, embeddings, learned patterns
+
+**All database queries MUST filter by `organizationId` for multi-tenant isolation.**
+**All events MUST include `actorId` to track who performed the action.**
+
+See `/one/connections/ontology.md` for complete specification.
+
+**2.2 Application Architecture**
 
 *   **Frontend (`/src`):**
     *   **UI Components (`/src/components/ui`):** Reusable Shadcn UI components for the interface.
@@ -28,12 +47,13 @@ order: 1
     *   **State Management:** Primarily managed via Convex backend, with React hooks (`useQuery`, `useMutation`) for frontend interaction. Potentially uses React Context (`ChatContext`) for localized UI state.
     *   **Routing:** Handled by `type-route` (`/src/routes.ts`).
 *   **Backend (`/convex`):**
-    *   **Database Schema (`/convex/schema.ts`):** Defines tables for users, conversations, agents, participants, messages, etc. using Convex schema definitions.
-    *   **Authentication (`/convex/auth.ts`, `auth.config.ts`):** Manages user authentication using `@convex-dev/auth`.
-    *   **Core Logic (Mutations & Queries):** Functions organised by feature (e.g., `/convex/agents/mutations.ts`, `/convex/conversations/queries.ts`) handling data operations and business logic.
+    *   **Database Schema (`/convex/schema.ts`):** Implements the 6-dimension ontology using plain Convex schema (no Convex Ents). Tables: organizations, things, connections, events, knowledge.
+    *   **Authentication (`/convex/auth.ts`, `auth.config.ts`):** Manages user authentication using `@convex-dev/auth`. Users are "creator" things with role metadata.
+    *   **Core Logic (Mutations & Queries):** Functions organised by feature (e.g., `/convex/agents/mutations.ts`, `/convex/conversations/queries.ts`) handling data operations and business logic. **All queries include organizationId filtering.**
     *   **AI Agent Logic (`/convex/ai/`):**
         *   Contains internal actions and functions for processing messages, interacting with AI models, handling tool usage, managing history, and applying specific agent instructions/personalities.
         *   Orchestration likely involves internal actions calling specific AI generation functions (e.g., `agentReplyToMessage`, potentially new ones per agent role).
+        *   **Each agent action logs events with actorId for complete audit trails.**
     *   **HTTP Endpoints (`/convex/http.ts`):** Handles any necessary webhooks or external API integrations.
 *   **Shared Utilities (`/shared`):** Common functions and types (e.g., mentions parsing, tools definitions) used by both frontend and backend.
 
