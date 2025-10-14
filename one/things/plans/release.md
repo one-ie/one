@@ -129,49 +129,71 @@ cd apps/one
 git submodule add https://github.com/one-ie/docs.git docs
 ```
 
-## Release Workflow
+## Release Workflow (Real Velocity Edition)
 
-### Phase 1: Preparation
-1. Ensure all changes committed in development workspace
-2. Run tests and validation
-3. Update version numbers
-4. Update CHANGELOG.md
+**Total Time: 15-20 minutes from start to live** 🚀
 
-### Phase 2: Sync to Staging
-1. Sync `/one` → `cli/one` and `apps/one/one`
-2. Sync `/.claude` → `cli/.claude` and `apps/one/.claude`
-3. Sync core docs → `cli/` and `apps/one/`
-4. Update submodules in `apps/one/`:
-   - `git submodule update --remote web`
-   - `git submodule update --remote docs`
+### Phase 1-2: Automated (10 minutes)
 
-### Phase 3: Publish CLI Package
-1. `cd cli`
-2. `npm version [major|minor|patch]`
-3. `npm publish`
-4. Create git tag
-5. Push to one-ie/one
+Run the release script - it handles everything:
 
-### Phase 4: Publish Web Application
-1. `cd web` (or `apps/one/web` if using submodule)
-2. Update version
-3. Build and test
-4. Push to one-ie/web
-5. Deploy to Cloudflare Pages
+```bash
+# Patch release (2.0.6 → 2.0.7)
+./scripts/release.sh patch
 
-### Phase 5: Publish Documentation
-1. `cd docs` (or `apps/one/docs` if using submodule)
-2. Update version
-3. Build and test
-4. Push to one-ie/docs
-5. Deploy to docs site
+# Minor release (2.0.7 → 2.1.0)
+./scripts/release.sh minor
 
-### Phase 6: Update Main Package
-1. `cd apps/one`
-2. Commit all changes
-3. Create release tag
-4. Push to one-ie/one
-5. Create GitHub release with notes
+# Major release (2.1.0 → 3.0.0)
+./scripts/release.sh major
+```
+
+**What happens automatically:**
+- ✅ Validate prerequisites (git, directories, files)
+- ✅ Push core repos (one/, web/, backend/) to GitHub
+- ✅ Sync documentation (one/ → cli/one/ and apps/one/one/)
+- ✅ Sync .claude configuration
+- ✅ Sync core docs (CLAUDE.md, README.md, LICENSE.md)
+- ✅ Bump versions in package.json files
+- ✅ Update submodules
+- ✅ Commit and push cli/ and apps/one/
+- ✅ Create git tags (v2.0.7, etc.)
+- ✅ Push tags to GitHub
+
+### Phase 3: Manual - npm Publish (2 minutes)
+
+```bash
+cd cli
+npm login  # If needed
+npm publish --access public
+
+# Verify
+npx oneie@latest --version
+```
+
+### Phase 4: Manual - Cloudflare Deploy (3 minutes)
+
+```bash
+cd web
+bun run build
+wrangler pages deploy dist --project-name=one-platform
+
+# Live at https://one.ie in seconds
+```
+
+### Phase 5: Optional - GitHub Releases (5 minutes)
+
+```bash
+# Use GitHub CLI (fastest)
+gh release create v2.0.7 --title "v2.0.7" --notes "Release notes" --repo one-ie/cli
+gh release create v2.0.7 --title "v2.0.7" --notes "Release notes" --repo one-ie/one
+```
+
+### Phase 6: Announce (5 minutes)
+
+- Tweet: "🚀 ONE v2.0.7 released!"
+- Discord/Slack announcement
+- Update one.ie homepage
 
 ## Release Script
 
