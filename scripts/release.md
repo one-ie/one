@@ -243,64 +243,71 @@ Version numbers follow **Semantic Versioning** (semver):
 
 ## Post-Release Tasks
 
-After running the release script and publishing to npm:
+After running the release script, complete these **manual steps** for **real velocity**:
 
-### 1. Create GitHub Releases
-
-For each tagged repository, create a GitHub release:
+### Step 12: Publish to npm ⚡️ (2 minutes)
 
 ```bash
-# Navigate to each repo on GitHub
-# Click "Releases" → "Create a new release"
-# Select the version tag (e.g., v2.0.0)
-# Add release notes from changelog
+cd cli
+npm login  # If not already logged in
+npm publish --access public
+
+# Verify instantly
+npx oneie@latest --version  # Should show new version
 ```
 
-### 2. Update Documentation Site
+**Why manual?** Safety - prevents accidental publishes.
 
-Deploy the latest docs:
-
-```bash
-cd docs/
-npm run build
-wrangler pages deploy dist --project-name=one-docs
-```
-
-### 3. Test the CLI
-
-Verify the npm package works:
+### Step 13: Deploy to Cloudflare Pages ⚡️ (3 minutes)
 
 ```bash
-# Test global installation
-npm install -g oneie
-oneie --version
-oneie init my-project
-
-# Test npx usage
-npx oneie@latest --version
-npx oneie@latest init my-project
-
-# Verify submodules and structure
-cd my-project
-ls -la  # Should see: one/, web/, docs/, .claude/
-```
-
-### 4. Update Cloudflare Pages
-
-Deploy the web frontend:
-
-```bash
-cd web/
+cd web
 bun run build
-wrangler pages deploy dist --project-name=one-platform
+wrangler pages deploy dist --project-name=one-web
+
+# Live in seconds at:
+# - Production: https://web.one.ie
+# - Preview: https://a7b61736.one-web-eqz.pages.dev
 ```
 
-### 5. Announce Release
+**Now automated!** The release script can deploy automatically (with confirmation).
 
-- Post to Discord/Slack
-- Tweet from @ONE_ie
-- Update website homepage with "What's New"
-- Send email to newsletter subscribers
+**Manual deployment:**
+```bash
+cd web && bun run build && wrangler pages deploy dist --project-name=one-web
+```
+
+### Optional: Create GitHub Releases 📝 (5 minutes)
+
+For each tagged repository:
+
+```bash
+# Use GitHub CLI (fastest)
+gh release create v2.0.6 --title "v2.0.6" --notes "Release notes here" --repo one-ie/cli
+gh release create v2.0.6 --title "v2.0.6" --notes "Release notes here" --repo one-ie/one
+
+# Or web UI
+# Navigate to each repo → Releases → Create new release → Select tag
+```
+
+### Test Installation ✅ (2 minutes)
+
+```bash
+# Test npx (no install needed)
+npx oneie@latest --version
+npx oneie@latest init test-project
+
+# Verify structure
+cd test-project && ls -la  # Should see: one/, .claude/, CLAUDE.md, etc.
+```
+
+### Announce Release 📢 (5 minutes)
+
+- Tweet: "🚀 ONE Platform v2.0.6 released! npx oneie"
+- Discord/Slack announcement
+- Update one.ie homepage "What's New" section
+
+**Total time for complete release: ~15-20 minutes from start to live** 🚀
 
 ## Repository URLs
 
@@ -490,14 +497,21 @@ For critical production bugs:
 
 A release is considered successful when:
 
-- [ ] All repositories pushed to GitHub
+### Automated (via scripts/release.sh) ✅
+- [x] All repositories pushed to GitHub (one, web, backend, cli, apps/one)
+- [x] Git tags created (v2.0.6)
+- [x] Documentation synced (one/ → cli/one/ and apps/one/one/)
+- [x] Versions bumped (cli/package.json)
+- [x] All submodules pointing to correct commits
+
+### Manual (Steps 12-13) ⏳
 - [ ] npm package published and installable via `npx oneie@latest`
 - [ ] `npx oneie init` creates correct directory structure
-- [ ] Web frontend deployed to Cloudflare Pages
-- [ ] Documentation site updated
-- [ ] All submodules pointing to correct commits
-- [ ] GitHub releases created for all tagged repos
+- [ ] Web frontend deployed to Cloudflare Pages (https://one.ie)
+- [ ] GitHub releases created for tagged repos (optional)
 - [ ] No critical bugs reported within 24 hours
+
+**Total Release Time: ~15-20 minutes** (10 min automated + 5-10 min manual)
 
 ## License
 

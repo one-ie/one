@@ -723,6 +723,52 @@ fi
 echo ""
 
 # ============================================================
+# STEP 13: DEPLOY WEB TO CLOUDFLARE PAGES
+# ============================================================
+
+section "Step 13: Deploy Web to Cloudflare Pages"
+
+step "13"
+
+if [ -d "web" ]; then
+    echo ""
+    if confirm "Deploy web to Cloudflare Pages?"; then
+        cd web
+
+        info "Building web..."
+        if bun run build; then
+            success "Build successful"
+
+            echo ""
+            info "Deploying to Cloudflare Pages..."
+            if wrangler pages deploy dist --project-name=one-web; then
+                success "Deployed to Cloudflare Pages"
+                echo ""
+                info "Live URLs:"
+                echo "  - Production: https://web.one.ie"
+                echo "  - Preview: https://a7b61736.one-web-eqz.pages.dev"
+            else
+                error "Cloudflare deployment failed"
+                warning "You can deploy manually later with:"
+                echo "  cd web && wrangler pages deploy dist --project-name=one-web"
+            fi
+        else
+            error "Build failed - skipping deployment"
+            warning "Fix build errors and deploy manually"
+        fi
+
+        cd "$WORKSPACE_ROOT"
+    else
+        warning "Skipped Cloudflare deployment"
+        info "Deploy later with: cd web && bun run build && wrangler pages deploy dist"
+    fi
+else
+    warning "web/ directory not found, skipping Cloudflare deployment"
+fi
+
+echo ""
+
+# ============================================================
 # FINAL SUMMARY
 # ============================================================
 
@@ -744,11 +790,20 @@ if [ "$VERSION_BUMP" != "none" ]; then
 fi
 echo "  ✓ Updated git submodules"
 echo "  ✓ Committed and pushed cli/ and apps/one/"
+echo "  ✓ Cloudflare Pages deployment (if confirmed)"
+echo ""
+
+echo -e "${CYAN}Live Deployments:${NC}"
+echo ""
+echo "  📦 npm: https://www.npmjs.com/package/oneie"
+echo "  🌐 Web: https://web.one.ie"
+echo "  🏷️ GitHub CLI: https://github.com/one-ie/cli"
+echo "  🏷️ GitHub One: https://github.com/one-ie/one"
 echo ""
 
 echo -e "${CYAN}Next Steps:${NC}"
 echo ""
-echo "  1. Publish to npm:"
+echo "  1. Publish to npm (if not done):"
 echo "     cd cli && npm publish --access public"
 echo ""
 echo "  2. Test installation:"
@@ -759,10 +814,10 @@ echo "  3. Create GitHub releases for tagged versions:"
 echo "     https://github.com/one-ie/cli/releases"
 echo "     https://github.com/one-ie/one/releases"
 echo ""
-echo "  4. Deploy web to Cloudflare Pages:"
-echo "     cd web && bun run build && wrangler pages deploy dist"
+echo "  4. Verify web deployment:"
+echo "     https://web.one.ie"
 echo ""
-echo "  5. Update documentation site:"
+echo "  5. Update documentation site (optional):"
 echo "     cd docs && npm run build && wrangler pages deploy dist"
 echo ""
 
