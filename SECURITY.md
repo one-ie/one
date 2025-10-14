@@ -1,19 +1,31 @@
-# Security Policy
+If you discover a security vulnerability in this project, **please help us by reporting it responsibly**. We appreciate your efforts to make the open-source community a safer place!
 
-## Supported Versions
+**How to report:**
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+1. **Do Not Create a Public Issue**  
+   To protect users, please do **not** disclose vulnerabilities publicly in issue trackers, discussions, or forums.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+2. **Contact Us Privately**  
+   Email us at [agent@one.ie](mailto:agent@one.ie) with the following details:
+   - A clear description of the vulnerability
+   - Steps to reproduce the issue
+   - Any proof-of-concept code or screenshots, if available
+   - Your contact information for follow-up
 
-## Reporting a Vulnerability
+3. **Response Expectations**  
+   - We aim to respond within **3 business days**.
+   - After confirming the issue, we will work with you to remediate it as quickly as possible.
+   - We may request additional information to better understand and address the vulnerability.
 
-Use this section to tell people how to report a vulnerability.
+4. **Responsible Disclosure**  
+   - We ask that you do **not** publicly disclose the vulnerability until we have had a chance to address it.
+   - We greatly value responsible reporters and may provide public acknowledgment for your contribution (with your permission).
 
-Email agent@one.ie
+---
+
+## :handshake: Thank You
+
+Your efforts help improve the security of the project and the community at large.  
+If you have any other questions or concerns about security, feel free to reach out to us.
+
+Stay safe and secure!  
