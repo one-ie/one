@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "startup": {
+      "enabled": true,
+      "script": ".claude/hooks/startup-optimizer.js",
+      "description": "Optimizes startup time using lazy loading system",
+      "timeout": 30000,
+      "priority": "high"
+    }
+  },
+  "performance": {
+    "lazy_loading": {
+      "enabled": true,
+      "critical_path_timeout": 3000,
+      "total_timeout": 10000,
+      "cache_enabled": true
+    },
+    "monitoring": {
+      "enabled": true,
+      "log_performance": true,
+      "save_reports": true
+    }
+  },
+  "version": "1.0.0"
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.anthropic.com/schemas/claude-code-hooks.json",
+  "extends": "./claude-code-hooks.json",
+  "config": {
+    "debug": true,
+    "categories": {
+      "formatting": {
+        "enabled": true
+      },
+      "testing": {
+        "enabled": true
+      },
+      "security": {
+        "enabled": true
+      },
+      "notifications": {
+        "enabled": true
+      }
+    }
+  }
+}

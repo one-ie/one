@@ -1,0 +1,32 @@
+{
+  "globalBypass": false,
+  "emergencyBypass": false,
+  "bypassedHooks": {},
+  "bypassedCategories": {},
+  "bypassHistory": [
+    {
+      "timestamp": "2025-07-14T02:19:38Z",
+      "target": "all",
+      "action": "true",
+      "reason": "Test bypass"
+    },
+    {
+      "timestamp": "2025-07-14T02:19:39Z",
+      "target": "all",
+      "action": "false",
+      "reason": "Test complete"
+    },
+    {
+      "timestamp": "2025-07-14T02:19:39Z",
+      "target": "emergency",
+      "action": "true",
+      "reason": "Test emergency"
+    },
+    {
+      "timestamp": "2025-07-14T02:19:39Z",
+      "target": "emergency",
+      "action": "false",
+      "reason": "Emergency test complete"
+    }
+  ]
+}

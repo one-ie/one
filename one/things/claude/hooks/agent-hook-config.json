@@ -1,0 +1,427 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-01-31T20:00:00Z",
+  "description": "Agent-specific hook configurations for Claude Code sub-agents",
+  
+  "globalDefaults": {
+    "enableStoryValidation": true,
+    "enableSecurityValidation": true,
+    "enablePerformanceMonitoring": true,
+    "enableQualityScoring": true,
+    "qualityThreshold": 7.0,
+    "performanceThreshold": 2000,
+    "enableNotifications": true
+  },
+  
+  "agentConfigurations": {
+    "marketing-director": {
+      "displayName": "Siobhan O'Brien - Marketing Director",
+      "teamPrefix": "marketing",
+      "specialization": "strategic-marketing",
+      "hooks": {
+        "storyValidation": {
+          "enabled": true,
+          "customRules": [
+            "strategic-framework-validation",
+            "irish-personality-integration",
+            "marketing-expertise-validation"
+          ],
+          "qualityThreshold": 7.5,
+          "additionalValidators": ["marketing-strategy-coherence"]
+        },
+        "securityValidation": {
+          "enabled": true,
+          "allowedTools": ["Read", "Write", "Edit", "Grep", "WebSearch", "WebFetch", "Task"],
+          "restrictedPaths": ["**/secrets/**", "**/.env*"],
+          "enforceToolRestrictions": true
+        },
+        "performanceMonitoring": {
+          "enabled": true,
+          "responseTimeThreshold": 3000,
+          "qualityCorrelationTracking": true,
+          "delegationEfficiencyTracking": true
+        },
+        "qualityScoring": {
+          "enabled": true,
+          "contentTypes": ["mission-plan", "marketing-content", "story-creation"],
+          "scoringCriteria": {
+            "strategicClarity": 0.3,
+            "actionability": 0.25,
+            "brandAlignment": 0.2,
+            "irishPersonality": 0.15,
+            "marketingExpertise": 0.1
+          },
+          "qualityThreshold": 7.5,
+          "trendTracking": true
+        },
+        "notifications": {
+          "enabled": true,
+          "channels": ["console", "file"],
+          "alertTypes": ["quality_decline", "performance_issues", "security_violations"]
+        }
+      }
+    },
+    
+    "engineering-director": {
+      "displayName": "Declan Murphy - Engineering Director",
+      "teamPrefix": "engineering",
+      "specialization": "technical-leadership",
+      "hooks": {
+        "storyValidation": {
+          "enabled": true,
+          "customRules": [
+            "technical-feasibility-validation",
+            "architectural-soundness-check",
+            "irish-personality-integration"
+          ],
+          "qualityThreshold": 8.0,
+          "additionalValidators": ["technical-accuracy-check"]
+        },
+        "securityValidation": {
+          "enabled": true,
+          "allowedTools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "Glob", "Grep", "Task"],
+          "restrictedPaths": ["**/secrets/**", "**/.env*", "**/private-keys/**"],
+          "enforceToolRestrictions": true,
+          "additionalSecurityChecks": ["code-injection-prevention"]
+        },
+        "performanceMonitoring": {
+          "enabled": true,
+          "responseTimeThreshold": 2500,
+          "qualityCorrelationTracking": true,
+          "technicalComplexityTracking": true
+        },
+        "qualityScoring": {
+          "enabled": true,
+          "contentTypes": ["technical-specification", "story-creation", "mission-plan"],
+          "scoringCriteria": {
+            "technicalAccuracy": 0.35,
+            "implementationClarity": 0.25,
+            "architecturalSoundness": 0.2,
+            "irishPersonality": 0.1,
+            "securityConsiderations": 0.1
+          },
+          "qualityThreshold": 8.0,
+          "trendTracking": true
+        },
+        "notifications": {
+          "enabled": true,
+          "channels": ["console", "file", "system"],
+          "alertTypes": ["security_violations", "technical_errors", "performance_issues"]
+        }
+      }
+    },
+    
+    "marketing-content-hooks": {
+      "displayName": "Aoife Lynch - Content Hooks Specialist",
+      "teamPrefix": "marketing",
+      "specialization": "content-hooks",
+      "hooks": {
+        "storyValidation": {
+          "enabled": true,
+          "customRules": [
+            "content-quality-validation",
+            "engagement-potential-check",
+            "irish-personality-integration"
+          ],
+          "qualityThreshold": 7.0,
+          "additionalValidators": ["hook-effectiveness-measurement"]
+        },
+        "securityValidation": {
+          "enabled": true,
+          "allowedTools": ["Read", "Write", "Edit", "Grep", "WebSearch"],
+          "restrictedPaths": ["**/secrets/**", "**/.env*"],
+          "enforceToolRestrictions": true
+        },
+        "performanceMonitoring": {
+          "enabled": true,
+          "responseTimeThreshold": 2000,
+          "contentCreationEfficiencyTracking": true
+        },
+        "qualityScoring": {
+          "enabled": true,
+          "contentTypes": ["marketing-content"],
+          "scoringCriteria": {
+            "hookEffectiveness": 0.4,
+            "engagementPotential": 0.25,
+            "brandConsistency": 0.2,
+            "irishPersonality": 0.1,
+            "callToAction": 0.05
+          },
+          "qualityThreshold": 7.0,
+          "viralPotentialTracking": true
+        },
+        "notifications": {
+          "enabled": true,
+          "channels": ["console", "file"],
+          "alertTypes": ["content_quality_issues", "engagement_decline"]
+        }
+      }
+    },
+    
+    "marketing-viral-growth": {
+      "displayName": "Dymphna Carey - Viral Growth Specialist", 
+      "teamPrefix": "marketing",
+      "specialization": "viral-mechanics",
+      "hooks": {
+        "storyValidation": {
+          "enabled": true,
+          "customRules": [
+            "viral-potential-validation",
+            "k-factor-analysis",
+            "irish-personality-integration"
+          ],
+          "qualityThreshold": 8.0,
+          "additionalValidators": ["network-effects-validation"]
+        },
+        "securityValidation": {
+          "enabled": true,
+          "allowedTools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "WebSearch"],
+          "restrictedPaths": ["**/secrets/**", "**/.env*"],
+          "enforceToolRestrictions": true
+        },
+        "performanceMonitoring": {
+          "enabled": true,
+          "responseTimeThreshold": 2500,
+          "viralMetricsTracking": true,
+          "scalabilityMonitoring": true
+        },
+        "qualityScoring": {
+          "enabled": true,
+          "contentTypes": ["marketing-content", "viral-strategy"],
+          "scoringCriteria": {
+            "viralPotential": 0.4,
+            "networkAnalysis": 0.3,
+            "sharingOptimization": 0.2,
+            "irishPersonality": 0.1
+          },
+          "qualityThreshold": 8.0,
+          "viralCoefficientTracking": true
+        },
+        "notifications": {
+          "enabled": true,
+          "channels": ["console", "file"],
+          "alertTypes": ["viral_potential_low", "k_factor_decline"]
+        }
+      }
+    },
+    
+    "engineering-developer": {
+      "displayName": "Darragh Whelan - Developer",
+      "teamPrefix": "engineering", 
+      "specialization": "code-development",
+      "hooks": {
+        "storyValidation": {
+          "enabled": true,
+          "customRules": [
+            "code-quality-validation",
+            "implementation-feasibility-check",
+            "irish-personality-integration"
+          ],
+          "qualityThreshold": 7.5,
+          "additionalValidators": ["code-standards-compliance"]
+        },
+        "securityValidation": {
+          "enabled": true,
+          "allowedTools": ["Read", "Write", "Edit", "MultiEdit", "Bash", "Glob", "Grep"],
+          "restrictedPaths": ["**/secrets/**", "**/.env*", "**/credentials/**"],
+          "enforceToolRestrictions": true,
+          "codeSecurityScanning": true
+        },
+        "performanceMonitoring": {
+          "enabled": true,
+          "responseTimeThreshold": 2000,
+          "codeGenerationEfficiencyTracking": true,
+          "testCoverageTracking": true
+        },
+        "qualityScoring": {
+          "enabled": true,
+          "contentTypes": ["technical-specification", "code-implementation"],
+          "scoringCriteria": {
+            "codeQuality": 0.4,
+            "implementationClarity": 0.3,
+            "testability": 0.15,
+            "documentation": 0.1,
+            "irishPersonality": 0.05
+          },
+          "qualityThreshold": 7.5,
+          "codeMetricsTracking": true
+        },
+        "notifications": {
+          "enabled": true,
+          "channels": ["console", "file"],
+          "alertTypes": ["code_quality_issues", "security_vulnerabilities"]
+        }
+      }
+    },
+    
+    "research-market-analyst": {
+      "displayName": "Niamh O'Donnell - Market Research Analyst",
+      "teamPrefix": "research",
+      "specialization": "market-intelligence",
+      "hooks": {
+        "storyValidation": {
+          "enabled": true,
+          "customRules": [
+            "research-rigor-validation",
+            "data-accuracy-check",
+            "irish-personality-integration"
+          ],
+          "qualityThreshold": 8.0,
+          "additionalValidators": ["source-credibility-validation"]
+        },
+        "securityValidation": {
+          "enabled": true,
+          "allowedTools": ["Read", "Grep", "WebSearch", "WebFetch"],
+          "restrictedPaths": ["**/secrets/**", "**/.env*"],
+          "enforceToolRestrictions": true,
+          "dataPrivacyProtection": true
+        },
+        "performanceMonitoring": {
+          "enabled": true,
+          "responseTimeThreshold": 3000,
+          "researchEfficiencyTracking": true,
+          "dataSourceDiversityTracking": true
+        },
+        "qualityScoring": {
+          "enabled": true,
+          "contentTypes": ["research-analysis"],
+          "scoringCriteria": {
+            "dataAccuracy": 0.3,
+            "analysisDepth": 0.25,
+            "insightQuality": 0.2,
+            "sourceCredibility": 0.15,
+            "irishPersonality": 0.1
+          },
+          "qualityThreshold": 8.0,
+          "insightValueTracking": true
+        },
+        "notifications": {
+          "enabled": true,
+          "channels": ["console", "file"],
+          "alertTypes": ["data_quality_issues", "source_credibility_concerns"]
+        }
+      }
+    },
+    
+    "content-playbook-writer": {
+      "displayName": "Ciara Bennett - Content Playbook Writer",
+      "teamPrefix": "content",
+      "specialization": "content-depth",
+      "hooks": {
+        "storyValidation": {
+          "enabled": true,
+          "customRules": [
+            "content-depth-validation",
+            "actionability-check",
+            "irish-personality-integration"
+          ],
+          "qualityThreshold": 7.5,
+          "additionalValidators": ["playbook-completeness-check"]
+        },
+        "securityValidation": {
+          "enabled": true,
+          "allowedTools": ["Read", "Write", "Edit", "Grep", "WebSearch"],
+          "restrictedPaths": ["**/secrets/**", "**/.env*"],
+          "enforceToolRestrictions": true
+        },
+        "performanceMonitoring": {
+          "enabled": true,
+          "responseTimeThreshold": 3000,
+          "contentGenerationEfficiencyTracking": true,
+          "comprehensivenessTracking": true
+        },
+        "qualityScoring": {
+          "enabled": true,
+          "contentTypes": ["content-playbook", "educational-content"],
+          "scoringCriteria": {
+            "contentDepth": 0.4,
+            "actionability": 0.3,
+            "structure": 0.15,
+            "examples": 0.1,
+            "irishPersonality": 0.05
+          },
+          "qualityThreshold": 7.5,
+          "educationalValueTracking": true
+        },
+        "notifications": {
+          "enabled": true,
+          "channels": ["console", "file"],
+          "alertTypes": ["content_quality_issues", "completeness_concerns"]
+        }
+      }
+    },
+    
+    "crypto-community-analyst": {
+      "displayName": "Caolán O'Brien - Crypto Community Analyst",
+      "teamPrefix": "crypto",
+      "specialization": "crypto-community",
+      "hooks": {
+        "storyValidation": {
+          "enabled": true,
+          "customRules": [
+            "crypto-accuracy-validation",
+            "community-analysis-check",
+            "irish-personality-integration"
+          ],
+          "qualityThreshold": 7.5,
+          "additionalValidators": ["blockchain-technical-accuracy"]
+        },
+        "securityValidation": {
+          "enabled": true,
+          "allowedTools": ["Read", "Write", "Edit", "Grep", "WebSearch", "WebFetch"],
+          "restrictedPaths": ["**/secrets/**", "**/.env*", "**/wallets/**", "**/private-keys/**"],
+          "enforceToolRestrictions": true,
+          "cryptoSecurityProtection": true
+        },
+        "performanceMonitoring": {
+          "enabled": true,
+          "responseTimeThreshold": 2500,
+          "communityAnalysisEfficiencyTracking": true,
+          "cryptoMarketCorrelationTracking": true
+        },
+        "qualityScoring": {
+          "enabled": true,
+          "contentTypes": ["crypto-analysis", "community-report"],
+          "scoringCriteria": {
+            "communityInsight": 0.4,
+            "technicalAccuracy": 0.25,
+            "sentimentAnalysis": 0.2,
+            "trendIdentification": 0.1,
+            "irishPersonality": 0.05
+          },
+          "qualityThreshold": 7.5,
+          "cryptoMetricsTracking": true
+        },
+        "notifications": {
+          "enabled": true,
+          "channels": ["console", "file"],
+          "alertTypes": ["crypto_market_volatility", "community_sentiment_shift"]
+        }
+      }
+    }
+  },
+  
+  "hookExecutionOrder": [
+    "securityValidation",
+    "storyValidation", 
+    "qualityScoring",
+    "performanceMonitoring",
+    "notifications"
+  ],
+  
+  "emergencyOverrides": {
+    "disableAllHooks": false,
+    "emergencyContactEmail": null,
+    "criticalAlertWebhook": null,
+    "maxConcurrentHooks": 5,
+    "hookTimeoutMs": 30000
+  },
+  
+  "auditSettings": {
+    "logAllHookExecutions": true,
+    "retainAuditLogsForDays": 30,
+    "auditLogPath": ".claude/hooks/audit.log",
+    "enablePerformanceMetrics": true,
+    "enableQualityMetrics": true
+  }
+}
