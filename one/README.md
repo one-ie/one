@@ -2,6 +2,17 @@
 
 > **Every intelligent system needs a coherent model of reality.**
 
+     ██████╗ ███╗   ██╗███████╗
+    ██╔═══██╗████╗  ██║██╔════╝
+    ██║   ██║██╔██╗ ██║█████╗
+    ██║   ██║██║╚██╗██║██╔══╝
+    ╚██████╔╝██║ ╚████║███████╗
+     ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+
+       Make Your Ideas Real
+
+   https://one.ie  •  npx oneie
+
 The ONE Ontology gives AI agents—and the humans who direct them—a complete, scalable architecture for understanding **who owns what, who can do what, what happened, and what it all means.**
 
 [![License](https://img.shields.io/badge/license-FREE-blue.svg)](../LICENSE.md)

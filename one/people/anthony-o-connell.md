@@ -8,8 +8,8 @@
 
 - **Name:** Anthony O'Connell
 - **Role:** Platform Owner (`platform_owner`)
-- **Email:** anthony@one.ie
-- **Username:** anthony
+- **Email:** tony@one.ie
+- **Username:** tony
 - **Display Name:** Anthony
 - **URL:** https://one.ie
 - **Organization:** ONE Platform

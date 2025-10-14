@@ -284,6 +284,23 @@ bun test --watch
 - **Backend**: Convex Cloud (`shocking-falcon-870.convex.cloud`)
 - **Edge Runtime**: Cloudflare Workers compatibility
 
+## Root Directory File Policy
+
+**CRITICAL:** Only these markdown files belong in the root directory:
+- **README.md** - Platform overview and quick start
+- **LICENSE.md** - Legal terms and conditions
+- **CLAUDE.md** - Claude Code instructions (this file)
+- **AGENTS.md** - AI agent coordination and rules
+
+All other documentation belongs in the `one/` directory following the 6-dimension ontology:
+- **one/events/** - Deployment plans, release notes, test results, agent summaries
+- **one/knowledge/** - Architecture, patterns, rules, guides
+- **one/connections/** - Protocols, workflows, integrations
+- **one/things/** - Specifications, plans, agent definitions
+- **one/people/** - Roles, governance, organization
+
+**Why:** This keeps the root clean and scannable, while organizing all documentation by ontology dimensions.
+
 ## File Structure
 
 ```
@@ -310,7 +327,7 @@ ONE/
 ├── one/                         # Platform documentation (41 files)
 │   ├── connections/            # Ontology, protocols, patterns
 │   ├── things/                 # Architecture, specifications
-│   ├── events/                 # Event specifications
+│   ├── events/                 # Event specifications, deployment history
 │   ├── knowledge/              # RAG, AI, implementation
 │   └── people/                 # Roles, groups, governance
 │
