@@ -1,0 +1,213 @@
+@import 'tailwindcss';
+
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+@plugin "@tailwindcss/typography";
+
+@variant dark (.dark &);
+
+@theme {
+  --color-background: 36 8% 88%;
+  --color-foreground: 0 0% 13%;
+  --color-card: 36 10% 74%;
+  --color-card-foreground: 0 0% 13%;
+  --color-popover: 36 10% 74%;
+  --color-popover-foreground: 0 0% 13%;
+  --color-primary: 216 55% 25%;
+  --color-primary-foreground: 36 8% 96%;
+  --color-secondary: 219 14% 28%;
+  --color-secondary-foreground: 36 8% 96%;
+  --color-muted: 219 14% 92%;
+  --color-muted-foreground: 219 14% 30%;
+  --color-accent: 105 22% 25%;
+  --color-accent-foreground: 36 8% 96%;
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 0 0% 100%;
+  --color-border: 0 0% 100% / 0.1;
+  --color-input: 0 0% 100% / 0.1;
+  --color-ring: 216 63% 17%;
+  --color-chart-1: 216 55% 25%;
+  --color-chart-2: 105 22% 32%;
+  --color-chart-3: 219 14% 40%;
+  --color-chart-4: 36 8% 55%;
+  --color-chart-5: 0 0% 13%;
+  --color-sidebar-background: 36 8% 88%;
+  --color-sidebar-foreground: 0 0% 13%;
+  --color-sidebar-primary: 216 55% 25%;
+  --color-sidebar-primary-foreground: 36 8% 96%;
+  --color-sidebar-accent: 219 14% 28%;
+  --color-sidebar-accent-foreground: 36 8% 96%;
+  --color-sidebar-border: 0 0% 100% / 0.1;
+  --color-sidebar-ring: 216 63% 17%;
+  --radius-lg: 1.5rem;
+  --radius-md: 0.75rem;
+  --radius-sm: 0.375rem;
+}
+
+@theme {
+  --color-*: initial;
+  --radius-*: initial;
+}
+
+@source "./components/ui/**/*.{ts,tsx}";
+
+* {
+  border-color: hsl(var(--color-border));
+}
+
+*:focus-visible {
+  outline: 2px solid hsl(var(--color-ring));
+  outline-offset: 2px;
+  border-radius: 0.125rem;
+}
+
+body {
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+}
+
+/* Prevent horizontal scroll from off-canvas elements on mobile */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+:root {
+  --aui-thread-max-width: infinity;
+  --primary: 216 55% 25%;
+  --primary-foreground: 36 8% 96%;
+  --sidebar: 36 8% 88%;
+  --sidebar-foreground: 0 0% 13%;
+  --sidebar-primary: 216 55% 25%;
+  --sidebar-primary-foreground: 36 8% 96%;
+  --sidebar-accent: 219 14% 28%;
+  --sidebar-accent-foreground: 36 8% 96%;
+  --sidebar-border: 0 0% 100% / 0.1;
+  --sidebar-ring: 216 63% 17%;
+}
+
+.dark {
+  --primary: 216 55% 25%;
+  --primary-foreground: 36 8% 96%;
+  --color-background: 0 0% 13%;
+  --color-foreground: 36 8% 96%;
+  --color-card: 0 0% 10%;
+  --color-card-foreground: 36 8% 96%;
+  --color-popover: 0 0% 10%;
+  --color-popover-foreground: 36 8% 96%;
+  --color-primary: 216 55% 25%;
+  --color-primary-foreground: 36 8% 96%;
+  --color-secondary: 219 14% 32%;
+  --color-secondary-foreground: 36 8% 96%;
+  --color-muted: 216 63% 17%;
+  --color-muted-foreground: 36 8% 80%;
+  --color-accent: 105 22% 35%;
+  --color-accent-foreground: 36 8% 96%;
+  --color-destructive: 0 84% 60%;
+  --color-destructive-foreground: 0 0% 98%;
+  --color-border: 0 0% 100% / 0.1;
+  --color-input: 0 0% 100% / 0.1;
+  --color-ring: 216 63% 68%;
+  --color-chart-1: 216 63% 68%;
+  --color-chart-2: 105 22% 45%;
+  --color-chart-3: 219 14% 38%;
+  --color-chart-4: 36 8% 60%;
+  --color-chart-5: 0 0% 96%;
+  --color-sidebar-background: 0 0% 10%;
+  --color-sidebar-foreground: 36 8% 96%;
+  --color-sidebar-primary: 216 63% 68%;
+  --color-sidebar-primary-foreground: 0 0% 13%;
+  --color-sidebar-accent: 219 14% 32%;
+  --color-sidebar-accent-foreground: 36 8% 96%;
+  --color-sidebar-border: 0 0% 100% / 0.1;
+  --color-sidebar-ring: 216 63% 68%;
+  --sidebar: 0 0% 10%;
+  --sidebar-foreground: 36 8% 96%;
+  --sidebar-primary: 216 63% 68%;
+  --sidebar-primary-foreground: 0 0% 13%;
+  --sidebar-accent: 219 14% 32%;
+  --sidebar-accent-foreground: 36 8% 96%;
+  --sidebar-border: 0 0% 100% / 0.1;
+  --sidebar-ring: 216 63% 68%;
+}
+
+/* Add styles for code blocks */
+.prose pre {
+  background-color: hsl(var(--color-muted)) !important;
+}
+
+.prose code {
+  background-color: hsl(var(--color-muted)) !important;
+  color: hsl(var(--color-foreground)) !important;
+}
+
+/* Optional: Style inline code differently if needed */
+.prose :not(pre) > code {
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  border-radius: 0.375rem;
+}
+
+/* Ensure translucent card utility pulls full surface color */
+.bg-card\/50 {
+  --tw-bg-opacity: 1 !important;
+  background-color: hsl(var(--color-card)) !important;
+}
+
+/* Scroll area styles */
+.aui-thread-viewport > [data-radix-scroll-area-viewport] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  background: inherit;
+  width: 100%;
+  height: 100%;
+}
+
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+* {
+  border-color: hsl(var(--color-border));
+}
+
+body {
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+}

@@ -1,0 +1,124 @@
+---
+import Layout from './Layout.astro';
+import { Image } from 'astro:assets';
+import { TableOfContents } from '@/components/TableOfContents';
+import { ShareButtons } from '@/components/ShareButtons';
+import { Badge } from '@/components/ui/badge';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+  headings: { depth: number; slug: string; text: string }[];
+  children: any;
+}
+
+const { entry, headings } = Astro.props;
+
+const pageData = {
+  title: entry.data.title,
+  description: entry.data.description,
+  image: entry.data.image,
+  type: 'article',
+};
+
+// Construct full URL for sharing
+const currentUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+// Format date
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+}
+---
+
+<Layout {...pageData}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
+      <!-- Main content -->
+      <article class="min-w-0">
+        <header class="mb-8">
+          <h1 class="text-4xl font-bold mb-4" data-usal="fade-up duration-700">
+            {entry.data.title}
+          </h1>
+
+          <!-- Meta info -->
+          <div class="flex flex-wrap items-center gap-3 mb-4" data-usal="fade-up duration-700 delay-100">
+            <Badge variant="secondary">{entry.data.category}</Badge>
+            <span class="text-sm text-muted-foreground">
+              {formatDate(new Date(entry.data.date))}
+            </span>
+            {
+              entry.data.author && (
+                <span class="text-sm text-muted-foreground">
+                  By {entry.data.author}
+                </span>
+              )
+            }
+          </div>
+
+          {/* Tags */}
+          {
+            entry.data.tags && entry.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 mb-4" data-usal="fade-up duration-700 delay-200">
+                {entry.data.tags.map((tag) => (
+                  <span class="text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )
+          }
+
+          {
+            entry.data.description && (
+              <p class="text-xl text-muted-foreground mb-6" data-usal="fade-up duration-700 delay-300">
+                {entry.data.description}
+              </p>
+            )
+          }
+
+          {/* Share buttons */}
+          <div class="mb-6" data-usal="fade-in duration-700 delay-400">
+            <ShareButtons
+              client:load
+              title={entry.data.title}
+              url={currentUrl}
+            />
+          </div>
+
+          {
+            entry.data.image && entry.data.image.trim() !== '' && (
+              <Image
+                src={entry.data.image}
+                alt={entry.data.title}
+                width={1200}
+                height={630}
+                class="w-full object-cover rounded-lg"
+                data-usal="fade-up duration-700 delay-200"
+              />
+            )
+          }
+        </header>
+
+        <div class="prose dark:prose-invert max-w-none" data-usal="fade-up duration-700 delay-300">
+          <slot />
+        </div>
+
+        {/* Bottom share buttons */}
+        <footer class="mt-12 pt-8 border-t">
+          <ShareButtons client:load title={entry.data.title} url={currentUrl} />
+        </footer>
+      </article>
+
+      {/* Sidebar with Table of Contents */}
+      <aside class="hidden lg:block" data-usal="fade-left duration-700 delay-400">
+        <div class="sticky top-6">
+          <TableOfContents client:load headings={headings} />
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
