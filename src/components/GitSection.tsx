@@ -1,0 +1,273 @@
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Code, Download, Github, TerminalSquare, GitFork, Star, CloudCog } from 'lucide-react';
+
+const GITHUB_REPO = 'one-ie/one';
+const GITHUB_URL = `https://github.com/${GITHUB_REPO}`;
+const DOWNLOAD_URL = `${GITHUB_URL}/archive/refs/heads/main.zip`;
+const NPM_PACKAGE = 'oneie';
+const NPM_URL = `https://api.npmjs.org/downloads/point/last-week/${NPM_PACKAGE}`;
+
+type CopyTarget = 'git' | 'npx' | null;
+
+export function GitSection() {
+  const [stats, setStats] = useState({ stars: 0, forks: 0, downloads: 0, watchers: 0 });
+  const [copied, setCopied] = useState<CopyTarget>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [githubResponse, npmResponse] = await Promise.all([
+          fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
+            headers: { Accept: 'application/vnd.github.v3+json' }
+          }),
+          fetch(NPM_URL)
+        ]);
+
+        if (!githubResponse.ok) {
+          throw new Error(`GitHub API responded with status ${githubResponse.status}`);
+        }
+
+        const githubData = await githubResponse.json();
+        const npmData = npmResponse.ok ? await npmResponse.json() : null;
+
+        if (
+          githubData &&
+          typeof githubData.stargazers_count === 'number' &&
+          typeof githubData.forks_count === 'number'
+        ) {
+          setStats({
+            stars: githubData.stargazers_count,
+            forks: githubData.forks_count,
+            watchers: githubData.subscribers_count || 0,
+            downloads:
+              npmData && typeof npmData.downloads === 'number' ? npmData.downloads : 0
+          });
+        } else {
+          console.warn('Unexpected GitHub API response format:', githubData);
+          setStats({
+            stars: 0,
+            forks: 0,
+            watchers: 0,
+            downloads:
+              npmData && typeof npmData.downloads === 'number' ? npmData.downloads : 0
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching repository stats:', error);
+        setStats({ stars: 0, forks: 0, watchers: 0, downloads: 0 });
+      }
+    };
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const copyCommand = async (command: string, target: Exclude<CopyTarget, null>) => {
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopied(target);
+      setTimeout(() => setCopied(null), 2000);
+    } catch (error) {
+      console.error('Unable to copy command to clipboard:', error);
+    }
+  };
+
+  return (
+    <section className="w-full min-h-screen flex items-center justify-center px-4 sm:px-6 py-8">
+      <div className="w-full max-w-7xl mx-auto space-y-12">
+        {/* Hero Section */}
+        <div className="text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+            <Download className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">100% Free Forever</span>
+          </div>
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-foreground">
+            Download ONE
+          </h1>
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Build apps, websites, and AI agents is English. Download to your computer, run in the cloud and deploy to the edge or your own server. ONE is open source and free forever.
+          </p>
+        </div>
+
+        {/* Main Download Cards */}
+        <div className="grid gap-6 md:grid-cols-3">
+          {/* Download ZIP */}
+          <Card className="group relative overflow-hidden border-border/40 hover:border-primary/30 transition-all duration-300 hover:shadow-xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative p-6 space-y-6">
+              <div className="flex items-start justify-between">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                  <Download className="w-6 h-6 text-primary" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold">Download ZIP</h3>
+                <p className="text-sm text-muted-foreground">
+                  Get the latest code as a ZIP archive. No Git required.
+                </p>
+              </div>
+              <a href={DOWNLOAD_URL} className="block">
+                <Button className="w-full" size="lg">
+                  Download ZIP
+                </Button>
+              </a>
+            </div>
+          </Card>
+
+          {/* Clone Repository */}
+          <Card className="group relative overflow-hidden border-border/40 hover:border-primary/30 transition-all duration-300 hover:shadow-xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative p-6 space-y-6">
+              <div className="flex items-start justify-between">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                  <Code className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Star className="w-3 h-3 fill-primary text-primary" />
+                  <span className="font-semibold">{stats.stars > 0 ? stats.stars.toLocaleString() : '—'}</span>
+                  <span>stars</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold">Clone Repository</h3>
+                <p className="text-sm text-muted-foreground">
+                  Clone with Git for version control and updates.
+                </p>
+              </div>
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  className="w-full font-mono text-xs justify-start"
+                  onClick={() => copyCommand(`git clone ${GITHUB_URL}.git`, 'git')}
+                >
+                  <Code className="mr-2 h-4 w-4 shrink-0" />
+                  <span className="truncate">github.com/{GITHUB_REPO}</span>
+                </Button>
+                <p
+                  className={`absolute -bottom-6 left-0 text-xs text-primary transition-opacity duration-200 ${
+                    copied === 'git' ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  ✓ Copied!
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Bootstrap with NPX */}
+          <Card className="group relative overflow-hidden border-border/40 hover:border-primary/30 transition-all duration-300 hover:shadow-xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative p-6 space-y-6">
+              <div className="flex items-start justify-between">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                  <TerminalSquare className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Download className="w-3 h-3" />
+                  <span className="font-semibold">{stats.downloads > 0 ? stats.downloads.toLocaleString() : '—'}</span>
+                  <span>/week</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold">Bootstrap with NPX</h3>
+                <p className="text-sm text-muted-foreground">
+                  Generate a fresh project instantly with one command.
+                </p>
+              </div>
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  className="w-full font-mono text-xs"
+                  onClick={() => copyCommand(`npx ${NPM_PACKAGE}`, 'npx')}
+                >
+                  <TerminalSquare className="mr-2 h-4 w-4" />
+                  npx {NPM_PACKAGE}
+                </Button>
+                <p
+                  className={`absolute -bottom-6 left-0 text-xs text-primary transition-opacity duration-200 ${
+                    copied === 'npx' ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  ✓ Copied!
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Secondary Actions */}
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="outline"
+              size="lg"
+              className="group hover:border-primary/40 hover:bg-primary/5"
+            >
+              <Github className="w-5 h-5 mr-2" />
+              <span>View on GitHub</span>
+              <div className="ml-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-xs">
+                <Star className="w-3 h-3 fill-primary text-primary" />
+                <span className="font-semibold">{stats.stars > 0 ? stats.stars.toLocaleString() : '—'}</span>
+              </div>
+            </Button>
+          </a>
+
+          <a href={`${GITHUB_URL}/fork`} target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="outline"
+              size="lg"
+              className="group hover:border-primary/40 hover:bg-primary/5"
+            >
+              <GitFork className="w-5 h-5 mr-2" />
+              <span>Fork</span>
+              <div className="ml-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-xs">
+                <GitFork className="w-3 h-3 text-primary" />
+                <span className="font-semibold">{stats.forks > 0 ? stats.forks.toLocaleString() : '—'}</span>
+              </div>
+            </Button>
+          </a>
+
+          <a
+            href={`https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=${GITHUB_REPO}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button
+              variant="outline"
+              size="lg"
+              className="group hover:border-primary/40 hover:bg-primary/5"
+            >
+              <CloudCog className="w-5 h-5 mr-2" />
+              <span>Open in Codespaces</span>
+            </Button>
+          </a>
+        </div>
+
+        {/* Quick Info Footer */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-border/40">
+          <div className="text-center space-y-1">
+            <p className="text-sm text-muted-foreground">License</p>
+            <a href="/free-license" className="text-sm font-semibold text-primary hover:underline">
+              ONE Free License
+            </a>
+          </div>
+          <div className="text-center space-y-1">
+            <p className="text-sm text-muted-foreground">Requirements</p>
+            <p className="text-sm font-semibold">Node.js 18+</p>
+          </div>
+          <div className="text-center space-y-1">
+            <p className="text-sm text-muted-foreground">Package Manager</p>
+            <p className="text-sm font-semibold">pnpm / npm / bun</p>
+          </div>
+          <div className="text-center space-y-1">
+            <p className="text-sm text-muted-foreground">Deploy</p>
+            <p className="text-sm font-semibold">Anywhere</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

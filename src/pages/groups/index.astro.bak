@@ -1,0 +1,274 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { ConvexHttpClient } from 'convex/browser';
+import { api } from '../../../backend/convex/_generated/api';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Users, Globe, Lock, Plus, Search, Sparkles, TrendingUp } from 'lucide-react';
+import { GroupSearch } from '@/components/groups/GroupSearch';
+
+export const prerender = false;
+
+// SSR: Fetch public groups
+const convex = new ConvexHttpClient(import.meta.env.PUBLIC_CONVEX_URL);
+const allGroups = await convex.query(api.queries.groups.list, {
+  status: 'active',
+});
+
+// Filter to public groups only for discovery page
+const publicGroups = allGroups.filter((g) => g.settings?.visibility === 'public');
+
+// Check user authentication
+const user = Astro.locals.user;
+
+const groupTypeLabels = {
+  friend_circle: 'Friend Circle',
+  business: 'Business',
+  community: 'Community',
+  dao: 'DAO',
+  government: 'Government',
+  organization: 'Organization',
+};
+
+const groupTypeDescriptions = {
+  friend_circle: 'Private circles for close friends and family',
+  business: 'Professional teams and business organizations',
+  community: 'Open communities around shared interests',
+  dao: 'Decentralized autonomous organizations',
+  government: 'Public sector and civic organizations',
+  organization: 'General purpose organizations',
+};
+
+const groupTypeIcons = {
+  friend_circle: '👥',
+  business: '💼',
+  community: '🌐',
+  dao: '⚡',
+  government: '🏛️',
+  organization: '🏢',
+};
+---
+
+<Layout title="Discover Groups - ONE Platform">
+  <div class="mx-auto max-w-7xl space-y-12 px-4 py-8 sm:px-6 lg:px-8">
+    <!-- Hero Header with Gradient -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-primary/5 to-background p-8 md:p-12">
+      <div class="absolute inset-0 bg-grid-white/[0.02] pointer-events-none"></div>
+      <div class="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div class="flex-1 space-y-4">
+          <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+            <Sparkles className="h-4 w-4" />
+            <span>Explore Communities</span>
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
+            Discover <span class="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Groups</span>
+          </h1>
+          <p class="text-lg text-muted-foreground md:text-xl max-w-2xl">
+            Join vibrant communities, collaborate with teams, and be part of something bigger. Find your perfect group today.
+          </p>
+        </div>
+
+        <div class="flex gap-3">
+          {user ? (
+            <Button size="lg" asChild class="group">
+              <a href="/group/new/create">
+                <Plus className="mr-2 h-5 w-5 transition-transform group-hover:rotate-90" />
+                Create Group
+              </a>
+            </Button>
+          ) : (
+            <Button size="lg" asChild>
+              <a href="/account/signin">Sign in to create</a>
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Bar with Animation -->
+    <div class="grid gap-4 md:grid-cols-4">
+      <Card class="group hover:shadow-lg transition-all duration-300 border-primary/20">
+        <CardContent class="pt-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-3xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent">
+                {publicGroups.length}
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">Public Groups</p>
+            </div>
+            <Globe class="h-10 w-10 text-primary/20 group-hover:text-primary/40 transition-colors" />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card class="group hover:shadow-lg transition-all duration-300 border-blue-500/20">
+        <CardContent class="pt-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-3xl font-bold bg-gradient-to-br from-blue-500 to-blue-400 bg-clip-text text-transparent">
+                {publicGroups.filter((g) => g.type === 'community').length}
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">Communities</p>
+            </div>
+            <span class="text-4xl group-hover:scale-110 transition-transform">🌐</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card class="group hover:shadow-lg transition-all duration-300 border-purple-500/20">
+        <CardContent class="pt-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-3xl font-bold bg-gradient-to-br from-purple-500 to-purple-400 bg-clip-text text-transparent">
+                {publicGroups.filter((g) => g.type === 'dao').length}
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">DAOs</p>
+            </div>
+            <span class="text-4xl group-hover:scale-110 transition-transform">⚡</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card class="group hover:shadow-lg transition-all duration-300 border-green-500/20">
+        <CardContent class="pt-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-3xl font-bold bg-gradient-to-br from-green-500 to-green-400 bg-clip-text text-transparent">
+                {publicGroups.filter((g) => g.type === 'business').length}
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">Businesses</p>
+            </div>
+            <span class="text-4xl group-hover:scale-110 transition-transform">💼</span>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+
+    <!-- Search Component -->
+    <GroupSearch client:load initialGroups={publicGroups} />
+
+    <!-- Group Types Guide with Beautiful Cards -->
+    <div class="space-y-6">
+      <div class="flex items-center gap-3">
+        <TrendingUp class="h-6 w-6 text-primary" />
+        <h2 class="text-3xl font-bold tracking-tight">Group Types</h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {Object.entries(groupTypeLabels).map(([type, label]) => (
+          <Card class="group relative overflow-hidden hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/50">
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <CardHeader class="relative">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-4xl">{groupTypeIcons[type]}</span>
+                <CardTitle class="text-xl">{label}</CardTitle>
+              </div>
+              <CardDescription class="text-base">{groupTypeDescriptions[type]}</CardDescription>
+            </CardHeader>
+            <CardContent class="relative">
+              <div class="flex items-center justify-between">
+                <p class="text-sm font-medium text-muted-foreground">
+                  {publicGroups.filter((g) => g.type === type).length} public groups
+                </p>
+                <Badge variant="outline" class="group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  Explore
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+
+    <!-- Groups Grid with Enhanced Design -->
+    <div class="space-y-6">
+      <div class="flex items-center gap-3">
+        <Sparkles class="h-6 w-6 text-primary" />
+        <h2 class="text-3xl font-bold tracking-tight">All Public Groups</h2>
+      </div>
+
+      {publicGroups.length > 0 ? (
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {publicGroups.map((group) => (
+            <Card class="group flex flex-col overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border-2 hover:border-primary/50">
+              <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
+              <CardHeader class="relative">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-2xl">{groupTypeIcons[group.type]}</span>
+                    <CardTitle class="line-clamp-1 text-xl">{group.name}</CardTitle>
+                  </div>
+                  {group.settings?.visibility === 'public' ? (
+                    <Globe class="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary transition-colors" />
+                  ) : (
+                    <Lock class="h-5 w-5 shrink-0 text-muted-foreground" />
+                  )}
+                </div>
+                <div class="flex flex-wrap gap-2 mt-3">
+                  <Badge variant="secondary" class="font-medium">{groupTypeLabels[group.type]}</Badge>
+                  {group.settings?.joinPolicy === 'open' && (
+                    <Badge variant="outline" class="border-green-500/50 text-green-600 dark:text-green-400">
+                      Open to Join
+                    </Badge>
+                  )}
+                </div>
+              </CardHeader>
+
+              <CardContent class="relative flex flex-1 flex-col">
+                <div class="flex-1">
+                  {group.description ? (
+                    <p class="line-clamp-3 text-sm text-muted-foreground leading-relaxed">
+                      {group.description}
+                    </p>
+                  ) : (
+                    <p class="text-sm italic text-muted-foreground">No description provided</p>
+                  )}
+                </div>
+
+                <div class="mt-6 flex items-center justify-between border-t pt-4">
+                  <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Users class="h-4 w-4" />
+                    <span class="font-medium">Members</span>
+                  </div>
+                  <Button variant="outline" size="sm" asChild class="group/btn">
+                    <a href={`/group/${group.slug}`} class="flex items-center gap-1">
+                      <span>View Group</span>
+                      <span class="inline-block transition-transform group-hover/btn:translate-x-1">→</span>
+                    </a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <Card class="border-2 border-dashed">
+          <CardContent class="flex flex-col items-center justify-center py-16">
+            <div class="rounded-full bg-muted p-6 mb-6">
+              <Search class="h-12 w-12 text-muted-foreground" />
+            </div>
+            <p class="text-center text-xl font-semibold mb-2">No public groups found</p>
+            <p class="text-center text-muted-foreground mb-6 max-w-sm">
+              Be the first to create a public group and start building your community!
+            </p>
+            {user && (
+              <Button size="lg" asChild class="group">
+                <a href="/group/new/create">
+                  <Plus class="mr-2 h-5 w-5 transition-transform group-hover:rotate-90" />
+                  Create First Group
+                </a>
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .bg-grid-white {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+</style>

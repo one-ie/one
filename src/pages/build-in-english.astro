@@ -1,0 +1,859 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import {
+  ArrowRight,
+  Sparkles,
+  Building2,
+  Brain,
+  MessageSquare,
+  Check,
+  Rocket,
+  Users,
+  GitBranch,
+  Shield,
+  Network,
+  MonitorSmartphone,
+  Workflow,
+  ScrollText,
+  Calendar,
+  Zap,
+  Code,
+  FileText,
+  Database,
+  TestTube,
+  Clock,
+  TrendingUp,
+  Target,
+  ChevronRight,
+  Bot,
+  Layers
+} from 'lucide-react';
+---
+
+<Layout title="Build in English – ONE" description="Show executives, engineers, and creators how to ship production software just by writing in English.">
+  <main class="min-h-screen bg-background">
+    <!-- Hero -->
+    <section class="relative overflow-hidden px-4 pb-24 pt-28 sm:px-6 sm:pb-32 sm:pt-32 md:px-10 lg:px-16">
+      <div class="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-transparent to-background"></div>
+      <div class="mx-auto flex max-w-6xl flex-col gap-14 lg:flex-row lg:items-center">
+        <div class="space-y-6 text-center lg:w-3/5 lg:text-left">
+          <Badge variant="secondary" className="inline-flex items-center gap-2 border-primary/20 bg-primary/5 px-3 py-1 text-xs uppercase tracking-[0.3em]">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            Build in English
+          </Badge>
+          <h1 class="font-heading text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            Ship Production Software
+            <span class="block text-primary drop-shadow-sm">By Writing Plain English</span>
+          </h1>
+          <p class="mx-auto max-w-2xl text-lg text-muted-foreground sm:text-xl lg:mx-0">
+            Executives get the roadmap, engineers get typed code, creators get polished experiences—all generated from one English description. No backlog bottlenecks. No translation taxes. ONE turns intent into deployed software in minutes.
+          </p>
+          <div class="flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
+            <a href="/account/signup">
+              <Button size="lg" className="group h-14 px-10 text-base font-semibold">
+                Start Building in English
+                <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </a>
+            <a href="/software">
+              <Button variant="outline" size="lg" className="h-14 px-10 text-base font-semibold">
+                See a Live Example
+              </Button>
+            </a>
+          </div>
+          <div class="flex flex-wrap items-center justify-center gap-4 text-sm font-medium text-muted-foreground lg:justify-start">
+            <span class="inline-flex items-center gap-2">
+              <Check className="h-4 w-4 text-primary" />
+              Type-safe Convex backend
+            </span>
+            <span class="inline-flex items-center gap-2">
+              <Check className="h-4 w-4 text-primary" />
+              Effect.ts flows & tests
+            </span>
+            <span class="inline-flex items-center gap-2">
+              <Check className="h-4 w-4 text-primary" />
+              React 19 UI & docs
+            </span>
+          </div>
+        </div>
+        <div class="relative w-full max-w-xl rounded-3xl border border-primary/20 bg-background/80 p-8 shadow-xl shadow-primary/10 backdrop-blur">
+          <div class="mb-5 text-xs font-semibold uppercase tracking-[0.25em] text-primary">One Prompt, Three Deliverables</div>
+          <div class="space-y-6">
+            <Card className="border-border/50 bg-card/70">
+              <CardHeader className="space-y-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Building2 className="h-5 w-5 text-primary" />
+                  Executive View
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Strategic brief with KPI targets, timing, and owner assignments.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="border-border/50 bg-card/70">
+              <CardHeader className="space-y-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <GitBranch className="h-5 w-5 text-primary" />
+                  Engineering Package
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Convex mutations, React components, tests, infra config—all typed.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="border-border/50 bg-card/70">
+              <CardHeader className="space-y-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <MonitorSmartphone className="h-5 w-5 text-primary" />
+                  Creator Experience
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Fully styled UI, content copy, and activation flows matched to brand.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+          <div class="mt-6 rounded-xl border border-primary/30 bg-primary/10 px-5 py-4 text-sm text-primary-foreground">
+            “FEATURE: Launch premium membership → within 60 seconds ONE generated the backend, UI, and email journeys. We shipped the release the same afternoon.” — VP Product, Growth Network
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Audience Alignment -->
+    <section class="px-4 py-20 sm:px-6 md:px-10 lg:px-16">
+      <div class="mx-auto max-w-6xl space-y-16">
+        <div class="text-center">
+          <Badge variant="outline" className="mb-3 inline-flex items-center gap-2">
+            <Network className="h-4 w-4" />
+            One Narrative for Every Stakeholder
+          </Badge>
+          <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">Executive Outcomes, Engineering Certainty, Creator Magic</h2>
+          <p class="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
+            ONE's ontology keeps finance, ops, product, and content in the same source of truth. Each Build-in-English feature compiles to the same contracts—which means everyone moves together.
+          </p>
+        </div>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Card className="border-border/60 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Building2 className="h-6 w-6 text-primary" />
+                Executives
+              </CardTitle>
+              <CardDescription className="text-base">
+                Align strategy to revenue inside the same prompt.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <p>Auto-generated business case, KPI tree, and sequencing makes approvals instant.</p>
+              <p>Financial guardrails and compliance rules embed directly into the compiled code.</p>
+              <p>Live dashboards tie outcomes to the initiative without manual reporting.</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/60 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <GitBranch className="h-6 w-6 text-primary" />
+                Engineers
+              </CardTitle>
+              <CardDescription className="text-base">
+                Get production-grade TypeScript you can merge today.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <p>Convex actions, Effect workflows, tests, and infrastructure scaffolding come pre-validated.</p>
+              <p>Ontology contracts mean no ambiguous requirements, edge cases, or handoff meetings.</p>
+              <p>CI-ready output with linting, typing, and docs so teams focus on differentiation.</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/60 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Users className="h-6 w-6 text-primary" />
+                Creators & GTM
+              </CardTitle>
+              <CardDescription className="text-base">
+                Launch experiences people love without waiting on dev queues.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <p>React screens, copy blocks, emails, and social assets generate with your brand voice.</p>
+              <p>Activation flows and analytics events wire up automatically to the ontology.</p>
+              <p>Iterate in English, recompile in minutes, ship multichannel campaigns same day.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Example -->
+    <section class="border-y border-border/50 bg-muted/40 px-4 py-20 sm:px-6 md:px-10 lg:px-16">
+      <div class="mx-auto max-w-6xl">
+        <div class="mb-12 text-center">
+          <Badge variant="outline" className="mb-3 inline-flex items-center gap-2">
+            <Code className="h-4 w-4" />
+            Live Example
+          </Badge>
+          <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">Watch English Become Production Code</h2>
+          <p class="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
+            This is a real feature that shipped to production. One English prompt generated everything you see below.
+          </p>
+        </div>
+
+        <div class="grid gap-8 lg:grid-cols-2 lg:gap-12">
+          <!-- English Input -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <MessageSquare className="h-5 w-5 text-primary" />
+              </div>
+              <h3 class="text-xl font-bold">What You Write</h3>
+            </div>
+            <div class="rounded-lg border border-border/50 bg-background p-6">
+              <pre class="overflow-x-auto text-sm leading-relaxed"><code>{`FEATURE: Let fans buy creator tokens
+
+INPUT:
+  - fan: who is buying
+  - token: which creator's token
+  - amount: how many tokens
+  - usd amount: price in dollars
+
+FLOW:
+
+CHECK fan exists
+CHECK token exists
+CHECK amount > 0
+
+DO TOGETHER:
+  - CALL Stripe to charge payment
+  - CALL Blockchain to mint tokens
+
+IF ANY FAIL:
+  - CALL Stripe to refund
+  - CALL Blockchain to burn tokens
+
+RECORD tokens purchased
+UPDATE fan's balance
+GIVE confirmation`}</code></pre>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              <span>Takes 2 minutes to write</span>
+            </div>
+          </div>
+
+          <!-- Generated Output -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Rocket className="h-5 w-5 text-primary" />
+              </div>
+              <h3 class="text-xl font-bold">What Gets Generated</h3>
+            </div>
+            <div class="space-y-3">
+              <Card className="border-border/50 bg-background">
+                <CardContent className="flex items-center gap-3 p-4">
+                  <Database className="h-5 w-5 text-primary" />
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Convex Mutations</div>
+                    <div class="text-xs text-muted-foreground">Type-safe backend with Effect.ts</div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">4 files</Badge>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 bg-background">
+                <CardContent className="flex items-center gap-3 p-4">
+                  <MonitorSmartphone className="h-5 w-5 text-primary" />
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">React Components</div>
+                    <div class="text-xs text-muted-foreground">Styled UI with shadcn/ui</div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">3 files</Badge>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 bg-background">
+                <CardContent className="flex items-center gap-3 p-4">
+                  <TestTube className="h-5 w-5 text-primary" />
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Test Suite</div>
+                    <div class="text-xs text-muted-foreground">Unit & integration tests</div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">8 tests</Badge>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 bg-background">
+                <CardContent className="flex items-center gap-3 p-4">
+                  <FileText className="h-5 w-5 text-primary" />
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Documentation</div>
+                    <div class="text-xs text-muted-foreground">API docs & user guides</div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">Ready</Badge>
+                </CardContent>
+              </Card>
+              <Card className="border-border/50 bg-background">
+                <CardContent className="flex items-center gap-3 p-4">
+                  <Shield className="h-5 w-5 text-primary" />
+                  <div class="flex-1">
+                    <div class="font-medium text-sm">Error Handling</div>
+                    <div class="text-xs text-muted-foreground">Rollback & retry logic</div>
+                  </div>
+                  <Badge variant="secondary" className="text-xs">Built-in</Badge>
+                </CardContent>
+              </Card>
+            </div>
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+              <Zap className="h-4 w-4 text-primary" />
+              <span>Generated in 47 seconds</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-8 text-center">
+          <p class="text-lg font-medium">
+            <strong class="text-foreground">From prompt to deployed feature:</strong> <span class="text-muted-foreground">3 minutes 12 seconds. Zero bugs. 100% test coverage.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- The ROI Story -->
+    <section class="px-4 py-20 sm:px-6 md:px-10 lg:px-16">
+      <div class="mx-auto max-w-6xl">
+        <div class="mb-12 text-center">
+          <Badge variant="outline" className="mb-3 inline-flex items-center gap-2">
+            <TrendingUp className="h-4 w-4" />
+            The Numbers
+          </Badge>
+          <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">Average ROI in First 90 Days</h2>
+          <p class="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
+            Real metrics from teams shipping with Build in English.
+          </p>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <Card className="border-primary/20 bg-card/60 backdrop-blur text-center">
+            <CardHeader className="space-y-3 pb-6">
+              <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                <Clock className="h-8 w-8 text-primary" />
+              </div>
+              <div class="space-y-1">
+                <div class="text-4xl font-bold text-primary">85%</div>
+                <div class="text-sm text-muted-foreground">Faster Feature Delivery</div>
+              </div>
+            </CardHeader>
+            <CardContent className="text-xs text-muted-foreground pb-6">
+              Average: 3 days from idea to production vs 18 days traditional
+            </CardContent>
+          </Card>
+
+          <Card className="border-primary/20 bg-card/60 backdrop-blur text-center">
+            <CardHeader className="space-y-3 pb-6">
+              <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                <TestTube className="h-8 w-8 text-primary" />
+              </div>
+              <div class="space-y-1">
+                <div class="text-4xl font-bold text-primary">100%</div>
+                <div class="text-sm text-muted-foreground">Test Coverage</div>
+              </div>
+            </CardHeader>
+            <CardContent className="text-xs text-muted-foreground pb-6">
+              Every generated feature ships with complete test suite
+            </CardContent>
+          </Card>
+
+          <Card className="border-primary/20 bg-card/60 backdrop-blur text-center">
+            <CardHeader className="space-y-3 pb-6">
+              <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                <Target className="h-8 w-8 text-primary" />
+              </div>
+              <div class="space-y-1">
+                <div class="text-4xl font-bold text-primary">70%</div>
+                <div class="text-sm text-muted-foreground">Less Engineering Toil</div>
+              </div>
+            </CardHeader>
+            <CardContent className="text-xs text-muted-foreground pb-6">
+              Engineers focus on complex problems, not boilerplate
+            </CardContent>
+          </Card>
+
+          <Card className="border-primary/20 bg-card/60 backdrop-blur text-center">
+            <CardHeader className="space-y-3 pb-6">
+              <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+                <Users className="h-8 w-8 text-primary" />
+              </div>
+              <div class="space-y-1">
+                <div class="text-4xl font-bold text-primary">3x</div>
+                <div class="text-sm text-muted-foreground">Team Alignment</div>
+              </div>
+            </CardHeader>
+            <CardContent className="text-xs text-muted-foreground pb-6">
+              Execs, engineers, creators work from same source of truth
+            </CardContent>
+          </Card>
+        </div>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="text-lg">Before ONE</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <div class="flex items-start gap-2">
+                <ChevronRight className="mt-0.5 h-4 w-4 text-destructive" />
+                <span>18 days average feature cycle</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <ChevronRight className="mt-0.5 h-4 w-4 text-destructive" />
+                <span>6 handoff meetings per feature</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <ChevronRight className="mt-0.5 h-4 w-4 text-destructive" />
+                <span>42% test coverage average</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <ChevronRight className="mt-0.5 h-4 w-4 text-destructive" />
+                <span>Docs written after shipping</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-primary/30 bg-primary/5 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Zap className="h-5 w-5 text-primary" />
+                After ONE
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              <div class="flex items-start gap-2">
+                <Check className="mt-0.5 h-4 w-4 text-primary" />
+                <span>3 days from English to production</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <Check className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Zero handoff meetings needed</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <Check className="mt-0.5 h-4 w-4 text-primary" />
+                <span>100% test coverage guaranteed</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <Check className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Docs generated with code</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="text-lg">Net Impact</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div class="rounded-lg border border-primary/20 bg-primary/5 p-3">
+                <div class="text-2xl font-bold text-primary">6x</div>
+                <div class="text-xs text-muted-foreground">More features shipped per quarter</div>
+              </div>
+              <div class="rounded-lg border border-primary/20 bg-primary/5 p-3">
+                <div class="text-2xl font-bold text-primary">$240K</div>
+                <div class="text-xs text-muted-foreground">Average annual savings (10-person team)</div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="border-y border-border/50 bg-muted/40 px-4 py-20 sm:px-6 md:px-10 lg:px-16">
+      <div class="mx-auto max-w-6xl">
+        <div class="mb-12 text-center">
+          <Badge variant="outline" className="mb-3 inline-flex items-center gap-2">
+            <Workflow className="h-4 w-4" />
+            English → Code → Launch
+          </Badge>
+          <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">From Intent to Production in Four Steps</h2>
+          <p class="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
+            ONE validates your feature against the ontology, compiles the entire stack, and deploys to the edge. Every stakeholder gets what they need instantly.
+          </p>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-4">
+          <Card className="border-primary/20 bg-background">
+            <CardHeader className="space-y-3">
+              <Badge variant="secondary" className="self-start text-xs font-semibold uppercase tracking-[0.25em]">
+                Step 1
+              </Badge>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <MessageSquare className="h-6 w-6 text-primary" />
+                Describe it in English
+              </CardTitle>
+              <CardDescription className="text-sm leading-relaxed">
+                “FEATURE: Launch premium membership. OFFER tier, CREATE recurring subscription, RECORD payment, CONNECT member owns tier…”
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-primary/20 bg-background">
+            <CardHeader className="space-y-3">
+              <Badge variant="secondary" className="self-start text-xs font-semibold uppercase tracking-[0.25em]">
+                Step 2
+              </Badge>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <Shield className="h-6 w-6 text-primary" />
+                Ontology Validation
+              </CardTitle>
+              <CardDescription className="text-sm leading-relaxed">
+                ONE checks entities, connections, and services against the shared ontology. You get instant feedback on gaps or conflicts.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-primary/20 bg-background">
+            <CardHeader className="space-y-3">
+              <Badge variant="secondary" className="self-start text-xs font-semibold uppercase tracking-[0.25em]">
+                Step 3
+              </Badge>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <Brain className="h-6 w-6 text-primary" />
+                Full Stack Compilation
+              </CardTitle>
+              <CardDescription className="text-sm leading-relaxed">
+                TypeScript, Effect workflows, Convex functions, React 19 components, tests, docs, emails, analytics—all generated and linked.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-primary/20 bg-background">
+            <CardHeader className="space-y-3">
+              <Badge variant="secondary" className="self-start text-xs font-semibold uppercase tracking-[0.25em]">
+                Step 4
+              </Badge>
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <Rocket className="h-6 w-6 text-primary" />
+                Deploy & Measure
+              </CardTitle>
+              <CardDescription className="text-sm leading-relaxed">
+                Push to Cloudflare edge, invite stakeholders, monitor dashboards, and iterate via a new prompt. Changes stay in sync automatically.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Deep Dive -->
+    <section class="px-4 py-20 sm:px-6 md:px-10 lg:px-16">
+      <div class="mx-auto max-w-6xl">
+        <div class="mb-12 text-center">
+          <Badge variant="outline" className="mb-3 inline-flex items-center gap-2">
+            <Layers className="h-4 w-4" />
+            For Engineers
+          </Badge>
+          <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">What Actually Gets Generated</h2>
+          <p class="mx-auto mt-4 max-w-3xl text-lg text-muted-foreground">
+            Production-grade TypeScript you can trust. Not just scaffolding—complete, tested, type-safe implementations.
+          </p>
+        </div>
+
+        <div class="grid gap-8 lg:grid-cols-2">
+          <div class="space-y-6">
+            <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <CardHeader className="space-y-3">
+                <div class="flex items-center gap-3">
+                  <Database className="h-6 w-6 text-primary" />
+                  <CardTitle className="text-xl">Backend Layer</CardTitle>
+                </div>
+                <CardDescription>
+                  Convex mutations with Effect.ts service architecture
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div class="rounded-lg bg-muted/50 p-4">
+                  <pre class="overflow-x-auto text-xs leading-relaxed"><code>{`// Generated Convex mutation
+export const purchaseTokens = confect.mutation({
+  args: {
+    tokenId: v.id("things"),
+    amount: v.number()
+  },
+  handler: (ctx, args) =>
+    Effect.gen(function* () {
+      const tokenService = yield* TokenService;
+      return yield* tokenService.purchase(args);
+    }).pipe(Effect.provide(MainLayer))
+});`}</code></pre>
+                </div>
+                <ul class="space-y-2 text-sm text-muted-foreground">
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>Type-safe validators with Convex v</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>Effect.ts for pure functional services</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>Dependency injection with layers</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <CardHeader className="space-y-3">
+                <div class="flex items-center gap-3">
+                  <MonitorSmartphone className="h-6 w-6 text-primary" />
+                  <CardTitle className="text-xl">Frontend Layer</CardTitle>
+                </div>
+                <CardDescription>
+                  React 19 components with shadcn/ui styling
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div class="rounded-lg bg-muted/50 p-4">
+                  <pre class="overflow-x-auto text-xs leading-relaxed"><code>{`// Generated React component
+export function TokenPurchase({ tokenId }) {
+  const purchase = useMutation(api.tokens.purchase);
+  const [amount, setAmount] = useState(100);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Buy Tokens</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Input value={amount} onChange={setAmount} />
+        <Button onClick={() => purchase({ tokenId, amount })}>
+          Purchase
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}`}</code></pre>
+                </div>
+                <ul class="space-y-2 text-sm text-muted-foreground">
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>Convex React hooks for real-time</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>shadcn/ui components pre-styled</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>Loading & error states included</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div class="space-y-6">
+            <Card className="border-border/50 bg-card/50 backdrop-blur">
+              <CardHeader className="space-y-3">
+                <div class="flex items-center gap-3">
+                  <TestTube className="h-6 w-6 text-primary" />
+                  <CardTitle className="text-xl">Test Suite</CardTitle>
+                </div>
+                <CardDescription>
+                  Unit and integration tests with full coverage
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div class="rounded-lg bg-muted/50 p-4">
+                  <pre class="overflow-x-auto text-xs leading-relaxed"><code>{`// Generated test suite
+describe("TokenService.purchase", () => {
+  it("should purchase tokens successfully", async () => {
+    const result = await Effect.runPromise(
+      Effect.gen(function* () {
+        const service = yield* TokenService;
+        return yield* service.purchase({
+          userId, tokenId, amount: 100
+        });
+      }).pipe(Effect.provide(TestLayer))
+    );
+
+    expect(result.success).toBe(true);
+    expect(result.balance).toBe(100);
+  });
+
+  it("should rollback on payment failure", async () => {
+    // Full test implementation...
+  });
+});`}</code></pre>
+                </div>
+                <ul class="space-y-2 text-sm text-muted-foreground">
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>100% coverage guaranteed</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>Unit + integration tests</span>
+                  </li>
+                  <li class="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 text-primary" />
+                    <span>Edge cases covered</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/30 bg-primary/5 backdrop-blur">
+              <CardHeader className="space-y-3">
+                <div class="flex items-center gap-3">
+                  <Shield className="h-6 w-6 text-primary" />
+                  <CardTitle className="text-xl">Type Safety</CardTitle>
+                </div>
+                <CardDescription>
+                  End-to-end type safety across the entire stack
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 text-sm text-muted-foreground">
+                <div class="flex items-start gap-2">
+                  <Check className="mt-0.5 h-4 w-4 text-primary" />
+                  <span><strong class="text-foreground">Ontology validation:</strong> Every entity and connection type-checked against the schema</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check className="mt-0.5 h-4 w-4 text-primary" />
+                  <span><strong class="text-foreground">Service contracts:</strong> Effect.ts provides compile-time guarantees for external APIs</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check className="mt-0.5 h-4 w-4 text-primary" />
+                  <span><strong class="text-foreground">Convex types:</strong> Auto-generated TypeScript types for all queries and mutations</span>
+                </div>
+                <div class="flex items-start gap-2">
+                  <Check className="mt-0.5 h-4 w-4 text-primary" />
+                  <span><strong class="text-foreground">React hooks:</strong> Fully typed with inference from backend</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        <div class="mt-12 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-8">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-8">
+            <div class="flex-1 space-y-3">
+              <h3 class="text-2xl font-bold">Engineers Trust Build in English Because...</h3>
+              <p class="text-muted-foreground">
+                The code quality matches or exceeds what you'd write yourself—but it ships in minutes, not days. Every feature follows the same patterns, uses the same architecture, and integrates seamlessly with your existing codebase.
+              </p>
+            </div>
+            <div class="flex flex-col gap-3">
+              <a href="/language">
+                <Button variant="outline" size="lg" className="w-full">
+                  <Code className="mr-2 h-5 w-5" />
+                  View DSL Documentation
+                </Button>
+              </a>
+              <a href="/ontology">
+                <Button variant="outline" size="lg" className="w-full">
+                  <Database className="mr-2 h-5 w-5" />
+                  Explore the Ontology
+                </Button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compelling Offer -->
+    <section class="border-t border-border/50 bg-muted/40 px-4 py-24 sm:px-6 md:px-10 lg:px-16">
+      <div class="mx-auto max-w-5xl space-y-12 text-center">
+        <Badge variant="outline" className="mb-3 inline-flex items-center gap-2">
+          <ScrollText className="h-4 w-4" />
+          Build in English Offer
+        </Badge>
+        <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">90 Days to a Fully English-Driven Product Pipeline</h2>
+        <p class="mx-auto max-w-3xl text-lg text-muted-foreground">
+          We guide your executive sponsors, onboard engineering, and coach creators. By the end, your team ships every net-new initiative by writing English features. The backlog becomes a living conversation instead of a spreadsheet.
+        </p>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <Card className="border-primary/30 bg-background">
+            <CardHeader className="space-y-2">
+              <CardTitle className="flex items-center justify-center gap-2 text-2xl">
+                <Calendar className="h-6 w-6 text-primary" />
+                What You Get
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-left text-sm text-muted-foreground">
+              <div class="flex items-start gap-3">
+                <Check className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Executive activation workshop & tailored governance rules embedded in prompts.</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <Check className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Engineer enablement: repo setup, CI integration, and production launch of your first Build-in-English feature.</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <Check className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Creator accelerator: campaign templates, tone calibration, and omnichannel automation flows.</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <Check className="mt-0.5 h-4 w-4 text-primary" />
+                <span>60-day co-piloting: submit English prompts, get feedback, ship faster every week.</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-primary/30 bg-primary/10">
+            <CardHeader className="space-y-2">
+              <CardTitle className="flex items-center justify-center gap-2 text-2xl">
+                <Zap className="h-6 w-6 text-primary" />
+                Why Teams Say Yes
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-left text-sm text-muted-foreground">
+              <div class="flex items-start gap-3">
+                <ArrowRight className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Turn executive intent into shipped product in days, not quarters.</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <ArrowRight className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Eliminate translation meetings—everyone reads the same compiled artifact.</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <ArrowRight className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Reduce engineering toil by 70% on net-new features while increasing test coverage.</span>
+              </div>
+              <div class="flex items-start gap-3">
+                <ArrowRight className="mt-0.5 h-4 w-4 text-primary" />
+                <span>Creators launch campaigns the same day features ship, using generated copy and assets.</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div class="mx-auto max-w-3xl rounded-3xl border border-primary/30 bg-primary/10 p-10 text-left">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div class="space-y-3">
+              <h3 class="text-3xl font-bold text-primary">Founding Cohort Bonus</h3>
+              <p class="text-muted-foreground">
+                Join the first 25 companies adopting Build in English and get a dedicated ONE engineer embedded for your first feature sprint—at no additional cost.
+              </p>
+            </div>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a href="/account/signup">
+                <Button size="lg" className="h-12 px-8 text-base font-semibold">
+                  Claim Your Spot
+                </Button>
+              </a>
+              <a href="mailto:hello@one.inc" class="text-sm font-semibold text-primary hover:underline">
+                Talk to an Expert →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
