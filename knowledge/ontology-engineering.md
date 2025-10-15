@@ -1,0 +1,1652 @@
+# ONE Ontology Engineering
+
+**Version:** 1.0.0
+**Purpose:** Complete Platform Generation from 6-Dimension Ontology
+**Philosophy:** 66 Things + 25 Connections + 67 Events + Knowledge = Infinite Platforms
+
+---
+
+## Table of Contents
+
+1. [The Complete Ontology](#the-complete-ontology)
+2. [Context Engineering Strategy](#context-engineering-strategy)
+3. [Platform Generation Matrix](#platform-generation-matrix)
+4. [Specialist AI Agent Architecture](#specialist-ai-agent-architecture)
+5. [Frontend Generation Patterns](#frontend-generation-patterns)
+6. [Backend Generation Patterns](#backend-generation-patterns)
+7. [Website Generation Engine](#website-generation-engine)
+8. [Complete Examples](#complete-examples)
+
+---
+
+## The Complete Ontology
+
+### The 6 Dimensions
+
+```typescript
+// Organizations: Multi-tenant isolation (1 table)
+organizations: {
+  _id, name, slug, domain, status, plan, limits, usage, billing, settings
+}
+
+// People: Authorization & governance (1 table)
+people: {
+  _id, email, username, role, organizationId, organizations[], permissions[]
+  // Roles: platform_owner, org_owner, org_user, customer
+}
+
+// Things: All entities (1 table, 66 types)
+things: {
+  _id, type, name, properties, status, createdAt, updatedAt
+}
+
+// Connections: All relationships (1 table, 25 types)
+connections: {
+  _id, fromThingId, toThingId, relationshipType, metadata, createdAt
+}
+
+// Events: All actions (1 table, 67 types)
+events: {
+  _id, type, actorId, targetId, timestamp, metadata
+}
+
+// Knowledge: Labels + vectors (1 table, 4 types: label, document, chunk, vector_only)
+knowledge: {
+  _id, knowledgeType, text, embedding, embeddingModel, sourceThingId, labels, metadata
+}
+
+// ThingKnowledge: Many-to-many junction
+thingKnowledge: {
+  _id, thingId, knowledgeId, role, metadata
+}
+```
+
+### The 66 Thing Types
+
+```typescript
+type ThingType =
+  // CORE (4)
+  | 'creator'              // Human creator (platform/org owners, users, customers)
+  | 'ai_clone'             // Digital twin with voice + appearance
+  | 'audience_member'      // Fan/customer consuming content
+  | 'organization'         // Multi-tenant org container
+
+  // BUSINESS AGENTS (10) - The AI workforce
+  | 'strategy_agent'       // Vision, planning, OKRs
+  | 'research_agent'       // Market research, trends
+  | 'marketing_agent'      // Content strategy, SEO
+  | 'sales_agent'          // Funnels, conversion
+  | 'service_agent'        // Support, success
+  | 'design_agent'         // Brand, UI/UX
+  | 'engineering_agent'    // Tech, automation
+  | 'finance_agent'        // Revenue, costs
+  | 'legal_agent'          // Compliance, contracts
+  | 'intelligence_agent'   // Analytics, predictions
+
+  // CONTENT (7)
+  | 'blog_post' | 'video' | 'podcast' | 'social_post'
+  | 'email' | 'course' | 'lesson'
+
+  // PRODUCTS (4)
+  | 'digital_product'      // Templates, tools
+  | 'membership'           // Tiered access
+  | 'consultation'         // 1-on-1 sessions
+  | 'nft'                  // Collectibles
+
+  // COMMUNITY (3)
+  | 'community' | 'conversation' | 'message'
+
+  // TOKEN (2)
+  | 'token'                // Token instance
+  | 'token_contract'       // Smart contract
+
+  // KNOWLEDGE (2)
+  | 'knowledge_item'       // Creator knowledge
+  | 'embedding'            // Vector embedding
+
+  // PLATFORM (6)
+  | 'website'              // Auto-generated sites
+  | 'landing_page'         // Custom pages
+  | 'template'             // Design templates
+  | 'livestream'           // Live broadcasts
+  | 'recording'            // Saved streams
+  | 'media_asset'          // Images, videos
+
+  // BUSINESS (7)
+  | 'payment' | 'subscription' | 'invoice' | 'metric'
+  | 'insight' | 'prediction' | 'report'
+
+  // AUTHENTICATION & SESSION (5)
+  | 'session'              // User sessions
+  | 'oauth_account'        // OAuth connections
+  | 'verification_token'   // Email/2FA verification
+  | 'password_reset_token' // Password resets
+  | 'ui_preferences'       // User UI settings
+
+  // MARKETING (6)
+  | 'notification' | 'email_campaign' | 'announcement'
+  | 'referral' | 'campaign' | 'lead'
+
+  // EXTERNAL INTEGRATIONS (3)
+  | 'external_agent'       // ElizaOS, AutoGen, etc.
+  | 'external_workflow'    // n8n, Zapier, Make
+  | 'external_connection'  // API connections
+
+  // PROTOCOL ENTITIES (2)
+  | 'mandate'              // AP2 intent/cart mandates
+  | 'product'              // ACP marketplace products
+```
+
+### The 25 Connection Types
+
+```typescript
+type ConnectionType =
+  // OWNERSHIP (2)
+  | 'owns'                 // Creator owns course, org owns content
+  | 'created_by'           // Course created by creator
+
+  // AI RELATIONSHIPS (3)
+  | 'clone_of'             // AI clone of creator
+  | 'trained_on'           // Clone trained on knowledge
+  | 'powers'               // Agent powers feature
+
+  // CONTENT RELATIONSHIPS (5)
+  | 'authored'             // Creator authored post
+  | 'generated_by'         // Content generated by agent
+  | 'published_to'         // Post published to platform
+  | 'part_of'              // Lesson part of course
+  | 'references'           // Post references another post
+
+  // COMMUNITY RELATIONSHIPS (4)
+  | 'member_of'            // User member of community/org
+  | 'following'            // User following creator
+  | 'moderates'            // User moderates community
+  | 'participated_in'      // User participated in conversation
+
+  // BUSINESS RELATIONSHIPS (3)
+  | 'manages'              // Manager manages team
+  | 'reports_to'           // User reports to manager
+  | 'collaborates_with'    // Creators collaborate
+
+  // TOKEN RELATIONSHIPS (3)
+  | 'holds_tokens'         // User holds N tokens
+  | 'staked_in'            // Tokens staked in pool
+  | 'earned_from'          // Tokens earned from action
+
+  // PRODUCT RELATIONSHIPS (4)
+  | 'purchased'            // User purchased product
+  | 'enrolled_in'          // User enrolled in course
+  | 'completed'            // User completed course
+  | 'teaching'             // Clone teaching course
+
+  // CONSOLIDATED (use metadata for variants)
+  | 'transacted'           // Payment/subscription (metadata.transactionType)
+  | 'notified'             // Notifications (metadata.channel)
+  | 'referred'             // Referrals (metadata.referralType)
+  | 'communicated'         // Agent communication (metadata.protocol)
+  | 'delegated'            // Task delegation (metadata.taskType)
+  | 'approved'             // Approvals (metadata.approvalType)
+  | 'fulfilled'            // Fulfillment (metadata.fulfillmentType)
+```
+
+### The 67 Event Types
+
+```typescript
+type EventType =
+  // ENTITY LIFECYCLE (4)
+  | 'entity_created' | 'entity_updated' | 'entity_deleted' | 'entity_archived'
+
+  // USER EVENTS (5)
+  | 'user_registered' | 'user_verified' | 'user_login' | 'user_logout' | 'profile_updated'
+
+  // AUTHENTICATION (6)
+  | 'password_reset_requested' | 'password_reset_completed'
+  | 'email_verification_sent' | 'email_verified'
+  | 'two_factor_enabled' | 'two_factor_disabled'
+
+  // ORGANIZATION (5)
+  | 'organization_created' | 'organization_updated'
+  | 'user_invited_to_org' | 'user_joined_org' | 'user_removed_from_org'
+
+  // DASHBOARD & UI (4)
+  | 'dashboard_viewed' | 'settings_updated' | 'theme_changed' | 'preferences_updated'
+
+  // AI/CLONE (4)
+  | 'clone_created' | 'clone_updated' | 'voice_cloned' | 'appearance_cloned'
+
+  // AGENT (4)
+  | 'agent_created' | 'agent_executed' | 'agent_completed' | 'agent_failed'
+
+  // TOKEN (7)
+  | 'token_created' | 'token_minted' | 'token_burned'
+  | 'tokens_purchased' | 'tokens_staked' | 'tokens_unstaked' | 'tokens_transferred'
+
+  // COURSE (5)
+  | 'course_created' | 'course_enrolled' | 'lesson_completed'
+  | 'course_completed' | 'certificate_earned'
+
+  // ANALYTICS (5)
+  | 'metric_calculated' | 'insight_generated' | 'prediction_made'
+  | 'optimization_applied' | 'report_generated'
+
+  // INFERENCE (7) - Revenue tracking
+  | 'inference_request' | 'inference_completed' | 'inference_failed'
+  | 'inference_quota_exceeded' | 'inference_revenue_collected'
+  | 'org_revenue_generated' | 'revenue_share_distributed'
+
+  // BLOCKCHAIN (5)
+  | 'nft_minted' | 'nft_transferred' | 'tokens_bridged'
+  | 'contract_deployed' | 'treasury_withdrawal'
+
+  // CONSOLIDATED (use metadata for variants)
+  | 'content_event'        // action: created|updated|deleted|viewed|shared|liked
+  | 'payment_event'        // status: requested|verified|processed
+  | 'subscription_event'   // action: started|renewed|cancelled
+  | 'commerce_event'       // ACP/AP2 commerce
+  | 'livestream_event'     // status/action: started|ended|joined|left
+  | 'notification_event'   // channel + deliveryStatus
+  | 'referral_event'       // action: created|completed|rewarded
+  | 'communication_event'  // protocol: a2a|acp|ap2|x402|agui
+  | 'task_event'           // action: delegated|completed|failed
+  | 'mandate_event'        // mandateType: intent|cart
+  | 'price_event'          // action: checked|changed
+```
+
+---
+
+## Context Engineering Strategy
+
+### The Problem
+
+**Traditional AI:**
+```
+Load entire codebase → 100k tokens
+Load full documentation → 50k tokens
+Load all examples → 30k tokens
+Total: 180k tokens per request = $$$$ + slow + hallucinations
+```
+
+**ONE Solution:**
+```
+Query ontology types → 500 tokens
+Retrieve relevant chunks → 800 tokens
+Load focused examples → 400 tokens
+Total: 1,700 tokens per request = $ + fast + accurate
+```
+
+### Strategy 1: Ontology as Schema
+
+**The ontology IS the context.**
+
+Instead of explaining "how to create a course", we say:
+```typescript
+// Context (50 tokens):
+{
+  thingType: 'course',
+  properties: ['title', 'description', 'price', 'modules'],
+  connections: ['owns', 'part_of', 'teaching'],
+  events: ['course_created', 'course_enrolled']
+}
+
+// Agent generates full CRUD from this schema
+```
+
+### Strategy 2: Type-Driven Generation
+
+**Every thing type = Complete feature stack**
+
+```typescript
+// Input: Thing type 'course'
+const courseType = ontology.things.course
+
+// Generated automatically:
+1. Database schema (Convex table definition)
+2. TypeScript types (course properties interface)
+3. CRUD mutations (create, update, delete)
+4. Query functions (list, get, search)
+5. Frontend components (CourseCard, CourseList, CourseDetail)
+6. Forms (CreateCourseForm, EditCourseForm)
+7. Pages (courses/index, courses/[id])
+8. API routes (/api/courses)
+9. Event logging (course_created, course_updated)
+10. Analytics (course metrics dashboard)
+
+// Context used: 2k tokens
+// Features generated: 10+ complete features
+```
+
+### Strategy 3: Connection-Driven UI
+
+**Every connection type = Relationship UI**
+
+```typescript
+// Input: Connection 'enrolled_in'
+const enrolledInConnection = ontology.connections.enrolled_in
+
+// Generated automatically:
+1. "Enroll" button component
+2. Enrollment modal/form
+3. "My Enrollments" list page
+4. Progress tracker (via metadata.progress)
+5. Query: getUserEnrollments(userId)
+6. Mutation: enrollInCourse(userId, courseId)
+7. Event: course_enrolled
+8. Analytics: enrollment metrics
+
+// Context used: 800 tokens
+// UI components generated: 8
+```
+
+### Strategy 4: Event-Driven Analytics
+
+**Every event type = Analytics dashboard**
+
+```typescript
+// Input: Org's event types
+const orgEvents = [
+  'course_created',
+  'course_enrolled',
+  'lesson_completed',
+  'tokens_purchased'
+]
+
+// Generated automatically:
+1. Metrics for each event (count, trend, change %)
+2. Time-series charts
+3. Comparison views (this month vs last month)
+4. Event log viewer
+5. Export functionality
+6. Real-time subscriptions
+
+// Context used: 1k tokens
+// Dashboard generated: Complete analytics platform
+```
+
+---
+
+## Platform Generation Matrix
+
+### How 66 Things Generate the Platform
+
+| Thing Type | Generates | Example |
+|------------|-----------|---------|
+| `creator` | User management system | Registration, profiles, auth |
+| `ai_clone` | AI assistant platform | Voice synthesis, chat, training |
+| `course` | Learning management system | Courses, lessons, enrollments |
+| `token` | Token economy | Wallet, transactions, staking |
+| `organization` | Multi-tenant system | Org dashboard, member management |
+| `strategy_agent` | Business planning tools | OKR tracking, vision boards |
+| `blog_post` | Content management system | Post editor, publishing workflow |
+| `livestream` | Streaming platform | RTMP ingestion, chat, recording |
+| `payment` | Payment processing | Checkout, invoicing, refunds |
+| `community` | Social network | Forums, discussions, messaging |
+
+**Result:** 66 thing types × average 10 features each = **660+ platform features**
+
+### How 25 Connections Generate Relationships
+
+| Connection Type | Generates | Example |
+|-----------------|-----------|---------|
+| `owns` | Ownership system | Asset management, permissions |
+| `member_of` | Membership system | Org roles, access control |
+| `enrolled_in` | Enrollment system | Course access, progress tracking |
+| `following` | Social graph | Follow/unfollow, feed generation |
+| `holds_tokens` | Token holdings | Wallet balance, transaction history |
+| `teaching` | Teaching system | Instructor assignment, schedules |
+| `transacted` | Transaction system | Payment history, receipts |
+| `communicated` | Messaging system | Chat, notifications, email |
+
+**Result:** 25 connection types × average 8 features each = **200+ relationship features**
+
+### How 67 Events Generate Intelligence
+
+| Event Type | Generates | Example |
+|------------|-----------|---------|
+| `user_login` | Login analytics | Active users, sessions, retention |
+| `course_enrolled` | Enrollment analytics | Conversion rates, popular courses |
+| `tokens_purchased` | Revenue analytics | Sales, MRR, LTV |
+| `inference_request` | Usage analytics | API calls, costs, quotas |
+| `content_event` | Content analytics | Views, engagement, virality |
+| `agent_executed` | Agent analytics | Task success rate, performance |
+
+**Result:** 67 event types × average 5 metrics each = **335+ analytics metrics**
+
+---
+
+## Specialist AI Agent Architecture
+
+### 10 Agents × Focused Context = Complete Platform
+
+#### Agent 1: **Schema Generator** (Context: 2k tokens)
+
+**Input:** Thing types from ontology
+**Output:** Complete Convex schema
+
+```typescript
+// Reads ontology (cached, 500 tokens)
+const thingTypes = ontology.things // 66 types
+
+// Generates schema
+export default defineSchema({
+  things: defineTable({
+    type: v.union(
+      v.literal('creator'),
+      v.literal('ai_clone'),
+      // ... all 66 types
+    ),
+    name: v.string(),
+    properties: v.any(),
+    status: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number()
+  })
+  .index('by_type', ['type'])
+  .index('by_status', ['status'])
+  .index('by_created', ['createdAt'])
+  .searchIndex('search_things', {
+    searchField: 'name',
+    filterFields: ['type', 'status']
+  }),
+
+  connections: defineTable({
+    fromThingId: v.id('things'),
+    toThingId: v.id('things'),
+    relationshipType: v.union(
+      v.literal('owns'),
+      v.literal('member_of'),
+      // ... all 25 types
+    ),
+    metadata: v.optional(v.any()),
+    createdAt: v.number()
+  })
+  .index('from_type', ['fromThingId', 'relationshipType'])
+  .index('to_type', ['toThingId', 'relationshipType']),
+
+  events: defineTable({
+    type: v.union(
+      v.literal('entity_created'),
+      v.literal('user_login'),
+      // ... all 67 types
+    ),
+    actorId: v.id('things'),
+    targetId: v.optional(v.id('things')),
+    timestamp: v.number(),
+    metadata: v.any()
+  })
+  .index('type_time', ['type', 'timestamp'])
+  .index('actor_time', ['actorId', 'timestamp']),
+
+  knowledge: defineTable({
+    knowledgeType: v.union(
+      v.literal('label'),
+      v.literal('document'),
+      v.literal('chunk'),
+      v.literal('vector_only')
+    ),
+    text: v.optional(v.string()),
+    embedding: v.optional(v.array(v.float64())),
+    sourceThingId: v.optional(v.id('things')),
+    labels: v.optional(v.array(v.string())),
+    metadata: v.optional(v.any()),
+    createdAt: v.number()
+  })
+  .index('by_type', ['knowledgeType'])
+  .index('by_source', ['sourceThingId'])
+  .vectorIndex('by_embedding', {
+    vectorField: 'embedding',
+    dimensions: 1536,
+    filterFields: ['sourceThingId', 'knowledgeType']
+  })
+})
+
+// Context used: 2k tokens
+// Schema generated: Complete database
+```
+
+#### Agent 2: **CRUD Generator** (Context: 3k tokens)
+
+**Input:** Thing type definition
+**Output:** Complete CRUD operations
+
+```typescript
+// For each of 66 thing types, generates:
+
+// queries/[thingType].ts
+export const list = query({
+  args: {
+    organizationId: v.optional(v.id('things')),
+    limit: v.optional(v.number())
+  },
+  handler: async (ctx, { organizationId, limit = 20 }) => {
+    let q = ctx.db.query('things').withIndex('by_type', q =>
+      q.eq('type', 'course') // Example: course
+    )
+
+    if (organizationId) {
+      q = q.filter(q => q.eq(q.field('properties.organizationId'), organizationId))
+    }
+
+    return await q.take(limit)
+  }
+})
+
+export const get = query({
+  args: { id: v.id('things') },
+  handler: async (ctx, { id }) => {
+    return await ctx.db.get(id)
+  }
+})
+
+// mutations/[thingType].ts
+export const create = mutation({
+  args: {
+    name: v.string(),
+    properties: v.any(),
+    organizationId: v.optional(v.id('things'))
+  },
+  handler: async (ctx, args) => {
+    // Validate user permission
+    const user = await getCurrentUser(ctx)
+    if (!user) throw new Error('Unauthorized')
+
+    // Create thing
+    const id = await ctx.db.insert('things', {
+      type: 'course', // Example: course
+      name: args.name,
+      properties: {
+        ...args.properties,
+        organizationId: args.organizationId,
+        createdBy: user._id
+      },
+      status: 'active',
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    })
+
+    // Create ownership connection
+    if (args.organizationId) {
+      await ctx.db.insert('connections', {
+        fromThingId: args.organizationId,
+        toThingId: id,
+        relationshipType: 'owns',
+        createdAt: Date.now()
+      })
+    }
+
+    // Log event
+    await ctx.db.insert('events', {
+      type: 'entity_created',
+      actorId: user._id,
+      targetId: id,
+      timestamp: Date.now(),
+      metadata: { thingType: 'course' }
+    })
+
+    return id
+  }
+})
+
+// Repeat for all 66 thing types
+// Context per type: 3k tokens
+// Total generated: 66 × 4 operations = 264 database operations
+```
+
+#### Agent 3: **Component Generator** (Context: 4k tokens)
+
+**Input:** Thing type + display fields
+**Output:** React/Astro components
+
+```typescript
+// For 'course' thing type, generates:
+
+// components/cards/CourseCard.tsx
+interface CourseCardProps {
+  courseId: Id<'things'>
+}
+
+export function CourseCard({ courseId }: CourseCardProps) {
+  const course = useQuery(api.queries.course.get, { id: courseId })
+  const creator = useQuery(api.queries.connections.getCreator, { courseId })
+
+  if (!course) return <Skeleton />
+
+  return (
+    <div className="card">
+      <img
+        src={course.properties.thumbnail || '/placeholder.jpg'}
+        alt={course.name}
+        className="w-full h-48 object-cover"
+      />
+      <div className="p-4">
+        <h3 className="text-xl font-bold">{course.name}</h3>
+        <p className="text-gray-600">{course.properties.description}</p>
+
+        {creator && (
+          <div className="flex items-center mt-2">
+            <img src={creator.properties.avatar} className="w-8 h-8 rounded-full" />
+            <span className="ml-2 text-sm">{creator.name}</span>
+          </div>
+        )}
+
+        <div className="flex items-center justify-between mt-4">
+          <span className="text-2xl font-bold">${course.properties.price}</span>
+          <EnrollButton courseId={courseId} />
+        </div>
+
+        <div className="flex gap-2 mt-2">
+          <Badge>{course.properties.modules} modules</Badge>
+          <Badge>{course.properties.lessons} lessons</Badge>
+          <Badge>{course.properties.enrollments} students</Badge>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// components/lists/CourseList.tsx
+export function CourseList({ organizationId }: { organizationId?: Id<'things'> }) {
+  const courses = useQuery(api.queries.course.list, { organizationId, limit: 20 })
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {courses?.map(course => (
+        <CourseCard key={course._id} courseId={course._id} />
+      ))}
+    </div>
+  )
+}
+
+// pages/courses/[id].astro
+---
+import { ConvexHttpClient } from 'convex/browser'
+import Layout from '@/layouts/Layout.astro'
+import CourseDetail from '@/components/CourseDetail.tsx'
+
+const convex = new ConvexHttpClient(import.meta.env.PUBLIC_CONVEX_URL)
+const course = await convex.query(api.queries.course.get, {
+  id: Astro.params.id
+})
+---
+
+<Layout title={course.name}>
+  <CourseDetail client:load courseId={course._id} />
+</Layout>
+
+// Repeat for all 66 thing types
+// Context per type: 4k tokens
+// Total generated: 66 × 3 components = 198 UI components
+```
+
+#### Agent 4: **Connection Manager** (Context: 2k tokens)
+
+**Input:** Connection type
+**Output:** Relationship management UI
+
+```typescript
+// For 'enrolled_in' connection, generates:
+
+// components/EnrollButton.tsx
+export function EnrollButton({ courseId }: { courseId: Id<'things'> }) {
+  const user = useCurrentUser()
+  const enroll = useMutation(api.mutations.enrollment.create)
+
+  // Check if already enrolled
+  const enrollment = useQuery(api.queries.connections.checkEnrollment, {
+    userId: user?._id,
+    courseId
+  })
+
+  if (enrollment) {
+    return (
+      <Link href={`/courses/${courseId}/learn`}>
+        <Button>Continue Learning</Button>
+      </Link>
+    )
+  }
+
+  return (
+    <Button onClick={() => enroll({ userId: user._id, courseId })}>
+      Enroll Now
+    </Button>
+  )
+}
+
+// queries/connections/enrollment.ts
+export const checkEnrollment = query({
+  args: { userId: v.id('things'), courseId: v.id('things') },
+  handler: async (ctx, { userId, courseId }) => {
+    return await ctx.db
+      .query('connections')
+      .withIndex('from_type', q =>
+        q.eq('fromThingId', userId)
+         .eq('toThingId', courseId)
+         .eq('relationshipType', 'enrolled_in')
+      )
+      .first()
+  }
+})
+
+// mutations/enrollment.ts
+export const create = mutation({
+  args: { userId: v.id('things'), courseId: v.id('things') },
+  handler: async (ctx, { userId, courseId }) => {
+    // Create connection
+    const connId = await ctx.db.insert('connections', {
+      fromThingId: userId,
+      toThingId: courseId,
+      relationshipType: 'enrolled_in',
+      metadata: { progress: 0, enrolledAt: Date.now() },
+      createdAt: Date.now()
+    })
+
+    // Log event
+    await ctx.db.insert('events', {
+      type: 'course_enrolled',
+      actorId: userId,
+      targetId: courseId,
+      timestamp: Date.now(),
+      metadata: { connectionId: connId }
+    })
+
+    return connId
+  }
+})
+
+// Repeat for all 25 connection types
+// Context per type: 2k tokens
+// Total generated: 25 × 3 operations = 75 relationship features
+```
+
+#### Agent 5: **Analytics Generator** (Context: 3k tokens)
+
+**Input:** Event types for org
+**Output:** Complete analytics dashboard
+
+```typescript
+// Analyzes events for organization and generates:
+
+// queries/analytics/courseMetrics.ts
+export const getCourseMetrics = query({
+  args: {
+    organizationId: v.id('things'),
+    period: v.union(v.literal('7d'), v.literal('30d'), v.literal('90d'))
+  },
+  handler: async (ctx, { organizationId, period }) => {
+    const since = Date.now() - getPeriodMs(period)
+
+    // Count course creations
+    const coursesCreated = await ctx.db
+      .query('events')
+      .withIndex('type_time', q =>
+        q.eq('type', 'course_created').gte('timestamp', since)
+      )
+      .filter(q => q.eq(q.field('metadata.organizationId'), organizationId))
+      .collect()
+      .then(events => events.length)
+
+    // Count enrollments
+    const enrollments = await ctx.db
+      .query('events')
+      .withIndex('type_time', q =>
+        q.eq('type', 'course_enrolled').gte('timestamp', since)
+      )
+      .filter(q => q.eq(q.field('metadata.organizationId'), organizationId))
+      .collect()
+      .then(events => events.length)
+
+    // Count completions
+    const completions = await ctx.db
+      .query('events')
+      .withIndex('type_time', q =>
+        q.eq('type', 'course_completed').gte('timestamp', since)
+      )
+      .filter(q => q.eq(q.field('metadata.organizationId'), organizationId))
+      .collect()
+      .then(events => events.length)
+
+    // Calculate completion rate
+    const completionRate = enrollments > 0
+      ? (completions / enrollments) * 100
+      : 0
+
+    return {
+      coursesCreated,
+      enrollments,
+      completions,
+      completionRate,
+      period
+    }
+  }
+})
+
+// components/analytics/CourseMetricsDashboard.tsx
+export function CourseMetricsDashboard({ orgId }: { orgId: Id<'things'> }) {
+  const metrics = useQuery(api.queries.analytics.getCourseMetrics, {
+    organizationId: orgId,
+    period: '30d'
+  })
+
+  if (!metrics) return <Skeleton />
+
+  return (
+    <div className="grid grid-cols-4 gap-4">
+      <MetricCard
+        title="Courses Created"
+        value={metrics.coursesCreated}
+        icon={<BookIcon />}
+      />
+      <MetricCard
+        title="Total Enrollments"
+        value={metrics.enrollments}
+        icon={<UsersIcon />}
+      />
+      <MetricCard
+        title="Completions"
+        value={metrics.completions}
+        icon={<CheckIcon />}
+      />
+      <MetricCard
+        title="Completion Rate"
+        value={`${metrics.completionRate.toFixed(1)}%`}
+        icon={<TrendingUpIcon />}
+      />
+    </div>
+  )
+}
+
+// Repeat for all relevant event types
+// Context: 3k tokens
+// Total generated: Complete analytics platform
+```
+
+#### Agent 6: **Knowledge Manager** (Context: 3k tokens)
+
+**Input:** Thing with text content
+**Output:** Embeddings + semantic search
+
+```typescript
+// actions/knowledge/embed.ts
+export const embedThing = internalAction({
+  args: { thingId: v.id('things'), fields: v.array(v.string()) },
+  handler: async (ctx, { thingId, fields }) => {
+    // Get thing
+    const thing = await ctx.runQuery(internal.queries.things.get, { id: thingId })
+    if (!thing) return
+
+    // Extract text from specified fields
+    const texts = fields.map(field => thing.properties[field]).filter(Boolean)
+    const fullText = texts.join('\n\n')
+
+    // Chunk text (800 tokens per chunk, 200 overlap)
+    const chunks = chunkText(fullText, { size: 800, overlap: 200 })
+
+    // Embed each chunk
+    for (const [index, chunk] of chunks.entries()) {
+      // Generate embedding
+      const embedding = await embed(chunk.text) // OpenAI API call
+
+      // Create knowledge chunk
+      const knowledgeId = await ctx.runMutation(internal.mutations.knowledge.create, {
+        knowledgeType: 'chunk',
+        text: chunk.text,
+        embedding,
+        embeddingModel: 'text-embedding-3-large',
+        embeddingDim: 1536,
+        sourceThingId: thingId,
+        sourceField: fields.join(','),
+        chunk: { index, tokenCount: chunk.tokens, overlap: 200 },
+        labels: extractLabels(thing), // e.g., ['skill:fitness', 'format:video']
+        createdAt: Date.now()
+      })
+
+      // Link thing to knowledge
+      await ctx.runMutation(internal.mutations.thingKnowledge.create, {
+        thingId,
+        knowledgeId,
+        role: 'chunk_of',
+        createdAt: Date.now()
+      })
+    }
+  }
+})
+
+// queries/knowledge/search.ts
+export const semanticSearch = query({
+  args: {
+    query: v.string(),
+    organizationId: v.optional(v.id('things')),
+    thingType: v.optional(v.string()),
+    limit: v.optional(v.number())
+  },
+  handler: async (ctx, { query, organizationId, thingType, limit = 10 }) => {
+    // Generate query embedding
+    const queryEmbedding = await embed(query)
+
+    // Vector search
+    const results = await ctx.vectorSearch('knowledge', 'by_embedding', {
+      vector: queryEmbedding,
+      limit,
+      filter: q => {
+        let filter = q.eq(q.field('knowledgeType'), 'chunk')
+
+        if (organizationId) {
+          filter = filter.eq(q.field('sourceThingId.properties.organizationId'), organizationId)
+        }
+
+        if (thingType) {
+          filter = filter.eq(q.field('sourceThingId.type'), thingType)
+        }
+
+        return filter
+      }
+    })
+
+    // Hydrate with source things
+    const chunks = await Promise.all(
+      results.map(async result => ({
+        knowledge: result,
+        thing: await ctx.db.get(result.sourceThingId),
+        score: result._score
+      }))
+    )
+
+    return chunks
+  }
+})
+
+// Auto-embed on content creation
+export const onThingCreated = internalMutation({
+  args: { thingId: v.id('things') },
+  handler: async (ctx, { thingId }) => {
+    const thing = await ctx.db.get(thingId)
+
+    // Determine fields to embed based on thing type
+    const fieldsToEmbed = {
+      'course': ['title', 'description', 'content'],
+      'blog_post': ['title', 'content'],
+      'video': ['title', 'description', 'transcript'],
+      'lesson': ['title', 'content'],
+      // ... etc for all content types
+    }
+
+    const fields = fieldsToEmbed[thing.type]
+    if (fields) {
+      await ctx.scheduler.runAfter(0, internal.actions.knowledge.embed, {
+        thingId,
+        fields
+      })
+    }
+  }
+})
+
+// Context: 3k tokens
+// Generated: Complete RAG pipeline
+```
+
+#### Agent 7: **Website Generator** (Context: 4k tokens)
+
+**Input:** Organization + template choice
+**Output:** Complete website
+
+```typescript
+// actions/website/generate.ts
+export const generateWebsite = internalAction({
+  args: {
+    organizationId: v.id('things'),
+    template: v.union(v.literal('minimal'), v.literal('showcase'), v.literal('portfolio'))
+  },
+  handler: async (ctx, { organizationId, template }) => {
+    // Get organization
+    const org = await ctx.runQuery(internal.queries.orgs.get, { id: organizationId })
+
+    // Get org's creators
+    const creators = await ctx.runQuery(internal.queries.things.list, {
+      type: 'creator',
+      organizationId,
+      limit: 100
+    })
+
+    // Get org's content (courses, posts, etc.)
+    const courses = await ctx.runQuery(internal.queries.things.list, {
+      type: 'course',
+      organizationId,
+      limit: 50
+    })
+
+    const posts = await ctx.runQuery(internal.queries.things.list, {
+      type: 'blog_post',
+      organizationId,
+      limit: 50
+    })
+
+    // Generate pages based on template
+    const pages = []
+
+    // 1. Homepage
+    pages.push({
+      path: '/index.astro',
+      content: generateHomepage(org, creators, { template })
+    })
+
+    // 2. About page
+    pages.push({
+      path: '/about.astro',
+      content: generateAboutPage(org, creators)
+    })
+
+    // 3. Courses page + individual course pages
+    pages.push({
+      path: '/courses/index.astro',
+      content: generateCoursesPage(courses)
+    })
+
+    for (const course of courses) {
+      pages.push({
+        path: `/courses/${course._id}.astro`,
+        content: generateCoursePage(course)
+      })
+    }
+
+    // 4. Blog page + individual post pages
+    pages.push({
+      path: '/blog/index.astro',
+      content: generateBlogPage(posts)
+    })
+
+    for (const post of posts) {
+      pages.push({
+        path: `/blog/${post._id}.astro`,
+        content: generatePostPage(post)
+      })
+    }
+
+    // 5. Creator pages
+    for (const creator of creators) {
+      pages.push({
+        path: `/creators/${creator._id}.astro`,
+        content: generateCreatorPage(creator)
+      })
+    }
+
+    // Deploy to Cloudflare Pages
+    await deployToCloudflare(pages, {
+      domain: `${org.properties.slug}.one.ie`,
+      orgId: organizationId
+    })
+
+    // Update org website status
+    await ctx.runMutation(internal.mutations.orgs.update, {
+      id: organizationId,
+      properties: {
+        ...org.properties,
+        websiteUrl: `https://${org.properties.slug}.one.ie`,
+        websiteLastDeployed: Date.now()
+      }
+    })
+
+    return {
+      success: true,
+      url: `https://${org.properties.slug}.one.ie`,
+      pagesGenerated: pages.length
+    }
+  }
+})
+
+function generateHomepage(org, creators, { template }) {
+  // Template-specific homepage generation
+  const templates = {
+    minimal: `
+---
+import Layout from '@/layouts/Layout.astro'
+import Hero from '@/components/Hero.astro'
+import CreatorGrid from '@/components/CreatorGrid.tsx'
+
+const creators = ${JSON.stringify(creators)}
+---
+
+<Layout title="${org.name}">
+  <Hero
+    title="${org.name}"
+    subtitle="${org.properties.description}"
+    cta="Get Started"
+    ctaLink="/courses"
+  />
+
+  <section class="py-16">
+    <h2 class="text-3xl font-bold mb-8">Our Creators</h2>
+    <CreatorGrid client:load creators={creators} />
+  </section>
+</Layout>
+`,
+    showcase: `
+// ... full showcase template with more sections
+`,
+    portfolio: `
+// ... portfolio template with projects
+`
+  }
+
+  return templates[template] || templates.minimal
+}
+
+// Context: 4k tokens
+// Generated: Complete multi-page website
+```
+
+#### Agent 8: **Protocol Handler** (Context: 4k tokens)
+
+**Input:** External protocol message
+**Output:** Ontology translation + execution
+
+```typescript
+// A2A Protocol: Agent-to-Agent communication
+export const handleA2AMessage = internalAction({
+  args: { message: v.any() },
+  handler: async (ctx, { message }) => {
+    // Detect protocol
+    if (message.protocol !== 'a2a') return
+
+    // Parse task delegation
+    const task = message.task // e.g., "research_market_trends"
+    const params = message.parameters // e.g., { industry: 'fitness' }
+
+    // Find appropriate internal agent
+    const agent = await ctx.runQuery(internal.queries.things.findAgent, {
+      agentType: 'research_agent'
+    })
+
+    // Execute agent
+    const result = await ctx.runAction(internal.actions.agents.execute, {
+      agentId: agent._id,
+      task,
+      params
+    })
+
+    // Log communication event
+    await ctx.runMutation(internal.mutations.events.create, {
+      type: 'communication_event',
+      actorId: message.fromAgentId,
+      targetId: agent._id,
+      timestamp: Date.now(),
+      metadata: {
+        protocol: 'a2a',
+        messageType: 'task_delegation',
+        task,
+        result
+      }
+    })
+
+    return result
+  }
+})
+
+// ACP Protocol: Agentic Commerce
+export const handleACPPurchase = internalAction({
+  args: { purchase: v.any() },
+  handler: async (ctx, { purchase }) => {
+    // Translate ACP purchase to ontology
+
+    // 1. Create payment thing
+    const paymentId = await ctx.runMutation(internal.mutations.things.create, {
+      type: 'payment',
+      name: `Payment for ${purchase.productName}`,
+      properties: {
+        amount: purchase.amount,
+        currency: purchase.currency,
+        protocol: 'acp',
+        agentPlatform: purchase.agentPlatform, // e.g., 'chatgpt'
+        status: 'pending'
+      }
+    })
+
+    // 2. Create connection (user transacted with product)
+    await ctx.runMutation(internal.mutations.connections.create, {
+      fromThingId: purchase.userId,
+      toThingId: purchase.productId,
+      relationshipType: 'transacted',
+      metadata: {
+        protocol: 'acp',
+        transactionType: 'purchase',
+        amount: purchase.amount,
+        paymentId
+      }
+    })
+
+    // 3. Log commerce event
+    await ctx.runMutation(internal.mutations.events.create, {
+      type: 'commerce_event',
+      actorId: purchase.userId,
+      targetId: paymentId,
+      timestamp: Date.now(),
+      metadata: {
+        protocol: 'acp',
+        eventType: 'purchase_initiated',
+        agentPlatform: purchase.agentPlatform,
+        productId: purchase.productId
+      }
+    })
+
+    return { success: true, paymentId }
+  }
+})
+
+// AP2 Protocol: Agent Payments (Intent/Cart Mandates)
+export const handleAP2Mandate = internalAction({
+  args: { mandate: v.any() },
+  handler: async (ctx, { mandate }) => {
+    // Create mandate thing
+    const mandateId = await ctx.runMutation(internal.mutations.things.create, {
+      type: 'mandate',
+      name: `${mandate.mandateType} mandate`,
+      properties: {
+        mandateType: mandate.type, // 'intent' or 'cart'
+        intent: mandate.intent, // Intent description
+        items: mandate.items, // Cart items
+        subtotal: mandate.subtotal,
+        total: mandate.total,
+        status: 'pending',
+        protocol: 'ap2',
+        autoExecute: mandate.autoExecute
+      }
+    })
+
+    // Log mandate event
+    await ctx.runMutation(internal.mutations.events.create, {
+      type: 'mandate_event',
+      actorId: mandate.userId,
+      targetId: mandateId,
+      timestamp: Date.now(),
+      metadata: {
+        protocol: 'ap2',
+        mandateType: mandate.type
+      }
+    })
+
+    // If auto-execute intent, trigger price checking
+    if (mandate.autoExecute && mandate.type === 'intent') {
+      await ctx.scheduler.runAfter(0, internal.actions.ap2.checkPrices, {
+        mandateId
+      })
+    }
+
+    return { success: true, mandateId }
+  }
+})
+
+// X402 Protocol: HTTP Micropayments
+export const handleX402Payment = internalAction({
+  args: { payment: v.any() },
+  handler: async (ctx, { payment }) => {
+    // Verify blockchain transaction
+    const verified = await verifyBlockchainTx(
+      payment.txHash,
+      payment.network // 'base', 'sui', 'solana'
+    )
+
+    if (!verified) {
+      throw new Error('Payment verification failed')
+    }
+
+    // Create payment thing
+    const paymentId = await ctx.runMutation(internal.mutations.things.create, {
+      type: 'payment',
+      name: `X402 payment`,
+      properties: {
+        amount: payment.amount,
+        protocol: 'x402',
+        network: payment.network,
+        txHash: payment.txHash,
+        status: 'completed'
+      }
+    })
+
+    // Log payment event
+    await ctx.runMutation(internal.mutations.events.create, {
+      type: 'payment_event',
+      actorId: payment.userId,
+      targetId: paymentId,
+      timestamp: Date.now(),
+      metadata: {
+        protocol: 'x402',
+        status: 'verified',
+        network: payment.network,
+        txHash: payment.txHash
+      }
+    })
+
+    // Grant access to resource
+    await ctx.runMutation(internal.mutations.connections.create, {
+      fromThingId: payment.userId,
+      toThingId: payment.resourceId,
+      relationshipType: 'purchased',
+      metadata: {
+        protocol: 'x402',
+        paymentId
+      }
+    })
+
+    return { success: true, paymentId }
+  }
+})
+
+// Context: 4k tokens
+// Generated: Complete protocol integration layer
+```
+
+---
+
+## Complete Examples
+
+### Example 1: Building a Learning Platform from Scratch
+
+**Input:** "Build a learning platform for fitness creators"
+
+**Agent Orchestration:**
+
+```typescript
+// Step 1: Ontology Agent parses intent
+const intent = {
+  platform: 'learning',
+  niche: 'fitness',
+  thingTypes: ['creator', 'course', 'lesson', 'ai_clone', 'membership'],
+  connections: ['owns', 'enrolled_in', 'teaching', 'completed'],
+  events: ['course_created', 'course_enrolled', 'lesson_completed', 'course_completed']
+}
+
+// Step 2: Schema Agent generates database
+await schemaAgent.generate({
+  things: ['creator', 'course', 'lesson', 'ai_clone', 'membership'],
+  connections: ['owns', 'enrolled_in', 'teaching', 'completed'],
+  events: ['course_created', 'course_enrolled', 'lesson_completed', 'course_completed']
+})
+// Output: Complete Convex schema with indexes
+
+// Step 3: CRUD Agent generates operations
+for (const type of intent.thingTypes) {
+  await crudAgent.generate(type)
+}
+// Output: 5 types × 4 operations = 20 database functions
+
+// Step 4: Component Agent generates UI
+for (const type of intent.thingTypes) {
+  await componentAgent.generate({
+    thingType: type,
+    variants: ['card', 'list', 'detail', 'form']
+  })
+}
+// Output: 5 types × 4 variants = 20 React components
+
+// Step 5: Connection Agent generates relationships
+for (const conn of intent.connections) {
+  await connectionAgent.generate(conn)
+}
+// Output: 4 connection types × 3 features = 12 relationship features
+
+// Step 6: Analytics Agent generates dashboards
+await analyticsAgent.generate({
+  eventTypes: intent.events,
+  organizationId: org._id
+})
+// Output: Complete analytics dashboard with 4 metrics
+
+// Step 7: Website Agent generates marketing site
+await websiteAgent.generate({
+  organizationId: org._id,
+  template: 'showcase',
+  features: intent.thingTypes
+})
+// Output: Complete website at fitness.one.ie
+
+// Total context used: 2k + 2k + 15k + 20k + 8k + 12k + 16k = 75k tokens
+// vs Monolithic AI: 500k+ tokens
+
+// Total features generated:
+// - 20 database operations
+// - 20 UI components
+// - 12 relationship features
+// - 4 analytics metrics
+// - 1 complete website
+// = 57 features from 5 thing types
+```
+
+### Example 2: Adding Token Economy
+
+**Input:** "Add token rewards to the learning platform"
+
+**Agent Orchestration:**
+
+```typescript
+// Step 1: Ontology Agent identifies additions
+const additions = {
+  thingTypes: ['token', 'token_contract'],
+  connections: ['holds_tokens', 'earned_from'],
+  events: ['tokens_purchased', 'tokens_earned', 'tokens_transferred']
+}
+
+// Step 2: Schema Agent updates schema
+await schemaAgent.update({
+  addThingTypes: ['token', 'token_contract'],
+  addConnectionTypes: ['holds_tokens', 'earned_from'],
+  addEventTypes: ['tokens_purchased', 'tokens_earned', 'tokens_transferred']
+})
+// Output: Schema migration (non-breaking, additive)
+
+// Step 3: CRUD Agent generates token operations
+await crudAgent.generate('token')
+await crudAgent.generate('token_contract')
+// Output: 8 new database functions
+
+// Step 4: Component Agent generates token UI
+await componentAgent.generate({
+  thingType: 'token',
+  variants: ['wallet', 'transaction-history', 'buy-tokens']
+})
+// Output: Wallet component, transaction list, purchase flow
+
+// Step 5: Connection Agent generates token relationships
+await connectionAgent.generate('holds_tokens')
+await connectionAgent.generate('earned_from')
+// Output: Token balance tracking, earning history
+
+// Step 6: Add reward logic to existing events
+await mutationAgent.enhance('course_completed', {
+  afterCreate: async (ctx, { userId, courseId }) => {
+    // Award tokens on completion
+    const rewardAmount = 100
+
+    // Update user's token balance
+    const holdingConn = await ctx.db
+      .query('connections')
+      .withIndex('from_type', q =>
+        q.eq('fromThingId', userId)
+         .eq('relationshipType', 'holds_tokens')
+      )
+      .first()
+
+    if (holdingConn) {
+      await ctx.db.patch(holdingConn._id, {
+        metadata: {
+          ...holdingConn.metadata,
+          balance: (holdingConn.metadata.balance || 0) + rewardAmount
+        }
+      })
+    }
+
+    // Log token earned event
+    await ctx.db.insert('events', {
+      type: 'tokens_earned',
+      actorId: userId,
+      targetId: courseId,
+      timestamp: Date.now(),
+      metadata: {
+        amount: rewardAmount,
+        reason: 'course_completed'
+      }
+    })
+  }
+})
+
+// Step 7: Analytics Agent adds token metrics
+await analyticsAgent.addMetrics({
+  'tokens_earned': 'Total tokens earned',
+  'tokens_purchased': 'Total tokens purchased',
+  'token_holders': 'Unique token holders'
+})
+
+// Total context used: 2k + 2k + 6k + 12k + 6k + 4k + 3k = 35k tokens
+// Features added: Complete token economy
+// Changes to existing code: Minimal (event enhancement only)
+```
+
+### Example 3: Generating Custom Org Website
+
+**Input:** Organization "FitnessPro" wants website
+
+**Execution:**
+
+```typescript
+// Organization data:
+const org = {
+  _id: 'org_123',
+  name: 'FitnessPro',
+  slug: 'fitnesspro',
+  properties: {
+    description: 'Elite fitness coaching and courses',
+    template: 'showcase',
+    logo: 'https://...',
+    colors: {
+      primary: '#10b981',
+      secondary: '#059669',
+      accent: '#34d399'
+    }
+  }
+}
+
+// Step 1: Query org's content
+const creators = await db.query('things')
+  .withIndex('by_type', q => q.eq('type', 'creator'))
+  .filter(q => q.eq(q.field('properties.organizationId'), org._id))
+  .collect()
+// Result: 3 fitness coaches
+
+const courses = await db.query('things')
+  .withIndex('by_type', q => q.eq('type', 'course'))
+  .filter(q => q.eq(q.field('properties.organizationId'), org._id))
+  .collect()
+// Result: 12 fitness courses
+
+const posts = await db.query('things')
+  .withIndex('by_type', q => q.eq('type', 'blog_post'))
+  .filter(q => q.eq(q.field('properties.organizationId'), org._id))
+  .collect()
+// Result: 24 blog posts
+
+// Step 2: Website Agent generates pages
+const website = await websiteAgent.generate({
+  org,
+  creators, // 3 coaches
+  courses,  // 12 courses
+  posts,    // 24 posts
+  template: 'showcase'
+})
+
+// Generated pages:
+// - /index.astro (homepage with hero + features)
+// - /about.astro (about FitnessPro)
+// - /coaches/index.astro (coach directory)
+// - /coaches/[coach1].astro
+// - /coaches/[coach2].astro
+// - /coaches/[coach3].astro
+// - /courses/index.astro (course catalog)
+// - /courses/[course1].astro (12 course pages)
+// - ...
+// - /blog/index.astro (blog listing)
+// - /blog/[post1].astro (24 post pages)
+// - ...
+// Total: 44 pages generated
+
+// Step 3: Deploy to Cloudflare
+await deployToCloudflare(website.pages, {
+  domain: 'fitnesspro.one.ie',
+  orgId: org._id,
+  env: {
+    PUBLIC_CONVEX_URL: process.env.CONVEX_URL,
+    PUBLIC_ORG_ID: org._id
+  }
+})
+
+// Result: https://fitnesspro.one.ie is live
+// - Real-time data from Convex
+// - Components auto-update when content changes
+// - Multi-page website from 39 things (3 creators + 12 courses + 24 posts)
+// - Context used: 16k tokens
+// - Time: <30 seconds
+```
+
+---
+
+## Summary: The Complete Generation System
+
+### Input → Output Matrix
+
+| Input | Context | Output | Example |
+|-------|---------|--------|---------|
+| 1 thing type | 3k tokens | 4 CRUD ops + 4 components + analytics | `course` → full course management |
+| 1 connection type | 2k tokens | 3 relationship features + UI | `enrolled_in` → enrollment system |
+| 1 event type | 1k tokens | 1 metric + logging + history | `course_enrolled` → enrollment tracking |
+| 1 organization | 16k tokens | Complete website | FitnessPro → fitnesspro.one.ie |
+
+### Platform Generation Formula
+
+```typescript
+Platform Features =
+  (66 thing types × 10 features/type) +           // 660 features
+  (25 connection types × 8 features/type) +       // 200 features
+  (67 event types × 5 metrics/type) +             // 335 metrics
+  (Organizations × 1 website each)                // Infinite sites
+
+Total = 1,195+ base features + infinite customization
+```
+
+### Context Efficiency
+
+```
+Traditional Monolithic AI:
+- Load full codebase: 200k tokens
+- Load docs: 50k tokens
+- Load examples: 30k tokens
+- Total per request: 280k tokens
+- Cost per request: ~$2.80
+- Speed: 30-60 seconds
+
+ONE Specialist Agents:
+- Query ontology types: 500 tokens
+- Retrieve focused chunks: 800 tokens
+- Load agent context: 2k tokens
+- Total per request: 3.3k tokens
+- Cost per request: ~$0.03
+- Speed: 2-5 seconds
+
+Efficiency gain: 98.8% context reduction, 93x cost reduction, 10x faster
+```
+
+### The Ontology Advantage
+
+**Why this works:**
+
+1. **Stable Foundation:** 6 dimensions never change
+2. **Finite Primitives:** 66 + 25 + 67 = 158 types (not infinite)
+3. **Infinite Combinations:** 158 types compose into infinite features
+4. **Type-Driven:** Everything generates from type definitions
+5. **Protocol-Agnostic:** Metadata handles variance, not new types
+6. **Context-Efficient:** Query slices, not full ontology
+7. **Agent-Friendly:** Each agent masters <10 types
+8. **Human-Readable:** "It's a course" → everyone understands
+
+**Result:** A complete ontology that generates platforms from scratch while using 98% less context than traditional AI approaches.
+
+---
+
+**END OF ONTOLOGY ENGINEERING**
+
+The ontology is complete. The generation system is complete. Build anything.

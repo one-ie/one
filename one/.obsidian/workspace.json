@@ -171,6 +171,13 @@
   },
   "active": "613025f84d05f0e8",
   "lastOpenFiles": [
+    "things/plans/5-build-frontend.md",
+    "things/plans/5-build-frontend",
+    "things/plans/switch-off-auth.md",
+    "events/2025-10-15-unignore-public-group-docs.md",
+    "groups/vision.md",
+    "groups/strategy.md",
+    "groups/revenue.md",
     "things/agents/agent-deploy.md",
     "events/2025-10-15-private-files-secured.md",
     "events/2024-10-14-final-sync-complete.md",
@@ -193,19 +200,12 @@
     "things/system.md",
     "things/products/ontology.md",
     "things/products/cascade.md",
-    "things/products/cascade-landing-page.md",
-    "things/plans/release.md",
-    "things/plans/organizations-to-groups.md",
-    "things/plans/deploy-to-cloudflare.md",
-    "things/plans/backend-agnostic-frontend.md",
-    "things/plans/3-groups.md",
     "things/features/dataprovider-interface",
     "things/cli",
     "things/cascade/docs/examples/1-6-numbering-structure",
     "things/cascade/docs/examples/1-5-quality-loops",
     "things/cascade/docs/examples/1-4-knowledge-management",
     "things/cascade/docs/examples/1-3-event-coordination",
-    "things/cascade/docs/examples/1-2-yaml-orchestrator",
-    "things/cascade/docs/examples/1-1-agent-prompts"
+    "things/cascade/docs/examples/1-2-yaml-orchestrator"
   ]
 }

@@ -425,8 +425,6 @@ SUI's object-centric model maps naturally to ONE's thing-centric ontology. Knowl
 This repository contains **41 documentation files** organized in **8 layers**:
 
 ### 1. Strategy Layer (Vision & Revenue)
-- [vision.md](./groups/vision.md) - Platform vision
-- [revenue.md](./groups/revenue.md) - Revenue strategy
 - [one.md](./groups/one.md) - Platform organization
 
 ### 2. Ontology Layer (Core Model)
@@ -579,6 +577,28 @@ Tags, chunks, embeddings, and relationships give AI agents context to act intell
 
 ---
 
+## 🤖 Claude Automation Stack
+
+### `.claude/agents/*`
+- **Director (`agent-director.md`)** validates ideas against the 6 dimensions, sequences numbered plans, and routes work to the right specialist.
+- **Builder squad (`agent-builder.md`, `agent-backend.md`, `agent-frontend.md`, `backend-specialist.md`, `frontend-specialist.md`)** implements Convex services, Astro interfaces, and cross-cutting features while preserving multi-tenant boundaries and typed contracts.
+- **Integration lead (`agent-integrator.md`)** connects external protocols (A2A, ACP, AP2, X402, AG-UI) and reconciles third-party data so it lands in groups, people, things, connections, events, and knowledge.
+- **Quality loop (`agent-quality.md`, `agent-clean.md`, `agent-problem-solver.md`)** defines acceptance up front, enforces guardrails, diagnoses failures, and refactors without breaking ontology guarantees.
+- **Design + knowledge (`agent-designer.md`, `designer.md`, `agent-documenter.md`)** translate specs into accessible UI systems, tokens, and documentation so the knowledge dimension stays queryable for future generations.
+- **Growth ops (`agent-clone.md`, `agent-sales.md`)** migrate legacy assets, build AI clones, manage trials, and tie revenue attribution back to event streams.
+
+**Cascade in practice:** Director validates → Quality defines tests → Designers supply artifacts → Specialists build → Clean and Problem Solver close gaps → Documenter updates knowledge. Every agent reads and writes to the same ontology, so each run leaves richer context for the next.
+
+### MCP Servers (`.mcp.json`)
+- **shadcn** (`npx shadcn@latest mcp`) gives UI agents instant access to audited component recipes without leaving Claude Code.
+- **cloudflare-builds** (`npx -y mcp-remote https://builds.mcp.cloudflare.com/sse`) lets release flows trigger deployments, inspect logs, and roll back while emitting auditable events.
+- **cloudflare-docs** (`npx -y mcp-remote https://docs.mcp.cloudflare.com/sse`) streams authoritative references so integrators and quality agents stay aligned with platform guidance.
+- **chrome-devtools** (`npx -y chrome-devtools-mcp@latest`) enables live performance profiling; findings roll into knowledge chunks for future optimizations.
+
+**How it fits:** `.claude/commands/*` orchestrate the workflow (plan → build → release), `.claude/hooks/*` enforce guardrails, agents execute the steps, and MCP servers provide live tool access—all grounded in the ONE ontology as the single source of truth.
+
+---
+
 ## 📊 Statistics
 
 ### Ontology Size
@@ -643,21 +663,12 @@ See [LICENSE.md](../LICENSE.md) for details.
 
 ---
 
-## 🌐 Links
-
-- **Website:** [one.ie](https://one.ie)
-- **GitHub:** [github.com/one-ie/ontology](https://github.com/one-ie/ontology)
-- **Documentation:** [docs.one.ie](https://docs.one.ie)
-- **NPM:** `npx oneie@latest`
-
----
-
 <div align="center">
 
 **ONE Ontology. Infinite Systems.**
 
 *Built with clarity, simplicity, and infinite scale in mind.*
 
-[Explore the Platform](https://one.ie) • [View on GitHub](https://github.com/one-ie/stack) • [Read the Docs](https://docs.one.ie)
+[Explore the Platform](https://one.ie) • [View on GitHub](https://github.com/one-ie/one) • [Read the Docs](https://one.ie/docs)
 
 </div>

@@ -1,0 +1,299 @@
+# ONE Platform - Minimal Ontology
+# The absolute essence
+
+version: 2.0.0
+golden_rule: "Everything maps to 6 dimensions. All complexity lives in metadata."
+
+# ======================================================================
+# THE 6 DIMENSIONS
+# ======================================================================
+
+1_organizations:
+  purpose: Multi-tenant isolation
+  rule: "Every resource belongs to exactly one organization"
+  structure:
+    _id: Id
+    name: string # REQUIRED: Display name
+    slug: string # REQUIRED: URL identifier (/org/slug)
+    status: enum # REQUIRED: active, suspended, trial, cancelled
+    plan: enum # REQUIRED: starter, pro, enterprise
+    domain?: string # OPTIONAL: Custom domain
+    logo?: string # OPTIONAL: Organization logo
+    description?: string # OPTIONAL: About text
+    limits: {}
+    usage: {}
+    settings: {}
+
+  common_fields:
+    identity: [name, slug]
+    web: [slug, name, logo, description, domain]
+    operations: [status, plan, limits, usage, settings]
+
+2_people:
+  purpose: Authorization & governance
+  rule: "Every action has exactly one actor"
+  structure:
+    _id: Id
+    email: string # REQUIRED: Auth identifier
+    username: string # REQUIRED: URL identifier (/username)
+    displayName: string # REQUIRED: Display name
+    role: enum[platform_owner, org_owner, org_user, customer]
+    organizationId?: Id # Current/default org
+    organizations: Id[] # All orgs person belongs to
+    permissions?: string[] # Additional permissions
+    avatar?: string # OPTIONAL: Profile image
+    bio?: string # OPTIONAL: About text
+
+  common_fields:
+    identity: [email, username, displayName]
+    auth: [email, username, role, permissions]
+    web: [username, displayName, avatar, bio]
+    governance: [role, organizationId, organizations, permissions]
+
+3_things:
+  purpose: All entities
+  rule: "If you can point at it and say 'this is a ___', it's a thing"
+  structure:
+    _id: Id
+    type: ThingType # 66 types (see ontology.yaml)
+    name: string
+    properties: {} # Schema-free JSON
+    status: enum
+
+  workflow_things:
+    idea: "User's initial concept → validated by director"
+    plan: "Collection of features → orchestrated by director (e.g., 2-course-platform)"
+    feature: "Specification of what to build → written by specialists (e.g., 2-1-course-crud)"
+    test: "User flows + acceptance criteria → defined by quality agent"
+    design: "Wireframes + components → created by design agent"
+    task: "Individual work item → executed by specialists (e.g., 2-1-task-1)"
+    lesson: "Lessons learned → captured in knowledge after fixes"
+
+4_connections:
+  purpose: All relationships
+  rule: "If X relates to Y, it's a connection"
+  structure:
+    _id: Id
+    fromThingId: Id
+    toThingId: Id
+    relationshipType: ConnectionType # 25 types (see ontology.yaml)
+    metadata?: {} # Protocol + context
+
+  workflow_connections:
+    part_of: "feature → plan, task → feature"
+    assigned_to: "feature → agent, task → agent"
+    depends_on: "task → task (optional ordering)"
+    tested_by: "feature → test"
+    designed_by: "feature → design"
+    implements: "task → design"
+
+5_events:
+  purpose: All actions in time
+  rule: "If something happened at a specific time, it's an event"
+  structure:
+    _id: Id
+    type: EventType # 67 types (see ontology.yaml)
+    actorId: Id
+    targetId?: Id
+    timestamp: number
+    metadata: {} # Protocol + event data
+
+6_knowledge:
+  purpose: Labels + vectors for RAG
+  rule: "Categories (labels) and semantic search (chunks)"
+  structure:
+    _id: Id
+    knowledgeType: enum[label, document, chunk, vector_only]
+    text?: string
+    embedding?: number[]
+    sourceThingId?: Id
+    labels?: string[]
+    metadata?: {}
+
+  junction:
+    thingKnowledge:
+      thingId: Id
+      knowledgeId: Id
+      role?: enum
+
+# ======================================================================
+# UNIVERSAL FIELDS (Auth + Web Generation)
+# ======================================================================
+
+universal_fields:
+  description: "Fields that EVERY person/org has for auth and web generation"
+
+  organizations_require:
+    identity: [name, slug] # Who they are + URL
+    web: [slug, logo?, description?, domain?]
+    operations: [status, plan, limits, usage]
+
+  people_require:
+    identity: [email, username, displayName] # Who they are + URL
+    auth: [email, username, role] # Authentication
+    web: [username, displayName, avatar?, bio?]
+    governance: [role, organizationId?, organizations]
+
+  things_require:
+    identity: [type, name] # What it is
+    properties: {} # Type-specific data (username, slug, image, etc.)
+    status: enum # Visibility/state
+
+  web_generation_pattern: |
+    Every person/org can be a website:
+    - Organizations: /org/{slug} → generated from org data
+    - People: /{username} → generated from person data
+    - Things: Rendered in context of their owner (org or person)
+
+    Required for ANY web page:
+    1. URL identifier (slug/username in properties)
+    2. Display name (name field)
+    3. Visual identity (logo/avatar in properties)
+    4. Description (bio/description in properties)
+    5. Visibility (status field)
+
+  auth_pattern: |
+    Better Auth integration:
+    - People table has email (links to auth.users)
+    - Auth sessions → session thing (type: session)
+    - OAuth accounts → oauth_account thing
+    - Email verification → verification_token thing
+
+    Minimal auth fields in people:
+    - email (REQUIRED for linking to auth.users)
+    - username (OPTIONAL for username-based login)
+    - role (REQUIRED for authorization)
+
+# ======================================================================
+# EXTENSIBILITY
+# ======================================================================
+
+extensibility:
+  principle: "Add without breaking"
+
+  add_thing_type: "Only when global categorization helps"
+  add_properties: "Use properties{} - no schema change"
+  add_metadata: "Use metadata{} - no schema change"
+  add_labels: "Use knowledge labels - no schema change"
+
+  protocols: "metadata.protocol = a2a | acp | ap2 | x402 | ag-ui | custom"
+
+# ======================================================================
+# WORKFLOW (Agent-Based Development)
+# ======================================================================
+
+workflow:
+  description: "Agent-orchestrated development using ontology as source of truth"
+  philosophy: "The ontology IS the workflow. Agents collaborate. Everything else is noise."
+
+  stages:
+    1_ideas: # Director validates against ontology
+    2_plans: # Director creates feature collections
+    3_features: # Specialists write specifications
+    4_tests: # Quality defines user flows & acceptance criteria
+    5_design: # Design creates UI that enables tests to pass
+    6_implementation: # Specialists code → Quality validates → Complete
+
+  agents:
+    director: # Validates ideas, creates plans, assigns work
+      role: engineering_agent
+      responsibilities:
+        [validate_ideas, create_plans, assign_specialists, mark_complete]
+      context_tokens: 200 # Just ontology type names
+
+    specialists: # Write features, execute tasks, fix problems
+      roles: [engineering_agent, design_agent, marketing_agent]
+      types: [backend, frontend, integration]
+      context_tokens: 1500 # Ontology types + patterns
+
+    quality: # Defines tests, validates results
+      role: intelligence_agent
+      responsibilities:
+        [check_ontology, create_user_flows, define_tests, validate]
+      context_tokens: 2000 # Ontology + feature + UX patterns
+
+    design: # Creates wireframes & components
+      role: design_agent
+      responsibilities: [create_wireframes, define_components, set_tokens]
+      context_tokens: 2000 # Feature + tests + design patterns
+
+    problem_solver: # Analyzes failures (ultrathink mode)
+      role: intelligence_agent
+      responsibilities: [analyze_failures, propose_solutions, delegate_fixes]
+      context_tokens: 2500 # Failed tests + implementation + ontology
+
+    documenter: # Writes docs after completion
+      role: intelligence_agent
+      responsibilities: [write_docs, update_knowledge]
+      context_tokens: 1000 # Feature + tests
+
+  numbering:
+    plan: "2-plan-name" # e.g., 2-course-platform
+    feature: "2-1-feature-name" # e.g., 2-1-course-crud
+    tasks: "2-1-feature-name-tasks" # e.g., 2-1-course-crud-tasks
+    task: "2-1-task-1" # e.g., 2-1-task-1
+
+  workflow_events:
+    planning: [plan_started, feature_assigned, tasks_created]
+    execution:
+      [feature_started, implementation_complete, task_started, task_completed]
+    quality:
+      [
+        quality_check_started,
+        quality_check_complete,
+        test_started,
+        test_passed,
+        test_failed,
+      ]
+    problem_solving:
+      [problem_analysis_started, solution_proposed, fix_started, fix_complete]
+    documentation:
+      [documentation_started, documentation_complete, lesson_learned_added]
+    completion: [feature_complete, plan_complete]
+
+  quality_loop: |
+    Specialist writes → Quality validates → Tests run
+    → PASS: Documenter writes docs
+    → FAIL: Problem Solver analyzes → Proposes solution → Specialist fixes → Add to lessons learned → Re-test
+
+  coordination:
+    pattern: "Event-driven via events table"
+    no_handoffs: "Agents watch events, act autonomously"
+    parallel: "Tasks execute concurrently"
+    audit_trail: "Complete history in events table"
+
+# ======================================================================
+# IMPLEMENTATION
+# ======================================================================
+
+checklist:
+  1: "What things?"
+  2: "What connections?"
+  3: "What events?"
+  4: "What knowledge?"
+  5: "What protocol? (metadata.protocol)"
+  6: "What workflow stage? (idea/plan/feature/test/design/implementation)"
+
+indexes:
+  things: [by_type, by_status]
+  connections: [from_type, to_type]
+  events: [type_time, actor_time]
+  knowledge: [by_type, by_embedding]
+
+# ======================================================================
+# PHILOSOPHY
+# ======================================================================
+
+essence: |
+  6 dimensions × infinite metadata = complete platform
+
+  Organizations partition
+  People authorize
+  Things exist
+  Connections relate
+  Events record
+  Knowledge understands
+
+  Everything else is just data.
+
+# See ontology.yaml for complete specification
