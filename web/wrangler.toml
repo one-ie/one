@@ -1,0 +1,15 @@
+name = "web"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-09-25"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables for Cloudflare Pages
+# Note: These are for local testing. For production, set in Cloudflare Pages dashboard
+[vars]
+PUBLIC_CONVEX_URL = "https://shocking-falcon-870.convex.cloud"
+CONVEX_DEPLOYMENT = "prod:shocking-falcon-870"
+CLOUDFLARE_ACCOUNT_ID = "627e0c7ccbe735a4a7cabf91e377bbad"
+GITHUB_CLIENT_ID = "55c60b9b2850097d51b7"
+[[kv_namespaces]]
+binding = "SESSION"
+id = "3c7a77f517f6434a9fea95a3fa5537c1"

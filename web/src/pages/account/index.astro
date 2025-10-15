@@ -1,0 +1,12 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { DashboardLayout } from '@/components/dashboard/dashboard-layout';
+
+export const prerender = false;
+
+const user = Astro.locals.user;
+---
+
+<Layout title="Dashboard">
+  <DashboardLayout client:load user={user ?? undefined} />
+</Layout>

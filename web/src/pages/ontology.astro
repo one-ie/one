@@ -1,0 +1,1624 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  ArrowRight,
+  Check,
+  Users,
+  Box,
+  GitBranch,
+  Activity,
+  Brain,
+  Network,
+  Sparkles,
+  Code,
+  FileText,
+  Zap,
+  Database,
+  MessageSquare,
+  ChevronDown,
+  Building2,
+  Shield,
+  Globe,
+  Coins,
+} from 'lucide-react';
+---
+
+<Layout title="The ONE Ontology - ONE Platform">
+  <!-- Hero Section -->
+  <section
+    class="relative overflow-hidden px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
+  >
+    <div
+      class="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-primary/[0.02] to-background"
+    >
+    </div>
+    <div
+      class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-primary/5 to-transparent"
+    >
+    </div>
+    <div
+      class="absolute left-1/2 top-0 -z-10 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]"
+    >
+    </div>
+
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="flex flex-col items-center space-y-8 text-center">
+        <Badge
+          variant="outline"
+          className="inline-flex items-center gap-2"
+          data-usal="fade-down duration-600"
+        >
+          <Network className="h-4 w-4" />
+          Complete Architecture for AI Systems
+        </Badge>
+
+        <div class="space-y-6" data-usal="fade-up duration-700 delay-100">
+          <h1
+            class="font-heading font-extrabold leading-[1.1] tracking-tight text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+          >
+            <span class="block">The ONE</span>
+            <span class="block text-primary drop-shadow-sm">Ontology</span>
+          </h1>
+
+          <p
+            class="mx-auto max-w-3xl text-xl leading-relaxed text-muted-foreground md:text-2xl"
+          >
+            Every intelligent system needs a coherent model of reality. The ONE
+            Ontology gives AI agents—and the humans who direct
+            them—a complete, scalable architecture for understanding <strong
+              class="text-foreground"
+              >who owns what, who can do what, what happened, and what it all
+              means.</strong
+            >
+          </p>
+        </div>
+
+        <div
+          class="flex items-center gap-3 pt-4"
+          data-usal="fade-up duration-700 delay-200"
+        >
+          <span class="text-sm text-muted-foreground"
+            >Scroll to explore the architecture</span
+          >
+          <ChevronDown
+            className="h-5 w-5 animate-bounce text-muted-foreground"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why ONE Ontology -->
+  <section
+    class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
+  >
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge
+          variant="outline"
+          className="mb-2 inline-flex items-center gap-2"
+          data-usal="fade-down duration-600"
+        >
+          <Sparkles className="h-4 w-4" />
+          The Foundation
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+          data-usal="fade-up duration-700 delay-100"
+        >
+          Why the ONE Ontology
+        </h2>
+        <p
+          class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground"
+          data-usal="fade-up duration-700 delay-200"
+        >
+          Traditional systems create tables for features, pollute schemas with
+          temporary concepts, and end up with hundreds of entities nobody
+          understands. The ONE Ontology takes a different approach: <strong
+            class="text-foreground"
+            >model reality in six core dimensions and map everything to them.</strong
+          >
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Users className="h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">Groups</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Hierarchical containers that nest infinitely. From friend circles to global enterprises—perfect isolation at any scale.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Users className="h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">People</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Authorize and govern. Every action traces back to human intent. AI
+              serves people, not the other way around.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Box className="h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">Things</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Capture what exists. Agents, products, audiences, tokens—anything
+              you need to model with strong types.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <GitBranch className="h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">Connections</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Express relationships. Ownership, authorization, value flows—make
+              the implicit explicit.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Activity className="h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">Events</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Record what happened. Immutable audit trail that enables
+              time-travel queries and learning loops.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Brain className="h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">Knowledge</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Store what it means. Semantics, embeddings, and insights that give
+              agents context to act intelligently.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <div
+        class="mt-16 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-8 backdrop-blur text-center"
+      >
+        <p class="text-lg leading-relaxed">
+          <strong class="text-foreground"
+            >Together, these dimensions create a generative architecture</strong
+          > where human intent flows through organizational scope, creating entities
+          that relate, generating history that produces intelligence.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ONE Ontology Deep Dive -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge
+          variant="outline"
+          className="mb-2 inline-flex items-center gap-2"
+          data-usal="fade-down duration-600"
+        >
+          <Network className="h-4 w-4" />
+          Complete Model
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+          data-usal="fade-up duration-700 delay-100"
+        >
+          Inside the ONE Ontology
+          <br />
+          <span class="text-muted-foreground">Deep Dive</span>
+        </h2>
+      </div>
+
+      <div class="space-y-16">
+        <!-- Dimension 1: Groups -->
+        <div class="space-y-6">
+          <Card
+            className="border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur"
+          >
+            <CardHeader className="space-y-4">
+              <div class="flex items-start gap-4">
+                <div
+                  class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/20"
+                >
+                  <Users className="h-8 w-8 text-primary" />
+                </div>
+                <div class="flex-1">
+                  <CardTitle className="text-3xl">1. Groups</CardTitle>
+                  <CardDescription className="text-base mt-2 leading-relaxed">
+                    Hierarchical containers that organize people and things
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <p class="leading-relaxed text-muted-foreground">
+                Groups are hierarchical containers that can nest within each other, from intimate friend circles to massive organizations. Each group owns its own graph of people, things, connections, events, and knowledge—creating perfect isolation at any scale.
+              </p>
+
+              <!-- Group Types -->
+              <div class="space-y-3">
+                <div class="font-semibold text-sm text-foreground">
+                  6 Group Types
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <div class="flex items-start gap-2 text-sm">
+                    <Badge variant="secondary" className="font-mono">friend_circle</Badge>
+                    <span class="text-muted-foreground">Small, intimate groups</span>
+                  </div>
+                  <div class="flex items-start gap-2 text-sm">
+                    <Badge variant="secondary" className="font-mono">business</Badge>
+                    <span class="text-muted-foreground">Commercial organizations</span>
+                  </div>
+                  <div class="flex items-start gap-2 text-sm">
+                    <Badge variant="secondary" className="font-mono">community</Badge>
+                    <span class="text-muted-foreground">Interest-based collectives</span>
+                  </div>
+                  <div class="flex items-start gap-2 text-sm">
+                    <Badge variant="secondary" className="font-mono">dao</Badge>
+                    <span class="text-muted-foreground">Token-governed groups</span>
+                  </div>
+                  <div class="flex items-start gap-2 text-sm">
+                    <Badge variant="secondary" className="font-mono">government</Badge>
+                    <span class="text-muted-foreground">Public institutions</span>
+                  </div>
+                  <div class="flex items-start gap-2 text-sm">
+                    <Badge variant="secondary" className="font-mono">organization</Badge>
+                    <span class="text-muted-foreground">Generic groups</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hierarchical Nesting -->
+              <div class="space-y-3">
+                <div class="font-semibold text-sm text-foreground">
+                  Hierarchical Nesting
+                </div>
+                <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                  <pre class="text-xs overflow-x-auto"><code>{`groups/acme-corp (business)
+  ├─ groups/engineering (organization)
+  │   ├─ groups/backend-team (organization)
+  │   └─ groups/frontend-team (organization)
+  ├─ groups/marketing (organization)
+  └─ groups/sales (organization)
+
+groups/emmas-friends (friend_circle)
+  ├─ groups/birthday-party (friend_circle)
+  └─ groups/game-night (friend_circle)
+
+groups/cool-dao (dao)
+  ├─ groups/treasury (dao)
+  └─ groups/governance (dao)`}</code></pre>
+                </div>
+              </div>
+
+              <!-- Properties & Features -->
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div
+                  class="rounded-lg border border-border/50 bg-muted/30 p-4 space-y-2"
+                >
+                  <div class="font-semibold text-sm text-foreground">
+                    Properties
+                  </div>
+                  <ul class="text-sm text-muted-foreground space-y-1">
+                    <li>• Name, slug, and type</li>
+                    <li>• Parent group (for nesting)</li>
+                    <li>• Ownership chain</li>
+                    <li>• Subscription plan and billing</li>
+                    <li>• Usage quotas and limits</li>
+                    <li>• Status (active, suspended, trial)</li>
+                  </ul>
+                </div>
+                <div
+                  class="rounded-lg border border-border/50 bg-muted/30 p-4 space-y-2"
+                >
+                  <div class="font-semibold text-sm text-foreground">
+                    Why it matters
+                  </div>
+                  <ul class="text-sm text-muted-foreground space-y-1">
+                    <li>• Works at any scale</li>
+                    <li>• Natural hierarchy modeling</li>
+                    <li>• Multi-tenant isolation</li>
+                    <li>• Inherited permissions</li>
+                    <li>• URL-based creation</li>
+                    <li>• Type-specific defaults</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Example with Schema -->
+              <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
+                <pre
+                  class="text-xs overflow-x-auto"><code>{`groups/acme-corp
+  type: "business"
+  parentGroupId: null
+  properties: {
+    plan: "enterprise",
+    limits: { users: 50, agents: 20, inference: "1M/month" },
+    usage: { users: 12, agents: 8, inference: "234K" },
+    status: "active"
+  }
+  owned_by → people/anthony-o-connell
+
+groups/engineering
+  type: "organization"
+  parentGroupId: "acme-corp"
+  inherited_permissions: true`}</code></pre>
+              </div>
+            </CardContent>
+          </Card>
+
+          <!-- How Groups Work Section -->
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="text-2xl">How Groups Work</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div class="space-y-4">
+                <div>
+                  <h4 class="font-semibold text-sm text-foreground mb-2">URL-Based Creation</h4>
+                  <p class="text-sm text-muted-foreground mb-2">
+                    Create groups instantly by visiting <code class="text-xs bg-muted px-1 py-0.5 rounded">one.ie/group/slug</code>
+                  </p>
+                  <div class="rounded-lg border border-border/50 bg-muted/30 p-3">
+                    <pre class="text-xs overflow-x-auto"><code>{`one.ie/group/cooldao → creates "cooldao" group
+one.ie/group/cooldao/treasury → creates nested "treasury" group
+one.ie/group/emmas-birthday → creates "emmas-birthday" group`}</code></pre>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-sm text-foreground mb-2">Type-Specific Defaults</h4>
+                  <p class="text-sm text-muted-foreground mb-2">
+                    Each group type has smart defaults based on its use case:
+                  </p>
+                  <div class="grid gap-2 sm:grid-cols-2">
+                    <div class="rounded-lg border border-border/50 bg-muted/30 p-3">
+                      <div class="text-xs font-mono text-primary">friend_circle</div>
+                      <div class="text-xs text-muted-foreground">Private, invitation-only, no billing</div>
+                    </div>
+                    <div class="rounded-lg border border-border/50 bg-muted/30 p-3">
+                      <div class="text-xs font-mono text-primary">business</div>
+                      <div class="text-xs text-muted-foreground">Billing enabled, quotas enforced</div>
+                    </div>
+                    <div class="rounded-lg border border-border/50 bg-muted/30 p-3">
+                      <div class="text-xs font-mono text-primary">dao</div>
+                      <div class="text-xs text-muted-foreground">Token-gated, on-chain governance</div>
+                    </div>
+                    <div class="rounded-lg border border-border/50 bg-muted/30 p-3">
+                      <div class="text-xs font-mono text-primary">community</div>
+                      <div class="text-xs text-muted-foreground">Public, open membership</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-sm text-foreground mb-2">Multi-Tenant Isolation</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Every group gets its own isolated data space. Resources from one group never leak into another—perfect for SaaS, white-label deployment, and enterprise scale.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <!-- Example Scenarios -->
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="text-2xl">3 Example Scenarios</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <!-- Scenario 1: Friend Circle -->
+              <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-primary" />
+                  <h4 class="font-semibold text-foreground">Scenario 1: Friend Circle</h4>
+                </div>
+                <div class="rounded-lg border border-border/50 bg-muted/30 p-4">
+                  <pre class="text-xs overflow-x-auto"><code>{`Emma creates: one.ie/group/emmas-friends
+
+groups/emmas-friends (friend_circle)
+  owned_by → people/emma
+  members → [emma, sarah, jake, alex]
+
+  └─ groups/birthday-party (friend_circle)
+      event_date: "2025-10-20"
+      location: "Emma's House"
+      members → [emma, sarah, jake]  # Subset of parent`}</code></pre>
+                  <p class="text-xs text-muted-foreground mt-2">
+                    Perfect for: Party planning, trip coordination, small gatherings
+                  </p>
+                </div>
+              </div>
+
+              <!-- Scenario 2: Business -->
+              <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <Building2 className="h-5 w-5 text-primary" />
+                  <h4 class="font-semibold text-foreground">Scenario 2: Business Organization</h4>
+                </div>
+                <div class="rounded-lg border border-border/50 bg-muted/30 p-4">
+                  <pre class="text-xs overflow-x-auto"><code>{`Anthony creates: one.ie/group/acme-corp
+
+groups/acme-corp (business)
+  owned_by → people/anthony
+  plan: "enterprise"
+  billing: { seats: 50, price: "$5000/mo" }
+
+  ├─ groups/engineering (organization)
+  │   ├─ groups/backend (organization)
+  │   │   members → [dev1, dev2, dev3]
+  │   └─ groups/frontend (organization)
+  │       members → [dev4, dev5]
+  │
+  └─ groups/marketing (organization)
+      members → [marketing1, marketing2]`}</code></pre>
+                  <p class="text-xs text-muted-foreground mt-2">
+                    Perfect for: Company org charts, department isolation, permission inheritance
+                  </p>
+                </div>
+              </div>
+
+              <!-- Scenario 3: DAO -->
+              <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <Coins className="h-5 w-5 text-primary" />
+                  <h4 class="font-semibold text-foreground">Scenario 3: Decentralized Organization</h4>
+                </div>
+                <div class="rounded-lg border border-border/50 bg-muted/30 p-4">
+                  <pre class="text-xs overflow-x-auto"><code>{`Community creates: one.ie/group/cooldao
+
+groups/cooldao (dao)
+  token_address: "0x..."
+  voting_threshold: 100_000
+  members → [wallet1, wallet2, wallet3...]
+
+  ├─ groups/treasury (dao)
+  │   governance: "multisig"
+  │   signers → [wallet1, wallet2, wallet3]
+  │   funds → $500K USDC
+  │
+  └─ groups/governance (dao)
+      proposals → [prop1, prop2, prop3]
+      voting_power → weighted by token holdings`}</code></pre>
+                  <p class="text-xs text-muted-foreground mt-2">
+                    Perfect for: Token-gated communities, on-chain governance, decentralized collaboration
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <!-- Dimension 2: People -->
+        <div class="space-y-6">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-4">
+              <div class="flex items-start gap-4">
+                <div
+                  class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/10"
+                >
+                  <Users className="h-8 w-8 text-primary" />
+                </div>
+                <div class="flex-1">
+                  <CardTitle className="text-3xl">2. People</CardTitle>
+                  <CardDescription className="text-base mt-2 leading-relaxed">
+                    WHO authorizes, owns, and governs
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p class="leading-relaxed text-muted-foreground">
+                People are the prime movers. Every decision, transaction, and
+                relationship traces back to human intent. People link to
+                organizations through membership connections, creating clear
+                authorization chains.
+              </p>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div
+                  class="rounded-lg border border-border/50 bg-muted/30 p-4 space-y-2"
+                >
+                  <div class="font-semibold text-sm text-foreground">
+                    Properties
+                  </div>
+                  <ul class="text-sm text-muted-foreground space-y-1">
+                    <li>• Identity (name, email, wallet)</li>
+                    <li>• Authentication credentials</li>
+                    <li>• Role within organization</li>
+                    <li>• Permissions and authorization</li>
+                    <li>• Preferences and settings</li>
+                  </ul>
+                </div>
+                <div
+                  class="rounded-lg border border-border/50 bg-muted/30 p-4 space-y-2"
+                >
+                  <div class="font-semibold text-sm text-foreground">
+                    Why it matters
+                  </div>
+                  <ul class="text-sm text-muted-foreground space-y-1">
+                    <li>• Human authorization required</li>
+                    <li>• Clear governance</li>
+                    <li>• Audit trails</li>
+                    <li>• Intent and accountability</li>
+                    <li>• AI serves people</li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <!-- Dimension 3: Things -->
+        <div class="space-y-6">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-4">
+              <div class="flex items-start gap-4">
+                <div
+                  class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/10"
+                >
+                  <Box className="h-8 w-8 text-primary" />
+                </div>
+                <div class="flex-1">
+                  <CardTitle className="text-3xl">3. Things</CardTitle>
+                  <CardDescription className="text-base mt-2 leading-relaxed">
+                    WHAT exists in your system
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p class="leading-relaxed text-muted-foreground">
+                Things are discrete entities with properties, types, and states.
+                They can be agents, products, audiences, tokens, mandates,
+                contracts—anything you need to model. Every thing belongs to
+                exactly one organization.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">66 Thing Types</Badge>
+                <Badge variant="secondary">Core</Badge>
+                <Badge variant="secondary">Business Agents</Badge>
+                <Badge variant="secondary">Content</Badge>
+                <Badge variant="secondary">Products</Badge>
+                <Badge variant="secondary">Community</Badge>
+                <Badge variant="secondary">Knowledge</Badge>
+                <Badge variant="secondary">Platform</Badge>
+                <Badge variant="secondary">Tokenization</Badge>
+                <Badge variant="secondary">External</Badge>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <!-- Dimension 4: Connections -->
+        <div class="space-y-6">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-4">
+              <div class="flex items-start gap-4">
+                <div
+                  class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/10"
+                >
+                  <GitBranch className="h-8 w-8 text-primary" />
+                </div>
+                <div class="flex-1">
+                  <CardTitle className="text-3xl">4. Connections</CardTitle>
+                  <CardDescription className="text-base mt-2 leading-relaxed">
+                    HOW things relate to each other
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p class="leading-relaxed text-muted-foreground">
+                Connections are first-class relationships with their own
+                properties. They express ownership, membership, governance,
+                authorization, dependencies, transactions, and more. Connections
+                make the implicit explicit.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">25 Connection Types</Badge>
+                <Badge variant="secondary">owns</Badge>
+                <Badge variant="secondary">can_execute</Badge>
+                <Badge variant="secondary">governed_by</Badge>
+                <Badge variant="secondary">member_of</Badge>
+                <Badge variant="secondary">following</Badge>
+                <Badge variant="secondary">transacted</Badge>
+                <Badge variant="secondary">licensed_to</Badge>
+                <Badge variant="secondary">taught_by</Badge>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <!-- Dimension 5: Events -->
+        <div class="space-y-6">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-4">
+              <div class="flex items-start gap-4">
+                <div
+                  class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/10"
+                >
+                  <Activity className="h-8 w-8 text-primary" />
+                </div>
+                <div class="flex-1">
+                  <CardTitle className="text-3xl">5. Events</CardTitle>
+                  <CardDescription className="text-base mt-2 leading-relaxed">
+                    WHAT happened, when, and why
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p class="leading-relaxed text-muted-foreground">
+                Events are immutable records of every action in your system.
+                They create an audit trail, enable time-travel queries, feed
+                analytics, and power learning loops. Events are the memory of
+                your system.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">67 Event Types</Badge>
+                <Badge variant="secondary">Thing lifecycle</Badge>
+                <Badge variant="secondary">User actions</Badge>
+                <Badge variant="secondary">AI/Agent</Badge>
+                <Badge variant="secondary">Token/NFT</Badge>
+                <Badge variant="secondary">Content</Badge>
+                <Badge variant="secondary">Knowledge</Badge>
+                <Badge variant="secondary">Analytics</Badge>
+                <Badge variant="secondary">Blockchain</Badge>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <!-- Dimension 6: Knowledge -->
+        <div class="space-y-6">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-4">
+              <div class="flex items-start gap-4">
+                <div
+                  class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/10"
+                >
+                  <Brain className="h-8 w-8 text-primary" />
+                </div>
+                <div class="flex-1">
+                  <CardTitle className="text-3xl">6. Knowledge</CardTitle>
+                  <CardDescription className="text-base mt-2 leading-relaxed">
+                    WHAT it all means
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p class="leading-relaxed text-muted-foreground">
+                Knowledge captures semantics—labels, chunks, embeddings, and
+                structured insights—that give agents the context they need to
+                act intelligently. Knowledge transforms raw events and
+                properties into queryable, composable intelligence.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">Labels</Badge>
+                <Badge variant="secondary">Chunks</Badge>
+                <Badge variant="secondary">Embeddings</Badge>
+                <Badge variant="secondary">Relationships</Badge>
+                <Badge variant="secondary">Licensing</Badge>
+                <Badge variant="secondary">Provenance</Badge>
+                <Badge variant="secondary">Tokenization</Badge>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual Representation -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-5xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2" data-usal="fade-down duration-600">
+          <Network className="h-4 w-4" />
+          Visual Model
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl" data-usal="fade-up duration-700 delay-100">
+          How The Ontology Works
+        </h2>
+        <p class="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground" data-usal="fade-up duration-700 delay-200">
+          A complete example showing how all six dimensions of the ONE Ontology work together in a real feature.
+        </p>
+      </div>
+
+      <div class="space-y-8">
+        <!-- Example: Token Purchase Flow -->
+        <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
+          <h3 class="mb-8 text-center text-2xl font-bold">Example: Fan Buys Creator Tokens</h3>
+
+          <div class="space-y-6">
+            <!-- Step 0: Groups -->
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Users className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-semibold">Groups</h4>
+                  <Badge variant="outline" className="text-xs">Scope</Badge>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  Transaction happens within "Acme Corp" group boundary. All entities belong to this group (can be nested).
+                </p>
+                <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
+                  groupId: acme-corp → scope: all entities in this transaction
+                </div>
+              </div>
+            </div>
+
+            <div class="ml-6 h-8 w-px bg-border"></div>
+
+            <!-- Step 1: People -->
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Users className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-semibold">People</h4>
+                  <Badge variant="outline" className="text-xs">Authorization</Badge>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  Fan authorizes the intent: "Buy 100 creator tokens for $10."
+                </p>
+                <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
+                  actorId: fan_123 → intent: purchase_tokens
+                </div>
+              </div>
+            </div>
+
+            <div class="ml-6 h-8 w-px bg-border"></div>
+
+            <!-- Step 2: Things -->
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Box className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-semibold">Things</h4>
+                  <Badge variant="outline" className="text-xs">Entities Involved</Badge>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  The system resolves the intent to concrete Things: the fan (audience_member) and the creator token (token).
+                </p>
+                <div class="grid gap-2 sm:grid-cols-2">
+                  <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
+                    <div class="text-primary">fan_123</div>
+                    <div class="text-muted-foreground">type: audience_member</div>
+                  </div>
+                  <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
+                    <div class="text-primary">token_456</div>
+                    <div class="text-muted-foreground">type: token</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ml-6 h-8 w-px bg-border"></div>
+
+            <!-- Step 3: Connections -->
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <GitBranch className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-semibold">Connections</h4>
+                  <Badge variant="outline" className="text-xs">Relationship Created</Badge>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  ONE asserts a `holds_tokens` relationship and stores live balance metadata.
+                </p>
+                <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
+                  <div><span class="text-primary">fan_123</span> → <span class="text-primary">token_456</span></div>
+                  <div class="mt-1 text-muted-foreground">relationshipType: holds_tokens</div>
+                  <div class="text-muted-foreground">{`metadata: { balance: 100 }`}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ml-6 h-8 w-px bg-border"></div>
+
+            <!-- Step 4: Events -->
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Activity className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-semibold">Events</h4>
+                  <Badge variant="outline" className="text-xs">Action Recorded</Badge>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  An immutable `tokens_purchased` event records who did what, when, and how much.
+                </p>
+                <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
+                  <div>type: tokens_purchased</div>
+                  <div class="mt-1 text-muted-foreground">actorId: fan_123</div>
+                  <div class="text-muted-foreground">targetId: token_456</div>
+                  <div class="text-muted-foreground">{`metadata: { amount: 100, usd: 10 }`}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ml-6 h-8 w-px bg-border"></div>
+
+            <!-- Step 5: Knowledge -->
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Brain className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-semibold">Knowledge</h4>
+                  <Badge variant="outline" className="text-xs">Context Added</Badge>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  Knowledge labels give downstream agents context for segmentation, rewards, and recommendations.
+                </p>
+                <div class="rounded-md bg-muted/50 p-3">
+                  <div class="flex flex-wrap gap-2 font-mono text-xs">
+                    <Badge variant="secondary" className="font-mono">payment_method:stripe</Badge>
+                    <Badge variant="secondary" className="font-mono">status:completed</Badge>
+                    <Badge variant="secondary" className="font-mono">audience:engaged</Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 rounded-lg border border-primary/20 bg-primary/5 p-6 text-center">
+            <p class="text-sm font-medium">
+              <strong class="text-foreground">Result:</strong> <span class="text-muted-foreground">One intent now touches every dimension—organizational scope, authorization, entities, relationships, events, and context—ready for agents to reuse.</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Enhanced Data Flow Diagram -->
+        <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
+          <h3 class="mb-8 text-center text-xl font-bold">Data Flow Through The Ontology</h3>
+
+          <div class="mx-auto max-w-3xl">
+            <div class="relative space-y-6">
+              <!-- Vertical flow line -->
+              <div class="absolute left-12 top-16 bottom-16 w-px bg-gradient-to-b from-primary/40 via-primary/20 to-primary/40"></div>
+
+              <!-- Step 0: Groups -->
+              <div class="relative">
+                <div class="flex items-start gap-6">
+                  <div class="relative z-10 flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur">
+                    <div class="text-center">
+                      <Users className="mx-auto h-8 w-8 text-primary" />
+                      <div class="mt-1 text-xs font-medium text-primary">0</div>
+                    </div>
+                  </div>
+                  <div class="flex-1 space-y-2 pt-2">
+                    <h4 class="text-lg font-semibold">Groups</h4>
+                    <p class="text-sm text-muted-foreground leading-relaxed">
+                      <strong class="text-foreground">Isolation Layer:</strong> Everything happens within a group boundary (can be hierarchically nested). Perfect multi-tenant separation, resource quotas, billing boundaries.
+                    </p>
+                    <div class="flex items-center gap-2 pt-1">
+                      <Badge variant="secondary" className="text-xs">Scope</Badge>
+                      <Badge variant="secondary" className="text-xs">Hierarchical</Badge>
+                      <Badge variant="secondary" className="text-xs">Isolation</Badge>
+                    </div>
+                  </div>
+                </div>
+                <div class="ml-12 mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <ArrowRight className="h-3 w-3" />
+                  <span>Establishes scope for all operations (with optional nesting)</span>
+                </div>
+              </div>
+
+              <!-- Step 1: People -->
+              <div class="relative">
+                <div class="flex items-start gap-6">
+                  <div class="relative z-10 flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-border/50 bg-muted/50 backdrop-blur">
+                    <div class="text-center">
+                      <Users className="mx-auto h-8 w-8 text-primary" />
+                      <div class="mt-1 text-xs font-medium text-muted-foreground">1</div>
+                    </div>
+                  </div>
+                  <div class="flex-1 space-y-2 pt-2">
+                    <h4 class="text-lg font-semibold">People</h4>
+                    <p class="text-sm text-muted-foreground leading-relaxed">
+                      <strong class="text-foreground">Policy Layer:</strong> Humans set outcomes, attach limits, and approve execution. Every workflow starts with explicit intent.
+                    </p>
+                    <div class="flex items-center gap-2 pt-1">
+                      <Badge variant="secondary" className="text-xs">Intent</Badge>
+                      <Badge variant="secondary" className="text-xs">Policy</Badge>
+                      <Badge variant="secondary" className="text-xs">Approval</Badge>
+                    </div>
+                  </div>
+                </div>
+                <div class="ml-12 mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <ArrowRight className="h-3 w-3" />
+                  <span>Triggers system action</span>
+                </div>
+              </div>
+
+              <!-- Step 2: Things -->
+              <div class="relative">
+                <div class="flex items-start gap-6">
+                  <div class="relative z-10 flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-border/50 bg-muted/50 backdrop-blur">
+                    <div class="text-center">
+                      <Box className="mx-auto h-8 w-8 text-primary" />
+                      <div class="mt-1 text-xs font-medium text-muted-foreground">2</div>
+                    </div>
+                  </div>
+                  <div class="flex-1 space-y-2 pt-2">
+                    <h4 class="text-lg font-semibold">Things</h4>
+                    <p class="text-sm text-muted-foreground leading-relaxed">
+                      <strong class="text-foreground">Entity Layer:</strong> ONE resolves intent into typed Things—people, agents, offers, content—and versions every change.
+                    </p>
+                    <div class="flex items-center gap-2 pt-1">
+                      <Badge variant="secondary" className="text-xs">66 types</Badge>
+                      <Badge variant="secondary" className="text-xs">Typed</Badge>
+                      <Badge variant="secondary" className="text-xs">Validated</Badge>
+                    </div>
+                  </div>
+                </div>
+                <div class="ml-12 mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <ArrowRight className="h-3 w-3" />
+                  <span>Creates relationships</span>
+                </div>
+              </div>
+
+              <!-- Step 3: Connections -->
+              <div class="relative">
+                <div class="flex items-start gap-6">
+                  <div class="relative z-10 flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-border/50 bg-muted/50 backdrop-blur">
+                    <div class="text-center">
+                      <GitBranch className="mx-auto h-8 w-8 text-primary" />
+                      <div class="mt-1 text-xs font-medium text-muted-foreground">3</div>
+                    </div>
+                  </div>
+                  <div class="flex-1 space-y-2 pt-2">
+                    <h4 class="text-lg font-semibold">Connections</h4>
+                    <p class="text-sm text-muted-foreground leading-relaxed">
+                      <strong class="text-foreground">Relationship Layer:</strong> Defines how value moves—ownership, membership, authority—and stores actionable metadata on every edge.
+                    </p>
+                    <div class="flex items-center gap-2 pt-1">
+                      <Badge variant="secondary" className="text-xs">25 types</Badge>
+                      <Badge variant="secondary" className="text-xs">Graph</Badge>
+                      <Badge variant="secondary" className="text-xs">Metadata</Badge>
+                    </div>
+                  </div>
+                </div>
+                <div class="ml-12 mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <ArrowRight className="h-3 w-3" />
+                  <span>Determines permitted actions</span>
+                </div>
+              </div>
+
+              <!-- Step 4: Events -->
+              <div class="relative">
+                <div class="flex items-start gap-6">
+                  <div class="relative z-10 flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-border/50 bg-muted/50 backdrop-blur">
+                    <div class="text-center">
+                      <Activity className="mx-auto h-8 w-8 text-primary" />
+                      <div class="mt-1 text-xs font-medium text-muted-foreground">4</div>
+                    </div>
+                  </div>
+                  <div class="flex-1 space-y-2 pt-2">
+                    <h4 class="text-lg font-semibold">Events</h4>
+                    <p class="text-sm text-muted-foreground leading-relaxed">
+                      <strong class="text-foreground">Audit Layer:</strong> Records what happened, when, by whom. Builds the immutable timeline for analytics, compliance, and automation.
+                    </p>
+                    <div class="flex items-center gap-2 pt-1">
+                      <Badge variant="secondary" className="text-xs">67 types</Badge>
+                      <Badge variant="secondary" className="text-xs">Timestamped</Badge>
+                      <Badge variant="secondary" className="text-xs">Immutable</Badge>
+                    </div>
+                  </div>
+                </div>
+                <div class="ml-12 mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <ArrowRight className="h-3 w-3" />
+                  <span>Feeds the knowledge graph</span>
+                </div>
+              </div>
+
+              <!-- Step 5: Knowledge -->
+              <div class="relative">
+                <div class="flex items-start gap-6">
+                  <div class="relative z-10 flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-border/50 bg-muted/50 backdrop-blur">
+                    <div class="text-center">
+                      <Brain className="mx-auto h-8 w-8 text-primary" />
+                      <div class="mt-1 text-xs font-medium text-muted-foreground">5</div>
+                    </div>
+                  </div>
+                  <div class="flex-1 space-y-2 pt-2">
+                    <h4 class="text-lg font-semibold">Knowledge</h4>
+                    <p class="text-sm text-muted-foreground leading-relaxed">
+                      <strong class="text-foreground">Intelligence Layer:</strong> Adds labels, embeddings, and summaries so agents can recall, reason, and personalize.
+                    </p>
+                    <div class="flex items-center gap-2 pt-1">
+                      <Badge variant="secondary" className="text-xs">Labels</Badge>
+                      <Badge variant="secondary" className="text-xs">Vectors</Badge>
+                      <Badge variant="secondary" className="text-xs">RAG</Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="mt-10 rounded-lg border border-primary/20 bg-primary/5 p-6">
+              <div class="flex items-start gap-4">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                  <Check className="h-6 w-6 text-primary" />
+                </div>
+                <div class="space-y-2">
+                  <h4 class="font-semibold text-foreground">Shared Mental Model</h4>
+                  <p class="text-sm text-muted-foreground leading-relaxed">
+                    Plain-English features compile straight into the ontology. You can inspect each dimension, test assumptions, and ship new automations with confidence.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plain English DSL -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2" data-usal="fade-down duration-600">
+          <MessageSquare className="h-4 w-4" />
+          Plain English DSL
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl" data-usal="fade-up duration-700 delay-100">
+          Write Features in English
+          <br />
+          <span class="text-muted-foreground">The System Builds Everything</span>
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground" data-usal="fade-up duration-700 delay-200">
+          Describe what you want in plain English. The compiler checks every line against the ontology, generates TypeScript and tests, and deploys to the edge.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+        <Card className="border-border/50 bg-card/50 backdrop-blur" data-usal="fade-up duration-600 delay-100">
+          <CardHeader className="space-y-3">
+            <Code className="h-8 w-8 text-primary" />
+            <CardTitle className="text-lg">CREATE</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Add typed Things—agents, content, tokens, offers—directly into the graph
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur" data-usal="fade-up duration-600 delay-150">
+          <CardHeader className="space-y-3">
+            <GitBranch className="h-8 w-8 text-primary" />
+            <CardTitle className="text-lg">CONNECT</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Define relationships like owns, follows, powers with metadata and direction
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur" data-usal="fade-up duration-600 delay-200">
+          <CardHeader className="space-y-3">
+            <Activity className="h-8 w-8 text-primary" />
+            <CardTitle className="text-lg">RECORD</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Append immutable Events for purchases, interactions, completions, insights
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur" data-usal="fade-up duration-600 delay-250">
+          <CardHeader className="space-y-3">
+            <Zap className="h-8 w-8 text-primary" />
+            <CardTitle className="text-lg">CALL</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Invoke services—OpenAI, Stripe, ElevenLabs—and persist structured outputs
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur" data-usal="fade-up duration-600 delay-300">
+          <CardHeader className="space-y-3">
+            <Check className="h-8 w-8 text-primary" />
+            <CardTitle className="text-lg">CHECK</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Enforce People-defined guardrails before any action runs
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <div class="mt-16 rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
+        <h3 class="mb-6 text-center text-2xl font-bold">Example: Chat with AI Clone</h3>
+        <div class="grid gap-6 lg:grid-cols-2">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
+              <FileText className="h-5 w-5" />
+              Plain English
+            </div>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs leading-relaxed"><code>{`FEATURE: Let fans chat with my AI
+
+WHEN a fan sends a message
+  CHECK they own tokens
+  GET conversation history
+  CALL OpenAI with my personality
+  RECORD the interaction
+  REWARD fan with 10 tokens
+  GIVE AI response to fan`}</code></pre>
+            <p class="text-xs text-muted-foreground">Seven lines of English. The compiler maps each verb to a dimension and checks it before shipping.</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
+              <Database className="h-5 w-5" />
+              What Maps to Ontology
+            </div>
+            <div class="space-y-3 text-sm">
+              <div class="flex items-start gap-3 rounded border border-border/50 bg-muted/30 p-3">
+                <Box className="h-5 w-5 shrink-0 text-primary" />
+                <div>
+                  <div class="font-medium">Things Touched</div>
+                  <div class="text-xs text-muted-foreground">fan, ai_clone, message, token — all typed rows</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 rounded border border-border/50 bg-muted/30 p-3">
+                <GitBranch className="h-5 w-5 shrink-0 text-primary" />
+                <div>
+                  <div class="font-medium">Connections Updated</div>
+                  <div class="text-xs text-muted-foreground">fan holds_tokens token, fan interacted_with clone with metadata</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 rounded border border-border/50 bg-muted/30 p-3">
+                <Activity className="h-5 w-5 shrink-0 text-primary" />
+                <div>
+                  <div class="font-medium">Events Logged</div>
+                  <div class="text-xs text-muted-foreground">message_sent, tokens_earned, clone_interaction with timestamps</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 rounded border border-border/50 bg-muted/30 p-3">
+                <Brain className="h-5 w-5 shrink-0 text-primary" />
+                <div>
+                  <div class="font-medium">Knowledge Indexed</div>
+                  <div class="text-xs text-muted-foreground">Clone personality, embeddings, conversation history for retrieval</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <p class="text-base text-muted-foreground">
+          <strong class="text-foreground">Every feature follows this flow.</strong> Write it once in English, the compiler checks it against the ontology, and the edge deploys it everywhere.
+          <br class="hidden sm:block" />
+          If a step breaks the model, you know before it ships.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ontology Summary -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="space-y-12 text-center">
+        <Badge variant="outline" className="mb-4 inline-flex items-center gap-2" data-usal="fade-down duration-600">
+          <Sparkles className="h-4 w-4" />
+          The Foundation
+        </Badge>
+
+        <div class="space-y-6" data-usal="fade-up duration-700 delay-100">
+          <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+            Why This Works
+          </h2>
+          <p class="mx-auto max-w-3xl text-xl leading-relaxed text-muted-foreground">
+            The ontology holds the contracts. The DSL speaks those contracts. Together they give <strong class="text-foreground">humans, AI agents, and code the same, inspectable source of truth.</strong>
+          </p>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-3 pt-8">
+          <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+            <CardHeader className="space-y-4">
+              <Database className="mx-auto h-12 w-12 text-primary" />
+              <CardTitle className="text-2xl">66 Thing Types</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Every entity—users, agents, content, products, tokens—has a canonical, versioned schema
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+            <CardHeader className="space-y-4">
+              <Network className="mx-auto h-12 w-12 text-primary" />
+              <CardTitle className="text-2xl">25 Connection Types</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Directional edges model ownership, access, payouts, and more with structured metadata
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+            <CardHeader className="space-y-4">
+              <Activity className="mx-auto h-12 w-12 text-primary" />
+              <CardTitle className="text-2xl">67 Event Types</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Every action—purchases, completions, interactions—is immutable and ready for analytics
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+
+        <div class="pt-12" data-usal="fade-up duration-700 delay-200">
+          <p class="text-lg text-muted-foreground">
+            <strong class="text-foreground">Clarity scales.</strong>
+            <br class="hidden sm:block" />
+            Your DSL features, agent playbooks, and analytics dashboards stay in sync because they pull from the same ontology.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Context Flow -->
+  <section
+    class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
+  >
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge
+          variant="outline"
+          className="mb-2 inline-flex items-center gap-2"
+        >
+          <Network className="h-4 w-4" />
+          The Generative Chain
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          How Context Flows
+        </h2>
+        <p
+          class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground"
+        >
+          Everything begins with identity and organizational scope. This isn't
+          just metadata—it's the foundation that makes every AI operation
+          context-aware, authorized, and intelligent.
+        </p>
+      </div>
+
+      <div
+        class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur space-y-6"
+      >
+        <h3 class="text-2xl font-bold text-center">The Ownership Hierarchy</h3>
+
+        <pre
+          class="overflow-x-auto rounded bg-muted/50 p-6 text-sm leading-relaxed"><code>{`groups/acme-corp (business, the container)
+  ├─ owned_by → people/anthony-o-connell (the owner)
+  ├─ member_of → people/sarah-thompson (member, role: analyst)
+  │
+  ├─ groups/engineering (nested subgroup)
+  │   └─ owns → things/backend-agent
+  │
+  └─ owns → things/strategy-agent
+      ├─ governed_by → things/business-strategy-mandate
+      ├─ can_read → knowledge/market-research-bundle
+      ├─ can_read → knowledge/competitor-landscape
+      └─ can_execute → people/anthony-o-connell (owner)
+      └─ can_execute → people/sarah-thompson (delegated)`}</code></pre>
+
+        <div
+          class="rounded-lg border border-primary/20 bg-primary/5 p-6 space-y-4"
+        >
+          <h4 class="font-semibold text-foreground">
+            Context Propagation in Action
+          </h4>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            When you ask your Strategy Agent a question, the system
+            automatically enriches the prompt with your identity graph:
+            group context (with hierarchy), authorization, accessible resources, recent
+            events, relevant knowledge (semantic match), and
+            mandates/constraints.
+          </p>
+          <p class="text-sm font-medium text-foreground">
+            The agent knows WHO is asking, WHAT group scope to operate in, WHAT parent/child groups exist, WHAT it can
+            access, WHAT happened recently, WHAT constraints apply, and WHAT it
+            already knows.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What This Enables -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge
+          variant="outline"
+          className="mb-2 inline-flex items-center gap-2"
+        >
+          <Sparkles className="h-4 w-4" />
+          What This Unlocks
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          The ONE Ontology Advantage
+        </h2>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Shield className="h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl">Zero-Trust Authorization</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Every action traces back through explicit connections to a person
+              in an organization. Perfect auditability. No implicit permissions.
+              Authorization is data, not code.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Brain className="h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl"
+              >Identity-Aware Intelligence</CardTitle
+            >
+            <CardDescription className="leading-relaxed">
+              Agents don't just retrieve facts—they understand organizational
+              context, provenance, licensing, governance, and strategic
+              constraints.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Activity className="h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl">Event-Driven Compounding</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Every action generates events that create knowledge that enriches
+              future actions. The system gets smarter with every interaction.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Globe className="h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl"
+              >Protocol-Agnostic Integration</CardTitle
+            >
+            <CardDescription className="leading-relaxed">
+              Same ontology, different protocols—all via metadata. Query across
+              Stripe, SUI, and any future protocol with unified patterns.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Network className="h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl"
+              >Cross-Organization Collaboration</CardTitle
+            >
+            <CardDescription className="leading-relaxed">
+              Resources can be shared without transferring ownership. Perfect
+              for knowledge marketplaces with trustless licensing.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <Coins className="h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl">Tokenization with SUI</CardTitle>
+            <CardDescription className="leading-relaxed">
+              SUI's object-centric model maps naturally to ONE's thing-centric
+              ontology. Knowledge as tradeable, licensable assets.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scale & Reality -->
+  <section
+    class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
+  >
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Built for Scale
+        </h2>
+        <p
+          class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground"
+        >
+          The ONE Ontology isn't just theory—it's production-ready
+          architecture that scales from solo creator to global enterprise.
+        </p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+          <CardHeader className="space-y-4">
+            <Database className="mx-auto h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl">Current Scale</CardTitle>
+            <CardDescription className="leading-relaxed">
+              • 1M+ things per organization<br />
+              • 10M+ connections (optimized indexes)<br />
+              • 100M+ events (time-partitioned)<br />
+              • 1M+ knowledge chunks (vector search)
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+          <CardHeader className="space-y-4">
+            <Zap className="mx-auto h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl">Performance</CardTitle>
+            <CardDescription className="leading-relaxed">
+              • Graph caching (ownership chains)<br />
+              • Materialized views (common queries)<br />
+              • Event archival (cold storage)<br />
+              • Token budgeting (context aware)
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+          <CardHeader className="space-y-4">
+            <Network className="mx-auto h-12 w-12 text-primary" />
+            <CardTitle className="text-2xl">Future Scale</CardTitle>
+            <CardDescription className="leading-relaxed">
+              • Shard by organization (>10M things)<br />
+              • Streaming events (Kafka)<br />
+              • Distributed vectors (Weaviate)<br />
+              • Regional databases (CDC replication)
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section
+    class="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 md:px-8 md:py-40"
+  >
+    <div class="absolute inset-0 -z-10">
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-background via-primary/10 to-background"
+      >
+      </div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_50%)]"
+      >
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-full sm:max-w-4xl space-y-12 text-center">
+      <div class="space-y-6">
+        <h2
+          class="text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl"
+        >
+          <span class="block">ONE Ontology.</span>
+          <span class="block text-primary drop-shadow-sm">
+            Infinite Systems.
+          </span>
+        </h2>
+
+        <p
+          class="mx-auto max-w-3xl text-xl sm:text-2xl leading-relaxed text-muted-foreground"
+        >
+          The ONE Ontology proves that you don't need hundreds of
+          tables or complex schemas to build intelligent systems. You need six
+          dimensions that model reality.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="text-lg font-medium text-muted-foreground space-y-2">
+          <p>
+            <strong class="text-foreground">Groups</strong> partition for
+            scale (with infinite hierarchy)
+          </p>
+          <p>
+            <strong class="text-foreground">People</strong> authorize for governance
+          </p>
+          <p>
+            <strong class="text-foreground">Things</strong> exist for substance
+          </p>
+          <p>
+            <strong class="text-foreground">Connections</strong> relate for structure
+          </p>
+          <p>
+            <strong class="text-foreground">Events</strong> record for memory
+          </p>
+          <p>
+            <strong class="text-foreground">Knowledge</strong> learns for intelligence
+          </p>
+        </div>
+
+        <p class="text-xl text-primary font-semibold pt-4">
+          Map your domain to these dimensions. Everything else is just data.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-4 sm:flex-row sm:justify-center pt-8">
+        <a href="/">
+          <Button size="lg" className="h-14 w-full sm:w-auto px-10 text-lg">
+            <ArrowRight className="mr-2 h-5 w-5" />
+            Explore the Platform
+          </Button>
+        </a>
+        <a
+          href="https://github.com/one-ie/stack"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button
+            variant="outline"
+            size="lg"
+            className="h-14 w-full sm:w-auto px-10 text-lg"
+          >
+            <Code className="mr-2 h-5 w-5" />
+            View on GitHub
+          </Button>
+        </a>
+      </div>
+
+      <div
+        class="flex flex-wrap items-center justify-center gap-6 pt-8 text-sm text-muted-foreground"
+      >
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Protocol agnostic
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Type safe
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          AI understandable
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Built for scale
+        </span>
+      </div>
+    </div>
+  </section>
+</Layout>

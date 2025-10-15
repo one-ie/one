@@ -1,0 +1,1295 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  ArrowRight,
+  Check,
+  Code,
+  FileText,
+  Sparkles,
+  Zap,
+  Users,
+  Bot,
+  Terminal,
+  MessageSquare,
+  ChevronDown,
+  Box,
+  GitBranch,
+  Activity,
+  CheckCircle,
+  Plus,
+  Link,
+  Save,
+  Search,
+  Clock,
+  Repeat,
+  Send,
+  Target,
+  Bell,
+  BarChart,
+  Radio,
+  UserPlus,
+} from 'lucide-react';
+---
+
+<Layout title="Plain English DSL - ONE Platform">
+  <!-- Hero Section -->
+  <section
+    class="relative overflow-hidden px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
+  >
+    <div
+      class="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-primary/[0.02] to-background"
+    >
+    </div>
+    <div
+      class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-primary/5 to-transparent"
+    >
+    </div>
+    <div
+      class="absolute left-1/2 top-0 -z-10 h-[600px] w-[800px] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]"
+    >
+    </div>
+
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="flex flex-col items-center space-y-8 text-center">
+        <Badge
+          variant="outline"
+          className="inline-flex items-center gap-2"
+          data-usal="fade-down duration-600"
+        >
+          <MessageSquare className="h-4 w-4" />
+          Plain English DSL
+        </Badge>
+
+        <div class="space-y-6" data-usal="fade-up duration-700 delay-100">
+          <h1
+            class="font-heading font-extrabold leading-[1.1] tracking-tight text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+          >
+            <span class="block">Write Features</span>
+            <span
+              class="block bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
+              >In Plain English</span
+            >
+          </h1>
+
+          <p
+            class="mx-auto max-w-3xl text-xl leading-relaxed text-muted-foreground md:text-2xl"
+          >
+            Describe what you want in plain English. The compiler checks it
+            against the ontology, generates TypeScript and tests, and deploys
+            to the edge. <strong class="text-foreground"
+              >No coding required.</strong
+            >
+          </p>
+        </div>
+
+        <div
+          class="flex items-center gap-3 pt-4"
+          data-usal="fade-up duration-700 delay-200"
+        >
+          <span class="text-sm text-muted-foreground"
+            >Scroll to see the language</span
+          >
+          <ChevronDown
+            className="h-5 w-5 animate-bounce text-muted-foreground"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Concept -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge
+          variant="outline"
+          className="mb-2 inline-flex items-center gap-2"
+          data-usal="fade-down duration-600"
+        >
+          <Sparkles className="h-4 w-4" />
+          Core Concept
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+          data-usal="fade-up duration-700 delay-100"
+        >
+          Write What You Want
+          <br />
+          <span class="text-muted-foreground">The System Builds It</span>
+        </h2>
+      </div>
+
+      <div class="mx-auto max-w-4xl rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
+        <h3 class="mb-6 text-center text-2xl font-bold">Example: Chat with AI Clone</h3>
+
+        <pre class="overflow-x-auto rounded bg-muted/50 p-6 text-sm leading-relaxed"><code>{`FEATURE: Let fans chat with my AI clone
+
+WHEN a fan sends a message
+  CHECK they own tokens
+  GET my AI personality
+  SEND message to AI with my personality
+  SAVE the conversation
+  GIVE fan 10 tokens as reward
+  SHOW AI response to fan`}</code></pre>
+
+        <div class="mt-8 rounded-lg border border-primary/20 bg-primary/5 p-6 text-center">
+          <p class="text-lg font-medium">
+            <strong class="text-foreground">That's it.</strong> <span class="text-muted-foreground">The system builds the entire feature from this—frontend, backend, database, tests, deployment.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-16 grid gap-6 md:grid-cols-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+          <CardHeader className="space-y-4">
+            <Users className="mx-auto h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">For Creators</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Write what you want in plain English. No coding required. You can read, understand, and modify every feature yourself.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+          <CardHeader className="space-y-4">
+            <Bot className="mx-auto h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">For AI Agents</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Unambiguous instructions that map directly to technical DSL, validate against ontology, and generate perfect code every time.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
+          <CardHeader className="space-y-4">
+            <Code className="mx-auto h-12 w-12 text-primary" />
+            <CardTitle className="text-xl">For Developers</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Readable specifications. Generated code is clean and tested. Can enhance generated code if needed while system maintains consistency.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Language Commands -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge
+          variant="outline"
+          className="mb-2 inline-flex items-center gap-2"
+          data-usal="fade-down duration-600"
+        >
+          <Terminal className="h-4 w-4" />
+          The Language
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+          data-usal="fade-up duration-700 delay-100"
+        >
+          Command Reference
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Every command maps to a specific operation in the ontology. Simple, powerful, and type-safe.
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        <!-- CREATE -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Plus className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1">
+                <CardTitle className="text-2xl">CREATE - Make Something New</CardTitle>
+                <CardDescription className="mt-2 leading-relaxed">
+                  Create new Things in the ontology with properties and relationships
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CREATE ai clone called "John's AI Clone"
+  WITH voice ID from previous step
+  WITH personality prompt
+  WITH active status
+
+CREATE token called "CREATOR"
+  WITH total supply of 10 million
+  WITH symbol "CRTR"`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- CONNECT -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Link className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1">
+                <CardTitle className="text-2xl">CONNECT - Link Two Things</CardTitle>
+                <CardDescription className="mt-2 leading-relaxed">
+                  Create relationships between Things with directional connections
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CONNECT creator to ai clone as owner
+
+CONNECT fan to token as holder
+
+CONNECT student to course as enrolled`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- RECORD -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Save className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1">
+                <CardTitle className="text-2xl">RECORD - Log That Something Happened</CardTitle>
+                <CardDescription className="mt-2 leading-relaxed">
+                  Create immutable Events that capture what happened, when, and by whom
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`RECORD clone created
+  BY creator
+  WITH voice ID and personality
+
+RECORD tokens purchased
+  BY fan
+  WITH amount and price`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- CALL -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Zap className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1">
+                <CardTitle className="text-2xl">CALL - Use External Service</CardTitle>
+                <CardDescription className="mt-2 leading-relaxed">
+                  Invoke external services like OpenAI, Stripe, ElevenLabs with typed parameters
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CALL ElevenLabs to clone voice
+  WITH audio samples from videos
+  SAVE AS voice ID
+
+CALL Stripe to charge payment
+  WITH amount $100
+  SAVE AS payment`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- CHECK -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <CheckCircle className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1">
+                <CardTitle className="text-2xl">CHECK - Validate Something</CardTitle>
+                <CardDescription className="mt-2 leading-relaxed">
+                  Validate conditions before proceeding with error handling
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CHECK creator exists
+  OTHERWISE say "Creator not found"
+
+CHECK fan has tokens
+  OTHERWISE say "Buy tokens to chat"`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- GET -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-start gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Search className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex-1">
+                <CardTitle className="text-2xl">GET - Retrieve Something</CardTitle>
+                <CardDescription className="mt-2 leading-relaxed">
+                  Query the ontology for Things, Connections, Events, or Knowledge
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`GET fan's token balance WHERE token is CREATOR
+  SAVE AS balance
+
+GET all content WHERE creator owns it
+  SAVE AS my content`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- Advanced Commands Grid -->
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
+              <Clock className="h-8 w-8 text-primary" />
+              <CardTitle className="text-lg">WAIT</CardTitle>
+              <CardDescription className="text-sm">
+                Pause execution for duration or until condition
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <pre class="text-xs"><code>{`WAIT 24 hours
+WAIT until payment received`}</code></pre>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
+              <Repeat className="h-8 w-8 text-primary" />
+              <CardTitle className="text-lg">FOR EACH</CardTitle>
+              <CardDescription className="text-sm">
+                Loop through items and execute steps
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <pre class="text-xs"><code>{`FOR EACH video IN videos
+  DO extract audio`}</code></pre>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
+              <Send className="h-8 w-8 text-primary" />
+              <CardTitle className="text-lg">GIVE</CardTitle>
+              <CardDescription className="text-sm">
+                Return results to the caller
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <pre class="text-xs"><code>{`GIVE clone ID and voice ID
+GIVE success message`}</code></pre>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
+              <Radio className="h-8 w-8 text-primary" />
+              <CardTitle className="text-lg">STREAM</CardTitle>
+              <CardDescription className="text-sm">
+                Live broadcasting to platforms
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <pre class="text-xs"><code>{`STREAM "Weekly Q&A" TO youtube
+  MIX WITH AI CLONE`}</code></pre>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
+              <UserPlus className="h-8 w-8 text-primary" />
+              <CardTitle className="text-lg">REFER</CardTitle>
+              <CardDescription className="text-sm">
+                Referral system with rewards
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <pre class="text-xs"><code>{`REFER fan to new user
+  REWARD 100 tokens`}</code></pre>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
+              <Bell className="h-8 w-8 text-primary" />
+              <CardTitle className="text-lg">NOTIFY</CardTitle>
+              <CardDescription className="text-sm">
+                Send notifications via multiple channels
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <pre class="text-xs"><code>{`NOTIFY students ABOUT lesson
+  VIA email and push`}</code></pre>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Complete Examples -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-5xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <FileText className="h-4 w-4" />
+          Complete Examples
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Real-World Features
+        </h2>
+        <p class="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground">
+          Production-ready examples showing the full power of the Plain English DSL
+        </p>
+      </div>
+
+      <div class="space-y-12">
+        <!-- Example 1: Create AI Clone -->
+        <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Bot className="h-5 w-5 text-primary" />
+            </div>
+            <h3 class="text-2xl font-bold">Create AI Voice Clone</h3>
+          </div>
+
+          <pre class="overflow-x-auto rounded bg-muted/50 p-6 text-sm leading-relaxed"><code>{`FEATURE: Create my AI voice clone from videos
+
+INPUT:
+  - creator: which creator this is for
+  - video links: list of my videos (at least 3)
+
+OUTPUT:
+  - clone ID: my new AI clone
+  - voice ID: my cloned voice
+
+FLOW:
+
+CHECK creator exists
+  OTHERWISE say "Creator not found"
+
+CHECK video links are at least 3
+  OTHERWISE say "Need at least 3 videos to clone your voice"
+
+CALL OpenAI to extract audio from videos
+  WITH video links
+  SAVE AS audio samples
+
+CALL ElevenLabs to clone voice
+  WITH audio samples
+  WITH name "Creator's Voice"
+  RETRY 3 times if it fails
+  TIMEOUT after 5 minutes
+  SAVE AS voice ID
+
+CALL OpenAI to analyze personality
+  WITH video transcripts
+  WITH social media posts
+  SAVE AS personality
+
+CREATE ai clone called "Creator's AI Clone"
+  WITH voice ID
+  WITH personality prompt
+  WITH active status
+  SAVE AS clone ID
+
+CONNECT creator to clone ID as owner
+
+RECORD clone created
+  BY creator
+  WITH voice ID
+  WITH personality traits
+
+GIVE clone ID and voice ID`}</code></pre>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <h4 class="mb-2 text-sm font-semibold text-foreground">Services Used</h4>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">OpenAI</Badge>
+                <Badge variant="secondary">ElevenLabs</Badge>
+                <Badge variant="secondary">Audio Processing</Badge>
+              </div>
+            </div>
+            <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <h4 class="mb-2 text-sm font-semibold text-foreground">Features</h4>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">Retry Logic</Badge>
+                <Badge variant="secondary">Timeouts</Badge>
+                <Badge variant="secondary">Multi-step Flow</Badge>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Example 2: Token Purchase -->
+        <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Target className="h-5 w-5 text-primary" />
+            </div>
+            <h3 class="text-2xl font-bold">Token Purchase with Atomic Transactions</h3>
+          </div>
+
+          <pre class="overflow-x-auto rounded bg-muted/50 p-6 text-sm leading-relaxed"><code>{`FEATURE: Let fans buy creator tokens
+
+INPUT:
+  - fan: who is buying
+  - token: which creator's token
+  - amount: how many tokens
+  - usd amount: price in dollars
+
+OUTPUT:
+  - payment ID: transaction receipt
+  - tx hash: blockchain confirmation
+
+FLOW:
+
+CHECK fan exists
+  OTHERWISE say "Fan account not found"
+
+CHECK token exists
+  OTHERWISE say "Token not found"
+
+CHECK amount is greater than 0
+  OTHERWISE say "Amount must be positive"
+
+DO TOGETHER:
+  - CALL Stripe to charge payment
+      WITH usd amount in cents
+      WITH fan's payment method
+      SAVE AS payment
+
+  - CALL Blockchain to mint tokens
+      WITH token contract address
+      WITH fan's wallet
+      WITH amount
+      SAVE AS mint transaction
+
+IF ANY FAIL:
+  - CALL Stripe to refund payment
+  - CALL Blockchain to burn tokens
+
+RECORD tokens purchased
+  BY fan
+  WITH amount
+  WITH usd amount
+  WITH payment ID
+  WITH tx hash
+
+GET fan's token balance WHERE token matches
+  SAVE AS existing balance
+
+IF existing balance exists
+  THEN UPDATE balance to add amount
+  ELSE CREATE new balance
+    CONNECT fan to token as holder
+    WITH balance amount
+
+GIVE payment ID and tx hash`}</code></pre>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <h4 class="mb-2 text-sm font-semibold text-foreground">Ontology Mapping</h4>
+              <ul class="space-y-1 text-xs text-muted-foreground">
+                <li><strong class="text-foreground">Things:</strong> fan, token</li>
+                <li><strong class="text-foreground">Connections:</strong> holds_tokens (with balance)</li>
+                <li><strong class="text-foreground">Events:</strong> tokens_purchased</li>
+                <li><strong class="text-foreground">Services:</strong> Stripe, Blockchain</li>
+              </ul>
+            </div>
+            <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <h4 class="mb-2 text-sm font-semibold text-foreground">Advanced Features</h4>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">Atomic Ops</Badge>
+                <Badge variant="secondary">Rollback</Badge>
+                <Badge variant="secondary">Balance Update</Badge>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Example 3: Chat with AI -->
+        <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
+          <div class="mb-6 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <MessageSquare className="h-5 w-5 text-primary" />
+            </div>
+            <h3 class="text-2xl font-bold">Chat with AI Clone</h3>
+          </div>
+
+          <pre class="overflow-x-auto rounded bg-muted/50 p-6 text-sm leading-relaxed"><code>{`FEATURE: Let fans chat with my AI clone
+
+INPUT:
+  - fan: who is chatting
+  - clone: which AI clone
+  - message: what fan said
+
+OUTPUT:
+  - response: what AI said back
+  - tokens earned: reward for engagement
+
+FLOW:
+
+CHECK fan exists
+  OTHERWISE say "Please sign up first"
+
+CHECK clone exists
+  OTHERWISE say "AI clone not found"
+
+GET fan's token balance WHERE clone's token
+  SAVE AS balance
+
+CHECK balance is greater than 0
+  OTHERWISE say "Buy tokens to chat with this creator"
+
+GET last 10 messages
+  WHERE fan chatted with clone
+  SAVE AS conversation history
+
+CALL OpenAI to search relevant knowledge
+  WITH fan's message
+  WITH clone's knowledge base
+  SAVE AS context
+
+CALL OpenAI to generate response
+  WITH clone's personality
+  WITH conversation history
+  WITH context
+  WITH fan's message
+  SAVE AS AI response
+
+RECORD clone interaction
+  BY fan
+  WITH message
+  WITH response
+  WITH tokens used
+
+UPDATE fan's token balance
+  ADD 10 tokens as reward
+
+GIVE AI response and 10 tokens earned`}</code></pre>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <h4 class="mb-2 text-sm font-semibold text-foreground">AI Features</h4>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">RAG Search</Badge>
+                <Badge variant="secondary">Personality</Badge>
+                <Badge variant="secondary">Context-Aware</Badge>
+              </div>
+            </div>
+            <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <h4 class="mb-2 text-sm font-semibold text-foreground">Gamification</h4>
+              <div class="flex flex-wrap gap-2">
+                <Badge variant="secondary">Token Rewards</Badge>
+                <Badge variant="secondary">Balance Gating</Badge>
+                <Badge variant="secondary">History Tracking</Badge>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Advanced Patterns -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Code className="h-4 w-4" />
+          Advanced Patterns
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Production-Ready Patterns
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Handle errors, retry failures, and ensure data consistency with battle-tested patterns
+        </p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2">
+        <!-- Error Handling -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <CheckCircle className="h-5 w-5 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Error Handling</CardTitle>
+            </div>
+            <CardDescription>
+              Try operations with fallbacks and always-execute cleanup
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs leading-relaxed"><code>{`TRY:
+  CALL payment processor
+  CALL blockchain
+
+IF IT FAILS:
+  CALL refund payment
+  SEND error notification
+
+ALWAYS DO:
+  RECORD what happened
+  SAVE logs`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- Parallel Operations -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Zap className="h-5 w-5 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Parallel Operations</CardTitle>
+            </div>
+            <CardDescription>
+              Execute multiple operations simultaneously for speed
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs leading-relaxed"><code>{`DO AT SAME TIME:
+  - CALL OpenAI to analyze videos
+  - CALL OpenAI to analyze posts
+  - CALL OpenAI to analyze comments
+
+WAIT FOR ALL TO FINISH
+
+COMBINE all results`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- Retry with Backoff -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Repeat className="h-5 w-5 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Retry with Backoff</CardTitle>
+            </div>
+            <CardDescription>
+              Retry failed operations with exponential backoff
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs leading-relaxed"><code>{`TRY UP TO 3 TIMES:
+  CALL voice cloning service
+
+WAIT 5 seconds BETWEEN TRIES
+
+IF ALL FAIL:
+  USE default voice
+  NOTIFY creator about failure`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <!-- Queue and Process -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                <Clock className="h-5 w-5 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Queue and Process Later</CardTitle>
+            </div>
+            <CardDescription>
+              Defer heavy work to background processing
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs leading-relaxed"><code>{`ADD TO QUEUE:
+  Generate 30 days of content
+
+PROCESS WHEN:
+  System is not busy
+
+NOTIFY creator when done`}</code></pre>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Examples Library -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Sparkles className="h-4 w-4" />
+          Examples Library
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Common Use Cases
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Copy-paste snippets for frequent operations
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-lg">Create AI Clone</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto text-xs"><code>{`CHECK videos exist (3+)
+CALL ElevenLabs to clone voice
+CALL OpenAI to analyze personality
+CREATE ai clone
+CONNECT creator to clone as owner
+RECORD clone created
+GIVE clone ID`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-lg">Buy Tokens</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto text-xs"><code>{`CHECK user has payment method
+DO TOGETHER charge payment and mint tokens
+RECORD purchase
+UPDATE balance
+GIVE confirmation`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-lg">Chat with AI</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto text-xs"><code>{`CHECK user has tokens
+GET conversation history
+CALL OpenAI with personality
+RECORD interaction
+REWARD user with tokens
+GIVE response`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-lg">Enroll in Course</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto text-xs"><code>{`CHECK course exists
+CHECK user not already enrolled
+CONNECT user to course as enrolled
+RECORD enrollment
+GIVE success`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-lg">Generate Content</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto text-xs"><code>{`GET creator's style
+GET top performing topics
+CALL OpenAI to generate post
+CREATE content
+CONNECT creator to content
+RECORD published
+GIVE post ID`}</code></pre>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="text-lg">Send Referral Reward</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <pre class="overflow-x-auto text-xs"><code>{`CHECK referrer exists
+CHECK new user signed up
+CREATE referral connection
+REWARD referrer with tokens
+NOTIFY both users
+GIVE reward amount`}</code></pre>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Sparkles className="h-4 w-4" />
+          The Compilation Process
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          How It Works
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          From plain English to production-ready code in seconds
+        </p>
+      </div>
+
+      <div class="mx-auto max-w-3xl space-y-6">
+        <!-- Step 1 -->
+        <div class="flex items-start gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 border-2 border-primary/30">
+            <span class="text-lg font-bold text-primary">1</span>
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="text-xl font-bold">Write in Plain English</h3>
+            <p class="text-sm text-muted-foreground">Creator describes the feature using natural language commands</p>
+            <div class="rounded bg-muted/50 p-3 text-xs">
+              <code>FEATURE: Let fans buy my tokens...</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="ml-6 h-8 w-px bg-border"></div>
+
+        <!-- Step 2 -->
+        <div class="flex items-start gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted/50 border-2 border-border/50">
+            <span class="text-lg font-bold text-muted-foreground">2</span>
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="text-xl font-bold">System Validates</h3>
+            <p class="text-sm text-muted-foreground">Checks entity types, connection types, and service availability against ontology</p>
+            <div class="flex flex-wrap gap-2">
+              <Badge variant="secondary">✓ Entity types valid</Badge>
+              <Badge variant="secondary">✓ Connections valid</Badge>
+              <Badge variant="secondary">✓ Services available</Badge>
+            </div>
+          </div>
+        </div>
+
+        <div class="ml-6 h-8 w-px bg-border"></div>
+
+        <!-- Step 3 -->
+        <div class="flex items-start gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted/50 border-2 border-border/50">
+            <span class="text-lg font-bold text-muted-foreground">3</span>
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="text-xl font-bold">Compiles to Technical DSL</h3>
+            <p class="text-sm text-muted-foreground">Transforms to structured JSON with typed operations</p>
+            <div class="rounded bg-muted/50 p-3 text-xs">
+              <code>{`{ feature: "PurchaseTokens", flow: [...] }`}</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="ml-6 h-8 w-px bg-border"></div>
+
+        <!-- Step 4 -->
+        <div class="flex items-start gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted/50 border-2 border-border/50">
+            <span class="text-lg font-bold text-muted-foreground">4</span>
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="text-xl font-bold">Generates TypeScript</h3>
+            <p class="text-sm text-muted-foreground">Production-ready code with Effect.ts services and type safety</p>
+            <div class="rounded bg-muted/50 p-3 text-xs">
+              <code>{`export const purchaseTokens = Effect.gen(...)`}</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="ml-6 h-8 w-px bg-border"></div>
+
+        <!-- Step 5 -->
+        <div class="flex items-start gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted/50 border-2 border-border/50">
+            <span class="text-lg font-bold text-muted-foreground">5</span>
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="text-xl font-bold">Auto-Generates Tests</h3>
+            <p class="text-sm text-muted-foreground">Complete test suite with unit and integration tests</p>
+            <div class="rounded bg-muted/50 p-3 text-xs">
+              <code>{`describe("purchaseTokens", () => {...})`}</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="ml-6 h-8 w-px bg-border"></div>
+
+        <!-- Step 6 -->
+        <div class="flex items-start gap-4">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 border-2 border-primary/30">
+            <Check className="h-6 w-6 text-primary" />
+          </div>
+          <div class="flex-1 space-y-2">
+            <h3 class="text-xl font-bold">Feature Deployed</h3>
+            <p class="text-sm text-muted-foreground">Frontend components, backend functions, database schema, and tests—all ready</p>
+            <div class="flex flex-wrap gap-2">
+              <Badge variant="default">Frontend ✓</Badge>
+              <Badge variant="default">Backend ✓</Badge>
+              <Badge variant="default">Database ✓</Badge>
+              <Badge variant="default">Tests ✓</Badge>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why This Works -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Sparkles className="h-4 w-4" />
+          Why This Works
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          The Power of Constraints
+        </h2>
+        <p class="mx-auto max-w-3xl text-xl leading-relaxed text-muted-foreground">
+          By limiting to the ontology's six dimensions, we ensure <strong class="text-foreground">every feature is type-safe, tested, and composable</strong>
+        </p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-3">
+        <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur text-center">
+          <div class="mb-6 flex justify-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10">
+              <Users className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <h3 class="mb-3 text-xl font-bold">For Creators</h3>
+          <ul class="space-y-2 text-sm text-muted-foreground text-left">
+            <li>✓ Write what you want in plain English</li>
+            <li>✓ No coding required</li>
+            <li>✓ Can read and understand every feature</li>
+            <li>✓ Can modify features yourself</li>
+          </ul>
+        </div>
+
+        <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur text-center">
+          <div class="mb-6 flex justify-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10">
+              <Bot className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <h3 class="mb-3 text-xl font-bold">For AI Agents</h3>
+          <ul class="space-y-2 text-sm text-muted-foreground text-left">
+            <li>✓ Unambiguous instructions</li>
+            <li>✓ Maps directly to technical DSL</li>
+            <li>✓ Validates against ontology</li>
+            <li>✓ Generates perfect code every time</li>
+          </ul>
+        </div>
+
+        <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur text-center">
+          <div class="mb-6 flex justify-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-primary/10">
+              <Code className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <h3 class="mb-3 text-xl font-bold">For Developers</h3>
+          <ul class="space-y-2 text-sm text-muted-foreground text-left">
+            <li>✓ Readable specifications</li>
+            <li>✓ Generated code is clean and tested</li>
+            <li>✓ Can enhance generated code if needed</li>
+            <li>✓ System maintains consistency</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-16 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-8 backdrop-blur text-center">
+        <p class="text-lg leading-relaxed">
+          <strong class="text-foreground">The ontology holds the contracts. The DSL speaks those contracts.</strong> Together they give humans, AI agents, and code the same, inspectable source of truth.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Reference -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Terminal className="h-4 w-4" />
+          Quick Reference
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Command Cheat Sheet
+        </h2>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle>Create & Connect</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div>
+              <code class="text-xs text-primary">CREATE [type] called [name] WITH [properties]</code>
+            </div>
+            <div>
+              <code class="text-xs text-primary">CONNECT [thing 1] to [thing 2] as [relationship]</code>
+            </div>
+            <div>
+              <code class="text-xs text-primary">RECORD [what happened] BY [who] WITH [details]</code>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle>Query & Validate</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div>
+              <code class="text-xs text-primary">GET [what] WHERE [conditions] SAVE AS [name]</code>
+            </div>
+            <div>
+              <code class="text-xs text-primary">CHECK [condition] OTHERWISE [action]</code>
+            </div>
+            <div>
+              <code class="text-xs text-primary">IF [condition] THEN [steps] ELSE [steps]</code>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle>External Services</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div>
+              <code class="text-xs text-primary">CALL [service] to [action] WITH [params] SAVE AS [name]</code>
+            </div>
+            <div>
+              <code class="text-xs text-primary">NOTIFY [user] ABOUT [event] VIA [channel]</code>
+            </div>
+            <div>
+              <code class="text-xs text-primary">STREAM [content] TO [platform]</code>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader>
+            <CardTitle>Control Flow</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div>
+              <code class="text-xs text-primary">WAIT [duration]</code>
+            </div>
+            <div>
+              <code class="text-xs text-primary">FOR EACH [item] IN [list] DO [steps]</code>
+            </div>
+            <div>
+              <code class="text-xs text-primary">DO TOGETHER: [steps] IF ANY FAIL: [rollback]</code>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section
+    class="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 md:px-8 md:py-40"
+  >
+    <div class="absolute inset-0 -z-10">
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-background via-primary/10 to-background"
+      >
+      </div>
+      <div
+        class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_50%)]"
+      >
+      </div>
+    </div>
+
+    <div class="mx-auto max-w-full sm:max-w-4xl space-y-12 text-center">
+      <div class="space-y-6">
+        <h2
+          class="text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl"
+        >
+          <span class="block">Write in English.</span>
+          <span
+            class="block bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent"
+          >
+            Ship to Production.
+          </span>
+        </h2>
+
+        <p
+          class="mx-auto max-w-3xl text-xl sm:text-2xl leading-relaxed text-muted-foreground"
+        >
+          The Plain English DSL makes ONE accessible to everyone while
+          maintaining technical precision. No coding required, no
+          ambiguity, no limits.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-4 sm:flex-row sm:justify-center pt-8">
+        <a href="/">
+          <Button size="lg" className="h-14 w-full sm:w-auto px-10 text-lg">
+            <ArrowRight className="mr-2 h-5 w-5" />
+            Explore the Platform
+          </Button>
+        </a>
+        <a href="/ontology">
+          <Button
+            variant="outline"
+            size="lg"
+            className="h-14 w-full sm:w-auto px-10 text-lg"
+          >
+            <FileText className="mr-2 h-5 w-5" />
+            View the Ontology
+          </Button>
+        </a>
+      </div>
+
+      <div
+        class="flex flex-wrap items-center justify-center gap-6 pt-8 text-sm text-muted-foreground"
+      >
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Type safe
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Ontology validated
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Auto-tested
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Production ready
+        </span>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,17 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { SimpleSignInForm } from "@/components/auth/SimpleSignInForm"
+
+export const prerender = false
+
+// Redirect if already logged in
+if (Astro.locals.user) {
+  return Astro.redirect("/account")
+}
+---
+
+<Layout title="Authentication">
+  <main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary/10 p-4">
+    <SimpleSignInForm client:load />
+  </main>
+</Layout>

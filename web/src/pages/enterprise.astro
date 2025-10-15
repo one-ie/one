@@ -1,0 +1,276 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  Lock,
+  Mail,
+  Key,
+  RotateCcw,
+  MailOpen,
+  Wand2,
+  Shield,
+  Users,
+  Building2,
+  Rocket,
+  ArrowRight,
+  Check,
+  Sparkles
+} from 'lucide-react';
+---
+
+<Layout title="Enterprise Authentication - ONE Platform" description="Enterprise-grade authentication with 6 methods pre-configured. Email/password, OAuth, magic links, 2FA, password reset, and email verification.">
+
+  <!-- Hero Section -->
+  <section class="relative min-h-[60vh] flex items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 bg-gradient-to-b from-background via-primary/10 to-background"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_50%)]"></div>
+    </div>
+
+    <div class="w-full max-w-7xl mx-auto">
+      <div class="text-center space-y-12">
+        <div class="space-y-8">
+          <span class="inline-block text-sm font-semibold uppercase tracking-[0.3em] text-primary">
+            Enterprise Ready
+          </span>
+
+          <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold !leading-[1.1] tracking-tight opacity-70">
+            Enterprise Authentication
+          </h1>
+
+          <p class="text-lg sm:text-xl text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed">
+            Six authentication methods pre-configured and production-ready. Email/password, OAuth, magic links, 2FA, password reset, and email verification — all working out of the box.
+          </p>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+          <a href="https://github.com/one-ie/stack" target="_blank" rel="noopener noreferrer">
+            <Button size="lg" className="h-14 px-8 text-lg font-semibold">
+              <Rocket className="mr-2 h-5 w-5" />
+              Get Started
+            </Button>
+          </a>
+          <a href="/websites">
+            <Button variant="outline" size="lg" className="h-14 px-8 text-lg font-semibold">
+              <ArrowRight className="ml-2 h-5 w-5" />
+              Back to Websites
+            </Button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Authentication Methods -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Lock className="h-4 w-4" />
+          6 Authentication Methods
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Pre-Configured & Ready
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Every authentication method you need, configured and tested. Just describe what you want in plain English.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <Mail className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Email/Password</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Secure password hashing, session management, HttpOnly cookies built-in.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <Key className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">OAuth Social Login</CardTitle>
+            <CardDescription className="leading-relaxed">
+              GitHub and Google OAuth pre-configured. Add more providers in minutes.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <RotateCcw className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Password Reset</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Email-based reset with secure tokens. Custom HTML templates included.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <MailOpen className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Email Verification</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Automated verification emails on sign-up with beautiful templates.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <Wand2 className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Magic Links</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Passwordless authentication. One-click sign-in via email link.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <Lock className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Two-Factor Auth</CardTitle>
+            <CardDescription className="leading-relaxed">
+              TOTP with Google Authenticator, Authy, 1Password. QR code setup.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enterprise Features -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Shield className="h-4 w-4" />
+          Enterprise Security
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Built for Scale
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Multi-tenant architecture with group-level isolation, role-based access control, and comprehensive audit trails.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <Building2 className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Multi-Tenant Groups</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Hierarchical groups with perfect data isolation. From friend circles to enterprises.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <Users className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Role-Based Access</CardTitle>
+            <CardDescription className="leading-relaxed">
+              4 roles: platform_owner, org_owner, org_user, customer. Granular permissions.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
+              <Shield className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Session Management</CardTitle>
+            <CardDescription className="leading-relaxed">
+              HttpOnly cookies, CSRF protection, rate limiting, and brute force prevention.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 md:px-8 md:py-40">
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 bg-gradient-to-b from-background via-primary/10 to-background"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_50%)]"></div>
+    </div>
+
+    <div class="mx-auto max-w-full sm:max-w-4xl md:max-w-5xl space-y-12 sm:space-y-16 text-center">
+      <div class="space-y-8">
+        <Badge variant="secondary" className="inline-flex items-center gap-2 text-base font-medium px-6 py-2">
+          <Sparkles className="h-5 w-5" />
+          Ready for Production
+        </Badge>
+
+        <h2 class="text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl">
+          <span class="block">Enterprise Authentication.</span>
+          <span class="block bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+            No Configuration.
+          </span>
+        </h2>
+
+        <p class="mx-auto max-w-3xl text-xl sm:text-2xl leading-relaxed text-muted-foreground">
+          Just describe what you need in plain English. The system handles the rest.
+        </p>
+      </div>
+
+      <!-- Primary CTA -->
+      <div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
+        <a href="https://github.com/one-ie/stack" target="_blank" rel="noopener noreferrer" class="group">
+          <Button size="lg" className="h-18 w-full sm:w-auto px-12 text-lg font-bold shadow-2xl shadow-primary/30 transition-all hover:scale-105 hover:shadow-primary/50">
+            <Rocket className="mr-3 h-7 w-7 transition-transform group-hover:translate-y-[-4px]" />
+            <span>
+              Get Started Free
+              <span class="block text-xs font-normal opacity-90">Pre-configured auth in 30 seconds</span>
+            </span>
+          </Button>
+        </a>
+      </div>
+
+      <!-- Trust Indicators -->
+      <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-6 text-base font-medium text-muted-foreground">
+        <span class="flex items-center gap-2">
+          <Check className="h-5 w-5 text-primary" />
+          6 Auth Methods
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-5 w-5 text-primary" />
+          Multi-Tenant
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-5 w-5 text-primary" />
+          RBAC Built-In
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-5 w-5 text-primary" />
+          Production Ready
+        </span>
+      </div>
+    </div>
+  </section>
+
+</Layout>
