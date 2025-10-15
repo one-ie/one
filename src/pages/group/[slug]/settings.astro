@@ -1,0 +1,50 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { ConvexHttpClient } from 'convex/browser';
+import { api } from '@/lib/convex-api';
+import { GroupSettingsForm } from '@/components/groups/GroupSettingsForm';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/groups');
+}
+
+// Check if user is authenticated
+const user = Astro.locals.user;
+
+if (!user) {
+  return Astro.redirect(`/account/signin?redirect=/group/${slug}/settings`);
+}
+
+// SSR: Fetch group data
+const convex = new ConvexHttpClient(import.meta.env.PUBLIC_CONVEX_URL);
+const group = await convex.query(api.queries.groups.getBySlug, { slug });
+
+if (!group) {
+  return Astro.redirect('/404');
+}
+
+// TODO: Add proper ownership/admin check
+// For now, assuming authenticated user has access
+const isOwner = true; // Replace with actual ownership check
+
+if (!isOwner) {
+  return Astro.redirect(`/group/${slug}`);
+}
+---
+
+<Layout title={`${group.name} - Settings`}>
+  <div class="mx-auto max-w-4xl space-y-8">
+    <div class="space-y-2">
+      <h1 class="text-4xl font-bold tracking-tight">{group.name}</h1>
+      <p class="text-lg text-muted-foreground">
+        Manage your group settings, permissions, and configuration.
+      </p>
+    </div>
+
+    <GroupSettingsForm client:load group={group} user={user} />
+  </div>
+</Layout>

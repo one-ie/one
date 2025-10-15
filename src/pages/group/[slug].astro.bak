@@ -1,0 +1,277 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { ConvexHttpClient } from 'convex/browser';
+import { api } from '../../../backend/convex/_generated/api';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Users, Settings, Globe, Lock, Calendar, Activity } from 'lucide-react';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/groups');
+}
+
+// SSR: Fetch group data
+const convex = new ConvexHttpClient(import.meta.env.PUBLIC_CONVEX_URL);
+const group = await convex.query(api.queries.groups.getBySlug, { slug });
+
+if (!group) {
+  return Astro.redirect('/404');
+}
+
+// Fetch group stats
+const stats = await convex.query(api.queries.groups.getStats, {
+  groupId: group._id,
+  includeSubgroups: true,
+});
+
+// Fetch recent activity
+const recentEvents = await convex.query(api.queries.groups.getEventsInHierarchy, {
+  rootGroupId: group._id,
+  limit: 5,
+});
+
+// Check user authentication
+const user = Astro.locals.user;
+
+// Check if user is member (simplified - expand with proper membership query)
+const isMember = false; // TODO: Add membership check
+const isOwner = false; // TODO: Add ownership check
+
+const groupTypeLabels = {
+  friend_circle: 'Friend Circle',
+  business: 'Business',
+  community: 'Community',
+  dao: 'DAO',
+  government: 'Government',
+  organization: 'Organization',
+};
+---
+
+<Layout title={`${group.name} - Group`}>
+  <div class="mx-auto max-w-7xl space-y-8">
+    <!-- Group Header -->
+    <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+      <div class="flex-1 space-y-4">
+        <div class="flex flex-wrap items-center gap-3">
+          <h1 class="text-4xl font-bold tracking-tight">{group.name}</h1>
+          <Badge variant="secondary">
+            {groupTypeLabels[group.type]}
+          </Badge>
+          {group.settings.visibility === 'private' ? (
+            <Badge variant="outline" class="gap-1">
+              <Lock class="h-3 w-3" />
+              Private
+            </Badge>
+          ) : (
+            <Badge variant="outline" class="gap-1">
+              <Globe class="h-3 w-3" />
+              Public
+            </Badge>
+          )}
+        </div>
+
+        {group.description && (
+          <p class="text-lg text-muted-foreground">{group.description}</p>
+        )}
+
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <Calendar class="h-4 w-4" />
+          <span>Created {new Date(group.createdAt).toLocaleDateString()}</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-3">
+        {user ? (
+          <>
+            {isMember ? (
+              <Button variant="outline">Joined</Button>
+            ) : (
+              <Button>
+                {group.settings.joinPolicy === 'open' ? 'Join Group' : 'Request to Join'}
+              </Button>
+            )}
+            {isOwner && (
+              <Button variant="outline" asChild>
+                <a href={`/group/${slug}/settings`}>
+                  <Settings class="mr-2 h-4 w-4" />
+                  Settings
+                </a>
+              </Button>
+            )}
+          </>
+        ) : (
+          <Button asChild>
+            <a href="/account/signin">Sign in to join</a>
+          </Button>
+        )}
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <Card>
+        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle class="text-sm font-medium">Members</CardTitle>
+          <Users class="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div class="text-2xl font-bold">{stats.stats.members}</div>
+          <p class="text-xs text-muted-foreground">Active members</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle class="text-sm font-medium">Entities</CardTitle>
+          <Activity class="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div class="text-2xl font-bold">{stats.stats.entities}</div>
+          <p class="text-xs text-muted-foreground">Total entities</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle class="text-sm font-medium">Connections</CardTitle>
+          <Activity class="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div class="text-2xl font-bold">{stats.stats.connections}</div>
+          <p class="text-xs text-muted-foreground">Relationships</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle class="text-sm font-medium">Events</CardTitle>
+          <Activity class="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+          <div class="text-2xl font-bold">{stats.stats.events}</div>
+          <p class="text-xs text-muted-foreground">Activity events</p>
+        </CardContent>
+      </Card>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid gap-6 lg:grid-cols-3">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- About Section -->
+        <Card>
+          <CardHeader>
+            <CardTitle>About this group</CardTitle>
+          </CardHeader>
+          <CardContent class="space-y-4">
+            {group.description ? (
+              <p class="text-muted-foreground">{group.description}</p>
+            ) : (
+              <p class="text-sm text-muted-foreground italic">
+                No description provided yet.
+              </p>
+            )}
+
+            <div class="grid gap-3 text-sm">
+              <div class="flex items-center justify-between">
+                <span class="text-muted-foreground">Visibility</span>
+                <span class="font-medium capitalize">{group.settings.visibility}</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-muted-foreground">Join Policy</span>
+                <span class="font-medium capitalize">
+                  {group.settings.joinPolicy.replace('_', ' ')}
+                </span>
+              </div>
+              {group.settings.plan && (
+                <div class="flex items-center justify-between">
+                  <span class="text-muted-foreground">Plan</span>
+                  <span class="font-medium capitalize">{group.settings.plan}</span>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <!-- Recent Activity -->
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {recentEvents.length > 0 ? (
+              <div class="space-y-4">
+                {recentEvents.map((event) => (
+                  <div class="flex items-start gap-3 border-b border-border pb-3 last:border-0 last:pb-0">
+                    <div class="rounded-full bg-primary/10 p-2">
+                      <Activity class="h-4 w-4 text-primary" />
+                    </div>
+                    <div class="flex-1 space-y-1">
+                      <p class="text-sm font-medium">{event.type.replace('_', ' ')}</p>
+                      <p class="text-xs text-muted-foreground">
+                        {new Date(event.timestamp).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p class="text-sm text-muted-foreground italic">No recent activity</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <!-- Quick Stats -->
+        <Card>
+          <CardHeader>
+            <CardTitle class="text-base">Quick Stats</CardTitle>
+          </CardHeader>
+          <CardContent class="space-y-3 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Members</span>
+              <span class="font-semibold">{stats.stats.members}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Subgroups</span>
+              <span class="font-semibold">{stats.stats.subgroups}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Knowledge</span>
+              <span class="font-semibold">{stats.stats.knowledge}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <!-- Admin Actions (only for owners) -->
+        {isOwner && (
+          <Card>
+            <CardHeader>
+              <CardTitle class="text-base">Admin Actions</CardTitle>
+            </CardHeader>
+            <CardContent class="space-y-2">
+              <Button variant="outline" class="w-full justify-start" asChild>
+                <a href={`/group/${slug}/settings`}>
+                  <Settings class="mr-2 h-4 w-4" />
+                  Group Settings
+                </a>
+              </Button>
+              <Button variant="outline" class="w-full justify-start">
+                <Users class="mr-2 h-4 w-4" />
+                Manage Members
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    </div>
+  </div>
+</Layout>

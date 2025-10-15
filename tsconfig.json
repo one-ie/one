@@ -1,0 +1,21 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@lib/*": ["src/lib/*"],
+      "@stores/*": ["src/stores/*"],
+      "@content/*": ["src/content/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@types/*": ["src/types/*"],
+      "@config/*": ["src/config/*"],
+      "convex/_generated/*": ["../backend/convex/_generated/*"]
+    },
+    "jsx": "preserve",
+    "jsxImportSource": "react"
+  },
+  "exclude": ["node_modules", "dist", "test", "tests", "**/*.test.ts", "**/*.test.tsx"]
+}

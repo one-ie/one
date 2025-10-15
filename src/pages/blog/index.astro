@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Grid, List } from 'lucide-react';
+import { BlogSearch } from '@/components/BlogSearch';
+
+// Get all Blog entries
+const entries = await getCollection('blog');
+
+// Get view mode from URL params, default to list
+const viewModeParam = Astro.url.searchParams.get('view') || 'list';
+const viewMode = (viewModeParam === 'list' || viewModeParam === 'grid') ? viewModeParam : 'list';
+const gridColumnsParam = Astro.url.searchParams.get('columns') || '2';
+const gridColumns = (gridColumnsParam === '2' || gridColumnsParam === '3' || gridColumnsParam === '4') ? gridColumnsParam : '2';
+---
+
+<Layout title="Blog" description="Browse all available lessons">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-bold" data-usal="fade-right duration-700">Blog</h1>
+      <div class="flex gap-2 items-center" data-usal="fade-left duration-700 delay-100">
+        <a
+          href="/blog?view=list"
+          class={`p-2 rounded-md hover:bg-accent hover:scale-110 transition-all duration-200 ${viewMode === 'list' ? 'bg-accent' : ''}`}
+          title="List view"
+        >
+          <List className="w-5 h-5" />
+        </a>
+        <a
+          href="/blog?view=grid&columns=2"
+          class={`p-2 rounded-md hover:bg-accent hover:scale-110 transition-all duration-200 ${viewMode === 'grid' && gridColumns === '2' ? 'bg-accent' : ''}`}
+          title="2 columns grid"
+        >
+          <Grid className="w-5 h-5" />
+        </a>
+        <a
+          href="/blog?view=grid&columns=3"
+          class={`p-2 rounded-md hover:bg-accent hover:scale-110 transition-all duration-200 ${viewMode === 'grid' && gridColumns === '3' ? 'bg-accent' : ''}`}
+          title="3 columns grid"
+        >
+          <div class="w-5 h-5 grid grid-cols-3 gap-0.5">
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+          </div>
+        </a>
+        <a
+          href="/blog?view=grid&columns=4"
+          class={`p-2 rounded-md hover:bg-accent hover:scale-110 transition-all duration-200 ${viewMode === 'grid' && gridColumns === '4' ? 'bg-accent' : ''}`}
+          title="4 columns grid"
+        >
+          <div class="w-5 h-5 grid grid-cols-2 grid-rows-2 gap-0.5">
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <BlogSearch
+      client:load
+      posts={entries}
+      viewMode={viewMode}
+      gridColumns={gridColumns}
+    />
+  </div>
+</Layout>
