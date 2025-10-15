@@ -1,5 +1,3 @@
-# ONE Platform v2.0.9
-
 # ONE Platform
 
 **Make Your Ideas Real**

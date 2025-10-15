@@ -35,4 +35,8 @@ Temporary Items
 
 # Private business files (backed up in /one-group/)
 # Following 6-dimension ontology: sensitive group data hidden from public repo
-groups/
+# Public docs: groups.md, one.md (visible in git)
+# Private docs: revenue.md, strategy.md, vision.md (hidden from git)
+groups/revenue.md
+groups/strategy.md
+groups/vision.md

@@ -1,0 +1,1165 @@
+# ONE Platform - Ontology Specification (YAML)
+
+version: 2.0.0
+status: Complete - Groups-Based Reality Model
+principle: This ontology models reality in six dimensions. All protocols map TO this ontology via metadata.
+
+# ======================================================================
+# THE 6-DIMENSION REALITY MODEL
+# ======================================================================
+
+dimensions:
+  - name: groups
+    description: Multi-tenant isolation boundary with hierarchical nesting - who owns what at group level
+    purpose: Partition the system with perfect isolation, supporting nested groups (groups within groups)
+
+  - name: people
+    description: Authorization & governance - platform owner, group owners
+    purpose: Define who can do what. People direct groups, customize AI agents, and govern access
+
+  - name: things
+    description: Every "thing" - users, agents, content, tokens, courses
+    purpose: All addressable objects in the system
+
+  - name: connections
+    description: Every relationship - owns, follows, taught_by, powers
+    purpose: All relationships between things
+
+  - name: events
+    description: Every action - purchased, created, viewed, completed
+    purpose: All time-stamped occurrences
+
+  - name: knowledge
+    description: Labels + chunks + vectors powering RAG & search
+    purpose: Taxonomy (labels) and retrieval-augmented generation (RAG)
+
+golden_rule: "If you can't map your feature to these 6 dimensions, you're thinking about it wrong."
+
+simplicity: "ONE is six dimensions — groups partition, people authorize, things exist, connections relate, events record, and knowledge understands. Everything composes from these building blocks."
+
+# ======================================================================
+# GROUPS: The Isolation Boundary with Nesting
+# ======================================================================
+
+groups:
+  structure:
+    _id: Id<'groups'>
+    slug: string              # REQUIRED: URL identifier (/group/slug)
+    name: string              # REQUIRED: Display name
+    type:
+      - friend_circle
+      - business
+      - community
+      - dao
+      - government
+      - organization          # Legacy type for backward compatibility
+    parentGroupId: Id<'groups'>?  # OPTIONAL: Parent group for nesting
+    description: string?      # OPTIONAL: About text
+    metadata: Record<string, any>
+    settings:
+      visibility:
+        - public
+        - private
+      joinPolicy:
+        - open
+        - invite_only
+        - approval_required
+      plan:
+        - starter
+        - pro
+        - enterprise
+      limits:
+        users: number
+        storage: number         # GB
+        apiCalls: number
+    status:
+      - active
+      - archived
+    createdAt: number
+    updatedAt: number
+
+  common_fields:
+    identity: [slug, name]
+    web: [slug, name, description]
+    operations: [status, type, settings, parentGroupId]
+
+  why_matters:
+    - Multi-Tenant Isolation: Each group's data is completely separate
+    - Hierarchical Nesting: Groups can contain sub-groups for complex organizations
+    - Flexible Types: From friend circles to DAOs to governments
+    - Resource Quotas: Control costs and usage per group
+    - Privacy Control: Groups can be public or private with controlled access
+
+# ======================================================================
+# PEOPLE: Authorization & Governance
+# ======================================================================
+
+people:
+  structure:
+    _id: Id<'people'>
+    email: string             # REQUIRED: Auth identifier
+    username: string          # REQUIRED: URL identifier (/username)
+    displayName: string       # REQUIRED: Display name
+    role:
+      - platform_owner
+      - group_owner
+      - group_user
+      - customer
+    groupId: Id<'groups'>?  # Current/default group
+    permissions: string[]?    # Additional permissions
+    bio: string?              # OPTIONAL: About text
+    avatar: string?           # OPTIONAL: Profile image
+    groups: Id<'groups'>[]  # All groups this person belongs to
+    createdAt: number
+    updatedAt: number
+
+  common_fields:
+    identity: [email, username, displayName]
+    auth: [email, username, role, permissions]
+    web: [username, displayName, avatar, bio]
+    governance: [role, groupId, groups, permissions]
+
+  roles:
+    platform_owner:
+      description: Owns the ONE Platform
+      revenue: 100% from platform-level services
+      access: Can access all groups (support/debugging)
+      capabilities: Creates new groups
+
+    group_owner:
+      description: Owns/manages one or more groups
+      control: Users, permissions, billing within group
+      customization: AI agents and frontend
+      revenue: Revenue sharing with platform
+
+    group_user:
+      description: Works within a group
+      permissions: Limited permissions (defined by group owner)
+      capabilities: Can create content, run agents (within quotas)
+
+    customer:
+      description: External user consuming content
+      access: Purchases tokens, enrolls in courses
+      admin: No admin access
+
+  why_matters:
+    - Authorization: Every action must have an actor (person)
+    - Governance: Group owners control who can do what
+    - Audit Trail: Events log who did what when
+    - Customization: People teach AI agents their preferences
+
+# ======================================================================
+# KNOWLEDGE: Labels, Chunks, and Vectors (RAG)
+# ======================================================================
+
+knowledge:
+  purpose: Unify taxonomy ("tags") and retrieval-augmented generation (RAG) under one table
+
+  principles:
+    - Protocol-agnostic: store protocol details in metadata
+    - Many-to-many: link knowledge ⇄ things via thingKnowledge with optional context metadata
+    - Scalable: consolidated types minimize index fan-out; embeddings enable semantic search
+
+  types:
+    - label:       # replaces legacy "tag"; lightweight categorical marker
+    - document:    # wrapper for a source text/blob (pre-chunking)
+    - chunk:       # atomic chunk of text with embedding
+    - vector_only: # embedding without stored text (e.g., privacy)
+
+  structure:
+    _id: Id<'knowledge'>
+    knowledgeType: KnowledgeType
+    text: string?                    # optional for label/vector_only
+    embedding: number[]?             # Float32 vector; model-dependent dimension
+    embeddingModel: string?          # e.g., "text-embedding-3-large"
+    embeddingDim: number?
+    sourceThingId: Id<'things'>?     # Primary source entity
+    sourceField: string?             # e.g., 'content', 'transcript', 'title'
+    chunk:
+      index: number
+      start: number?
+      end: number?
+      tokenCount: number?
+      overlap: number?
+    labels: string[]?                # Replaces per-thing tags; applied to knowledge
+    metadata: Record<string, any>?   # protocol, language, mime, hash, version
+    createdAt: number
+    updatedAt: number
+    deletedAt: number?
+
+  junction_thingKnowledge:
+    _id: Id<'thingKnowledge'>
+    thingId: Id<'things'>
+    knowledgeId: Id<'knowledge'>
+    role:
+      - label
+      - summary
+      - chunk_of
+      - caption
+      - keyword
+    metadata: Record<string, any>?
+    createdAt: number
+
+  indexes:
+    - knowledge.by_type (knowledgeType)
+    - knowledge.by_source (sourceThingId)
+    - knowledge.by_created (createdAt)
+    - thingKnowledge.by_thing (thingId)
+    - thingKnowledge.by_knowledge (knowledgeId)
+    - knowledge.by_embedding (vector index for ANN search)
+
+  governance:
+    policy: Default is free-form, user-extensible knowledge labels for maximum flexibility
+    curated_prefixes:
+      - skill:*
+      - industry:*
+      - topic:*
+      - format:*
+      - goal:*
+      - audience:*
+      - technology:*
+      - status:*
+      - capability:*
+      - protocol:*
+      - payment_method:*
+      - network:*
+    validation: Enforce label hygiene (no duplicates within scope)
+    ownership: Platform/organization owners may curate official labels
+
+# ======================================================================
+# THINGS: All The "Things" (66 Types)
+# ======================================================================
+
+things:
+  test: "If you can point at it and say 'this is a ___', it's a thing"
+
+  structure:
+    _id: Id<"things">
+    type: ThingType
+    name: string
+    properties: Record<string, any>  # Type-specific properties (JSON)
+    status:
+      - active
+      - inactive
+      - draft
+      - published
+      - archived
+    createdAt: number
+    updatedAt: number
+    deletedAt: number?
+
+  types:
+    core:
+      - creator          # Human creator (role: platform_owner, group_owner, group_user, customer)
+      - ai_clone         # Digital twin of creator
+      - audience_member  # Fan/user (role: customer)
+      - organization     # DEPRECATED: Legacy - Use type='organization' group instead
+
+    business_agents:
+      - strategy_agent      # Vision, planning, OKRs
+      - research_agent      # Market, trends, competitors
+      - marketing_agent     # Content strategy, SEO, distribution
+      - sales_agent         # Funnels, conversion, follow-up
+      - service_agent       # Support, onboarding, success
+      - design_agent        # Brand, UI/UX, assets
+      - engineering_agent   # Tech, integration, automation
+      - finance_agent       # Revenue, costs, forecasting
+      - legal_agent         # Compliance, contracts, IP
+      - intelligence_agent  # Analytics, insights, predictions
+
+    content:
+      - blog_post     # Written content
+      - video         # Video content
+      - podcast       # Audio content
+      - social_post   # Social media post
+      - email         # Email content
+      - course        # Educational course
+      - lesson        # Individual lesson
+
+    products:
+      - digital_product  # Templates, tools, assets
+      - membership       # Tiered membership
+      - consultation     # 1-on-1 session
+      - nft              # NFT collectible
+
+    community:
+      - community     # Community space
+      - conversation  # Thread/discussion
+      - message       # Individual message
+
+    token:
+      - token          # Actual token instance
+      - token_contract # Smart contract
+
+    knowledge_types:
+      - knowledge_item # Piece of creator knowledge
+      - embedding      # Vector embedding
+
+    platform:
+      - website       # Auto-generated creator site
+      - landing_page  # Custom landing pages
+      - template      # Design templates
+      - livestream    # Live broadcast
+      - recording     # Saved livestream content
+      - media_asset   # Images, videos, files
+
+    business:
+      - payment       # Payment transaction
+      - subscription  # Recurring subscription
+      - invoice       # Invoice record
+      - metric        # Tracked metric
+      - insight       # AI-generated insight
+      - prediction    # AI prediction
+      - report        # Analytics report
+
+    auth_session:
+      - session               # User session (Better Auth)
+      - oauth_account         # OAuth connection (GitHub, Google)
+      - verification_token    # Email/2FA verification token
+      - password_reset_token  # Password reset token
+
+    ui_preferences:
+      - ui_preferences  # User UI settings (theme, layout, etc.)
+
+    marketing:
+      - notification     # System notification
+      - email_campaign   # Email marketing campaign
+      - announcement     # Platform announcement
+      - referral         # Referral record
+      - campaign         # Marketing campaign
+      - lead             # Potential customer/lead
+
+    external:
+      - external_agent       # External AI agent (ElizaOS, etc.)
+      - external_workflow    # External workflow (n8n, Zapier, Make)
+      - external_connection  # Connection config to external service
+
+    protocol:
+      - mandate  # Intent or cart mandate (AP2)
+      - product  # Sellable product (ACP/marketplace)
+
+  properties_by_type:
+    creator:
+      email: string
+      username: string
+      displayName: string
+      bio: string?
+      avatar: string?
+      niche: string[]
+      expertise: string[]
+      targetAudience: string
+      brandColors:
+        primary: string
+        secondary: string
+        accent: string
+      totalFollowers: number
+      totalContent: number
+      totalRevenue: number
+      role:
+        - platform_owner
+        - group_owner
+        - group_user
+        - customer
+      groupId: Id<"groups">?
+      permissions: string[]?
+
+    organization:  # DEPRECATED: Legacy type for backward compatibility
+      name: string
+      slug: string
+      domain: string?
+      logo: string?
+      description: string?
+      status:
+        - active
+        - suspended
+        - trial
+        - cancelled
+      plan:
+        - starter
+        - pro
+        - enterprise
+      limits:
+        users: number
+        storage: number
+        apiCalls: number
+      usage:
+        users: number
+        storage: number
+        apiCalls: number
+      billing:
+        customerId: string?
+        subscriptionId: string?
+        currentPeriodEnd: number?
+      settings:
+        allowSignups: boolean
+        requireEmailVerification: boolean
+        enableTwoFactor: boolean
+        allowedDomains: string[]?
+      createdAt: number
+      trialEndsAt: number?
+
+    ai_clone:
+      voiceId: string?
+      voiceProvider:
+        - elevenlabs
+        - azure
+        - custom
+      appearanceId: string?
+      appearanceProvider:
+        - d-id
+        - heygen
+        - custom
+      systemPrompt: string
+      temperature: number
+      knowledgeBaseSize: number
+      lastTrainingDate: number
+      totalInteractions: number
+      satisfactionScore: number
+
+    token:
+      contractAddress: string
+      blockchain:
+        - base
+        - ethereum
+        - polygon
+      standard:
+        - ERC20
+        - ERC721
+        - ERC1155
+      totalSupply: number
+      circulatingSupply: number
+      price: number
+      marketCap: number
+      utility: string[]
+      burnRate: number
+      holders: number
+      transactions24h: number
+      volume24h: number
+
+    course:
+      title: string
+      description: string
+      thumbnail: string?
+      modules: number
+      lessons: number
+      totalDuration: number
+      price: number
+      currency: string
+      tokenPrice: number?
+      enrollments: number
+      completions: number
+      averageRating: number
+      generatedBy:
+        - ai
+        - human
+        - hybrid
+      personalizationLevel:
+        - none
+        - basic
+        - advanced
+
+# ======================================================================
+# CONNECTIONS: All The Relationships (25 Types)
+# ======================================================================
+
+connections:
+  test: "If you're describing how thing X relates to thing Y, it's a connection"
+
+  principle: Consolidated types with metadata for variants. Protocol identity stored in metadata.protocol
+
+  structure:
+    _id: Id<"connections">
+    fromThingId: Id<"things">
+    toThingId: Id<"things">
+    relationshipType: ConnectionType
+    metadata: Record<string, any>?  # relationship data
+    strength: number?               # 0-1
+    validFrom: number?
+    validTo: number?
+    createdAt: number
+    updatedAt: number?
+
+  types:
+    ownership:
+      - owns
+      - created_by
+
+    ai_relationships:
+      - clone_of
+      - trained_on
+      - powers
+
+    content_relationships:
+      - authored
+      - generated_by
+      - published_to
+      - part_of
+      - references
+
+    community_relationships:
+      - member_of
+      - following
+      - moderates
+      - participated_in
+
+    business_relationships:
+      - manages
+      - reports_to
+      - collaborates_with
+
+    token_relationships:
+      - holds_tokens
+      - staked_in
+      - earned_from
+
+    product_relationships:
+      - purchased
+      - enrolled_in
+      - completed
+      - teaching
+
+    consolidated:
+      transacted:  # Payment/subscription/invoice (metadata.transactionType + protocol)
+      notified:    # Notifications (metadata.channel + notificationType)
+      referred:    # Referrals (metadata.referralType)
+      communicated:  # Agent/protocol communication (metadata.protocol + messageType)
+      delegated:   # Task/workflow delegation (metadata.protocol + taskType)
+      approved:    # Approvals (metadata.approvalType + protocol)
+      fulfilled:   # Fulfillment (metadata.fulfillmentType + protocol)
+
+  patterns:
+    ownership:
+      description: Creator owns AI clone
+      example:
+        fromThingId: creatorId
+        toThingId: cloneId
+        relationshipType: owns
+
+    revenue_split:
+      description: Collaborator owns 30% of course
+      example:
+        fromThingId: collaboratorId
+        toThingId: courseId
+        relationshipType: owns
+        metadata:
+          revenueShare: 0.3
+
+    token_holding:
+      description: User holds 1000 tokens
+      example:
+        fromThingId: userId
+        toThingId: tokenId
+        relationshipType: holds_tokens
+        metadata:
+          balance: 1000
+          acquiredAt: timestamp
+
+    group_membership:
+      description: User is member of group with role
+      example:
+        fromThingId: userId
+        toThingId: groupId
+        relationshipType: member_of
+        metadata:
+          role: group_owner  # or group_user
+          permissions: [read, write, admin]
+          invitedBy: userId?
+          joinedAt: timestamp
+
+# ======================================================================
+# EVENTS: All The Actions (67 Types)
+# ======================================================================
+
+events:
+  test: "If you're describing something that HAPPENED at a specific TIME, it's an event"
+
+  principle: Consolidated types with metadata for variants. Protocol identity stored in metadata.protocol
+
+  structure:
+    _id: Id<"events">
+    type: EventType
+    actorId: Id<"things">      # Who/what caused this
+    targetId: Id<"things">?    # Optional target thing
+    timestamp: number
+    metadata: any              # Event-specific data
+
+  metadata_structure:
+    protocol_agnostic:
+      action: string
+      contentType: string
+
+    protocol_specific:
+      protocol:
+        - a2a
+        - acp
+        - ap2
+        - x402
+        - ag-ui
+      # protocol-specific fields
+
+  types:
+    entity_lifecycle:
+      - entity_created
+      - entity_updated
+      - entity_deleted
+      - entity_archived
+
+    user_events:
+      - user_registered
+      - user_verified
+      - user_login
+      - user_logout
+      - profile_updated
+
+    authentication_events:
+      - password_reset_requested
+      - password_reset_completed
+      - email_verification_sent
+      - email_verified
+      - two_factor_enabled
+      - two_factor_disabled
+
+    group_events:
+      - group_created
+      - group_updated
+      - user_invited_to_group
+      - user_joined_group
+      - user_removed_from_group
+
+    dashboard_ui_events:
+      - dashboard_viewed
+      - settings_updated
+      - theme_changed
+      - preferences_updated
+
+    ai_clone_events:
+      - clone_created
+      - clone_updated
+      - voice_cloned
+      - appearance_cloned
+
+    agent_events:
+      - agent_created
+      - agent_executed
+      - agent_completed
+      - agent_failed
+
+    token_events:
+      - token_created
+      - token_minted
+      - token_burned
+      - tokens_purchased
+      - tokens_staked
+      - tokens_unstaked
+      - tokens_transferred
+
+    course_events:
+      - course_created
+      - course_enrolled
+      - lesson_completed
+      - course_completed
+      - certificate_earned
+
+    analytics_events:
+      - metric_calculated
+      - insight_generated
+      - prediction_made
+      - optimization_applied
+      - report_generated
+
+    inference_events:
+      - inference_request
+      - inference_completed
+      - inference_failed
+      - inference_quota_exceeded
+      - inference_revenue_collected
+      - org_revenue_generated
+      - revenue_share_distributed
+
+    blockchain_events:
+      - nft_minted
+      - nft_transferred
+      - tokens_bridged
+      - contract_deployed
+      - treasury_withdrawal
+
+    consolidated_events:
+      content_event:        # metadata.action: created|updated|deleted|viewed|shared|liked
+      payment_event:        # metadata.status: requested|verified|processed + protocol
+      subscription_event:   # metadata.action: started|renewed|cancelled
+      commerce_event:       # metadata.eventType + protocol (ACP, AP2)
+      livestream_event:     # metadata.status: started|ended + metadata.action: joined|left|chat|donation
+      notification_event:   # metadata.channel: email|sms|push|in_app + deliveryStatus
+      referral_event:       # metadata.action: created|completed|rewarded
+      communication_event:  # metadata.protocol (A2A, ACP, AG-UI) + messageType
+      task_event:           # metadata.action: delegated|completed|failed + protocol
+      mandate_event:        # metadata.mandateType: intent|cart + protocol (AP2)
+      price_event:          # metadata.action: checked|changed
+
+  retention_archival:
+    purpose: Keep queries fast and costs predictable at scale
+    windows:
+      hot: Last 30-90 days in primary events table, fully indexed
+      warm: 90-365 days; restrict heavy scans
+      cold: >365 days exported to warehouse/storage
+    patterns:
+      - Use type_time and actor_time for filters
+      - Precompute aggregates into metric entities
+      - Scheduled rollups to move old events to archive
+
+# ======================================================================
+# PROTOCOL INTEGRATION
+# ======================================================================
+
+protocols:
+  principle: Ontology is protocol-agnostic. Protocols identify themselves via metadata.protocol
+
+  a2a_agent_to_agent:
+    description: Agent-to-Agent communication
+    event_example:
+      type: task_delegated
+      actorId: oneAgentId
+      targetId: externalAgentId
+      metadata:
+        protocol: a2a
+        task: research_market_trends
+        parameters:
+          industry: fitness
+
+  acp_agentic_commerce:
+    description: Agentic Commerce Protocol
+    event_example:
+      type: commerce_event
+      actorId: agentId
+      targetId: transactionId
+      metadata:
+        protocol: acp
+        eventType: purchase_initiated
+        agentPlatform: chatgpt
+        productId: productId
+        amount: 99.00
+
+  ap2_agent_payments:
+    description: Agent Payments Protocol
+    event_example:
+      type: mandate_created
+      actorId: userId
+      targetId: mandateId
+      metadata:
+        protocol: ap2
+        mandateType: intent
+        autoExecute: true
+        maxBudget: 1500
+
+  x402_http_micropayments:
+    description: HTTP Micropayments Protocol
+    event_example:
+      type: payment_requested
+      actorId: apiServiceId
+      targetId: resourceId
+      metadata:
+        protocol: x402
+        scheme: permit
+        network: base
+        amount: "0.01"
+        resource: /api/agent/analyze
+
+  ag_ui_generative_ui:
+    description: CopilotKit Generative UI
+    event_example:
+      type: message_sent
+      actorId: agentId
+      targetId: conversationId
+      metadata:
+        protocol: ag-ui
+        messageType: ui
+        component: chart
+        data:
+          chartType: line
+
+# ======================================================================
+# QUERIES & INDEXES
+# ======================================================================
+
+queries:
+  get_thing_by_id:
+    description: Get thing by ID
+    example: db.get(thingId)
+
+  get_things_by_type:
+    description: Get all things of type
+    index: by_type
+    example: |
+      db.query('things')
+        .withIndex('by_type', (q) => q.eq('type', 'creator'))
+        .collect()
+
+  get_thing_relationships:
+    description: Get all entities this entity owns
+    index: from_type
+    example: |
+      db.query('connections')
+        .withIndex('from_type', (q) =>
+          q.eq('fromThingId', thingId).eq('relationshipType', 'owns'))
+        .collect()
+
+  get_thing_history:
+    description: Get all events for this entity
+    index: thing_type_time
+    example: |
+      db.query('events')
+        .withIndex('thing_type_time', (q) => q.eq('thingId', thingId))
+        .order('desc')
+        .collect()
+
+  get_thing_knowledge:
+    description: Get knowledge items linked to thing
+    example: |
+      db.query('thingKnowledge')
+        .withIndex('by_thing', (q) => q.eq('thingId', thingId))
+        .collect()
+
+indexes:
+  things:
+    - by_type(type)
+    - by_status(status)
+    - by_created(createdAt)
+    - search_things(name, type, status)
+
+  connections:
+    - from_type(fromThingId, relationshipType)
+    - to_type(toThingId, relationshipType)
+    - bidirectional(fromThingId, toThingId)
+
+  events:
+    - thing_type_time(thingId, eventType, timestamp)
+    - type_time(eventType, timestamp)
+    - session(sessionId, timestamp)
+    - actor_time(actorId, timestamp)
+
+  knowledge:
+    - by_type(knowledgeType)
+    - by_source(sourceThingId)
+    - by_created(createdAt)
+    - by_embedding(embedding vector)
+
+# ======================================================================
+# VALIDATION RULES
+# ======================================================================
+
+validation:
+  thing:
+    - type must be valid ThingType
+    - name cannot be empty
+    - properties structure must match type
+    - status must be valid
+    - createdAt and updatedAt required
+
+  connection:
+    - fromThingId must exist
+    - toThingId must exist
+    - relationshipType must be valid
+    - Cannot connect a thing to itself (usually)
+    - Relationship must make semantic sense
+
+  event:
+    - thingId must exist
+    - eventType must be valid
+    - timestamp required
+    - actorId must exist if provided
+    - metadata structure must match event type
+
+# ======================================================================
+# SUMMARY STATISTICS
+# ======================================================================
+
+statistics:
+  dimensions: 6
+  thing_types: 66
+  connection_types: 25
+  event_types: 67
+
+  thing_breakdown:
+    core: 4
+    business_agents: 10
+    content: 7
+    products: 4
+    community: 3
+    token: 2
+    knowledge: 2
+    platform: 6
+    business: 7
+    auth_session: 5
+    marketing: 6
+    external: 3
+    protocol: 2
+
+  connection_breakdown:
+    specific_semantic: 18
+    consolidated_with_metadata: 7
+
+  event_breakdown:
+    entity_lifecycle: 4
+    user: 5
+    authentication: 6
+    group: 5
+    dashboard_ui: 4
+    ai_clone: 4
+    agent: 4
+    token: 7
+    course: 5
+    analytics: 5
+    inference: 7
+    blockchain: 5
+    consolidated: 11
+
+# ======================================================================
+# DESIGN BENEFITS
+# ======================================================================
+
+benefits:
+  - Six-dimension reality model
+  - Multi-tenant by design
+  - Clear ownership & governance
+  - Protocol-agnostic core
+  - Infinite protocol extensibility
+  - Cross-protocol analytics
+  - Type-safe
+  - Future-proof
+  - Scales from children to enterprise
+
+# ======================================================================
+# PHILOSOPHY
+# ======================================================================
+
+philosophy:
+  quote: "Simplicity is the ultimate sophistication."
+
+  proof: |
+    This ontology proves that you don't need hundreds of tables or complex schemas
+    to build a complete AI-native platform.
+
+  why_this_works:
+    other_systems:
+      - Create new tables for every feature
+      - Add protocol-specific columns
+      - Pollute schema with temporary concepts
+      - End up with 50+ tables, 200+ columns
+      - Become unmaintainable nightmares
+
+    one_approach:
+      - Map every feature to 6 dimensions
+      - Groups partition the space
+      - People authorize and govern
+      - Things, connections, events flow from there
+      - Knowledge understands it all
+      - Scale infinitely without schema changes
+      - Stay simple, clean, beautiful
+
+  result:
+    - Scales from lemonade stands to global enterprises
+    - Children can understand it
+    - Enterprises can rely on it
+    - AI agents can reason about it
+    - Never needs breaking changes
+    - Grows more powerful as it grows larger
+
+# ======================================================================
+# EXTENSIBILITY
+# ======================================================================
+
+extensibility:
+  principle: Users can add to any type without breaking the ontology
+
+  guidelines:
+    - Use properties for schema-free details
+    - Use knowledge labels to categorize, filter, and group
+    - Use metadata on connections and events for protocol/workflow-specific context
+    - Keep type stable, add properties.kind and labels for subtypes
+    - Custom automations integrate via external_agent, external_workflow, external_connection
+
+# ======================================================================
+# UNIVERSAL FIELDS (Auth + Web Generation)
+# ======================================================================
+
+universal_fields:
+  description: "Fields that EVERY person/group has for auth and web generation"
+
+  groups_require:
+    identity: [slug, name]        # Who they are + URL
+    web: [slug, name, description?]
+    operations: [status, type, settings, parentGroupId?]
+
+  people_require:
+    identity: [email, username, displayName]  # Who they are + URL
+    auth: [email, username, role]             # Authentication
+    web: [username, displayName, avatar?, bio?]
+    governance: [role, groupId?, groups]
+
+  things_require:
+    identity: [type, name]        # What it is
+    properties: {}                # Type-specific data (username, slug, image, etc.)
+    status: enum                  # Visibility/state
+
+  web_generation_pattern: |
+    Every person/group can be a website:
+    - Groups: /group/{slug} → generated from group data
+    - People: /{username} → generated from person data
+    - Things: Rendered in context of their owner (group or person)
+
+    Required for ANY web page:
+    1. URL identifier (slug/username in properties)
+    2. Display name (name field)
+    3. Visual identity (description in properties)
+    4. Description (bio/description in properties)
+    5. Visibility (status field)
+
+  auth_pattern: |
+    Better Auth integration:
+    - People table has email (links to auth.users)
+    - Auth sessions → session thing (type: session)
+    - OAuth accounts → oauth_account thing
+    - Email verification → verification_token thing
+
+    Minimal auth fields in people:
+    - email (REQUIRED for linking to auth.users)
+    - username (OPTIONAL for username-based login)
+    - role (REQUIRED for authorization)
+
+# ======================================================================
+# WORKFLOW (Agent-Based Development)
+# ======================================================================
+
+workflow:
+  description: "Agent-orchestrated development using ontology as source of truth"
+  philosophy: "The ontology IS the workflow. Agents collaborate. Everything else is noise."
+
+  stages:
+    1_ideas:        # Director validates against ontology
+    2_plans:        # Director creates feature collections
+    3_features:     # Specialists write specifications
+    4_tests:        # Quality defines user flows & acceptance criteria
+    5_design:       # Design creates UI that enables tests to pass
+    6_implementation: # Specialists code → Quality validates → Complete
+
+  agents:
+    director:       # Validates ideas, creates plans, assigns work
+      role: engineering_agent
+      responsibilities: [validate_ideas, create_plans, assign_specialists, mark_complete]
+      context_tokens: 200  # Just ontology type names
+
+    specialists:    # Write features, execute tasks, fix problems
+      roles: [engineering_agent, design_agent, marketing_agent]
+      types: [backend, frontend, integration]
+      context_tokens: 1500  # Ontology types + patterns
+
+    quality:        # Defines tests, validates results
+      role: intelligence_agent
+      responsibilities: [check_ontology, create_user_flows, define_tests, validate]
+      context_tokens: 2000  # Ontology + feature + UX patterns
+
+    design:         # Creates wireframes & components
+      role: design_agent
+      responsibilities: [create_wireframes, define_components, set_tokens]
+      context_tokens: 2000  # Feature + tests + design patterns
+
+    problem_solver: # Analyzes failures (ultrathink mode)
+      role: intelligence_agent
+      responsibilities: [analyze_failures, propose_solutions, delegate_fixes]
+      context_tokens: 2500  # Failed tests + implementation + ontology
+
+    documenter:     # Writes docs after completion
+      role: intelligence_agent
+      responsibilities: [write_docs, update_knowledge]
+      context_tokens: 1000  # Feature + tests
+
+  workflow_things:
+    idea: "User's initial concept → validated by director"
+    plan: "Collection of features → orchestrated by director (e.g., 2-course-platform)"
+    feature: "Specification of what to build → written by specialists (e.g., 2-1-course-crud)"
+    test: "User flows + acceptance criteria → defined by quality agent"
+    design: "Wireframes + components → created by design agent"
+    task: "Individual work item → executed by specialists (e.g., 2-1-task-1)"
+    lesson: "Lessons learned → captured in knowledge after fixes"
+
+  workflow_connections:
+    part_of: "feature → plan, task → feature"
+    assigned_to: "feature → agent, task → agent"
+    depends_on: "task → task (optional ordering)"
+    tested_by: "feature → test"
+    designed_by: "feature → design"
+    implements: "task → design"
+
+  numbering:
+    plan: "2-plan-name"                    # e.g., 2-course-platform
+    feature: "2-1-feature-name"            # e.g., 2-1-course-crud
+    tasks: "2-1-feature-name-tasks"        # e.g., 2-1-course-crud-tasks
+    task: "2-1-task-1"                     # e.g., 2-1-task-1
+
+  workflow_events:
+    planning: [plan_started, feature_assigned, tasks_created]
+    execution: [feature_started, implementation_complete, task_started, task_completed]
+    quality: [quality_check_started, quality_check_complete, test_started, test_passed, test_failed]
+    problem_solving: [problem_analysis_started, solution_proposed, fix_started, fix_complete]
+    documentation: [documentation_started, documentation_complete, lesson_learned_added]
+    completion: [feature_complete, plan_complete]
+
+  quality_loop: |
+    Specialist writes → Quality validates → Tests run
+    → PASS: Documenter writes docs
+    → FAIL: Problem Solver analyzes → Proposes solution → Specialist fixes → Add to lessons learned → Re-test
+
+  coordination:
+    pattern: "Event-driven via events table"
+    no_handoffs: "Agents watch events, act autonomously"
+    parallel: "Tasks execute concurrently"
+    audit_trail: "Complete history in events table"
+
+  benefits:
+    - 300 lines of orchestration vs 15,000+ lines of YAML
+    - 98% context reduction (200-2,500 tokens vs 50k-150k)
+    - 5x faster execution (20s vs 115s per feature)
+    - Event-driven coordination (no handoff protocols)
+    - Quality loops with continuous learning
+    - Parallel execution by default
+
+# ======================================================================
+# FOR IMPLEMENTERS
+# ======================================================================
+
+implementer_checklist:
+  when_implementing_feature:
+    1: What entities are involved?
+    2: What connections link them?
+    3: What events need to be logged?
+    4: What knowledge labels categorize them?
+    5: What protocol is this for? (add to metadata)
+    6: What knowledge (labels + chunks) should be linked?
+    7: What workflow stage? (idea/plan/feature/test/design/implementation)
+
+  for_ai_agents: |
+    You now have a complete, unambiguous data model. Generate consistent
+    database operations because you understand the underlying structure.
+
+    Use the workflow agents to orchestrate development:
+    - Director validates ideas and creates plans
+    - Specialists write features and execute tasks
+    - Quality defines tests and validates results
+    - Design creates UI that enables tests to pass
+    - Problem Solver analyzes failures and proposes solutions
+    - Documenter captures knowledge after completion
+
+  for_developers: |
+    You have a schema that will never need major refactoring. Just add new
+    thing types as needed, use existing event types with metadata, and enjoy
+    the simplicity.
+
+    The workflow system uses the same 6-dimension ontology:
+    - Ideas, plans, features, tests, designs, tasks are all "things"
+    - Agent assignments are "connections"
+    - All progress tracked via "events"
+    - Lessons learned stored in "knowledge"
+
+# ======================================================================
+# END OF ONTOLOGY SPECIFICATION
+# ======================================================================

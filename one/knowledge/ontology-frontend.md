@@ -1,6 +1,6 @@
 # Frontend Development Ontology
 
-**Version:** 4.0.0
+**Version:** 2.0.0
 **Type System:** Formal ontology for backend-agnostic Astro website development
 **Paradigm:** Pure declarative type theory + Provider pattern + Context engineering
 
@@ -31,42 +31,49 @@
 ## Core Axioms
 
 ### Axiom 1: Everything is a Thing
+
 ```
 ∀x ∈ Frontend → x : Thing
 Thing ::= Page | Component | Content | Service | Provider | Configuration
 ```
 
 ### Axiom 2: All Things Have Type
+
 ```
 type : Thing → TypeID
 TypeID ::= String ∈ ontology.things.types
 ```
 
 ### Axiom 3: Things Connect
+
 ```
 connect : Thing × Thing → Connection
 Connection ::= { from: Thing, to: Thing, type: RelationType, metadata: Object }
 ```
 
 ### Axiom 4: Actions Emit Events
+
 ```
 action : Thing → Event
 Event ::= { type: EventType, actor: Thing, target: Thing, timestamp: Time, metadata: Object }
 ```
 
 ### Axiom 5: Patterns Compose
+
 ```
 compose : Pattern × Pattern → Pattern
 Pattern ::= { type: PatternType, inputs: [Thing], outputs: [Thing], transform: Function }
 ```
 
 ### Axiom 6: Backend Agnosticism
+
 ```
 ∀Provider. Provider implements DataProviderInterface → Frontend works with Provider
 DataProviderInterface ::= { organizations, people, things, connections, events, knowledge }
 ```
 
 ### Axiom 7: Context Minimalism
+
 ```
 ∀Operation. Load only required types, not implementations
 ContextUsed << ContextAvailable
@@ -178,6 +185,7 @@ target_reduction: 98%+
 ## Type Hierarchy
 
 ### Base Types
+
 ```
 Thing
 ├── Artifact          // Code artifacts (what agents create)
@@ -234,25 +242,42 @@ Thing
 ## Critical Distinctions
 
 ### What Frontend IS
+
 ```typescript
 type FrontendResponsibility =
-  | { type: "render"; data: any }                    // Display UI from data
+  | { type: "render"; data: any } // Display UI from data
   | { type: "call_provider"; operation: DataOperation } // Call DataProvider (not direct backend)
-  | { type: "manage_ui_state"; state: UIState }      // Form inputs, modals, loading (component-local)
-  | { type: "route"; path: Path }                    // Client-side navigation
-  | { type: "cache_display"; data: CachedData }     // Cache UI data (not business data)
+  | { type: "manage_ui_state"; state: UIState } // Form inputs, modals, loading (component-local)
+  | { type: "route"; path: Path } // Client-side navigation
+  | { type: "cache_display"; data: CachedData }; // Cache UI data (not business data)
 ```
 
 ### What Frontend IS NOT
+
 ```typescript
 type FrontendProhibition =
   | { type: "database_access"; reason: "Backend-only (provider abstracts)" }
-  | { type: "business_logic"; reason: "Backend validates (frontend calls provider)" }
+  | {
+      type: "business_logic";
+      reason: "Backend validates (frontend calls provider)";
+    }
   | { type: "event_logging"; reason: "Backend logs (frontend just triggers)" }
-  | { type: "authorization"; reason: "Backend authorizes (frontend just checks state)" }
-  | { type: "data_validation"; reason: "Backend validates (frontend UX hints only)" }
-  | { type: "org_filtering"; reason: "Provider handles (frontend never filters by org)" }
-  | { type: "backend_specific_code"; reason: "Provider abstracts (frontend uses interface)" }
+  | {
+      type: "authorization";
+      reason: "Backend authorizes (frontend just checks state)";
+    }
+  | {
+      type: "data_validation";
+      reason: "Backend validates (frontend UX hints only)";
+    }
+  | {
+      type: "org_filtering";
+      reason: "Provider handles (frontend never filters by org)";
+    }
+  | {
+      type: "backend_specific_code";
+      reason: "Provider abstracts (frontend uses interface)";
+    };
 ```
 
 ---
@@ -395,6 +420,7 @@ type FrontendProhibition =
 ## DataProvider Interface (Universal API)
 
 ### Core Contract
+
 ```typescript
 // ALL backends must implement this interface
 interface DataProviderInterface {
@@ -452,6 +478,7 @@ interface DataProviderInterface {
 ```
 
 ### Provider Algebra
+
 ```typescript
 // Provider composition
 implement : Backend × DataProviderInterface → Provider
@@ -662,44 +689,44 @@ type NotionProvider = Provider & {
 ```typescript
 // Display Configuration (UI only, NOT business logic)
 type DisplayConfig = Configuration & {
-  purpose: "ui_presentation"
-  scope: ThingType[]
+  purpose: "ui_presentation";
+  scope: ThingType[];
 
   properties: {
-    displayName: string              // "Course" (singular)
-    displayNamePlural: string        // "Courses" (plural)
-    icon: LucideIconName            // "BookOpen"
-    color: TailwindColor            // "green"
-    primaryField: string            // Which property to show as title
-    secondaryField: string          // Which property to show as subtitle
-    imageField: string              // Which property is the image
-    fields: FieldConfig[]           // Form fields for UI
-  }
+    displayName: string; // "Course" (singular)
+    displayNamePlural: string; // "Courses" (plural)
+    icon: LucideIconName; // "BookOpen"
+    color: TailwindColor; // "green"
+    primaryField: string; // Which property to show as title
+    secondaryField: string; // Which property to show as subtitle
+    imageField: string; // Which property is the image
+    fields: FieldConfig[]; // Form fields for UI
+  };
 
   invariant: {
-    ui_only: true                   // NO business logic
-    backend_agnostic: true          // Works with any provider
-    display_hints: true             // Labels, placeholders, icons
-  }
-}
+    ui_only: true; // NO business logic
+    backend_agnostic: true; // Works with any provider
+    display_hints: true; // Labels, placeholders, icons
+  };
+};
 
 // Provider Configuration (backend connection)
 type ProviderConfig = Configuration & {
-  purpose: "backend_connection"
+  purpose: "backend_connection";
 
   properties: {
-    provider: ProviderType          // "convex" | "wordpress" | "notion" | etc
-    url: string                     // Backend URL
-    apiKey?: string                 // API key (if needed)
-    databaseId?: string             // Database ID (for Notion)
+    provider: ProviderType; // "convex" | "wordpress" | "notion" | etc
+    url: string; // Backend URL
+    apiKey?: string; // API key (if needed)
+    databaseId?: string; // Database ID (for Notion)
     // ... other backend-specific config
-  }
+  };
 
   invariant: {
-    one_line_swap: true             // Change provider in ONE line
-    environment_vars: true          // Use .env for secrets
-  }
-}
+    one_line_swap: true; // Change provider in ONE line
+    environment_vars: true; // Use .env for secrets
+  };
+};
 ```
 
 ---
@@ -2336,6 +2363,7 @@ type ProviderConfig = Configuration & {
 ### Ontology Evolution
 
 **Version 4.0.0 Additions:**
+
 - **Provider as Context Loader** - 99.9% context reduction via interface abstraction
 - **Multi-Tenant Architecture** - Subdomain-based org isolation enforced by provider
 - **4-Tier Caching** - Type definitions, interface, SSR data, real-time subscriptions
@@ -2349,16 +2377,16 @@ type ProviderConfig = Configuration & {
 
 ### Key Metrics
 
-| Metric | v3.0.0 | v4.0.0 | Improvement |
-|--------|--------|--------|-------------|
-| **Context per request** | 50k-300k tokens | 300-5k tokens | **99%+ reduction** |
-| **Backend coupling** | High (Convex-specific) | Zero (provider abstraction) | **Infinite backends** |
-| **Caching strategy** | Undefined | 4-tier (L1-L4) | **80-95% fewer calls** |
-| **Error handling** | Basic | Full propagation | **100% coverage** |
-| **Testing strategy** | Ad-hoc | 3-layer (unit/int/e2e) | **Systematic** |
-| **State management** | Unclear | 4-layer hierarchy | **No duplication** |
-| **Observability** | None | 4-pillar (calls, context, cache, perf) | **Full visibility** |
-| **Agent coordination** | Sequential | Parallel (event-driven) | **5x faster** |
+| Metric                  | v3.0.0                 | v4.0.0                                 | Improvement            |
+| ----------------------- | ---------------------- | -------------------------------------- | ---------------------- |
+| **Context per request** | 50k-300k tokens        | 300-5k tokens                          | **99%+ reduction**     |
+| **Backend coupling**    | High (Convex-specific) | Zero (provider abstraction)            | **Infinite backends**  |
+| **Caching strategy**    | Undefined              | 4-tier (L1-L4)                         | **80-95% fewer calls** |
+| **Error handling**      | Basic                  | Full propagation                       | **100% coverage**      |
+| **Testing strategy**    | Ad-hoc                 | 3-layer (unit/int/e2e)                 | **Systematic**         |
+| **State management**    | Unclear                | 4-layer hierarchy                      | **No duplication**     |
+| **Observability**       | None                   | 4-pillar (calls, context, cache, perf) | **Full visibility**    |
+| **Agent coordination**  | Sequential             | Parallel (event-driven)                | **5x faster**          |
 
 ### Derivation Power
 
@@ -2378,12 +2406,14 @@ From minimal axioms:
 ### Context Engineering Results
 
 **Traditional approach:**
+
 - Load: 50k-300k tokens per request
 - Cost: $0.50-$3.00 per request
 - Speed: 30-60 seconds
 - Backends: 1 (tightly coupled)
 
 **Ontology-driven approach (v4.0.0):**
+
 - Load: 300-5k tokens per request (98-99% reduction)
 - Cost: $0.003-$0.05 per request (100x cheaper)
 - Speed: 2-5 seconds (10x faster)

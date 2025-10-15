@@ -1,0 +1,25 @@
+{
+  "sessionStart": "2025-07-31T11:03:00.438Z",
+  "agentMetrics": {
+    "marketing-director": {
+      "requestCount": 3,
+      "totalResponseTime": 2705,
+      "averageResponseTime": 901.6666666666666,
+      "errorCount": 0,
+      "lastUsed": "2025-07-31T11:04:41.057Z",
+      "performance": "good",
+      "qualityScores": [],
+      "averageQuality": 0,
+      "qualityTrend": "stable",
+      "toolUsage": {},
+      "delegationEfficiency": 1
+    }
+  },
+  "systemMetrics": {
+    "totalRequests": 3,
+    "averageResponseTime": 901.6666666666666,
+    "errorRate": 0,
+    "peakConcurrency": 0
+  },
+  "alerts": []
+}
