@@ -1,7 +1,6 @@
-# The ONE Ontology
+# ONE
 
-> **Every intelligent system needs a coherent model of reality.**
-
+```
      ██████╗ ███╗   ██╗███████╗
     ██╔═══██╗████╗  ██║██╔════╝
     ██║   ██║██╔██╗ ██║█████╗
@@ -10,665 +9,598 @@
      ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
        Make Your Ideas Real
-
-   https://one.ie  •  npx oneie
-
-The ONE Ontology gives AI agents—and the humans who direct them—a complete, scalable architecture for understanding **who owns what, who can do what, what happened, and what it all means.**
-
-[![License](https://img.shields.io/badge/license-FREE-blue.svg)](../LICENSE.md)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](./knowledge/ontology.md)
-[![Dimensions](https://img.shields.io/badge/dimensions-6-orange.svg)](#the-6-dimensions)
-
----
-
-## 🌟 Why the ONE Ontology
-
-Traditional systems create tables for features, pollute schemas with temporary concepts, and end up with hundreds of entities nobody understands. The ONE Ontology takes a different approach:
-
-**Model reality in six core dimensions and map everything to them.**
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Groups → People → Things → Connections → Events → Knowledge │
-│                                                               │
-│  Everything flows through these six dimensions.               │
-│  Everything scales without schema changes.                   │
-│  Everything is queryable, composable, and intelligent.        │
-└─────────────────────────────────────────────────────────────┘
+          https://one.ie
+               type
+             npx oneie
+             /claude
+               /one
+               start
 ```
 
----
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+`/now` `/next` `/todo` `/done` `/build` `/design` `/deploy` `/see`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## 🎯 The 6 Dimensions
-
-### 1. 👥 Groups
-**Hierarchical containers that organize people and things**
-
-Groups can nest infinitely—from intimate friend circles to massive organizations. Each group owns its own graph of people, things, connections, events, and knowledge, creating perfect isolation at any scale.
-
-**6 Group Types:**
-- `friend_circle` - Small, intimate groups
-- `business` - Commercial organizations
-- `community` - Interest-based collectives
-- `dao` - Token-governed groups
-- `government` - Public institutions
-- `organization` - Generic groups
-
-**URL-Based Creation:**
-```
-one.ie/group/cooldao → creates "cooldao" group
-one.ie/group/cooldao/treasury → creates nested "treasury" group
-one.ie/group/emmas-birthday → creates "emmas-birthday" group
-```
-
-**Hierarchical Nesting Example:**
-```
-groups/acme-corp (business)
-  ├─ groups/engineering (organization)
-  │   ├─ groups/backend-team (organization)
-  │   └─ groups/frontend-team (organization)
-  ├─ groups/marketing (organization)
-  └─ groups/sales (organization)
-
-groups/emmas-friends (friend_circle)
-  ├─ groups/birthday-party (friend_circle)
-  └─ groups/game-night (friend_circle)
-
-groups/cool-dao (dao)
-  ├─ groups/treasury (dao)
-  └─ groups/governance (dao)
-```
+**Build apps, websites and AI agents in English and deploy at the edge. Free!**
 
 ---
 
-### 2. 🙋 People
-**Authorization & governance - WHO can do what**
+## ✨ What is ONE?
 
-People are the prime movers. Every decision, transaction, and relationship traces back to human intent. People link to organizations through membership connections, creating clear authorization chains.
+**Build apps, websites, and AI agents in English.** Download to your computer, run in the cloud and deploy to the edge or your own server. ONE is open source and free forever.
 
-**4 Roles:**
-- `platform_owner` - Platform-level control
-- `org_owner` - Organization-level control
-- `org_user` - Organization member
-- `customer` - End user
+ONE maps everything to **6 universal dimensions**:
 
-**Properties:**
-- Identity (name, email, wallet)
-- Authentication credentials
-- Role within organization
-- Permissions and authorization
-- Preferences and settings
+1. **Groups** – Who owns what (multi-tenant isolation + hierarchical nesting)
+2. **People** – Who can do what (authorization & governance)
+3. **Things** – What exists (66 entity types)
+4. **Connections** – How they relate (25 relationship types)
+5. **Events** – What happened (67 event types, complete audit trail)
+6. **Knowledge** – What it means (embeddings, vectors, RAG)
 
-**Why it matters:**
-- ✓ Human authorization required
-- ✓ Clear governance
-- ✓ Audit trails
-- ✓ Intent and accountability
-- ✓ AI serves people, not the other way around
+**Everything else is just data.**
 
 ---
 
-### 3. 📦 Things
-**Entities - WHAT exists in your system**
+## 🚀 Why ONE?
 
-Things are discrete entities with properties, types, and states. They can be agents, products, audiences, tokens, mandates, contracts—anything you need to model. Every thing belongs to exactly one group.
+Traditional platforms create custom tables for every feature:
+- Users table, Products table, Orders table, Messages table...
+- 50+ tables, 200+ columns, endless complexity
+- Schema changes break everything
+- AI agents can't understand your database
 
-**66 Thing Types** organized in categories:
+**ONE's approach:**
 
-**Core:**
-- `creator`, `audience_member`, `workspace`, `organization_settings`
+Map every feature to the 6 dimensions → Scale infinitely without schema changes
 
-**Agents:**
-- `intelligence_agent`, `business_agent`, `personal_assistant`, `data_analyst`, `writer`, `researcher`, `moderator`, `customer_support`, `sales_rep`, `code_reviewer`, `qa_tester`, `task_automator`
+**Examples:**
+- Lemonade stand? ✅ Works
+- Enterprise SaaS? ✅ Works
+- Social network? ✅ Works
+- E-commerce? ✅ Works
+- AI agent platform? ✅ Works
 
-**Content:**
-- `video_content`, `text_content`, `audio_content`, `image_content`, `course`, `curriculum`, `module`, `lesson`, `quiz`, `certificate`, `podcast`, `newsletter`, `live_stream`, `blog_post`
-
-**Products:**
-- `token`, `nft`, `digital_product`, `offer`, `subscription_tier`, `bundle`, `access_pass`
-
-**Community:**
-- `community`, `forum`, `discussion`, `announcement`, `poll`
-
-**Knowledge:**
-- `knowledge_base`, `knowledge_chunk`, `topic`, `recommendation`, `insight`, `summary`
-
-**Platform:**
-- `ai_clone`, `voice_clone`, `personality_profile`, `mandate`, `delegation`, `workflow`, `automation`, `integration`, `webhook`
-
-**Business:**
-- `lead`, `deal`, `invoice`, `payment_method`, `payout_config`
+Same 6 dimensions. Different properties.
 
 ---
 
-### 4. 🔗 Connections
-**Relationships - HOW things relate to each other**
+## 🎯 Simple Enough for Children
 
-Connections are first-class relationships with their own properties. They express ownership, membership, governance, authorization, dependencies, transactions, and more. Connections make the implicit explicit.
-
-**25 Connection Types:**
-
-**Ownership & Authorization:**
-- `owns` - Ownership relationship
-- `can_read` - Read access
-- `can_write` - Write access
-- `can_execute` - Execution permission
-
-**Governance:**
-- `governed_by` - Governed by mandate
-- `delegated_to` - Delegation chain
-- `member_of` - Membership
-
-**Content & Knowledge:**
-- `authored` - Created content
-- `taught_by` - Teaching relationship
-- `enrolled_in` - Course enrollment
-- `contains` - Hierarchical containment
-
-**Social:**
-- `following` - Social following
-- `subscribed_to` - Subscription
-- `holds_tokens` - Token ownership
-
-**Consolidated Types (with metadata):**
-- `transacted` - Financial transactions (metadata.protocol: stripe | sui | blockchain)
-- `communicated` - Messages/interactions (metadata.channel: email | chat | voice)
-- `delegated` - Delegated authority (metadata.permissions: [...])
-- `governed` - Governance (metadata.constraints: [...])
-- `powered` - Dependency (metadata.config: {...})
-- `related` - Generic relationship (metadata.relationshipType: custom)
-- `licensed_to` - Licensing (metadata.terms: {...})
-
----
-
-### 5. ⚡ Events
-**Actions - WHAT happened, when, and why**
-
-Events are immutable records of every action in your system. They create an audit trail, enable time-travel queries, feed analytics, and power learning loops. Events are the memory of your system.
-
-**67 Event Types** organized in categories:
-
-**Thing Lifecycle:**
-- `thing_created`, `thing_updated`, `thing_deleted`, `thing_published`, `thing_archived`
-
-**User Actions:**
-- `user_signup`, `user_login`, `user_logout`, `profile_updated`, `preferences_changed`
-
-**AI/Agent:**
-- `agent_created`, `agent_executed`, `agent_completed`, `agent_failed`, `clone_created`, `clone_interaction`, `voice_cloned`, `personality_analyzed`
-
-**Inference Events:**
-- `inference_request`, `inference_completed`, `inference_failed`, `inference_quota_exceeded`, `inference_revenue_collected`, `org_revenue_generated`, `revenue_share_distributed`
-
-**Token/NFT:**
-- `token_created`, `tokens_purchased`, `tokens_transferred`, `tokens_burned`, `nft_minted`, `nft_transferred`
-
-**Blockchain:**
-- `tokens_bridged`, `contract_deployed`, `treasury_withdrawal`
-
-**Content:**
-- `content_created`, `content_published`, `content_viewed`, `content_liked`, `content_shared`, `course_enrolled`, `lesson_completed`, `quiz_submitted`, `certificate_earned`
-
-**Knowledge:**
-- `knowledge_indexed`, `embedding_generated`, `search_performed`, `recommendation_generated`
-
-**Consolidated Events (with metadata):**
-- `communicated` (metadata.protocol: email | sms | chat)
-- `transacted` (metadata.protocol: stripe | sui | blockchain)
-- `content_engaged` (metadata.engagement_type: view | like | share)
-- Others...
-
----
-
-### 6. 🧠 Knowledge
-**Intelligence - WHAT it all means**
-
-Knowledge captures semantics—labels, chunks, embeddings, and structured insights—that give agents the context they need to act intelligently. Knowledge transforms raw events and properties into queryable, composable intelligence.
-
-**12 Tag Categories:**
-
-1. **skill** - typescript, react, python, design, video-editing
-2. **industry** - fitness, education, finance, healthcare
-3. **topic** - ai, blockchain, marketing, sales, analytics
-4. **format** - video, text, audio, code, interactive
-5. **goal** - learn, earn, build, grow, teach
-6. **audience** - beginners, professionals, students, developers
-7. **technology** - astro, react-19, convex, sui, solana
-8. **status** - draft, published, deprecated, featured
-9. **capability** - image-gen, analysis, trading, refactoring
-10. **protocol** - a2a, acp, ap2, x402, ag-ui
-11. **payment** - stripe, crypto, x402, ap2
-12. **network** - sui, solana, base, ethereum
-
-**Features:**
-- Labels for categorization
-- Chunks for semantic search
-- Embeddings for vector similarity
-- Relationships for knowledge graphs
-- Licensing for IP protection
-- Provenance for trust
-- Tokenization for markets
-
----
-
-## 🎨 How The Ontology Works
-
-### Complete Example: Fan Buys Creator Tokens
-
-Let's see how all six dimensions work together in a real feature:
-
-#### Step 0: **Groups** (Scope)
 ```typescript
-groupId: "acme-corp"
-// Transaction happens within this group boundary
-// All entities belong to this group (can be nested)
-```
+// Emma's Lemonade Stand
 
-#### Step 1: **People** (Authorization)
-```typescript
-actorId: "fan_123"
-// Fan authorizes: "Buy 100 creator tokens for $10"
-```
+// 1. Create your group
+const myStand = await createGroup({
+  name: "Emma's Lemonade Stand",
+  slug: "emmas-lemonade",
+  type: "business"
+});
 
-#### Step 2: **Things** (Entities Involved)
-```typescript
-{
-  fan_123: { type: "audience_member" },
-  token_456: { type: "token", symbol: "CRTR" }
-}
-```
+// 2. You are the owner (a person)
+const me = await createPerson({
+  name: "Emma",
+  role: "org_owner",
+  groupId: myStand._id
+});
 
-#### Step 3: **Connections** (Relationship Created)
-```typescript
-{
-  fromThingId: "fan_123",
-  toThingId: "token_456",
-  relationshipType: "holds_tokens",
-  metadata: { balance: 100 }
-}
-```
+// 3. Create lemonade (a thing)
+const lemonade = await createThing({
+  type: "product",
+  name: "Fresh Lemonade",
+  groupId: myStand._id,
+  properties: {
+    price: 1.00,
+    inventory: 20
+  }
+});
 
-#### Step 4: **Events** (Action Recorded)
-```typescript
-{
+// 4. Customer buys it (a connection)
+await createConnection({
+  from: customer._id,
+  to: lemonade._id,
+  type: "purchased",
+  groupId: myStand._id
+});
+
+// 5. Log the sale (an event)
+await createEvent({
   type: "tokens_purchased",
-  actorId: "fan_123",
-  targetId: "token_456",
-  metadata: { amount: 100, usd: 10 },
-  timestamp: Date.now()
-}
+  actor: customer._id,
+  target: lemonade._id,
+  groupId: myStand._id,
+  metadata: { amount: 1.00, weather: "sunny" }
+});
+
+// 6. AI learns (knowledge)
+// "Sunny days = more sales. Make 30 cups tomorrow!"
 ```
 
-#### Step 5: **Knowledge** (Context Added)
+**That's it.** 6 dimensions model reality completely.
+
+---
+
+## 🏢 Powerful Enough for Enterprises
+
 ```typescript
-// Labels give downstream agents context
-tags: ["payment_method:stripe", "status:completed", "audience:engaged"]
+// Acme Corporation - Enterprise SaaS with Hierarchical Groups
+
+// Top-level organization group
+const acmeCorp = await createGroup({
+  name: "Acme Corporation",
+  slug: "acme-corp",
+  type: "organization",
+  plan: "enterprise",
+  limits: {
+    users: 100,
+    storage: 1000, // GB
+    apiCalls: 1000000
+  }
+});
+
+// Department groups (nested)
+const engineering = await createGroup({
+  name: "Engineering",
+  slug: "engineering",
+  type: "department",
+  parentGroupId: acmeCorp._id
+});
+
+const backend = await createGroup({
+  name: "Backend Team",
+  slug: "backend",
+  type: "team",
+  parentGroupId: engineering._id
+});
+
+// Role-based access control
+const ceo = await createPerson({
+  name: "Jane CEO",
+  role: "org_owner",
+  groupId: acmeCorp._id
+});
+
+// AI sales agent (a thing)
+const salesAgent = await createThing({
+  type: "sales_agent",
+  name: "Acme Sales AI",
+  groupId: acmeCorp._id,
+  properties: {
+    systemPrompt: "You are a friendly sales assistant...",
+    temperature: 0.7
+  }
+});
+
+// Lead management (things + connections)
+const lead = await createThing({
+  type: "lead",
+  name: "John Smith - Enterprise Lead",
+  groupId: acmeCorp._id,
+  properties: {
+    email: "john@enterprise.com",
+    budget: 100000,
+    status: "qualified"
+  }
+});
+
+// AI agent follows up (connection + event)
+await createConnection({
+  from: salesAgent._id,
+  to: lead._id,
+  type: "communicated",
+  groupId: acmeCorp._id,
+  metadata: {
+    protocol: "email",
+    subject: "Following up on our conversation"
+  }
+});
+
+await createEvent({
+  type: "communication_event",
+  actor: salesAgent._id,
+  target: lead._id,
+  groupId: acmeCorp._id,
+  metadata: {
+    protocol: "email",
+    sentiment: "positive"
+  }
+});
+
+// AI learns from all sales interactions (knowledge)
+const context = await queryKnowledge({
+  groupId: acmeCorp._id,
+  query: "enterprise software objections pricing",
+  k: 10
+});
+
+const aiResponse = await generateResponse({
+  context,
+  prompt: "Address pricing concerns"
+});
 ```
 
-**Result:** One intent now touches every dimension—organizational scope, authorization, entities, relationships, events, and context—ready for agents to reuse.
+**Perfect data isolation. Clear governance. Hierarchical structure. Infinite scale.**
 
 ---
 
-## 📐 Data Flow Through The Ontology
+## 👥 Social: Friend Circles
 
-```
-0. Groups (Isolation Layer)
-   ↓ Establishes scope for all operations (with optional nesting)
+```typescript
+// Emma's Friend Circle - Social Groups
 
-1. People (Policy Layer)
-   ↓ Humans set outcomes, attach limits, approve execution
+// Create friend circle
+const emmasFriends = await createGroup({
+  name: "Emma's Friends",
+  slug: "emmas-friends",
+  type: "social"
+});
 
-2. Things (Entity Layer)
-   ↓ System resolves intent into typed entities
+// Create event group (nested under friend circle)
+const birthdayParty = await createGroup({
+  name: "Birthday Party 2025",
+  slug: "birthday-party-2025",
+  type: "event",
+  parentGroupId: emmasFriends._id,
+  properties: {
+    date: "2025-12-15",
+    location: "Emma's House",
+    capacity: 20
+  }
+});
 
-3. Connections (Relationship Layer)
-   ↓ Defines how value moves—ownership, membership, authority
+// Add friends to the circle
+const alice = await createPerson({
+  name: "Alice",
+  role: "org_user",
+  groupId: emmasFriends._id
+});
 
-4. Events (Audit Layer)
-   ↓ Records what happened, when, by whom
+// Share photos (things) in the event group
+const photo = await createThing({
+  type: "media",
+  name: "Birthday Cake Photo",
+  groupId: birthdayParty._id,
+  properties: {
+    url: "https://cdn.example.com/photo.jpg",
+    takenAt: Date.now()
+  }
+});
 
-5. Knowledge (Intelligence Layer)
-   ↓ Adds labels, embeddings, summaries for AI agents
-```
-
-**Together:** Groups partition for scale (with infinite hierarchy), People authorize for governance, Things exist for substance, Connections relate for structure, Events record for memory, Knowledge learns for intelligence.
-
----
-
-## 💡 Plain English DSL
-
-### Write Features in English. The System Builds Everything.
-
-Describe what you want in plain English. The compiler checks every line against the ontology, generates TypeScript and tests, and deploys to the edge.
-
-**Example: Chat with AI Clone**
-
-```
-FEATURE: Let fans chat with my AI clone
-
-WHEN a fan sends a message
-  CHECK they own tokens
-  GET conversation history
-  CALL OpenAI with my personality
-  RECORD the interaction
-  REWARD fan with 10 tokens
-  GIVE AI response to fan
-```
-
-**What maps to ontology:**
-
-- **Things Touched:** fan, ai_clone, message, token — all typed rows
-- **Connections Updated:** fan `holds_tokens` token, fan `interacted_with` clone with metadata
-- **Events Logged:** message_sent, tokens_earned, clone_interaction with timestamps
-- **Knowledge Indexed:** Clone personality, embeddings, conversation history for retrieval
-
-**5 Core Commands:**
-
-| Command | Purpose | Example |
-|---------|---------|---------|
-| `CREATE` | Add typed Things into the graph | `CREATE ai clone WITH voice ID` |
-| `CONNECT` | Define relationships with metadata | `CONNECT fan to token as holder` |
-| `RECORD` | Append immutable Events | `RECORD tokens purchased BY fan` |
-| `CALL` | Invoke services and persist outputs | `CALL Stripe to charge payment` |
-| `CHECK` | Enforce guardrails before action | `CHECK user has tokens` |
-
-See [language.md](./knowledge/language.md) for complete DSL specification.
-
----
-
-## 🚀 What This Unlocks
-
-### Zero-Trust Authorization
-Every action traces back through explicit connections to a person in an organization. Perfect auditability. No implicit permissions. Authorization is data, not code.
-
-### Identity-Aware Intelligence
-Agents don't just retrieve facts—they understand organizational context, provenance, licensing, governance, and strategic constraints.
-
-### Event-Driven Compounding
-Every action generates events that create knowledge that enriches future actions. The system gets smarter with every interaction.
-
-### Protocol-Agnostic Integration
-Same ontology, different protocols—all via metadata. Query across Stripe, SUI, and any future protocol with unified patterns.
-
-### Cross-Organization Collaboration
-Resources can be shared without transferring ownership. Perfect for knowledge marketplaces with trustless licensing.
-
-### Tokenization with SUI
-SUI's object-centric model maps naturally to ONE's thing-centric ontology. Knowledge as tradeable, licensable assets.
-
----
-
-## 📈 Built for Scale
-
-### Current Scale
-- ✅ 1M+ things per organization
-- ✅ 10M+ connections (optimized indexes)
-- ✅ 100M+ events (time-partitioned)
-- ✅ 1M+ knowledge chunks (vector search)
-
-### Performance
-- 🚀 Graph caching (ownership chains)
-- 🚀 Materialized views (common queries)
-- 🚀 Event archival (cold storage)
-- 🚀 Token budgeting (context aware)
-
-### Future Scale
-- 🔮 Shard by organization (>10M things)
-- 🔮 Streaming events (Kafka)
-- 🔮 Distributed vectors (Weaviate)
-- 🔮 Regional databases (CDC replication)
-
----
-
-## 📚 Documentation Structure
-
-This repository contains **41 documentation files** organized in **8 layers**:
-
-### 1. Strategy Layer (Vision & Revenue)
-- [one.md](./groups/one.md) - Platform organization
-
-### 2. Ontology Layer (Core Model)
-- [ontology.md](./knowledge/ontology.md) - Complete 6-dimension spec (Version 1.0.0)
-- [groups.md](./groups/groups.md) - Groups dimension
-- [things.md](./things/things.md) - Things dimension
-- [connections.md](./connections/connections.md) - Connections dimension
-- [events.md](./events/events.md) - Events dimension
-- [knowledge.md](./knowledge/knowledge.md) - Knowledge dimension
-
-### 3. Protocols Layer (A2A, ACP, AP2, X402, AG-UI)
-- [protocols.md](./connections/protocols.md) - Protocol overview
-- [a2a.md](./connections/a2a.md), [acp.md](./connections/acp.md), [ap2.md](./connections/ap2.md), [x402.md](./connections/x402.md), [agui.md](./connections/agui.md)
-
-### 4. Services Layer (Effect.ts)
-- [service-layer.md](./connections/service-layer.md) - Effect.ts patterns
-- [service-providers.md](./things/service-providers.md) - External API providers
-
-### 5. Implementation Layer (Frontend, Patterns)
-- [frontend.md](./knowledge/frontend.md) - Frontend architecture
-- [architecture.md](./knowledge/architecture.md) - System architecture
-- [patterns.md](./connections/patterns.md) - Code patterns
-
-### 6. Integration Layer (ElizaOS, CopilotKit, MCP, N8N)
-- [elizaos.md](./connections/elizaos.md) - ElizaOS integration
-- [copilotkit.md](./connections/copilotkit.md) - CopilotKit integration
-- [mcp.md](./connections/mcp.md) - Model Context Protocol
-- [n8n.md](./connections/n8n.md) - N8N workflow automation
-
-### 7. Examples Layer (Use Cases)
-- [lemonade-stand.md](./things/examples/children/lemonade-stand.md) - Simple for children
-- Enterprise CRM examples
-
-### 8. Plans Layer (Future & Technical Debt)
-- Various planning documents
-
-**Use targeted reading:** Don't read everything - follow the critical path for your specific feature type.
-
-See [files.md](./knowledge/files.md) for complete file location guide.
-
----
-
-## 🎯 Getting Started
-
-### For Developers
-
-1. **Understand the Ontology**
-   ```bash
-   # Read these in order:
-   - knowledge/ontology.md (complete 6-dimension spec)
-   - knowledge/rules.md (golden rules)
-   - connections/workflow.md (development flow)
-   - connections/patterns.md (code patterns)
-   ```
-
-2. **Map Your Feature**
-   - Which **groups** are involved? (organizational scope, with potential nesting)
-   - Which **people** are involved? (authorization)
-   - Which **things** are involved? (entities)
-   - Which **connections** are needed? (relationships)
-   - Which **events** should be logged? (actions)
-   - Which **knowledge** should be captured? (context)
-
-3. **Generate Code**
-   - Use Effect.ts for business logic
-   - Create Convex wrappers for database operations
-   - Build React components for UI
-   - Write tests to validate behavior
-
-### For AI Agents
-
-**Before generating ANY code:**
-
-1. Read `knowledge/ontology.md` (understand the 6 dimensions)
-2. Read `knowledge/rules.md` (golden rules for AI agents)
-3. Read `connections/workflow.md` (6-phase development workflow)
-4. Map feature to: groups, people, things, connections, events, knowledge
-5. Design types and errors (tagged unions)
-6. Generate Effect.ts service (pure business logic)
-7. Create Convex wrapper (thin layer)
-8. Build React component (UI)
-9. Write tests (unit + integration)
-10. Update documentation
-
-**Critical:** Never skip reading documentation. Never use `any` type except in entity `properties`. Always write tests.
-
-### For Content Creators
-
-Use the Plain English DSL:
-
-```
-FEATURE: Create my AI voice clone
-
-INPUT:
-  - video links (at least 3)
-
-OUTPUT:
-  - clone ID
-  - voice ID
-
-FLOW:
-  CALL ElevenLabs to clone voice
-  CALL OpenAI to analyze personality
-  CREATE ai clone WITH voice and personality
-  CONNECT creator to clone as owner
-  RECORD clone created
-  GIVE clone ID and voice ID
+// Track RSVPs (connections)
+await createConnection({
+  from: alice._id,
+  to: birthdayParty._id,
+  type: "member_of",
+  groupId: birthdayParty._id,
+  metadata: {
+    rsvp: "yes",
+    guestsCount: 1
+  }
+});
 ```
 
-See [language.md](./knowledge/language.md) for complete DSL reference.
+**Nested groups enable rich social structures. Friends → Events → Photos → Memories.**
 
 ---
 
-## 🏗️ Architecture Principles
+## 🪙 DAO: Decentralized Organizations
 
-### 1. Clarity Scales
-Everything maps to the 6 dimensions. No exceptions. If it doesn't map, rethink your approach.
+```typescript
+// CoolDAO - Blockchain-Native Organization
 
-### 2. Groups Partition for Scale
-From friend circles (2 people) to governments (billions) without schema changes. Infinite hierarchical nesting supported.
+// Create DAO group
+const coolDAO = await createGroup({
+  name: "CoolDAO",
+  slug: "cool-dao",
+  type: "dao",
+  properties: {
+    blockchain: "base",
+    governanceToken: "COOL",
+    treasuryAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+  }
+});
 
-### 3. People Authorize for Governance
-Every action traces back to human intent. AI serves people, not the other way around.
+// Create treasury committee (nested)
+const treasury = await createGroup({
+  name: "Treasury",
+  slug: "treasury",
+  type: "committee",
+  parentGroupId: coolDAO._id
+});
 
-### 4. Things Exist for Substance
-66 thing types capture everything you need to model. Flexible `properties` field for type-specific data.
+// Create governance committee (nested)
+const governance = await createGroup({
+  name: "Governance Committee",
+  slug: "governance",
+  type: "committee",
+  parentGroupId: coolDAO._id
+});
 
-### 5. Connections Relate for Structure
-25 connection types make the implicit explicit. Relationships are first-class with metadata.
+// DAO member with token holdings
+const member = await createPerson({
+  name: "DAO Member",
+  role: "org_user",
+  groupId: coolDAO._id
+});
 
-### 6. Events Record for Memory
-67 event types create immutable audit trail. Time-travel queries and analytics built-in.
+// Track token holdings (thing + connection)
+const tokenHolding = await createThing({
+  type: "token",
+  name: "COOL Token Holding",
+  groupId: coolDAO._id,
+  properties: {
+    symbol: "COOL",
+    amount: 1000,
+    chain: "base"
+  }
+});
 
-### 7. Knowledge Learns for Intelligence
-Tags, chunks, embeddings, and relationships give AI agents context to act intelligently.
+await createConnection({
+  from: member._id,
+  to: tokenHolding._id,
+  type: "holds_tokens",
+  groupId: coolDAO._id
+});
+
+// Governance proposal (thing)
+const proposal = await createThing({
+  type: "proposal",
+  name: "Allocate 10% Treasury to Marketing",
+  groupId: governance._id,
+  properties: {
+    proposer: member._id,
+    status: "active",
+    votesFor: 5000,
+    votesAgainst: 2000,
+    quorum: 10000
+  }
+});
+
+// Vote event
+await createEvent({
+  type: "vote_cast",
+  actor: member._id,
+  target: proposal._id,
+  groupId: governance._id,
+  metadata: {
+    choice: "for",
+    votingPower: 1000
+  }
+});
+```
+
+**Groups model DAOs perfectly: Top-level DAO → Committees → Proposals → Votes.**
 
 ---
 
-## 💎 Philosophy
+## 🛠️ Technology Stack
 
-**Beauty = Stability.** The ontology is not just a schema—it's a shared mental model between humans, AI agents, and code. Every feature should feel intentional because it maps cleanly to reality.
+**Frontend:**
+- Astro 5.14+ (SSR + SSG)
+- React 19 (Islands architecture)
+- Tailwind v4 (CSS-based config)
+- shadcn/ui (50+ components)
+- TypeScript 5.9+ (Strict mode)
 
-**Simple enough for children. Powerful enough for enterprises.** A lemonade stand and a Fortune 500 company use the same 6 dimensions.
+**Backend:**
+- Convex (Real-time database)
+- Better Auth (6 auth methods)
+- Effect.ts (Functional services)
+- Rate limiting & security
 
-**The ontology holds the contracts. The DSL speaks those contracts.** Together they give everyone the same, inspectable source of truth.
+**AI Layer:**
+- Vercel AI SDK (Multi-provider)
+- OpenAI (GPT-4, GPT-3.5)
+- Anthropic (Claude 3.5 Sonnet)
+- OpenRouter (100+ models)
 
-**Clarity scales.** Your DSL features, agent playbooks, and analytics dashboards stay in sync because they pull from the same ontology.
-
-**Map your domain to these dimensions. Everything else is just data.**
-
----
-
-## 🤖 Claude Automation Stack
-
-### `.claude/agents/*`
-- **Director (`agent-director.md`)** validates ideas against the 6 dimensions, sequences numbered plans, and routes work to the right specialist.
-- **Builder squad (`agent-builder.md`, `agent-backend.md`, `agent-frontend.md`, `backend-specialist.md`, `frontend-specialist.md`)** implements Convex services, Astro interfaces, and cross-cutting features while preserving multi-tenant boundaries and typed contracts.
-- **Integration lead (`agent-integrator.md`)** connects external protocols (A2A, ACP, AP2, X402, AG-UI) and reconciles third-party data so it lands in groups, people, things, connections, events, and knowledge.
-- **Quality loop (`agent-quality.md`, `agent-clean.md`, `agent-problem-solver.md`)** defines acceptance up front, enforces guardrails, diagnoses failures, and refactors without breaking ontology guarantees.
-- **Design + knowledge (`agent-designer.md`, `designer.md`, `agent-documenter.md`)** translate specs into accessible UI systems, tokens, and documentation so the knowledge dimension stays queryable for future generations.
-- **Growth ops (`agent-clone.md`, `agent-sales.md`)** migrate legacy assets, build AI clones, manage trials, and tie revenue attribution back to event streams.
-
-**Cascade in practice:** Director validates → Quality defines tests → Designers supply artifacts → Specialists build → Clean and Problem Solver close gaps → Documenter updates knowledge. Every agent reads and writes to the same ontology, so each run leaves richer context for the next.
-
-### MCP Servers (`.mcp.json`)
-- **shadcn** (`npx shadcn@latest mcp`) gives UI agents instant access to audited component recipes without leaving Claude Code.
-- **cloudflare-builds** (`npx -y mcp-remote https://builds.mcp.cloudflare.com/sse`) lets release flows trigger deployments, inspect logs, and roll back while emitting auditable events.
-- **cloudflare-docs** (`npx -y mcp-remote https://docs.mcp.cloudflare.com/sse`) streams authoritative references so integrators and quality agents stay aligned with platform guidance.
-- **chrome-devtools** (`npx -y chrome-devtools-mcp@latest`) enables live performance profiling; findings roll into knowledge chunks for future optimizations.
-
-**How it fits:** `.claude/commands/*` orchestrate the workflow (plan → build → release), `.claude/hooks/*` enforce guardrails, agents execute the steps, and MCP servers provide live tool access—all grounded in the ONE ontology as the single source of truth.
+**Infrastructure:**
+- Cloudflare Pages (Edge SSR)
+- Convex Cloud (Backend)
+- Stripe (Payments)
+- Multi-chain (Sui, Base, Solana)
 
 ---
 
-## 📊 Statistics
+## 📦 Quick Start
 
-### Ontology Size
-- **6 Dimensions** (groups, people, things, connections, events, knowledge)
-- **6 Group Types** (friend_circle, business, community, dao, government, organization)
-- **4 Roles** (platform_owner, org_owner, org_user, customer)
-- **66 Thing Types** (across 13 categories)
-- **25 Connection Types** (18 specific + 7 consolidated)
-- **67 Event Types** (including inference & blockchain events)
-- **12 Tag Categories** (industry, skill, topic, format, goal, audience, technology, status, capability, protocol, payment, network)
+```bash
+# Option 1: Bootstrap new project
+npx oneie
 
-### Coverage
-- ✅ **100% Protocol Agnostic** - Stripe, SUI, Solana, any blockchain via metadata
-- ✅ **100% Type Safe** - Every entity, connection, and event is typed
-- ✅ **100% AI Understandable** - Plain English DSL compiles to ontology
-- ✅ **100% Auditable** - Immutable event log for every action
+# Option 2: Clone and develop
+git clone https://github.com/one-platform/one
+cd ONE
+pnpm install
+pnpm dev
+```
+
+**Development Commands:**
+
+```bash
+# Frontend
+cd frontend/
+bun run dev        # localhost:4321
+bun run build      # Production build
+bunx astro check   # Type checking
+
+# Backend
+cd backend/
+npx convex dev     # Watch mode
+npx convex deploy  # Production
+
+# Testing
+cd frontend/
+bun test           # All tests
+bun test test/auth # Auth tests (50+ cases)
+```
 
 ---
 
-## 🔗 Quick Links
+## 📚 Documentation
 
-### Core Documentation
-- [📖 Complete Ontology Specification](./knowledge/ontology.md) - Version 1.0.0
-- [🎨 Plain English DSL](./knowledge/language.md) - Write features in English
-- [🏗️ Architecture Guide](./knowledge/architecture.md) - System architecture
-- [📝 Development Workflow](./connections/workflow.md) - 6-phase process
-- [🎯 Code Patterns](./connections/patterns.md) - Proven patterns
-- [⚡ Golden Rules](./knowledge/rules.md) - Rules for AI agents
-- [📁 File Locations](./knowledge/files.md) - Where everything goes
+**Core Concepts:**
+- [6-Dimension Ontology](/one/knowledge/ontology.md) – Complete specification
+- [Architecture](/one/knowledge/architecture.md) – How it all fits together
+- [Workflow Guide](/one/connections/workflow.md) – Development process
 
-### Integrations
-- [🤖 ElizaOS](./connections/elizaos.md) - Multi-agent communication
-- [🎨 CopilotKit](./connections/copilotkit.md) - Generative UI
-- [🔌 MCP](./connections/mcp.md) - Model Context Protocol
-- [⚙️ N8N](./connections/n8n.md) - Workflow automation
+**Dimensions:**
+- [Groups](/one/connections/organisation.md) – Multi-tenancy & hierarchies
+- [People](/one/connections/people.md) – Authorization & roles
+- [Things](/one/connections/things.md) – 66 entity types
+- [Connections](/one/connections/connections.md) – 25 relationship types
+- [Events](/one/connections/events.md) – 67 event types
+- [Knowledge](/one/connections/knowledge.md) – RAG & intelligence
 
-### Examples
-- [🍋 Lemonade Stand](./things/examples/children/lemonade-stand.md) - Simple for children
-- Enterprise CRM (coming soon)
+**Implementation:**
+- [Frontend Guide](/one/things/frontend.md) – UI patterns
+- [Backend Guide](/one/things/hono.md) – API & services
+- [Examples](/one/things/implementation-examples.md) – Real-world patterns
+
+---
+
+## 🧪 Testing
+
+**6 Authentication Methods:**
+1. ✅ Email & Password
+2. ✅ OAuth (GitHub, Google)
+3. ✅ Magic Links
+4. ✅ Password Reset
+5. ✅ Email Verification
+6. ✅ 2FA (TOTP + Backup codes)
+
+**50+ Test Cases** covering security, rate limiting, token expiry, and complete auth flows.
+
+```bash
+cd frontend
+bun test test/auth              # All auth tests
+bun test test/auth/email-password.test.ts  # Specific test
+bun test --watch test/auth      # Watch mode
+```
+
+---
+
+## 🏗️ Project Structure
+
+```
+ONE/
+├── frontend/           # Astro 5 + React 19 app
+│   ├── src/
+│   │   ├── pages/     # File-based routing
+│   │   ├── components/ # React components + shadcn/ui
+│   │   ├── layouts/   # Page layouts
+│   │   └── styles/    # Tailwind v4
+│   └── test/          # Test suites
+│
+├── backend/           # Convex backend
+│   └── convex/
+│       ├── schema.ts  # 6-dimension schema
+│       ├── queries/   # Read operations
+│       ├── mutations/ # Write operations
+│       └── services/  # Effect.ts services
+│
+├── one/              # Documentation (41 files)
+│   ├── connections/  # Ontology & protocols
+│   ├── things/       # Architecture & specs
+│   ├── events/       # Event specifications
+│   └── knowledge/    # RAG & AI
+│
+└── apps/             # Example applications
+    ├── oneie/       # Main Astro app
+    ├── eliza/       # ElizaOS integration
+    └── stack/       # Stack Auth example
+```
+
+---
+
+## 🔒 Security & Compliance
+
+- **Multi-Tenant Isolation** – Groups partition ALL data
+- **Hierarchical Access Control** – Nested groups inherit permissions
+- **Role-Based Access** – 4 roles (platform_owner, org_owner, org_user, customer)
+- **Complete Audit Trail** – Events table logs everything
+- **GDPR Compliant** – Delete all group data with single groupId filter
+- **Encryption** – Group-scoped encryption keys
+
+---
+
+## 🎯 Philosophy
+
+**Simplicity is the ultimate sophistication.**
+
+You don't need hundreds of tables. You need:
+
+1. **6 dimensions** (groups, people, things, connections, events, knowledge)
+2. **66 thing types** (every "thing")
+3. **25 connection types** (every relationship)
+4. **67 event types** (every action)
+5. **Metadata** (for protocol-specific details)
+
+**That's it. Everything else is just data.**
+
+### Why This Works
+
+**Other platforms:**
+- Create new tables for every feature
+- Add protocol-specific columns
+- Pollute schema with temporary concepts
+- End up with 50+ tables, 200+ columns
+- Become unmaintainable
+
+**ONE's approach:**
+- Map every feature to 6 dimensions
+- Groups partition the space (with hierarchical nesting)
+- People authorize and govern
+- Things, connections, events flow naturally
+- Knowledge understands it all
+- Scale infinitely without schema changes
+- Stay simple, clean, beautiful
+
+### The Result
+
+A database schema that:
+
+- **Scales** from lemonade stands to global enterprises to DAOs
+- **Children understand**: "I have a group, I'm the boss (person), I sell lemonade (things)"
+- **Enterprises rely on**: Multi-tenant isolation, hierarchical structure, clear governance, infinite scale
+- **DAOs build on**: Nested committees, transparent governance, on-chain integration
+- **AI agents reason about** completely
+- **Never breaks** with schema changes
+- **Gets more powerful** as it grows
+
+**This is what happens when you design for clarity first.**
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Before submitting:
+1. Fork the repository
+2. Create a feature branch
+3. **Map your feature to the 6 dimensions**
+4. Add tests if applicable
+5. Submit a pull request
 
-1. Read [knowledge/ontology.md](./knowledge/ontology.md) to understand the 6 dimensions
-2. Read [knowledge/rules.md](./knowledge/rules.md) for golden rules
-3. Map your contribution to the ontology
-4. Follow the patterns in [connections/patterns.md](./connections/patterns.md)
-5. Write tests
-6. Update documentation
+**Golden Rule:** If you can't map your feature to these 6 dimensions, you're thinking about it wrong.
 
 ---
 
-## 📜 License
+## 📄 License
 
-Copyright © 2025 ONE Platform
-Licensed under the FREE License with Commercial Attribution
-
-See [LICENSE.md](../LICENSE.md) for details.
+MIT License – see [LICENSE](LICENSE) for details.
 
 ---
 
 <div align="center">
 
-**ONE Ontology. Infinite Systems.**
+**ONE Platform** – Where reality meets AI.
 
-*Built with clarity, simplicity, and infinite scale in mind.*
+Built with simplicity, clarity, and infinite scale in mind.
 
-[Explore the Platform](https://one.ie) • [View on GitHub](https://github.com/one-ie/one) • [Read the Docs](https://one.ie/docs)
+Groups partition (hierarchically). People authorize. Things exist.
+Connections relate. Events record. Knowledge understands.
+
+**Everything else is just data.**
+
+[Website](https://one.ie) • [Documentation](/one) • [Examples](/apps)
 
 </div>
