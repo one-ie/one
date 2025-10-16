@@ -20,7 +20,7 @@ ONE separates concerns while enabling exponential growth:
 ├── .claude/         # Shared Claude Code commands, hooks, and agents
 │   ├── commands/    # Slash commands: /push-ontology, /push-frontend, etc.
 │   └── hooks/       # Shared git hooks and automations
-├── one/             # Universal Schema - Ontology documentation (git: one-ie/one-ontology)
+├── one/             # Universal Schema - Ontology documentation (git: one-ie/one)
 │   ├── people/      # Individuals, teams, organizations
 │   ├── things/      # Products, tools, assets, agents, plans
 │   ├── connections/ # Relationships, workflows, integrations
@@ -31,6 +31,7 @@ ONE separates concerns while enabling exponential growth:
 ├── apps/            # Application repos
 │   ├── bullfm/      # (git: bull-fm/bullfm)
 │   ├── stack/       # (git: one-ie/stack)
+│   ├── one/       # (git: one-ie/one)
 │   └── ...
 └── ONE.md           # This file - Architecture documentation
 ```
@@ -43,14 +44,14 @@ npm install -g oneie
 
 # Or use directly with npx
 npx oneie init              # Creates .claude/ and one/ structure
-npx oneie clone frontend    # Clones one-ie/frontend into ./frontend
-npx oneie clone backend     # Clones one-ie/backend into ./backend
+npx oneie clone frontend    # Clones one-ie/frontend into /web
+npx oneie clone backend     # Clones one-ie/backend into /backend (later)
 ```
 
 ### Repository Structure
 
 - **Root workspace**: NOT a git repo - just a workspace directory
-- **Independent repos**: Each subdirectory (`one/`, `frontend/`, `backend/`) is its own git repo
+- **Independent repos**: Each subdirectory (`one/`, `web/`, `backend/`) is its own git repo
 - **Shared tooling**: `.claude/` contains commands and hooks used across all repos
 - **No submodules**: Simple, elegant - just clone repos where needed
 
@@ -58,12 +59,12 @@ npx oneie clone backend     # Clones one-ie/backend into ./backend
 
 ### Core Systems
 
-| Path        | Repository            | Visibility | Purpose                                              | URLs               |
-| ----------- | --------------------- | ---------- | ---------------------------------------------------- | ------------------ |
-| `.claude/`  | Shared tooling        | Private    | Claude Code commands, hooks, agents (not a git repo) | -                  |
-| `one/`      | `one-ie/one-ontology` | Private    | Canonical ontology and knowledge graph               | -                  |
-| `frontend/` | `one-ie/frontend`     | Public     | Primary marketing/knowledge experience               | https://one.ie     |
-| `backend/`  | `one-ie/backend`      | Private    | Knowledge API (Convex + Hono)                        | https://api.one.ie |
+| Path       | Repository            | Visibility | Purpose                                              | URLs               |
+| ---------- | --------------------- | ---------- | ---------------------------------------------------- | ------------------ |
+| `.claude/` | Shared tooling        | Private    | Claude Code commands, hooks, agents (not a git repo) | -                  |
+| `one/`     | `one-ie/one-ontology` | Private    | Canonical ontology and knowledge graph               | -                  |
+| `web/`     | `one-ie/one`          | Public     | Demo of ONE experience                               | https://web.one.ie |
+| `backend/` | `one-ie/backend`      | Private    | Knowledge API (Convex + Hono)                        | https://api.one.ie |
 
 ### Applications
 
@@ -77,7 +78,7 @@ npx oneie clone backend     # Clones one-ie/backend into ./backend
 ### Access Model
 
 - **Private**: Ontology (`one/`), backend (`backend/`), Bull FM, Stack starter
-- **Public**: Frontend (`frontend/`), Astro Shadcn, Astro Email
+- **Public**: Web (`web/`), Astro Shadcn, Astro Email
 - **Shared Tooling**: `.claude/` directory contains commands and hooks used across all repos
 
 ### Git Workflow
@@ -89,14 +90,14 @@ Each repo has its own git remote and can be pushed independently:
 cd one && git push
 
 # Push frontend changes
-cd frontend && git push
+cd web && git push
 
 # Push backend changes
 cd backend && git push
 
 # Or use Claude Code commands
 /push-ontology     # Pushes one/ to one-ie/one-ontology
-/push-frontend     # Pushes frontend/ to one-ie/frontend
+/push-web     # Pushes frontend/ to one-ie/frontend
 /push-backend      # Pushes backend/ to one-ie/backend
 ```
 
@@ -118,7 +119,8 @@ cd backend && git push
 
 ```
 one/
-├── people/       # Individuals, teams, organizations, relationships
+├── groups/       # Friends or governments
+├── people/       # Individuals
 ├── things/       # Products, tools, assets, resources, technologies
 ├── connections/  # Relationships, links, associations between entities
 ├── events/       # Milestones, triggers, moments, achievements
@@ -311,7 +313,7 @@ ontology: {
 ### 1. Knowledge Import (ONE-Import → ONE)
 
 ```
-ONE-Import (15GB, 826 files)
+ONE-Import
   ├── /one → /Users/toc/Server/ONE/one (Universal Schema)
   ├── /.claude/agents → backend/convex/agents table
   ├── /one/prompts → backend/convex/prompts table
@@ -353,6 +355,8 @@ The ONE system implements the **Test-Driven Vision CASCADE** methodology:
 4. STORIES: Engineering narratives → Acceptance testing
 5. EVENTS: Milestones & triggers → Completion validation
 6. TASKS: Concrete actions → Quality gates
+7. RESULTS: Evaluations
+8. PROPERTY: Intellectual property and content, software and data
 ```
 
 ### How It Maps to ONE
@@ -377,10 +381,7 @@ The ONE system implements the **Test-Driven Vision CASCADE** methodology:
 
 ### Phase 1: Core Structure ✅
 
-- [x] Create trinity directories (one, frontend, backend)
-- [x] Move astro-shadcn/one → /one
-- [x] Move astro-shadcn → /frontend
-- [x] Copy convex → /backend
+- [x] Map to trinity directories (one, web, backend)
 
 ### Phase 2: Knowledge Import (Next)
 
@@ -428,7 +429,7 @@ one-import foundation /Users/toc/Server/ONE-Import/one/me
 ### Frontend (Edge)
 
 ```bash
-cd frontend
+cd web
 bun install
 bun run build
 wrangler pages deploy dist
@@ -488,7 +489,7 @@ bunx convex deploy
 
 ## Source Data
 
-**Import Source**: `/Users/toc/Server/ONE-Import`
+**Import Source**: `/Users/toc/Server/ONE-Import` a `/Users/toc/Server/ONE/apps/oneie` and bull-fm
 
 - 15GB total (826 knowledge files)
 - 112+ specialized AI agents
