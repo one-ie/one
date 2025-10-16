@@ -187,6 +187,57 @@ After `/release` succeeds, remind user to:
 4. Monitor npm downloads
 5. Check for errors in first 24 hours
 
+## Installation Folder Sync (Optional)
+
+If installation folders need to be synced across repositories:
+
+```bash
+# Sync installation folder to assembly repo
+if [ -d "/${INSTALLATION_NAME}" ]; then
+  echo "📦 Syncing installation folder: ${INSTALLATION_NAME}"
+
+  # Copy to assembly repo
+  rsync -av --delete \
+    "/${INSTALLATION_NAME}/" \
+    "apps/one/${INSTALLATION_NAME}/"
+
+  # Commit and push
+  cd apps/one
+  git add "${INSTALLATION_NAME}/"
+  git commit -m "chore: sync installation folder ${INSTALLATION_NAME}"
+  git push
+
+  echo "✅ Installation folder synced"
+fi
+```
+
+**Update version bump to include installation folder in changelog:**
+
+```bash
+# Generate changelog entry
+cat >> CHANGELOG.md <<EOF
+
+## [${NEW_VERSION}] - $(date +%Y-%m-%d)
+
+### Added
+- Installation folder multi-tenancy support
+- Hierarchical file resolution with group support
+- CLI: \`npx oneie init\` to create installation folders
+- Frontend: Auto-resolution of installation-specific files
+- Deployment: Cloudflare Pages integration for installation folders
+
+### Changed
+- Terminology: "group folder" → "installation folder"
+- Environment: \`GROUP_NAME\` → \`INSTALLATION_NAME\`
+- Documentation updated across CLAUDE.md, AGENTS.md, README.md
+
+### Security
+- Path traversal prevention in file resolution
+- Symlink validation
+- Audit logging for file access
+EOF
+```
+
 ---
 
 **Full Release Pipeline: npm → GitHub → Cloudflare Pages → Production! 🚀**
