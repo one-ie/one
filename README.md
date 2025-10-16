@@ -1,3 +1,5 @@
+# ONE Platform v3.0.0
+
 # ONE
 
 ```
@@ -478,31 +480,21 @@ bun test --watch test/auth      # Watch mode
 
 ```
 ONE/
-├── web/           # Astro 5 + React 19 app
-│   ├── src/
-│   │   ├── pages/     # File-based routing
-│   │   ├── components/ # React components + shadcn/ui
-│   │   ├── layouts/   # Page layouts
-│   │   └── styles/    # Tailwind v4
-│   └── test/          # Test suites
-│
-├── backend/           # Convex backend
-│   └── convex/
-│       ├── schema.ts  # 6-dimension schema
-│       ├── queries/   # Read operations
-│       ├── mutations/ # Write operations
-│       └── services/  # Effect.ts services
-│
-├── one/              # Documentation (41 files)
-│   ├── connections/  # Ontology & protocols
-│   ├── things/       # Architecture & specs
-│   ├── events/       # Event specifications
-│   └── knowledge/    # RAG & AI
-│
-└── apps/             # Example applications
-    ├── oneie/       # Main website one.ie
-    ├── one/       # Demo web.one.ie
-    └── stack/       # Full Stack Auth example
+├── .claude/           # Claude Code agents, commands, hooks
+├── one/               # 6-dimension ontology docs
+├── web/               # Astro 5 + React 19 application
+├── cli/               # CLI package workspace (npm: oneie)
+├── apps/
+│   └── one/           # Master assembly (syncs to one-ie/one)
+│       ├── one/       # Synced ontology bundle
+│       ├── .claude/   # Synced AI configuration
+│       ├── web/       # Git subtree of one-ie/web
+│       └── docs/      # Optional docs staging
+├── scripts/           # Release automation and tooling
+├── README.md          # Root documentation (synced downstream)
+├── LICENSE.md         # License
+├── AGENTS.md          # AI agent defaults
+└── CLAUDE.md          # Claude Code guidance
 ```
 
 ---
