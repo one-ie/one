@@ -9,11 +9,11 @@ description: Execute full ONE Platform release - npm, GitHub, and Cloudflare Pag
 
 ## Context
 
-- Current directory: !`pwd`
-- Release script status: !`ls -lah scripts/release.sh`
-- CLI version: !`cd cli && node -p "require('./package.json').version"`
-- Web build status: !`ls -lah web/dist/ 2>/dev/null | head -3 || echo "No build found"`
-- Current git status: !`git status --short | head -10`
+Before starting the release, gather this information:
+1. Run `pwd` to verify current directory
+2. Check `ls -lah scripts/release.sh` to verify release script exists
+3. Run `git status --short` to check for uncommitted changes
+4. Check `ls -lah web/dist/` to see if a build already exists
 
 ## Release Options
 
