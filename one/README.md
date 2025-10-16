@@ -55,6 +55,59 @@ cd web/
 bun test           # All tests
 ```
 
+## Installation Folders (NEW)
+
+Customize your ONE installation with organization-specific documentation and configuration.
+
+### Initialize
+
+```bash
+npx oneie init
+# Follow prompts to create your installation folder
+```
+
+### Structure
+
+```
+/acme/                        # Your installation folder
+├── groups/                   # Group-specific docs (hierarchical)
+│   ├── engineering/
+│   │   ├── frontend/
+│   │   └── backend/
+│   └── marketing/
+├── people/                   # Role documentation
+├── things/                   # Entity specifications
+├── connections/              # Workflows
+├── events/                   # Deployment history
+└── knowledge/                # AI training data
+```
+
+### Override Templates
+
+Files in your installation folder override global `/one/` templates:
+
+```bash
+# Override vision document
+echo "# Our Vision" > /acme/things/vision.md
+
+# Add group-specific practices
+echo "# Engineering Practices" > /acme/groups/engineering/practices.md
+```
+
+### File Resolution
+
+The system automatically resolves files with this priority:
+
+1. Group-specific (e.g., `/acme/groups/engineering/frontend/sprint-guide.md`)
+2. Parent groups (walk up hierarchy)
+3. Installation root (e.g., `/acme/things/vision.md`)
+4. Global fallback (e.g., `/one/things/vision.md`)
+
+### Learn More
+
+- Complete guide: `/one/knowledge/installation-folders.md`
+- 6-Dimension Ontology: `/one/knowledge/ontology.md`
+
 ## ✨ ONE
 
 **Build apps, websites, and AI agents in English.** Download to your computer, run in the cloud and deploy to the edge or your own server. ONE is open source and free forever.

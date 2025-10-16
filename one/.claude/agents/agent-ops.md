@@ -614,6 +614,256 @@ Live URLs:
 **Problem:** Deploying without knowing how to rollback
 **Correct Approach:** Document rollback steps before deployment.
 
+### Mistake 7: Example Credentials in Documentation
+**Problem:** Using real API tokens/account IDs in example code triggers GitHub push protection
+**Correct Approach:** Always use obvious placeholders (`your-token-here`, `your-account-id-here`)
+
+### Mistake 8: Incorrect Icon Type Definitions
+**Problem:** Using `(props: SVGProps) => JSX.Element` for Lucide icons causes TypeScript errors
+**Correct Approach:** Use `React.ComponentType<React.SVGProps<SVGSVGElement>>` for icon types
+
+## Troubleshooting Guide
+
+### Issue 1: GitHub Push Protection Blocks Release
+
+**Symptoms:**
+```
+remote: error: GH013: Repository rule violations found for refs/heads/main
+remote: - Push cannot contain secrets
+remote: - GitHub Personal Access Token
+```
+
+**Root Cause:**
+Example credentials in documentation files (API keys, tokens, account IDs) that look real enough to trigger secret scanning.
+
+**Solution:**
+1. Identify the file and line number from error message
+2. Replace real-looking examples with obvious placeholders:
+   ```bash
+   # BAD: Looks like a real token
+   GITHUB_TOKEN=ghp_XXXyourXXXgithubXXXtokenXXXhere
+
+   # GOOD: Obviously a placeholder
+   GITHUB_TOKEN=ghp_your-github-token-here
+   ```
+3. If already committed, reset git history:
+   ```bash
+   cd apps/one
+   git log --oneline -5  # Find commit before the secret
+   git reset --hard <commit-before-secret>
+   # Re-run release script to create clean commits
+   ```
+4. Update files with placeholders
+5. Re-run release script
+
+**Prevention:**
+- Use `your-*-here` patterns for all example credentials
+- Run pre-deployment check which scans for common secret patterns
+- Never commit `.env` files or actual credentials
+
+### Issue 2: TypeScript Build Failures
+
+**Symptoms:**
+```
+error ts(2322): Type 'ForwardRefExoticComponent<...>' is not assignable to type '(props: SVGProps<SVGSVGElement>) => Element'
+```
+
+**Common Causes:**
+1. **Icon Type Mismatch**: Lucide React icons are components, not functions
+2. **React 19 Type Changes**: Newer React types may conflict with older patterns
+
+**Solutions:**
+
+**For Lucide Icons:**
+```typescript
+// BAD: Function signature
+type Tool = {
+  icon: (props: React.SVGProps<SVGSVGElement>) => React.JSX.Element;
+};
+
+// GOOD: Component type
+type Tool = {
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+};
+```
+
+**For Custom SVG Icons:**
+```typescript
+// Use ComponentType for consistency
+type IconProps = React.SVGProps<SVGSVGElement>;
+type CustomIcon = React.ComponentType<IconProps>;
+```
+
+**Quick Fix:**
+```bash
+cd web
+# Find all icon type errors
+bunx astro check 2>&1 | grep "icon.*SVGProps"
+# Fix each occurrence using Edit tool
+# Rebuild
+bun run build
+```
+
+### Issue 3: Web Build Fails Before Deployment
+
+**Symptoms:**
+```
+$ bun run build
+error: script "build" exited with code 1
+Result (241 files): 6 errors
+```
+
+**Diagnosis:**
+```bash
+cd web
+bunx astro check  # See all TypeScript errors
+bunx astro check 2>&1 | grep "error"  # Filter errors only
+```
+
+**Common Errors:**
+1. Icon type mismatches (see Issue 2)
+2. Missing `client:load` directives on interactive components
+3. Incorrect import paths
+4. React 19 compatibility issues
+
+**Solutions:**
+- Fix TypeScript errors one by one
+- Use `bunx astro sync` to regenerate content types
+- Check Astro.request usage in prerendered pages
+- Verify all React components have proper hydration directives
+
+### Issue 4: npm Publish Shows Already Published
+
+**Symptoms:**
+```
+npm WARN publish Version 3.0.0 already published to npm
+```
+
+**Cause:**
+Trying to release the same version that's already live on npm.
+
+**Solution:**
+```bash
+# Check current published version
+npm view oneie version
+
+# If same as local, bump version
+cd cli
+npm version patch  # or minor/major
+
+# Or let release script handle it
+./scripts/release.sh patch  # Will auto-increment
+```
+
+### Issue 5: Cloudflare Deployment Warnings
+
+**Symptoms:**
+```
+[WARN] `Astro.request.headers` was used when rendering prerendered pages
+```
+
+**Cause:**
+Using `Astro.request.headers` in statically prerendered pages.
+
+**Solution:**
+Either:
+1. Make page server-rendered: `export const prerender = false;`
+2. Remove dependency on request headers in that page
+3. Use conditional rendering based on `import.meta.env.SSR`
+
+**Note:** Warnings don't block deployment, but should be fixed for correctness.
+
+### Issue 6: Git History Contains Secrets
+
+**Symptoms:**
+Push rejected even after fixing files in latest commit.
+
+**Cause:**
+Secret exists in git history, not just current files.
+
+**Solution:**
+```bash
+# 1. Find the commit with the secret
+cd apps/one
+git log --oneline --all | head -20
+
+# 2. Check what changed in suspicious commit
+git show <commit-hash>
+
+# 3. Hard reset to commit BEFORE the secret
+git reset --hard <commit-before-secret>
+
+# 4. Re-apply changes with fixed files
+# (Release script will create new clean commits)
+./scripts/release.sh patch
+
+# 5. Force push (ONLY if necessary and you understand the risks)
+git push --force origin main
+```
+
+**Prevention:**
+- Never commit actual secrets
+- Use git hooks to scan commits before push
+- Keep `.env` and credentials in `.gitignore`
+- Use environment variables, not hardcoded values
+
+### Issue 7: Version Mismatch Between Repos
+
+**Symptoms:**
+- npm shows different version than GitHub tags
+- cli/package.json doesn't match apps/one/package.json
+
+**Cause:**
+Manual version editing or interrupted release process.
+
+**Solution:**
+```bash
+# Let release script sync everything
+./scripts/release.sh patch
+
+# Manually verify sync
+cat cli/package.json | grep version
+cat apps/one/package.json | grep version
+npm view oneie version
+git tag -l | tail -5
+```
+
+**Prevention:**
+- Always use release script, never manually edit versions
+- Complete full release cycle, don't interrupt mid-way
+- Verify all versions match post-deployment
+
+## Release Checklist (Expanded)
+
+**Pre-Release (5-10 minutes):**
+- [ ] All tests passing (`bun test`)
+- [ ] Documentation updated
+- [ ] No uncommitted changes (or acceptable)
+- [ ] Run `./scripts/pre-deployment-check.sh`
+- [ ] Review warnings (4 warnings acceptable)
+- [ ] Scan for example credentials in docs
+- [ ] Web build succeeds (`cd web && bun run build`)
+
+**During Release (10-15 minutes):**
+- [ ] Run release script: `./scripts/release.sh [major|minor|patch]`
+- [ ] Watch for GitHub push protection errors
+- [ ] If blocked, apply security fixes and retry
+- [ ] Verify files synced (518+ files)
+- [ ] Confirm CLI commit & push
+- [ ] apps/one auto-pushes (no confirmation)
+
+**Post-Release (5-10 minutes):**
+- [ ] npm publish: `cd cli && npm publish --access public`
+- [ ] Verify npm: `npm view oneie version`
+- [ ] Build web: `cd web && bun run build`
+- [ ] Deploy Cloudflare: `wrangler pages deploy dist --project-name=web`
+- [ ] Capture deployment URL
+- [ ] Test npm: `npx oneie@latest --version`
+- [ ] Test web: Visit deployment URL
+- [ ] Create GitHub releases (manual)
+
+**Total Time:** 20-35 minutes (depending on issues)
+
 ## Success Criteria
 
 ### Immediate (Per Deployment)

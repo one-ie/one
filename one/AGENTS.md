@@ -1,10 +1,22 @@
 ONE Ontology quick reference for coding agents. Concise, protocol-agnostic, and optimized for minimal context.
 
+## Agent Coordination
+
+**Platform Agents:**
+
+- **agent-ops** (`.claude/agents/agent-ops.md`) - DevOps specialist for releases, deployments, infrastructure automation, and CI/CD pipelines
+- **agent-clean** - Code quality and refactoring specialist
+- **agent-clone** - Data migration and legacy system integration
+- Additional agents defined in `.claude/agents/`
+
+See `.claude/agents/` directory for complete agent specifications and workflows.
+
 ## Root Directory File Policy
 
 **CRITICAL:** Only these markdown files belong in the root directory:
 - **README.md** - Platform overview and quick start
 - **LICENSE.md** - Legal terms and conditions
+- **SECURITY.md** - Security policy and vulnerability reporting
 - **CLAUDE.md** - Claude Code instructions (this file)
 - **AGENTS.md** - AI agent coordination and rules
 
@@ -203,14 +215,61 @@ await ctx.db.insert('events', { type: 'content_changed', actorId: userId, target
 - Validate inputs with `v` validators; prefer `.unique()` when expecting a single match.
 - After schema/index changes, regenerate types (`npx convex dev`).
 
+## Installation Folder File Resolution
+
+When reading documentation or configuration files, agents should use hierarchical file resolution:
+
+### Priority Order
+
+1. **Group-specific (most specific)**
+   - Path: `/<installation-name>/groups/<group-slug>/<file>`
+   - Example: `/acme/groups/engineering/frontend/sprint-guide.md`
+
+2. **Parent groups (walk up hierarchy)**
+   - Path: `/<installation-name>/groups/<parent-slug>/<file>`
+   - Example: `/acme/groups/engineering/sprint-guide.md`
+
+3. **Installation root**
+   - Path: `/<installation-name>/<file>`
+   - Example: `/acme/things/vision.md`
+
+4. **Global fallback**
+   - Path: `/one/<file>`
+   - Example: `/one/things/vision.md`
+
+### Implementation
+
+```typescript
+import { resolveFile } from '@/lib/utils/file-resolver';
+
+// Resolve with group context
+const content = await resolveFile('things/vision.md', {
+  groupId: currentGroupId,
+  fallbackToGlobal: true,
+});
+```
+
+### Agent Prompts
+
+Update agent prompts to include:
+
+```markdown
+When reading documentation, check these locations in order:
+1. /${INSTALLATION_NAME}/groups/${GROUP_PATH}/<file>
+2. /${INSTALLATION_NAME}/<file>
+3. /one/<file>
+
+Use the most specific file found.
+```
+
 ## Auth Testing
 
-**Location:** `/frontend/test/auth/`
+**Location:** `/web/test/auth/`
 
 **Run Tests:**
 
 ```bash
-cd frontend && bun test test/auth
+cd web && bun test test/auth
 ```
 
 **6 Methods Tested:**
@@ -224,7 +283,7 @@ cd frontend && bun test test/auth
 
 **Backend Connection:**
 
-- Frontend → Backend: `https://shocking-falcon-870.convex.cloud`
+- Web → Backend: `https://shocking-falcon-870.convex.cloud`
 - Import path: `../../../backend/convex/_generated/api`
 - Backend auth: `backend/convex/auth.ts`
 
@@ -252,9 +311,36 @@ const user = await convex.query(api.auth.getCurrentUser, {
 
 **Coverage:** 50+ test cases covering all auth flows, security features, and edge cases.
 
+## Deployment & Release
+
+**Automated Release Process (v3.0.0+):**
+
+Use `/release` command for complete deployment:
+- Syncs 518+ files from root to cli/ and apps/one/
+- Publishes to npm (oneie@<version>)
+- Deploys web to Cloudflare Pages (project: web)
+- Pushes to GitHub repos (cli, web, one)
+
+**Live Deployment:**
+- Production: https://web.one.ie
+- Preview: https://web-d3d.pages.dev
+- npm: https://www.npmjs.com/package/oneie
+
+**Manual Deployment:**
+
+```bash
+cd web/
+bun run build
+wrangler pages deploy dist --project-name=web
+```
+
+See `.claude/commands/release.md` and `.claude/agents/agent-ops.md` for details.
+
 ## References
 
 - Full ontology: `one/knowledge/ontology.md`
-- Auth tests: `frontend/test/auth/README.md`
+- Auth tests: `web/test/auth/README.md`
+- Agent coordination: `.claude/agents/agent-ops.md` (DevOps & releases)
+- Release workflow: `.claude/commands/release.md`
 - Better Auth: https://www.better-auth.com
 - Convex Docs: https://docs.convex.dev

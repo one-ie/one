@@ -195,6 +195,70 @@ events → groupId: Id<"groups">
 knowledge → groupId: Id<"groups">
 ```
 
+## Installation Folders
+
+**NEW:** Each ONE installation can have a top-level folder for organization-specific customization.
+
+### Architecture
+
+```
+/
+├── one/                    # Global templates (fallback)
+├── <installation-name>/    # Customer-specific overrides
+│   ├── groups/             # Hierarchical group docs
+│   ├── people/
+│   ├── things/
+│   ├── connections/
+│   ├── events/
+│   └── knowledge/
+├── web/
+├── backend/
+└── .claude/
+```
+
+### File Resolution
+
+When loading documentation, use this priority:
+
+1. `/<installation-name>/groups/<group-path>/<file>` (most specific)
+2. Parent group paths (walk up hierarchy)
+3. `/<installation-name>/<file>` (installation root)
+4. `/one/<file>` (global fallback)
+
+### Initialize Installation
+
+```bash
+npx oneie init
+# Prompts for organization name and installation identifier
+# Creates folder structure and updates .env.local
+```
+
+### Usage
+
+**Add installation-specific docs:**
+```bash
+mkdir -p /acme/groups/engineering
+echo "# Engineering Practices" > /acme/groups/engineering/practices.md
+```
+
+**Override global templates:**
+```bash
+echo "# Our Vision" > /acme/things/vision.md
+```
+
+### Important Distinctions
+
+- **Installation folder** = Filesystem customization per organization
+- **Database groups** = Runtime data isolation per group (via `groupId`)
+- One installation can serve many database groups
+- Folder hierarchy mirrors database `parentGroupId` structure
+
+### Security
+
+- Never store secrets in installation folders
+- Use `.env.local` for sensitive configuration
+- Installation folders excluded from git by default
+
 ## Development Commands
 
 ### Frontend Development
@@ -289,6 +353,7 @@ bun test --watch
 **CRITICAL:** Only these markdown files belong in the root directory:
 - **README.md** - Platform overview and quick start
 - **LICENSE.md** - Legal terms and conditions
+- **SECURITY.md** - Security policy and vulnerability reporting
 - **CLAUDE.md** - Claude Code instructions (this file)
 - **AGENTS.md** - AI agent coordination and rules
 
@@ -305,7 +370,7 @@ All other documentation belongs in the `one/` directory following the 6-dimensio
 
 ```
 ONE/
-├── frontend/                    # Main Astro application
+├── web/                         # Main Astro application
 │   ├── src/
 │   │   ├── pages/              # File-based routing
 │   │   ├── components/         # React components + shadcn/ui
@@ -329,34 +394,66 @@ ONE/
 │   ├── things/                 # Architecture, specifications
 │   ├── events/                 # Event specifications, deployment history
 │   ├── knowledge/              # RAG, AI, implementation
-│   └── people/                 # Roles, groups, governance
+│   └── people/                 # Roles, governance, organization
+│
+├── .claude/                     # Claude Code configuration
+│   ├── agents/                 # AI agent definitions (agent-ops, etc.)
+│   └── commands/               # Slash commands (/release, etc.)
 │
 └── apps/                        # Example applications
-    ├── oneie/                  # Main example app
+    ├── one/                    # Assembly repository (synced from root)
     ├── eliza/                  # ElizaOS integration
     └── stack/                  # Stack Auth example
 ```
 
-## Development Workflow (6-Phase Process)
+## Development Workflow (7-Phase Process)
 
 Before implementing ANY feature, follow this workflow defined in `one/connections/workflow.md`:
 
+### Phase 0: CHECK INSTALLATION FOLDER (NEW)
+
+**FIRST STEP:** Check if there are installation-specific overrides before reading global templates.
+
+```bash
+# Check if installation folder exists
+if [ -d "/${INSTALLATION_NAME}" ]; then
+  echo "✅ Installation folder detected: /${INSTALLATION_NAME}"
+  echo "Priority: Installation-specific docs override global /one/ templates"
+fi
+```
+
+**File Resolution Priority:**
+1. Check `/<installation-name>/groups/<group-path>/<file>` (group-specific)
+2. Check `/<installation-name>/<file>` (installation-wide)
+3. Fallback to `/one/<file>` (global template)
+
+**Key Questions:**
+- Is there a custom `things/vision.md` in the installation folder?
+- Are there group-specific `groups/<group-name>/` docs?
+- Does this feature need installation-specific documentation?
+
 ### Phase 1: UNDERSTAND
 
-1. Read `one/knowledge/ontology.md` (understand the 6 dimensions)
-2. Read `frontend/AGENTS.md` (Convex patterns and quick reference)
-3. Read `one/knowledge/rules.md` (golden rules for AI agents)
-4. Identify feature category (entity, relationship, action, query)
-5. Find similar patterns in existing code
+1. **Check installation folder first** (if `INSTALLATION_NAME` is set)
+   - Look for `/<installation-name>/knowledge/ontology.md` (custom ontology docs)
+   - Look for `/<installation-name>/knowledge/rules.md` (custom rules)
+2. Read `one/knowledge/ontology.md` (understand the 6 dimensions)
+3. Read `web/AGENTS.md` (Convex patterns and quick reference)
+4. Read `one/knowledge/rules.md` (golden rules for AI agents)
+5. Identify feature category (entity, relationship, action, query)
+6. Find similar patterns in existing code
+7. **Check for group-specific docs** in `/<installation-name>/groups/<group-path>/`
 
 ### Phase 2: MAP TO ONTOLOGY
 
 1. Identify **groups** (which group owns this? any parent/child relationships?)
+   - **NEW:** Check if group has custom docs in `/<installation-name>/groups/<group-slug>/`
 2. Identify **people** (who can access/modify this?)
 3. Identify **things** (what entities are involved?)
 4. Identify **connections** (how do they relate?)
 5. Identify **events** (what actions need logging?)
 6. Identify **knowledge** (what needs to be learned/searched?)
+7. **NEW:** Decide if this feature needs installation-specific documentation
 
 ### Phase 3: DESIGN SERVICES
 
@@ -384,8 +481,16 @@ Before implementing ANY feature, follow this workflow defined in `one/connection
 
 1. Write unit tests for services
 2. Write integration tests for full flows
-3. Update documentation in `one/` directory
+3. Update documentation:
+   - **Installation-specific:** Add to `/<installation-name>/<dimension>/` if feature is org-specific
+   - **Group-specific:** Add to `/<installation-name>/groups/<group-slug>/` if feature is group-specific
+   - **Global:** Add to `/one/<dimension>/` if feature is platform-wide
 4. Run type checking (`bunx astro check`)
+5. **NEW:** Test file resolution with installation folder:
+   ```bash
+   # Test that installation-specific docs override global docs
+   cat /<installation-name>/things/vision.md  # Should show custom version
+   ```
 
 ## Key Patterns and Best Practices
 
@@ -665,11 +770,16 @@ Verify `react-dom/server.edge` alias is set in `astro.config.mjs` under `vite.re
 
 **For ANY feature implementation, read in this order:**
 
-1. **`one/knowledge/ontology.md`** - Complete 6-dimension ontology specification (Version 1.0.0)
-2. **`frontend/AGENTS.md`** - Quick reference for Convex patterns
-3. **`one/knowledge/rules.md`** - Golden rules for AI development
-4. **`one/connections/workflow.md`** - 6-phase development workflow
-5. **`one/connections/patterns.md`** - Proven code patterns to replicate
+1. **Check installation folder first** (if `INSTALLATION_NAME` is set):
+   - `/<installation-name>/knowledge/ontology.md` (custom ontology docs)
+   - `/<installation-name>/knowledge/rules.md` (custom rules)
+   - `/<installation-name>/groups/<group-slug>/` (group-specific docs)
+2. **`one/knowledge/ontology.md`** - Complete 6-dimension ontology specification (Version 1.0.0)
+3. **`web/AGENTS.md`** - Quick reference for Convex patterns
+4. **`one/knowledge/rules.md`** - Golden rules for AI development
+5. **`one/connections/workflow.md`** - 7-phase development workflow (includes installation folders)
+6. **`one/connections/patterns.md`** - Proven code patterns to replicate
+7. **`one/knowledge/installation-folders.md`** - Installation folder architecture and usage
 
 **For specific feature types:**
 
@@ -696,15 +806,58 @@ The `one/` directory contains **41 documentation files** organized in **8 layers
 
 ## Deployment
 
-### Web (Cloudflare Pages)
+### Automated Release (v3.0.0+)
+
+**Use `/release` command for complete deployment:**
+
+```bash
+# Patch release (bug fixes)
+/release patch
+
+# Minor release (new features)
+/release minor
+
+# Major release (breaking changes)
+/release major
+
+# Sync files without version bump
+/release sync
+```
+
+**The release process automatically:**
+1. Bumps version in `cli/package.json`
+2. Syncs 518+ files from root to `cli/` and `apps/one/`:
+   - `/one/*` → `cli/one/` and `apps/one/one/`
+   - `/.claude/*` → `cli/.claude/` and `apps/one/one/.claude/`
+   - `/web/*` → `apps/one/web/` (git subtree)
+   - `CLAUDE.md`, `README.md`, `LICENSE.md`, `SECURITY.md` → all targets
+   - `web/AGENTS.md` → `apps/one/one/AGENTS.md`
+3. Commits and pushes to:
+   - `github.com/one-ie/cli`
+   - `github.com/one-ie/web`
+   - `github.com/one-ie/one` (apps/one assembly repo)
+4. Publishes to npm: `oneie@<version>`
+5. Builds and deploys web to Cloudflare Pages
+
+**Live URLs:**
+- npm: https://www.npmjs.com/package/oneie
+- Web: https://web.one.ie
+- CLI: https://github.com/one-ie/cli
+- One: https://github.com/one-ie/one
+
+See `.claude/commands/release.md` and `.claude/agents/agent-ops.md` for details.
+
+### Manual Deployment
+
+**Web (Cloudflare Pages):**
 
 ```bash
 cd web/
 bun run build
-wrangler pages deploy dist --project-name=one-platform
+wrangler pages deploy dist --project-name=web
 ```
 
-### Backend (Convex Cloud)
+**Backend (Convex Cloud):**
 
 ```bash
 cd backend/
@@ -731,10 +884,11 @@ Everything else is just data. This ontology scales from friend circles (2 people
 For questions about:
 
 - **6-Dimension Ontology**: Read `one/knowledge/ontology.md` (Version 1.0.0 - complete specification)
-- **Convex patterns**: Read `frontend/AGENTS.md`
+- **Convex patterns**: Read `web/AGENTS.md`
 - **Architecture**: Read `one/knowledge/architecture.md`
 - **Workflows**: Read `one/connections/workflow.md`
 - **Best practices**: Read `one/knowledge/rules.md`
+- **Release process**: Read `.claude/commands/release.md` and `.claude/agents/agent-ops.md`
 - **Migration from 4-table**: Read `one/things/plans/ontology-6-dimensions.md`
 
 ---
