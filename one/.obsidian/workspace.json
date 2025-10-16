@@ -171,6 +171,8 @@
   },
   "active": "613025f84d05f0e8",
   "lastOpenFiles": [
+    "things/interface.md",
+    "things/vision/interface.md",
     "things/plans/5-build-frontend.md",
     "things/plans/5-build-frontend",
     "things/plans/switch-off-auth.md",
@@ -198,8 +200,6 @@
     "things/tests/2-1-dataprovider-interface.md",
     "things/tests",
     "things/system.md",
-    "things/products/ontology.md",
-    "things/products/cascade.md",
     "things/features/dataprovider-interface",
     "things/cli",
     "things/cascade/docs/examples/1-6-numbering-structure",

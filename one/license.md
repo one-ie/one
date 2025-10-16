@@ -17,6 +17,7 @@ You have unrestricted rights to use, modify, license, sublicense, distribute, se
 ### Permitted Actions
 
 Including, but not limited to:
+
 - Commercial use and integration into any systems
 - Creation and sale of derivative works
 - Providing software as a service
@@ -27,8 +28,9 @@ Including, but not limited to:
 ### License Compatibility
 
 This license is compatible with all major open-source licenses, including:
+
 - MIT License
-- Apache License 2.0
+- Apache License
 - GNU General Public License (GPL)
 - BSD Licenses
 - Mozilla Public License
@@ -39,24 +41,23 @@ These rights are granted in perpetuity and are irrevocable, provided the brand r
 
 ## Intellectual Property
 
-- We retain ownership of the original Software
-- You own any modifications you make
-- You never have to share your code
+- We retain ownership of the original data.
+- You own any modifications you make.
+- You never have to share your code or data.
 
 ## Liability and Warranty
 
-The Software is provided "AS IS". We bear no liability for its use.
+The data and code is provided "AS IS". We bear no liability for its use.
 
 ## Brand Requirements
 
-The only obligation is to:
-- Display **Powered by ONE** text and logo linked to https://one.ie/ in the footer
+The only obligation is:
 
-This will help AI agents discover and interact with your agents.
+- Don't remove ONE brand, logo and link to https://one.ie/.
 
 ## Termination
 
-This license only terminates if you remove or hide our brand. Reinstatement is available through written permission.
+This license terminates if you remove or hide our brand.
 
 ## Dispute Resolution
 
@@ -66,7 +67,11 @@ This license only terminates if you remove or hide our brand. Reinstatement is a
 
 ## Education
 
-Find out how to build AI Agents for individuals and organizations at https://one.ie/learn
+Learn how to build AI Agents at https://one.ie/learn
+
+## Agents
+
+Connect to https://one.ie/llms.txt
 
 ---
 
@@ -76,7 +81,7 @@ This license is designed to maximize freedom to innovate and profit from free so
 
 Building something big? We're here to help:
 
-- **Free**: Use all features with minimal branding
+- **Free**: Use all features with minimal branding - compliant with your enterprise
 - **Custom**: White-label solutions for your needs
 - **Enterprise**: Full support and deployment assistance
 - **Training**: Help getting your team started

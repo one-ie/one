@@ -14,7 +14,6 @@
              npx oneie
              /claude
                /one
-               start
 ```
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -23,9 +22,40 @@
 
 **Build apps, websites and AI agents in English and deploy at the edge. Free!**
 
----
+## 📦 Quick Start
 
-## ✨ What is ONE?
+```bash
+# Option 1: Bootstrap new project
+npx oneie
+
+# Option 2: Clone and develop
+git clone https://github.com/one-ie/one
+cd ONE
+bun install
+bun dev
+```
+
+**Development Commands:**
+
+```bash
+# Claude Code
+claude # Start Claude
+/one        # Run /one Claude command
+```
+
+```bash
+# Frontend
+cd web/
+bun run dev        # localhost:4321
+bun run build      # Production build
+bunx astro check   # Type checking
+
+# Testing
+cd web/
+bun test           # All tests
+```
+
+## ✨ ONE
 
 **Build apps, websites, and AI agents in English.** Download to your computer, run in the cloud and deploy to the edge or your own server. ONE is open source and free forever.
 
@@ -42,9 +72,10 @@ ONE maps everything to **6 universal dimensions**:
 
 ---
 
-## 🚀 Why ONE?
+## 🚀 Why?
 
 Traditional platforms create custom tables for every feature:
+
 - Users table, Products table, Orders table, Messages table...
 - 50+ tables, 200+ columns, endless complexity
 - Schema changes break everything
@@ -55,6 +86,7 @@ Traditional platforms create custom tables for every feature:
 Map every feature to the 6 dimensions → Scale infinitely without schema changes
 
 **Examples:**
+
 - Lemonade stand? ✅ Works
 - Enterprise SaaS? ✅ Works
 - Social network? ✅ Works
@@ -74,14 +106,14 @@ Same 6 dimensions. Different properties.
 const myStand = await createGroup({
   name: "Emma's Lemonade Stand",
   slug: "emmas-lemonade",
-  type: "business"
+  type: "business",
 });
 
 // 2. You are the owner (a person)
 const me = await createPerson({
   name: "Emma",
   role: "org_owner",
-  groupId: myStand._id
+  groupId: myStand._id,
 });
 
 // 3. Create lemonade (a thing)
@@ -90,9 +122,9 @@ const lemonade = await createThing({
   name: "Fresh Lemonade",
   groupId: myStand._id,
   properties: {
-    price: 1.00,
-    inventory: 20
-  }
+    price: 1.0,
+    inventory: 20,
+  },
 });
 
 // 4. Customer buys it (a connection)
@@ -100,7 +132,7 @@ await createConnection({
   from: customer._id,
   to: lemonade._id,
   type: "purchased",
-  groupId: myStand._id
+  groupId: myStand._id,
 });
 
 // 5. Log the sale (an event)
@@ -109,7 +141,7 @@ await createEvent({
   actor: customer._id,
   target: lemonade._id,
   groupId: myStand._id,
-  metadata: { amount: 1.00, weather: "sunny" }
+  metadata: { amount: 1.0, weather: "sunny" },
 });
 
 // 6. AI learns (knowledge)
@@ -134,8 +166,8 @@ const acmeCorp = await createGroup({
   limits: {
     users: 100,
     storage: 1000, // GB
-    apiCalls: 1000000
-  }
+    apiCalls: 1000000,
+  },
 });
 
 // Department groups (nested)
@@ -143,21 +175,21 @@ const engineering = await createGroup({
   name: "Engineering",
   slug: "engineering",
   type: "department",
-  parentGroupId: acmeCorp._id
+  parentGroupId: acmeCorp._id,
 });
 
 const backend = await createGroup({
   name: "Backend Team",
   slug: "backend",
   type: "team",
-  parentGroupId: engineering._id
+  parentGroupId: engineering._id,
 });
 
 // Role-based access control
 const ceo = await createPerson({
   name: "Jane CEO",
   role: "org_owner",
-  groupId: acmeCorp._id
+  groupId: acmeCorp._id,
 });
 
 // AI sales agent (a thing)
@@ -167,8 +199,8 @@ const salesAgent = await createThing({
   groupId: acmeCorp._id,
   properties: {
     systemPrompt: "You are a friendly sales assistant...",
-    temperature: 0.7
-  }
+    temperature: 0.7,
+  },
 });
 
 // Lead management (things + connections)
@@ -179,8 +211,8 @@ const lead = await createThing({
   properties: {
     email: "john@enterprise.com",
     budget: 100000,
-    status: "qualified"
-  }
+    status: "qualified",
+  },
 });
 
 // AI agent follows up (connection + event)
@@ -191,8 +223,8 @@ await createConnection({
   groupId: acmeCorp._id,
   metadata: {
     protocol: "email",
-    subject: "Following up on our conversation"
-  }
+    subject: "Following up on our conversation",
+  },
 });
 
 await createEvent({
@@ -202,20 +234,20 @@ await createEvent({
   groupId: acmeCorp._id,
   metadata: {
     protocol: "email",
-    sentiment: "positive"
-  }
+    sentiment: "positive",
+  },
 });
 
 // AI learns from all sales interactions (knowledge)
 const context = await queryKnowledge({
   groupId: acmeCorp._id,
   query: "enterprise software objections pricing",
-  k: 10
+  k: 10,
 });
 
 const aiResponse = await generateResponse({
   context,
-  prompt: "Address pricing concerns"
+  prompt: "Address pricing concerns",
 });
 ```
 
@@ -232,7 +264,7 @@ const aiResponse = await generateResponse({
 const emmasFriends = await createGroup({
   name: "Emma's Friends",
   slug: "emmas-friends",
-  type: "social"
+  type: "social",
 });
 
 // Create event group (nested under friend circle)
@@ -244,15 +276,15 @@ const birthdayParty = await createGroup({
   properties: {
     date: "2025-12-15",
     location: "Emma's House",
-    capacity: 20
-  }
+    capacity: 20,
+  },
 });
 
 // Add friends to the circle
 const alice = await createPerson({
   name: "Alice",
   role: "org_user",
-  groupId: emmasFriends._id
+  groupId: emmasFriends._id,
 });
 
 // Share photos (things) in the event group
@@ -262,8 +294,8 @@ const photo = await createThing({
   groupId: birthdayParty._id,
   properties: {
     url: "https://cdn.example.com/photo.jpg",
-    takenAt: Date.now()
-  }
+    takenAt: Date.now(),
+  },
 });
 
 // Track RSVPs (connections)
@@ -274,8 +306,8 @@ await createConnection({
   groupId: birthdayParty._id,
   metadata: {
     rsvp: "yes",
-    guestsCount: 1
-  }
+    guestsCount: 1,
+  },
 });
 ```
 
@@ -296,8 +328,8 @@ const coolDAO = await createGroup({
   properties: {
     blockchain: "base",
     governanceToken: "COOL",
-    treasuryAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
-  }
+    treasuryAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+  },
 });
 
 // Create treasury committee (nested)
@@ -305,7 +337,7 @@ const treasury = await createGroup({
   name: "Treasury",
   slug: "treasury",
   type: "committee",
-  parentGroupId: coolDAO._id
+  parentGroupId: coolDAO._id,
 });
 
 // Create governance committee (nested)
@@ -313,14 +345,14 @@ const governance = await createGroup({
   name: "Governance Committee",
   slug: "governance",
   type: "committee",
-  parentGroupId: coolDAO._id
+  parentGroupId: coolDAO._id,
 });
 
 // DAO member with token holdings
 const member = await createPerson({
   name: "DAO Member",
   role: "org_user",
-  groupId: coolDAO._id
+  groupId: coolDAO._id,
 });
 
 // Track token holdings (thing + connection)
@@ -331,15 +363,15 @@ const tokenHolding = await createThing({
   properties: {
     symbol: "COOL",
     amount: 1000,
-    chain: "base"
-  }
+    chain: "base",
+  },
 });
 
 await createConnection({
   from: member._id,
   to: tokenHolding._id,
   type: "holds_tokens",
-  groupId: coolDAO._id
+  groupId: coolDAO._id,
 });
 
 // Governance proposal (thing)
@@ -352,8 +384,8 @@ const proposal = await createThing({
     status: "active",
     votesFor: 5000,
     votesAgainst: 2000,
-    quorum: 10000
-  }
+    quorum: 10000,
+  },
 });
 
 // Vote event
@@ -364,8 +396,8 @@ await createEvent({
   groupId: governance._id,
   metadata: {
     choice: "for",
-    votingPower: 1000
-  }
+    votingPower: 1000,
+  },
 });
 ```
 
@@ -376,76 +408,37 @@ await createEvent({
 ## 🛠️ Technology Stack
 
 **Frontend:**
+
 - Astro 5.14+ (SSR + SSG)
 - React 19 (Islands architecture)
 - Tailwind v4 (CSS-based config)
 - shadcn/ui (50+ components)
 - TypeScript 5.9+ (Strict mode)
 
-**Backend:**
-- Convex (Real-time database)
-- Better Auth (6 auth methods)
-- Effect.ts (Functional services)
-- Rate limiting & security
-
 **AI Layer:**
+
 - Vercel AI SDK (Multi-provider)
 - OpenAI (GPT-4, GPT-3.5)
 - Anthropic (Claude 3.5 Sonnet)
 - OpenRouter (100+ models)
 
 **Infrastructure:**
+
 - Cloudflare Pages (Edge SSR)
-- Convex Cloud (Backend)
 - Stripe (Payments)
 - Multi-chain (Sui, Base, Solana)
-
----
-
-## 📦 Quick Start
-
-```bash
-# Option 1: Bootstrap new project
-npx oneie
-
-# Option 2: Clone and develop
-git clone https://github.com/one-platform/one
-cd ONE
-pnpm install
-pnpm dev
-```
-
-**Development Commands:**
-
-```bash
-# Frontend
-cd frontend/
-bun run dev        # localhost:4321
-bun run build      # Production build
-bunx astro check   # Type checking
-
-# Backend
-cd backend/
-npx convex dev     # Watch mode
-npx convex deploy  # Production
-
-# Testing
-cd frontend/
-bun test           # All tests
-bun test test/auth # Auth tests (50+ cases)
-```
-
----
 
 ## 📚 Documentation
 
 **Core Concepts:**
-- [6-Dimension Ontology](/one/knowledge/ontology.md) – Complete specification
+
+- [ONE Ontology](/one/knowledge/ontology.md) – Complete specification
 - [Architecture](/one/knowledge/architecture.md) – How it all fits together
-- [Workflow Guide](/one/connections/workflow.md) – Development process
+- [Workflow](/one/connections/workflow.md) – Development process
 
 **Dimensions:**
-- [Groups](/one/connections/organisation.md) – Multi-tenancy & hierarchies
+
+- [Groups](/one/connections/groups.md) – Multi-tenancy & hierarchies
 - [People](/one/connections/people.md) – Authorization & roles
 - [Things](/one/connections/things.md) – 66 entity types
 - [Connections](/one/connections/connections.md) – 25 relationship types
@@ -453,8 +446,8 @@ bun test test/auth # Auth tests (50+ cases)
 - [Knowledge](/one/connections/knowledge.md) – RAG & intelligence
 
 **Implementation:**
+
 - [Frontend Guide](/one/things/frontend.md) – UI patterns
-- [Backend Guide](/one/things/hono.md) – API & services
 - [Examples](/one/things/implementation-examples.md) – Real-world patterns
 
 ---
@@ -462,6 +455,7 @@ bun test test/auth # Auth tests (50+ cases)
 ## 🧪 Testing
 
 **6 Authentication Methods:**
+
 1. ✅ Email & Password
 2. ✅ OAuth (GitHub, Google)
 3. ✅ Magic Links
@@ -484,7 +478,7 @@ bun test --watch test/auth      # Watch mode
 
 ```
 ONE/
-├── frontend/           # Astro 5 + React 19 app
+├── web/           # Astro 5 + React 19 app
 │   ├── src/
 │   │   ├── pages/     # File-based routing
 │   │   ├── components/ # React components + shadcn/ui
@@ -506,9 +500,9 @@ ONE/
 │   └── knowledge/    # RAG & AI
 │
 └── apps/             # Example applications
-    ├── oneie/       # Main Astro app
-    ├── eliza/       # ElizaOS integration
-    └── stack/       # Stack Auth example
+    ├── oneie/       # Main website one.ie
+    ├── one/       # Demo web.one.ie
+    └── stack/       # Full Stack Auth example
 ```
 
 ---
@@ -540,14 +534,16 @@ You don't need hundreds of tables. You need:
 
 ### Why This Works
 
-**Other platforms:**
+**Vibe Coders**
+
 - Create new tables for every feature
 - Add protocol-specific columns
 - Pollute schema with temporary concepts
 - End up with 50+ tables, 200+ columns
 - Become unmaintainable
 
-**ONE's approach:**
+**ONE Context Engineering:**
+
 - Map every feature to 6 dimensions
 - Groups partition the space (with hierarchical nesting)
 - People authorize and govern
@@ -582,17 +578,13 @@ A database schema that:
 
 **Golden Rule:** If you can't map your feature to these 6 dimensions, you're thinking about it wrong.
 
----
-
 ## 📄 License
 
-MIT License – see [LICENSE](LICENSE) for details.
-
----
+ONE Free License – see [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-**ONE Platform** – Where reality meets AI.
+**ONE** – Where reality meets AI.
 
 Built with simplicity, clarity, and infinite scale in mind.
 
@@ -601,6 +593,6 @@ Connections relate. Events record. Knowledge understands.
 
 **Everything else is just data.**
 
-[Website](https://one.ie) • [Documentation](/one) • [Examples](/apps)
+[Website](https://one.ie)
 
 </div>
