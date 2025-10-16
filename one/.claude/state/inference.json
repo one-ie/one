@@ -99,7 +99,8 @@
     96,
     97,
     98,
-    99
+    99,
+    100
   ],
   "feature_name": "New Feature",
   "organization": "Default Org",
@@ -599,6 +600,62 @@
       "inference": 99,
       "lesson": "Completed inference 99 successfully",
       "timestamp": 1760590074.04
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760590457.92
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760591107.85
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760591567.08
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760592095.12
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760592186.98
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760593204.57
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760593208.19
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760593337.48
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760593574.27
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760593908.92
+    },
+    {
+      "inference": 100,
+      "lesson": "Completed inference 100 successfully",
+      "timestamp": 1760594128.88
     }
-  ]
+  ],
+  "feature_complete": true
 }

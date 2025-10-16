@@ -51,10 +51,15 @@ Based on the release type requested:
 1. Run `./scripts/release.sh [patch|minor|major]`
 2. This will:
    - Bump version in cli/package.json
-   - Sync 552 files (ontology + .claude)
-   - Update apps/one/README.md
+   - Sync 518+ files to cli/ and apps/one/:
+     - `/one/*` → `cli/one/` and `apps/one/one/`
+     - `/.claude/*` → `cli/.claude/` and `apps/one/one/.claude/`
+     - `/web/*` → `apps/one/web/` (git subtree)
+     - `CLAUDE.md`, `README.md`, `LICENSE.md`, `SECURITY.md` → all targets
+     - `web/AGENTS.md` → `apps/one/one/AGENTS.md`
+   - **AUTOMATICALLY** commit and push apps/one/ to one-ie/one (no confirmation needed)
    - Show git status for review
-3. When prompted "Commit and push?", answer 'y'
+3. When prompted for cli/ "Commit and push?", answer 'y'
 4. When prompted "Create tag?", answer 'y'
 
 ### Step 3: npm Publish
