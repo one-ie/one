@@ -247,9 +247,11 @@ export const migrate = mutation({
 
 ## Hierarchical Groups (New Capability)
 
-Once groups are live, you can nest them:
+Once groups are live, you can nest them in **both database AND filesystem**:
 
 ### Example 1: Company with Teams
+
+**Database (Runtime Isolation):**
 
 ```typescript
 // Parent: Acme Corporation
@@ -276,7 +278,46 @@ const backend = await createGroup({
 });
 ```
 
+**Filesystem (Documentation & AI Context):**
+
+After creating groups in database, generate hierarchical documentation:
+
+```bash
+npx oneie create-group-docs
+
+# Creates:
+/acme/                                   # Installation folder
+├── groups/
+│   ├── acme-corp/
+│   │   └── README.md
+│   ├── acme-corp-engineering/
+│   │   └── README.md
+│   └── acme-corp-engineering-backend/
+│       └── README.md
+```
+
+Add custom documentation that inherits from parent groups:
+
+```bash
+# Backend-specific practices
+echo "# Backend Practices" > /acme/groups/acme-corp-engineering-backend/practices.md
+
+# Engineering-wide patterns (inherited by backend)
+echo "# Engineering Patterns" > /acme/groups/acme-corp-engineering/patterns.md
+```
+
+**File Resolution Example:**
+
+When AI or web app loads `practices.md` for backend team:
+
+1. `/acme/groups/acme-corp-engineering-backend/practices.md` ✅ (most specific)
+2. `/acme/groups/acme-corp-engineering/practices.md` (parent group)
+3. `/acme/practices.md` (installation-wide)
+4. `/one/practices.md` (global fallback)
+
 ### Example 2: DAO with Committees
+
+**Database:**
 
 ```typescript
 // Parent: Main DAO
@@ -300,6 +341,22 @@ const governance = await createGroup({
   type: "dao",
   parentGroupId: dao._id
 });
+```
+
+**Filesystem:**
+
+```bash
+/cooldao/                              # Installation folder
+├── groups/
+│   ├── cooldao/
+│   │   ├── README.md
+│   │   └── governance.md            # DAO-wide governance rules
+│   ├── cooldao-treasury/
+│   │   ├── README.md
+│   │   └── multisig-setup.md        # Treasury-specific docs
+│   └── cooldao-governance/
+│       ├── README.md
+│       └── proposal-process.md      # Governance-specific docs
 ```
 
 **Query hierarchy:**
@@ -500,3 +557,179 @@ const allEntities = await getEntitiesInHierarchy({
 - ✅ Backward compatible (organizations become group type)
 
 **Organizations don't disappear. They evolve into groups.**
+
+---
+
+## Installation Folder Integration (v2.0.0)
+
+Groups now span **two layers**:
+
+### 1. Database Layer (Runtime)
+
+```typescript
+// Groups table with hierarchical support
+groups: defineTable({
+  name: v.string(),
+  type: v.union(...),           // 6 types
+  parentGroupId: v.optional(v.id("groups")),  // Hierarchical nesting
+  properties: v.any(),
+  status: v.string(),
+  createdAt: v.number(),
+  updatedAt: v.number(),
+})
+```
+
+**Purpose:** Runtime data isolation via `groupId`
+
+### 2. Filesystem Layer (Documentation)
+
+```
+/<installation-name>/          # Installation folder
+├── groups/                    # Group documentation (mirrors hierarchy)
+│   ├── <parent-slug>/
+│   │   ├── README.md
+│   │   ├── <child-slug>/
+│   │   │   └── README.md
+│   │   └── practices.md
+│   └── <sibling-slug>/
+│       └── README.md
+├── people/
+├── things/
+├── connections/
+├── events/
+└── knowledge/
+```
+
+**Purpose:** Private documentation that overrides global `/one/` templates
+
+### Complete Workflow
+
+**Step 1: Initialize Installation**
+```bash
+npx oneie init
+
+# Prompts:
+# - Your name: Anthony O'Connell
+# - Your email: anthony@one.ie
+# - Organization name: Acme Corp
+# - Installation identifier: acme
+# - Domain: acme.com
+
+# Creates:
+# - /one/ (global ontology)
+# - /acme/ (installation folder with 6-dimension structure)
+# - /web/ (frontend)
+# - /backend/ (backend)
+```
+
+**Step 2: Create Groups in Database**
+```bash
+cd web && bun run dev
+# Visit /groups/new in browser
+# Create groups: "acme-corp", "engineering", "engineering/frontend"
+```
+
+**Step 3: Generate Group Documentation**
+```bash
+npx oneie create-group-docs
+
+# Fetches groups from database
+# Creates hierarchical folders:
+# - /acme/groups/acme-corp/README.md
+# - /acme/groups/engineering/README.md
+# - /acme/groups/engineering/frontend/README.md
+```
+
+**Step 4: Add Custom Documentation**
+```bash
+# Frontend-specific practices
+echo "# Frontend Practices" > /acme/groups/engineering/frontend/practices.md
+
+# Engineering-wide patterns (inherited by frontend)
+echo "# Engineering Patterns" > /acme/groups/engineering/patterns.md
+
+# Installation-wide rules
+echo "# Acme Corp Rules" > /acme/knowledge/company-rules.md
+```
+
+**Step 5: File Resolution in Action**
+
+When AI or web app loads `practices.md` for frontend group:
+
+```typescript
+// File resolution hierarchy:
+const content = await resolveFile("practices.md", {
+  installationName: "acme",
+  groupId: frontendGroupId,
+  convexClient: convex
+});
+
+// Checks in order:
+// 1. /acme/groups/engineering/frontend/practices.md ✅ (found!)
+// 2. /acme/groups/engineering/practices.md (parent group)
+// 3. /acme/practices.md (installation-wide)
+// 4. /one/practices.md (global fallback)
+```
+
+### Key Benefits
+
+**1. Multi-Tenancy**
+- One installation serves many database groups
+- Each group can have custom documentation
+- Perfect data isolation via `groupId`
+
+**2. Hierarchical Documentation**
+- Child groups inherit parent documentation
+- Override at any level (group, parent, installation, global)
+- Walk up hierarchy automatically
+
+**3. Private Customizations**
+- Installation folder = your private docs
+- Never released (stays in your repo)
+- Overrides global `/one/` templates
+
+**4. AI Context**
+- AI agents read group-specific docs
+- Hierarchical resolution provides context
+- Group practices inform feature generation
+
+### Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ DATABASE (Runtime Isolation)                                │
+├─────────────────────────────────────────────────────────────┤
+│ groups                                                       │
+│   ├── acme-corp (parentGroupId: null)                      │
+│   ├── engineering (parentGroupId: acme-corp)               │
+│   └── frontend (parentGroupId: engineering)                │
+│                                                              │
+│ things / connections / events / knowledge                   │
+│   ├── groupId: acme-corp → Acme-wide data                  │
+│   ├── groupId: engineering → Engineering data              │
+│   └── groupId: frontend → Frontend-only data               │
+└─────────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────────┐
+│ FILESYSTEM (Documentation & AI Context)                     │
+├─────────────────────────────────────────────────────────────┤
+│ /one/                        → Global templates (public)    │
+│ /acme/                       → Installation folder (private)│
+│   └── groups/                                                │
+│       ├── acme-corp/         → Org-wide docs                │
+│       └── engineering/       → Team-wide docs               │
+│           └── frontend/      → Team-specific docs           │
+│                                                              │
+│ File Resolution: frontend → engineering → installation → one│
+└─────────────────────────────────────────────────────────────┘
+```
+
+### See Also
+
+- **[Installation Folder Multi-Tenancy Plan](./group-folder-multi-tenancy.md)** - Complete architecture
+- **[Feature 2: CLI](../features/2-cli.md)** - Implementation details
+- **[CLI Overview](../cli/cli.md)** - User-facing documentation
+
+---
+
+**The evolution:** Organizations → Groups + Installation Folders = Enterprise-grade multi-tenancy with hierarchical documentation

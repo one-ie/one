@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "things/plans/mail.md",
+                "file": "things/todo.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "mail"
+              "title": "todo"
             }
           }
         ]
@@ -171,6 +171,10 @@
   },
   "active": "613025f84d05f0e8",
   "lastOpenFiles": [
+    "things/ecommerce-ontology.md",
+    "things/ecommerce.md",
+    "things/plans/mail.md",
+    "things/plans/5-complete.md",
     "events/cloudflare-automation-complete.md",
     "events/installation-folders-workflow-integration.md",
     "events/deployment-verification.md",
@@ -196,10 +200,6 @@
     "groups/strategy.md",
     "groups/revenue.md",
     "things/agents/agent-deploy.md",
-    "events/2025-10-15-private-files-secured.md",
-    "events/2024-10-14-final-sync-complete.md",
-    "events/2024-10-15-release-command-complete.md",
-    "events/2024-10-15-package-manager-tests.md",
     "things/vision",
     "things/tests",
     "things/features/dataprovider-interface",
