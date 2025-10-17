@@ -1,6 +1,6 @@
 ---
-allowed-tools: Bash(./scripts/release.sh:*), Bash(./scripts/pre-deployment-check.sh:*), Bash(cd web && bun run build:*), Bash(cd web && wrangler pages deploy:*), Bash(cd cli && npm publish:*), Bash(git status:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(git tag:*), Bash(npm view oneie:*)
-description: Execute full ONE Platform release - npm, GitHub, and Cloudflare Pages
+allowed-tools: Bash(./scripts/release.sh:*), Bash(./scripts/pre-deployment-check.sh:*), Bash(./scripts/cloudflare-deploy.sh:*), Bash(cd web && bun run build:*), Bash(cd web && wrangler pages deploy:*), Bash(cd cli && npm publish:*), Bash(git status:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(git tag:*), Bash(npm view oneie:*)
+description: Execute full ONE Platform release with automated Cloudflare deployment via API
 ---
 
 # /release - Full ONE Platform Release
@@ -70,11 +70,32 @@ Based on the release type requested:
 5. Report new version to user
 
 ### Step 4: Build & Deploy Web to Cloudflare
+
+**Automatic Mode (if CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are set):**
+1. The release script automatically detects credentials
+2. Builds web with `cd web && bun run build`
+3. Deploys via `scripts/cloudflare-deploy.sh` using Cloudflare API
+4. Shows deployment status and URLs
+5. **Zero confirmation needed** - fully automated!
+
+**Manual Mode (if credentials not set):**
 1. `cd web`
 2. Run `bun run build`
-3. If build succeeds, run `wrangler pages deploy dist --project-name=one-web`
-4. Capture deployment URL
-5. Report URL to user: https://a7b61736.one-web-eqz.pages.dev (or new URL)
+3. When prompted "Deploy web to Cloudflare Pages via wrangler?", answer 'y'
+4. Script runs `wrangler pages deploy dist --project-name=web`
+5. Capture deployment URL and report to user
+
+**Standalone Deployment:**
+```bash
+# Deploy directly via Cloudflare module
+scripts/cloudflare-deploy.sh deploy web web/dist production
+
+# Check deployment status
+scripts/cloudflare-deploy.sh status web
+
+# List recent deployments
+scripts/cloudflare-deploy.sh list web 5
+```
 
 ### Step 5: Verification
 1. Test npm package: `npx oneie@latest --version`
@@ -177,6 +198,14 @@ Before running `/release`, ensure:
 - ✅ You're logged in to npm (`npm whoami`)
 - ✅ Wrangler is authenticated
 - ✅ Release scripts exist in `scripts/`
+
+**For Automated Cloudflare Deployment (Optional):**
+- ✅ Set `CLOUDFLARE_API_TOKEN` environment variable
+- ✅ Set `CLOUDFLARE_ACCOUNT_ID` environment variable
+
+**Without these credentials:**
+- The script falls back to interactive wrangler CLI deployment
+- Still fully functional, just requires manual confirmation
 
 ## Post-Release Tasks
 

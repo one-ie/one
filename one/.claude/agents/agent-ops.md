@@ -102,6 +102,34 @@ curl -X DELETE "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUN
   -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN"
 ```
 
+**Cloudflare Deployment Module (`scripts/cloudflare-deploy.sh`):**
+```bash
+# Rock-solid automated deployment with retry logic
+
+# Deploy project (automatic if credentials set)
+scripts/cloudflare-deploy.sh deploy <project-name> <dist-dir> [branch]
+
+# Check deployment status
+scripts/cloudflare-deploy.sh status <project-name>
+
+# List recent deployments
+scripts/cloudflare-deploy.sh list <project-name> [limit]
+
+# Get rollback instructions
+scripts/cloudflare-deploy.sh rollback <project-name>
+```
+
+**Automated Mode (Credentials Set):**
+- Detects `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+- Deploys via API without confirmation
+- Shows real-time deployment status
+- **Zero human intervention needed**
+
+**Fallback Mode (No Credentials):**
+- Uses wrangler CLI with interactive confirmation
+- Still fully functional
+- Clear error messages and recovery paths
+
 ### 2. npm Registry
 
 ```bash

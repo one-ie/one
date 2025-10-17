@@ -171,6 +171,7 @@
   },
   "active": "613025f84d05f0e8",
   "lastOpenFiles": [
+    "events/cloudflare-automation-complete.md",
     "events/installation-folders-workflow-integration.md",
     "events/deployment-verification.md",
     "events/deployment-ops-summary.md",
@@ -199,7 +200,6 @@
     "events/2024-10-14-final-sync-complete.md",
     "events/2024-10-15-release-command-complete.md",
     "events/2024-10-15-package-manager-tests.md",
-    "events/2024-10-15-handoff-to-clean.md",
     "things/vision",
     "things/tests",
     "things/features/dataprovider-interface",
