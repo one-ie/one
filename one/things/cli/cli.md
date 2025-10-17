@@ -22,7 +22,7 @@
 ## ✨ Get Started
 
 ```bash
-npx oneie init
+npx oneie
 ```
 
 That's it. Your complete ontology-driven platform is ready.
@@ -34,7 +34,7 @@ That's it. Your complete ontology-driven platform is ready.
 The ONE CLI creates **living, ontology-driven codebases** with installation folder architecture for multi-tenancy:
 
 ```
-npx oneie init
+npx oneie
     ↓
 Global Ontology + Installation Folder + Web App + Backend → Ready!
 ```
@@ -132,73 +132,136 @@ Global Ontology + Installation Folder + Web App + Backend → Ready!
 
 ## Usage
 
-### Bootstrap New Installation
+### Bootstrap New Project (First-Time Setup)
+
+```bash
+npx oneie
+```
+
+**Full interactive setup with web app and backend:**
+
+```
+✨ Welcome to ONE Platform!
+
+Let's set up your environment with the 6-dimension ontology.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧑 Step 1: Tell us about yourself
+
+What's your full name? Anthony O'Connell
+What's your email? anthony@one.ie
+
+✓ Created your profile in one/people/anthony-o-connell.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🏢 Step 2: Organization Setup
+
+What's your organization name? Acme Corp
+What's your organization website? acme.com
+
+✓ Created organization profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 Step 3: Syncing ONE Ontology
+
+✓ Copied 100+ ontology files from /one/
+✓ Synced 12 agent definitions to .claude/agents/
+✓ Synced .claude/hooks/ and .claude/commands/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Step 4: Website Setup
+
+Would you like to build a website? Yes
+
+✓ Cloning web repository...
+✓ Installing dependencies...
+✓ Created .env.local
+
+Your website is ready at: http://localhost:4321
+Run: cd web && bun run dev
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 Step 5: Third-Party Documentation
+
+Would you like to clone third-party docs for AI context? Yes
+
+✓ Cloned 3 documentation repositories
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Setup Complete!
+
+📁 Project Structure:
+   /one/                 → 6-dimension ontology (100+ files)
+   /web/                 → Astro + React website
+   /docs/                → Third-party documentation
+   /.claude/             → AI agent integration
+
+🚀 Next Steps:
+
+1. Start building:
+   cd web && bun run dev
+
+2. Use AI agents:
+   claude
+
+3. Read the docs:
+   cat one/knowledge/ontology.md
+
+4. Create your first feature:
+   /one
+
+Happy building! 🎉
+```
+
+### Add Installation Folder to Existing Project
 
 ```bash
 npx oneie init
 ```
 
-**Interactive prompts:**
+**Installation folder setup only (no web cloning):**
 
 ```
-✨ Welcome to ONE!
+✨ Initialize Installation Folder
 
-ONE is organized by groups which have their own people, things,
-connections, events, and knowledge. Groups can have subgroups.
+What is your organization name? Acme Corp
+Installation identifier (lowercase, hyphens only): acme
+Exclude /acme/ from git? Yes
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📥 Downloading ONE Framework...
-
-✓ Copied 100+ ontology files from /one/
-✓ Synced 12 agent definitions to .claude/agents/
-✓ Copied Claude Code hooks and commands
-
-ONE Setup Complete! 🎉
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-👤 Account Setup
-
-What's your name? Anthony O'Connell
-What's your email? anthony@one.ie
-
-✓ Created your profile in one/people/anthony-o-connell.md
-
-Account Setup Complete! 🎉
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🏢 Organization Setup
-
-What's your organization name? Acme Corp
-Installation identifier: acme
-Domain: acme.com
-
-Creating your installation folder...
-✓ /acme/groups/
-✓ /acme/people/
-✓ /acme/things/
-✓ /acme/connections/
-✓ /acme/events/
-✓ /acme/knowledge/
-
-✓ Created installation README
+✓ Created installation folder: /acme
+✓ Created 6 ontology subdirectories
+   - /groups/
+   - /people/
+   - /things/
+   - /connections/
+   - /events/
+   - /knowledge/
+✓ Created README.md
 ✓ Updated .env.local with INSTALLATION_NAME=acme
+✓ Updated .gitignore to exclude /acme/
 
-Organization Setup Complete! 🎉
+🎉 Installation initialized!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 Your installation folder:
+   /acme/
 
-🌐 Next: Create Your First Group
+🔧 Configuration:
+   Organization: Acme Corp
+   Identifier: acme
+   Git: excluded
 
-Visit your web app to create groups in the database:
-  cd web && bun run dev
+📝 Next steps:
 
-Then run this to generate group documentation:
-  npx oneie create-group-docs
-
-You're all set! 🚀
+1. Create your first group in the database (via web UI)
+2. Add group-specific docs: /acme/groups/<group-slug>/
+3. Override global templates: /acme/<dimension>/
+4. Read the README: cat acme/README.md
 ```
 
 **Generated structure:**
@@ -370,26 +433,60 @@ tests/unit/services/token-purchase.test.ts    # Tests
 
 ## Command Reference
 
+### `npx oneie`
+
+**Full project bootstrap** - Initialize new ONE project with complete setup.
+
+```bash
+npx oneie
+```
+
+**What it does:**
+1. Prompts for user profile (name, email)
+2. Prompts for organization (name, website)
+3. Syncs global ontology (`/one/`)
+4. Syncs AI agent definitions (`.claude/`)
+5. Optionally clones web repository (`/web/`)
+6. Optionally clones third-party docs (`/docs/`)
+
+**Creates:**
+- `/one/` - Global ontology (100+ files)
+- `/web/` - Astro 5 + React 19 application
+- `/docs/` - Third-party documentation (optional)
+- `.claude/` - AI configuration
+- User profile in `one/people/`
+- Organization profile in `one/people/`
+
+**Use this for:** First-time setup, new projects
+
+---
+
 ### `npx oneie init`
 
-Initialize new ONE installation with installation folder architecture.
+**Installation folder only** - Add installation folder to existing project.
 
 ```bash
 npx oneie init
 ```
 
-**Prompts for:**
-- User name and email
-- Organization name and domain
-- Installation identifier
+**What it does:**
+1. Prompts for organization name
+2. Prompts for installation identifier (e.g., "acme")
+3. Creates installation folder structure
+4. Updates `.env.local` with `INSTALLATION_NAME`
+5. Optionally updates `.gitignore`
 
 **Creates:**
-- `/one/` - Global ontology
 - `/<installation-name>/` - Installation folder
-- `/web/` - Web application
-- `/backend/` - Convex backend
-- `.claude/` - AI configuration
-- `.env.local` - Environment variables
+  - `groups/` - Hierarchical group docs
+  - `people/` - People profiles
+  - `things/` - Custom entities
+  - `connections/` - Custom relationships
+  - `events/` - Custom events
+  - `knowledge/` - Custom knowledge
+- `.env.local` - Updated with installation name
+
+**Use this for:** Existing projects, adding multi-tenancy
 
 ---
 
