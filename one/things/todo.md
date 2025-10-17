@@ -3,6 +3,10 @@
 Now
 
 - [ ] This is calculated automatically.
+- [ ] Create a folder with the group name
+- [ ] 
+- [ ] Have Cli ask for a name 
+- [ ] Start Server automatically - start cd web in /one
 
 ---
 
