@@ -701,6 +701,21 @@ const entities = await convex.query(api.queries.entities.list, {
 
 ### Environment Variables
 
+**Root (.env) - CRITICAL FOR DEPLOYMENTS:**
+
+```bash
+# Cloudflare Global API Key - FULL ACCESS to Cloudflare API
+# This provides complete programmatic access for automated deployments
+CLOUDFLARE_GLOBAL_API_KEY=your-cloudflare-global-api-key
+CLOUDFLARE_ACCOUNT_ID=your-cloudflare-account-id
+CLOUDFLARE_EMAIL=your-cloudflare-email
+
+# Alternative: Cloudflare API Token (scoped access)
+CLOUDFLARE_API_TOKEN=your-cloudflare-api-token
+```
+
+**IMPORTANT:** The `CLOUDFLARE_GLOBAL_API_KEY` in `.env` provides **FULL ACCESS** to the Cloudflare API. This enables automated deployments via `./scripts/cloudflare-deploy.sh` and the `/release` command without manual intervention. Keep this key secure and never commit `.env` to version control.
+
 **Web (.env.local):**
 
 ```bash
