@@ -1,45 +1,54 @@
 ---
-allowed-tools: Bash(./scripts/release.sh:*), Bash(./scripts/pre-deployment-check.sh:*), Bash(./scripts/cloudflare-deploy.sh:*), Bash(cd web && bun run build:*), Bash(cd web && wrangler pages deploy:*), Bash(cd cli && npm publish:*), Bash(git status:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(git tag:*), Bash(npm view oneie:*)
-description: Execute full ONE Platform release with automated Cloudflare deployment via API
+allowed-tools: Task(agent-ops:*)
+description: Execute full ONE Platform release via agent-ops specialist
 ---
 
 # /release - Full ONE Platform Release
 
-**Purpose:** Execute the complete 13-step release process including npm publish, GitHub pushes, and Cloudflare Pages deployment.
+**Purpose:** Delegate to `agent-ops` specialist to execute the complete 13-step release process including npm publish, GitHub pushes, and Cloudflare Pages deployment.
 
-## Context
+## How It Works
 
-Before starting the release, gather this information:
-1. Run `pwd` to verify current directory
-2. Check `ls -lah scripts/release.sh` to verify release script exists
-3. Run `git status --short` to check for uncommitted changes
-4. Check `ls -lah web/dist/` to see if a build already exists
+This command **MUST** delegate to the `agent-ops` specialist agent, which has the expertise and tools to handle:
+1. Pre-deployment validation
+2. Version bumping
+3. File synchronization
+4. Git operations
+5. npm publishing
+6. Cloudflare deployments (using CLOUDFLARE_GLOBAL_API_KEY)
+7. Verification and reporting
 
-## Release Options
+## Release Types
 
-### Option 1: Patch Release (Recommended for Hotfixes)
-```
-/release patch
-```
-
-### Option 2: Minor Release (New Features)
-```
-/release minor
-```
-
-### Option 3: Major Release (Breaking Changes)
-```
-/release major
-```
-
-### Option 4: Sync Only (No Version Bump)
-```
-/release sync
-```
+- `/release patch` - Bug fixes (3.3.5 → 3.3.6)
+- `/release minor` - New features (3.3.5 → 3.4.0)
+- `/release major` - Breaking changes (3.3.5 → 4.0.0)
+- `/release sync` - Sync files without version bump
 
 ## Your Task
 
-Based on the release type requested:
+**CRITICAL:** You MUST delegate this entire release to the `agent-ops` specialist by using the Task tool:
+
+```typescript
+Task({
+  subagent_type: "agent-ops",
+  description: "Execute full release",
+  prompt: `Execute a ${releaseType} release for ONE Platform:
+
+1. Run pre-deployment validation
+2. Execute release script: ./scripts/release.sh ${releaseType}
+3. Publish to npm: cd cli && npm publish --access public
+4. Verify deployment:
+   - npm: npx oneie@latest --version
+   - Web: Check Cloudflare deployment URL
+   - GitHub: Verify tags created
+5. Report summary with all live URLs
+
+IMPORTANT: The CLOUDFLARE_GLOBAL_API_KEY is set in .env and provides FULL ACCESS to Cloudflare API for automated deployments.`
+})
+```
+
+## Agent-Ops Responsibilities
 
 ### Step 1: Pre-Deployment Validation
 1. Run `./scripts/pre-deployment-check.sh`
@@ -199,13 +208,24 @@ Before running `/release`, ensure:
 - ✅ Wrangler is authenticated
 - ✅ Release scripts exist in `scripts/`
 
-**For Automated Cloudflare Deployment (Optional):**
+**For Automated Cloudflare Deployment:**
+
+**Option 1: Global API Key (FULL ACCESS - Recommended for automated deployments):**
+- ✅ Set `CLOUDFLARE_GLOBAL_API_KEY` in root `.env`
+- ✅ Set `CLOUDFLARE_ACCOUNT_ID` in root `.env`
+- ✅ Set `CLOUDFLARE_EMAIL` in root `.env`
+- ✅ Provides complete programmatic access to Cloudflare API
+- ✅ Zero manual intervention needed
+
+**Option 2: API Token (Scoped access):**
 - ✅ Set `CLOUDFLARE_API_TOKEN` environment variable
 - ✅ Set `CLOUDFLARE_ACCOUNT_ID` environment variable
 
 **Without these credentials:**
 - The script falls back to interactive wrangler CLI deployment
 - Still fully functional, just requires manual confirmation
+
+**CRITICAL:** The `CLOUDFLARE_GLOBAL_API_KEY` in `.env` provides **FULL ACCESS** to the Cloudflare API. This is required for fully automated deployments via `/release` command.
 
 ## Post-Release Tasks
 
