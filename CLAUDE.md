@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-**ONE Platform** is a multi-tenant AI-native platform built on a **6-dimension ontology** that models reality through: Groups, People, Things, Connections, Events, and Knowledge. The architecture separates concerns into three distinct layers:
+**ONE Platform** is an AI-native platform built on a **6-dimension ontology** that models reality through: Groups, People, Things, Connections, Events, and Knowledge. The architecture separates concerns into three distinct layers:
 
 ```
 Web (Astro + React) → Backend (Convex) → 6-Dimension Ontology
@@ -24,11 +24,13 @@ Web (Astro + React) → Backend (Convex) → 6-Dimension Ontology
 ### Why Inference-Based Planning?
 
 Traditional planning uses time estimates ("Day 1-3", "Week 2"), which are:
+
 - Inaccurate (time varies wildly)
 - Context-heavy (requires re-planning)
 - Sequential (blocks parallel work)
 
 Inference-based planning uses **sequence positions** ("Infer 1-100"), which are:
+
 - Precise (each inference is a concrete step)
 - Context-light (< 3000 tokens per inference)
 - Parallel-friendly (inferences can run concurrently when dependencies allow)
@@ -81,17 +83,20 @@ Infer 91-100:  Deployment & Documentation (production, guides)
 ```
 
 **Workflow Commands:**
+
 - `/now` - Display current inference and what you're working on
 - `/next` - Advance to next inference and load context
 - `/todo` - View complete task list (100-inference sequence)
 - `/done` - Mark current inference complete and advance
 
 **Creation Commands:**
+
 - `/build` - Build features with AI specialists
 - `/design` - Create wireframes & UI components
 - `/deploy` - Ship to production
 
 **Insight Commands:**
+
 - `/see` - View analytics, refine vision, explore courses
 
 ### Benefits
@@ -287,12 +292,14 @@ bun test --watch
 ## Root Directory File Policy
 
 **CRITICAL:** Only these markdown files belong in the root directory:
+
 - **README.md** - Platform overview and quick start
 - **LICENSE.md** - Legal terms and conditions
 - **CLAUDE.md** - Claude Code instructions (this file)
 - **AGENTS.md** - AI agent coordination and rules
 
 All other documentation belongs in the `one/` directory following the 6-dimension ontology:
+
 - **one/events/** - Deployment plans, release notes, test results, agent summaries
 - **one/knowledge/** - Architecture, patterns, rules, guides
 - **one/connections/** - Protocols, workflows, integrations
@@ -458,13 +465,15 @@ import { v } from "convex/values";
 export const createOrganization = mutation({
   args: {
     name: v.string(),
-    plan: v.optional(v.union(v.literal("starter"), v.literal("pro"), v.literal("enterprise"))),
+    plan: v.optional(
+      v.union(v.literal("starter"), v.literal("pro"), v.literal("enterprise"))
+    ),
   },
   handler: async (ctx, args) => {
     const groupId = await ctx.db.insert("groups", {
       name: args.name,
       type: "organization",
-      parentGroupId: undefined,  // Top-level group
+      parentGroupId: undefined, // Top-level group
       properties: {
         plan: args.plan || "starter",
       },
@@ -498,7 +507,7 @@ export const createSubGroup = mutation({
     const groupId = await ctx.db.insert("groups", {
       name: args.name,
       type: args.type,
-      parentGroupId: args.parentGroupId,  // Link to parent
+      parentGroupId: args.parentGroupId, // Link to parent
       properties: {},
       status: "active",
       createdAt: Date.now(),
