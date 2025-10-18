@@ -1,0 +1,875 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Sparkles,
+  Code,
+  Layout as LayoutIcon,
+  FileText,
+  Users,
+  Shield,
+  Zap,
+  Globe,
+  Rocket,
+  Settings,
+  Boxes,
+  Database,
+  Video,
+  Mic,
+  ShoppingCart,
+  Brain,
+  Image as ImageIcon,
+  Server,
+  Cloud,
+  Network,
+  MessageSquare,
+  Figma,
+  Terminal,
+  Check,
+} from 'lucide-react';
+---
+
+<Layout title="Features - ONE Platform">
+  <!-- Hero Section -->
+  <section
+    class="relative min-h-[60vh] flex items-center justify-center px-4 py-20 sm:px-6 lg:px-8"
+  >
+    <div class="w-full max-w-7xl mx-auto text-center space-y-8">
+      <Badge
+        variant="outline"
+        className="mb-2 inline-flex items-center gap-2 text-base px-6 py-2"
+      >
+        <Sparkles className="h-5 w-5" />
+        Everything You Need
+      </Badge>
+
+      <h1
+        class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold !leading-[1.1] tracking-tight"
+      >
+        Built for Speed,
+        <br />
+        <span class="text-primary">Made for Scale</span>
+      </h1>
+
+      <p
+        class="text-lg sm:text-xl text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed"
+      >
+        From landing pages to enterprise applications, ONE gives you the tools
+        to build fast, ship faster, and scale infinitely.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="https://github.com/one-ie/one" target="_blank">
+          <Button size="lg" className="h-14 px-8 text-lg font-semibold">
+            <Code className="mr-2 h-5 w-5" />
+            Get Started
+          </Button>
+        </a>
+        <a href="/download">
+          <Button
+            variant="outline"
+            size="lg"
+            className="h-14 px-8 text-lg font-semibold"
+          >
+            Download Free
+          </Button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Builder Section -->
+  <section
+    class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32 bg-gradient-to-b from-background via-background to-muted/40"
+  >
+    <div class="mx-auto max-w-7xl space-y-16">
+      <div class="grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:items-center">
+        <div class="space-y-6">
+          <Badge
+            variant="outline"
+            className="inline-flex items-center gap-2 text-base px-6 py-2"
+          >
+            <Sparkles className="h-5 w-5" />
+            AI-Built Websites
+          </Badge>
+          <h2
+            class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+          >
+            `/ai` builds your site with Claude Code
+          </h2>
+          <p class="text-lg text-muted-foreground/90 leading-relaxed">
+            Start with a short brief and let the AI assembler scaffold, author,
+            and wire your pages end-to-end. Tuned for Claude Code today—with
+            Codex, Cursor, and more editors coming online next—so you stay in
+            your flow while the system ships production-quality work.
+          </p>
+          <p class="text-base text-muted-foreground/90 leading-relaxed">
+            As sites grow, content silos and inconsistent copy spiral out of
+            control. ONE&apos;s shared ontology and lightweight domain language
+            anchor every component, keeping navigation, copy, and data models
+            in sync across generations. Each run captures what worked, so the
+            next generation lands closer to your voice, standards, and SEO
+            targets.
+          </p>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2">
+          <Card
+            className="border-border/50 bg-card/60 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+          >
+            <CardHeader className="space-y-4">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <Check className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">What You Get</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Full-stack pages, typed content collections, IaC snippets, and
+                launch checklists generated in minutes, ready for human polish.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card
+            className="border-border/50 bg-card/60 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+          >
+            <CardHeader className="space-y-4">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <Network className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Ontology in Control</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Shared taxonomies bind components, routes, and copy so growth
+                never breaks structure—even when multiple AI agents contribute.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card
+            className="border-border/50 bg-card/60 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+          >
+            <CardHeader className="space-y-4">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <Brain className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Context Engineering</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Prompt kits, evaluation runs, and review reports roll forward
+                so every generation hands richer context to the next.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card
+            className="border-border/50 bg-card/60 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+          >
+            <CardHeader className="space-y-4">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <Database className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-xl">Living Language</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Microcopy, schema definitions, and design tokens stay aligned
+                through a shared lexicon so the AI speaks in your brand voice.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div class="space-y-4 text-center lg:text-left">
+          <Badge variant="outline" className="inline-flex items-center gap-2">
+            <Terminal className="h-4 w-4" />
+            The .claude Cascade
+          </Badge>
+          <h3 class="text-3xl font-semibold tracking-tight">
+            Agents, hooks, commands, and MCPs in sync
+          </h3>
+          <p class="text-base text-muted-foreground/90 leading-relaxed max-w-3xl mx-auto lg:mx-0">
+            The automation stack is declared in <code>.claude/*</code>. Agents
+            orchestrate build steps, hooks enforce quality gates, commands
+            expose reusable routines, and Model Context Protocol (MCP) services
+            keep tools, repos, and knowledge bases streaming into Claude. The
+            result: a cascading workflow where every layer feeds the next with
+            structured insight.
+          </p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <Card
+            className="border-border/50 bg-card/60 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+          >
+            <CardHeader className="space-y-4">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <MessageSquare className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-lg">`.claude/agents`</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Specialist planners, writers, and reviewers chain their outputs,
+                handing structured briefs downstream for deterministic builds.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card
+            className="border-border/50 bg-card/60 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+          >
+            <CardHeader className="space-y-4">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <Server className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-lg">`.claude/hooks`</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Pre- and post-run checks capture diffs, inject ontology updates,
+                and make sure each generation leaves the repo healthier.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card
+            className="border-border/50 bg-card/60 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+          >
+            <CardHeader className="space-y-4">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <Figma className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-lg">`.claude/commands`</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Task-specific playbooks expose production-ready flows—content
+                migrations, design refreshes, launch prep, and more.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card
+            className="border-border/50 bg-card/60 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+          >
+            <CardHeader className="space-y-4">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <Cloud className="h-6 w-6 text-primary" />
+              </div>
+              <CardTitle className="text-lg">MCP Services</CardTitle>
+              <CardDescription className="leading-relaxed">
+                Model Context Protocol bridges tools, issue trackers, and data
+                stores so every agent has live context while staying isolated.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Types Section -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32 bg-muted/50">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <LayoutIcon className="h-4 w-4" />
+          Pre-Built Templates
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+        >
+          Start With Templates
+          <br />
+          <span class="text-muted-foreground">Ship in Hours, Not Weeks</span>
+        </h2>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <LayoutIcon className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Landing Pages</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Beautiful, conversion-optimized landing pages that load in
+              milliseconds. SEO-friendly and mobile-responsive.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <FileText className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Blogs</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Type-safe content collections with markdown support. RSS feeds,
+              search, and SEO built-in.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Video className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Videos</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Video galleries and streaming support. Optimized for performance
+              with lazy loading and thumbnails.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Mic className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Podcasts</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Podcast players with episode management, transcripts, and RSS feed
+              generation.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Rocket className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">SaaS</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Complete SaaS starter with authentication, billing, dashboards,
+              and multi-tenancy.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <ShoppingCart className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">E-commerce</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Full e-commerce solution with payments, inventory, and order
+              management. Coming soon.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features Section -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Zap className="h-4 w-4" />
+          Core Features
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+        >
+          Built With Modern Tools
+        </h2>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <Card
+          className="border-border/50 bg-card/50 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <Brain className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">AI Integration</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Build with AI SDK and Prompt Kit. OpenAI, Anthropic, and more
+              out-of-the-box.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="border-border/50 bg-card/50 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <Settings className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">View Transitions</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Smooth page transitions with Astro's view transitions API. Native
+              feel, zero effort.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="border-border/50 bg-card/50 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <Boxes className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">shadcn/ui Components</CardTitle>
+            <CardDescription className="leading-relaxed">
+              50+ accessible components with charts, forms, and complex UI
+              patterns.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="border-border/50 bg-card/50 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <FileText className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Content-Driven</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Write in Markdown. Load data from your file system, APIs, or
+              favorite CMS.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="border-border/50 bg-card/50 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <Shield className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Authentication</CardTitle>
+            <CardDescription className="leading-relaxed">
+              6 auth methods including OAuth, magic links, and 2FA. Better Auth
+              + Convex integration.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card
+          className="border-border/50 bg-card/50 backdrop-blur hover:border-primary/20 hover:bg-card transition-all"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <Users className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Dashboard</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Pre-built admin dashboard with analytics, user management, and
+              settings.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Astro Features Section -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32 bg-muted/50">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Rocket className="h-4 w-4" />
+          Astro Powered
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+        >
+          Performance by Default
+        </h2>
+        <p class="text-lg text-muted-foreground max-w-3xl mx-auto">
+          Astro improves website performance by rendering components on the
+          server, sending lightweight HTML to the browser with zero unnecessary
+          JavaScript.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-lg">Zero JavaScript</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Ship only the JavaScript you need. Static by default, interactive
+              when necessary.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <ImageIcon className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-lg">Optimized Images</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Automatic image optimization with lazy loading and responsive
+              sizes.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <Rocket className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-lg">Prefetch</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Intelligent link prefetching for instant page transitions.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+            >
+              <Server className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-lg">Server-First</CardTitle>
+            <CardDescription className="text-sm leading-relaxed">
+              Render on the server, hydrate on demand. Best of both worlds.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Section -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Network className="h-4 w-4" />
+          Integrations
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+        >
+          Connect Everything
+        </h2>
+      </div>
+
+      <div class="grid gap-8 lg:grid-cols-2">
+        <!-- Cloudflare -->
+        <Card
+          className="border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/20"
+            >
+              <Cloud className="h-7 w-7 text-primary" />
+            </div>
+            <CardTitle className="text-2xl">Cloudflare</CardTitle>
+            <CardDescription className="text-base leading-relaxed">
+              Deploy to Cloudflare's global edge network. Unlimited requests,
+              instant updates, zero configuration.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <!-- MCP -->
+        <Card
+          className="border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/20"
+            >
+              <MessageSquare className="h-7 w-7 text-primary" />
+            </div>
+            <CardTitle className="text-2xl">MCP Integrations</CardTitle>
+            <CardDescription className="text-base leading-relaxed">
+              Astro MCP, Sentry MCP, Shadcn MCP, Figma MCP - connect to your
+              favorite tools.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-lg">Effect TS</CardTitle>
+            <CardDescription className="text-sm">
+              Type-safe functional programming for bulletproof business logic.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-lg">Architecture</CardTitle>
+            <CardDescription className="text-sm">
+              6-dimension ontology for infinite scalability.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-lg">Ontology</CardTitle>
+            <CardDescription className="text-sm">
+              66 entity types, 25 connections, 67 events out of the box.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-lg">Language</CardTitle>
+            <CardDescription className="text-sm">
+              Build in plain English with 15 simple commands.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Flexibility Section -->
+  <section
+    class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32 bg-muted/50 border-y"
+  >
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Sparkles className="h-4 w-4" />
+          Total Flexibility
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+        >
+          Use What You Love
+        </h2>
+        <p class="text-lg text-muted-foreground max-w-3xl mx-auto">
+          ONE works with your favorite tools. No vendor lock-in, no forced
+          decisions.
+        </p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <CardTitle className="text-2xl">Any Frontend</CardTitle>
+            <CardDescription className="text-base leading-relaxed">
+              React 19 included, but import Svelte, Solid, Vue, or any other
+              framework from Astro.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div class="flex flex-wrap gap-2">
+              <Badge variant="secondary">React 19</Badge>
+              <Badge variant="secondary">Svelte</Badge>
+              <Badge variant="secondary">Solid</Badge>
+              <Badge variant="secondary">Vue</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <CardTitle className="text-2xl">Any Backend</CardTitle>
+            <CardDescription className="text-base leading-relaxed">
+              Convex included, but use Supabase, Firebase, or any backend you
+              prefer.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div class="flex flex-wrap gap-2">
+              <Badge variant="secondary">Convex</Badge>
+              <Badge variant="secondary">Supabase</Badge>
+              <Badge variant="secondary">Firebase</Badge>
+              <Badge variant="secondary">Custom</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <CardTitle className="text-2xl">Any CMS</CardTitle>
+            <CardDescription className="text-base leading-relaxed">
+              Content collections included, or connect to Contentful, Sanity,
+              Strapi, and more.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div class="flex flex-wrap gap-2">
+              <Badge variant="secondary">Markdown</Badge>
+              <Badge variant="secondary">Contentful</Badge>
+              <Badge variant="secondary">Sanity</Badge>
+              <Badge variant="secondary">Strapi</Badge>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <CardTitle className="text-2xl">Any IDE</CardTitle>
+            <CardDescription className="text-base leading-relaxed">
+              Build with Claude Code, Cursor, V0, or any IDE that supports
+              TypeScript.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div class="flex flex-wrap gap-2">
+              <Badge variant="secondary">Claude Code</Badge>
+              <Badge variant="secondary">Cursor</Badge>
+              <Badge variant="secondary">V0</Badge>
+              <Badge variant="secondary">VS Code</Badge>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div class="mt-12 text-center">
+        <Card
+          className="inline-block border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur p-8 max-w-3xl"
+        >
+          <CardHeader className="pb-4">
+            <CardTitle className="text-2xl">Deploy Anywhere</CardTitle>
+            <CardDescription className="text-base leading-relaxed">
+              Cloudflare, Vercel, Netlify, AWS, or your own infrastructure. ONE
+              runs everywhere.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div class="flex flex-wrap gap-2 justify-center">
+              <Badge variant="secondary">Cloudflare</Badge>
+              <Badge variant="secondary">Vercel</Badge>
+              <Badge variant="secondary">Netlify</Badge>
+              <Badge variant="secondary">AWS</Badge>
+              <Badge variant="secondary">Self-hosted</Badge>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="px-4 py-20 sm:px-6 sm:py-32 md:px-8 md:py-40">
+    <div class="mx-auto max-w-4xl text-center space-y-8">
+      <h2
+        class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight"
+      >
+        Ready to Build?
+      </h2>
+      <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+        Everything you need to ship fast, scale infinitely, and build the
+        future.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        <a href="/download">
+          <Button size="lg" className="h-14 px-8 text-lg font-semibold">
+            <Rocket className="mr-2 h-5 w-5" />
+            Download Free
+          </Button>
+        </a>
+        <a href="https://github.com/one-ie/one" target="_blank">
+          <Button
+            variant="outline"
+            size="lg"
+            className="h-14 px-8 text-lg font-semibold"
+          >
+            View on GitHub
+          </Button>
+        </a>
+      </div>
+
+      <div
+        class="flex flex-wrap items-center justify-center gap-6 pt-8 text-sm text-muted-foreground"
+      >
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Free Forever
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          No Credit Card
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-4 w-4 text-primary" />
+          Open Source
+        </span>
+      </div>
+    </div>
+  </section>
+</Layout>

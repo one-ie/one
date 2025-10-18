@@ -214,7 +214,7 @@ export type DataProviderError =
 /**
  * Helper functions for creating errors
  */
-export const DataProviderError = {
+export const DataProviderErrorHelpers = {
   network: (message: string, cause?: unknown): DataProviderError => ({
     _tag: 'NetworkError',
     message,

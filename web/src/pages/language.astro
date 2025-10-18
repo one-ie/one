@@ -74,10 +74,7 @@ import {
             class="font-heading font-extrabold leading-[1.1] tracking-tight text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
           >
             <span class="block">Write Features</span>
-            <span
-              class="block bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
-              >In Plain English</span
-            >
+            <span class="block text-foreground">In Plain English</span>
           </h1>
 
           <p
@@ -129,21 +126,24 @@ import {
       </div>
 
       <div class="mx-auto max-w-4xl rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
-        <h3 class="mb-6 text-center text-2xl font-bold">Example: Chat with AI Clone</h3>
+        <h3 class="mb-6 text-center text-2xl font-bold">Example: Build a Landing Page</h3>
 
-        <pre class="overflow-x-auto rounded bg-muted/50 p-6 text-sm leading-relaxed"><code>{`FEATURE: Let fans chat with my AI clone
+        <pre class="overflow-x-auto rounded bg-muted/50 p-6 text-sm leading-relaxed"><code>{`WEBSITE: SaaS Landing Page
 
-WHEN a fan sends a message
-  CHECK they own tokens
-  GET my AI personality
-  SEND message to AI with my personality
-  SAVE the conversation
-  GIVE fan 10 tokens as reward
-  SHOW AI response to fan`}</code></pre>
+CREATE page at /
+  ADD hero section with CTA button
+  ADD features grid (3 columns)
+  ADD pricing table (3 tiers)
+  ADD testimonials carousel
+  ADD FAQ accordion
+  ADD footer with links
+
+STYLE: Modern, clean, primary color blue
+DEPLOY: To Cloudflare Pages`}</code></pre>
 
         <div class="mt-8 rounded-lg border border-primary/20 bg-primary/5 p-6 text-center">
           <p class="text-lg font-medium">
-            <strong class="text-foreground">That's it.</strong> <span class="text-muted-foreground">The system builds the entire feature from this—frontend, backend, database, tests, deployment.</span>
+            <strong class="text-foreground">That's it.</strong> <span class="text-muted-foreground">The system builds the entire website from this—Astro pages, React components, responsive layout, and deploys globally.</span>
           </p>
         </div>
       </div>
@@ -152,9 +152,9 @@ WHEN a fan sends a message
         <Card className="border-border/50 bg-card/50 backdrop-blur text-center">
           <CardHeader className="space-y-4">
             <Users className="mx-auto h-12 w-12 text-primary" />
-            <CardTitle className="text-xl">For Creators</CardTitle>
+            <CardTitle className="text-xl">For Everyone</CardTitle>
             <CardDescription className="leading-relaxed">
-              Write what you want in plain English. No coding required. You can read, understand, and modify every feature yourself.
+              Write what you want in plain English. No coding required. Build websites, landing pages, blogs, and e-commerce stores yourself.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -174,7 +174,7 @@ WHEN a fan sends a message
             <Code className="mx-auto h-12 w-12 text-primary" />
             <CardTitle className="text-xl">For Developers</CardTitle>
             <CardDescription className="leading-relaxed">
-              Readable specifications. Generated code is clean and tested. Can enhance generated code if needed while system maintains consistency.
+              Readable specifications. Generated Astro pages and React components are clean, tested, and optimized. Can enhance code while system maintains consistency.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -222,14 +222,15 @@ WHEN a fan sends a message
             </div>
           </CardHeader>
           <CardContent>
-            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CREATE ai clone called "John's AI Clone"
-  WITH voice ID from previous step
-  WITH personality prompt
-  WITH active status
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CREATE page called "Landing Page"
+  WITH route "/"
+  WITH hero section
+  WITH CTA buttons
 
-CREATE token called "CREATOR"
-  WITH total supply of 10 million
-  WITH symbol "CRTR"`}</code></pre>
+CREATE component called "Pricing Table"
+  WITH 3 pricing tiers
+  WITH feature comparison
+  WITH highlight on "Pro" tier`}</code></pre>
           </CardContent>
         </Card>
 
@@ -249,11 +250,11 @@ CREATE token called "CREATOR"
             </div>
           </CardHeader>
           <CardContent>
-            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CONNECT creator to ai clone as owner
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CONNECT page to site as part_of
 
-CONNECT fan to token as holder
+CONNECT page to component as contains
 
-CONNECT student to course as enrolled`}</code></pre>
+CONNECT collection to page as provides_data`}</code></pre>
           </CardContent>
         </Card>
 
@@ -273,13 +274,13 @@ CONNECT student to course as enrolled`}</code></pre>
             </div>
           </CardHeader>
           <CardContent>
-            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`RECORD clone created
-  BY creator
-  WITH voice ID and personality
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`RECORD page created
+  BY owner
+  WITH route and components
 
-RECORD tokens purchased
-  BY fan
-  WITH amount and price`}</code></pre>
+RECORD site deployed
+  BY owner
+  WITH URL and build time`}</code></pre>
           </CardContent>
         </Card>
 
@@ -299,13 +300,13 @@ RECORD tokens purchased
             </div>
           </CardHeader>
           <CardContent>
-            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CALL ElevenLabs to clone voice
-  WITH audio samples from videos
-  SAVE AS voice ID
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CALL Astro to generate pages
+  WITH content collections
+  SAVE AS built site
 
-CALL Stripe to charge payment
-  WITH amount $100
-  SAVE AS payment`}</code></pre>
+CALL Cloudflare to deploy
+  WITH built site directory
+  SAVE AS deployment URL`}</code></pre>
           </CardContent>
         </Card>
 
@@ -325,11 +326,11 @@ CALL Stripe to charge payment
             </div>
           </CardHeader>
           <CardContent>
-            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CHECK creator exists
-  OTHERWISE say "Creator not found"
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`CHECK site exists
+  OTHERWISE say "Create site first"
 
-CHECK fan has tokens
-  OTHERWISE say "Buy tokens to chat"`}</code></pre>
+CHECK pages have content
+  OTHERWISE say "Add content before deploying"`}</code></pre>
           </CardContent>
         </Card>
 
@@ -349,11 +350,11 @@ CHECK fan has tokens
             </div>
           </CardHeader>
           <CardContent>
-            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`GET fan's token balance WHERE token is CREATOR
-  SAVE AS balance
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs"><code>{`GET all pages WHERE site contains them
+  SAVE AS page list
 
-GET all content WHERE creator owns it
-  SAVE AS my content`}</code></pre>
+GET all blog posts FROM collection
+  SAVE AS blog content`}</code></pre>
           </CardContent>
         </Card>
 
@@ -935,125 +936,6 @@ NOTIFY both users
 GIVE reward amount`}</code></pre>
           </CardContent>
         </Card>
-      </div>
-    </div>
-  </section>
-
-  <!-- How It Works -->
-  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
-    <div class="mx-auto max-w-full sm:max-w-6xl">
-      <div class="mb-20 space-y-4 text-center">
-        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
-          <Sparkles className="h-4 w-4" />
-          The Compilation Process
-        </Badge>
-        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-          How It Works
-        </h2>
-        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
-          From plain English to production-ready code in seconds
-        </p>
-      </div>
-
-      <div class="mx-auto max-w-3xl space-y-6">
-        <!-- Step 1 -->
-        <div class="flex items-start gap-4">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 border-2 border-primary/30">
-            <span class="text-lg font-bold text-primary">1</span>
-          </div>
-          <div class="flex-1 space-y-2">
-            <h3 class="text-xl font-bold">Write in Plain English</h3>
-            <p class="text-sm text-muted-foreground">Creator describes the feature using natural language commands</p>
-            <div class="rounded bg-muted/50 p-3 text-xs">
-              <code>FEATURE: Let fans buy my tokens...</code>
-            </div>
-          </div>
-        </div>
-
-        <div class="ml-6 h-8 w-px bg-border"></div>
-
-        <!-- Step 2 -->
-        <div class="flex items-start gap-4">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted/50 border-2 border-border/50">
-            <span class="text-lg font-bold text-muted-foreground">2</span>
-          </div>
-          <div class="flex-1 space-y-2">
-            <h3 class="text-xl font-bold">System Validates</h3>
-            <p class="text-sm text-muted-foreground">Checks entity types, connection types, and service availability against ontology</p>
-            <div class="flex flex-wrap gap-2">
-              <Badge variant="secondary">✓ Entity types valid</Badge>
-              <Badge variant="secondary">✓ Connections valid</Badge>
-              <Badge variant="secondary">✓ Services available</Badge>
-            </div>
-          </div>
-        </div>
-
-        <div class="ml-6 h-8 w-px bg-border"></div>
-
-        <!-- Step 3 -->
-        <div class="flex items-start gap-4">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted/50 border-2 border-border/50">
-            <span class="text-lg font-bold text-muted-foreground">3</span>
-          </div>
-          <div class="flex-1 space-y-2">
-            <h3 class="text-xl font-bold">Compiles to Technical DSL</h3>
-            <p class="text-sm text-muted-foreground">Transforms to structured JSON with typed operations</p>
-            <div class="rounded bg-muted/50 p-3 text-xs">
-              <code>{`{ feature: "PurchaseTokens", flow: [...] }`}</code>
-            </div>
-          </div>
-        </div>
-
-        <div class="ml-6 h-8 w-px bg-border"></div>
-
-        <!-- Step 4 -->
-        <div class="flex items-start gap-4">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted/50 border-2 border-border/50">
-            <span class="text-lg font-bold text-muted-foreground">4</span>
-          </div>
-          <div class="flex-1 space-y-2">
-            <h3 class="text-xl font-bold">Generates TypeScript</h3>
-            <p class="text-sm text-muted-foreground">Production-ready code with Effect.ts services and type safety</p>
-            <div class="rounded bg-muted/50 p-3 text-xs">
-              <code>{`export const purchaseTokens = Effect.gen(...)`}</code>
-            </div>
-          </div>
-        </div>
-
-        <div class="ml-6 h-8 w-px bg-border"></div>
-
-        <!-- Step 5 -->
-        <div class="flex items-start gap-4">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted/50 border-2 border-border/50">
-            <span class="text-lg font-bold text-muted-foreground">5</span>
-          </div>
-          <div class="flex-1 space-y-2">
-            <h3 class="text-xl font-bold">Auto-Generates Tests</h3>
-            <p class="text-sm text-muted-foreground">Complete test suite with unit and integration tests</p>
-            <div class="rounded bg-muted/50 p-3 text-xs">
-              <code>{`describe("purchaseTokens", () => {...})`}</code>
-            </div>
-          </div>
-        </div>
-
-        <div class="ml-6 h-8 w-px bg-border"></div>
-
-        <!-- Step 6 -->
-        <div class="flex items-start gap-4">
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 border-2 border-primary/30">
-            <Check className="h-6 w-6 text-primary" />
-          </div>
-          <div class="flex-1 space-y-2">
-            <h3 class="text-xl font-bold">Feature Deployed</h3>
-            <p class="text-sm text-muted-foreground">Frontend components, backend functions, database schema, and tests—all ready</p>
-            <div class="flex flex-wrap gap-2">
-              <Badge variant="default">Frontend ✓</Badge>
-              <Badge variant="default">Backend ✓</Badge>
-              <Badge variant="default">Database ✓</Badge>
-              <Badge variant="default">Tests ✓</Badge>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </section>

@@ -10,6 +10,20 @@ PUBLIC_CONVEX_URL = "https://shocking-falcon-870.convex.cloud"
 CONVEX_DEPLOYMENT = "prod:shocking-falcon-870"
 CLOUDFLARE_ACCOUNT_ID = "627e0c7ccbe735a4a7cabf91e377bbad"
 GITHUB_CLIENT_ID = "55c60b9b2850097d51b7"
+
 [[kv_namespaces]]
 binding = "SESSION"
 id = "3c7a77f517f6434a9fea95a3fa5537c1"
+
+# Production environment with installation folder support
+# Note: Custom domains (web.one.ie, one.ie) are configured in Cloudflare Pages dashboard
+[env.production]
+[env.production.vars]
+INSTALLATION_NAME = "one-group"
+PUBLIC_INSTALLATION_NAME = "one-group"
+
+# Preview environment
+[env.preview]
+[env.preview.vars]
+INSTALLATION_NAME = "one-group"
+PUBLIC_INSTALLATION_NAME = "one-group"

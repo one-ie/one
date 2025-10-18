@@ -1,0 +1,140 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { DashboardShowcase } from '@/components/showcase/DashboardShowcase';
+import { ComponentCollage } from '@/components/showcase/ComponentCollage';
+import { PaletteShowcase } from '@/components/showcase/PaletteShowcase';
+import { ModeToggle } from '@/components/ModeToggle';
+
+const agentSnippet = `import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+export function LaunchPad() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Ready to launch</CardTitle>
+      </CardHeader>
+      <CardContent className="flex items-center justify-between">
+        <span className="text-muted-foreground">All systems synced.</span>
+        <Button size="lg">Fire thrusters</Button>
+      </CardContent>
+    </Card>
+  );
+}`;
+---
+
+<Layout
+  title="Component Library"
+  description="Everything in ONE's component system, ready for humans and AI to assemble new pages."
+>
+  <div class="mx-auto max-w-6xl px-4 py-16 space-y-24">
+    <header class="space-y-8">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <span class="text-xs font-semibold tracking-[0.3rem] text-primary/70 uppercase">
+          ONE Component System
+        </span>
+        <ModeToggle client:load />
+      </div>
+      <div class="space-y-4">
+        <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">
+          Build complete product surfaces with ready-made components.
+        </h1>
+        <p class="text-base text-muted-foreground sm:text-lg">
+          This library powers every ONE experience. It combines shadcn/ui primitives, production dashboards, and provider utilities so AI agents and teams can ship polished interfaces without fighting layout or styling.
+        </p>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-lg border border-border bg-card p-4">
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            What you get
+          </h2>
+          <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
+            <li>&mdash; Feature dashboards with charts, tables, and navigation</li>
+            <li>&mdash; 40+ shadcn/ui primitives styled with ONE tokens</li>
+            <li>&mdash; Providers for Convex, theme, and analytics setup</li>
+          </ul>
+        </div>
+        <div class="rounded-lg border border-border bg-card p-4">
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Where to look
+          </h2>
+          <ul class="mt-3 space-y-2 text-sm text-muted-foreground">
+            <li><code class="font-mono text-xs">web/src/components</code> for shared React helpers</li>
+            <li><code class="font-mono text-xs">web/src/components/ui</code> for shadcn/ui primitives</li>
+            <li><code class="font-mono text-xs">web/src/components/dashboard</code> for full layouts</li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <a
+          class="inline-flex items-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:shadow-md"
+          href="/"
+        >
+          Browse site built with these components
+        </a>
+        <a
+          class="inline-flex items-center rounded-full border border-border px-6 py-3 text-sm font-semibold text-muted-foreground transition hover:border-primary hover:text-primary"
+          href="https://one.ie"
+        >
+          See ONE platform in action
+        </a>
+      </div>
+    </header>
+
+    <section class="space-y-6">
+      <div class="space-y-2">
+        <h2 class="text-2xl font-semibold">Live dashboard example</h2>
+        <p class="text-sm text-muted-foreground sm:text-base">
+          Drop in <code class="font-mono text-xs">DashboardLayout</code> to get metrics cards, charts, and transaction tables with zero extra wiring.
+        </p>
+      </div>
+      <div class="rounded-lg border border-border bg-background p-4 sm:p-6">
+        <DashboardShowcase client:load />
+      </div>
+    </section>
+
+    <section class="space-y-6">
+      <div class="space-y-2">
+        <h2 class="text-2xl font-semibold">Component combinations</h2>
+        <p class="text-sm text-muted-foreground sm:text-base">
+          Buttons, charts, tabs, badges, avatars, and input surfaces are designed to layer together. Use these patterns in landing pages, apps, and agent-generated flows.
+        </p>
+      </div>
+      <ComponentCollage client:load />
+    </section>
+
+    <section class="space-y-6">
+      <div class="space-y-2">
+        <h2 class="text-2xl font-semibold">shadcn/ui foundation</h2>
+        <p class="text-sm text-muted-foreground sm:text-base">
+          Every primitive mirrors the official shadcn/ui API and inherits ONE styling. Import only what you need, from buttons and cards to drawers and calendars.
+        </p>
+      </div>
+      <PaletteShowcase client:load />
+    </section>
+
+    <section class="space-y-6">
+      <div class="space-y-4 rounded-lg border border-border bg-card p-6">
+        <h2 class="text-2xl font-semibold">Agent-ready workflow</h2>
+        <p class="text-sm text-muted-foreground sm:text-base">
+          Agents generate new TSX files beside existing components, import from <code class="font-mono text-xs">@/components/ui/*</code>, and place the result on any Astro page with <code class="font-mono text-xs">client:*</code> directives. The design system keeps typography, spacing, and dark mode in sync.
+        </p>
+        <pre class="overflow-x-auto rounded-md bg-muted p-4 text-sm">
+<code class="language-tsx">{agentSnippet}</code>
+        </pre>
+        <p class="text-xs text-muted-foreground">
+          Copy this recipe for a new card or replace the contents to build modals, tables, or data visualizations.
+        </p>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-2xl font-semibold">Next steps</h2>
+      <ul class="space-y-3 text-sm text-muted-foreground sm:text-base">
+        <li>&mdash; Explore <code class="font-mono text-xs">web/src/components/examples</code> for ready-to-run flows.</li>
+        <li>&mdash; Wire real data using <code class="font-mono text-xs">ConvexClientProvider</code> or your preferred backend.</li>
+        <li>&mdash; Let agents add new sections, then review and ship in minutes.</li>
+      </ul>
+    </section>
+  </div>
+</Layout>

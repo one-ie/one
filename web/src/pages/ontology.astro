@@ -115,7 +115,7 @@ import {
           class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
           data-usal="fade-up duration-700 delay-100"
         >
-          Why the ONE Ontology
+          How to work differently
         </h2>
         <p
           class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground"
@@ -750,9 +750,9 @@ groups/cooldao (dao)
       </div>
 
       <div class="space-y-8">
-        <!-- Example: Token Purchase Flow -->
+        <!-- Example: Build Landing Page -->
         <div class="rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
-          <h3 class="mb-8 text-center text-2xl font-bold">Example: Fan Buys Creator Tokens</h3>
+          <h3 class="mb-8 text-center text-2xl font-bold">Example: Build a Landing Page with Pricing</h3>
 
           <div class="space-y-6">
             <!-- Step 0: Groups -->
@@ -766,10 +766,10 @@ groups/cooldao (dao)
                   <Badge variant="outline" className="text-xs">Scope</Badge>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  Transaction happens within "Acme Corp" group boundary. All entities belong to this group (can be nested).
+                  Website is built within "SaaS Startup" group boundary. All pages and components belong to this group (can be nested).
                 </p>
                 <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
-                  groupId: acme-corp → scope: all entities in this transaction
+                  groupId: saas-startup → scope: all pages, components, content collections
                 </div>
               </div>
             </div>
@@ -787,10 +787,10 @@ groups/cooldao (dao)
                   <Badge variant="outline" className="text-xs">Authorization</Badge>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  Fan authorizes the intent: "Buy 100 creator tokens for $10."
+                  Product owner authorizes the intent: "Build landing page with pricing table."
                 </p>
                 <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
-                  actorId: fan_123 → intent: purchase_tokens
+                  actorId: owner_123 → intent: build_landing_page
                 </div>
               </div>
             </div>
@@ -808,16 +808,16 @@ groups/cooldao (dao)
                   <Badge variant="outline" className="text-xs">Entities Involved</Badge>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  The system resolves the intent to concrete Things: the fan (audience_member) and the creator token (token).
+                  The system resolves the intent to concrete Things: the website (astro_site), landing page (astro_page), and pricing table component (react_component).
                 </p>
                 <div class="grid gap-2 sm:grid-cols-2">
                   <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
-                    <div class="text-primary">fan_123</div>
-                    <div class="text-muted-foreground">type: audience_member</div>
+                    <div class="text-primary">landing_page</div>
+                    <div class="text-muted-foreground">type: astro_page</div>
                   </div>
                   <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
-                    <div class="text-primary">token_456</div>
-                    <div class="text-muted-foreground">type: token</div>
+                    <div class="text-primary">pricing_table</div>
+                    <div class="text-muted-foreground">type: react_component</div>
                   </div>
                 </div>
               </div>
@@ -836,12 +836,12 @@ groups/cooldao (dao)
                   <Badge variant="outline" className="text-xs">Relationship Created</Badge>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  ONE asserts a `holds_tokens` relationship and stores live balance metadata.
+                  ONE asserts a `contains` relationship between page and components with layout metadata.
                 </p>
                 <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
-                  <div><span class="text-primary">fan_123</span> → <span class="text-primary">token_456</span></div>
-                  <div class="mt-1 text-muted-foreground">relationshipType: holds_tokens</div>
-                  <div class="text-muted-foreground">{`metadata: { balance: 100 }`}</div>
+                  <div><span class="text-primary">landing_page</span> → <span class="text-primary">pricing_table</span></div>
+                  <div class="mt-1 text-muted-foreground">relationshipType: contains</div>
+                  <div class="text-muted-foreground">{`metadata: { position: "center", tiers: 3 }`}</div>
                 </div>
               </div>
             </div>
@@ -859,13 +859,13 @@ groups/cooldao (dao)
                   <Badge variant="outline" className="text-xs">Action Recorded</Badge>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  An immutable `tokens_purchased` event records who did what, when, and how much.
+                  An immutable `page_created` event records who built what, when, and how.
                 </p>
                 <div class="rounded-md bg-muted/50 p-3 font-mono text-xs">
-                  <div>type: tokens_purchased</div>
-                  <div class="mt-1 text-muted-foreground">actorId: fan_123</div>
-                  <div class="text-muted-foreground">targetId: token_456</div>
-                  <div class="text-muted-foreground">{`metadata: { amount: 100, usd: 10 }`}</div>
+                  <div>type: page_created</div>
+                  <div class="mt-1 text-muted-foreground">actorId: owner_123</div>
+                  <div class="text-muted-foreground">targetId: landing_page</div>
+                  <div class="text-muted-foreground">{`metadata: { route: "/", components: 5, deployed: true }`}</div>
                 </div>
               </div>
             </div>
@@ -883,13 +883,13 @@ groups/cooldao (dao)
                   <Badge variant="outline" className="text-xs">Context Added</Badge>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  Knowledge labels give downstream agents context for segmentation, rewards, and recommendations.
+                  Knowledge labels give downstream agents context for optimization, SEO, and improvements.
                 </p>
                 <div class="rounded-md bg-muted/50 p-3">
                   <div class="flex flex-wrap gap-2 font-mono text-xs">
-                    <Badge variant="secondary" className="font-mono">payment_method:stripe</Badge>
-                    <Badge variant="secondary" className="font-mono">status:completed</Badge>
-                    <Badge variant="secondary" className="font-mono">audience:engaged</Badge>
+                    <Badge variant="secondary" className="font-mono">framework:astro</Badge>
+                    <Badge variant="secondary" className="font-mono">style:modern</Badge>
+                    <Badge variant="secondary" className="font-mono">lighthouse:100</Badge>
                   </div>
                 </div>
               </div>
@@ -898,7 +898,7 @@ groups/cooldao (dao)
 
           <div class="mt-8 rounded-lg border border-primary/20 bg-primary/5 p-6 text-center">
             <p class="text-sm font-medium">
-              <strong class="text-foreground">Result:</strong> <span class="text-muted-foreground">One intent now touches every dimension—organizational scope, authorization, entities, relationships, events, and context—ready for agents to reuse.</span>
+              <strong class="text-foreground">Result:</strong> <span class="text-muted-foreground">One intent now touches every dimension—group scope, authorization, page/component entities, layout relationships, creation events, and framework context—ready for deployment to the edge.</span>
             </p>
           </div>
         </div>
@@ -1162,23 +1162,27 @@ groups/cooldao (dao)
       </div>
 
       <div class="mt-16 rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur">
-        <h3 class="mb-6 text-center text-2xl font-bold">Example: Chat with AI Clone</h3>
+        <h3 class="mb-6 text-center text-2xl font-bold">Example: Create a Blog with Search</h3>
         <div class="grid gap-6 lg:grid-cols-2">
           <div class="space-y-4">
             <div class="flex items-center gap-2 text-sm font-semibold text-primary">
               <FileText className="h-5 w-5" />
               Plain English
             </div>
-            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs leading-relaxed"><code>{`FEATURE: Let fans chat with my AI
+            <pre class="overflow-x-auto rounded bg-muted/50 p-4 text-xs leading-relaxed"><code>{`WEBSITE: Add blog to site
 
-WHEN a fan sends a message
-  CHECK they own tokens
-  GET conversation history
-  CALL OpenAI with my personality
-  RECORD the interaction
-  REWARD fan with 10 tokens
-  GIVE AI response to fan`}</code></pre>
-            <p class="text-xs text-muted-foreground">Seven lines of English. The compiler maps each verb to a dimension and checks it before shipping.</p>
+CREATE content collection "blog"
+  WITH schema: title, date, author, tags
+  WITH markdown support
+
+CREATE page /blog
+  LIST all posts in grid view
+  ADD search and filter by tags
+
+CREATE page /blog/[slug]
+  SHOW full post with TOC
+  ADD share buttons`}</code></pre>
+            <p class="text-xs text-muted-foreground">Nine lines of English. The compiler generates Astro pages, content collections, and React components.</p>
           </div>
 
           <div class="space-y-4">
@@ -1190,29 +1194,29 @@ WHEN a fan sends a message
               <div class="flex items-start gap-3 rounded border border-border/50 bg-muted/30 p-3">
                 <Box className="h-5 w-5 shrink-0 text-primary" />
                 <div>
-                  <div class="font-medium">Things Touched</div>
-                  <div class="text-xs text-muted-foreground">fan, ai_clone, message, token — all typed rows</div>
+                  <div class="font-medium">Things Created</div>
+                  <div class="text-xs text-muted-foreground">blog_collection, blog_index_page, blog_post_page, search_component — all typed</div>
                 </div>
               </div>
               <div class="flex items-start gap-3 rounded border border-border/50 bg-muted/30 p-3">
                 <GitBranch className="h-5 w-5 shrink-0 text-primary" />
                 <div>
-                  <div class="font-medium">Connections Updated</div>
-                  <div class="text-xs text-muted-foreground">fan holds_tokens token, fan interacted_with clone with metadata</div>
+                  <div class="font-medium">Connections Created</div>
+                  <div class="text-xs text-muted-foreground">site contains blog pages, pages use components, content has schema</div>
                 </div>
               </div>
               <div class="flex items-start gap-3 rounded border border-border/50 bg-muted/30 p-3">
                 <Activity className="h-5 w-5 shrink-0 text-primary" />
                 <div>
                   <div class="font-medium">Events Logged</div>
-                  <div class="text-xs text-muted-foreground">message_sent, tokens_earned, clone_interaction with timestamps</div>
+                  <div class="text-xs text-muted-foreground">collection_created, pages_generated, components_added, site_deployed</div>
                 </div>
               </div>
               <div class="flex items-start gap-3 rounded border border-border/50 bg-muted/30 p-3">
                 <Brain className="h-5 w-5 shrink-0 text-primary" />
                 <div>
                   <div class="font-medium">Knowledge Indexed</div>
-                  <div class="text-xs text-muted-foreground">Clone personality, embeddings, conversation history for retrieval</div>
+                  <div class="text-xs text-muted-foreground">Blog posts indexed for search, tags categorized, SEO metadata generated</div>
                 </div>
               </div>
             </div>
@@ -1502,7 +1506,7 @@ WHEN a fan sends a message
             <Network className="mx-auto h-12 w-12 text-primary" />
             <CardTitle className="text-2xl">Future Scale</CardTitle>
             <CardDescription className="leading-relaxed">
-              • Shard by organization (>10M things)<br />
+              • Shard by organization ({'>'}10M things)<br />
               • Streaming events (Kafka)<br />
               • Distributed vectors (Weaviate)<br />
               • Regional databases (CDC replication)
@@ -1584,7 +1588,7 @@ WHEN a fan sends a message
           </Button>
         </a>
         <a
-          href="https://github.com/one-ie/stack"
+          href="https://github.com/one-ie/one"
           target="_blank"
           rel="noopener noreferrer"
         >

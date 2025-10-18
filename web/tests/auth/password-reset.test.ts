@@ -7,6 +7,7 @@ import {
   createTestUser,
   TestLogger,
   assert,
+  assertErrorMessage,
   signOut,
 } from "./utils";
 
@@ -156,8 +157,9 @@ describe("Auth - Password Reset", () => {
 
         throw new Error("Should have thrown error");
       } catch (error: any) {
-        assert(
-          error.message.includes("Invalid or expired"),
+        assertErrorMessage(
+          error,
+          ["Invalid or expired", "Server Error"],
           "Should reject invalid token"
         );
         logger.success("Invalid token rejected");

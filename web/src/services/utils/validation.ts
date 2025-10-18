@@ -10,14 +10,11 @@ import {
   THING_TYPES,
   CONNECTION_TYPES,
   EVENT_TYPES,
-  STATUS_TRANSITIONS,
   isValidThingType,
   isValidConnectionType,
   isValidEventType,
   isValidStatusTransition,
   type ThingType,
-  type ConnectionType,
-  type EventType,
 } from "../constants";
 import type { ThingError, ConnectionError, EventError } from "../types";
 

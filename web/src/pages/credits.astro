@@ -1,0 +1,269 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+interface Link {
+  label: string;
+  url: string;
+}
+
+interface Person {
+  name: string;
+  title: string;
+  message: string;
+  avatar?: string;
+  links: Link[];
+}
+
+interface CreditGroup {
+  category: string;
+  summary: string;
+  people: Person[];
+}
+
+const creditGroups: CreditGroup[] = [
+  {
+    category: "Framework & Runtime",
+    summary:
+      "Core runtime choices from web/package.json that give ONE consistent performance, DX, and deployment flexibility.",
+    people: [
+      {
+        name: "Fred K. Schott",
+        title: "Co-creator, Astro",
+        message:
+          "We selected Astro to deliver content-first pages with island architecture, keeping our marketing surfaces static-fast while letting interactive dashboards hydrate where needed.",
+        links: [
+          { label: "GitHub", url: "https://github.com/FredKSchott" },
+          { label: "X", url: "https://twitter.com/FredKSchott" },
+        ],
+      },
+      {
+        name: "Matthew Phillips",
+        title: "Core maintainer, Astro",
+        message:
+          "Astro's predictable DX and well-governed release cadence make it safe for our team to ship weekly without breakage, and Matthew's roadmap stewardship is a key reason we trust the platform.",
+        links: [
+          { label: "GitHub", url: "https://github.com/matthewp" },
+          { label: "X", url: "https://twitter.com/matthewcp" },
+        ],
+      },
+      {
+        name: "Evan You & Anthony Fu",
+        title: "Creators of Vite",
+        message:
+          "We rely on Vite's lightning-fast dev server and build pipeline for instant feedback during pairing sessions and reproducible production bundles.",
+        links: [
+          { label: "Evan's GitHub", url: "https://github.com/yyx990803" },
+          { label: "Anthony's GitHub", url: "https://github.com/antfu" },
+        ],
+      },
+      {
+        name: "Jarred Sumner & the Oven team",
+        title: "Creators of Bun",
+        message:
+          "Bun is our chosen package manager and runtime for local scripts, giving us fast installs, deterministic locks, and test runners aligned with our TypeScript toolchain.",
+        links: [
+          { label: "GitHub", url: "https://github.com/oven-sh/bun" },
+          { label: "Website", url: "https://bun.sh" },
+        ],
+      },
+      {
+        name: "Cloudflare Developers",
+        title: "Builders of Cloudflare Workers & Pages",
+        message:
+          "The Cloudflare platform pairs with Astro seamlessly, letting us deploy globally distributed sites and edge functions straight from the `@astrojs/cloudflare` adapter.",
+        links: [
+          { label: "GitHub", url: "https://github.com/cloudflare" },
+          { label: "Website", url: "https://developers.cloudflare.com" },
+        ],
+      },
+    ],
+  },
+  {
+    category: "Interface & Design System",
+    summary:
+      "Interface primitives defined in web/package.json shape our component system, accessibility guarantees, and visual language.",
+    people: [
+      {
+        name: "shadcn",
+        title: "Creator, shadcn/ui",
+        message:
+          "We adopted shadcn/ui to bootstrap accessible React patterns we can own and refactor, keeping our Astro + React surfaces consistent without a heavy design system dependency.",
+        links: [
+          { label: "GitHub", url: "https://github.com/shadcn" },
+          { label: "Website", url: "https://ui.shadcn.com" },
+        ],
+      },
+      {
+        name: "Adam Wathan & the Tailwind Labs team",
+        title: "Creators, Tailwind CSS",
+        message:
+          "We standardised on Tailwind CSS to move quickly with utility classes, ensuring themes stay consistent across Astro and React islands without maintaining bespoke tokens.",
+        links: [
+          { label: "GitHub", url: "https://github.com/adamwathan" },
+          { label: "Website", url: "https://tailwindcss.com" },
+        ],
+      },
+      {
+        name: "Lucide contributors",
+        title: "Maintainers, Lucide icon set",
+        message:
+          "Lucide gives us a cohesive, OSS-friendly icon library with balanced styling that fits both product UI and marketing pages without licensing friction.",
+        links: [
+          { label: "GitHub", url: "https://github.com/lucide-icons/lucide" },
+          { label: "Website", url: "https://lucide.dev" },
+        ],
+      },
+    ],
+  },
+  {
+    category: "AI & Developer Tooling",
+    summary:
+      "Engineering foundations in web/package.json that keep our AI workflows type-safe, observable, and production-ready.",
+    people: [
+      {
+        name: "Microsoft TypeScript team",
+        title: "Maintainers, TypeScript",
+        message:
+          "We rely on TypeScript to scale agent and UI code with static guarantees, enabling cross-editor AI workflows to refactor safely.",
+        links: [
+          { label: "GitHub", url: "https://github.com/microsoft/TypeScript" },
+          { label: "Website", url: "https://www.typescriptlang.org" },
+        ],
+      },
+      {
+        name: "OpenAI Research & Engineering",
+        title: "Models powering ONE's AI",
+        message:
+          "OpenAI models power our `/ai` assembler features and conversational tooling, chosen for broad capability coverage and rigorous evaluation tooling.",
+        links: [
+          { label: "Website", url: "https://openai.com" },
+          { label: "GitHub", url: "https://github.com/openai" },
+        ],
+      },
+      {
+        name: "Convex team",
+        title: "Creators of Convex",
+        message:
+          "Convex supplies our reactive data layer and serverless functions, aligning with the `convex` and `@convex-dev` packages we lean on for auth, rate limiting, and email flows.",
+        links: [
+          { label: "GitHub", url: "https://github.com/get-convex" },
+          { label: "Website", url: "https://www.convex.dev" },
+        ],
+      },
+    ],
+  },
+  {
+    category: "Learning & Inspiration",
+    summary:
+      "Leaders whose public work shapes our engineering playbooks, architecture principles, and shipping cadence.",
+    people: [
+      {
+        name: "Guillermo Rauch",
+        title: "Founder, Vercel",
+        message:
+          "Guillermo's focus on global edge delivery and developer ergonomics informs how we package Cloudflare + Astro deployments for instant previews.",
+        links: [
+          { label: "GitHub", url: "https://github.com/rauchg" },
+          { label: "X", url: "https://twitter.com/rauchg" },
+        ],
+      },
+      {
+        name: "Theo Browne",
+        title: "Creator, ping.gg & tRPC",
+        message:
+          "Theo's tRPC and content on end-to-end types push us toward consistent typing strategies across Convex services, Astro endpoints, and React components.",
+        links: [
+          { label: "GitHub", url: "https://github.com/t3dotgg" },
+          { label: "YouTube", url: "https://www.youtube.com/@t3dotgg" },
+        ],
+      },
+      {
+        name: "Tania Rascia",
+        title: "Educator & Developer Advocate",
+        message:
+          "Tania's long-form guides on modern web stacks influence how we document the stack and translate technical decisions into approachable guides.",
+        links: [
+          { label: "Website", url: "https://taniarascia.com" },
+          { label: "GitHub", url: "https://github.com/taniarascia" },
+        ],
+      },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Credits — ONE"
+  description="A heartfelt thank you to the builders, educators, and communities whose work powers ONE."
+>
+  <main id="main-content" class="relative isolate overflow-hidden">
+    <div class="absolute inset-0 -z-10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div class="absolute inset-x-0 top-[-10%] h-[320px] bg-primary/20 blur-[120px]" />
+    </div>
+
+    <section class="max-w-5xl mx-auto px-6 md:px-10 pt-16 pb-12 text-center text-slate-100">
+      <p class="text-sm uppercase tracking-[0.3em] text-primary/60">With deep gratitude</p>
+      <h1 class="mt-6 text-4xl md:text-5xl font-semibold leading-tight">
+        ONE is possible because of generous builders who share their craft.
+      </h1>
+      <p class="mt-6 text-base md:text-lg text-slate-300 max-w-3xl mx-auto">
+        Open source is a relay race. These people and teams shipped the tools and practices we depend on.
+        Every reference here maps back to entries in <code>web/package.json</code> or the playbooks we use to ship them.
+      </p>
+    </section>
+
+    <section class="relative max-w-6xl mx-auto px-6 md:px-10 pb-24">
+      <div class="grid gap-12">
+        {creditGroups.map((group) => (
+          <article
+            class="rounded-3xl border border-white/10 bg-white/5 p-6 md:p-10 shadow-[0_20px_45px_-20px_rgba(15,23,42,0.75)] backdrop-blur-xl"
+          >
+            <header class="mb-8 text-slate-200">
+              <h2 class="text-2xl font-semibold">{group.category}</h2>
+              <p class="mt-3 text-base text-slate-300">{group.summary}</p>
+            </header>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              {group.people.map((person) => (
+                <div class="relative flex flex-col gap-4 rounded-2xl border border-white/10 bg-slate-950/50 p-5">
+                  <div>
+                    <p class="text-lg font-medium text-white">{person.name}</p>
+                    <p class="text-sm text-slate-400">{person.title}</p>
+                  </div>
+                  <p class="text-sm leading-relaxed text-slate-300">{person.message}</p>
+                  <div class="flex flex-wrap gap-3 pt-2">
+                    {person.links.map((link) => (
+                      <a
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        href={link.url}
+                        class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-slate-200 transition hover:border-primary/50 hover:bg-primary/20 hover:text-primary-50"
+                      >
+                        <span class="h-1.5 w-1.5 rounded-full bg-primary/80" />
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="mt-16 rounded-3xl border border-white/10 bg-white/5 p-8 md:p-12 text-center text-slate-200">
+        <h3 class="text-2xl font-semibold">Want to support them too?</h3>
+        <p class="mt-4 text-base text-slate-300">
+          Star their repositories, sponsor their work, and share their stories. ONE will keep paying
+          it forward—if we missed you, please reach out so we can add your name here.
+        </p>
+        <a
+          class="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground transition hover:brightness-110"
+          href="mailto:hello@one.ie?subject=ONE%20Credits"
+        >
+          Say hi
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>

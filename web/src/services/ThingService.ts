@@ -8,15 +8,11 @@
 import { Effect } from "effect";
 import {
   DataProviderService,
-  type Thing,
   type CreateThingInput,
   type UpdateThingInput,
   type ListThingsOptions,
   type ThingStatus,
-  ThingNotFoundError,
   ThingCreateError,
-  ThingUpdateError,
-  QueryError,
 } from "../providers/DataProvider";
 
 // ============================================================================

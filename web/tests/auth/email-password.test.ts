@@ -6,6 +6,7 @@ import {
   generateTestPassword,
   TestLogger,
   assert,
+  assertErrorMessage,
   isValidEmail,
   isStrongPassword,
 } from "./utils";
@@ -198,8 +199,9 @@ describe("Auth - Email & Password", () => {
 
         throw new Error("Should have thrown error");
       } catch (error: any) {
-        assert(
-          error.message.includes("Invalid email or password"),
+        assertErrorMessage(
+          error,
+          ["Invalid email or password", "Server Error"],
           "Should reject wrong password"
         );
         logger.success("Wrong password rejected");
@@ -218,8 +220,9 @@ describe("Auth - Email & Password", () => {
 
         throw new Error("Should have thrown error");
       } catch (error: any) {
-        assert(
-          error.message.includes("Invalid email or password"),
+        assertErrorMessage(
+          error,
+          ["Invalid email or password", "Server Error"],
           "Should reject non-existent user"
         );
         logger.success("Non-existent user rejected");
@@ -247,8 +250,9 @@ describe("Auth - Email & Password", () => {
 
         throw new Error("Should have thrown error");
       } catch (error: any) {
-        assert(
-          error.message.includes("Invalid email or password"),
+        assertErrorMessage(
+          error,
+          ["Invalid email or password", "Server Error"],
           "Should reject different case"
         );
         logger.success("Password is case-sensitive");

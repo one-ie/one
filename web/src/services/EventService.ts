@@ -8,11 +8,9 @@
 import { Effect } from "effect";
 import {
   DataProviderService,
-  type Event,
   type CreateEventInput,
   type ListEventsOptions,
   EventCreateError,
-  QueryError,
 } from "../providers/DataProvider";
 
 // ============================================================================

@@ -8,13 +8,11 @@
 import { Effect } from "effect";
 import {
   DataProviderService,
-  type Connection,
   type CreateConnectionInput,
   type ListConnectionsOptions,
   type ConnectionType,
   ConnectionNotFoundError,
   ConnectionCreateError,
-  QueryError,
 } from "../providers/DataProvider";
 
 // ============================================================================

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Code, Download, Github, TerminalSquare, GitFork, Star, CloudCog } from 'lucide-react';
@@ -11,9 +11,15 @@ const NPM_URL = `https://api.npmjs.org/downloads/point/last-week/${NPM_PACKAGE}`
 
 type CopyTarget = 'git' | 'npx' | null;
 
-export function GitSection() {
+interface GitSectionProps {
+  children?: ReactNode;
+}
+
+export function GitSection({ children }: GitSectionProps) {
   const [stats, setStats] = useState({ stars: 0, forks: 0, downloads: 0, watchers: 0 });
   const [copied, setCopied] = useState<CopyTarget>(null);
+  const [displayStats, setDisplayStats] = useState({ stars: 0, downloads: 0 });
+  const animationFrame = useRef<number | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -37,22 +43,25 @@ export function GitSection() {
           typeof githubData.stargazers_count === 'number' &&
           typeof githubData.forks_count === 'number'
         ) {
-          setStats({
+          const nextStats = {
             stars: githubData.stargazers_count,
             forks: githubData.forks_count,
             watchers: githubData.subscribers_count || 0,
             downloads:
               npmData && typeof npmData.downloads === 'number' ? npmData.downloads : 0
-          });
+          };
+
+          setStats(nextStats);
         } else {
           console.warn('Unexpected GitHub API response format:', githubData);
-          setStats({
+          const fallbackStats = {
             stars: 0,
             forks: 0,
             watchers: 0,
             downloads:
               npmData && typeof npmData.downloads === 'number' ? npmData.downloads : 0
-          });
+          };
+          setStats(fallbackStats);
         }
       } catch (error) {
         console.error('Error fetching repository stats:', error);
@@ -64,6 +73,49 @@ export function GitSection() {
     const interval = setInterval(fetchStats, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const duration = 800;
+    const start = performance.now();
+    const initial = { ...displayStats };
+    const target = {
+      stars: stats.stars || 0,
+      downloads: stats.downloads || 0
+    };
+
+    const step = (timestamp: number) => {
+      const progress = Math.min((timestamp - start) / duration, 1);
+      setDisplayStats({
+        stars: Math.round(initial.stars + (target.stars - initial.stars) * progress),
+        downloads: Math.round(initial.downloads + (target.downloads - initial.downloads) * progress)
+      });
+      if (progress < 1) {
+        animationFrame.current = requestAnimationFrame(step);
+      }
+    };
+
+    if (target.stars !== initial.stars || target.downloads !== initial.downloads) {
+      if (animationFrame.current !== null) {
+        cancelAnimationFrame(animationFrame.current);
+      }
+      animationFrame.current = requestAnimationFrame(step);
+    }
+
+    return () => {
+      if (animationFrame.current !== null) {
+        cancelAnimationFrame(animationFrame.current);
+      }
+    };
+  }, [stats.stars, stats.downloads]);
+
+  const formattedStars =
+    displayStats.stars > 0 ? displayStats.stars.toLocaleString() : stats.stars > 0 ? stats.stars.toLocaleString() : '—';
+  const formattedDownloads =
+    displayStats.downloads > 0
+      ? displayStats.downloads.toLocaleString()
+      : stats.downloads > 0
+      ? stats.downloads.toLocaleString()
+      : '—';
 
   const copyCommand = async (command: string, target: Exclude<CopyTarget, null>) => {
     try {
@@ -79,13 +131,27 @@ export function GitSection() {
     <section className="w-full min-h-screen flex items-center justify-center px-4 sm:px-6 py-8">
       <div className="w-full max-w-7xl mx-auto space-y-12">
         {/* Hero Section */}
-        <div className="text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
-            <Download className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">100% Free Forever</span>
+        <div className="text-center space-y-8">
+          {children ? (
+            <div className="max-w-6xl mx-auto">{children}</div>
+          ) : null}
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border-2 border-yellow-300/70 bg-yellow-500/5">
+            <Download className="w-5 h-5 text-yellow-300" />
+            <span className="text-lg font-semibold tracking-[0.25em] text-yellow-100 uppercase">
+              Own AI Agents
+            </span>
+          </div>
+          <div className="flex justify-center">
+            <img
+              src="/logo.svg"
+              alt="ONE Logo"
+              width={400}
+              height={400}
+              className="mx-auto w-full max-w-[400px] h-auto"
+            />
           </div>
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-foreground">
-            Download ONE
+            Download FREE - Own FOREVER
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
             Build apps, websites, and AI agents is English. Download to your computer, run in the cloud and deploy to the edge or your own server. ONE is open source and free forever.
@@ -99,8 +165,8 @@ export function GitSection() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative p-6 space-y-6">
               <div className="flex items-start justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                  <Download className="w-6 h-6 text-primary" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-yellow-400/10 group-hover:bg-yellow-400/20 transition-colors duration-300">
+                  <Download className="w-6 h-6 text-yellow-400" />
                 </div>
               </div>
               <div className="space-y-2">
@@ -126,8 +192,8 @@ export function GitSection() {
                   <Code className="w-6 h-6 text-primary" />
                 </div>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Star className="w-3 h-3 fill-primary text-primary" />
-                  <span className="font-semibold">{stats.stars > 0 ? stats.stars.toLocaleString() : '—'}</span>
+                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                  <span className="font-semibold">{formattedStars}</span>
                   <span>stars</span>
                 </div>
               </div>
@@ -166,8 +232,8 @@ export function GitSection() {
                   <TerminalSquare className="w-6 h-6 text-primary" />
                 </div>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Download className="w-3 h-3" />
-                  <span className="font-semibold">{stats.downloads > 0 ? stats.downloads.toLocaleString() : '—'}</span>
+                  <Download className="w-3 h-3 text-yellow-400" />
+                  <span className="font-semibold">{formattedDownloads}</span>
                   <span>/week</span>
                 </div>
               </div>

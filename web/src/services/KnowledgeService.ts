@@ -8,7 +8,6 @@
 import { Effect } from "effect";
 import {
   DataProviderService,
-  type Knowledge,
   type CreateKnowledgeInput,
   type SearchKnowledgeOptions,
   type KnowledgeType,

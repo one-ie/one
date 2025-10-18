@@ -1,0 +1,379 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from '@/components/ui/card';
+import {
+  Users,
+  Sparkles,
+  Workflow,
+  ClipboardCheck,
+  ListChecks,
+  BookOpen,
+  Share2,
+  Target,
+  Rocket,
+  PenTool,
+  Layers,
+  Library,
+} from 'lucide-react';
+
+const crew = [
+  {
+    name: 'agent-director',
+    title: 'Engineering Director',
+    summary:
+      'Maps every idea to the six dimensions, sequences numbered plans, and keeps the roster aligned through `one/knowledge/todo.md`.',
+    handoff: 'agent-builder',
+  },
+  {
+    name: 'agent-builder',
+    title: 'Full-Stack Builder',
+    summary:
+      'Transforms validated plans into working features across Convex, Effect services, and Astro islands without breaking multi-tenant rules.',
+    handoff: 'agent-backend · agent-frontend',
+  },
+  {
+    name: 'agent-backend',
+    title: 'Backend Specialist',
+    summary:
+      'Shapes schemas, mutations, and queries that preserve organization, people, and event boundaries for every release.',
+    handoff: 'agent-frontend',
+  },
+  {
+    name: 'agent-frontend',
+    title: 'Frontend Specialist',
+    summary:
+      'Ships React and Astro experiences with Tailwind tokens, shadcn/ui, and agent-friendly copy so features feel native immediately.',
+    handoff: 'agent-quality',
+  },
+  {
+    name: 'agent-designer',
+    title: 'Design Strategist',
+    summary:
+      'Breaks plans into flows, wireframes, and tokens so builders and frontenders stay on rhythm with the ontology.',
+    handoff: 'agent-frontend',
+  },
+  {
+    name: 'agent-integrator',
+    title: 'Protocol Integrator',
+    summary:
+      'Connects external APIs and protocols (A2A, ACP, AP2, X402) while translating every payload into ontology-native structures.',
+    handoff: 'agent-quality',
+  },
+  {
+    name: 'agent-quality',
+    title: 'Quality Intelligence',
+    summary:
+      'Defines acceptance criteria during planning, runs validations, and blocks release until events, docs, and tests line up.',
+    handoff: 'agent-documenter',
+  },
+  {
+    name: 'agent-problem-solver',
+    title: 'Root Cause Analyst',
+    summary:
+      'Triages regressions, replays failed runs, and issues corrective tasks so no agent repeats the same mistake.',
+    handoff: 'agent-builder',
+  },
+  {
+    name: 'agent-documenter',
+    title: 'Knowledge Curator',
+    summary:
+      'Captures what shipped, updates `one/things/` and `one/events/`, and keeps future agents primed with richer context.',
+    handoff: 'agent-sales',
+  },
+  {
+    name: 'agent-clone',
+    title: 'Migration & Clone Specialist',
+    summary:
+      'Ports legacy artifacts and assembles AI clones with provenance so audience, products, and agents stay in sync.',
+    handoff: 'agent-builder',
+  },
+  {
+    name: 'agent-clean',
+    title: 'Refinement Specialist',
+    summary:
+      'Pays down debt, restructures files, and restores clarity without altering behaviors or violating typed contracts.',
+    handoff: 'agent-quality',
+  },
+  {
+    name: 'agent-sales',
+    title: 'Revenue Operator',
+    summary:
+      'Keeps the pipeline warm, feeds back requests from customers, and ensures releases map to monetizable outcomes.',
+    handoff: 'agent-director',
+  },
+];
+
+const workflow = [
+  {
+    icon: Workflow,
+    stage: 'Infer & Align',
+    lead: 'agent-director',
+    focus:
+      'Loads the current inference from `one/knowledge/todo.md`, validates ontology coverage, and numbers the plan so every agent knows the lane.',
+    artifacts: ['one/knowledge/todo.md', 'one/connections/workflow.md'],
+  },
+  {
+    icon: PenTool,
+    stage: 'Design the Experience',
+    lead: 'agent-designer',
+    focus:
+      'Sketches flows, tokens, and UI scaffolding while builders gather references in `/web/src/components/` to reuse established patterns.',
+    artifacts: ['web/src/components/ui/*', 'web/src/styles/global.css'],
+  },
+  {
+    icon: Layers,
+    stage: 'Build the Stack',
+    lead: 'agent-builder',
+    focus:
+      'Hands work to backend, frontend, and integrator specialists who implement Convex services, React islands, and protocol bridges in parallel.',
+    artifacts: ['backend/convex', 'web/src/pages', 'web/src/services'],
+  },
+  {
+    icon: ClipboardCheck,
+    stage: 'Validate & Document',
+    lead: 'agent-quality',
+    focus:
+      'Runs scoped tests, checks release notes, and pairs with the documenter to log events, update `one/things/`, and keep knowledge searchable.',
+    artifacts: ['scripts/release.md', 'one/things/', 'one/events/'],
+  },
+  {
+    icon: Rocket,
+    stage: 'Ship & Learn',
+    lead: 'agent-sales',
+    focus:
+      'Coordinates launch tasks, loops customer feedback back into the todo, and keeps agents on call for follow-up improvements.',
+    artifacts: ['scripts/release.sh', 'one/knowledge/todo.md'],
+  },
+];
+
+const operatingSystem = [
+  {
+    title: 'Source of Truth',
+    description:
+      '`one/knowledge/todo.md` tracks every inference, /now, /next, and /done hook. Agents mark assignments and completions here before touching code.',
+    icon: ListChecks,
+  },
+  {
+    title: 'Release Memory',
+    description:
+      '`scripts/release.md` and `scripts/release.sh` capture the shipping checklist so every iteration remembers what just went live.',
+    icon: BookOpen,
+  },
+  {
+    title: 'Shared Playbooks',
+    description:
+      '`.claude/agents/*` defines tools, guardrails, and vocabulary. Any new specialist inherits these prompts to stay in sync.',
+    icon: Library,
+  },
+  {
+    title: 'Collaboration Signals',
+    description:
+      'Events like `agent_assigned`, `quality_check_complete`, and `feature_complete` broadcast progress through Convex.',
+    icon: Share2,
+  },
+  {
+    title: 'Targets & Outcomes',
+    description:
+      'Roadmap items stay mapped to groups, people, things, connections, events, and knowledge so releases ladder up to business goals.',
+    icon: Target,
+  },
+];
+---
+
+<Layout
+  title="Claude Agents"
+  description="See how the ONE Claude agents plan, build, and ship your website together."
+>
+  <section class="relative px-4 pt-12 pb-20 sm:px-6 sm:pt-16 sm:pb-24 md:px-8 md:pt-20 md:pb-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-16 flex flex-col gap-10 text-center lg:flex-row lg:items-center lg:justify-between lg:text-left">
+        <div class="space-y-6">
+          <Badge
+            variant="outline"
+            className="inline-flex items-center gap-2"
+            data-usal="fade-down duration-600"
+          >
+            <Sparkles className="h-4 w-4" />
+            Claude Agent Crew
+          </Badge>
+          <h1
+            class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl"
+            data-usal="fade-up duration-700 delay-100"
+          >
+            Agents that build with you—nonstop
+          </h1>
+          <p
+            class="text-lg leading-relaxed text-muted-foreground sm:text-xl"
+            data-usal="fade-up duration-700 delay-150"
+          >
+            The `.claude/agents/*` roster runs around the clock. Director, builders, designers,
+            integrators, and quality specialists coordinate through the ontology so your site
+            ships fast, remains accurate, and keeps improving release after release.
+          </p>
+        </div>
+        <div
+          class="rounded-2xl border border-border/40 bg-card/60 p-6 backdrop-blur"
+          data-usal="fade-left duration-700 delay-200"
+        >
+          <div class="flex items-center gap-4">
+            <Users className="h-10 w-10 text-primary" />
+            <div class="space-y-1 text-left">
+              <p class="text-sm font-semibold uppercase tracking-wide text-primary/80">
+                Collaboration Loop
+              </p>
+              <p class="text-base text-muted-foreground">
+                Validate → Plan → Design → Build → Quality → Release → Learn → Repeat
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-border/60 bg-card/60 p-8 backdrop-blur">
+        <div class="mb-12 space-y-4 text-center">
+          <Badge
+            variant="outline"
+            className="mb-2 inline-flex items-center gap-2"
+          >
+            <Sparkles className="h-4 w-4" />
+            Crew Roster
+          </Badge>
+          <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+            Specialists tuned for the ONE ontology
+          </h2>
+          <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+            Every agent follows a deterministic playbook from <code>.claude/agents/*</code>.
+            Together they cover ontology validation, design, implementation, QA, documentation,
+            and go-to-market.
+          </p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {crew.map((agent) => (
+            <div class="rounded-2xl border border-border/50 bg-card/60 p-6 backdrop-blur">
+              <p class="text-sm font-semibold uppercase tracking-wide text-primary/80">
+                {agent.name}
+              </p>
+              <h3 class="mt-2 text-xl font-semibold text-foreground">{agent.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {agent.summary}
+              </p>
+              <div class="mt-4 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                <Share2 className="h-3.5 w-3.5 text-primary" />
+                Hands to: {agent.handoff}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+
+      <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <Card className="border-border/60 bg-card/70 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3 text-2xl">
+              <Workflow className="h-6 w-6 text-primary" />
+              How the agents hand off work
+            </CardTitle>
+            <CardDescription className="leading-relaxed">
+              Every release follows the same five-stage handoff. Each specialist picks up where the
+              previous one stops, leaving artifacts and signals the rest of the crew can trust.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {workflow.map((stage) => (
+              <div class="rounded-xl border border-border/40 bg-muted/30 p-5">
+                <div class="flex items-start gap-4">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                    <stage.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div class="space-y-2">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                      <h3 class="text-lg font-semibold text-foreground">{stage.stage}</h3>
+                      <span class="text-sm font-medium text-primary sm:mt-0">
+                        Lead: {stage.lead}
+                      </span>
+                    </div>
+                    <p class="text-sm leading-relaxed text-muted-foreground">{stage.focus}</p>
+                    <div class="flex flex-wrap gap-2 pt-1">
+                      {stage.artifacts.map((artifact) => (
+                        <Badge variant="secondary" className="border-border/40 text-xs uppercase">
+                          {artifact}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/60 bg-card/70 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3 text-2xl">
+              <ListChecks className="h-6 w-6 text-primary" />
+              Operating system
+            </CardTitle>
+            <CardDescription className="leading-relaxed">
+              These rituals keep the agents in sync with your business. When something moves here,
+              everyone adapts instantly.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            {operatingSystem.map((item) => (
+              <div class="rounded-lg border border-border/40 bg-muted/30 p-4">
+                <div class="flex items-start gap-3">
+                  <div class="mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                    <item.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div class="space-y-2">
+                    <h3 class="text-base font-semibold text-foreground">{item.title}</h3>
+                    <p class="text-sm leading-relaxed text-muted-foreground">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-5xl">
+      <div class="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-10 backdrop-blur">
+        <div class="flex flex-col gap-6 text-center">
+          <Badge
+            variant="outline"
+            className="inline-flex items-center gap-2 self-center"
+          >
+            <ClipboardCheck className="h-4 w-4" />
+            Continuous collaboration
+          </Badge>
+          <h2 class="text-3xl font-bold text-foreground sm:text-4xl">
+            Always-on execution for your releases
+          </h2>
+          <p class="text-lg leading-relaxed text-muted-foreground">
+            Releases never happen in isolation. The director agent monitors `scripts/release.md`,
+            quality tracks open validations, documenters log the outcome, and sales loops feedback
+            back into `one/knowledge/todo.md`. Describe what you need in English and the crew
+            handles the rest—planning, building, verifying, and iterating.
+          </p>
+          <p class="text-base font-medium text-foreground">
+            Tell the agents the next move. We will be working—always—to build your business.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

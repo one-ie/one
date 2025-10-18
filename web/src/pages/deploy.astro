@@ -1,0 +1,1001 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Zap,
+  Globe,
+  Check,
+  Rocket,
+  Clock,
+  DollarSign,
+  Code,
+  Bot,
+  ArrowRight,
+  Shield,
+  TrendingUp,
+  Layers,
+} from 'lucide-react';
+---
+
+<Layout title="Deploy to Cloudflare Edge in Seconds - ONE Platform">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 md:px-8 md:py-40">
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 bg-gradient-to-b from-background via-primary/10 to-background"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_50%)]"></div>
+    </div>
+
+    <div class="mx-auto max-w-6xl space-y-12 text-center">
+      <div class="space-y-6">
+        <Badge
+          variant="secondary"
+          className="inline-flex items-center gap-2 text-base font-medium px-6 py-2"
+        >
+          <Zap className="h-5 w-5" />
+          Deploy in 45 Seconds
+        </Badge>
+
+        <h1 class="text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl">
+          <span class="block">Lightning-Fast Edge</span>
+          <span class="block text-primary">
+            Deployment
+          </span>
+          <span class="block text-muted-foreground">Powered by Cloudflare</span>
+        </h1>
+
+        <p class="mx-auto max-w-3xl text-xl sm:text-2xl leading-relaxed text-muted-foreground">
+          Deploy your web apps to <strong class="text-foreground">330+ global locations</strong> instantly.
+          <br />
+          Unlimited requests. Sub-second response times. <strong class="text-foreground">Completely free</strong> for static sites.
+        </p>
+      </div>
+
+      <!-- Deployment Speed Timeline -->
+      <div class="rounded-2xl border border-primary/30 bg-card/50 p-8 backdrop-blur">
+        <h3 class="mb-6 text-2xl font-bold">Your Deployment Timeline</h3>
+        <div class="grid gap-6 md:grid-cols-4">
+          <div class="space-y-3 text-center">
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
+              37s
+            </div>
+            <h4 class="font-semibold">Build App</h4>
+            <p class="text-sm text-muted-foreground">
+              Astro optimizes and bundles (10,104 modules)
+            </p>
+          </div>
+          <div class="space-y-3 text-center">
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
+              5s
+            </div>
+            <h4 class="font-semibold">Upload Assets</h4>
+            <p class="text-sm text-muted-foreground">
+              Wrangler uploads 138 files (20 new, 118 cached)
+            </p>
+          </div>
+          <div class="space-y-3 text-center">
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
+              3s
+            </div>
+            <h4 class="font-semibold">Deploy Worker</h4>
+            <p class="text-sm text-muted-foreground">
+              Compile & attach 158 modules (5.46 MB)
+            </p>
+          </div>
+          <div class="space-y-3 text-center">
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
+              &lt;1s
+            </div>
+            <h4 class="font-semibold">Global Replication</h4>
+            <p class="text-sm text-muted-foreground">
+              Live on 330+ edge locations worldwide
+            </p>
+          </div>
+        </div>
+        <div class="mt-8 text-center space-y-2">
+          <p class="text-lg font-semibold text-primary">
+            Total: ~45 seconds from code push to global availability
+          </p>
+          <p class="text-sm text-muted-foreground">
+            Latest deployment: <a href="https://1716b773.web-d3d.pages.dev" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">1716b773.web-d3d.pages.dev</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
+        <a href="/download" class="group">
+          <Button
+            size="lg"
+            className="h-18 w-full sm:w-auto px-12 text-lg font-bold shadow-2xl shadow-primary/30 transition-all hover:scale-105 hover:shadow-primary/50"
+          >
+            <Rocket className="mr-3 h-7 w-7 transition-transform group-hover:translate-y-[-4px]" />
+            <span>
+              Deploy Your App Now
+              <span class="block text-xs font-normal opacity-90">Free forever</span>
+            </span>
+          </Button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- One-Command Deploy Section -->
+  <section class="border-y bg-gradient-to-br from-primary/5 via-background to-primary/5 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-16 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Rocket className="h-4 w-4" />
+          One Command Deploy
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Deploy with <code class="text-primary">/deploy</code>
+          <br />
+          <span class="text-muted-foreground">One Command. Zero Configuration.</span>
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Built into every ONE Platform project. Run <code class="text-foreground bg-muted px-2 py-1 rounded">/deploy</code> and
+          watch your app go live on <strong class="text-foreground">330+ edge locations</strong> in under a minute.
+        </p>
+      </div>
+
+      <div class="grid gap-8 lg:grid-cols-2 mb-12">
+        <!-- What It Does -->
+        <Card className="border-2 border-primary/30 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-2xl">What <code>/deploy</code> Does</CardTitle>
+            <CardDescription className="leading-relaxed text-base">
+              Intelligent deployment command that handles everything automatically
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-start gap-3">
+                <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary mt-0.5">
+                  1
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Checks for Cloudflare Credentials</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Looks for <code class="text-foreground bg-muted px-1 rounded text-xs">CLOUDFLARE_GLOBAL_API_KEY</code> in your <code class="text-foreground bg-muted px-1 rounded text-xs">.env</code> file
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary mt-0.5">
+                  2
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Guides Setup (If Needed)</h4>
+                  <p class="text-sm text-muted-foreground">
+                    If missing, provides step-by-step instructions to get your credentials
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary mt-0.5">
+                  3
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Builds Your Website</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Optimizes and bundles with Astro (~37 seconds)
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary mt-0.5">
+                  4
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Deploys to Cloudflare Pages</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Uploads and deploys globally (~8 seconds)
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary mt-0.5">
+                  5
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Reports Live URLs</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Gives you production and preview URLs instantly
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <!-- How to Get Credentials -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Shield className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-2xl">Get Your Cloudflare Key</CardTitle>
+            <CardDescription className="leading-relaxed text-base">
+              One-time setup. Takes 2 minutes.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div class="space-y-4">
+              <div>
+                <h4 class="font-semibold mb-2 flex items-center gap-2">
+                  <span class="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-xs font-bold text-primary">1</span>
+                  Global API Key
+                </h4>
+                <p class="text-sm text-muted-foreground mb-2">
+                  Go to <a href="https://dash.cloudflare.com/profile/api-tokens" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">dash.cloudflare.com/profile/api-tokens</a>
+                </p>
+                <p class="text-sm text-muted-foreground">
+                  Click "View" next to "Global API Key" and copy it
+                </p>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-2 flex items-center gap-2">
+                  <span class="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-xs font-bold text-primary">2</span>
+                  Account ID
+                </h4>
+                <p class="text-sm text-muted-foreground mb-2">
+                  Go to <a href="https://dash.cloudflare.com" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">dash.cloudflare.com</a>
+                </p>
+                <p class="text-sm text-muted-foreground">
+                  Select any site → Copy "Account ID" from the right sidebar
+                </p>
+              </div>
+
+              <div>
+                <h4 class="font-semibold mb-2 flex items-center gap-2">
+                  <span class="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-xs font-bold text-primary">3</span>
+                  Add to .env File
+                </h4>
+                <div class="rounded-lg border border-border/50 bg-background/50 p-3">
+                  <pre class="text-xs font-mono overflow-x-auto"><code>{`CLOUDFLARE_GLOBAL_API_KEY=your-key-here
+CLOUDFLARE_ACCOUNT_ID=your-account-id
+CLOUDFLARE_EMAIL=your@email.com`}</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-lg border-2 border-amber-500/30 bg-amber-500/5 p-4">
+              <div class="flex items-start gap-3">
+                <Shield className="h-5 w-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                <div class="space-y-2">
+                  <h4 class="font-semibold text-amber-600 dark:text-amber-500 text-sm">Security Notice</h4>
+                  <p class="text-xs text-muted-foreground leading-relaxed">
+                    The Global API Key provides <strong class="text-foreground">full control</strong> over your Cloudflare account.
+                    Never commit <code class="bg-muted px-1 rounded">.env</code> to git. Keep it secure.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <!-- Usage Example -->
+      <div class="rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-background p-8 md:p-12">
+        <h3 class="text-2xl font-bold mb-8 text-center">See It in Action</h3>
+        <div class="grid gap-8 lg:grid-cols-2">
+          <div class="space-y-4">
+            <h4 class="font-semibold text-lg flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              First Time (No Credentials)
+            </h4>
+            <div class="rounded-lg border border-border/50 bg-background/80 backdrop-blur p-4 space-y-3">
+              <div class="flex items-center gap-2 text-sm font-mono">
+                <span class="text-muted-foreground">You:</span>
+                <span class="text-primary">/deploy</span>
+              </div>
+              <div class="text-sm text-muted-foreground leading-relaxed">
+                <p class="mb-2">❌ No Cloudflare credentials found in .env</p>
+                <p class="text-foreground font-medium mb-2">To deploy, you need three values from Cloudflare:</p>
+                <ol class="list-decimal list-inside space-y-1 text-xs">
+                  <li>Get Global API Key from dashboard</li>
+                  <li>Get Account ID from any site</li>
+                  <li>Add credentials to .env file</li>
+                </ol>
+                <p class="mt-3 text-xs">[...detailed instructions provided...]</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <h4 class="font-semibold text-lg flex items-center gap-2">
+              <Rocket className="h-5 w-5 text-primary" />
+              With Credentials
+            </h4>
+            <div class="rounded-lg border border-border/50 bg-background/80 backdrop-blur p-4 space-y-3">
+              <div class="flex items-center gap-2 text-sm font-mono">
+                <span class="text-muted-foreground">You:</span>
+                <span class="text-primary">/deploy</span>
+              </div>
+              <div class="text-sm space-y-2 font-mono">
+                <p class="text-green-600 dark:text-green-500">✅ Cloudflare credentials found</p>
+                <p class="text-muted-foreground">🔨 Building website...</p>
+                <p class="text-green-600 dark:text-green-500">✓ Build complete (37s)</p>
+                <p class="text-muted-foreground">🚀 Deploying to Cloudflare...</p>
+                <p class="text-green-600 dark:text-green-500">✅ Deployment complete!</p>
+                <p class="text-primary mt-2">🌍 Live at: https://abc123.pages.dev</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <p class="text-sm text-muted-foreground">
+            Total time from <code class="text-foreground bg-muted px-2 py-0.5 rounded">/deploy</code> to live site:
+            <strong class="text-primary text-base ml-2">~45 seconds</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Section -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Layers className="h-4 w-4" />
+          Edge-Native Architecture
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Built for the Edge
+          <br />
+          <span class="text-muted-foreground">Run Anywhere, Connect to Any Backend</span>
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Our web apps use <strong class="text-foreground">nanostores</strong> for lightweight state management
+          and can communicate with <strong class="text-foreground">any backend</strong>—Convex, Supabase, Firebase, or your own API.
+        </p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Edge Runtime</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Astro + React 19 SSR runs on Cloudflare Workers. No Node.js required.
+              <strong class="text-foreground"> Sub-100ms cold starts</strong> worldwide.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Code className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Nanostores State</CardTitle>
+            <CardDescription className="leading-relaxed">
+              <strong class="text-foreground">334 bytes</strong> state management library.
+              React, Vue, Svelte compatible. <strong class="text-foreground">No hydration overhead</strong>.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Globe className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Backend Agnostic</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Connect to <strong class="text-foreground">any backend</strong>: Convex, Supabase, Firebase,
+              custom APIs. <strong class="text-foreground">No vendor lock-in</strong>.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agent-Ops Section -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Bot className="h-4 w-4" />
+          Autonomous Deployments
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Agent-Ops: Hands-Off Deployments
+          <br />
+          <span class="text-muted-foreground">Give AI Your Cloudflare Key and Watch</span>
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Our <strong class="text-foreground">agent-ops</strong> system can deploy your apps autonomously
+          with your Cloudflare Global API Key. <strong class="text-foreground">Zero clicks</strong>. Zero manual work.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-background p-8 md:p-12">
+        <div class="grid gap-12 lg:grid-cols-2">
+          <div class="space-y-6">
+            <h3 class="text-2xl font-bold">How It Works</h3>
+            <div class="space-y-4">
+              <div class="flex items-start gap-4">
+                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                  1
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Add Cloudflare API Key</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Store your Global API Key securely in environment variables
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                  2
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Agent Monitors Changes</h4>
+                  <p class="text-sm text-muted-foreground">
+                    AI watches your git repository for new commits to main branch
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                  3
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Auto-Deploy on Push</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Agent builds, tests, and deploys to Cloudflare Pages automatically
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                  4
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-1">Real-time Notifications</h4>
+                  <p class="text-sm text-muted-foreground">
+                    Get Slack/Discord notifications with deployment status and preview URLs
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <h3 class="text-2xl font-bold">Deployment Commands</h3>
+            <div class="space-y-4">
+              <div class="rounded-lg border border-border/50 bg-background/50 p-4">
+                <p class="text-xs text-muted-foreground mb-2">Manual Deployment</p>
+                <pre class="text-sm font-mono"><code>bun run build
+wrangler pages deploy dist</code></pre>
+              </div>
+              <div class="rounded-lg border border-border/50 bg-background/50 p-4">
+                <p class="text-xs text-muted-foreground mb-2">Agent-Ops Deployment</p>
+                <pre class="text-sm font-mono"><code>git push origin main
+# Agent deploys automatically ✨</code></pre>
+              </div>
+              <div class="rounded-lg border border-border/50 bg-background/50 p-4">
+                <p class="text-xs text-muted-foreground mb-2">With Preview Environments</p>
+                <pre class="text-sm font-mono"><code>git push origin feature-branch
+# Agent creates preview deploy 🚀</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Architecture & Pricing -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <DollarSign className="h-4 w-4" />
+          Our Cost-Effective Architecture
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          We Deploy TO Cloudflare
+          <br />
+          <span class="text-muted-foreground">So You Get Enterprise Speed for Free</span>
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          We're not Cloudflare—we <strong class="text-foreground">deploy our apps TO Cloudflare Pages</strong>.
+          By stripping JavaScript (96% reduction: ~30KB vs 800KB) and serving HTML at the edge,
+          we achieve <strong class="text-foreground">subsecond load times globally</strong>.
+        </p>
+        <div class="flex justify-center gap-4 pt-4">
+          <a
+            href="/blog/why-speed-matters"
+            class="text-sm font-medium text-primary hover:underline"
+          >
+            Read: Why Speed Matters →
+          </a>
+          <a
+            href="/blog/one-hundred-percent-lighthouse-score"
+            class="text-sm font-medium text-primary hover:underline"
+          >
+            Read: 100% Lighthouse Score →
+          </a>
+        </div>
+      </div>
+
+      <!-- Performance Stats -->
+      <div class="mb-12 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-background p-8">
+        <h3 class="text-2xl font-bold mb-6 text-center">Our Performance Stats</h3>
+        <div class="grid gap-6 md:grid-cols-4">
+          <div class="text-center space-y-2">
+            <div class="text-3xl font-bold text-primary">~30KB</div>
+            <p class="text-sm text-muted-foreground">JavaScript bundle<br />(vs 800KB traditional)</p>
+          </div>
+          <div class="text-center space-y-2">
+            <div class="text-3xl font-bold text-primary">&lt;330ms</div>
+            <p class="text-sm text-muted-foreground">Average page load<br />(global)</p>
+          </div>
+          <div class="text-center space-y-2">
+            <div class="text-3xl font-bold text-primary">100/100</div>
+            <p class="text-sm text-muted-foreground">Lighthouse scores<br />(all metrics)</p>
+          </div>
+          <div class="text-center space-y-2">
+            <div class="text-3xl font-bold text-primary">96%</div>
+            <p class="text-sm text-muted-foreground">JS reduction<br />(Islands Architecture)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cloudflare Pricing Comparison -->
+      <div class="mb-8">
+        <h3 class="text-2xl font-bold mb-6 text-center">Cloudflare Pricing (What You Pay Them)</h3>
+        <p class="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
+          Because we use <strong class="text-foreground">Cloudflare Pages</strong> (not Workers) and strip JavaScript
+          to serve static HTML at the edge, you stay on the <strong class="text-foreground">free tier forever</strong>.
+        </p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
+        <!-- Cloudflare Pages Free (What We Use) -->
+        <Card className="border-2 border-primary/50 bg-card/50 backdrop-blur relative">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+            <Badge className="bg-primary text-primary-foreground px-4 py-1">
+              ← We Use This
+            </Badge>
+          </div>
+          <CardHeader className="space-y-4 pb-8 pt-8">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-2xl">Cloudflare Pages</CardTitle>
+              <CardDescription className="text-lg font-bold text-foreground mt-2">
+                Free Forever
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                <span class="text-sm"><strong>Unlimited</strong> bandwidth</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                <span class="text-sm"><strong>Unlimited</strong> static requests</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                <span class="text-sm"><strong>500</strong> builds/month</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                <span class="text-sm"><strong>100,000</strong> Functions requests/day</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                <span class="text-sm"><strong>330+</strong> global edge locations</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                <span class="text-sm"><strong>Edge SSR</strong> with React 19</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-primary flex-shrink-0" />
+                <span class="text-sm"><strong>Automatic</strong> SSL certificates</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <!-- Cloudflare Workers (For Reference) -->
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4 pb-8">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+              <Code className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <div>
+              <CardTitle className="text-2xl">Cloudflare Workers</CardTitle>
+              <CardDescription className="text-lg font-bold text-foreground mt-2">
+                $5/month (if needed)
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <span class="text-sm"><strong>10 million</strong> requests/month</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <span class="text-sm"><strong>$0.50</strong> per additional million</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <span class="text-sm">Includes <strong>Workers KV</strong></span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <span class="text-sm">Includes <strong>Durable Objects</strong></span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <span class="text-sm">Includes <strong>Hyperdrive</strong></span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <span class="text-sm"><strong>CPU time</strong> based billing</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Check className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                <span class="text-sm"><strong>No idle time</strong> charges</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div class="mt-12 text-center space-y-4">
+        <div class="rounded-lg border border-primary/30 bg-primary/5 p-6 max-w-3xl mx-auto">
+          <h4 class="text-xl font-bold mb-3 text-primary">Why Our Apps Stay Free</h4>
+          <p class="text-sm leading-relaxed text-muted-foreground">
+            By using <strong class="text-foreground">Astro Islands Architecture</strong>, we ship mostly static HTML with
+            minimal JavaScript (~30KB). This means <strong class="text-foreground">unlimited requests on Cloudflare Pages' free tier</strong>.
+            Traditional React apps ship 800KB+ of JavaScript and often require paid Workers/Functions—we avoid that entirely.
+          </p>
+        </div>
+        <p class="text-sm text-muted-foreground">
+          Cloudflare pricing as of January 2025. Visit{' '}
+          <a
+            href="https://developers.cloudflare.com/pages/functions/pricing/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary hover:underline"
+          >
+            Cloudflare Pages pricing
+          </a>{' '}
+          for latest details. We are not affiliated with Cloudflare—we just deploy there.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cloudflare MCP Section -->
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Bot className="h-4 w-4" />
+          Model Context Protocol
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Cloudflare MCP Servers
+          <br />
+          <span class="text-muted-foreground">AI-Native Infrastructure</span>
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Cloudflare provides <strong class="text-foreground">13 public MCP servers</strong> that
+          integrate seamlessly with Claude and other AI systems for autonomous deployments and infrastructure management.
+        </p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Globe className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Remote MCP Servers</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Unlike local MCP servers, Cloudflare's remote servers are <strong class="text-foreground">Internet-accessible</strong>.
+              Deploy them on Cloudflare Workers and connect from any MCP client (Claude, Cursor, Cline, etc.).
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-start gap-2">
+                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span><strong>13 public servers</strong> available immediately</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>Atlassian, PayPal, Sentry, Webflow integrations</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>Deploy custom MCP servers to Workers</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>TypeScript API generation from MCP tools</span>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Shield className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">MCP Server Portals</CardTitle>
+            <CardDescription className="leading-relaxed">
+              <strong class="text-foreground">Centralized gateway</strong> for all your MCP servers with
+              Zero Trust security, access controls, and audit logging built-in.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-start gap-2">
+                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span><strong>Single gateway</strong> for multiple MCP servers</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>Zero Trust authentication and authorization</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>Complete audit trail of all AI interactions</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <span>Enterprise-grade security by default</span>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div class="mt-12 rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-background p-8">
+        <h3 class="text-2xl font-bold mb-6 text-center">What You Can Build with MCP</h3>
+        <div class="grid gap-6 md:grid-cols-3">
+          <div class="space-y-2">
+            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
+              <Bot className="h-5 w-5" />
+              Autonomous Deployment Agents
+            </div>
+            <p class="text-sm text-muted-foreground">
+              AI agents that monitor your repo, build apps, run tests, and deploy to Cloudflare Pages autonomously
+            </p>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
+              <Code className="h-5 w-5" />
+              Infrastructure as Code
+            </div>
+            <p class="text-sm text-muted-foreground">
+              Describe infrastructure in plain English, AI translates to Wrangler commands and deploys
+            </p>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2 text-sm font-semibold text-primary">
+              <Zap className="h-5 w-5" />
+              Real-time Monitoring
+            </div>
+            <p class="text-sm text-muted-foreground">
+              AI agents watch analytics, detect issues, and automatically rollback or scale resources
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wrangler & Developer Experience -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Code className="h-4 w-4" />
+          Developer Experience
+        </Badge>
+        <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
+          Wrangler CLI: Everything Pre-Configured
+          <br />
+          <span class="text-muted-foreground">Deploy in One Command</span>
+        </h2>
+        <p class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground">
+          Our projects come with <strong class="text-foreground">Wrangler pre-configured</strong>.
+          You're <strong class="text-foreground">seconds away</strong> from deploying to production.
+        </p>
+      </div>
+
+      <div class="grid gap-8 lg:grid-cols-2">
+        <div class="space-y-6">
+          <h3 class="text-2xl font-bold">Pre-Configured Setup</h3>
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="text-lg">wrangler.toml</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <pre class="text-xs font-mono overflow-x-auto"><code>{`name = "one-web"
+compatibility_date = "2025-01-09"
+pages_build_output_dir = "dist"
+
+[compatibility_flags]
+nodejs_compat = true
+
+[[kv_namespaces]]
+binding = "SESSION"
+id = "your-kv-namespace-id"`}</code></pre>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle className="text-lg">package.json Scripts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <pre class="text-xs font-mono overflow-x-auto"><code>{`{
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "wrangler pages dev dist",
+    "deploy": "wrangler pages deploy dist"
+  }
+}`}</code></pre>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div class="space-y-6">
+          <h3 class="text-2xl font-bold">Quick Start Commands</h3>
+          <div class="space-y-4">
+            <div class="rounded-lg border border-border/50 bg-background/50 p-4">
+              <p class="text-xs text-muted-foreground mb-2 flex items-center gap-2">
+                <Clock className="h-3 w-3" />
+                Step 1: Build (37 seconds)
+              </p>
+              <pre class="text-sm font-mono"><code>bun run build
+# 10,104 modules transformed in 19.86s
+# Server built in 37.49s ✨</code></pre>
+            </div>
+
+            <div class="rounded-lg border border-border/50 bg-background/50 p-4">
+              <p class="text-xs text-muted-foreground mb-2 flex items-center gap-2">
+                <Clock className="h-3 w-3" />
+                Step 2: Deploy (8 seconds)
+              </p>
+              <pre class="text-sm font-mono"><code>wrangler pages deploy dist
+# Uploaded 138 files in 5.32 sec
+# Worker compiled & deployed ✨</code></pre>
+            </div>
+
+            <div class="rounded-lg border border-border/50 bg-background/50 p-4">
+              <p class="text-xs text-muted-foreground mb-2 flex items-center gap-2">
+                <Zap className="h-3 w-3" />
+                One-Command Deploy
+              </p>
+              <pre class="text-sm font-mono"><code>bun run deploy</code></pre>
+            </div>
+
+            <div class="rounded-lg border border-primary/30 bg-primary/5 p-4">
+              <p class="text-xs font-semibold text-primary mb-2 flex items-center gap-2">
+                <Rocket className="h-3 w-3" />
+                Result: Live in 45 Seconds
+              </p>
+              <pre class="text-xs font-mono text-muted-foreground"><code>✨ Success! Deployed to:
+https://1716b773.web-d3d.pages.dev
+
+Global CDN active
+330+ edge locations
+Sub-second response times</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="relative overflow-hidden px-4 py-24 sm:px-6 sm:py-32 md:px-8 md:py-40">
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 bg-gradient-to-b from-background via-primary/10 to-background"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_50%)]"></div>
+    </div>
+
+    <div class="mx-auto max-w-4xl space-y-12 text-center">
+      <div class="space-y-6">
+        <Badge
+          variant="secondary"
+          className="inline-flex items-center gap-2 text-base font-medium px-6 py-2"
+        >
+          <Zap className="h-5 w-5" />
+          Deploy Your First App Today
+        </Badge>
+
+        <h2 class="text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl">
+          <span class="block">From Code to Production</span>
+          <span class="block text-primary">
+            In 45 Seconds
+          </span>
+        </h2>
+
+        <p class="mx-auto max-w-2xl text-xl leading-relaxed text-muted-foreground">
+          Free unlimited bandwidth. 330+ global locations. <strong class="text-foreground">Zero configuration</strong>.
+          <br />
+          Everything you need to deploy production apps is already set up.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
+        <a href="/download" class="group">
+          <Button
+            size="lg"
+            className="h-18 w-full sm:w-auto px-12 text-lg font-bold shadow-2xl shadow-primary/30 transition-all hover:scale-105 hover:shadow-primary/50"
+          >
+            <Rocket className="mr-3 h-7 w-7 transition-transform group-hover:translate-y-[-4px]" />
+            <span>
+              Download & Deploy
+              <span class="block text-xs font-normal opacity-90">Free forever</span>
+            </span>
+          </Button>
+        </a>
+        <a href="https://developers.cloudflare.com/pages/" target="_blank" rel="noopener noreferrer">
+          <Button
+            variant="outline"
+            size="lg"
+            className="h-18 w-full sm:w-auto px-12 text-lg font-bold border-2 transition-all hover:scale-105 hover:border-primary hover:bg-primary/10"
+          >
+            <ArrowRight className="mr-3 h-7 w-7" />
+            <span>
+              Read Cloudflare Docs
+              <span class="block text-xs font-normal opacity-90">Learn more</span>
+            </span>
+          </Button>
+        </a>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-10 pt-6 text-base font-medium text-muted-foreground">
+        <span class="flex items-center gap-2">
+          <Check className="h-5 w-5 text-primary" />
+          No Credit Card
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-5 w-5 text-primary" />
+          No Trial Limits
+        </span>
+        <span class="flex items-center gap-2">
+          <Check className="h-5 w-5 text-primary" />
+          Production Ready
+        </span>
+      </div>
+    </div>
+  </section>
+</Layout>

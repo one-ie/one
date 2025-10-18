@@ -1,0 +1,435 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import {
+  Sparkles,
+  Code,
+  Brain,
+  Network,
+  Database,
+  Layers,
+  Terminal,
+  Server,
+  MessageSquare,
+  Cloud,
+  Check,
+} from 'lucide-react';
+---
+
+<Layout title="/ai Builder - ONE Platform">
+  <section class="relative min-h-[60vh] flex items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
+    <div class="w-full max-w-5xl mx-auto text-center space-y-8">
+      <Badge variant="outline" className="inline-flex items-center gap-2 text-base px-6 py-2">
+        <Sparkles className="h-5 w-5" />
+        AI Web Builder
+      </Badge>
+      <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold !leading-[1.05] tracking-tight">
+        `/ai` builds production websites with Claude Code
+      </h1>
+      <p class="text-lg sm:text-xl text-muted-foreground/85 max-w-3xl mx-auto leading-relaxed">
+        Give the builder a short brief and watch full-stack pages, content, wiring, and QA prompts materialize
+        in minutes. Optimized for Claude Code today—with Codex, Cursor, and friends joining soon—so your editor stays in focus while the AI handles the heavy lift.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <Button size="lg" className="h-14 px-8 text-lg font-semibold">
+          <Code className="mr-2 h-5 w-5" />
+          Run `one /ai`
+        </Button>
+        <a href="/features">
+          <Button variant="outline" size="lg" className="h-14 px-8 text-lg font-semibold">
+            Explore the Stack
+          </Button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32 bg-muted/40">
+    <div class="mx-auto max-w-6xl space-y-12">
+      <div class="space-y-6 text-center">
+        <h2 class="text-4xl font-semibold tracking-tight sm:text-5xl">What you get out of the box</h2>
+        <p class="text-base sm:text-lg text-muted-foreground/90 leading-relaxed max-w-3xl mx-auto">
+          The builder synthesizes code, copy, and configuration from one brief—and pins everything back to the shared ontology so future runs keep improving accuracy.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Check className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Production deliverables</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Pages, components, typed content schemas, IaC snippets, launch checklists, and QA runs ready for human polish—not throwaway prototypes.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Brain className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Context engineering baked in</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Prompt kits, critique loops, and evaluation feedback are persisted so each generation hands richer context to the next and accuracy compounds.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Network className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Ontology keeps growth in control</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Information architecture, copy blocks, and data contracts map to a single domain language so scaling content never fragments navigation or message.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Database className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Living language layer</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Microcopy, tone guidelines, and schema vocab stay synced through the ontology, so every agent speaks in your voice across funnels, docs, and apps.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl space-y-12">
+      <div class="space-y-6">
+        <Badge variant="outline" className="inline-flex items-center gap-2">
+          <Layers className="h-4 w-4" />
+          The Cascade
+        </Badge>
+        <h2 class="text-4xl font-semibold tracking-tight sm:text-5xl">How the .claude stack works together</h2>
+        <p class="text-base sm:text-lg text-muted-foreground/90 leading-relaxed max-w-3xl">
+          Automation lives in `<code>.claude/*</code>`. Agents plan, hooks guard, commands execute, and MCP services stream live context. Each layer feeds the next so work stays deterministic even when the AI is driving.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <MessageSquare className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`.claude/agents`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Specialist planners, writers, reviewers, and deployers chain together, producing structured briefs that downstream steps can execute without guesswork.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Server className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`.claude/hooks`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Pre- and post-run hooks capture diffs, reconcile ontology updates, trigger tests, and ensure every run leaves the repo healthier than it found it.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Terminal className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`.claude/commands`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Reusable playbooks for migrations, design refreshes, copy sweeps, and launch prep give agents deterministic steps with human-tuned safeguards.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Cloud className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-lg">MCP services</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Model Context Protocol bridges repositories, issue trackers, design files, and data stores so agents stay sandboxed yet fully informed in real time.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32 bg-muted/35">
+    <div class="mx-auto max-w-6xl space-y-10">
+      <div class="space-y-4 text-center">
+        <Badge variant="outline" className="inline-flex items-center gap-2">
+          <Brain className="h-4 w-4" />
+          Specialist Agents
+        </Badge>
+        <h2 class="text-4xl font-semibold tracking-tight sm:text-5xl">`.claude/agents/*` orchestrate the build</h2>
+        <p class="text-base sm:text-lg text-muted-foreground/90 leading-relaxed max-w-3xl mx-auto">
+          The builder doesn’t work alone. Each specialist agent plugs into the ontology, runs deterministic playbooks, and hands richer context to the next layer. Together they keep AI output production-ready.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3">
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Layers className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Directors & Integrators</CardTitle>
+            <CardDescription className="leading-relaxed">
+              `agent-director` validates ideas against the six dimensions, sequences numbered plans, and routes work. `agent-integrator` keeps external protocols—A2A, ACP, AP2, X402—aligned with groups, people, and things.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Code className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Builder Squad</CardTitle>
+            <CardDescription className="leading-relaxed">
+              `agent-builder`, `agent-backend`, `agent-frontend`, and the specialist variants ship Convex services, Astro UI, and cross-cutting features while preserving multi-tenant boundaries and typed contracts.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-4">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Check className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">Quality & Growth</CardTitle>
+            <CardDescription className="leading-relaxed">
+              `agent-quality`, `agent-clean`, and `agent-problem-solver` close gaps before release, while `agent-designer`, `agent-documenter`, `agent-clone`, and `agent-sales` keep UI, knowledge, and revenue loops in sync.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-3xl font-semibold tracking-tight">`.claude/agents/*` Roster</h3>
+        <p class="text-base text-muted-foreground/90 leading-relaxed">
+          Every specialist agent follows a deterministic playbook tied to the ONE ontology. Together they plan, build, refine, document, and grow the platform with AI-first workflows.
+        </p>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Layers className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-director`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Engineering Director who validates ideas against the six-dimension ontology, sequences numbered plans, and assigns work to the right specialists.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Code className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-builder`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Full-Stack Builder who ships Convex backends, Astro frontends, and integrations while keeping multi-tenant boundaries intact.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Server className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-backend`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Backend Specialist who designs Convex schemas, mutations, and services mapped cleanly to groups, people, things, connections, events, and knowledge.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Database className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`backend-specialist`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Backend Executor who implements tasks on demand with strict typed contracts, auditing, and ontology alignment.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Layers className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-frontend`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Frontend Specialist who builds Astro + React interfaces that render ontology data with accessibility, performance, and island architecture best practices.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Code className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`frontend-specialist`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Frontend Executor who ships targeted UI components, pages, or flows while keeping design tokens and shared language intact.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Network className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-integrator`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Protocol Integrator who connects external systems (A2A, ACP, AP2, X402, AG-UI) and reconciles data so it lands in the ontology without drift.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Check className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-quality`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Quality Intelligence who defines acceptance criteria, runs validations, forecasts risks, and keeps ontology guarantees intact.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Sparkles className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-clean`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Refinement Specialist who refactors code, pays down debt, and restores architecture clarity without breaking typed contracts.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Brain className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-problem-solver`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Root Cause Analyst who investigates failing runs, diagnoses ontology or implementation gaps, and prescribes fixes.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Sparkles className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-designer`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Design Strategist who translates specs and quality requirements into wireframes, component definitions, and tokens ready for build.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Sparkles className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`designer`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Design Executor who produces targeted assets after tests are defined so implementation agents can ship pixel-perfect work.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <MessageSquare className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-documenter`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Knowledge Curator who captures learnings, updates docs, and indexes knowledge for richer context on future runs.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Cloud className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-clone`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Migration & Clone Specialist who migrates legacy assets, assembles AI clones, and preserves provenance.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <Card className="border-border/50 bg-card/60 backdrop-blur transition-all hover:border-primary/20 hover:bg-card">
+          <CardHeader className="space-y-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Network className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle className="text-lg">`agent-sales`</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Revenue Operator who qualifies leads, coordinates demos, assists trials, and ensures attribution flows through auditable events.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <div class="rounded-2xl border border-dashed border-border/60 bg-card/40 px-6 py-6 text-sm text-muted-foreground flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="space-y-2">
+          <h3 class="text-base font-semibold text-foreground">Need the full roster?</h3>
+          <p>
+            Explore every playbook inside <code>.claude/agents/</code>. Each file defines scope, tools, success metrics, and the ontology mappings every run must honor.
+          </p>
+        </div>
+        <a href="https://github.com/one-ie/one/tree/main/.claude/agents" target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" className="h-12 px-6 font-medium">
+            View Agents Directory
+          </Button>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

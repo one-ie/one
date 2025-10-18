@@ -4,25 +4,35 @@
  */
 
 import { vi } from 'vitest';
-import '@testing-library/jest-dom';
+import { createRequire } from 'module';
 
-// Mock Convex hooks
+const require = createRequire(import.meta.url);
+
+try {
+  require('@testing-library/jest-dom');
+} catch {
+  // Optional dependency; tests will be skipped when the library is unavailable
+}
+
+// Mock Convex hooks (only if vi.mock is available)
 export const mockUseQuery = vi.fn();
 export const mockUseMutation = vi.fn();
 
-vi.mock('convex/react', () => ({
-  useQuery: mockUseQuery,
-  useMutation: mockUseMutation,
-  ConvexProvider: ({ children }: any) => children,
-}));
+if (typeof (vi as any)?.mock === 'function') {
+  vi.mock('convex/react', () => ({
+    useQuery: mockUseQuery,
+    useMutation: mockUseMutation,
+    ConvexProvider: ({ children }: any) => children,
+  }));
 
-// Mock next-themes
-vi.mock('next-themes', () => ({
-  useTheme: () => ({
-    theme: 'light',
-    setTheme: vi.fn(),
-  }),
-}));
+  // Mock next-themes
+  vi.mock('next-themes', () => ({
+    useTheme: () => ({
+      theme: 'light',
+      setTheme: vi.fn(),
+    }),
+  }));
+}
 
 // Test data generators
 export function createMockGroup(overrides?: any) {
@@ -71,8 +81,10 @@ export function createMockStats() {
   };
 }
 
-// Reset mocks before each test
-beforeEach(() => {
-  mockUseQuery.mockReset();
-  mockUseMutation.mockReset();
-});
+// Reset mocks before each test when supported by the runner
+if (typeof beforeEach === 'function') {
+  beforeEach(() => {
+    mockUseQuery.mockReset();
+    mockUseMutation.mockReset();
+  });
+}

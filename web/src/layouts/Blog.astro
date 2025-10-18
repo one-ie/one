@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  entry: CollectionEntry<'blog'>;
+  entry: CollectionEntry<'blog' | 'stream'>;
   headings: { depth: number; slug: string; text: string }[];
   children: any;
 }
@@ -40,12 +40,12 @@ function formatDate(date: Date) {
       <!-- Main content -->
       <article class="min-w-0">
         <header class="mb-8">
-          <h1 class="text-4xl font-bold mb-4" data-usal="fade-up duration-700">
+          <h1 class="text-4xl font-bold mb-4">
             {entry.data.title}
           </h1>
 
           <!-- Meta info -->
-          <div class="flex flex-wrap items-center gap-3 mb-4" data-usal="fade-up duration-700 delay-100">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
             <Badge variant="secondary">{entry.data.category}</Badge>
             <span class="text-sm text-muted-foreground">
               {formatDate(new Date(entry.data.date))}
@@ -62,7 +62,7 @@ function formatDate(date: Date) {
           {/* Tags */}
           {
             entry.data.tags && entry.data.tags.length > 0 && (
-              <div class="flex flex-wrap gap-2 mb-4" data-usal="fade-up duration-700 delay-200">
+              <div class="flex flex-wrap gap-2 mb-4">
                 {entry.data.tags.map((tag) => (
                   <span class="text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground">
                     {tag}
@@ -74,14 +74,14 @@ function formatDate(date: Date) {
 
           {
             entry.data.description && (
-              <p class="text-xl text-muted-foreground mb-6" data-usal="fade-up duration-700 delay-300">
+              <p class="text-xl text-muted-foreground mb-6">
                 {entry.data.description}
               </p>
             )
           }
 
           {/* Share buttons */}
-          <div class="mb-6" data-usal="fade-in duration-700 delay-400">
+          <div class="mb-6">
             <ShareButtons
               client:load
               title={entry.data.title}
@@ -96,14 +96,13 @@ function formatDate(date: Date) {
                 alt={entry.data.title}
                 width={1200}
                 height={630}
-                class="w-full object-cover rounded-lg"
-                data-usal="fade-up duration-700 delay-200"
+                class="w-full object-cover rounded-lg blog-hero-image"
               />
             )
           }
         </header>
 
-        <div class="prose dark:prose-invert max-w-none" data-usal="fade-up duration-700 delay-300">
+        <div class="prose dark:prose-invert max-w-none">
           <slot />
         </div>
 
@@ -114,11 +113,31 @@ function formatDate(date: Date) {
       </article>
 
       {/* Sidebar with Table of Contents */}
-      <aside class="hidden lg:block" data-usal="fade-left duration-700 delay-400">
+      <aside class="hidden lg:block">
         <div class="sticky top-6">
           <TableOfContents client:load headings={headings} />
         </div>
       </aside>
     </div>
   </div>
+
+  <script>
+    // Hide broken images gracefully
+    document.addEventListener('DOMContentLoaded', () => {
+      const heroImage = document.querySelector('.blog-hero-image');
+      if (heroImage) {
+        heroImage.addEventListener('error', () => {
+          (heroImage as HTMLElement).style.display = 'none';
+        });
+      }
+
+      // Also handle images in the prose content
+      const contentImages = document.querySelectorAll('.prose img');
+      contentImages.forEach((img) => {
+        img.addEventListener('error', () => {
+          (img as HTMLElement).style.display = 'none';
+        });
+      });
+    });
+  </script>
 </Layout>

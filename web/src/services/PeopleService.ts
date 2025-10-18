@@ -8,10 +8,6 @@
 import { Effect } from "effect";
 import {
   DataProviderService,
-  type Thing,
-  type CreateThingInput,
-  ThingNotFoundError,
-  ThingCreateError,
 } from "../providers/DataProvider";
 import { isValidRole, type Role } from "./constants";
 import type { PeopleError } from "./types";
