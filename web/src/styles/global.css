@@ -27,6 +27,7 @@
   --color-border: 0 0% 100% / 0.1;
   --color-input: 0 0% 100% / 0.1;
   --color-ring: 216 63% 17%;
+  --color-overlay: 216 63% 17%;
   --color-chart-1: 216 55% 25%;
   --color-chart-2: 105 22% 32%;
   --color-chart-3: 219 14% 40%;
@@ -65,6 +66,31 @@
 body {
   background-color: hsl(var(--color-background));
   color: hsl(var(--color-foreground));
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(calc(var(--start-angle) * 1deg))
+      translateY(calc(var(--radius) * 1px))
+      rotate(calc(var(--start-angle) * -1deg));
+  }
+  to {
+    transform: rotate(calc(360deg + (var(--start-angle) * 1deg)))
+      translateY(calc(var(--radius) * 1px))
+      rotate(calc(-360deg + (var(--start-angle) * -1deg)));
+  }
+}
+
+.animate-orbit {
+  position: absolute;
+  animation: orbit calc(var(--duration) * 1s) linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-orbit {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
 
 /* Prevent horizontal scroll from off-canvas elements on mobile */
@@ -133,6 +159,7 @@ html, body {
   --color-border: 0 0% 100% / 0.1;
   --color-input: 0 0% 100% / 0.1;
   --color-ring: 216 63% 68%;
+  --color-overlay: 0 0% 0%;
   --color-chart-1: 216 63% 68%;
   --color-chart-2: 105 22% 45%;
   --color-chart-3: 219 14% 38%;
@@ -156,14 +183,26 @@ html, body {
   --sidebar-ring: 216 63% 68%;
 }
 
+/* Keep gradient text readable when background clipping is unavailable */
+.bg-clip-text.text-transparent {
+  color: hsl(var(--primary));
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .bg-clip-text.text-transparent {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
 /* Add styles for code blocks */
 .prose pre {
-  background-color: hsl(var(--color-muted)) !important;
+  background-color: hsl(var(--color-sidebar-background)) !important;
 }
 
 .prose code {
-  background-color: hsl(var(--color-muted)) !important;
-  color: hsl(var(--color-foreground)) !important;
+  background-color: hsl(var(--color-sidebar-background)) !important;
+  color: hsl(var(--color-sidebar-foreground)) !important;
 }
 
 /* Optional: Style inline code differently if needed */
@@ -190,6 +229,16 @@ html, body {
   background: inherit;
   width: 100%;
   height: 100%;
+}
+
+/* Ensure modal overlays are fully opaque */
+[data-radix-dialog-overlay],
+[data-radix-alert-dialog-overlay],
+[data-vaul-overlay],
+#command-modal > .absolute.inset-0 {
+  background-color: hsl(var(--color-overlay)) !important;
+  --tw-bg-opacity: 1 !important;
+  opacity: 1 !important;
 }
 
 @theme inline {

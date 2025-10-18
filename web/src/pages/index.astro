@@ -9,6 +9,9 @@ import {
   CardContent,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { GitSection } from '@/components/GitSection';
+import { PerformanceChart } from '@/components/features/PerformanceChart';
+import OrbitingCircles from '@/components/magicui/orbiting-circles';
 import {
   Github,
   Check,
@@ -31,618 +34,512 @@ import {
   Network,
   Bot,
   Building2,
+  ArrowRight,
 } from 'lucide-react';
+
+const innerOrbits = [
+  {
+    startAngle: 0,
+    duration: 36,
+    logo: '/logos/shopify.svg',
+    name: 'Shopify',
+    caption: 'Storefront',
+  },
+  {
+    startAngle: 90,
+    duration: 36,
+    logo: '/logos/woocommerce.svg',
+    name: 'WooCommerce',
+    caption: 'Commerce',
+  },
+  {
+    startAngle: 180,
+    duration: 36,
+    logo: '/logos/magento.svg',
+    name: 'Magento',
+    caption: 'Enterprise',
+  },
+  {
+    startAngle: 270,
+    duration: 36,
+    logo: '/logos/stripe.svg',
+    name: 'Stripe',
+    caption: 'Billing',
+  },
+];
+
+const outerOrbits = [
+  {
+    startAngle: 0,
+    duration: 48,
+    logo: '/logos/openai.svg',
+    name: 'OpenAI',
+    caption: 'GPT-4',
+  },
+  {
+    startAngle: 72,
+    duration: 48,
+    logo: '/logos/anthropic.svg',
+    name: 'Anthropic',
+    caption: 'Claude 3',
+  },
+  {
+    startAngle: 144,
+    duration: 48,
+    logo: '/logos/gemini.svg',
+    name: 'Google Gemini',
+    caption: 'Multimodal',
+  },
+  {
+    startAngle: 216,
+    duration: 48,
+    logo: '/logos/mistral.svg',
+    name: 'Mistral AI',
+    caption: 'Open-Weight',
+  },
+  {
+    startAngle: 288,
+    duration: 48,
+    logo: '/logos/deepseek.svg',
+    name: 'DeepSeek',
+    caption: 'Optimized',
+  },
+];
+
 ---
 
 <Layout title="ONE - Build AI Agents, Applications, and Your Audience">
-  <!-- Hero Section -->
+  <style is:global>
+    /* Desktop only: hide header until scroll on home page */
+    @media (min-width: 1024px) {
+      body.home-header-hidden header[data-home-header] {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-12px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+      body.home-header-hidden.home-header-visible header[data-home-header] {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+    }
+
+    /* Mobile: header always visible */
+    @media (max-width: 1023px) {
+      body.home-header-hidden header[data-home-header] {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <script is:inline>
+    if (typeof window !== 'undefined') {
+      const init = () => {
+        const body = document.body;
+        if (!body) return;
+
+        // Check if we're on desktop (lg breakpoint = 1024px)
+        const isDesktop = () => window.innerWidth >= 1024;
+
+        const applyVisibility = () => {
+          // Only hide/show header on desktop
+          if (isDesktop()) {
+            if (window.scrollY > 120) {
+              body.classList.add('home-header-visible');
+            } else {
+              body.classList.remove('home-header-visible');
+            }
+          } else {
+            // On mobile, always show header
+            body.classList.remove('home-header-visible');
+          }
+        };
+
+        // Only add hidden class on desktop
+        if (isDesktop()) {
+          body.classList.add('home-header-hidden');
+        }
+
+        applyVisibility();
+        window.addEventListener('scroll', applyVisibility, { passive: true });
+
+        // Handle window resize
+        const handleResize = () => {
+          if (isDesktop()) {
+            body.classList.add('home-header-hidden');
+            applyVisibility();
+          } else {
+            body.classList.remove('home-header-hidden', 'home-header-visible');
+          }
+        };
+        window.addEventListener('resize', handleResize, { passive: true });
+
+        const cleanup = () => {
+          body.classList.remove('home-header-hidden', 'home-header-visible');
+          window.removeEventListener('scroll', applyVisibility);
+          window.removeEventListener('resize', handleResize);
+          window.removeEventListener('pagehide', cleanup);
+          window.removeEventListener('beforeunload', cleanup);
+        };
+
+        window.addEventListener('pagehide', cleanup);
+        window.addEventListener('beforeunload', cleanup);
+      };
+
+      if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', init, { once: true });
+      } else {
+        init();
+      }
+    }
+  </script>
+  <GitSection client:load />
+
+  <!-- Who ONE Is For -->
   <section
-    class="relative min-h-screen flex items-center justify-center px-4 py-20 sm:px-6 lg:px-8"
+    class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
   >
-    <div class="w-full max-w-7xl mx-auto">
-      <!-- Main Content -->
-      <div class="text-center space-y-12">
-        <!-- Heading -->
-        <div class="space-y-8">
-          <span
-            class="inline-block text-sm font-semibold uppercase tracking-[0.3em] text-primary"
-            >Bring your ideas to life</span
-          >
-          <h1
-            class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold !leading-[1.1] tracking-tight opacity-70"
-          >
-            English → Code → Reality
-          </h1>
-          <p
-            class="text-lg sm:text-xl text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed"
-          >
-            ONE transforms ideas into living, AI-powered businesses through
-            plain English commands. Built with love by humans and AI working
-            together, ONE was made for founders, engineers, creators and
-            educators.
-          </p>
-        </div>
-
-        <!-- 4 Steps Grid -->
-        <div
-          class="mt-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto"
-        >
-          <div
-            class="group rounded-2xl border border-border/50 bg-card/50 backdrop-blur p-8 hover:border-primary/30 hover:bg-card transition-all"
-          >
-            <div class="flex flex-col items-center text-center space-y-4">
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-xl font-bold text-primary group-hover:bg-primary/20 transition-colors"
-              >
-                1
-              </div>
-              <h2 class="text-xl font-bold">Write in English</h2>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                Simple commands anyone can understand
-              </p>
-            </div>
-          </div>
-
-          <div
-            class="group rounded-2xl border border-border/50 bg-card/50 backdrop-blur p-8 hover:border-primary/30 hover:bg-card transition-all"
-          >
-            <div class="flex flex-col items-center text-center space-y-4">
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-xl font-bold text-primary group-hover:bg-primary/20 transition-colors"
-              >
-                2
-              </div>
-              <h2 class="text-xl font-bold">System Validates</h2>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                Instant feedback on your agent design
-              </p>
-            </div>
-          </div>
-
-          <div
-            class="group rounded-2xl border border-border/50 bg-card/50 backdrop-blur p-8 hover:border-primary/30 hover:bg-card transition-all"
-          >
-            <div class="flex flex-col items-center text-center space-y-4">
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-xl font-bold text-primary group-hover:bg-primary/20 transition-colors"
-              >
-                3
-              </div>
-              <h2 class="text-xl font-bold">Code Generated</h2>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                Production TypeScript, type-safe and tested
-              </p>
-            </div>
-          </div>
-
-          <div
-            class="group rounded-2xl border border-border/50 bg-card/50 backdrop-blur p-8 hover:border-primary/30 hover:bg-card transition-all"
-          >
-            <div class="flex flex-col items-center text-center space-y-4">
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-xl font-bold text-primary group-hover:bg-primary/20 transition-colors"
-              >
-                4
-              </div>
-              <h2 class="text-xl font-bold">Deploy to Edge</h2>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                Live globally in 60 seconds
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- CTA Buttons -->
-        <div
-          class="flex flex-col sm:flex-row gap-4 justify-center items-center mt-16"
-        >
-          <a
-            href="https://github.com/one-ie/stack"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button size="lg" className="h-14 px-8 text-lg font-semibold">
-              <Github className="mr-2 h-5 w-5" />
-              Get Started Free
-            </Button>
-          </a>
-          <a href="#examples">
-            <Button
-              variant="outline"
-              size="lg"
-              className="h-14 px-8 text-lg font-semibold"
-            >
-              See Examples
-            </Button>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Six Dimensions Showcase: Complete Ontology Flow -->
-  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
-    <div class="mx-auto max-w-full sm:max-w-4xl">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
       <div class="mb-20 space-y-4 text-center">
         <Badge
           variant="outline"
           className="mb-2 inline-flex items-center gap-2"
           data-usal="fade-down duration-600"
         >
-          <Network className="h-4 w-4" />
-          The Foundation
+          <Users className="h-4 w-4" />
+          Built For Everyone
         </Badge>
         <h2
           class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
           data-usal="fade-up duration-700 delay-100"
         >
-          Six Dimensions
+          Who Is ONE For?
           <br />
-          <span class="text-muted-foreground">One Unified Model</span>
+          <span class="text-muted-foreground">You. Right Now.</span>
         </h2>
         <p
           class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground"
           data-usal="fade-up duration-700 delay-200"
         >
-          Every feature maps to six dimensions. Groups partition hierarchically,
-          People authorize intent, while Things, Connections, Events, and
-          Knowledge execute, track, and contextualize every move.
+          From kids learning to code to enterprises managing billions in revenue—the same 6-dimension ontology scales to your needs.
         </p>
       </div>
 
-      <!-- Single Column: Groups → People → Things → Connections → Events → Knowledge -->
-      <div class="space-y-6">
-        <!-- 1. Groups Layer -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-up duration-600 delay-50"
-        >
-          <Card
-            className="group w-full border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10"
-          >
-            <CardHeader className="space-y-4">
-              <div class="flex items-start gap-4">
-                <div
-                  class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/20 transition-colors group-hover:bg-primary/30"
-                >
-                  <Building2 className="h-8 w-8 text-primary" />
-                </div>
-                <div class="flex-1 space-y-3">
-                  <CardTitle className="text-2xl">Groups</CardTitle>
-                  <CardDescription className="text-base leading-relaxed">
-                    Hierarchical containers that nest infinitely—from friend circles
-                    to governments. 6 group types (root, org, team, project, circle, community)
-                    with automatic inheritance and perfect data isolation.
-                  </CardDescription>
-                  <div class="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="border-border/50"
-                      >Hierarchical</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Flexible Nesting</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Universal Scale</Badge
-                    >
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
-                <p class="text-sm leading-relaxed text-muted-foreground">
-                  <span class="font-semibold text-foreground"
-                    >AI Customization:</span
-                  > Each group inherits settings from parents while maintaining
-                  its own agents, knowledge bases, and training data—creating
-                  composable AI that scales from friend circles to enterprises.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <!-- Flow Arrow Down -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-in duration-400 delay-75"
-        >
-          <div class="flex flex-col items-center gap-2">
-            <div
-              class="h-8 w-px bg-gradient-to-b from-primary/60 to-primary/30"
-            >
-            </div>
-            <div class="text-xs font-medium text-primary">
-              Contains & Isolates
-            </div>
-            <div
-              class="h-8 w-px bg-gradient-to-b from-primary/30 to-primary/60"
-            >
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. People Layer -->
-        <div
-          class="flex justify-center"
+      <!-- Segment Selector Grid -->
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <!-- Kids -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
           data-usal="fade-up duration-600 delay-100"
         >
-          <Card
-            className="group w-full border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10"
-          >
-            <CardHeader className="space-y-4">
-              <div class="flex items-start gap-4">
-                <div
-                  class="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-primary/20 transition-colors group-hover:bg-primary/30"
-                >
-                  <Users className="h-8 w-8 text-primary" />
-                </div>
-                <div class="flex-1 space-y-3">
-                  <CardTitle className="text-2xl">People</CardTitle>
-                  <CardDescription className="text-base leading-relaxed">
-                    Set intent, govern outcomes, authorize every action. Humans
-                    remain in command while agents execute.
-                  </CardDescription>
-                  <div class="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="border-border/50"
-                      >Intent</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Governance</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Authorization</Badge
-                    >
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div class="rounded-lg border border-primary/20 bg-primary/5 p-4">
-                <p class="text-sm leading-relaxed text-muted-foreground">
-                  <span class="font-semibold text-foreground"
-                    >AI Customization:</span
-                  > Your preferences, writing style, brand voice, and approval rules
-                  teach agents how to work exactly the way you want.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Users className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">For Kids 🧒</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Create, share, and play safely. Learn to build your first AI agent or community.
+            </CardDescription>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary" className="text-xs">Communities</Badge>
+              <Badge variant="secondary" className="text-xs">Content</Badge>
+              <Badge variant="secondary" className="text-xs">Safe</Badge>
+            </div>
+          </CardHeader>
+        </Card>
 
-        <!-- Flow Arrow Down -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-in duration-400 delay-150"
+        <!-- Young People -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
+          data-usal="fade-up duration-600 delay-150"
         >
-          <div class="flex flex-col items-center gap-2">
+          <CardHeader className="space-y-4">
             <div
-              class="h-8 w-px bg-gradient-to-b from-primary/60 to-primary/30"
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
             >
+              <Code className="h-6 w-6 text-primary" />
             </div>
-            <div class="text-xs font-medium text-primary">
-              Defines & Creates
+            <CardTitle className="text-xl">For Young People 🧑‍💻</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Learn skills, build projects, start your first side hustle. Launch your career.
+            </CardDescription>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary" className="text-xs">Courses</Badge>
+              <Badge variant="secondary" className="text-xs">Projects</Badge>
+              <Badge variant="secondary" className="text-xs">Monetize</Badge>
             </div>
-            <div
-              class="h-8 w-px bg-gradient-to-b from-primary/30 to-primary/60"
-            >
-            </div>
-          </div>
-        </div>
+          </CardHeader>
+        </Card>
 
-        <!-- 2. Things Layer -->
-        <div
-          class="flex justify-center"
+        <!-- Creators -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
           data-usal="fade-up duration-600 delay-200"
         >
-          <Card
-            className="group w-full border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
-          >
-            <CardHeader className="space-y-4">
-              <div class="flex items-start gap-4">
-                <div
-                  class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
-                >
-                  <Box className="h-7 w-7 text-primary" />
-                </div>
-                <div class="flex-1 space-y-3">
-                  <CardTitle className="text-xl">Things</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Every entity — agents, products, audiences, tokens, courses.
-                    66 types out of the box.
-                  </CardDescription>
-                  <div class="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="border-border/50"
-                      >Agents</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Products</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Audiences</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Tokens</Badge
-                    >
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div class="rounded-lg border border-border/50 bg-muted/30 p-4">
-                <p class="text-sm leading-relaxed text-muted-foreground">
-                  <span class="font-semibold text-foreground"
-                    >AI Customization:</span
-                  > Rich properties store context about each entity— sales agent
-                  knows lead history, content agent knows top topics, support agent
-                  knows customer issues.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <!-- Flow Arrow Down -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-in duration-400 delay-250"
-        >
-          <div class="flex flex-col items-center gap-2">
+          <CardHeader className="space-y-4">
             <div
-              class="h-8 w-px bg-gradient-to-b from-primary/60 to-primary/30"
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
             >
+              <Wand2 className="h-6 w-6 text-primary" />
             </div>
-            <div class="text-xs font-medium text-primary">
-              Relates & Connects
+            <CardTitle className="text-xl">For Creators 🧑‍🎨</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Build your audience, clone yourself, monetize your passion. AI works for you 24/7.
+            </CardDescription>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary" className="text-xs">AI Clones</Badge>
+              <Badge variant="secondary" className="text-xs">Tokens</Badge>
+              <Badge variant="secondary" className="text-xs">Courses</Badge>
             </div>
-            <div
-              class="h-8 w-px bg-gradient-to-b from-primary/30 to-primary/60"
-            >
-            </div>
-          </div>
-        </div>
+          </CardHeader>
+        </Card>
 
-        <!-- 3. Connections Layer -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-up duration-600 delay-300"
+        <!-- Sellers -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
+          data-usal="fade-up duration-600 delay-250"
         >
-          <Card
-            className="group w-full border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
-          >
-            <CardHeader className="space-y-4">
-              <div class="flex items-start gap-4">
-                <div
-                  class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
-                >
-                  <GitBranch className="h-7 w-7 text-primary" />
-                </div>
-                <div class="flex-1 space-y-3">
-                  <CardTitle className="text-xl">Connections</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Express relationships — ownership, memberships, revenue
-                    flows. Powers collaboration and value exchange.
-                  </CardDescription>
-                  <div class="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="border-border/50"
-                      >Owns</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Member of</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Follows</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Transacted</Badge
-                    >
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div class="rounded-lg border border-border/50 bg-muted/30 p-4">
-                <p class="text-sm leading-relaxed text-muted-foreground">
-                  <span class="font-semibold text-foreground"
-                    >AI Customization:</span
-                  > Relationship metadata reveals engagement levels, loyalty patterns,
-                  collaboration history—agents prioritize hot leads, reward superfans,
-                  coordinate team workflows.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <!-- Flow Arrow Down -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-in duration-400 delay-350"
-        >
-          <div class="flex flex-col items-center gap-2">
+          <CardHeader className="space-y-4">
             <div
-              class="h-8 w-px bg-gradient-to-b from-primary/60 to-primary/30"
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
             >
+              <DollarSign className="h-6 w-6 text-primary" />
             </div>
-            <div class="text-xs font-medium text-primary">Tracks & Records</div>
-            <div
-              class="h-8 w-px bg-gradient-to-b from-primary/30 to-primary/60"
-            >
+            <CardTitle className="text-xl">For Sellers 🛒</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Sell products, manage customers, automate sales. AI agents handle the funnel.
+            </CardDescription>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary" className="text-xs">Products</Badge>
+              <Badge variant="secondary" className="text-xs">Sales Agents</Badge>
+              <Badge variant="secondary" className="text-xs">Analytics</Badge>
             </div>
-          </div>
-        </div>
+          </CardHeader>
+        </Card>
 
-        <!-- 4. Events Layer -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-up duration-600 delay-400"
+        <!-- Marketers -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
+          data-usal="fade-up duration-600 delay-100"
         >
-          <Card
-            className="group w-full border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
-          >
-            <CardHeader className="space-y-4">
-              <div class="flex items-start gap-4">
-                <div
-                  class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
-                >
-                  <Activity className="h-7 w-7 text-primary" />
-                </div>
-                <div class="flex-1 space-y-3">
-                  <CardTitle className="text-xl">Events</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Chronicle every action — launches, interactions,
-                    transactions, insights. Full audit trail built-in.
-                  </CardDescription>
-                  <div class="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="border-border/50"
-                      >Created</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Purchased</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Viewed</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Completed</Badge
-                    >
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div class="rounded-lg border border-border/50 bg-muted/30 p-4">
-                <p class="text-sm leading-relaxed text-muted-foreground">
-                  <span class="font-semibold text-foreground"
-                    >AI Customization:</span
-                  > Event streams reveal behavior patterns— what content performs
-                  best, which features drive engagement, when users convert. Agents
-                  learn and adapt continuously.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <!-- Flow Arrow Down -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-in duration-400 delay-450"
-        >
-          <div class="flex flex-col items-center gap-2">
+          <CardHeader className="space-y-4">
             <div
-              class="h-8 w-px bg-gradient-to-b from-primary/60 to-primary/30"
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
             >
+              <TrendingUp className="h-6 w-6 text-primary" />
             </div>
-            <div class="text-xs font-medium text-primary">
-              Learns & Enriches
+            <CardTitle className="text-xl">For Marketers 📈</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Launch campaigns, generate leads, analyze performance. Data-driven automation.
+            </CardDescription>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary" className="text-xs">Campaigns</Badge>
+              <Badge variant="secondary" className="text-xs">Leads</Badge>
+              <Badge variant="secondary" className="text-xs">Insights</Badge>
             </div>
-            <div
-              class="h-8 w-px bg-gradient-to-b from-primary/30 to-primary/60"
-            >
-            </div>
-          </div>
-        </div>
+          </CardHeader>
+        </Card>
 
-        <!-- 5. Knowledge Layer -->
-        <div
-          class="flex justify-center"
-          data-usal="fade-up duration-600 delay-500"
+        <!-- Designers -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
+          data-usal="fade-up duration-600 delay-150"
         >
-          <Card
-            className="group w-full border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
-          >
-            <CardHeader className="space-y-4">
-              <div class="flex items-start gap-4">
-                <div
-                  class="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
-                >
-                  <Brain className="h-7 w-7 text-primary" />
-                </div>
-                <div class="flex-1 space-y-3">
-                  <CardTitle className="text-xl">Knowledge</CardTitle>
-                  <CardDescription className="leading-relaxed">
-                    Store semantics — labels, chunks, embeddings. Makes agents
-                    intelligent and enables rich context.
-                  </CardDescription>
-                  <div class="flex flex-wrap gap-2">
-                    <Badge variant="secondary" className="border-border/50"
-                      >Tags</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Embeddings</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Context</Badge
-                    >
-                    <Badge variant="secondary" className="border-border/50"
-                      >Search</Badge
-                    >
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div class="rounded-lg border border-border/50 bg-muted/30 p-4">
-                <p class="text-sm leading-relaxed text-muted-foreground">
-                  <span class="font-semibold text-foreground"
-                    >AI Customization:</span
-                  > Vector embeddings power semantic search, document understanding,
-                  intelligent recommendations. Your knowledge base becomes liquid
-                  intelligence agents can query instantly.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Sparkles className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">For Designers 🎨</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Create assets, build templates, maintain brand consistency. Design at scale.
+            </CardDescription>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary" className="text-xs">Templates</Badge>
+              <Badge variant="secondary" className="text-xs">Assets</Badge>
+              <Badge variant="secondary" className="text-xs">Branding</Badge>
+            </div>
+          </CardHeader>
+        </Card>
+
+        <!-- Engineers -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
+          data-usal="fade-up duration-600 delay-200"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Code className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">For Engineers ⚙️</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Connect systems, automate workflows, build integrations. APIs that just work.
+            </CardDescription>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary" className="text-xs">Integrations</Badge>
+              <Badge variant="secondary" className="text-xs">Workflows</Badge>
+              <Badge variant="secondary" className="text-xs">APIs</Badge>
+            </div>
+          </CardHeader>
+        </Card>
+
+        <!-- Executives -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5 cursor-pointer"
+          data-usal="fade-up duration-600 delay-250"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Building2 className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">For Executives 🤵</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Monitor performance, make data-driven decisions, oversee strategy. Business intelligence.
+            </CardDescription>
+            <div class="flex flex-wrap gap-2 pt-2">
+              <Badge variant="secondary" className="text-xs">Analytics</Badge>
+              <Badge variant="secondary" className="text-xs">Strategy</Badge>
+              <Badge variant="secondary" className="text-xs">Insights</Badge>
+            </div>
+          </CardHeader>
+        </Card>
       </div>
 
-      <!-- Complete Journey Summary -->
       <div
-        class="mt-16 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-background p-8 backdrop-blur"
-        data-usal="fade-up duration-700 delay-600"
+        class="mt-16 rounded-lg border border-primary/20 bg-primary/5 p-8 backdrop-blur text-center"
       >
-        <h3 class="mb-6 text-center text-2xl font-bold">The Complete Flow</h3>
-        <div class="space-y-4 text-center">
-          <p class="text-lg leading-relaxed text-muted-foreground">
-            <strong class="text-foreground">Your Group</strong> contains
-            <strong class="text-foreground">You (Person)</strong> who creates an
-            <strong class="text-foreground">AI Agent (Thing)</strong> that
-            <strong class="text-foreground"
-              >follows your customers (Connection)</strong
-            >,
-            <strong class="text-foreground"
-              >tracks every interaction (Event)</strong
-            >, and
-            <strong class="text-foreground"
-              >learns from your docs (Knowledge)</strong
-            >.
-          </p>
-          <p class="text-base text-muted-foreground">
-            Each dimension adds context. Every interaction makes agents smarter.
-            The ontology ensures nothing is lost—
-            <br class="hidden sm:block" />
-            your AI gets more personalized, more accurate, more valuable over time.
-          </p>
-          <Badge variant="secondary" className="mt-4 text-sm">
-            6 Dimensions × Infinite Possibilities = Your AI Business
-          </Badge>
-        </div>
-      </div>
-
-      <div class="mt-12 text-center">
-        <p class="text-sm text-muted-foreground">
-          Protocol-agnostic clarity • Human oversight • Composable by design
+        <p class="text-lg leading-relaxed">
+          <strong class="text-foreground">Same platform. Same 6 dimensions. Infinite possibilities.</strong>
+          <br class="hidden sm:block" />
+          <span class="text-muted-foreground">The ontology adapts to YOUR world, not the other way around.</span>
         </p>
+        <div class="mt-6">
+          <a href="/ontology">
+            <Button size="lg" variant="outline">
+              Explore The Ontology
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- How It Works -->
   <section
-    class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
+    class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
   >
     <div class="mx-auto max-w-full sm:max-w-6xl">
+      <!-- Orbiting Circles with Logos -->
+      <div
+        class="relative mx-auto mb-20 flex h-[500px] sm:h-[600px] w-full max-w-[360px] sm:max-w-[500px] items-center justify-center origin-center scale-[0.85] sm:scale-100"
+      >
+        <div class="absolute inset-0 flex items-center justify-center">
+          <svg class="absolute size-full" viewBox="0 0 900 900">
+            <circle
+              cx="450"
+              cy="450"
+              r="240"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.12"
+              stroke-width="1.5"
+              stroke-dasharray="6 4"
+            ></circle>
+            <circle
+              cx="450"
+              cy="450"
+              r="360"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.1"
+              stroke-width="1.5"
+              stroke-dasharray="6 4"
+            ></circle>
+          </svg>
+        </div>
+
+        <div
+          class="relative flex h-60 w-60 items-center justify-center rounded-full bg-primary/10 shadow-inner"
+        >
+          <div
+            class="flex h-28 w-28 items-center justify-center rounded-full bg-primary text-xl font-semibold text-primary-foreground shadow-lg"
+          >
+            <img
+              src="/logos/one.svg"
+              alt="ONE"
+              class="h-16 w-16"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        {innerOrbits.map(({ startAngle, duration, logo, name, caption }, index) => (
+          <OrbitingCircles
+            radius={240}
+            duration={duration}
+            startAngle={startAngle}
+            client:load
+          >
+            <div class="flex flex-col items-center text-center">
+              <div
+                class="flex h-14 w-14 items-center justify-center rounded-full bg-background/90 p-2 shadow-sm backdrop-blur"
+              >
+                <img
+                  src={logo}
+                  alt={name}
+                  class="h-full w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <span class="mt-2 text-sm font-medium text-foreground">
+                {name}
+              </span>
+              <span class="text-xs text-muted-foreground whitespace-nowrap">
+                {caption}
+              </span>
+            </div>
+          </OrbitingCircles>
+        ))}
+
+        {outerOrbits.map(({ startAngle, duration, logo, name, caption }, index) => (
+          <OrbitingCircles
+            radius={360}
+            duration={duration}
+            startAngle={startAngle}
+            client:load
+          >
+            <div class="flex flex-col items-center text-center">
+              <div
+                class="flex h-16 w-16 items-center justify-center rounded-full bg-card/70 p-3 shadow-md backdrop-blur"
+              >
+                <img
+                  src={logo}
+                  alt={name}
+                  class="h-full w-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <span class="mt-2 text-sm font-semibold text-foreground">
+                {name}
+              </span>
+              <span class="text-xs text-muted-foreground whitespace-nowrap">
+                {caption}
+              </span>
+            </div>
+          </OrbitingCircles>
+        ))}
+      </div>
+
       <div class="mb-20 space-y-4 text-center">
         <Badge
           variant="outline"
@@ -686,6 +583,17 @@ import {
               Describe what you want: "CREATE ai clone", "CALL OpenAI", "RECORD
               purchase". Use 15 simple commands anyone can understand.
             </CardDescription>
+            <div class="space-y-2 pt-2">
+              <div class="text-xs text-muted-foreground">
+                <span class="font-semibold text-foreground">Creator:</span> "CREATE my AI clone"
+              </div>
+              <div class="text-xs text-muted-foreground">
+                <span class="font-semibold text-foreground">Seller:</span> "RECORD purchase event"
+              </div>
+              <div class="text-xs text-muted-foreground">
+                <span class="font-semibold text-foreground">Engineer:</span> "CONNECT to Stripe API"
+              </div>
+            </div>
           </CardHeader>
         </Card>
 
@@ -704,6 +612,17 @@ import {
               Checks against the ontology: Do these entity types exist? Are
               connections valid? Are services available? Instant feedback.
             </CardDescription>
+            <div class="space-y-2 pt-2">
+              <div class="text-xs text-muted-foreground">
+                <Check className="inline h-3 w-3 text-green-500" /> <span class="font-semibold text-foreground">ai_clone</span> entity type exists
+              </div>
+              <div class="text-xs text-muted-foreground">
+                <Check className="inline h-3 w-3 text-green-500" /> <span class="font-semibold text-foreground">tokens_purchased</span> event valid
+              </div>
+              <div class="text-xs text-muted-foreground">
+                <Check className="inline h-3 w-3 text-green-500" /> <span class="font-semibold text-foreground">Stripe</span> service available
+              </div>
+            </div>
           </CardHeader>
         </Card>
 
@@ -723,6 +642,20 @@ import {
               functions, React components, full test suite. Type-safe, tested,
               ready.
             </CardDescription>
+            <div class="space-y-2 pt-2">
+              <div class="flex items-center gap-2">
+                <Badge variant="secondary" className="text-xs">Backend</Badge>
+                <span class="text-xs text-muted-foreground">Mutations + Queries</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Badge variant="secondary" className="text-xs">Frontend</Badge>
+                <span class="text-xs text-muted-foreground">React Components</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <Badge variant="secondary" className="text-xs">Tests</Badge>
+                <span class="text-xs text-muted-foreground">50+ test cases</span>
+              </div>
+            </div>
           </CardHeader>
         </Card>
 
@@ -741,6 +674,17 @@ import {
               Push to Cloudflare's global network. Unlimited requests, instant
               updates, zero configuration. Live in 60 seconds.
             </CardDescription>
+            <div class="space-y-2 pt-2">
+              <div class="text-xs text-muted-foreground">
+                <Globe className="inline h-3 w-3 text-primary" /> <span class="font-semibold text-foreground">330+ locations</span> worldwide
+              </div>
+              <div class="text-xs text-muted-foreground">
+                <Zap className="inline h-3 w-3 text-primary" /> <span class="font-semibold text-foreground">&lt; 330ms</span> average response
+              </div>
+              <div class="text-xs text-muted-foreground">
+                <Check className="inline h-3 w-3 text-green-500" /> <span class="font-semibold text-foreground">Free tier</span> unlimited
+              </div>
+            </div>
           </CardHeader>
         </Card>
       </div>
@@ -749,7 +693,7 @@ import {
         class="mt-16 rounded-lg border border-border/50 bg-card/50 p-8 backdrop-blur"
       >
         <h3 class="mb-6 text-center text-2xl font-bold">
-          Complete Example: AI Clone Feature
+          Complete Example: Portfolio Website
         </h3>
         <div class="grid gap-8 lg:grid-cols-3">
           <div class="space-y-3">
@@ -764,14 +708,17 @@ import {
               You Write
             </div>
             <pre
-              class="overflow-x-auto rounded bg-muted/50 p-3 text-xs leading-relaxed"><code>{`FEATURE: Create AI clone
+              class="overflow-x-auto rounded bg-muted/50 p-3 text-xs leading-relaxed"><code>{`WEBSITE: Portfolio
 
-CHECK videos exist
-CALL ElevenLabs clone voice
-CALL OpenAI analyze style
-CREATE ai clone
-CONNECT creator owns clone
-RECORD clone created`}</code></pre>
+CREATE pages:
+  - / → Hero + featured work
+  - /work → Project grid
+  - /about → Bio + skills
+  - /contact → Form
+
+ADD blog with Astro collections
+STYLE: Minimal, dark theme
+DEPLOY: Cloudflare Pages`}</code></pre>
           </div>
 
           <div class="space-y-3">
@@ -786,14 +733,20 @@ RECORD clone created`}</code></pre>
               System Generates
             </div>
             <pre
-              class="overflow-x-auto rounded bg-muted/50 p-3 text-xs leading-relaxed"><code>{`export const createClone =
-  mutation(async (ctx, args) => {
-  // Validation
-  // Service calls
-  // Database updates
-  // Event logging
-  // All typed & tested
-});`}</code></pre>
+              class="overflow-x-auto rounded bg-muted/50 p-3 text-xs leading-relaxed"><code>{`src/pages/
+  index.astro
+  work.astro
+  about.astro
+  contact.astro
+
+src/content/
+  blog/config.ts
+  projects/config.ts
+
+Responsive layout
+Dark mode
+Contact form
+All deployed`}</code></pre>
           </div>
 
           <div class="space-y-3">
@@ -810,19 +763,19 @@ RECORD clone created`}</code></pre>
             <div class="space-y-2 text-sm">
               <div class="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
-                <span>Backend API endpoints</span>
+                <span>4 Astro pages (SSR)</span>
               </div>
               <div class="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
-                <span>React UI components</span>
+                <span>React components</span>
               </div>
               <div class="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
-                <span>Complete test suite</span>
+                <span>Content collections</span>
               </div>
               <div class="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
-                <span>Database schema</span>
+                <span>Responsive design</span>
               </div>
               <div class="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
@@ -830,7 +783,7 @@ RECORD clone created`}</code></pre>
               </div>
               <div class="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
-                <span>Full documentation</span>
+                <span>100/100 Lighthouse</span>
               </div>
             </div>
           </div>
@@ -882,7 +835,13 @@ RECORD clone created`}</code></pre>
       <div class="grid gap-8 lg:grid-cols-2">
         <Card className="border-border/50 bg-card/50 backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-2xl">Sales Agent</CardTitle>
+            <div class="flex items-center justify-between mb-2">
+              <CardTitle className="text-2xl">Sales Agent</CardTitle>
+              <div class="flex gap-2">
+                <Badge variant="outline" className="text-xs">For Sellers</Badge>
+                <Badge variant="outline" className="text-xs">For Executives</Badge>
+              </div>
+            </div>
             <CardDescription
               >Qualifies leads, answers questions, books meetings</CardDescription
             >
@@ -915,7 +874,13 @@ WHEN lead sends message:
 
         <Card className="border-border/50 bg-card/50 backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-2xl">Content Agent</CardTitle>
+            <div class="flex items-center justify-between mb-2">
+              <CardTitle className="text-2xl">Content Agent</CardTitle>
+              <div class="flex gap-2">
+                <Badge variant="outline" className="text-xs">For Creators</Badge>
+                <Badge variant="outline" className="text-xs">For Marketers</Badge>
+              </div>
+            </div>
             <CardDescription
               >Generates posts, schedules publishing, analyzes performance</CardDescription
             >
@@ -947,7 +912,13 @@ EVERY DAY at 8am:
 
         <Card className="border-border/50 bg-card/50 backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-2xl">Support Agent</CardTitle>
+            <div class="flex items-center justify-between mb-2">
+              <CardTitle className="text-2xl">Support Agent</CardTitle>
+              <div class="flex gap-2">
+                <Badge variant="outline" className="text-xs">For Sellers</Badge>
+                <Badge variant="outline" className="text-xs">For Educators</Badge>
+              </div>
+            </div>
             <CardDescription
               >Answers customer questions using your knowledge base</CardDescription
             >
@@ -980,7 +951,13 @@ WHEN customer asks question:
 
         <Card className="border-border/50 bg-card/50 backdrop-blur">
           <CardHeader>
-            <CardTitle className="text-2xl">Research Agent</CardTitle>
+            <div class="flex items-center justify-between mb-2">
+              <CardTitle className="text-2xl">Research Agent</CardTitle>
+              <div class="flex gap-2">
+                <Badge variant="outline" className="text-xs">For Marketers</Badge>
+                <Badge variant="outline" className="text-xs">For Executives</Badge>
+              </div>
+            </div>
             <CardDescription
               >Monitors trends, analyzes competitors, finds opportunities</CardDescription
             >
@@ -1029,8 +1006,166 @@ EVERY WEEK:
     </div>
   </section>
 
+  <!-- Connections/Protocols Section -->
+  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-full sm:max-w-6xl">
+      <div class="mb-20 space-y-4 text-center">
+        <Badge
+          variant="outline"
+          className="mb-2 inline-flex items-center gap-2"
+          data-usal="fade-down duration-600"
+        >
+          <Network className="h-4 w-4" />
+          Universal Connectivity
+        </Badge>
+        <h2
+          class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+          data-usal="fade-up duration-700 delay-100"
+        >
+          Six Protocols
+          <br />
+          <span class="text-muted-foreground">Infinite Connections</span>
+        </h2>
+        <p
+          class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground"
+          data-usal="fade-up duration-700 delay-200"
+        >
+          Built on open standards. Connect to any AI framework, payment system, or communication platform. No vendor lock-in.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <!-- ACP -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
+          data-usal="fade-up duration-600 delay-100"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Network className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">ACP</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Agent Communication Protocol. REST-based messaging, task delegation, and multi-agent coordination. Linux Foundation standard.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <!-- MCP -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
+          data-usal="fade-up duration-600 delay-150"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Globe className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">MCP</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Model Context Protocol. Universal AI connectivity. Access ontology, semantic search, and RAG pipelines. Anthropic standard.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <!-- A2A -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
+          data-usal="fade-up duration-600 delay-200"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Bot className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">A2A</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Agent-to-Agent Protocol. Framework-agnostic collaboration across LangGraph, CrewAI, and custom systems. Google + Linux Foundation.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <!-- AP2 -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
+          data-usal="fade-up duration-600 delay-100"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <DollarSign className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">AP2</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Agent Payments Protocol. Secure autonomous transactions with verifiable credentials. Credit cards, crypto, bank transfers. 60+ partners.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <!-- X402 -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
+          data-usal="fade-up duration-600 delay-150"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">X402</CardTitle>
+            <CardDescription className="leading-relaxed">
+              HTTP-Native Payments. Instant micropayments via HTTP 402. Zero fees, 2-second settlement, blockchain-agnostic. Pay-per-API-call.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+
+        <!-- AG-UI -->
+        <Card
+          className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
+          data-usal="fade-up duration-600 delay-200"
+        >
+          <CardHeader className="space-y-4">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15"
+            >
+              <Code className="h-6 w-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl">AG-UI</CardTitle>
+            <CardDescription className="leading-relaxed">
+              Agent-Generated UI. Dynamic interfaces from structured JSON. Charts, tables, forms—all type-safe and composable. Real-time rendering.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+
+      <div
+        class="mt-16 rounded-lg border border-primary/20 bg-primary/5 p-8 backdrop-blur text-center"
+      >
+        <p class="text-lg leading-relaxed">
+          <strong class="text-foreground">One ontology. Six protocols. Universal interoperability.</strong>
+          <br class="hidden sm:block" />
+          <span class="text-muted-foreground">Connect anything to everything with type-safe, open standards.</span>
+        </p>
+        <div class="mt-6">
+          <a href="/connections">
+            <Button size="lg" variant="outline">
+              Explore All Protocols
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Features Grid -->
-  <section class="bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
     <div class="mx-auto max-w-full sm:max-w-6xl">
       <div class="mb-20 space-y-4 text-center">
         <Badge
@@ -1145,11 +1280,11 @@ EVERY WEEK:
               <Globe className="h-6 w-6 text-primary" />
             </div>
             <CardTitle className="text-xl"
-              >Own, Whitelabel, and Resell</CardTitle
+              >Deploy Anywhere</CardTitle
             >
             <CardDescription className="leading-relaxed">
-              Download and run locally. Own 100% of data and agents. Acquire
-              platform tokens for whitelabel rights. Resell under your brand.
+              Download and run locally. Own 100% of data and agents. Operate on
+              your infrastructure with zero lock-in.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -1240,148 +1375,185 @@ EVERY WEEK:
           data-usal="fade-down duration-600"
         >
           <Wand2 className="h-4 w-4" />
-          Plain English DSL
+          Build Websites in English
         </Badge>
         <h2
           class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
           data-usal="fade-up duration-700 delay-100"
         >
-          Describe in English
+          Describe Your Website
           <br />
-          <span class="text-muted-foreground">Deploy in Minutes</span>
+          <span class="text-muted-foreground">Get Astro Pages & Components</span>
         </h2>
         <p
           class="mx-auto max-w-2xl text-lg text-muted-foreground"
           data-usal="fade-up duration-700 delay-200"
         >
-          Write what you want in plain English. The system compiles it to
-          production-ready code.
+          Describe your website in plain English. The system generates Astro pages, React components, and deploys to the edge.
         </p>
       </div>
 
       <div class="grid gap-8 lg:grid-cols-2">
         <div class="group" data-usal="fade-right duration-700 delay-100">
-          <h3 class="mb-4 text-xl font-semibold">Create Your AI Clone</h3>
+          <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-xl font-semibold">Build a Landing Page</h3>
+            <Badge variant="outline" className="text-xs">For Everyone</Badge>
+          </div>
           <div
             class="overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur transition-all group-hover:border-primary/20 group-hover:bg-card group-hover:shadow-lg group-hover:shadow-primary/5"
           >
             <div
               class="border-b border-border/50 bg-muted/50 px-4 py-2 text-xs text-muted-foreground"
             >
-              Plain English → Working Feature
+              Plain English → Astro Landing Page
             </div>
             <pre
-              class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="language-text">{`FEATURE: Create my AI voice clone
+              class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="language-text">{`WEBSITE: SaaS Landing Page
 
-CHECK videos exist (at least 3)
-CALL ElevenLabs to clone voice
-CALL OpenAI to analyze personality
-CREATE ai clone
-CONNECT creator to clone as owner
-RECORD clone created
-GIVE clone ID`}</code></pre>
+CREATE page at /
+  - Hero section with CTA button
+  - Features grid (3 columns)
+  - Pricing table (3 tiers)
+  - Testimonials carousel
+  - FAQ accordion
+  - Footer with links
+
+STYLE: Modern, clean, primary color blue
+DEPLOY: To Cloudflare Pages`}</code></pre>
           </div>
           <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-            That's it. Seven lines of English. The system generates the entire
-            feature—backend, frontend, tests, deployment.
+            Six lines of English. Generates Astro pages, React components, responsive layout, and deploys globally.
           </p>
         </div>
 
         <div class="group" data-usal="fade-left duration-700 delay-100">
-          <h3 class="mb-4 text-xl font-semibold">Let Fans Buy Tokens</h3>
+          <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-xl font-semibold">Add a Blog</h3>
+            <div class="flex gap-2">
+              <Badge variant="outline" className="text-xs">For Creators</Badge>
+              <Badge variant="outline" className="text-xs">For Marketers</Badge>
+            </div>
+          </div>
           <div
             class="overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur transition-all group-hover:border-primary/20 group-hover:bg-card group-hover:shadow-lg group-hover:shadow-primary/5"
           >
             <div
               class="border-b border-border/50 bg-muted/50 px-4 py-2 text-xs text-muted-foreground"
             >
-              Plain English → E-commerce Ready
+              Plain English → Content Collections
             </div>
             <pre
-              class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="language-text">{`FEATURE: Let fans buy my tokens
+              class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="language-text">{`FEATURE: Add blog to website
 
-CHECK fan has valid payment
-DO TOGETHER:
-  - CALL Stripe to charge payment
-  - CALL Blockchain to mint tokens
-RECORD the purchase
-UPDATE balance
-GIVE confirmation`}</code></pre>
+CREATE content collection "blog"
+  - Schema: title, date, author, tags
+  - Markdown support with syntax highlighting
+
+CREATE page /blog
+  - List all posts (grid view)
+  - Search and filter by tags
+
+CREATE page /blog/[slug]
+  - Full post with table of contents
+  - Share buttons
+  - Related posts`}</code></pre>
           </div>
           <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Payments, blockchain, database—fully integrated. Atomic transactions
-            with automatic rollback on failure.
+            Complete blog system with type-safe content collections, dynamic routing, and automatic sitemap generation.
           </p>
         </div>
 
         <div class="group" data-usal="fade-right duration-700 delay-200">
-          <h3 class="mb-4 text-xl font-semibold">Chat with AI</h3>
+          <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-xl font-semibold">Create Documentation</h3>
+            <div class="flex gap-2">
+              <Badge variant="outline" className="text-xs">For Developers</Badge>
+              <Badge variant="outline" className="text-xs">For Teams</Badge>
+            </div>
+          </div>
           <div
             class="overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur transition-all group-hover:border-primary/20 group-hover:bg-card group-hover:shadow-lg group-hover:shadow-primary/5"
           >
             <div
               class="border-b border-border/50 bg-muted/50 px-4 py-2 text-xs text-muted-foreground"
             >
-              Plain English → Real-time Chat
+              Plain English → Docs Site
             </div>
             <pre
-              class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="language-text">{`FEATURE: Let fans chat with my AI
+              class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="language-text">{`WEBSITE: Documentation Site
 
-CHECK user has tokens
-GET conversation history
-CALL OpenAI with my personality
-RECORD interaction
-REWARD user with 10 tokens
-GIVE response`}</code></pre>
+CREATE layout with sidebar navigation
+  - Auto-generate from folder structure
+  - Search functionality
+  - Version switcher
+
+CREATE pages from /docs folder
+  - MDX support for interactive examples
+  - Code blocks with copy button
+  - Dark mode toggle
+
+ADD features:
+  - Full-text search (Pagefind)
+  - API reference pages
+  - Edit on GitHub links`}</code></pre>
           </div>
           <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Personalized AI interactions with token rewards. History tracking,
-            context awareness, and engagement metrics built-in.
+            Professional docs site with search, navigation, and interactive examples. Like Astro, Convex, or shadcn docs.
           </p>
         </div>
 
         <div class="group" data-usal="fade-left duration-700 delay-200">
-          <h3 class="mb-4 text-xl font-semibold">Generate Daily Content</h3>
+          <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-xl font-semibold">Build E-commerce Store</h3>
+            <div class="flex gap-2">
+              <Badge variant="outline" className="text-xs">For Sellers</Badge>
+              <Badge variant="outline" className="text-xs">For Businesses</Badge>
+            </div>
+          </div>
           <div
             class="overflow-hidden rounded-lg border border-border/50 bg-card/50 backdrop-blur transition-all group-hover:border-primary/20 group-hover:bg-card group-hover:shadow-lg group-hover:shadow-primary/5"
           >
             <div
               class="border-b border-border/50 bg-muted/50 px-4 py-2 text-xs text-muted-foreground"
             >
-              Plain English → Auto-pilot Content
+              Plain English → Store with Payments
             </div>
             <pre
-              class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="language-text">{`FEATURE: Generate daily content
+              class="overflow-x-auto p-4 text-sm leading-relaxed"><code class="language-text">{`FEATURE: E-commerce storefront
 
-GET my content style
-GET top performing topics
-FOR EACH platform (Twitter, Instagram):
-  - CALL OpenAI to generate post
-  - CREATE content
-  - PUBLISH at 9am
-RECORD published
-GIVE success`}</code></pre>
+CREATE collection "products"
+  - Schema: name, price, images, stock
+
+CREATE pages:
+  - /shop → Product grid with filters
+  - /product/[id] → Product details
+  - /cart → Shopping cart (client-side)
+  - /checkout → Stripe integration
+
+ADD features:
+  - Inventory management
+  - Order confirmation emails
+  - Admin dashboard`}</code></pre>
           </div>
           <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Automated content across platforms. Your voice, your style, your
-            schedule—all on autopilot.
+            Full e-commerce site with Stripe payments, inventory tracking, and order management. Production-ready.
           </p>
         </div>
       </div>
 
       <div class="mt-16 text-center">
         <p class="text-base text-muted-foreground">
-          <strong class="text-foreground">No coding required.</strong> Write features
-          in English, deploy production apps.
+          <strong class="text-foreground">No coding required.</strong> Describe websites
+          in English, get production Astro apps.
           <br class="hidden sm:block" />
-          AI agents and non-technical founders can build enterprise software.
+          From simple landing pages to complex e-commerce—all generated and deployed to the edge.
         </p>
       </div>
     </div>
   </section>
 
   <!-- Tech Stack -->
-  <section class="border-y bg-muted/50 px-6 py-24 md:px-8 md:py-32">
+  <section class="border-t bg-muted/50 px-6 py-24 md:px-8 md:py-32">
     <div class="mx-auto max-w-6xl">
       <div class="mb-16 space-y-4 text-center">
         <h2
@@ -1514,16 +1686,19 @@ GIVE success`}</code></pre>
     </div>
   </section>
 
+  <!-- Performance Chart Section -->
+  <PerformanceChart client:load />
+
   <!-- Why ONE Section -->
   <section class="px-6 py-24 md:px-8 md:py-32">
     <div class="mx-auto max-w-6xl">
       <div class="mb-16 space-y-6 text-center">
         <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-          The Viral Flywheel
+          Bring Your Ideas to Life in Minutes
         </h2>
         <p class="mx-auto max-w-3xl text-xl text-muted-foreground">
-          Own it. Whitelabel it. Resell it. Earn from it. Build once, monetize
-          infinitely.
+          Download the platform, describe what you want in plain English, and
+          launch production-ready agents faster than ever.
         </p>
       </div>
 
@@ -1598,13 +1773,42 @@ GIVE success`}</code></pre>
               <div
                 class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
               >
-                <Bot className="h-6 w-6 text-primary" />
+                <Globe className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle className="text-xl">AI Clones</CardTitle>
+              <div class="flex items-center justify-between">
+                <CardTitle className="text-xl">Landing Pages</CardTitle>
+                <Badge variant="outline" className="text-xs">For Everyone</Badge>
+              </div>
               <CardDescription className="text-sm leading-relaxed">
-                Voice clones, personality models, autonomous content creators.
-                Your digital twin working 24/7.
+                SaaS, product launches, marketing campaigns. Hero sections, pricing tables, testimonials. Deploy in minutes.
               </CardDescription>
+              <div class="flex flex-wrap gap-2 pt-2">
+                <Badge variant="secondary" className="text-xs">Hero</Badge>
+                <Badge variant="secondary" className="text-xs">Pricing</Badge>
+                <Badge variant="secondary" className="text-xs">CTA</Badge>
+              </div>
+            </CardHeader>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
+              <div
+                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
+              >
+                <Code className="h-6 w-6 text-primary" />
+              </div>
+              <div class="flex items-center justify-between">
+                <CardTitle className="text-xl">Documentation Sites</CardTitle>
+                <Badge variant="outline" className="text-xs">For Developers</Badge>
+              </div>
+              <CardDescription className="text-sm leading-relaxed">
+                Technical docs, API references, knowledge bases. Auto-generated nav, full-text search, version control.
+              </CardDescription>
+              <div class="flex flex-wrap gap-2 pt-2">
+                <Badge variant="secondary" className="text-xs">MDX</Badge>
+                <Badge variant="secondary" className="text-xs">Search</Badge>
+                <Badge variant="secondary" className="text-xs">Sidebar</Badge>
+              </div>
             </CardHeader>
           </Card>
 
@@ -1615,33 +1819,25 @@ GIVE success`}</code></pre>
               >
                 <DollarSign className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle className="text-xl">Token Economies</CardTitle>
-              <CardDescription className="text-sm leading-relaxed">
-                Launch creator tokens, subscription plans, NFT drops. Instant
-                payment processing.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="border-border/50 bg-card/50 backdrop-blur">
-            <CardHeader className="space-y-3">
-              <div
-                class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"
-              >
-                <Network className="h-6 w-6 text-primary" />
+              <div class="flex items-center justify-between">
+                <CardTitle className="text-xl">E-commerce Stores</CardTitle>
+                <Badge variant="outline" className="text-xs">For Sellers</Badge>
               </div>
-              <CardTitle className="text-xl">Multi-Agent Systems</CardTitle>
               <CardDescription className="text-sm leading-relaxed">
-                Sales, support, content, research agents coordinating through
-                shared ontology.
+                Online stores with Stripe payments. Product catalogs, shopping carts, inventory, order management.
               </CardDescription>
+              <div class="flex flex-wrap gap-2 pt-2">
+                <Badge variant="secondary" className="text-xs">Products</Badge>
+                <Badge variant="secondary" className="text-xs">Stripe</Badge>
+                <Badge variant="secondary" className="text-xs">Orders</Badge>
+              </div>
             </CardHeader>
           </Card>
         </div>
       </div>
 
       <!-- The Flywheel -->
-      <div class="grid gap-8 md:grid-cols-2">
+      <div class="mx-auto max-w-2xl">
         <Card
           className="group border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 transition-all hover:scale-[1.02] hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10"
         >
@@ -1656,26 +1852,6 @@ GIVE success`}</code></pre>
               Download free. Install locally. No vendor lock-in, no recurring
               fees, no limits. The code is yours. The data is yours. The
               business is yours.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-
-        <Card
-          className="group border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 transition-all hover:scale-[1.02] hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10"
-        >
-          <CardHeader className="space-y-4">
-            <div
-              class="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/20 transition-colors group-hover:bg-primary/30"
-            >
-              <Wand2 className="h-7 w-7 text-primary" />
-            </div>
-            <CardTitle className="text-2xl"
-              >Whitelabel & Resell Anywhere</CardTitle
-            >
-            <CardDescription className="text-base leading-relaxed">
-              Rebrand as your own product. Set your own pricing. Sell to your
-              audience. Keep 100% of revenue. Built-in viral distribution
-              through shared ontology.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -1916,9 +2092,7 @@ GIVE success`}</code></pre>
         data-usal="fade-up duration-700 delay-300"
       >
         <a
-          href="https://github.com/one-ie/stack"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/download"
           class="group"
         >
           <Button
@@ -1936,7 +2110,7 @@ GIVE success`}</code></pre>
             </span>
           </Button>
         </a>
-        <a href="/account/signup" class="group">
+        <a href="/deploy" class="group">
           <Button
             variant="outline"
             size="lg"
@@ -2036,13 +2210,13 @@ GIVE success`}</code></pre>
         data-usal="fade-in duration-700 delay-500"
       >
         <a
-          href="/blog"
+          href="/blogs"
           class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           Blog
         </a>
         <a
-          href="https://github.com/one-ie/stack/blob/main/plans/landing.md"
+          href="https://github.com/one-ie/one/blob/main/plans/landing.md"
           target="_blank"
           rel="noopener noreferrer"
           class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -2050,7 +2224,7 @@ GIVE success`}</code></pre>
           Documentation
         </a>
         <a
-          href="https://github.com/one-ie/stack/issues"
+          href="https://github.com/one-ie/one/issues"
           target="_blank"
           rel="noopener noreferrer"
           class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -2058,7 +2232,7 @@ GIVE success`}</code></pre>
           Support
         </a>
         <a
-          href="https://github.com/one-ie/stack/discussions"
+          href="https://github.com/one-ie/one/discussions"
           target="_blank"
           rel="noopener noreferrer"
           class="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"

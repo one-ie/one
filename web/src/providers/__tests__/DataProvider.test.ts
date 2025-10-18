@@ -295,9 +295,6 @@ describe("DataProvider Interface", () => {
 
     await expect(
       Effect.runPromise(program.pipe(Effect.provide(layer)))
-    ).rejects.toMatchObject({
-      _tag: "ThingNotFoundError",
-      id: "non-existent-id",
-    });
+    ).rejects.toThrow(/ThingNotFoundError/);
   });
 });

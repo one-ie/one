@@ -186,7 +186,7 @@ Frontend (Astro + React) → Backend Convex → Data Layer
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/one-ie/stack.git
+git clone https://github.com/one-ie/one.git
 cd stack
 
 # 2. Install dependencies (bun recommended)
@@ -1036,7 +1036,7 @@ Perfect scores across all metrics:
 
 - 💬 [Discord Community](https://astro.build/chat) - Join Astro's Discord
 - 📚 [Documentation](https://docs.astro.build) - Official Astro docs
-- 🐛 [Report Issues](https://github.com/one-ie/stack/issues) - File bugs or feature requests
+- 🐛 [Report Issues](https://github.com/one-ie/one/issues) - File bugs or feature requests
 - 📧 [Contact](https://one.ie) - Reach out to the ONE team
 
 ### Contributing
@@ -1051,7 +1051,7 @@ Contributions are welcome! Please:
 
 ### Star on GitHub ⭐
 
-If you find ONE Stack useful, please star it on [GitHub](https://github.com/one-ie/stack)!
+If you find ONE Stack useful, please star it on [GitHub](https://github.com/one-ie/one)!
 
 ## 🎯 What Makes ONE Stack Different?
 
@@ -1182,6 +1182,6 @@ Built with these amazing technologies:
 
 **Built with ❤️ by [ONE](https://one.ie)**
 
-[⭐ Star on GitHub](https://github.com/one-ie/stack) • [🚀 Live Demo](https://stack.one.ie) • [📚 Documentation](./plans/landing.md)
+[⭐ Star on GitHub](https://github.com/one-ie/one) • [🚀 Live Demo](https://stack.one.ie) • [📚 Documentation](./plans/landing.md)
 
 </div>

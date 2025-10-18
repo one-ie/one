@@ -1,0 +1,406 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import CliTerminal from '@/components/cli-terminal';
+import {
+  Terminal as TerminalIcon,
+  Zap,
+  Layers,
+  Users,
+  FolderTree,
+  Bot,
+  Rocket,
+  BookOpen,
+  ShieldCheck,
+  Workflow,
+  ArrowRight
+} from 'lucide-react';
+---
+
+<Layout title="ONE CLI - npx oneie" description="Bootstrap the entire ONE platform with a single command. Sync the ontology, Claude agents, websites, and docs in minutes.">
+  <section class="relative flex min-h-[80vh] items-center justify-center px-4 py-20 sm:px-6 lg:px-8">
+    <div class="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-primary/[0.02] to-background"></div>
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/15 via-primary/5 to-transparent"></div>
+    <div class="absolute left-1/2 top-0 -z-10 h-[560px] w-[720px] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]"></div>
+
+    <div class="w-full max-w-6xl mx-auto text-center space-y-10">
+      <Badge variant="outline" className="inline-flex items-center gap-2">
+        <TerminalIcon className="h-4 w-4" />
+        `npx oneie`
+      </Badge>
+
+      <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight !leading-[1.1]">
+        Launch Your Entire Stack
+        <span class="block bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+          With One Command
+        </span>
+      </h1>
+
+      <p class="mx-auto max-w-3xl text-lg sm:text-xl text-muted-foreground leading-relaxed">
+        The ONE CLI copies the full 6-dimension ontology, syncs Claude agents, creates your org profile,
+        and optionally boots a production Astro frontend and docs. Minutes, not weeks.
+      </p>
+
+      <div class="mx-auto max-w-4xl space-y-6">
+        <div class="flex justify-center">
+          <div class="inline-flex items-center gap-2 rounded-full border border-border/40 bg-[hsl(var(--sidebar))]/80 px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.32em] text-sidebar-foreground/70 shadow-[0_24px_60px_-40px_rgba(15,23,42,0.85)] backdrop-blur-sm">
+            <Zap className="h-3.5 w-3.5" />
+            Quick Start
+          </div>
+        </div>
+        <div class="relative overflow-hidden rounded-[40px] border border-border/40 bg-[hsl(var(--sidebar))] p-3 shadow-[0_70px_180px_-80px_rgba(15,23,42,0.95)]">
+          <div class="pointer-events-none absolute inset-0 rounded-[40px] bg-gradient-to-br from-primary/15 via-primary/5 to-transparent" />
+          <div class="pointer-events-none absolute -left-24 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-[120px] sm:-left-8 sm:-top-24" />
+          <div class="relative z-10">
+            <CliTerminal client:only="react" />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+        <button id="copy-command-btn" class="inline-flex items-center justify-center gap-2 h-14 px-8 text-lg font-semibold rounded-md bg-primary text-primary-foreground shadow hover:bg-primary/90 transition-colors">
+          Run `npx oneie`
+          <ArrowRight className="ml-2 h-5 w-5" />
+        </button>
+        <a href="https://www.npmjs.com/package/oneie" target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="lg" className="h-14 px-8 text-lg font-semibold">
+            View Source
+          </Button>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-6 py-20 md:px-8 md:py-28 bg-muted/30">
+    <div class="mx-auto max-w-6xl space-y-8 text-center">
+      <Badge variant="outline" className="inline-flex items-center gap-2">
+        <Workflow className="h-4 w-4" />
+        Guided Bootstrap Flow
+      </Badge>
+      <h2 class="text-4xl font-bold tracking-tight">From Blank Repo to Ontology-Aware Workspace</h2>
+      <p class="mx-auto max-w-3xl text-lg text-muted-foreground leading-relaxed">
+        `npx oneie` runs an interactive flow that captures your identity, provisions organizational structure,
+        and deploys the full ontology so Claude understands your project instantly.
+      </p>
+    </div>
+
+    <div class="mx-auto mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl">
+      <Card className="border-border/50 bg-card/50 backdrop-blur">
+        <CardHeader className="space-y-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <Users className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle>User & Org Profiles</CardTitle>
+          <CardDescription>
+            Collects your name, email, and organization details, generating ontology-mapped markdown records instantly.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+
+      <Card className="border-border/50 bg-card/50 backdrop-blur">
+        <CardHeader className="space-y-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <FolderTree className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle>Ontology Sync</CardTitle>
+          <CardDescription>
+            Copies 100+ curated files from `/one/*`, including knowledge, things, connections, events, and governance rules.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+
+      <Card className="border-border/50 bg-card/50 backdrop-blur">
+        <CardHeader className="space-y-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <Bot className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle>Claude Agent Suite</CardTitle>
+          <CardDescription>
+            Syncs 8 Claude Code agents plus commands and hooks, giving you CASCADE automation inside the IDE.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+
+      <Card className="border-border/50 bg-card/50 backdrop-blur">
+        <CardHeader className="space-y-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <Rocket className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle>Frontend Starter</CardTitle>
+          <CardDescription>
+            Optionally clones the Astro + React + Tailwind stack with auth, shadcn/ui, and edge deployment presets.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+
+      <Card className="border-border/50 bg-card/50 backdrop-blur">
+        <CardHeader className="space-y-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <BookOpen className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle>Offline Docs Vault</CardTitle>
+          <CardDescription>
+            Pulls Astro, Convex, Effect.ts, React, and Tailwind docs so AI agents have instant local context.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+
+      <Card className="border-border/50 bg-card/50 backdrop-blur">
+        <CardHeader className="space-y-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <ShieldCheck className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle>Repeatable Sync</CardTitle>
+          <CardDescription>
+            Re-run `npx oneie` anytime to pull ontology updates, regenerate agents, and keep every workstation aligned.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    </div>
+  </section>
+
+  <section class="px-6 py-24 md:px-8 md:py-32">
+    <div class="mx-auto max-w-6xl grid gap-16 lg:grid-cols-[1.2fr_minmax(0,_1fr)] items-start">
+      <div class="space-y-10">
+        <Badge variant="outline" className="inline-flex items-center gap-2">
+          <Layers className="h-4 w-4" />
+          Everything Mapped to the Ontology
+        </Badge>
+        <h2 class="text-4xl font-bold tracking-tight">Your Project Ships with the Six Universal Dimensions</h2>
+        <p class="text-lg text-muted-foreground leading-relaxed">
+          ONE treats reality as data. When the CLI lands in your repo, every dimension is pre-populated so agents and humans stay in sync.
+        </p>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <Card className="border-border/50 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base">Groups</CardTitle>
+              <CardDescription>Organizations, departments, and teams with hierarchy and tenancy controls.</CardDescription>
+            </CardHeader>
+          </Card>
+          <Card className="border-border/50 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base">People</CardTitle>
+              <CardDescription>Roles, permissions, and governance tied directly to your org structure.</CardDescription>
+            </CardHeader>
+          </Card>
+          <Card className="border-border/50 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base">Things</CardTitle>
+              <CardDescription>66+ entity blueprints covering products, pages, flows, and more.</CardDescription>
+            </CardHeader>
+          </Card>
+          <Card className="border-border/50 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base">Connections</CardTitle>
+              <CardDescription>25 relationship types that let agents reason about ownership and flow.</CardDescription>
+            </CardHeader>
+          </Card>
+          <Card className="border-border/50 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base">Events</CardTitle>
+              <CardDescription>67 event definitions plus audit-trail conventions for full observability.</CardDescription>
+            </CardHeader>
+          </Card>
+          <Card className="border-border/50 bg-card/60 backdrop-blur">
+            <CardHeader className="space-y-2">
+              <CardTitle className="text-base">Knowledge</CardTitle>
+              <CardDescription>Embedding-ready docs, workflows, and rules that guide every AI interaction.</CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-border/60 bg-card/60 p-6 backdrop-blur">
+        <div class="flex items-center gap-3 text-sm font-medium text-muted-foreground uppercase tracking-wide">
+          <ShieldCheck className="h-5 w-5 text-primary" />
+          Generated Structure
+        </div>
+<pre class="mt-4 h-full max-h-[520px] overflow-auto rounded-xl bg-background/80 p-4 text-sm leading-relaxed">
+<code>one/
+|-- knowledge/ontology.md
+|-- knowledge/architecture.md
+|-- things/agents/*.md
+|-- connections/workflows/*.md
+|-- events/catalog.md
+|-- people/&#123;your-name&#125;.md
+`-- groups/&#123;your-org&#125;.md
+
+.claude/
+|-- agents/*.json
+|-- commands/*.md
+`-- hooks/*.py
+
+frontend/ (optional)
+docs/ (optional)
+cli/folders.yaml</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="px-6 py-20 md:px-8 md:py-28 bg-muted/20">
+    <div class="mx-auto max-w-6xl text-center space-y-12">
+      <Badge variant="outline" className="inline-flex items-center gap-2">
+        <Zap className="h-4 w-4" />
+        3 Command Launch
+      </Badge>
+      <h2 class="text-4xl font-bold tracking-tight">Build Something Real in Under 10 Minutes</h2>
+      <p class="mx-auto max-w-3xl text-lg text-muted-foreground leading-relaxed">
+        The CLI is tuned so your first production-ready build is pure English. Kick off the workflow below and hand the rest to your agents.
+      </p>
+
+      <div class="grid gap-6 sm:grid-cols-3 text-left">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardContent className="space-y-3 pt-6">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <TerminalIcon className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold">1. Bootstrap</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">Run `npx oneie` and accept the defaults. Your ontology, agents, and profiles sync immediately.</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardContent className="space-y-3 pt-6">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Bot className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold">2. Talk to Claude</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">Open Claude Code, load the synced agents, and describe the product you want to build in English.</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardContent className="space-y-3 pt-6">
+            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+              <Rocket className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold">3. Ship</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">Use the generated Astro frontend or your own stack to deploy to 330+ edge regions.</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal - Positioned at document root for proper z-index stacking -->
+  <div id="command-modal" class="hidden fixed inset-0 z-[9999]">
+    <!-- Opaque Backdrop -->
+    <div class="absolute inset-0 bg-slate-950"></div>
+
+    <!-- Modal Container -->
+    <div class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg z-[10000] px-4">
+      <div class="relative rounded-lg border bg-card p-8 shadow-2xl">
+        <button id="close-modal" class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+
+        <div class="flex flex-col space-y-6">
+          <div class="flex items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-2xl font-bold">Command Copied!</h2>
+              <p class="text-sm text-muted-foreground">npx oneie</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="rounded-lg border border-border/50 bg-muted/50 p-4">
+              <h3 class="font-semibold mb-2">Next Steps:</h3>
+              <ol class="space-y-2 text-sm">
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-primary">1.</span>
+                  <span>Open your terminal</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-primary">2.</span>
+                  <span>Navigate to your project directory</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-primary">3.</span>
+                  <span>Paste the command and press Enter</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-primary">4.</span>
+                  <span>Follow the interactive prompts</span>
+                </li>
+              </ol>
+            </div>
+
+            <div class="rounded-lg bg-primary/5 p-4 text-sm">
+              <p class="text-muted-foreground">
+                The ONE CLI will bootstrap your project with the 6-dimension ontology, Claude agents, and optionally sync the frontend starter.
+              </p>
+            </div>
+          </div>
+
+          <button id="modal-close-btn" class="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90">
+            Got it!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const copyBtn = document.getElementById('copy-command-btn');
+    const modal = document.getElementById('command-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const command = 'npx oneie';
+
+    // Copy command and show modal
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(command);
+        modal?.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      } catch (err) {
+        console.error('Failed to copy command:', err);
+        // Fallback: still show modal with instructions
+        modal?.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+
+    // Close modal handlers
+    const closeModal = () => {
+      modal?.classList.add('hidden');
+      document.body.style.overflow = '';
+    };
+
+    closeModalBtn?.addEventListener('click', closeModal);
+    modalCloseBtn?.addEventListener('click', closeModal);
+
+    // Close on backdrop click
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal?.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+  });
+</script>

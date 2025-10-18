@@ -1,10 +1,125 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ReadmeContent from '../../README.md';
+
+const agents = [
+  {
+    name: 'agent-director',
+    title: 'Engineering Director',
+    summary:
+      'Validates ideas against the six-dimension ontology, sequences numbered plans, and assigns work to the right specialists.',
+  },
+  {
+    name: 'agent-builder',
+    title: 'Full-Stack Builder',
+    summary:
+      'Ships end-to-end features—Convex backend, Astro frontend, and integrations—while keeping multi-tenant boundaries intact.',
+  },
+  {
+    name: 'agent-backend',
+    title: 'Backend Specialist',
+    summary:
+      'Designs Convex schemas, mutations, queries, and services that project cleanly into groups, people, things, connections, events, and knowledge.',
+  },
+  {
+    name: 'backend-specialist',
+    title: 'Backend Executor',
+    summary:
+      'Implements backend tasks on demand with strict adherence to typed contracts, auditing, and ontology mappings.',
+  },
+  {
+    name: 'agent-frontend',
+    title: 'Frontend Specialist',
+    summary:
+      'Builds Astro + React interfaces that render ontology data with accessibility, performance, and islands architecture best practices.',
+  },
+  {
+    name: 'frontend-specialist',
+    title: 'Frontend Executor',
+    summary:
+      'Handles focused UI deliveries—components, pages, or flows—while respecting design tokens and shared language.',
+  },
+  {
+    name: 'agent-integrator',
+    title: 'Protocol Integrator',
+    summary:
+      'Connects external systems (A2A, ACP, AP2, X402, AG-UI) and reconciles third-party data so it lands in the ontology without drift.',
+  },
+  {
+    name: 'agent-quality',
+    title: 'Quality Intelligence',
+    summary:
+      'Defines acceptance criteria up front, runs validations, forecasts risks, and ensures every change upholds ontology guarantees.',
+  },
+  {
+    name: 'agent-clean',
+    title: 'Refinement Specialist',
+    summary:
+      'Refactors code, pays down debt, and restores architecture clarity without altering behavior or breaking typed contracts.',
+  },
+  {
+    name: 'agent-problem-solver',
+    title: 'Root Cause Analyst',
+    summary:
+      'Investigates failing runs, diagnoses ontology or implementation gaps, and prescribes fixes for the right specialist to execute.',
+  },
+  {
+    name: 'agent-designer',
+    title: 'Design Strategist',
+    summary:
+      'Translates feature specs and quality requirements into wireframes, component definitions, and design tokens ready for build.',
+  },
+  {
+    name: 'designer',
+    title: 'Design Executor',
+    summary:
+      'Produces targeted design assets after tests are defined so implementation agents can ship pixel-perfect work.',
+  },
+  {
+    name: 'agent-documenter',
+    title: 'Knowledge Curator',
+    summary:
+      'Captures learnings, updates docs, and indexes knowledge chunks so agents have richer context on future runs.',
+  },
+  {
+    name: 'agent-clone',
+    title: 'Migration & Clone Specialist',
+    summary:
+      'Migrates legacy assets into the ontology, assembles AI clones, and preserves provenance across events and knowledge.',
+  },
+  {
+    name: 'agent-sales',
+    title: 'Revenue Operator',
+    summary:
+      'Qualifies leads, coordinates demos, assists trials, and ensures revenue attribution flows through auditable events.',
+  },
+];
 ---
 
 <Layout title="README" description="ONE - Bring Your Ideas to Life">
   <div class="container mx-auto px-4 py-8 max-w-[800px]">
+    <section class="mb-12 space-y-6">
+      <div class="space-y-2">
+        <h1 class="text-3xl font-semibold tracking-tight">`.claude/agents/*` Roster</h1>
+        <p class="text-muted-foreground leading-relaxed">
+          Every specialist agent follows a deterministic playbook tied to the ONE ontology. Together they plan, build, refine,
+          document, and grow the platform with AI-first workflows.
+        </p>
+      </div>
+      <div class="grid gap-5 md:grid-cols-2">
+        {agents.map((agent) => (
+          <div class="rounded-xl border border-border/60 bg-card/60 p-5 backdrop-blur">
+            <h2 class="text-lg font-semibold text-foreground">{agent.name}</h2>
+            <p class="text-sm uppercase tracking-wide text-primary/90">{agent.title}</p>
+            <p class="mt-3 text-sm leading-relaxed text-muted-foreground">{agent.summary}</p>
+          </div>
+        ))}
+      </div>
+      <p class="text-sm text-muted-foreground">
+        Browse the complete playbooks inside <code>.claude/agents/</code> to see tools, prompts, and guardrails for each role.
+      </p>
+    </section>
+
     <div class="prose dark:prose-invert max-w-none">
       <article>
         <ReadmeContent />
@@ -12,3 +127,9 @@ import ReadmeContent from '../../README.md';
     </div>
   </div>
 </Layout>
+
+<style>
+  :global(.prose pre) {
+    background-color: #111111;
+  }
+</style>

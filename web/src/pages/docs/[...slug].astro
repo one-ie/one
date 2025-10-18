@@ -1,0 +1,65 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { loadFileContent } from '@/lib/utils/file-resolver';
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+// Try loading from installation folder with global fallback
+const content = await loadFileContent(`${slug}.md`, {
+  fallbackToGlobal: true,
+});
+
+if (!content) {
+  return Astro.redirect('/404');
+}
+
+// Simple frontmatter parser (for production, use a proper markdown parser)
+const lines = content.split('\n');
+let title = slug;
+let description = '';
+let inFrontmatter = false;
+
+if (lines[0] === '---') {
+  inFrontmatter = true;
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i] === '---') {
+      inFrontmatter = false;
+      break;
+    }
+    if (lines[i].startsWith('title:')) {
+      title = lines[i].substring(6).trim().replace(/^["']|["']$/g, '');
+    }
+    if (lines[i].startsWith('description:')) {
+      description = lines[i].substring(12).trim().replace(/^["']|["']$/g, '');
+    }
+  }
+}
+
+// Extract markdown content (without frontmatter)
+const markdownContent = inFrontmatter
+  ? lines.slice(lines.indexOf('---', 1) + 1).join('\n')
+  : content;
+
+// Basic markdown to HTML conversion (for production, use remark/rehype)
+const htmlContent = markdownContent
+  .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+  .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+  .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+  .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+  .replace(/\*(.*)\*/gim, '<em>$1</em>')
+  .replace(/\n/gim, '<br>');
+---
+
+<Layout title={title}>
+  <div class="container mx-auto max-w-4xl px-4 py-8">
+    <article class="prose prose-slate dark:prose-invert lg:prose-lg">
+      <h1 class="mb-4 text-4xl font-bold">{title}</h1>
+      {description && <p class="text-xl text-muted-foreground">{description}</p>}
+      <div set:html={htmlContent} />
+    </article>
+  </div>
+</Layout>

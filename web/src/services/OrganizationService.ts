@@ -8,12 +8,6 @@
 import { Effect } from "effect";
 import {
   DataProviderService,
-  type Thing,
-  type CreateThingInput,
-  type UpdateThingInput,
-  ThingNotFoundError,
-  ThingCreateError,
-  ThingUpdateError,
 } from "../providers/DataProvider";
 import {
   DEFAULT_LIMITS,

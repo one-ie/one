@@ -1,5 +1,28 @@
 import * as React from "react"
-import { Scale, Book, PanelLeft, ChevronsUpDown, LogOut, UserPlus, LogIn, LayoutDashboard, Settings, Palette, Code2, Network, FileText, Download } from "lucide-react"
+import {
+  PanelLeft,
+  ChevronsUpDown,
+  LogOut,
+  UserPlus,
+  LogIn,
+  LayoutDashboard,
+  Settings,
+  Layers,
+  Type,
+  Terminal,
+  Globe,
+  Package,
+  Users,
+  Download,
+  FileText,
+  Award,
+  Newspaper,
+  X,
+  Github,
+  Youtube,
+  Shield,
+  Rocket,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -18,20 +41,47 @@ import { siteConfig } from "@/config/site"
 import { authClient } from "@/lib/auth-client"
 
 const iconMap = {
-  '/ontology': Network,
-  '/software': Code2,
-  '/design': Palette,
-  '/blog': Book,
+  '/ontology': Layers,
+  '/language': Type,
+  '/cli': Terminal,
+  '/websites': Globe,
+  '/components': Package,
+  '/agents': Users,
+  '/stream': Newspaper,
+  '/blog': Newspaper,
   '/readme': FileText,
-  '/free-license': Scale,
+  '/credits': Award,
+  '/free-license': Shield,
   '/download': Download,
+  '/deploy': Rocket,
 } as const
 
-const navItems = siteConfig.navigation.map((item) => ({
-  title: item.title,
-  url: item.path,
-  icon: iconMap[item.path as keyof typeof iconMap],
-}))
+const navOrder = [
+  '/stream',
+  '/language',
+  '/ontology',
+  '/cli',
+  '/websites',
+  '/agents',
+  '/free-license',
+  '/download',
+  '/deploy',
+] as const
+
+const navItems = navOrder
+  .map((path) => siteConfig.navigation.find((item) => item.path === path))
+  .filter((item): item is NonNullable<typeof item> => Boolean(item))
+  .map((item) => {
+    const Icon = iconMap[item.path as keyof typeof iconMap] ?? FileText
+    return {
+      title: item.title,
+      url: item.path,
+      icon: Icon,
+    }
+  })
+
+const backendProvider = (import.meta.env.PUBLIC_BACKEND_PROVIDER ?? '').toLowerCase()
+const AUTH_ENABLED = backendProvider === 'one'
 
 interface SimpleSidebarLayoutProps {
   children: React.ReactNode
@@ -43,11 +93,17 @@ export function Sidebar({ children }: SimpleSidebarLayoutProps) {
   const [currentPath, setCurrentPath] = React.useState('')
   const [mobileUserMenuOpen, setMobileUserMenuOpen] = React.useState(false)
   const isMobile = useIsMobile()
+  const authEnabled = AUTH_ENABLED
 
   // Manual session fetching for more reliable updates
   const [user, setUser] = React.useState<{ name: string; email: string; avatar?: string } | null>(null)
 
   const fetchSession = React.useCallback(async () => {
+    if (!authEnabled) {
+      setUser(null)
+      return
+    }
+
     try {
       const res = await fetch('/api/auth/get-session', {
         credentials: 'include',
@@ -73,10 +129,15 @@ export function Sidebar({ children }: SimpleSidebarLayoutProps) {
     } catch (error) {
       setUser(null)
     }
-  }, [])
+  }, [authEnabled])
 
   React.useEffect(() => {
     setCurrentPath(window.location.pathname)
+
+    if (!authEnabled) {
+      setUser(null)
+      return
+    }
 
     // Fetch session immediately on mount
     fetchSession()
@@ -100,7 +161,7 @@ export function Sidebar({ children }: SimpleSidebarLayoutProps) {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('focus', handleFocus)
     }
-  }, [fetchSession])
+  }, [authEnabled, fetchSession])
 
   const handleSignOut = async () => {
     try {
@@ -117,6 +178,45 @@ export function Sidebar({ children }: SimpleSidebarLayoutProps) {
     .join('')
     .toUpperCase()
     .slice(0, 2) || "U"
+
+  const authDisabledMenu = (
+    <div
+      className={`flex w-full py-2 text-muted-foreground ${
+        collapsed ? 'justify-center' : 'justify-start px-2'
+      }`}
+      aria-live="polite"
+    >
+      <div className="ml-2.5 flex items-center gap-2">
+        <a
+          href="https://x.com/tonyoconnell"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-7 w-7 items-center justify-center transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          <X className="h-4 w-4" aria-hidden="true" />
+          <span className="sr-only">X profile</span>
+        </a>
+        <a
+          href="https://github.com/one-ie"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-7 w-7 items-center justify-center transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          <Github className="h-4 w-4" aria-hidden="true" />
+          <span className="sr-only">GitHub organization</span>
+        </a>
+        <a
+          href="https://www.youtube.com/@onedotie"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-7 w-7 items-center justify-center transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          <Youtube className="h-4 w-4" aria-hidden="true" />
+          <span className="sr-only">YouTube channel</span>
+        </a>
+      </div>
+    </div>
+  )
 
   const handleMobileUserMenuToggle = () => {
     if (!isMobile) {
@@ -218,114 +318,118 @@ export function Sidebar({ children }: SimpleSidebarLayoutProps) {
           {/* User menu */}
           <div className="p-2">
             {isMobile ? (
-              <>
-                <button
-                  className={`flex items-center gap-3 rounded-md p-2 w-full text-left transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
-                    collapsed ? 'justify-center' : ''
-                  }`}
-                  aria-label="User menu"
-                  onClick={handleMobileUserMenuToggle}
-                  type="button"
-                >
-                  <Avatar className="h-10 w-10 rounded-lg shrink-0">
-                    <AvatarImage src={user?.avatar} alt={user?.name} />
-                    <AvatarFallback className="rounded-lg bg-primary text-primary-foreground text-sm font-semibold">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  {!collapsed && (
-                    <>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold truncate">{user?.name || 'Guest'}</p>
-                        <p className="text-xs text-muted-foreground truncate">{user?.email || 'guest@example.com'}</p>
-                      </div>
-                      <ChevronsUpDown className={`h-4 w-4 shrink-0 transition-transform ${mobileUserMenuOpen ? 'rotate-180' : ''}`} />
-                    </>
-                  )}
-                </button>
-                {mobileUserMenuOpen && (
-                  <div className="mt-2 space-y-3 rounded-md border border-border bg-background/80 p-3 text-sm shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                    {user ? (
+              authEnabled ? (
+                <>
+                  <button
+                    className={`flex items-center gap-3 rounded-md p-2 w-full text-left transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                      collapsed ? 'justify-center' : ''
+                    }`}
+                    aria-label="User menu"
+                    onClick={handleMobileUserMenuToggle}
+                    type="button"
+                  >
+                    <Avatar className="h-10 w-10 rounded-lg shrink-0">
+                      <AvatarImage src={user?.avatar} alt={user?.name} />
+                      <AvatarFallback className="rounded-lg bg-primary text-primary-foreground text-sm font-semibold">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    {!collapsed && (
                       <>
-                        <div className="flex items-center gap-3 rounded-md bg-muted/50 p-2">
-                          <Avatar className="h-10 w-10 rounded-lg">
-                            <AvatarImage src={user?.avatar} alt={user?.name} />
-                            <AvatarFallback className="rounded-lg bg-primary text-primary-foreground text-sm font-semibold">
-                              {initials}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="min-w-0 flex-1">
-                            <p className="font-semibold truncate">{user?.name}</p>
-                            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
-                          </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold truncate">{user?.name || 'Guest'}</p>
+                          <p className="text-xs text-muted-foreground truncate">{user?.email || 'guest@example.com'}</p>
                         </div>
-                        <Separator className="bg-border/70" />
-                        <div className="space-y-1">
-                          <a
-                            href="/account"
-                            className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
-                            onClick={handleMobileNavigate}
-                          >
-                            <LayoutDashboard className="h-4 w-4" />
-                            Dashboard
-                          </a>
-                          <a
-                            href="/account/settings"
-                            className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
-                            onClick={handleMobileNavigate}
-                          >
-                            <Settings className="h-4 w-4" />
-                            Settings
-                          </a>
-                        </div>
-                        <Separator className="bg-border/70" />
-                        <button
-                          className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-destructive/10 hover:text-destructive"
-                          onClick={handleMobileSignOut}
-                          type="button"
-                        >
-                          <LogOut className="h-4 w-4" />
-                          Log out
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <div className="flex items-center gap-3 rounded-md bg-muted/50 p-2">
-                          <Avatar className="h-10 w-10 rounded-lg">
-                            <AvatarFallback className="rounded-lg bg-muted text-sm font-semibold">
-                              {initials}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="font-semibold">Guest</p>
-                            <p className="text-xs text-muted-foreground">Not signed in</p>
-                          </div>
-                        </div>
-                        <Separator className="bg-border/70" />
-                        <div className="space-y-1">
-                          <a
-                            href="/account/signin"
-                            className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
-                            onClick={handleMobileNavigate}
-                          >
-                            <LogIn className="h-4 w-4" />
-                            Sign In
-                          </a>
-                          <a
-                            href="/account/signup"
-                            className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
-                            onClick={handleMobileNavigate}
-                          >
-                            <UserPlus className="h-4 w-4" />
-                            Sign Up
-                          </a>
-                        </div>
+                        <ChevronsUpDown className={`h-4 w-4 shrink-0 transition-transform ${mobileUserMenuOpen ? 'rotate-180' : ''}`} />
                       </>
                     )}
-                  </div>
-                )}
-              </>
-            ) : (
+                  </button>
+                  {mobileUserMenuOpen && (
+                    <div className="mt-2 space-y-3 rounded-md border border-border bg-background/80 p-3 text-sm shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                      {user ? (
+                        <>
+                          <div className="flex items-center gap-3 rounded-md bg-muted/50 p-2">
+                            <Avatar className="h-10 w-10 rounded-lg">
+                              <AvatarImage src={user?.avatar} alt={user?.name} />
+                              <AvatarFallback className="rounded-lg bg-primary text-primary-foreground text-sm font-semibold">
+                                {initials}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0 flex-1">
+                              <p className="font-semibold truncate">{user?.name}</p>
+                              <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                            </div>
+                          </div>
+                          <Separator className="bg-border/70" />
+                          <div className="space-y-1">
+                            <a
+                              href="/account"
+                              className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
+                              onClick={handleMobileNavigate}
+                            >
+                              <LayoutDashboard className="h-4 w-4" />
+                              Dashboard
+                            </a>
+                            <a
+                              href="/account/settings"
+                              className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
+                              onClick={handleMobileNavigate}
+                            >
+                              <Settings className="h-4 w-4" />
+                              Settings
+                            </a>
+                          </div>
+                          <Separator className="bg-border/70" />
+                          <button
+                            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-destructive/10 hover:text-destructive"
+                            onClick={handleMobileSignOut}
+                            type="button"
+                          >
+                            <LogOut className="h-4 w-4" />
+                            Log out
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-3 rounded-md bg-muted/50 p-2">
+                            <Avatar className="h-10 w-10 rounded-lg">
+                              <AvatarFallback className="rounded-lg bg-muted text-sm font-semibold">
+                                {initials}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-semibold">Guest</p>
+                              <p className="text-xs text-muted-foreground">Not signed in</p>
+                            </div>
+                          </div>
+                          <Separator className="bg-border/70" />
+                          <div className="space-y-1">
+                            <a
+                              href="/account/signin"
+                              className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
+                              onClick={handleMobileNavigate}
+                            >
+                              <LogIn className="h-4 w-4" />
+                              Sign In
+                            </a>
+                            <a
+                              href="/account/signup"
+                              className="flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted"
+                              onClick={handleMobileNavigate}
+                            >
+                              <UserPlus className="h-4 w-4" />
+                              Sign Up
+                            </a>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </>
+              ) : (
+                authDisabledMenu
+              )
+            ) : authEnabled ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -428,6 +532,8 @@ export function Sidebar({ children }: SimpleSidebarLayoutProps) {
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
+            ) : (
+              authDisabledMenu
             )}
           </div>
         </div>
@@ -442,7 +548,10 @@ export function Sidebar({ children }: SimpleSidebarLayoutProps) {
       {/* Main content area - takes remaining space */}
       <div className="flex flex-1 flex-col min-w-0">
         {/* Header with toggle */}
-        <header className="flex h-16 shrink-0 items-center border-b px-4 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40">
+        <header
+          data-home-header
+          className="flex h-16 shrink-0 items-center border-b px-4 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40"
+        >
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"

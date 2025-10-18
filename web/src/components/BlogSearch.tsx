@@ -97,7 +97,7 @@ export function BlogSearch({
               data-usal={`fade-up duration-700 delay-${Math.min(index * 100, 400)}`}
             >
               <a
-                href={`/blog/${entry.slug}`}
+                href={`/blogs/${entry.slug}`}
                 className={`block hover:opacity-80 transition-opacity ${
                   viewMode === 'list' ? 'flex flex-1' : ''
                 }`}

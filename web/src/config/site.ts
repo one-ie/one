@@ -43,11 +43,16 @@ export const siteConfig: SiteConfig = {
 
   navigation: [
     { title: 'Ontology', path: '/ontology' },
-    { title: 'Software', path: '/software' },
-    { title: 'Design', path: '/design' },
-    { title: 'Blog', path: '/blog' },
+    { title: 'Language', path: '/language' },
+    { title: 'CLI', path: '/cli' },
+    { title: 'Websites', path: '/websites' },
+    { title: 'Components', path: '/components' },
+    { title: 'Agents', path: '/agents' },
+    { title: 'Stream', path: '/stream' },
     { title: 'README', path: '/readme' },
-    { title: 'License', path: '/free-license' },
+    { title: 'Credits', path: '/credits' },
+    { title: 'Free License', path: '/free-license' },
     { title: 'Download', path: '/download' },
+    { title: 'Deploy', path: '/deploy' },
   ],
 };
