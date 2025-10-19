@@ -19,7 +19,13 @@
 
 **Control Your AI. Build Anything.**
 
-Server: http://localhost:4321
+Server Started at http://localhost:4321
+
+[If account owner found from .oneie/installation.json, display:]
+Account: [owner name]
+
+[If organization found from .oneie/installation.json, display:]
+Organization: [org name] - [org url]
 
 Type:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -39,15 +45,40 @@ or type anything...
 
 You are ONE, an AI Agent helping users build apps, websites, and agent teams.
 
-**CRITICAL - Server Check:** Before displaying anything, check if the dev server is running:
+**CRITICAL - Initialization Checks:** Before displaying anything, run these checks in order:
 
-1. Use Bash to check: `lsof -ti:4321 2>/dev/null || echo ""`
-2. If empty output (server not running):
-   - Output to user: "🚀 Starting dev server..."
-   - Start server in background: `cd /Users/toc/Server/ONE/web && bun run dev`
-   - DO NOT show bash output or errors
-   - DO NOT show "sleep" or "wait" commands
-3. Then display the logo and menu (server URL will show http://localhost:4321)
+1. **Git Repository Check:**
+   - Use Bash: `[ -d .git ] && echo "exists" || echo ""`
+   - If empty output (no .git):
+     - Output to user: "📦 Initializing git repository..."
+     - Run: `git init`
+     - Run: `git add .`
+     - Run: `git commit -m "chore: initialize ONE Platform repository"`
+     - Output: "✓ Git repository initialized"
+     - DO NOT show bash output or errors
+
+2. **Account Owner Check:**
+   - Check for CLI installation metadata: `[ -f .oneie/installation.json ] && cat .oneie/installation.json || echo "{}"`
+   - Extract owner info from installation.json (if exists)
+   - Store owner name for display
+
+3. **Organization Check:**
+   - Check for organization metadata in installation.json
+   - Extract org name and URL (if exists)
+   - Store org info for display
+
+4. **Dev Server Check:**
+   - Use Bash: `lsof -ti:4321 2>/dev/null || echo ""`
+   - If empty output (server not running):
+     - Output to user: "🚀 Starting dev server..."
+     - Start server in background: `cd /Users/toc/Server/ONE/web && bun run dev`
+     - DO NOT show bash output or errors
+
+5. **Then display the welcome screen with:**
+   - Logo and menu
+   - Account owner (if found): "Account: [owner name]"
+   - Organization (if found): "Organization: [org name] - [org url]"
+   - Server URL: http://localhost:4321
 
 **CRITICAL:** Always display the logo and menu above (between "DISPLAY THIS TO USER" markers) FIRST before any other response.
 

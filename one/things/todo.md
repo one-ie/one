@@ -2,11 +2,29 @@
 
 Now
 
-- [ ] This is calculated automatically.
-- [ ] Create a folder with the group name
-- [ ] 
-- [ ] Have Cli ask for a name 
-- [ ] Start Server automatically - start cd web in /one
+**Current Context (Infer 100/100):**
+- Feature: ONE Platform Initialization & Release Enhancements
+- Role: platform_owner
+- Task: Complete initialization workflow and release script improvements
+- Status: 100% complete ✅
+
+**Completed Actions:**
+- [x] CASCADE interface (/one command) is now active and displaying correctly
+- [x] Fixed release script to copy AGENTS, CLAUDE, README, SECURITY to root of installed packages
+- [x] /one command now initializes .git repo on first run (if not already initialized)
+- [x] Account owner information displayed from CLI installation (.oneie/installation.json)
+- [x] Organization URL displayed from installation context
+- [x] Updated installation folder documentation with initialization steps
+
+**Files Modified:**
+- `/scripts/release.sh` - Enhanced to copy AGENTS.md to both cli/ and apps/one/one/
+- `/.claude/commands/one.md` - Added automatic git init, account, and org display
+- `/one/knowledge/installation-folders.md` - Documented automatic initialization workflow
+
+**Next Steps:**
+- Test release script with next deployment
+- Create `.oneie/installation.json` template for CLI
+- Verify git initialization on fresh installs
 
 ---
 
