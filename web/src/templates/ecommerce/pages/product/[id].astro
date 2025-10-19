@@ -1,0 +1,291 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import { products } from '@/lib/products';
+import { ShoppingCart, Heart, Star, TruckIcon, RefreshCcw } from 'lucide-react';
+
+const { id } = Astro.params;
+const product = products.find((p) => p.id === id);
+
+if (!product) {
+  return Astro.redirect('/shop');
+}
+
+// Get related products (same category, exclude current)
+const relatedProducts = products
+  .filter((p) => p.category === product.category && p.id !== product.id)
+  .slice(0, 4);
+
+const displayPrice = product.salePrice || product.price;
+const savings = product.salePrice
+  ? Math.round(((product.price - product.salePrice) / product.price) * 100)
+  : 0;
+---
+
+<Layout title={`${product.name} | SHOS`}>
+  <!-- Breadcrumb -->
+  <div class="border-b bg-muted/30">
+    <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center gap-2 text-sm text-muted-foreground">
+        <a href="/" class="hover:text-foreground">Home</a>
+        <span>/</span>
+        <a href="/shop" class="hover:text-foreground">Shop</a>
+        <span>/</span>
+        <a href={`/shop?category=${product.category}`} class="hover:text-foreground capitalize">
+          {product.category}
+        </a>
+        <span>/</span>
+        <span class="text-foreground">{product.name}</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Product Detail -->
+  <section class="px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+      <div class="grid gap-12 lg:grid-cols-2">
+        <!-- Product Images -->
+        <div class="space-y-4">
+          <div class="aspect-square overflow-hidden rounded-lg border bg-muted">
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              class="h-full w-full object-cover"
+            />
+          </div>
+          {
+            product.images.length > 1 && (
+              <div class="grid grid-cols-4 gap-4">
+                {product.images.map((image, index) => (
+                  <div class="aspect-square overflow-hidden rounded-md border bg-muted cursor-pointer hover:border-primary transition-colors">
+                    <img
+                      src={image}
+                      alt={`${product.name} ${index + 1}`}
+                      class="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )
+          }
+        </div>
+
+        <!-- Product Info -->
+        <div class="space-y-6">
+          <div class="space-y-4">
+            <div class="flex items-start justify-between gap-4">
+              <div class="space-y-2 flex-1">
+                <h1 class="text-4xl font-bold tracking-tight">{product.name}</h1>
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star class="h-4 w-4 fill-primary text-primary" />
+                    ))}
+                  </div>
+                  <span class="text-sm text-muted-foreground">(2,143 reviews)</span>
+                </div>
+              </div>
+              <Button variant="outline" size="icon">
+                <Heart class="h-5 w-5" />
+              </Button>
+            </div>
+
+            <div class="flex items-baseline gap-4">
+              <span class="text-4xl font-bold">${displayPrice}</span>
+              {product.salePrice && (
+                <>
+                  <span class="text-2xl text-muted-foreground line-through">
+                    ${product.price}
+                  </span>
+                  <Badge variant="destructive" class="text-sm">
+                    Save {savings}%
+                  </Badge>
+                </>
+              )}
+            </div>
+
+            {product.isSale && (
+              <Badge variant="destructive" class="text-sm">
+                Sale - Limited Time Only
+              </Badge>
+            )}
+            {product.isNew && (
+              <Badge variant="secondary" class="text-sm">
+                New Arrival
+              </Badge>
+            )}
+          </div>
+
+          <div class="space-y-2">
+            <p class="text-lg leading-relaxed text-muted-foreground">
+              {product.description}
+            </p>
+          </div>
+
+          <!-- Size Selection -->
+          <div class="space-y-3">
+            <label class="text-sm font-semibold">Select Size:</label>
+            <div class="flex flex-wrap gap-2">
+              {product.sizes.map((size) => (
+                <Button variant="outline" class="min-w-[60px]">
+                  {size}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Color Selection -->
+          <div class="space-y-3">
+            <label class="text-sm font-semibold">
+              Select Color: <span class="font-normal text-muted-foreground">{product.colors[0]}</span>
+            </label>
+            <div class="flex flex-wrap gap-2">
+              {product.colors.map((color) => (
+                <Badge variant="outline" class="cursor-pointer px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-colors">
+                  {color}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          <!-- Stock Info -->
+          <div class="rounded-lg border border-green-500/20 bg-green-500/10 p-3">
+            <p class="text-sm font-medium text-green-700 dark:text-green-400">
+              ✓ In Stock - {product.stock} items available
+            </p>
+          </div>
+
+          <!-- Add to Cart -->
+          <div class="space-y-3">
+            <Button size="lg" class="w-full h-14 text-lg">
+              <ShoppingCart class="mr-2 h-5 w-5" />
+              Add to Cart - ${displayPrice}
+            </Button>
+            <Button size="lg" variant="outline" class="w-full h-14 text-lg">
+              Buy Now
+            </Button>
+          </div>
+
+          <!-- Features -->
+          <div class="space-y-3 pt-6 border-t">
+            <div class="flex items-center gap-3 text-sm">
+              <TruckIcon class="h-5 w-5 text-primary" />
+              <span>Free shipping on orders over $100</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+              <RefreshCcw class="h-5 w-5 text-primary" />
+              <span>30-day easy returns</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+              <Star class="h-5 w-5 text-primary" />
+              <span>Premium quality guaranteed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Details Tabs -->
+      <div class="mt-20 border-t pt-12">
+        <div class="grid gap-8 md:grid-cols-3">
+          <Card class="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle class="text-lg">Product Details</CardTitle>
+              <CardDescription class="text-sm leading-relaxed">
+                <ul class="mt-4 space-y-2">
+                  <li><strong>Category:</strong> {product.category}</li>
+                  <li><strong>Type:</strong> {product.subcategory}</li>
+                  <li><strong>Available Sizes:</strong> {product.sizes.join(', ')}</li>
+                  <li><strong>Available Colors:</strong> {product.colors.join(', ')}</li>
+                  <li><strong>Stock:</strong> {product.stock} items</li>
+                </ul>
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card class="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle class="text-lg">Shipping & Returns</CardTitle>
+              <CardDescription class="text-sm leading-relaxed">
+                <ul class="mt-4 space-y-2">
+                  <li>• Free shipping on orders over $100</li>
+                  <li>• Standard shipping: 5-7 business days</li>
+                  <li>• Express shipping available</li>
+                  <li>• 30-day return policy</li>
+                  <li>• No questions asked returns</li>
+                </ul>
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card class="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader>
+              <CardTitle class="text-lg">Care Instructions</CardTitle>
+              <CardDescription class="text-sm leading-relaxed">
+                <ul class="mt-4 space-y-2">
+                  <li>• Machine wash cold</li>
+                  <li>• Tumble dry low</li>
+                  <li>• Do not bleach</li>
+                  <li>• Iron on low if needed</li>
+                  <li>• Professional cleaning recommended for best results</li>
+                </ul>
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+
+      <!-- Related Products -->
+      {
+        relatedProducts.length > 0 && (
+          <div class="mt-20 border-t pt-12">
+            <h2 class="mb-8 text-3xl font-bold">You May Also Like</h2>
+            <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {relatedProducts.map((relatedProduct) => (
+                <a href={`/product/${relatedProduct.id}`}>
+                  <Card class="group overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+                    <div class="aspect-square overflow-hidden">
+                      <img
+                        src={relatedProduct.images[0]}
+                        alt={relatedProduct.name}
+                        class="h-full w-full object-cover transition-transform group-hover:scale-110"
+                        loading="lazy"
+                      />
+                    </div>
+                    <CardHeader class="space-y-2">
+                      <CardTitle class="text-lg line-clamp-1">
+                        {relatedProduct.name}
+                      </CardTitle>
+                      <div class="pt-2">
+                        {relatedProduct.salePrice ? (
+                          <div class="flex items-center gap-2">
+                            <span class="text-xl font-bold text-destructive">
+                              ${relatedProduct.salePrice}
+                            </span>
+                            <span class="text-sm text-muted-foreground line-through">
+                              ${relatedProduct.price}
+                            </span>
+                          </div>
+                        ) : (
+                          <span class="text-xl font-bold">
+                            ${relatedProduct.price}
+                          </span>
+                        )}
+                      </div>
+                    </CardHeader>
+                  </Card>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Layout>

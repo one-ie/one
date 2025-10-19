@@ -112,7 +112,48 @@ echo "# Our Vision" > /acme/things/vision.md
 
 ## CLI Usage
 
-### Initialize Installation
+### Automatic Initialization (via `/one` Command)
+
+When you run the `/one` command in Claude Code, it automatically performs initialization checks:
+
+**1. Git Repository Initialization**
+
+If `.git` directory doesn't exist:
+```bash
+✅ Initializing git repository...
+git init
+git add .
+git commit -m "chore: initialize ONE Platform repository"
+✅ Git repository initialized
+```
+
+**2. Installation Metadata Check**
+
+The `/one` command looks for `.oneie/installation.json`:
+
+```json
+{
+  "owner": "John Doe",
+  "organization": {
+    "name": "Acme Corp",
+    "url": "https://acme.one.ie"
+  },
+  "installationId": "acme",
+  "createdAt": "2025-10-19T12:00:00Z"
+}
+```
+
+**3. Display Context**
+
+When found, the `/one` command displays:
+```
+Account: John Doe
+Organization: Acme Corp - https://acme.one.ie
+```
+
+### Manual Initialization
+
+You can also initialize explicitly using the CLI:
 
 ```bash
 $ npx oneie init
@@ -122,6 +163,7 @@ $ npx oneie init
 ✅ Creating installation folder: /acme
 ✅ Mirroring ontology structure...
 ✅ Creating README.md
+✅ Creating .oneie/installation.json
 ✅ Creating .env.local with INSTALLATION_NAME=acme
 
 🎉 Installation initialized!
@@ -135,6 +177,8 @@ The installation name is stored in `.env.local`:
 INSTALLATION_NAME=acme
 PUBLIC_INSTALLATION_NAME=acme  # Exposed to frontend
 ```
+
+Installation metadata is stored in `.oneie/installation.json` for display purposes.
 
 ## Security
 

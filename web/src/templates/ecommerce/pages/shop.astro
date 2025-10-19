@@ -1,0 +1,163 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import { products } from '@/lib/products';
+
+// Get URL parameters for filtering
+const url = new URL(Astro.request.url);
+const category = url.searchParams.get('category');
+const filter = url.searchParams.get('filter');
+const subcategory = url.searchParams.get('subcategory');
+
+// Filter products based on parameters
+let filteredProducts = products;
+
+if (category) {
+  filteredProducts = filteredProducts.filter((p) => p.category === category);
+}
+
+if (subcategory) {
+  filteredProducts = filteredProducts.filter((p) => p.subcategory === subcategory);
+}
+
+if (filter === 'new') {
+  filteredProducts = filteredProducts.filter((p) => p.isNew);
+} else if (filter === 'sale') {
+  filteredProducts = filteredProducts.filter((p) => p.isSale);
+}
+
+// Get page title based on filters
+let pageTitle = 'Shop All';
+if (category) pageTitle = `Shop ${category.charAt(0).toUpperCase() + category.slice(1)}`;
+if (filter === 'new') pageTitle = 'New Arrivals';
+if (filter === 'sale') pageTitle = 'Sale Items';
+---
+
+<Layout title={`${pageTitle} | SHOS`}>
+  <!-- Header Section -->
+  <section class="px-4 py-20 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
+      <div class="mb-16 space-y-4 text-center">
+        <h1 class="text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
+          {pageTitle}
+        </h1>
+        <p class="text-lg text-muted-foreground">
+          {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'items'} available
+        </p>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="mb-12 flex flex-wrap items-center justify-center gap-3">
+        <a href="/shop">
+          <Badge variant={!category && !filter ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+            All
+          </Badge>
+        </a>
+        <a href="/shop?filter=new">
+          <Badge variant={filter === 'new' ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+            New Arrivals
+          </Badge>
+        </a>
+        <a href="/shop?filter=sale">
+          <Badge variant={filter === 'sale' ? 'destructive' : 'outline'} class="cursor-pointer px-4 py-2">
+            Sale
+          </Badge>
+        </a>
+        <div class="mx-4 h-6 w-px bg-border"></div>
+        <a href="/shop?category=men">
+          <Badge variant={category === 'men' ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+            Men
+          </Badge>
+        </a>
+        <a href="/shop?category=women">
+          <Badge variant={category === 'women' ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+            Women
+          </Badge>
+        </a>
+        <a href="/shop?category=unisex">
+          <Badge variant={category === 'unisex' ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+            Unisex
+          </Badge>
+        </a>
+      </div>
+
+      <!-- Product Grid -->
+      {
+        filteredProducts.length > 0 ? (
+          <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredProducts.map((product) => (
+              <a href={`/product/${product.id}`}>
+                <Card class="group overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+                  <div class="aspect-square overflow-hidden relative">
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      class="h-full w-full object-cover transition-transform group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    {product.isNew && (
+                      <Badge variant="secondary" class="absolute top-4 left-4">
+                        New
+                      </Badge>
+                    )}
+                    {product.isSale && (
+                      <Badge variant="destructive" class="absolute top-4 right-4">
+                        Sale
+                      </Badge>
+                    )}
+                  </div>
+                  <CardHeader class="space-y-2">
+                    <div class="flex items-start justify-between">
+                      <CardTitle class="text-lg line-clamp-1">
+                        {product.name}
+                      </CardTitle>
+                    </div>
+                    <CardDescription class="line-clamp-2">
+                      {product.description}
+                    </CardDescription>
+                    <div class="flex items-center gap-3 pt-2">
+                      {product.salePrice ? (
+                        <>
+                          <span class="text-2xl font-bold text-destructive">
+                            ${product.salePrice}
+                          </span>
+                          <span class="text-lg text-muted-foreground line-through">
+                            ${product.price}
+                          </span>
+                        </>
+                      ) : (
+                        <span class="text-2xl font-bold">${product.price}</span>
+                      )}
+                    </div>
+                    <div class="flex flex-wrap gap-1 pt-2">
+                      {product.colors.slice(0, 4).map((color) => (
+                        <Badge variant="outline" class="text-xs">
+                          {color}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardHeader>
+                </Card>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="py-20 text-center">
+            <p class="text-lg text-muted-foreground">
+              No products found matching your filters.
+            </p>
+            <a href="/shop" class="mt-4 inline-block text-primary hover:underline">
+              Clear filters
+            </a>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</Layout>
