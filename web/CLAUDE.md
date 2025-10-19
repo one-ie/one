@@ -112,6 +112,33 @@ See `/frontend/test/auth/README.md` and `/frontend/test/auth/STATUS.md` for deta
 
 ## Architecture Overview
 
+### ⚠️ CRITICAL RULE: NEVER IMPORT BACKEND CODE IN FRONTEND
+
+**THE GOLDEN RULE: Frontend NEVER imports Convex (or any backend) directly.**
+
+```
+❌ FORBIDDEN IN FRONTEND:
+import { api } from '../../../backend/convex/_generated/api'
+import { useQuery } from 'convex/react'
+import anything from 'convex/*'
+
+✅ CORRECT IN FRONTEND:
+import { useThings } from '@/hooks/useThings'        // Uses DataProvider
+import { ThingService } from '@/services/ThingService' // Backend-agnostic
+```
+
+**Why This Matters:**
+- Frontend must work with ANY backend (Convex, WordPress, Supabase, Notion, etc.)
+- Backend is swapped by changing ONE line: DataProvider implementation
+- No vendor lock-in
+- True backend-agnostic architecture
+
+**The Data Flow:**
+
+```
+Frontend Hook → Effect.ts Service → DataProvider Interface → Backend (Convex OR WordPress OR...)
+```
+
 ### The Beautiful Separation
 
 This project implements a **three-layer architecture** where Effect.ts acts as the glue between frontend and backend:
@@ -121,29 +148,29 @@ This project implements a **three-layer architecture** where Effect.ts acts as t
 │         ASTRO FRONTEND LAYER                     │
 │  - Pages: .astro files (SSR)                     │
 │  - Components: React 19 islands                   │
+│  - Hooks: useThings, useConnections, etc.        │
 │  - UI: shadcn/ui + Tailwind v4                   │
-│  - Content: Type-safe collections                │
+│  - NO direct backend imports                     │
 │  See: one/things/frontend.md                            │
 └────────────────┬─────────────────────────────────┘
                  │
-                 ↓ (Convex hooks + Hono API client)
+                 ↓ (HTTP calls via hooks - backend-agnostic)
 ┌──────────────────────────────────────────────────┐
-│         EFFECT.TS GLUE LAYER                     │
+│         EFFECT.TS SERVICE LAYER                  │
 │  - Services: Pure business logic                 │
-│  - Providers: External APIs (typed)              │
+│  - DataProvider: Backend abstraction interface   │
 │  - Layers: Dependency injection                  │
 │  - Errors: Typed error handling                  │
 │  See: one/things/hono.md                               │
 └────────────────┬─────────────────────────────────┘
                  │
-                 ↓ (Confect bridge + Hono routes)
+                 ↓ (DataProvider interface implementation)
 ┌──────────────────────────────────────────────────┐
-│         BACKEND LAYER                            │
-│  - Hono: API routes (REST endpoints)             │
-│  - Convex: Real-time database + functions        │
-│  - 4-Table Ontology: entities, connections,      │
-│    events, tags                                  │
-│  See: one/things/hono.md                               │
+│         BACKEND LAYER (Interchangeable)          │
+│  - ConvexProvider OR WordPressProvider OR...     │
+│  - 6-Dimension Ontology implementation           │
+│  - things, connections, events, knowledge        │
+│  See: src/providers/                             │
 └──────────────────────────────────────────────────┘
 ```
 

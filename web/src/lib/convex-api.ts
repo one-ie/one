@@ -1,16 +1,36 @@
 /**
- * Convex API for SSR (Astro pages only)
+ * ⚠️ DEPRECATED - DO NOT USE THIS FILE
  *
- * **For React Components:** Use domain hooks instead:
- * - import { useGroups } from "@/hooks/useGroups"
- * - import { useThings } from "@/hooks/useThings"
- * - import { useConnections } from "@/hooks/useConnections"
+ * This file violates the backend separation principle.
  *
- * **For Astro SSR:** This file is OK to use with ConvexHttpClient
+ * ❌ WRONG: Importing Convex API directly in frontend
+ * ✅ CORRECT: Use backend-agnostic hooks instead
  *
- * See DECOUPLING.md for full architecture.
+ * Replace imports like this:
+ *
+ * Before:
+ * import { api } from '@/lib/convex-api'
+ * const data = await convex.query(api.things.list, {})
+ *
+ * After:
+ * import { useThings } from '@/hooks/useThings'
+ * const { things } = useThings({ groupId, type })
+ *
+ * See CLAUDE.md for complete architecture guidelines.
  */
 
-// For SSR: Import directly from backend (relative path)
-// Frontend stays decoupled via PUBLIC_CONVEX_URL env var
-export { api } from '../../../backend/convex/_generated/api.js';
+// Stub export to prevent build errors temporarily
+// TODO: Remove all usages and delete this file
+export const api = {
+  things: {
+    list: () => { throw new Error('Use useThings hook instead') },
+    get: () => { throw new Error('Use useThings hook instead') },
+  },
+  connections: {
+    list: () => { throw new Error('Use useConnections hook instead') },
+  },
+  groups: {
+    list: () => { throw new Error('Use useGroups hook instead') },
+    get: () => { throw new Error('Use useGroups hook instead') },
+  },
+};
