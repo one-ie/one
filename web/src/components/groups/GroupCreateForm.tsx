@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQuery } from 'convex/react';
-import { api } from '../../../../backend/convex/_generated/api';
+import { api } from '@/lib/convex-api';
 import { Button } from '@/components/ui/button';
 import {
   Form,
