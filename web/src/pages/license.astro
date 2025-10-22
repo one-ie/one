@@ -1,14 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ReadmeContent from '../../LICENSE.md';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+// Read LICENSE.md content at build time
+const licenseContent = readFileSync(resolve('..', 'LICENSE.md'), 'utf-8');
 ---
 
-<Layout title="README" description="ONE - Bring Your Ideas to Life">
+<Layout title="License" description="ONE Platform License">
   <div class="container mx-auto px-4 py-8 max-w-[800px]">
     <div class="prose dark:prose-invert max-w-none">
-      <article>
-        <ReadmeContent />
-      </article>
+      <article set:html={licenseContent} />
     </div>
   </div>
 </Layout>
