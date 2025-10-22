@@ -5,6 +5,8 @@
  * Tests all 6 dimensions: organizations, people, things, connections, events, knowledge.
  */
 
+/* global performance */
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Effect } from "effect";
 import { createConvexProvider } from "@/providers/ConvexProvider";

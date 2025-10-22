@@ -1,0 +1,131 @@
+---
+// Frontmatter must come first
+import OrbitingCircles from "../components/magicui/orbiting-circles";
+
+// Base constants
+const BASE_INNER_RADIUS = 140;
+const BASE_OUTER_RADIUS = 240;
+const BASE_INNER_DURATION = 45;
+const BASE_OUTER_DURATION = 30;
+const STROKE_WIDTH = 1.5;
+
+// Calculate angles for perfect distribution
+const innerStartAngles = [0, 90, 180, 270]; // 4 e-commerce platforms
+const outerStartAngles = [0, 72, 144, 216, 288]; // 5 AI providers
+
+// Define logo arrays with names for inner and outer circles
+const innerLogos = [
+    { path: "/logos/shopify.svg", name: "Shopify" },
+    { path: "/logos/woocommerce.svg", name: "WooCommerce" },
+    { path: "/logos/magento.svg", name: "Magento" },
+    { path: "/logos/stripe.svg", name: "Stripe" },
+    { path: "/logos/prestashop.svg", name: "PrestaShop" }
+];
+
+const outerLogos = [
+    { path: "/logos/openai.svg", name: "OpenAI" },
+    { path: "/logos/anthropic.svg", name: "Anthropic" },
+    { path: "/logos/gemini.svg", name: "Gemini" },
+    { path: "/logos/mistral.svg", name: "Mistral AI" },
+    { path: "/logos/deepseek.svg", name: "DeepSeek" }
+];
+
+// Use fixed values instead of random ones
+const innerDurations = innerStartAngles.map(() => BASE_INNER_DURATION);
+const outerDurations = outerStartAngles.map(() => BASE_OUTER_DURATION);
+const innerRadii = innerStartAngles.map(() => BASE_INNER_RADIUS);
+const outerRadii = outerStartAngles.map(() => BASE_OUTER_RADIUS);
+---
+
+<div
+    class="relative flex h-[600px] w-full flex-col items-center justify-center overflow-hidden"
+>
+    {/* Orbit Paths */}
+    <div class="absolute inset-0 flex items-center justify-center">
+        <svg class="absolute size-full" viewBox="0 0 600 600">
+            <circle
+                cx="300"
+                cy="300"
+                r={BASE_INNER_RADIUS}
+                fill="none"
+                stroke="currentColor"
+                stroke-opacity="0.2"
+                stroke-width={STROKE_WIDTH}
+                stroke-dasharray="6 4"></circle>
+            <circle
+                cx="300"
+                cy="300"
+                r={BASE_OUTER_RADIUS}
+                fill="none"
+                stroke="currentColor"
+                stroke-opacity="0.2"
+                stroke-width={STROKE_WIDTH}
+                stroke-dasharray="6 4"></circle>
+        </svg>
+    </div>
+
+    {/* Center Logo */}
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+        <img
+            src="/logos/one.svg"
+            alt="ONE Logo"
+            class="size-[76px] opacity-90 hover:scale-110 transition-transform duration-300"
+        />
+        <span class="block mt-2 text-lg font-semibold text-primary">ONE</span>
+    </div>
+
+    {/* Inner Circle - E-commerce Platforms */}
+    {
+        innerStartAngles.map((angle, i) => (
+            <OrbitingCircles
+                className="absolute left-1/2 top-1/2"
+                duration={innerDurations[i]}
+                startAngle={angle}
+                radius={innerRadii[i]}
+                path={false}
+                client:load
+            >
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                    <div class="h-12 w-12 rounded-full hover:scale-110 transition-all duration-300">
+                        <img
+                            src={innerLogos[i].path}
+                            alt={innerLogos[i].name}
+                            class="h-full w-full"
+                        />
+                    </div>
+                    <span class="block mt-2 text-sm font-medium text-muted-foreground whitespace-nowrap">
+                        {innerLogos[i].name}
+                    </span>
+                </div>
+            </OrbitingCircles>
+        ))
+    }
+
+    {/* Outer Circle - AI Providers */}
+    {
+        outerStartAngles.map((angle, i) => (
+            <OrbitingCircles
+                className="absolute left-1/2 top-1/2"
+                radius={outerRadii[i]}
+                duration={outerDurations[i]}
+                startAngle={angle}
+                path={false}
+                reverse
+                client:load
+            >
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+                    <div class="h-14 w-14 rounded-full hover:scale-110 transition-all duration-300 text-black dark:text-white">
+                    	<img
+                    		src={outerLogos[i].path}
+                    		alt={outerLogos[i].name}
+                    		class="h-full w-full"
+                    	/>
+                    </div>
+                    <span class="block mt-2 text-sm font-medium text-muted-foreground whitespace-nowrap">
+                        {outerLogos[i].name}
+                    </span>
+                </div>
+            </OrbitingCircles>
+        ))
+    }
+</div>

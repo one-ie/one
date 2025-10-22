@@ -1,6 +1,8 @@
 ---
 import { Sidebar } from '@/components/Sidebar';
+import { MinimalSidebar } from '@/components/MinimalSidebar';
 import { Toaster } from '@/components/ui/sonner';
+import { GlobalCartDrawer } from '@/components/ecommerce/GlobalCartDrawer';
 import ThemeInit from '@/components/ThemeInit.astro';
 import '../styles/global.css';
 
@@ -21,6 +23,11 @@ const {
 // Generate canonical URL and full image URL
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const imageURL = new URL(image, Astro.site);
+
+// Detect if this is ONE Platform or a customer org
+const isONE = import.meta.env.ORG_NAME === "one" || !import.meta.env.ORG_NAME;
+const orgName = import.meta.env.ORG_NAME || "ONE";
+const orgWebsite = import.meta.env.ORG_WEBSITE || "https://one.ie";
 ---
 
 <!doctype html>
@@ -94,9 +101,13 @@ const imageURL = new URL(image, Astro.site);
     >
       Skip to main content
     </a>
+
+    <!-- Always use Sidebar - it will decide what to render internally -->
     <Sidebar client:load>
       <slot />
     </Sidebar>
+
     <Toaster client:load />
+    <GlobalCartDrawer client:load />
   </body>
 </html>

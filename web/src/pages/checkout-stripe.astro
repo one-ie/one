@@ -1,0 +1,260 @@
+---
+/**
+ * Stripe Checkout Page
+ * Demonstrates Stripe Elements integration
+ *
+ * URL: /checkout-stripe
+ */
+
+/* global window */
+
+import Layout from '@/layouts/Layout.astro';
+import { StripeProvider } from '@/components/ecommerce/payment/StripeProvider';
+import { PaymentForm } from '@/components/ecommerce/payment/PaymentForm';
+import { OrderSummary } from '@/components/ecommerce/payment/OrderSummary';
+
+// Example cart items
+const cartItems = [
+  {
+    product: {
+      id: 'tshirt-1',
+      name: 'Premium ONE Platform T-Shirt',
+      description: 'High-quality cotton t-shirt',
+      price: 2999, // $29.99 in cents
+      salePrice: null,
+      category: 'Apparel',
+      subcategory: 'T-Shirts',
+      sizes: ['S', 'M', 'L', 'XL'],
+      colors: ['Black', 'White', 'Blue'],
+      images: ['/images/tshirt-black.jpg'],
+      isNew: true,
+      isSale: false,
+      stock: 50,
+    },
+    quantity: 2,
+    selectedColor: 'Black',
+    selectedSize: 'M',
+  },
+  {
+    product: {
+      id: 'sticker-1',
+      name: 'ONE Platform Sticker Pack',
+      description: 'Set of 10 vinyl stickers',
+      price: 999, // $9.99 in cents
+      salePrice: 799, // $7.99 sale price
+      category: 'Accessories',
+      subcategory: 'Stickers',
+      sizes: [],
+      colors: [],
+      images: ['/images/stickers.jpg'],
+      isNew: false,
+      isSale: true,
+      stock: 100,
+    },
+    quantity: 1,
+  },
+];
+
+// Create PaymentIntent
+let clientSecret: string | null = null;
+let error: string | null = null;
+
+try {
+  const response = await fetch(`${Astro.url.origin}/api/checkout/create-intent`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      items: cartItems.map((item) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+        selectedColor: item.selectedColor,
+        selectedSize: item.selectedSize,
+      })),
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    error = errorData.error || 'Failed to initialize checkout';
+  } else {
+    const data = await response.json();
+    clientSecret = data.clientSecret;
+  }
+} catch (err) {
+  console.error('Checkout initialization error:', err);
+  error = 'Failed to connect to payment system';
+}
+
+// Calculate order totals
+const subtotal = cartItems.reduce((sum, item) => {
+  const price = item.product.salePrice || item.product.price;
+  return sum + price * item.quantity;
+}, 0);
+
+const shipping = subtotal >= 10000 ? 0 : 999; // Free shipping over $100
+const tax = Math.round((subtotal + shipping) * 0.08); // 8% tax
+const total = subtotal + shipping + tax;
+
+const calculation = {
+  subtotal,
+  shipping,
+  tax,
+  total,
+  currency: 'usd',
+};
+
+// Transform cartItems to match CartItem type for OrderSummary
+import type { CartItem } from '@/types/products';
+
+const transformedItems: CartItem[] = cartItems.map((item) => ({
+  productSlug: item.product.id,
+  productName: item.product.name,
+  price: item.product.salePrice || item.product.price,
+  quantity: item.quantity,
+  selectedColor: item.selectedColor,
+  selectedSize: item.selectedSize,
+  image: item.product.images[0] || '/placeholder.jpg',
+}));
+---
+
+<Layout title="Checkout - ONE Platform">
+  <div class="min-h-screen bg-background py-8">
+    <div class="container mx-auto max-w-6xl px-4">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold">Secure Checkout</h1>
+        <p class="mt-2 text-muted-foreground">
+          Complete your purchase with Stripe secure payments
+        </p>
+      </div>
+
+      <!-- Error State -->
+      {
+        error && (
+          <div class="rounded-lg border border-destructive bg-destructive/10 p-4">
+            <p class="text-destructive">{error}</p>
+            <p class="mt-2 text-sm text-muted-foreground">
+              Please check your environment variables and try again.
+            </p>
+          </div>
+        )
+      }
+
+      <!-- Checkout Grid -->
+      {
+        !error && clientSecret && (
+          <div class="grid gap-8 lg:grid-cols-2">
+            {/* Order Summary - Left Column */}
+            <div class="order-2 lg:order-1">
+              <OrderSummary
+                client:load
+                items={transformedItems}
+                calculation={calculation}
+              />
+
+              {/* Test Card Information */}
+              <div class="mt-6 rounded-lg border bg-muted/50 p-4">
+                <h3 class="mb-2 font-semibold">Test Cards</h3>
+                <div class="space-y-2 text-sm text-muted-foreground">
+                  <p>
+                    <strong>Success:</strong> 4242 4242 4242 4242
+                  </p>
+                  <p>
+                    <strong>Decline:</strong> 4000 0000 0000 0002
+                  </p>
+                  <p>
+                    <strong>Auth Required:</strong> 4000 0027 6000 3184
+                  </p>
+                  <p class="text-xs">
+                    Use any future expiry date (e.g., 12/34), any CVC (e.g.,
+                    123), and any ZIP (e.g., 12345)
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Form - Right Column */}
+            <div class="order-1 lg:order-2">
+              <div class="rounded-lg border bg-card p-6 shadow-sm">
+                <StripeProvider client:load clientSecret={clientSecret}>
+                  <PaymentForm
+                    client:load
+                    onSuccess={(orderId: string) => {
+                      console.log('Payment successful! Order ID:', orderId);
+                      // Redirect to order confirmation
+                      window.location.href = `/orders/confirmation?orderId=${orderId}`;
+                    }}
+                  />
+                </StripeProvider>
+              </div>
+            </div>
+          </div>
+        )
+      }
+
+      <!-- Security Badges -->
+      <div class="mt-12 flex items-center justify-center gap-6 text-muted-foreground">
+        <div class="flex items-center gap-2">
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            ></path>
+          </svg>
+          <span class="text-sm">SSL Encrypted</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+            ></path>
+          </svg>
+          <span class="text-sm">PCI Compliant</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+            ></path>
+          </svg>
+          <span class="text-sm">Powered by Stripe</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Ensure proper spacing on mobile */
+  @media (max-width: 1024px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Grid, List } from 'lucide-react';
+import { ProductSearch } from '@/components/products/ProductSearch';
+
+// Get all Product entries
+const entries = await getCollection('products');
+
+// Get view mode from URL params, default to grid
+const viewModeParam = Astro.url.searchParams.get('view') || 'grid';
+const viewMode = (viewModeParam === 'list' || viewModeParam === 'grid') ? viewModeParam : 'grid';
+const gridColumnsParam = Astro.url.searchParams.get('columns') || '3';
+const gridColumns = (gridColumnsParam === '2' || gridColumnsParam === '3' || gridColumnsParam === '4') ? gridColumnsParam : '3';
+---
+
+<Layout title="Products" description="Browse all available products">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-4xl font-bold" data-usal="fade-right duration-700">All Products</h1>
+        <p class="text-muted-foreground mt-2" data-usal="fade-right duration-700 delay-100">
+          Discover our complete collection of premium products
+        </p>
+      </div>
+      <div class="flex gap-2 items-center" data-usal="fade-left duration-700 delay-100">
+        <a
+          href="/products?view=list"
+          class={`p-2 rounded-md hover:bg-accent hover:scale-110 transition-all duration-200 ${viewMode === 'list' ? 'bg-accent' : ''}`}
+          title="List view"
+        >
+          <List className="w-5 h-5" />
+        </a>
+        <a
+          href="/products?view=grid&columns=2"
+          class={`p-2 rounded-md hover:bg-accent hover:scale-110 transition-all duration-200 ${viewMode === 'grid' && gridColumns === '2' ? 'bg-accent' : ''}`}
+          title="2 columns grid"
+        >
+          <Grid className="w-5 h-5" />
+        </a>
+        <a
+          href="/products?view=grid&columns=3"
+          class={`p-2 rounded-md hover:bg-accent hover:scale-110 transition-all duration-200 ${viewMode === 'grid' && gridColumns === '3' ? 'bg-accent' : ''}`}
+          title="3 columns grid"
+        >
+          <div class="w-5 h-5 grid grid-cols-3 gap-0.5">
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+          </div>
+        </a>
+        <a
+          href="/products?view=grid&columns=4"
+          class={`p-2 rounded-md hover:bg-accent hover:scale-110 transition-all duration-200 ${viewMode === 'grid' && gridColumns === '4' ? 'bg-accent' : ''}`}
+          title="4 columns grid"
+        >
+          <div class="w-5 h-5 grid grid-cols-2 grid-rows-2 gap-0.5">
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+            <div class="bg-current rounded-sm"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <ProductSearch
+      client:load
+      products={entries}
+      viewMode={viewMode}
+      gridColumns={gridColumns}
+    />
+  </div>
+</Layout>

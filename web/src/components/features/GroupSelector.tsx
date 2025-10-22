@@ -4,8 +4,7 @@
  */
 
 import * as React from "react";
-import { useQuery } from "convex/react";
-import { api } from "@/lib/convex-api";
+import { useGroups, type Group } from "@/hooks/useGroups";
 import {
   Select,
   SelectContent,
@@ -16,23 +15,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Id } from "@/types/convex";
-
-interface Group {
-  _id: Id<"groups">;
-  slug: string;
-  name: string;
-  type:
-    | "friend_circle"
-    | "business"
-    | "community"
-    | "dao"
-    | "government"
-    | "organization";
-  status: "active" | "archived";
-  settings: {
-    visibility: "public" | "private";
-  };
-}
 
 interface GroupSelectorProps {
   selectedGroupId?: Id<"groups">;
@@ -70,13 +52,13 @@ export function GroupSelector({
   filterByStatus = "active",
   className,
 }: GroupSelectorProps) {
-  const groups = useQuery(api.queries.groups.list, {
+  const { data: groups, loading } = useGroups({
     type: filterByType,
     status: filterByStatus,
   });
 
   // Loading state
-  if (groups === undefined) {
+  if (loading) {
     return (
       <div className={className}>
         <Skeleton className="h-10 w-full" />
@@ -85,7 +67,7 @@ export function GroupSelector({
   }
 
   // Empty state
-  if (groups.length === 0) {
+  if (!groups || groups.length === 0) {
     return (
       <div className={className}>
         <div className="rounded-lg border border-dashed p-4 text-center">
@@ -107,7 +89,7 @@ export function GroupSelector({
           <SelectValue placeholder="Select a group" />
         </SelectTrigger>
         <SelectContent>
-          {groups.map((group: Group) => (
+          {groups.map((group) => (
             <SelectItem key={group._id} value={group._id}>
               <div className="flex items-center gap-2">
                 <span className="font-medium">{group.name}</span>

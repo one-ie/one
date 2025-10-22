@@ -199,3 +199,23 @@ export {
   // Two-factor authentication
   use2FA,
 } from './useAuth';
+
+// ============================================================================
+// ONTOLOGY DISCOVERY
+// ============================================================================
+
+export {
+  // Complete ontology
+  useOntology,
+  useOntologyMetadata,
+
+  // Feature detection
+  useHasFeature,
+  useEnabledFeatures,
+  useFeatureBreakdown,
+
+  // Type discovery
+  useThingTypes,
+  useConnectionTypes,
+  useEventTypes,
+} from './useOntology';

@@ -1,0 +1,31 @@
+feature: portfolio
+extends: core
+description: Portfolio and project showcase
+
+thingTypes:
+  - name: project
+    properties:
+      title: string
+      slug: string
+      description: string
+      images: string[]
+      client: string
+      completedAt: number
+      technologies: string[]
+      url: string
+  - name: case_study
+    properties:
+      title: string
+      problem: string
+      solution: string
+      results: string
+      metrics: object
+
+connectionTypes:
+  - name: belongs_to_portfolio
+    fromType: project
+    toType: user
+
+eventTypes:
+  - name: project_viewed
+    thingType: project

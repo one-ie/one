@@ -203,27 +203,38 @@ knowledge → groupId: Id<"groups">
 
 ```
 /
-├── one/                    # Global templates (fallback)
-├── <installation-name>/    # Customer-specific overrides
-│   ├── groups/             # Hierarchical group docs
-│   ├── people/
-│   ├── things/
-│   ├── connections/
-│   ├── events/
+├── one/                    # Global templates (everyone uses these)
 │   └── knowledge/
+│       └── ontology.md     # Universal 6-dimension ontology
+├── <installation-name>/    # Customer-specific overrides
+│   ├── knowledge/
+│   │   ├── brand-guide.md  # Custom branding only
+│   │   ├── features.md     # Organization features
+│   │   └── rules.md        # Org-specific rules
+│   └── groups/             # Hierarchical group docs
 ├── web/
 ├── backend/
 └── .claude/
 ```
 
-### File Resolution
+### What Goes Where
 
-When loading documentation, use this priority:
+**Global (everyone uses):**
+- `/one/knowledge/ontology.md` - Universal 6-dimension ontology
+- `/one/knowledge/architecture.md` - Platform architecture
+- All `/one/*` documentation
 
-1. `/<installation-name>/groups/<group-path>/<file>` (most specific)
-2. Parent group paths (walk up hierarchy)
-3. `/<installation-name>/<file>` (installation root)
-4. `/one/<file>` (global fallback)
+**Installation-specific (per organization):**
+- Brand identity (colors, logos, fonts, tone)
+- Organization features and capabilities
+- Group-specific documentation
+- Custom business rules
+
+### Key Principle
+
+**Data isolation happens via `groupId` in the database, NOT via schema customization.**
+
+The 6-dimension ontology is universal and flexible enough for all use cases.
 
 ### Initialize Installation
 
@@ -235,23 +246,29 @@ npx oneie init
 
 ### Usage
 
-**Add installation-specific docs:**
+**Add installation-specific branding:**
+```bash
+mkdir -p /acme/knowledge
+echo "# Acme Brand Guide" > /acme/knowledge/brand-guide.md
+```
+
+**Document organization features:**
+```bash
+echo "# Acme Features" > /acme/knowledge/features.md
+```
+
+**Add group-specific docs:**
 ```bash
 mkdir -p /acme/groups/engineering
 echo "# Engineering Practices" > /acme/groups/engineering/practices.md
 ```
 
-**Override global templates:**
-```bash
-echo "# Our Vision" > /acme/things/vision.md
-```
-
 ### Important Distinctions
 
-- **Installation folder** = Filesystem customization per organization
+- **Installation folder** = Filesystem customization for branding and features
 - **Database groups** = Runtime data isolation per group (via `groupId`)
 - One installation can serve many database groups
-- Folder hierarchy mirrors database `parentGroupId` structure
+- **ONE ontology** = Universal schema shared by all installations
 
 ### Security
 
@@ -406,54 +423,28 @@ ONE/
     └── stack/                  # Stack Auth example
 ```
 
-## Development Workflow (7-Phase Process)
+## Development Workflow (6-Phase Process)
 
 Before implementing ANY feature, follow this workflow defined in `one/connections/workflow.md`:
 
-### Phase 0: CHECK INSTALLATION FOLDER (NEW)
-
-**FIRST STEP:** Check if there are installation-specific overrides before reading global templates.
-
-```bash
-# Check if installation folder exists
-if [ -d "/${INSTALLATION_NAME}" ]; then
-  echo "✅ Installation folder detected: /${INSTALLATION_NAME}"
-  echo "Priority: Installation-specific docs override global /one/ templates"
-fi
-```
-
-**File Resolution Priority:**
-1. Check `/<installation-name>/groups/<group-path>/<file>` (group-specific)
-2. Check `/<installation-name>/<file>` (installation-wide)
-3. Fallback to `/one/<file>` (global template)
-
-**Key Questions:**
-- Is there a custom `things/vision.md` in the installation folder?
-- Are there group-specific `groups/<group-name>/` docs?
-- Does this feature need installation-specific documentation?
-
 ### Phase 1: UNDERSTAND
 
-1. **Check installation folder first** (if `INSTALLATION_NAME` is set)
-   - Look for `/<installation-name>/knowledge/ontology.md` (custom ontology docs)
-   - Look for `/<installation-name>/knowledge/rules.md` (custom rules)
-2. Read `one/knowledge/ontology.md` (understand the 6 dimensions)
-3. Read `web/AGENTS.md` (Convex patterns and quick reference)
-4. Read `one/knowledge/rules.md` (golden rules for AI agents)
+1. Read `/one/knowledge/ontology.md` (universal 6-dimension ontology)
+2. Read `web/AGENTS.md` (Convex patterns and quick reference)
+3. Read `/one/knowledge/rules.md` (golden rules for AI agents)
+4. Check installation folder for branding: `/<installation>/knowledge/brand-guide.md` (if exists)
 5. Identify feature category (entity, relationship, action, query)
 6. Find similar patterns in existing code
-7. **Check for group-specific docs** in `/<installation-name>/groups/<group-path>/`
 
 ### Phase 2: MAP TO ONTOLOGY
 
 1. Identify **groups** (which group owns this? any parent/child relationships?)
-   - **NEW:** Check if group has custom docs in `/<installation-name>/groups/<group-slug>/`
 2. Identify **people** (who can access/modify this?)
 3. Identify **things** (what entities are involved?)
 4. Identify **connections** (how do they relate?)
 5. Identify **events** (what actions need logging?)
 6. Identify **knowledge** (what needs to be learned/searched?)
-7. **NEW:** Decide if this feature needs installation-specific documentation
+7. Check if group has specific docs in `/<installation-name>/groups/<group-slug>/`
 
 ### Phase 3: DESIGN SERVICES
 
@@ -482,15 +473,10 @@ fi
 1. Write unit tests for services
 2. Write integration tests for full flows
 3. Update documentation:
-   - **Installation-specific:** Add to `/<installation-name>/<dimension>/` if feature is org-specific
-   - **Group-specific:** Add to `/<installation-name>/groups/<group-slug>/` if feature is group-specific
-   - **Global:** Add to `/one/<dimension>/` if feature is platform-wide
+   - **Platform-wide features:** Add to `/one/<dimension>/`
+   - **Organization features:** Add to `/<installation-name>/knowledge/features.md`
+   - **Group-specific practices:** Add to `/<installation-name>/groups/<group-slug>/`
 4. Run type checking (`bunx astro check`)
-5. **NEW:** Test file resolution with installation folder:
-   ```bash
-   # Test that installation-specific docs override global docs
-   cat /<installation-name>/things/vision.md  # Should show custom version
-   ```
 
 ## Key Patterns and Best Practices
 
@@ -785,16 +771,16 @@ Verify `react-dom/server.edge` alias is set in `astro.config.mjs` under `vite.re
 
 **For ANY feature implementation, read in this order:**
 
-1. **Check installation folder first** (if `INSTALLATION_NAME` is set):
-   - `/<installation-name>/knowledge/ontology.md` (custom ontology docs)
-   - `/<installation-name>/knowledge/rules.md` (custom rules)
+1. **`/one/knowledge/ontology.md`** - Universal 6-dimension ontology specification (Version 1.0.0)
+2. **`web/AGENTS.md`** - Quick reference for Convex patterns
+3. **`/one/knowledge/rules.md`** - Golden rules for AI development
+4. **`/one/connections/workflow.md`** - 6-phase development workflow
+5. **`/one/connections/patterns.md`** - Proven code patterns to replicate
+6. **Check installation folder** (if `INSTALLATION_NAME` is set):
+   - `/<installation-name>/knowledge/brand-guide.md` (custom branding)
+   - `/<installation-name>/knowledge/features.md` (organization features)
+   - `/<installation-name>/knowledge/rules.md` (org-specific rules)
    - `/<installation-name>/groups/<group-slug>/` (group-specific docs)
-2. **`one/knowledge/ontology.md`** - Complete 6-dimension ontology specification (Version 1.0.0)
-3. **`web/AGENTS.md`** - Quick reference for Convex patterns
-4. **`one/knowledge/rules.md`** - Golden rules for AI development
-5. **`one/connections/workflow.md`** - 7-phase development workflow (includes installation folders)
-6. **`one/connections/patterns.md`** - Proven code patterns to replicate
-7. **`one/knowledge/installation-folders.md`** - Installation folder architecture and usage
 
 **For specific feature types:**
 

@@ -6,6 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 # Environment variables for Cloudflare Pages
 # Note: These are for local testing. For production, set in Cloudflare Pages dashboard
 [vars]
+NODE_VERSION = "22.16.0"  # Cloudflare Pages v3 default - ensures build consistency
 PUBLIC_CONVEX_URL = "https://shocking-falcon-870.convex.cloud"
 CONVEX_DEPLOYMENT = "prod:shocking-falcon-870"
 CLOUDFLARE_ACCOUNT_ID = "627e0c7ccbe735a4a7cabf91e377bbad"

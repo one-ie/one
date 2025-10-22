@@ -20,7 +20,7 @@ import { StatusTabs } from "./StatusTabs"
 import { MobileNav } from "./MobileNav"
 import { FloatingActionButton } from "./FloatingActionButton"
 import { CommandPalette } from "./CommandPalette"
-import { mockEntities, viewCounts, type NavigationView, JOURNEY_STAGES } from "@/data/app-data"
+import { mockEntities, viewCounts, JOURNEY_STAGES } from "@/data/app-data"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 interface AppLayoutProps {

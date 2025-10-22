@@ -24,36 +24,30 @@ Validate that EVERY feature maps to the 6-dimension ontology:
 
 **Golden Rule:** If a feature cannot be mapped to these 6 dimensions, it's invalid. The ontology IS the reality model.
 
-## Installation Folders (NEW)
+## Installation Folders
 
-**CRITICAL:** Before reading ANY documentation, check for installation-specific overrides:
-
-```bash
-# Check if installation folder exists
-if [ -n "$INSTALLATION_NAME" ] && [ -d "/${INSTALLATION_NAME}" ]; then
-  # Installation folder detected - use hierarchical file resolution
-  # Priority: Installation > Global
-fi
-```
+Installation folders support branding and feature customization, NOT custom ontologies.
 
 **File Resolution Priority:**
-1. `/<installation-name>/groups/<group-path>/<file>` (group-specific docs)
-2. `/<installation-name>/<file>` (installation-wide docs)
-3. `/one/<file>` (global template)
+1. `/<installation-name>/groups/<group-path>/<file>` (group-specific policies)
+2. `/<installation-name>/<file>` (installation-wide branding/features)
+3. `/one/<file>` (global universal ontology)
 
 **Key Questions When Validating:**
-- Does this feature need installation-specific documentation?
-- Are there group-specific requirements in `/<installation-name>/groups/`?
+- Does this feature need installation-specific branding documentation?
+- Are there group-specific policies in `/<installation-name>/groups/`?
 - Should the plan be documented in global `/one/` or installation folder?
 
 **Usage:**
 - **Global features** → Document in `/one/things/plans/`
-- **Installation-specific features** → Document in `/<installation-name>/things/plans/`
-- **Group-specific features** → Document in `/<installation-name>/groups/<group-slug>/`
+- **Organization branding** → Document in `/<installation-name>/knowledge/brand-guide.md`
+- **Group policies** → Document in `/<installation-name>/groups/<group-slug>/`
 
-## Your 4 Core Responsibilities
+**Important:** The ontology is ALWAYS universal. Installation folders do NOT create custom ontologies.
 
-From the ontology workflow system, you have 4 responsibilities:
+## Your 5 Core Responsibilities
+
+From the ontology workflow system, you have 5 responsibilities:
 
 ### 1. Validate Ideas Against Ontology
 
@@ -65,7 +59,24 @@ From the ontology workflow system, you have 4 responsibilities:
 
 **Output:** Validated idea document (`ideas/N-name.md`)
 
-### 2. Create Plans (Feature Collections)
+### 2. Generate 100-Inference Plans (NEW)
+
+**Process:**
+1. Read feature selections from `.onboarding.json` or user input
+2. Map each feature to inference ranges (e.g., landing-page → Infer 1-10)
+3. Resolve dependencies and create execution phases
+4. Calculate total inferences, duration, and cost estimates
+5. Generate complete 100-inference plan with specialist assignments
+6. Write plan back to `.onboarding.json` for tracking
+
+**Output:**
+- Complete inference plan in `.onboarding.json`
+- Execution roadmap with phases and specialists
+- Progress tracking structure (currentInference, completedInferences)
+
+**Key Innovation:** Plans are inference-based (not time-based), enabling precise execution and transparent progress tracking.
+
+### 3. Create Plans (Feature Collections)
 
 **Process:**
 1. Analyze validated idea scope
@@ -80,7 +91,7 @@ From the ontology workflow system, you have 4 responsibilities:
 - Plan: `2-course-platform`
 - Features: `2-1-course-crud`, `2-2-lesson-management`, `2-3-course-pages`
 
-### 3. Assign Work to Specialists
+### 4. Assign Work to Specialists
 
 **Process:**
 1. Identify feature category (backend/frontend/integration)
@@ -93,7 +104,7 @@ From the ontology workflow system, you have 4 responsibilities:
 
 **Output:** Assignment connections and events
 
-### 4. Mark Features Complete
+### 5. Mark Features Complete
 
 **Process:**
 1. Monitor for `quality_check_complete` (status: approved)
@@ -103,6 +114,403 @@ From the ontology workflow system, you have 4 responsibilities:
 5. Update plan progress
 
 **Output:** Completion events and status updates
+
+## Feature Library (100-Inference Mapping)
+
+The feature library maps every possible feature to specific inference ranges. Each feature includes:
+- **Inference range**: Where it fits in the 100-inference sequence
+- **Specialist**: Which agent executes it
+- **Duration**: Estimated time to complete
+- **Dependencies**: Required features that must complete first
+- **Status**: Available for existing/implemented features
+
+### Foundation Features (Required)
+
+```typescript
+const FOUNDATION_FEATURES = {
+  "landing-page": {
+    name: "Landing Page",
+    description: "Beautiful landing page with hero, features, CTA",
+    inferences: [1, 10],
+    specialist: "agent-frontend",
+    duration: "~5 min",
+    cost: "$0",
+    required: true,
+    dependencies: [],
+    status: "available",
+    ontology: {
+      things: ["landing_page", "website"],
+      connections: ["part_of"],
+      events: ["page_created", "page_deployed"],
+      knowledge: ["brand_colors", "brand_voice"]
+    }
+  },
+
+  "authentication": {
+    name: "Authentication System",
+    description: "Email/password + OAuth + Magic Links (6 methods)",
+    inferences: [11, 20],
+    specialist: "existing", // Already implemented
+    duration: "~0 min",
+    cost: "$0",
+    required: true,
+    dependencies: [],
+    status: "existing",
+    ontology: {
+      things: ["creator", "session", "oauth_account"],
+      connections: ["authenticated_by"],
+      events: ["user_signin", "user_signup", "user_signout"],
+      knowledge: ["security_patterns"]
+    }
+  },
+
+  "multi-tenant-groups": {
+    name: "Multi-Tenant Groups",
+    description: "Hierarchical groups with data scoping (organizations → teams → projects)",
+    inferences: [21, 30],
+    specialist: "agent-backend",
+    duration: "~10 min",
+    cost: "$0",
+    required: true,
+    dependencies: ["authentication"],
+    status: "available",
+    ontology: {
+      things: ["organization", "group"],
+      connections: ["part_of", "owns"],
+      events: ["group_created", "group_joined"],
+      knowledge: ["hierarchy_patterns"]
+    }
+  }
+};
+```
+
+### Content & Creator Features
+
+```typescript
+const CREATOR_FEATURES = {
+  "content-publishing": {
+    name: "Content Publishing",
+    description: "Blog posts, articles, courses, lessons",
+    inferences: [31, 40],
+    specialist: "agent-frontend",
+    duration: "~15 min",
+    cost: "$0",
+    dependencies: ["multi-tenant-groups"],
+    status: "available",
+    ontology: {
+      things: ["blog_post", "article", "course", "lesson"],
+      connections: ["authored", "part_of"],
+      events: ["content_created", "content_published"],
+      knowledge: ["content_embeddings", "topic_labels"]
+    }
+  },
+
+  "membership-tiers": {
+    name: "Membership Tiers",
+    description: "Subscription plans with tiered access",
+    inferences: [41, 50],
+    specialist: "agent-backend",
+    duration: "~15 min",
+    cost: "$0",
+    dependencies: ["authentication"],
+    status: "available",
+    ontology: {
+      things: ["membership", "subscription", "tier"],
+      connections: ["subscribed_to", "grants_access"],
+      events: ["subscription_created", "subscription_renewed"],
+      knowledge: ["pricing_strategies"]
+    }
+  },
+
+  "revenue-tracking": {
+    name: "Revenue Tracking",
+    description: "Track payments, subscriptions, and revenue metrics",
+    inferences: [51, 60],
+    specialist: "agent-backend",
+    duration: "~10 min",
+    cost: "$0",
+    dependencies: ["membership-tiers"],
+    status: "available",
+    ontology: {
+      things: ["payment", "invoice", "metric"],
+      connections: ["paid_for", "tracks"],
+      events: ["payment_received", "payment_failed"],
+      knowledge: ["revenue_analytics"]
+    }
+  }
+};
+```
+
+### Developer Features
+
+```typescript
+const DEVELOPER_FEATURES = {
+  "project-management": {
+    name: "Project Management",
+    description: "Projects, tasks, milestones, kanban boards",
+    inferences: [31, 40],
+    specialist: "agent-builder", // Full-stack
+    duration: "~15 min",
+    cost: "$0",
+    dependencies: ["multi-tenant-groups"],
+    status: "available",
+    ontology: {
+      things: ["project", "task", "milestone"],
+      connections: ["assigned_to", "depends_on", "part_of"],
+      events: ["task_created", "task_completed", "milestone_reached"],
+      knowledge: ["project_patterns"]
+    }
+  },
+
+  "code-repositories": {
+    name: "Code Repositories",
+    description: "Git repository integration and management",
+    inferences: [41, 50],
+    specialist: "agent-integrator",
+    duration: "~15 min",
+    cost: "$0",
+    dependencies: ["project-management"],
+    status: "available",
+    ontology: {
+      things: ["repository", "commit", "branch"],
+      connections: ["contains", "authored"],
+      events: ["commit_pushed", "branch_created", "pr_merged"],
+      knowledge: ["code_patterns", "commit_history"]
+    }
+  },
+
+  "deployment-pipeline": {
+    name: "Deployment Pipeline",
+    description: "CI/CD automation with Cloudflare Pages + Convex",
+    inferences: [51, 60],
+    specialist: "agent-ops",
+    duration: "~20 min",
+    cost: "$0",
+    dependencies: ["code-repositories"],
+    status: "available",
+    ontology: {
+      things: ["deployment", "build", "release"],
+      connections: ["deployed_to", "triggered_by"],
+      events: ["build_started", "deployment_complete", "deployment_failed"],
+      knowledge: ["deployment_patterns"]
+    }
+  }
+};
+```
+
+### AI Features
+
+```typescript
+const AI_FEATURES = {
+  "ai-agents": {
+    name: "AI Agent Framework",
+    description: "9 specialist agents for development, design, quality",
+    inferences: [61, 70],
+    specialist: "agent-builder",
+    duration: "~20 min",
+    cost: "$0",
+    dependencies: ["multi-tenant-groups"],
+    status: "available",
+    ontology: {
+      things: [
+        "engineering_agent", "design_agent", "quality_agent",
+        "problem_solver_agent", "integration_agent", "ops_agent"
+      ],
+      connections: ["delegated_to", "coordinated_by"],
+      events: ["agent_executed", "task_delegated", "agent_completed"],
+      knowledge: ["agent_patterns", "coordination_rules"]
+    }
+  },
+
+  "rag-knowledge": {
+    name: "RAG Knowledge Base",
+    description: "Vector embeddings + semantic search + retrieval",
+    inferences: [71, 80],
+    specialist: "agent-backend",
+    duration: "~15 min",
+    cost: "$0.10 - $1.00", // Embedding costs
+    dependencies: ["content-publishing"],
+    status: "available",
+    ontology: {
+      things: ["knowledge", "document", "chunk"],
+      connections: ["embedded_from", "similar_to"],
+      events: ["embedding_created", "knowledge_queried"],
+      knowledge: ["vectors", "embeddings", "semantic_index"]
+    }
+  },
+
+  "semantic-search": {
+    name: "Semantic Search",
+    description: "Natural language search across all content",
+    inferences: [81, 90],
+    specialist: "agent-backend",
+    duration: "~10 min",
+    cost: "$0",
+    dependencies: ["rag-knowledge"],
+    status: "available",
+    ontology: {
+      things: ["search_query", "search_result"],
+      connections: ["matched_by"],
+      events: ["search_executed", "result_clicked"],
+      knowledge: ["search_patterns", "relevance_scores"]
+    }
+  }
+};
+```
+
+### Integration Features
+
+```typescript
+const INTEGRATION_FEATURES = {
+  "stripe-payments": {
+    name: "Stripe Payments",
+    description: "Stripe integration for payments and subscriptions",
+    inferences: [31, 40],
+    specialist: "agent-integrator",
+    duration: "~15 min",
+    cost: "$0",
+    dependencies: ["membership-tiers"],
+    status: "available",
+    ontology: {
+      things: ["payment", "subscription", "invoice"],
+      connections: ["paid_with", "processed_by"],
+      events: ["payment_succeeded", "payment_failed", "subscription_updated"],
+      knowledge: ["payment_patterns"]
+    }
+  },
+
+  "email-marketing": {
+    name: "Email Marketing",
+    description: "Resend integration for transactional + marketing emails",
+    inferences: [41, 50],
+    specialist: "agent-integrator",
+    duration: "~10 min",
+    cost: "$0",
+    dependencies: ["authentication"],
+    status: "available",
+    ontology: {
+      things: ["email", "campaign", "template"],
+      connections: ["sent_to", "triggered_by"],
+      events: ["email_sent", "email_opened", "email_clicked"],
+      knowledge: ["email_templates"]
+    }
+  },
+
+  "discord-community": {
+    name: "Discord Community",
+    description: "Discord bot integration for community engagement",
+    inferences: [51, 60],
+    specialist: "agent-integrator",
+    duration: "~15 min",
+    cost: "$0",
+    dependencies: ["authentication"],
+    status: "available",
+    ontology: {
+      things: ["discord_server", "discord_channel", "discord_message"],
+      connections: ["member_of", "posted_in"],
+      events: ["message_sent", "member_joined", "role_assigned"],
+      knowledge: ["community_patterns"]
+    }
+  }
+};
+```
+
+### Design & UX Features
+
+```typescript
+const DESIGN_FEATURES = {
+  "design-system": {
+    name: "Design System",
+    description: "Component library with brand tokens and Tailwind config",
+    inferences: [71, 80],
+    specialist: "agent-designer",
+    duration: "~15 min",
+    cost: "$0",
+    dependencies: ["landing-page"],
+    status: "available",
+    ontology: {
+      things: ["component", "design_token", "brand_guide"],
+      connections: ["uses", "extends"],
+      events: ["component_created", "token_updated"],
+      knowledge: ["design_patterns", "accessibility_rules"]
+    }
+  },
+
+  "wireframes": {
+    name: "Wireframes & Mockups",
+    description: "Auto-generated wireframes from feature specs",
+    inferences: [71, 75],
+    specialist: "agent-designer",
+    duration: "~10 min",
+    cost: "$0",
+    dependencies: [],
+    status: "available",
+    ontology: {
+      things: ["wireframe", "mockup", "flow"],
+      connections: ["designs", "flows_to"],
+      events: ["wireframe_created", "mockup_approved"],
+      knowledge: ["ux_patterns"]
+    }
+  }
+};
+```
+
+### Performance & Analytics Features
+
+```typescript
+const PERFORMANCE_FEATURES = {
+  "performance-monitoring": {
+    name: "Performance Monitoring",
+    description: "Real-time performance metrics and Lighthouse scores",
+    inferences: [81, 90],
+    specialist: "agent-ops",
+    duration: "~10 min",
+    cost: "$0",
+    dependencies: ["landing-page"],
+    status: "available",
+    ontology: {
+      things: ["metric", "performance_report"],
+      connections: ["measures"],
+      events: ["metric_collected", "threshold_exceeded"],
+      knowledge: ["performance_baselines"]
+    }
+  },
+
+  "analytics-dashboard": {
+    name: "Analytics Dashboard",
+    description: "User analytics, revenue metrics, engagement tracking",
+    inferences: [81, 90],
+    specialist: "agent-frontend",
+    duration: "~15 min",
+    cost: "$0",
+    dependencies: ["multi-tenant-groups"],
+    status: "available",
+    ontology: {
+      things: ["dashboard", "chart", "report"],
+      connections: ["visualizes"],
+      events: ["report_generated", "insight_discovered"],
+      knowledge: ["analytics_patterns"]
+    }
+  }
+};
+```
+
+### Complete Feature Registry
+
+```typescript
+export const ALL_FEATURES = {
+  ...FOUNDATION_FEATURES,
+  ...CREATOR_FEATURES,
+  ...DEVELOPER_FEATURES,
+  ...AI_FEATURES,
+  ...INTEGRATION_FEATURES,
+  ...DESIGN_FEATURES,
+  ...PERFORMANCE_FEATURES
+};
+
+// Total: 20+ features covering Infer 1-90
+// Reserved: Infer 91-100 for deployment & documentation (always included)
+```
 
 ## Decision Framework
 
@@ -415,6 +823,478 @@ The Director enforces consistent numbering:
     dependencyType: "sequential",
     blocking: true,
   },
+}
+```
+
+## Plan Generation Algorithm
+
+When generating a 100-inference plan from feature selections, follow this algorithm:
+
+### Step 1: Read Feature Selections
+
+```typescript
+// Read from .onboarding.json or user input
+interface FeatureSelection {
+  selectedFeatures: string[]; // e.g., ["landing-page", "authentication", "ai-agents"]
+  organizationName: string;
+  websiteUrl?: string;
+  customOntology?: object;
+}
+
+// Example:
+const selections = {
+  selectedFeatures: [
+    "landing-page",
+    "authentication",
+    "multi-tenant-groups",
+    "project-management",
+    "ai-agents"
+  ],
+  organizationName: "Acme Corp",
+  websiteUrl: "https://acme.com"
+};
+```
+
+### Step 2: Resolve Dependencies
+
+```typescript
+function resolveDependencies(selectedFeatures: string[]): string[] {
+  const resolved = new Set<string>();
+  const queue = [...selectedFeatures];
+
+  while (queue.length > 0) {
+    const feature = queue.shift()!;
+    if (resolved.has(feature)) continue;
+
+    resolved.add(feature);
+
+    // Add dependencies to queue
+    const featureConfig = ALL_FEATURES[feature];
+    if (featureConfig?.dependencies) {
+      queue.push(...featureConfig.dependencies);
+    }
+  }
+
+  return Array.from(resolved);
+}
+
+// Example output:
+// Input: ["ai-agents", "project-management"]
+// Output: ["landing-page", "authentication", "multi-tenant-groups", "project-management", "ai-agents"]
+```
+
+### Step 3: Map to Inference Ranges
+
+```typescript
+function mapToInferences(features: string[]): InferencePlan {
+  const phases: Phase[] = [];
+  const allInferences = [];
+
+  for (const featureKey of features) {
+    const feature = ALL_FEATURES[featureKey];
+    const [start, end] = feature.inferences;
+
+    phases.push({
+      name: feature.name,
+      featureKey: featureKey,
+      inferences: { start, end },
+      specialist: feature.specialist,
+      duration: feature.duration,
+      cost: feature.cost,
+      status: "pending",
+      ontology: feature.ontology
+    });
+
+    allInferences.push(...range(start, end));
+  }
+
+  // Always add deployment phase (Infer 91-100)
+  phases.push({
+    name: "Deployment & Documentation",
+    featureKey: "deployment",
+    inferences: { start: 91, end: 100 },
+    specialist: "agent-ops",
+    duration: "~10 min",
+    cost: "$0",
+    status: "pending",
+    ontology: {
+      events: ["deployment_complete", "documentation_complete"]
+    }
+  });
+
+  return {
+    phases,
+    totalInferences: allInferences.length + 10, // Include deployment
+    currentInference: 1,
+    completedInferences: []
+  };
+}
+```
+
+### Step 4: Calculate Estimates
+
+```typescript
+function calculateEstimates(plan: InferencePlan) {
+  let totalMinutes = 0;
+  let totalCost = 0;
+
+  for (const phase of plan.phases) {
+    // Parse duration (e.g., "~15 min" → 15)
+    const minutes = parseInt(phase.duration.match(/\d+/)?[0] || "0");
+    totalMinutes += minutes;
+
+    // Parse cost (e.g., "$0.10 - $1.00" → 0.55)
+    const costMatch = phase.cost.match(/\$(\d+\.?\d*)/g);
+    if (costMatch) {
+      const costs = costMatch.map(c => parseFloat(c.replace('$', '')));
+      totalCost += costs.reduce((a, b) => a + b, 0) / costs.length;
+    }
+  }
+
+  return {
+    estimatedDuration: `${totalMinutes} minutes (~${Math.ceil(totalMinutes / 60)} hours)`,
+    estimatedCost: `$${totalCost.toFixed(2)}`,
+    inferenceCount: plan.totalInferences
+  };
+}
+```
+
+### Step 5: Generate Execution Plan
+
+```typescript
+interface ExecutionPlan {
+  version: string;
+  organizationName: string;
+  createdAt: number;
+  plan: {
+    phases: Phase[];
+    totalInferences: number;
+    currentInference: number;
+    completedInferences: number[];
+    estimates: {
+      duration: string;
+      cost: string;
+      inferences: number;
+    };
+  };
+  progress: {
+    status: "pending" | "in_progress" | "completed";
+    startedAt?: number;
+    completedAt?: number;
+    currentPhase?: string;
+  };
+}
+
+// Example output structure:
+const executionPlan: ExecutionPlan = {
+  version: "1.0.0",
+  organizationName: "Acme Corp",
+  createdAt: Date.now(),
+  plan: {
+    phases: [
+      {
+        name: "Landing Page",
+        featureKey: "landing-page",
+        inferences: { start: 1, end: 10 },
+        specialist: "agent-frontend",
+        duration: "~5 min",
+        cost: "$0",
+        status: "pending",
+        ontology: { /* ... */ }
+      },
+      // ... more phases
+    ],
+    totalInferences: 70,
+    currentInference: 1,
+    completedInferences: [],
+    estimates: {
+      duration: "60 minutes (~1 hours)",
+      cost: "$0.10",
+      inferences: 70
+    }
+  },
+  progress: {
+    status: "pending"
+  }
+};
+```
+
+### Step 6: Write to .onboarding.json
+
+```typescript
+function writeOnboardingPlan(plan: ExecutionPlan): void {
+  // Write complete plan to .onboarding.json
+  const planJson = JSON.stringify(plan, null, 2);
+  writeFile('.onboarding.json', planJson);
+
+  // Also create markdown summary for human readability
+  const summary = generateMarkdownSummary(plan);
+  writeFile('.onboarding-plan.md', summary);
+}
+
+function generateMarkdownSummary(plan: ExecutionPlan): string {
+  return `
+# ${plan.organizationName} - Onboarding Plan
+
+**Generated:** ${new Date(plan.createdAt).toLocaleString()}
+**Status:** ${plan.progress.status}
+
+## Overview
+
+- **Total Inferences:** ${plan.plan.totalInferences}/100
+- **Estimated Duration:** ${plan.plan.estimates.duration}
+- **Estimated Cost:** ${plan.plan.estimates.cost}
+
+## Execution Phases
+
+${plan.plan.phases.map((phase, i) => `
+### Phase ${i + 1}: ${phase.name} (Infer ${phase.inferences.start}-${phase.inferences.end})
+
+- **Specialist:** ${phase.specialist}
+- **Duration:** ${phase.duration}
+- **Cost:** ${phase.cost}
+- **Status:** ${phase.status}
+
+**Ontology Mapping:**
+${JSON.stringify(phase.ontology, null, 2)}
+`).join('\n')}
+
+## Progress Tracking
+
+Current Inference: ${plan.plan.currentInference}/${plan.plan.totalInferences}
+Completed: ${plan.plan.completedInferences.length} inferences
+`;
+}
+```
+
+## Execution Coordination
+
+The Director coordinates execution across all specialist agents using an event-driven workflow:
+
+### Phase Execution Pattern
+
+```typescript
+async function executePhase(phase: Phase): Promise<void> {
+  // 1. Emit phase_started event
+  await emitEvent({
+    type: "phase_started",
+    targetId: phase.featureKey,
+    metadata: {
+      phaseName: phase.name,
+      inferences: phase.inferences,
+      specialist: phase.specialist
+    }
+  });
+
+  // 2. Delegate to specialist agent
+  const specialist = getSpecialistAgent(phase.specialist);
+  await specialist.execute({
+    featureKey: phase.featureKey,
+    inferenceRange: phase.inferences,
+    ontology: phase.ontology
+  });
+
+  // 3. Monitor progress via events
+  watchForEvents([
+    "implementation_complete",
+    "quality_check_complete",
+    "deployment_complete"
+  ]);
+
+  // 4. Update .onboarding.json progress
+  updateProgress({
+    currentInference: phase.inferences.end,
+    completedInferences: range(phase.inferences.start, phase.inferences.end),
+    currentPhase: phase.name,
+    status: "in_progress"
+  });
+
+  // 5. Emit phase_complete event
+  await emitEvent({
+    type: "phase_complete",
+    targetId: phase.featureKey,
+    metadata: {
+      phaseName: phase.name,
+      duration: calculateActualDuration(),
+      testsPassedCount: getTestCount(),
+      qualityScore: getQualityScore()
+    }
+  });
+}
+```
+
+### Progress Tracking
+
+```typescript
+interface ProgressUpdate {
+  currentInference: number;
+  completedInferences: number[];
+  currentPhase: string;
+  status: "pending" | "in_progress" | "completed" | "failed";
+  startedAt?: number;
+  completedAt?: number;
+  errors?: Error[];
+}
+
+function updateProgress(update: Partial<ProgressUpdate>): void {
+  // Read current .onboarding.json
+  const plan = readOnboardingJson();
+
+  // Merge updates
+  plan.progress = {
+    ...plan.progress,
+    ...update
+  };
+
+  // Calculate completion percentage
+  const percentage = (plan.plan.completedInferences.length / plan.plan.totalInferences) * 100;
+
+  // Write back to file
+  writeOnboardingJson(plan);
+
+  // Emit progress event for real-time tracking
+  emitEvent({
+    type: "progress_updated",
+    metadata: {
+      percentage,
+      currentInference: plan.plan.currentInference,
+      totalInferences: plan.plan.totalInferences,
+      currentPhase: plan.progress.currentPhase
+    }
+  });
+}
+```
+
+### Sequential vs Parallel Execution
+
+```typescript
+async function executeAllPhases(plan: ExecutionPlan): Promise<void> {
+  for (const phase of plan.plan.phases) {
+    // Check if phase can run in parallel with others
+    const parallelPhases = findParallelPhases(phase, plan.plan.phases);
+
+    if (parallelPhases.length > 0) {
+      // Execute in parallel
+      await Promise.all([
+        executePhase(phase),
+        ...parallelPhases.map(p => executePhase(p))
+      ]);
+    } else {
+      // Execute sequentially
+      await executePhase(phase);
+    }
+  }
+
+  // Mark plan complete
+  updateProgress({
+    status: "completed",
+    completedAt: Date.now(),
+    currentInference: 100
+  });
+}
+
+function findParallelPhases(phase: Phase, allPhases: Phase[]): Phase[] {
+  // Phases can run in parallel if:
+  // 1. They have no shared dependencies
+  // 2. They don't overlap in inference ranges
+  // 3. They use different specialists (optional optimization)
+
+  return allPhases.filter(p =>
+    p !== phase &&
+    !hasSharedDependencies(p, phase) &&
+    !overlapsInferences(p.inferences, phase.inferences)
+  );
+}
+```
+
+### Error Handling & Recovery
+
+```typescript
+async function executePhaseWithRetry(phase: Phase, maxRetries = 3): Promise<void> {
+  let attempt = 0;
+
+  while (attempt < maxRetries) {
+    try {
+      await executePhase(phase);
+      return; // Success
+
+    } catch (error) {
+      attempt++;
+
+      // Log error
+      updateProgress({
+        errors: [{
+          phase: phase.name,
+          attempt,
+          message: error.message,
+          timestamp: Date.now()
+        }]
+      });
+
+      if (attempt >= maxRetries) {
+        // Final failure - delegate to problem solver
+        await emitEvent({
+          type: "phase_failed",
+          targetId: phase.featureKey,
+          metadata: {
+            phaseName: phase.name,
+            error: error.message,
+            attempts: attempt
+          }
+        });
+
+        // Wait for problem solver to propose fix
+        await waitForEvent("solution_proposed");
+
+        // Retry with fix
+        attempt = 0; // Reset counter after manual intervention
+      } else {
+        // Exponential backoff
+        await sleep(Math.pow(2, attempt) * 1000);
+      }
+    }
+  }
+}
+```
+
+### Real-Time Status Display
+
+```typescript
+function displayProgress(plan: ExecutionPlan): void {
+  const percentage = (plan.plan.completedInferences.length / plan.plan.totalInferences) * 100;
+
+  console.log(`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 BUILDING ${plan.organizationName}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Progress: ${percentage.toFixed(1)}% (${plan.plan.completedInferences.length}/${plan.plan.totalInferences} inferences)
+
+Current Phase: ${plan.progress.currentPhase || 'Starting...'}
+Current Inference: ${plan.plan.currentInference}
+
+Phases:
+${plan.plan.phases.map(phase => `
+  ${getStatusIcon(phase.status)} ${phase.name} (Infer ${phase.inferences.start}-${phase.inferences.end})
+     ${phase.specialist} • ${phase.duration}
+`).join('')}
+
+Estimates:
+  Duration: ${plan.plan.estimates.duration}
+  Cost: ${plan.plan.estimates.cost}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  `);
+}
+
+function getStatusIcon(status: string): string {
+  switch (status) {
+    case "completed": return "✅";
+    case "in_progress": return "🔄";
+    case "pending": return "⏳";
+    case "failed": return "❌";
+    default: return "○";
+  }
 }
 ```
 

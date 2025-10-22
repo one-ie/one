@@ -1,7 +1,11 @@
 ---
+/**
+ * TODO: Refactor to use backend-agnostic data fetching
+ * This page needs to use hooks or REST API instead of direct Convex imports
+ * See CLAUDE.md for proper architecture patterns
+ */
+
 import Layout from '@/layouts/Layout.astro';
-import { ConvexHttpClient } from 'convex/browser';
-import { api } from '@/lib/convex-api';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -9,31 +13,57 @@ import { Users, Settings, Globe, Lock, Calendar, Activity } from 'lucide-react';
 
 export const prerender = false;
 
+// Define Group type
+interface Group {
+  _id: string;
+  name: string;
+  type: 'friend_circle' | 'business' | 'community' | 'dao' | 'government' | 'organization';
+  description?: string;
+  settings: {
+    visibility: 'public' | 'private';
+    joinPolicy?: 'open' | 'approval' | 'invite';
+    plan?: 'starter' | 'pro' | 'enterprise';
+  };
+  status: string;
+  slug: string;
+  createdAt?: number;
+}
+
 const { slug } = Astro.params;
 
 if (!slug) {
   return Astro.redirect('/groups');
 }
 
-// SSR: Fetch group data
-const convex = new ConvexHttpClient(import.meta.env.PUBLIC_CONVEX_URL);
-const group = await convex.query(api.queries.groups.getBySlug, { slug });
+// TODO: Replace with backend-agnostic API call
+// For now, use mock data to allow page to render
+const group: Group = {
+  _id: 'mock-id',
+  name: 'Loading...',
+  type: 'community',
+  description: 'This page needs to be refactored to use backend-agnostic data fetching',
+  settings: {
+    visibility: 'public',
+    joinPolicy: 'open',
+    plan: 'starter',
+  },
+  status: 'active',
+  slug: slug,
+  createdAt: Date.now(),
+};
 
-if (!group) {
-  return Astro.redirect('/404');
-}
+const stats = {
+  stats: {
+    members: 0,
+    entities: 0,
+    connections: 0,
+    events: 0,
+    knowledge: 0,
+    subgroups: 0,
+  }
+};
 
-// Fetch group stats
-const stats = await convex.query(api.queries.groups.getStats, {
-  groupId: group._id,
-  includeSubgroups: true,
-});
-
-// Fetch recent activity
-const recentEvents = await convex.query(api.queries.groups.getEventsInHierarchy, {
-  rootGroupId: group._id,
-  limit: 5,
-});
+const recentEvents: any[] = [];
 
 // Check user authentication
 const user = Astro.locals.user;
@@ -42,7 +72,7 @@ const user = Astro.locals.user;
 const isMember = false; // TODO: Add membership check
 const isOwner = false; // TODO: Add ownership check
 
-const groupTypeLabels = {
+const groupTypeLabels: Record<Group['type'], string> = {
   friend_circle: 'Friend Circle',
   business: 'Business',
   community: 'Community',
@@ -81,7 +111,7 @@ const groupTypeLabels = {
 
         <div class="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
-          <span>Created {new Date(group.createdAt).toLocaleDateString()}</span>
+          <span>Created {new Date(group.createdAt || Date.now()).toLocaleDateString()}</span>
         </div>
       </div>
 
@@ -186,7 +216,7 @@ const groupTypeLabels = {
               <div class="flex items-center justify-between">
                 <span class="text-muted-foreground">Join Policy</span>
                 <span class="font-medium capitalize">
-                  {group.settings.joinPolicy.replace('_', ' ')}
+                  {group.settings.joinPolicy?.replace('_', ' ') || 'Not Set'}
                 </span>
               </div>
               {group.settings.plan && (

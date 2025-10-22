@@ -1,0 +1,53 @@
+feature: courses
+extends: core
+description: E-learning and course management
+
+thingTypes:
+  - name: course
+    properties:
+      title: string
+      slug: string
+      description: string
+      price: number
+      duration: string
+      level: string
+      thumbnail: string
+      status: string
+  - name: lesson
+    properties:
+      title: string
+      slug: string
+      content: string
+      videoUrl: string
+      duration: number
+      order: number
+      courseId: string
+  - name: quiz
+    properties:
+      title: string
+      questions: object[]
+      passingScore: number
+  - name: certificate
+    properties:
+      studentId: string
+      courseId: string
+      issuedAt: number
+      certificateUrl: string
+
+connectionTypes:
+  - name: enrolled_in
+    fromType: user
+    toType: course
+  - name: part_of
+    fromType: lesson
+    toType: course
+
+eventTypes:
+  - name: enrolled_in_course
+    thingType: course
+  - name: lesson_completed
+    thingType: lesson
+  - name: quiz_submitted
+    thingType: quiz
+  - name: certificate_earned
+    thingType: certificate

@@ -22,6 +22,7 @@ import {
   Youtube,
   Shield,
   Rocket,
+  ExternalLink,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -36,6 +37,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ModeToggle } from "@/components/ModeToggle"
+import { MinimalSidebar } from "@/components/MinimalSidebar"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { siteConfig } from "@/config/site"
 import { authClient } from "@/lib/auth-client"
@@ -88,6 +90,17 @@ interface SimpleSidebarLayoutProps {
 }
 
 export function Sidebar({ children }: SimpleSidebarLayoutProps) {
+  // Detect if this is ONE Platform or a customer org
+  const isONE = import.meta.env.ORG_NAME === "one" || !import.meta.env.ORG_NAME;
+  const orgName = import.meta.env.ORG_NAME || "ONE";
+  const orgWebsite = import.meta.env.ORG_WEBSITE || "https://one.ie";
+
+  // If not ONE Platform, render minimal sidebar
+  if (!isONE) {
+    return <MinimalSidebar orgName={orgName} orgWebsite={orgWebsite}>{children}</MinimalSidebar>;
+  }
+
+  // Full ONE Platform sidebar
   const [collapsed, setCollapsed] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [currentPath, setCurrentPath] = React.useState('')
@@ -126,7 +139,7 @@ export function Sidebar({ children }: SimpleSidebarLayoutProps) {
       } else {
         setUser(null)
       }
-    } catch (error) {
+    } catch {
       setUser(null)
     }
   }, [authEnabled])

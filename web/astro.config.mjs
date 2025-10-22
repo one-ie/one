@@ -3,41 +3,22 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node';
 import fs from 'fs-extra';
 import path from 'path';
 
-// Only use edge renderer in production builds for Cloudflare
-const isProd = process.env.NODE_ENV === 'production';
+// Use Node adapter for local dev (avoids miniflare EPIPE issues with Node 20.11.0)
+// Use Cloudflare adapter for production builds
+const isDev = process.env.NODE_ENV !== 'production';
+const adapter = isDev
+  ? node({ mode: 'standalone' })
+  : cloudflare({ mode: 'directory' });
 
 export default defineConfig({
   site: 'https://one.ie',
   integrations: [
     react(),
     sitemap(),
-    {
-      name: 'copy-installation-folder',
-      hooks: {
-        'astro:build:done': async ({ dir }) => {
-          const installationName = process.env.INSTALLATION_NAME;
-
-          if (!installationName) {
-            console.log('⚠️  No INSTALLATION_NAME set, skipping installation folder copy');
-            return;
-          }
-
-          const sourcePath = path.resolve(`/${installationName}`);
-          const destPath = path.join(dir.pathname, '_installation');
-
-          if (fs.existsSync(sourcePath)) {
-            console.log(`📦 Copying installation folder: ${installationName}`);
-            await fs.copy(sourcePath, destPath);
-            console.log(`✅ Installation folder copied to dist/_installation`);
-          } else {
-            console.log(`⚠️  Installation folder not found: ${sourcePath}`);
-          }
-        },
-      },
-    },
   ],
   vite: {
     plugins: [
@@ -46,24 +27,35 @@ export default defineConfig({
       }),
     ],
     resolve: {
-      alias: isProd
-        ? {
-            'react-dom/server': 'react-dom/server.edge',
-          }
-        : {},
+      alias: {
+        lodash: 'lodash-es',
+      },
+      dedupe: ['react', 'react-dom'],
     },
     ssr: {
       external: ['node:async_hooks'],
+      noExternal: [
+        'nanostores',
+        '@nanostores/react',
+        'lodash-es',
+        'use-sync-external-store',
+      ],
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'lodash-es',
+        'use-sync-external-store/shim',
+        'recharts',
+        'nanostores',
+        '@nanostores/react',
+      ],
+    },
+    build: {
+      target: 'esnext',
     },
   },
   output: 'server',
-  adapter: cloudflare({
-    platformProxy: {
-      enabled: false,
-    },
-    mode: 'directory',
-    runtime: {
-      mode: 'local',
-    },
-  }),
+  adapter,
 });

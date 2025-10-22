@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Code, Download, Github, TerminalSquare, GitFork, Star, CloudCog } from 'lucide-react';
 
+// Browser globals for ESLint
+/* global performance, requestAnimationFrame, cancelAnimationFrame */
+
 const GITHUB_REPO = 'one-ie/one';
 const GITHUB_URL = `https://github.com/${GITHUB_REPO}`;
 const DOWNLOAD_URL = `${GITHUB_URL}/archive/refs/heads/main.zip`;
@@ -131,13 +134,13 @@ export function GitSection({ children }: GitSectionProps) {
     <section className="w-full min-h-screen flex items-center justify-center px-4 sm:px-6 py-8">
       <div className="w-full max-w-7xl mx-auto space-y-12">
         {/* Hero Section */}
-        <div className="text-center space-y-8">
+        <div className="text-center space-y-6">
           {children ? (
             <div className="max-w-6xl mx-auto">{children}</div>
           ) : null}
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border-2 border-yellow-300/70 bg-yellow-500/5">
-            <Download className="w-5 h-5 text-yellow-300" />
-            <span className="text-lg font-semibold tracking-[0.25em] text-yellow-100 uppercase">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border-2 border-yellow-300/70 bg-yellow-500/5">
+            <Download className="w-4 h-4 text-yellow-300" />
+            <span className="text-sm font-semibold tracking-[0.2em] text-yellow-100 uppercase">
               Own AI Agents
             </span>
           </div>
@@ -150,8 +153,8 @@ export function GitSection({ children }: GitSectionProps) {
               className="mx-auto w-full max-w-[400px] h-auto"
             />
           </div>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-foreground">
-            Download FREE - Own FOREVER
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground">
+            Download FREE · Own FOREVER
           </h1>
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
             Build apps, websites, and AI agents is English. Download to your computer, run in the cloud and deploy to the edge or your own server. ONE is open source and free forever.
@@ -161,61 +164,66 @@ export function GitSection({ children }: GitSectionProps) {
         {/* Main Download Cards */}
         <div className="grid gap-6 md:grid-cols-3">
           {/* Download ZIP */}
-          <Card className="group relative overflow-hidden border-border/40 hover:border-primary/30 transition-all duration-300 hover:shadow-xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative p-6 space-y-6">
+          <Card className="group relative overflow-hidden border-border/50 hover:shadow-2xl transition-all duration-500">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(135deg, hsl(45 93% 47% / 0.03) 0%, transparent 100%)' }} />
+            <div className="relative p-8 space-y-6">
               <div className="flex items-start justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-yellow-400/10 group-hover:bg-yellow-400/20 transition-colors duration-300">
-                  <Download className="w-6 h-6 text-yellow-400" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 transition-all duration-500 group-hover:scale-110 group-hover:bg-primary/20">
+                  <Download className="w-7 h-7 text-primary transition-transform duration-500 group-hover:translate-y-0.5" />
                 </div>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold">Download ZIP</h3>
-                <p className="text-sm text-muted-foreground">
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold tracking-tight">Download ZIP</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Get the latest code as a ZIP archive. No Git required.
                 </p>
               </div>
               <a href={DOWNLOAD_URL} className="block">
-                <Button className="w-full" size="lg">
-                  Download ZIP
+                <Button className="w-full group/btn relative overflow-hidden" size="lg">
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    <Download className="w-4 h-4 transition-transform group-hover/btn:translate-y-0.5" />
+                    Download ZIP
+                  </span>
+                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, transparent, hsl(45 93% 47% / 0.1), transparent)' }} />
                 </Button>
               </a>
             </div>
           </Card>
 
           {/* Clone Repository */}
-          <Card className="group relative overflow-hidden border-border/40 hover:border-primary/30 transition-all duration-300 hover:shadow-xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative p-6 space-y-6">
+          <Card className="group relative overflow-hidden border-border/50 hover:shadow-2xl transition-all duration-500">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(135deg, hsl(45 93% 47% / 0.03) 0%, transparent 100%)' }} />
+            <div className="relative p-8 space-y-6">
               <div className="flex items-start justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                  <Code className="w-6 h-6 text-primary" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 transition-all duration-500 group-hover:scale-110 group-hover:bg-primary/20">
+                  <Code className="w-7 h-7 text-primary" />
                 </div>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                  <span className="font-semibold">{formattedStars}</span>
-                  <span>stars</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105" style={{ backgroundColor: 'hsl(45 93% 47% / 0.08)' }}>
+                  <Star className="w-3.5 h-3.5" style={{ fill: 'hsl(45 93% 47% / 0.9)', color: 'hsl(45 93% 47% / 0.9)' }} />
+                  <span className="font-semibold text-sm" style={{ color: 'hsl(45 93% 47%)' }}>{formattedStars}</span>
+                  <span className="text-xs opacity-60">stars</span>
                 </div>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold">Clone Repository</h3>
-                <p className="text-sm text-muted-foreground">
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold tracking-tight">Clone Repository</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Clone with Git for version control and updates.
                 </p>
               </div>
               <div className="relative">
                 <Button
                   variant="outline"
-                  className="w-full font-mono text-xs justify-start"
+                  className="w-full font-mono text-sm justify-start hover:border-primary/40 transition-all duration-300 group/btn"
                   onClick={() => copyCommand(`git clone ${GITHUB_URL}.git`, 'git')}
                 >
-                  <Code className="mr-2 h-4 w-4 shrink-0" />
+                  <Code className="mr-2 h-4 w-4 shrink-0 transition-transform group-hover/btn:scale-110" />
                   <span className="truncate">github.com/{GITHUB_REPO}</span>
                 </Button>
                 <p
-                  className={`absolute -bottom-6 left-0 text-xs text-primary transition-opacity duration-200 ${
+                  className={`absolute -bottom-6 left-0 text-xs transition-opacity duration-200 ${
                     copied === 'git' ? 'opacity-100' : 'opacity-0'
                   }`}
+                  style={{ color: 'hsl(45 93% 47%)' }}
                 >
                   ✓ Copied!
                 </p>
@@ -224,38 +232,49 @@ export function GitSection({ children }: GitSectionProps) {
           </Card>
 
           {/* Bootstrap with NPX */}
-          <Card className="group relative overflow-hidden border-border/40 hover:border-primary/30 transition-all duration-300 hover:shadow-xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative p-6 space-y-6">
+          <Card className="group relative overflow-hidden border-border/50 hover:shadow-2xl transition-all duration-500">
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(135deg, hsl(45 93% 47% / 0.03) 0%, transparent 100%)' }} />
+            <div className="relative p-8 space-y-6">
               <div className="flex items-start justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                  <TerminalSquare className="w-6 h-6 text-primary" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 transition-all duration-500 group-hover:scale-110 group-hover:bg-primary/20">
+                  <TerminalSquare className="w-7 h-7 text-primary" />
                 </div>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Download className="w-3 h-3 text-yellow-400" />
-                  <span className="font-semibold">{formattedDownloads}</span>
-                  <span>/week</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105" style={{ backgroundColor: 'hsl(45 93% 47% / 0.08)' }}>
+                  <Download className="w-3.5 h-3.5" style={{ color: 'hsl(45 93% 47% / 0.9)' }} />
+                  <span className="font-semibold text-sm" style={{ color: 'hsl(45 93% 47%)' }}>{formattedDownloads}</span>
+                  <span className="text-xs opacity-60">/week</span>
                 </div>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold">Bootstrap with NPX</h3>
-                <p className="text-sm text-muted-foreground">
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold tracking-tight">Bootstrap with NPX</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   Generate a fresh project instantly with one command.
                 </p>
               </div>
               <div className="relative">
                 <Button
-                  variant="outline"
-                  className="w-full font-mono text-xs"
+                  className="w-full font-mono text-sm transition-all duration-300 group/btn shadow-lg hover:shadow-xl"
                   onClick={() => copyCommand(`npx ${NPM_PACKAGE}`, 'npx')}
+                  style={{
+                    backgroundColor: 'hsl(216 55% 25%)',
+                    color: 'hsl(36 8% 96%)',
+                    borderColor: 'hsl(216 55% 25%)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'hsl(216 55% 20%)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'hsl(216 55% 25%)';
+                  }}
                 >
-                  <TerminalSquare className="mr-2 h-4 w-4" />
+                  <TerminalSquare className="mr-2 h-4 w-4 transition-transform group-hover/btn:scale-110" />
                   npx {NPM_PACKAGE}
                 </Button>
                 <p
-                  className={`absolute -bottom-6 left-0 text-xs text-primary transition-opacity duration-200 ${
+                  className={`absolute -bottom-6 left-0 text-xs transition-opacity duration-200 ${
                     copied === 'npx' ? 'opacity-100' : 'opacity-0'
                   }`}
+                  style={{ color: 'hsl(45 93% 47%)' }}
                 >
                   ✓ Copied!
                 </p>
@@ -274,9 +293,9 @@ export function GitSection({ children }: GitSectionProps) {
             >
               <Github className="w-5 h-5 mr-2" />
               <span>View on GitHub</span>
-              <div className="ml-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-xs">
-                <Star className="w-3 h-3 fill-primary text-primary" />
-                <span className="font-semibold">{stats.stars > 0 ? stats.stars.toLocaleString() : '—'}</span>
+              <div className="ml-2 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs transition-all duration-300 hover:scale-105" style={{ backgroundColor: 'hsl(45 93% 47% / 0.08)' }}>
+                <Star className="w-3 h-3" style={{ fill: 'hsl(45 93% 47% / 0.9)', color: 'hsl(45 93% 47% / 0.9)' }} />
+                <span className="font-semibold" style={{ color: 'hsl(45 93% 47%)' }}>{stats.stars > 0 ? stats.stars.toLocaleString() : '—'}</span>
               </div>
             </Button>
           </a>
@@ -290,8 +309,8 @@ export function GitSection({ children }: GitSectionProps) {
               <GitFork className="w-5 h-5 mr-2" />
               <span>Fork</span>
               <div className="ml-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted text-xs">
-                <GitFork className="w-3 h-3 text-primary" />
-                <span className="font-semibold">{stats.forks > 0 ? stats.forks.toLocaleString() : '—'}</span>
+                <GitFork className="w-3 h-3" style={{ color: 'hsl(45 93% 47%)' }} />
+                <span className="font-semibold" style={{ color: 'hsl(45 93% 47%)' }}>{stats.forks > 0 ? stats.forks.toLocaleString() : '—'}</span>
               </div>
             </Button>
           </a>
@@ -309,6 +328,15 @@ export function GitSection({ children }: GitSectionProps) {
               <CloudCog className="w-5 h-5 mr-2" />
               <span>Open in Codespaces</span>
             </Button>
+          </a>
+        </div>
+
+        {/* Download Stats */}
+        <div className="text-center py-4">
+          <a href="/stream/over-10000-users" className="inline-block">
+            <p className="text-2xl font-semibold text-foreground hover:opacity-80 transition-opacity">
+              Over <span style={{ color: 'hsl(45 93% 47%)' }}>10,000</span> Downloads
+            </p>
           </a>
         </div>
 

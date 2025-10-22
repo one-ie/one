@@ -1,4 +1,4 @@
-import type { Product } from '@/types/products';
+import type { Product } from './types';
 
 // Using Unsplash API for high-quality fashion images
 // Format: https://images.unsplash.com/photo-{id}?auto=format&fit=crop&w=800&q=80

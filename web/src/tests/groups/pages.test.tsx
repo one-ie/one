@@ -3,6 +3,8 @@
  * Tests for group pages: group/[slug], create, settings, discovery
  */
 
+/* global HTMLSelectElement, performance */
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createRequire } from "module";
 import {

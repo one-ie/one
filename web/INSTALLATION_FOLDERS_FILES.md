@@ -37,8 +37,8 @@
 ### 4. Tests
 
 ```
-/Users/toc/Server/ONE/web/test/utils/file-resolver.test.ts
-/Users/toc/Server/ONE/web/test/components/InstallationFileBrowser.test.tsx
+/Users/toc/Server/ONE/web/tests/utils/file-resolver.test.ts
+/Users/toc/Server/ONE/web/tests/components/InstallationFileBrowser.test.tsx
 ```
 - 11 unit tests for file resolver
 - 3 component tests for file browser
@@ -159,8 +159,8 @@ For copy-paste convenience:
 /Users/toc/Server/ONE/web/src/components/providers/InstallationProvider.tsx
 /Users/toc/Server/ONE/web/src/components/features/InstallationFileBrowser.tsx
 /Users/toc/Server/ONE/web/src/pages/docs/[...slug].astro
-/Users/toc/Server/ONE/web/test/utils/file-resolver.test.ts
-/Users/toc/Server/ONE/web/test/components/InstallationFileBrowser.test.tsx
+/Users/toc/Server/ONE/web/tests/utils/file-resolver.test.ts
+/Users/toc/Server/ONE/web/tests/components/InstallationFileBrowser.test.tsx
 /Users/toc/Server/ONE/web/.env.example
 /Users/toc/Server/ONE/web/INSTALLATION_FOLDERS.md
 /Users/toc/Server/ONE/web/INSTALLATION_FOLDERS_SUMMARY.md

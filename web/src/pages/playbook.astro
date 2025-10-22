@@ -1,0 +1,721 @@
+---
+export const prerender = true;
+
+import Layout from "../layouts/Layout.astro";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Check } from "lucide-react";
+import { CourseHeroSection } from "../components/course/HeroSection";
+import { FrameworkOverview } from "../components/course/FrameworkOverview";
+import { HowFrameworkWorks } from "../components/course/HowFrameworkWorks";
+import type { ModuleContentProps } from "@/types/course";
+import Elevate from "../components/course/Elevate";
+import { FAQSection } from "../components/course/FAQSection";
+import { PricingSection } from "../components/course/PricingSection";
+import { FinalCTA } from "../components/course/FinalCTA";
+import Circles from "@/components/Circles.astro";
+import { Transformation } from "../components/course/Transformation";
+import Teacher from "../components/Teacher.astro";
+import { CountdownTimer } from "../components/course/CountdownTimer";
+
+const description = "Transform random AI experiments into a systematic growth engine. Get the proven 9-Step Framework + AI Prompt Playbook For Ecommerce designed for Ecom Leaders ready to maximize growth, predictably.";
+
+// Course details
+const courseDetails = {
+  badge: "The ONE AI Playbook for Ecommerce",
+  title: "The ONE AI Playbook for Ecommerce",
+  subtitle: "Stop Guessing, Start Selling: Your Ebook, 100 Prompt System & Community",
+  originalPrice: "1,999",
+  currentPrice: "999",
+  guarantee: "30-Day Implementation Guarantee",
+  ctaText: "Get The System Now",
+  valueProposition: "Master AI for Ecom growth. Transform random AI experiments into predictable profit with our actionable Playbook – includes strategy Ebook, 100+ field-tested prompts, and expert community support.",
+  spots: {
+    total: 100,
+    remaining: 25
+  },
+  launchDate: "2025-08-01T00:00:00"  // Updated to August 1st, 2025
+};
+
+// Stats for hero section
+const heroStats = [
+  { value: "10X", label: "Faster Content Creation" },
+  { value: "100+", label: "Field-Tested AI Prompts" },
+  { value: "24/7", label: "Community Support" }
+];
+
+// FAQs for the bottom section
+const faqs = [
+      {
+        question: "Is the $999 investment really worth it for my store?",
+        answer: "Absolutely. Think about the cost of *not* having this system: hours wasted weekly on ineffective prompting (15+ hours/week), lost sales from subpar conversions (potentially thousands/month), and failed ad campaigns. This course provides a system proven to save time and generate results. Many students find the ROI covers the investment within weeks through increased efficiency and sales lift alone. It's an investment in predictable growth, not an expense."
+      },
+      {
+        question: "How is this different from just finding free prompts online or other AI courses?",
+        answer: "Night and day difference. Free prompts lack strategy, context, and testing. Other courses might give generic AI tips. This is a complete Ecom Growth SYSTEM: the proven 9-Step Elevate Framework PLUS a library of meticulously tested, Ecom-specific prompts engineered to work within that strategic framework, using your specific business data. It's about actionable results, not just random AI tricks."
+      },
+      {
+        question: "I'm already busy running my store. How much time does this really take?",
+        answer: "This system is designed to save you time, significantly. While there's an upfront investment to learn the framework (which you can do at your own pace), using the Playbook prompts for tasks like writing ads or emails takes minutes, not hours. You'll quickly reclaim far more time than you invest by eliminating guesswork and inefficient content creation."
+      },
+      {
+        question: "How technical is this? Do I need to be an AI wizard or coder?",
+        answer: "Not at all! If you can copy and paste text, and use basic tools like ChatGPT/Claude and your Ecom platform/email software, you have all the technical skills required. We focus on strategic application and effective prompting, not complex tech setups. The Playbook handles the advanced prompt engineering for you."
+      },
+      {
+    question: "What if I try it and it doesn't work for me? What's the guarantee?",
+    answer: "Our 30-Day 'Implement & See Results' Guarantee is simple: Enroll, actively use the framework and playbook as directed. If you don't see a clear improvement in your workflow efficiency and output quality within 30 days, email us for a full, no-hassle refund. We're confident in the system's effectiveness when implemented."
+  },
+      {
+        question: "Will this work for my specific Ecom niche (e.g., fashion, supplements, dropshipping)?",
+        answer: "Yes. The Elevate Ecommerce Framework addresses the fundamental principles of the e-commerce customer journey, applicable across niches. The AI Prompts are designed to be customized with your specific product details, customer avatar (Foundation module), and brand voice, making them highly adaptable and effective regardless of your niche."
+      },
+      {
+        question: "Which specific AI tools do I need to use this course?",
+        answer: "You need access to at least one of the major Large Language Models from Open AI, Deepseek, Anthropic, or Google. The course doesn't require purchasing dozens of niche AI tools; it focuses on leveraging the core, powerful LLMs effectively."
+      },
+      {
+        question: "AI changes so fast. Will this course become outdated quickly?",
+        answer: "That's exactly why you get Lifetime Access, including FREE updates to the course content AND the AI Prompt Playbook For Ecommerce. As AI evolves and we discover better prompts or framework refinements, we update the system, ensuring your investment continues to deliver cutting-edge value long-term."
+      },
+      {
+        question: "How many prompts are really included in the Playbook?",
+        answer: "You get access to our comprehensive library of 100+ prompts, each meticulously crafted and tested for specific Ecom tasks across all 9 steps of The Elevate Ecommerce Framework. This isn't inflated fluff; it's a curated arsenal designed for action."
+  },
+      {
+        question: "How is The Elevate Ecommerce Framework different from other marketing funnels or models?",
+        answer: "The Elevate Ecommerce Framework is specifically designed for modern Ecom, integrates AI implementation at every step, and follows a logical 9-step progression covering the entire customer value journey (Attraction, Conversion, AND Growth/Retention). It's more comprehensive and explicitly built for AI acceleration compared to older, simpler funnel models."
+      },
+      {
+    question: "Why are spots limited?",
+    answer: "We offer special launch pricing to reward early adopters who are ready to implement this system now. By limiting initial spots, we can provide focused support during the crucial launch phase and ensure each student gets the attention they need. Acting now locks in the best value and ensures you don't miss out on the special launch bonuses."
+  }
+];
+
+export const pricingData = {
+  originalPrice: "1,999",
+  currentPrice: "999",
+  paymentOptions: {
+    full: "999"
+  },
+  guarantee: {
+    days: 30,
+    title: "Our 30-Day 'Implement & See Results' Guarantee",
+    description: "We stand firmly behind this system. Enroll today, go through the modules, and actively implement The Elevate Ecommerce Framework using the AI Prompt Playbook For Ecommerce as directed. If you follow the system and honestly don't see a significant improvement in your marketing workflow efficiency and the quality of your AI-generated outputs within 30 days, simply email our support team. We'll process a full, prompt refund of your investment. No hoops, no hassle. Your success is the goal."
+  },
+  totalValue: "5,189",
+  valueBreakdown: [
+    {
+      item: "The Complete Elevate Framework Course (10 Modules)",
+      value: "1,999",
+      description: "Master the strategic 9-step system (Find to Share) for systematic Ecom growth. Step-by-step video training and implementation guidance."
+    },
+    {
+      item: "The AI Prompt Playbook For Ecommerce Library (200+ Tested Prompts)",
+      value: "999",
+      description: "Your copy-paste library of field-tested prompts for ChatGPT, Claude & Gemini, specifically engineered for each step of The Elevate Ecommerce Framework."
+    },
+    {
+      item: "Lifetime Access & FREE Updates",
+      value: "1,499",
+      description: "The world of AI and Ecom changes fast. Get lifetime access to all future course updates, new prompts, and framework refinements."
+    }
+  ],
+  bonuses: [
+    {
+      title: "Pre-Launch Bonus: AI Workflow Cheatsheets",
+      value: "499",
+      description: "Quick-reference guides showing how to efficiently integrate the Playbook prompts into your daily/weekly marketing tasks for maximum speed.",
+      expires: "August 1st"
+    },
+    {
+      title: "'Behind the Prompts' Logic Guide",
+      value: "299",
+      description: "Understand why the core Playbook prompts work so well, empowering you to slightly adapt them for unique situations if needed."
+    },
+    {
+      title: "Ecom AI Tool Selection Guide",
+      value: "199",
+      description: "A curated list and framework for choosing the right supporting AI tools for your specific Ecom needs, saving you research time."
+    }
+  ],
+  features: [
+    {
+      title: "Complete Elevate Framework Course Access",
+      included: true,
+      highlight: true,
+      description: "Get immediate access to all 9 modules and implementation guides"
+    },
+    {
+      title: "The Full AI Prompt Playbook For Ecommerce Library",
+      included: true,
+      highlight: true,
+      description: "200+ field-tested prompts for every framework step"
+    },
+    {
+      title: "Implementation Guides & Checklists",
+      included: true,
+      highlight: true,
+      description: "Step-by-step guidance for successful deployment"
+    },
+    {
+      title: "Foundation Blueprint Worksheets",
+      included: true,
+      highlight: true,
+      description: "Essential tools for effective AI generation"
+    },
+    {
+      title: "Lifetime Access & Updates",
+      included: true,
+      highlight: false,
+      description: "Access to all future content and features"
+    }
+  ],
+  scarcity: {
+    spots: {
+      total: 100,
+      remaining: 25
+    },
+    deadline: "August 1, 2025",
+    price_increase: "1,000"
+  }
+};
+
+// Course modules data
+const courseModulesData: ModuleContentProps['module'][] = [
+  {
+    title: "FOUNDATION – Building Your Growth Bedrock",
+    description: "Establish deep strategic clarity before action",
+    features: [
+      "Ideal Customer Avatar Deep Dive",
+      "Company Context Definition",
+      "Market Awareness Integration"
+    ],
+    details: {
+      overview: "Stop guessing, start knowing. Build the essential foundation for AI-powered success.",
+      benefits: [
+        "Deep dive into customer pains, desires, and behaviors",
+        "Define your unique offer and powerful brand voice",
+        "Integrate vital market insights for maximum impact"
+      ],
+      implementation: [
+        "In this crucial foundational module, you'll forge the essential bedrock for all future success.",
+        "We guide you to deeply understand your Ideal Customer Avatar ('Sam Store'), Company Context, and Market Awareness.",
+        "Your comprehensive Customer & Company Blueprint, ready to inform hyper-effective AI generation"
+      ]
+    }
+  },
+  {
+    title: "HOOK – Capturing Attention & Defining Your Angle",
+    description: "Stop the scroll and spark immediate interest",
+    features: [
+      "Hook Generation System",
+      "Channel Selection Strategy",
+      "Creative Development Process"
+    ],
+    details: {
+      overview: "Command attention in crowded feeds with irresistible hooks",
+      benefits: [
+        "Create scroll-stopping headlines with AI",
+        "Choose optimal platforms for maximum visibility",
+        "Craft compelling ad creative that converts"
+      ],
+      implementation: [
+        "Transform your Foundation insights into irresistible Hooks using targeted AI prompts.",
+        "Generate powerful headlines, compelling ad openers, and unique messaging angles that resonate deeply.",
+        "A validated set of high-impact hooks and attention-grabbing ad creative"
+      ]
+    }
+  },
+  {
+    title: "GIFT – Delivering Instant Value",
+    description: "Convert attention into genuine interest",
+    features: [
+      "Lead Magnet Creation",
+      "Landing Page Optimization",
+      "Promotional Strategy"
+    ],
+    details: {
+      overview: "Create high-value lead magnets that actually convert",
+      benefits: [
+        "Design irresistible free offers",
+        "Write high-converting landing pages",
+        "Plan effective distribution"
+      ],
+      implementation: [
+        "Use AI prompts to rapidly brainstorm, outline, and draft content for high-value Lead Magnets.",
+        "Craft compelling landing pages and promotional messages.",
+        "Ready-to-deploy lead magnet and landing page copy"
+      ]
+    }
+  },
+  {
+    title: "IDENTIFY – Capturing Future Customers",
+    description: "Convert interested prospects into leads",
+    features: [
+      "Form Optimization",
+      "Welcome Sequence Design",
+      "Lead Tagging System"
+    ],
+    details: {
+      overview: "Master the art of the low-friction ask",
+      benefits: [
+        "Create frictionless opt-in experiences",
+        "Design engaging welcome flows",
+        "Implement smart segmentation"
+      ],
+      implementation: [
+        "Use AI-assisted copy prompts to optimize opt-in forms and messaging.",
+        "Set up basic tagging and welcome emails for smooth lead flow.",
+        "Optimized lead capture process and initial prospect list"
+      ]
+    }
+  },
+  {
+    title: "ENGAGE – Activating Leads Instantly",
+    description: "Build immediate rapport post-identification",
+    features: [
+      "Instant Response System",
+      "Chatbot Integration",
+      "Follow-up Strategy"
+    ],
+    details: {
+      overview: "Capitalize on peak interest immediately",
+      benefits: [
+        "Create immediate value delivery",
+        "Set up intelligent conversations",
+        "Design effective nurture paths"
+      ],
+      implementation: [
+        "Implement immediate engagement strategies right after opt-in.",
+        "Use AI for impactful welcome messages and follow-up sequences.",
+        "Automated engagement assets and qualification insights"
+      ]
+    }
+  },
+  {
+    title: "SELL – Engineering Conversions",
+    description: "Maximize purchase conversions",
+    features: [
+      "Sales Copy Generation",
+      "Objection Handling",
+      "Checkout Optimization"
+    ],
+    details: {
+      overview: "Transform product pages into conversion engines",
+      benefits: [
+        "Write compelling product descriptions",
+        "Address concerns proactively",
+        "Optimize the purchase process"
+      ],
+      implementation: [
+        "Leverage AI prompts to craft persuasive sales copy, handle objections, and optimize CTAs.",
+        "Learn to streamline checkout flow and build trust.",
+        "High-converting sales page copy and optimized checkout"
+      ]
+    }
+  },
+  {
+    title: "NURTURE – Converting the Not Ready",
+    description: "Build trust over time",
+    features: [
+      "Email Sequence Design",
+      "Retargeting Strategy",
+      "Content Planning"
+    ],
+    details: {
+      overview: "Master the art of follow-up",
+      benefits: [
+        "Create engaging nurture flows",
+        "Design effective ad campaigns",
+        "Plan valuable content delivery"
+      ],
+      implementation: [
+        "Use AI-powered nurturing to draft value-driven email sequences.",
+        "Create retargeting campaigns that convert prospects over time.",
+        "Automated nurture sequences and retargeting copy"
+      ]
+    }
+  },
+  {
+    title: "UPSELL – Maximizing Customer Value",
+    description: "Increase Average Order Value instantly",
+    features: [
+      "Upsell Strategy",
+      "Timing Optimization",
+      "Value Maximization"
+    ],
+    details: {
+      overview: "Boost profitability with smart offers",
+      benefits: [
+        "Design irresistible upsells",
+        "Optimize offer presentation",
+        "Maximize customer profitability"
+      ],
+      implementation: [
+        "Use AI prompts to create compelling post-purchase upsell and cross-sell offers.",
+        "Learn optimal timing and presentation for maximum impact.",
+        "High-converting upsell offers and promotional copy"
+      ]
+    }
+  },
+  {
+    title: "UNDERSTAND – Driving Customer Success",
+    description: "Maximize loyalty through insight",
+    features: [
+      "Onboarding Flow Design",
+      "Feedback Analysis",
+      "Retention Strategy"
+    ],
+    details: {
+      overview: "Turn buyers into loyal fans",
+      benefits: [
+        "Create success-focused sequences",
+        "Generate actionable insights",
+        "Implement proactive support"
+      ],
+      implementation: [
+        "Craft exceptional customer onboarding sequences.",
+        "Analyze feedback for continuous improvement and proactive communication.",
+        "Effective onboarding system and insight strategy"
+      ]
+    }
+  },
+  {
+    title: "SHARE – Growing Through Advocacy",
+    description: "Leverage social proof for growth",
+    features: [
+      "Review Generation",
+      "Social Proof Creation",
+      "Referral System"
+    ],
+    details: {
+      overview: "Transform customers into advocates",
+      benefits: [
+        "Collect powerful testimonials",
+        "Create compelling success stories",
+        "Build automated word-of-mouth"
+      ],
+      implementation: [
+        "Use AI to streamline review collection and turn feedback into compelling social proof.",
+        "Build systematic referral programs.",
+        "Review templates and referral campaign assets"
+      ]
+    }
+  }
+];
+---
+<Layout
+  title="ONE - The AI Playbook for Ecommerce"
+  description={description}
+>
+  <main class="min-h-screen bg-background">
+    {/* Hero Section */}
+    <CourseHeroSection courseDetails={courseDetails} heroStats={heroStats} />
+
+    <Circles />
+
+    {/* System Overview */}
+    <div id="framework">
+      <FrameworkOverview client:load />
+    </div>
+
+    {/* Playbook Visual */}
+    <section class="container mx-auto px-6 py-16 border-b border-border">
+      <div class="w-full max-w-[1400px] mx-auto">
+        <div class="text-center mb-8">
+          <Badge variant="outline" className="mb-4">
+            The Complete System
+          </Badge>
+          <h2 class="text-4xl font-bold mb-4">Your AI Playbook for Ecommerce</h2>
+          <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+            A comprehensive visual system with 100+ field-tested AI prompts for every step of your ecommerce journey
+          </p>
+        </div>
+        <div class="max-w-5xl mx-auto">
+          <div class="rounded-2xl overflow-hidden border-2 border-primary/20 shadow-2xl">
+            <img
+              src="/images/drawings/Playbook.jpg"
+              alt="The AI Playbook for Ecommerce - Complete Framework"
+              class="w-full h-auto"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ELEVATE Framework */}
+    <div id="elevate" class="py-20">
+      <Elevate client:load />
+    </div>
+
+    {/* How It Works */}
+    <div id="how-it-works">
+      <HowFrameworkWorks client:load />
+    </div>
+
+    {/* Business Transformation */}
+    <div id="transformation">
+      <Transformation client:load />
+    </div>
+
+    <Teacher />
+
+    {/* Course Modules */}
+    <div id="modules" class="relative py-20 bg-gradient-to-b from-background to-background/80">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <Badge variant="outline" className="mb-4">
+            Complete Framework
+          </Badge>
+          <h2 class="text-4xl font-bold mb-4">Master The ELEVATE Framework</h2>
+          <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+            A systematic approach to transform your ecommerce growth through AI-powered automation
+          </p>
+        </div>
+
+        <div class="grid gap-16">
+          {courseModulesData?.map((module, index: number) => module && (
+            <div class="relative">
+              {/* Module Header */}
+              <div class="flex items-center gap-6 mb-8">
+                <div class="flex-shrink-0 w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <span class="text-2xl font-bold text-primary">{index.toString().padStart(2, '0')}</span>
+                </div>
+                <div>
+                  <h3 class="text-3xl font-bold mb-2">{module.title}</h3>
+                  <p class="text-xl text-muted-foreground">{module.description}</p>
+                </div>
+              </div>
+
+              {/* Module Content */}
+              <Card className="p-8">
+                {/* Two Column Content */}
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                  {/* Left Column */}
+                  <div>
+                    <h4 class="text-xl font-semibold mb-4">Overview</h4>
+                    <p class="text-muted-foreground mb-6">{module.details?.overview}</p>
+
+                    <h4 class="text-xl font-semibold mb-4">Key Features</h4>
+                    <ul class="space-y-3">
+                      {module.features.map((feature) => (
+                        <li class="flex items-start gap-3">
+                          <Check className="w-5 h-5 text-primary mt-1" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Right Column */}
+                  <div>
+                    <h4 class="text-xl font-semibold mb-4">What You'll Learn</h4>
+                    <ul class="space-y-4">
+                      {module.details?.benefits.map((benefit) => (
+                        <li class="flex items-start gap-3">
+                          <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-4 h-4 text-primary" />
+                          </div>
+                          <span class="text-muted-foreground">{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Implementation Section - Full Width */}
+                <div class="border-t pt-8">
+                  <div class="bg-muted/50 rounded-lg p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                      <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Check className="w-5 h-5 text-primary" />
+                      </div>
+                      <h4 class="text-xl font-semibold">Implementation Steps</h4>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                      {module.details?.implementation.map((step, stepIndex) => (
+                        <div class="relative">
+                          <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-primary/5 flex items-center justify-center flex-shrink-0 border border-primary/10">
+                              <span class="text-sm font-medium text-primary">{stepIndex + 1}</span>
+                            </div>
+                            <p class="text-muted-foreground">{step}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Module Connector Line */}
+              {index < courseModulesData.length - 1 && (
+                <div class="absolute left-8 top-[90px] bottom-0 w-px bg-border" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Pricing Section */}
+    <div id="pricing">
+      <PricingSection client:load pricingData={pricingData} />
+    </div>
+
+    {/* Countdown Timer */}
+    <CountdownTimer
+      client:load
+      targetDate={courseDetails.launchDate}
+      currentPrice={pricingData.currentPrice}
+      originalPrice={pricingData.originalPrice}
+    />
+
+    {/* FAQs Section */}
+    <div id="faq" class="min-h-screen">
+      <FAQSection client:load faqs={faqs} />
+    </div>
+
+    {/* Final CTA */}
+    <FinalCTA
+      client:load
+      currentPrice={pricingData.currentPrice}
+      remainingSpots={pricingData.scarcity.spots.remaining}
+      guaranteeText={pricingData.guarantee.description}
+    />
+  </main>
+</Layout>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+    --scroll-duration: 1.5s;
+  }
+
+  .no-underline {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Modern Shadcn-style button enhancements */
+  .button-shadow {
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  .button-shadow:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 10px 25px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .button-shadow:active {
+    transform: translateY(0);
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .button-glow {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .button-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      to right,
+      hsl(var(--primary) / 0.1),
+      hsl(var(--primary) / 0.2),
+      hsl(var(--primary) / 0.1)
+    );
+    z-index: -1;
+    border-radius: inherit;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+
+  .button-glow:hover::before {
+    opacity: 1;
+  }
+
+  .button-primary {
+    background: linear-gradient(
+      to bottom right,
+      hsl(var(--primary)),
+      hsl(var(--primary) / 0.9)
+    );
+    border: 1px solid hsl(var(--primary) / 0.2);
+  }
+
+  .button-outline {
+    background: transparent;
+    border: 1px solid hsl(var(--primary) / 0.2);
+  }
+
+  .button-outline:hover {
+    background: hsl(var(--primary) / 0.1);
+  }
+
+  /* Badge styles */
+  .badge-glow {
+    background: hsl(var(--primary) / 0.1);
+    border: 1px solid hsl(var(--primary) / 0.2);
+    color: hsl(var(--primary));
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+
+  /* Add smooth reveal animation for modules */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  #modules .relative {
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  #modules .relative:nth-child(1) { animation-delay: 0.1s; }
+  #modules .relative:nth-child(2) { animation-delay: 0.2s; }
+  #modules .relative:nth-child(3) { animation-delay: 0.3s; }
+  #modules .relative:nth-child(4) { animation-delay: 0.4s; }
+  #modules .relative:nth-child(5) { animation-delay: 0.5s; }
+  #modules .relative:nth-child(6) { animation-delay: 0.6s; }
+  #modules .relative:nth-child(7) { animation-delay: 0.7s; }
+  #modules .relative:nth-child(8) { animation-delay: 0.8s; }
+  #modules .relative:nth-child(9) { animation-delay: 0.9s; }
+</style>
+
+<script>
+  // Smooth scroll function
+  document.querySelectorAll('a[href^="#"]').forEach((anchor: Element) => {
+    anchor.addEventListener('click', function(this: HTMLAnchorElement, e: Event) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href') || '');
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+</script>

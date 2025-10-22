@@ -1,0 +1,32 @@
+/* Landing page theme generated from .onboarding.json */
+
+@theme {
+  /* Brand colors from onboarding */
+  --color-primary: 216 55% 25%;
+  --color-secondary: 219 14% 28%;
+  --color-accent: 105 22% 25%;
+  --color-background: 36 8% 88%;
+  --color-foreground: 0 0% 13%;
+
+  /* Derived colors */
+  --color-primary-foreground: 36 8% 96%;
+  --color-secondary-foreground: 36 8% 96%;
+  --color-accent-foreground: 36 8% 96%;
+
+  /* Semantic colors */
+  --color-card: 36 10% 74%;
+  --color-card-foreground: 0 0% 13%;
+  --color-muted: 219 14% 92%;
+  --color-muted-foreground: 219 14% 30%;
+  --color-border: 0 0% 100% / 0.1;
+}
+
+/* Dark mode overrides */
+.dark {
+  --color-background: 0 0% 13%;
+  --color-foreground: 36 8% 96%;
+  --color-card: 0 0% 10%;
+  --color-card-foreground: 36 8% 96%;
+  --color-muted: 216 63% 17%;
+  --color-muted-foreground: 36 8% 80%;
+}

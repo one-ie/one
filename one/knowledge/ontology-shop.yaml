@@ -1,0 +1,121 @@
+feature: shop
+extends: core
+description: E-commerce and online store functionality
+
+thingTypes:
+  - name: product
+    properties:
+      name: string
+      slug: string
+      description: string
+      price: number
+      compareAtPrice: number
+      images: string[]
+      inventory: number
+      sku: string
+      status: string
+
+  - name: product_variant
+    properties:
+      name: string
+      sku: string
+      price: number
+      inventory: number
+      options: object
+
+  - name: shopping_cart
+    properties:
+      items: object[]
+      subtotal: number
+      tax: number
+      shipping: number
+      total: number
+      sessionId: string
+
+  - name: order
+    properties:
+      orderNumber: string
+      items: object[]
+      subtotal: number
+      tax: number
+      shipping: number
+      total: number
+      status: string
+      shippingAddress: object
+      billingAddress: object
+      paymentId: string
+
+  - name: discount_code
+    properties:
+      code: string
+      discountType: string
+      discountValue: number
+      minPurchase: number
+      maxUses: number
+      usedCount: number
+      validFrom: number
+      validTo: number
+
+  - name: payment
+    properties:
+      amount: number
+      currency: string
+      paymentMethod: string
+      stripePaymentIntentId: string
+      status: string
+      processedAt: number
+
+connectionTypes:
+  - name: purchased
+    fromType: user
+    toType: product
+
+  - name: in_cart
+    fromType: user
+    toType: product
+
+  - name: variant_of
+    fromType: product_variant
+    toType: product
+
+  - name: ordered
+    fromType: user
+    toType: order
+
+  - name: paid_for
+    fromType: payment
+    toType: order
+
+eventTypes:
+  - name: product_added_to_cart
+    thingType: shopping_cart
+
+  - name: cart_updated
+    thingType: shopping_cart
+
+  - name: cart_abandoned
+    thingType: shopping_cart
+
+  - name: order_placed
+    thingType: order
+
+  - name: order_fulfilled
+    thingType: order
+
+  - name: order_shipped
+    thingType: order
+
+  - name: order_delivered
+    thingType: order
+
+  - name: payment_processed
+    thingType: payment
+
+  - name: payment_failed
+    thingType: payment
+
+  - name: product_viewed
+    thingType: product
+
+  - name: discount_applied
+    thingType: discount_code

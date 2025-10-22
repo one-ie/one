@@ -1,0 +1,107 @@
+---
+/**
+ * Collection Page Template
+ * Features: Product grid, filters, sorting, pagination
+ * Dynamic route: /collections/[slug]
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { getCollection, getEntry } from 'astro:content';
+import { CollectionPageClient } from '@/components/ecommerce/interactive/CollectionPageClient';
+import { Breadcrumbs, type BreadcrumbItem } from '@/components/ecommerce/static/Breadcrumbs';
+
+// Generate static paths for all collections
+export async function getStaticPaths() {
+  const collections = await getCollection('collections');
+  return collections.map(collection => ({
+    params: { slug: collection.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+// Get collection from content
+const collectionEntry = await getEntry('collections', slug!);
+
+if (!collectionEntry) {
+  return Astro.redirect('/404');
+}
+
+const collectionData = collectionEntry.data;
+
+// Get all products
+const allProducts = await getCollection('products');
+
+// Filter products by collection
+const products = allProducts
+  .filter(p => collectionData.products?.includes(p.slug))
+  .map(p => ({
+    id: p.id,
+    slug: p.slug,
+    name: p.data.name,
+    description: p.data.description,
+    price: p.data.price,
+    compareAtPrice: p.data.compareAtPrice,
+    images: p.data.images,
+    thumbnail: p.data.images[0],
+    category: p.data.category,
+    tags: p.data.tags || [],
+    inStock: p.data.inStock,
+    rating: 4.5,
+    reviewCount: 0,
+    featured: p.data.featured,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }));
+
+// Get all collections for sidebar (named 'categories' to match FilterSidebar prop)
+const allCollections = await getCollection('collections');
+const categories = allCollections.map(c => ({
+  id: c.slug, // Use slug as id for URL-friendly filtering
+  name: c.data.name,
+  count: c.data.products?.length || 0, // Show product count
+  products: c.data.products, // Include products array for filtering
+}));
+
+// Get unique tags from products
+const tags = Array.from(new Set(products.flatMap(p => p.tags)));
+
+// Serialize products with Date objects converted to ISO strings for client
+const productsForClient = products.map(p => ({
+  ...p,
+  createdAt: p.createdAt,
+  updatedAt: p.updatedAt,
+}));
+
+const breadcrumbs: BreadcrumbItem[] = [
+  { label: 'Shop', href: '/shop' },
+  { label: collectionData.name },
+];
+---
+
+<Layout title={`${collectionData.name} - ONE Store`} description={collectionData.description}>
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-8">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold text-foreground">{collectionData.name}</h1>
+        <p class="mt-2 text-muted-foreground">
+          {collectionData.description}
+        </p>
+        <p class="mt-1 text-sm text-muted-foreground">
+          {products.length} products
+        </p>
+      </div>
+
+      <!-- Client-side filtered product grid -->
+      <CollectionPageClient
+        client:load
+        products={productsForClient}
+        categories={categories}
+        tags={tags}
+        currentCollectionSlug={slug!}
+      />
+    </div>
+  </div>
+</Layout>

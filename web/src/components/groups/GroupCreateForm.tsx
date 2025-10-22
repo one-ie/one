@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useMutation, useQuery } from 'convex/react';
-import { api } from '@/lib/convex-api';
+import { useCreateGroup, useGroupBySlug } from '@/hooks/useGroups';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -51,12 +50,12 @@ interface GroupCreateFormProps {
 export function GroupCreateForm({ user, parentSlug }: GroupCreateFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const createGroup = useMutation(api.mutations.groups.create);
+  const createGroup = useCreateGroup();
 
   // If parentSlug provided, fetch parent group
-  const parentGroup = useQuery(
-    api.queries.groups.getBySlug,
-    parentSlug ? { slug: parentSlug } : 'skip'
+  const { data: parentGroup } = useGroupBySlug(
+    parentSlug || null,
+    { enabled: !!parentSlug }
   );
 
   const form = useForm<FormValues>({
@@ -86,7 +85,7 @@ export function GroupCreateForm({ user, parentSlug }: GroupCreateFormProps) {
   const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     try {
-      const groupId = await createGroup({
+      const groupId = await createGroup.mutate({
         slug: values.slug,
         name: values.name,
         type: values.type,
@@ -100,8 +99,14 @@ export function GroupCreateForm({ user, parentSlug }: GroupCreateFormProps) {
 
       toast.success('Group created successfully!');
 
-      // Redirect to group page
-      window.location.href = `/group/${values.slug}`;
+      // Redirect to group page using safe navigation
+      // Validate slug format before redirect to prevent open redirect
+      if (/^[a-z0-9-]+$/.test(values.slug)) {
+        window.location.href = `/group/${encodeURIComponent(values.slug)}`;
+      } else {
+        // Fallback to dashboard if slug is invalid
+        window.location.href = '/dashboard';
+      }
     } catch (error: any) {
       console.error('Failed to create group:', error);
       toast.error(error.message || 'Failed to create group');

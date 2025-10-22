@@ -48,8 +48,8 @@ All frontend integration tasks for installation folder multi-tenancy have been c
    - Cloudflare Pages compatibility
 
 7. **Tests**
-   - `web/test/utils/file-resolver.test.ts` (11 tests)
-   - `web/test/components/InstallationFileBrowser.test.tsx` (3 tests)
+   - `web/tests/utils/file-resolver.test.ts` (11 tests)
+   - `web/tests/components/InstallationFileBrowser.test.tsx` (3 tests)
    - **Result: 14/14 passing ✅**
 
 8. **Documentation**

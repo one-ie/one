@@ -209,7 +209,7 @@ PUBLIC_INSTALLATION_NAME=one-group  # Exposed to client
 
 ### Unit Tests
 
-**File:** `web/test/utils/file-resolver.test.ts`
+**File:** `web/tests/utils/file-resolver.test.ts`
 
 **Coverage:**
 - ✅ Path traversal rejection
@@ -220,12 +220,12 @@ PUBLIC_INSTALLATION_NAME=one-group  # Exposed to client
 
 **Run:**
 ```bash
-cd web && bun test test/utils/file-resolver.test.ts
+cd web && bun test tests/utils/file-resolver.test.ts
 ```
 
 ### Component Tests
 
-**File:** `web/test/components/InstallationFileBrowser.test.tsx`
+**File:** `web/tests/components/InstallationFileBrowser.test.tsx`
 
 **Coverage:**
 - ✅ Component structure validation
@@ -234,7 +234,7 @@ cd web && bun test test/utils/file-resolver.test.ts
 
 **Run:**
 ```bash
-cd web && bun test test/components/InstallationFileBrowser.test.tsx
+cd web && bun test tests/components/InstallationFileBrowser.test.tsx
 ```
 
 ### All Tests

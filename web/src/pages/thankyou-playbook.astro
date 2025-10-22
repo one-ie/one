@@ -1,0 +1,147 @@
+---
+export const prerender = false; // Must be server-rendered to retrieve Stripe session
+
+import Layout from "../layouts/Layout.astro";
+import Stripe from "stripe";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Check, ArrowRight, Mail, Download, BookOpen } from 'lucide-react';
+import type { Stripe as StripeType } from 'stripe';
+
+const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY) as StripeType;
+const sessionId = Astro.url.searchParams.get('session_id');
+
+let session;
+try {
+  if (!sessionId) throw new Error('No session ID provided');
+  session = await stripe.checkout.sessions.retrieve(sessionId);
+} catch (e) {
+  return Astro.redirect('/playbook');
+}
+
+const { name, email } = session.customer_details || {};
+---
+
+<Layout title="ONE Platform Playbook - Thank You">
+  <div class="container max-w-3xl mx-auto px-4 py-12">
+    {/* Success Message */}
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-6">
+        <Check className="w-8 h-8 text-green-600" />
+      </div>
+      <h1 class="text-4xl font-bold mb-4">Payment Successful!</h1>
+      {name && <p class="text-xl text-muted-foreground mb-2">Thank you, {name}!</p>}
+      <p class="text-muted-foreground">Your playbook is ready for download</p>
+    </div>
+
+    {/* Payment Details Card */}
+    <Card className="mb-8">
+      <CardHeader>
+        <h2 class="text-2xl font-semibold">Purchase Details</h2>
+      </CardHeader>
+      <CardContent>
+        <div class="space-y-4">
+          {email && (
+            <div class="flex items-start gap-3">
+              <Mail className="w-5 h-5 mt-1 text-muted-foreground" />
+              <div>
+                <p class="font-medium">Confirmation Email</p>
+                <p class="text-muted-foreground">We've sent your receipt and download link to {email}</p>
+              </div>
+            </div>
+          )}
+          <div class="flex items-start gap-3">
+            <Download className="w-5 h-5 mt-1 text-muted-foreground" />
+            <div>
+              <p class="font-medium">Download Your Playbook</p>
+              <p class="text-muted-foreground mb-3">
+                The ONE Platform Playbook is now available for instant download. Check your email for the download link.
+              </p>
+              <Button variant="default" className="gap-2">
+                <Download className="w-4 h-4" />
+                Download Playbook
+              </Button>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <BookOpen className="w-5 h-5 mt-1 text-muted-foreground" />
+            <div>
+              <p class="font-medium">Lifetime Access</p>
+              <p class="text-muted-foreground">
+                You have lifetime access to all future updates of the playbook at no additional cost.
+              </p>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+
+    {/* Next Steps */}
+    <Card>
+      <CardHeader>
+        <h2 class="text-2xl font-semibold">What's Inside the Playbook</h2>
+      </CardHeader>
+      <CardContent>
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="text-sm font-medium text-primary">1</span>
+            </div>
+            <div>
+              <p class="font-medium">6-Dimension Ontology Deep Dive</p>
+              <p class="text-muted-foreground">Master the Groups, People, Things, Connections, Events, and Knowledge dimensions</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="text-sm font-medium text-primary">2</span>
+            </div>
+            <div>
+              <p class="font-medium">Proven Patterns & Best Practices</p>
+              <p class="text-muted-foreground">Learn from real-world implementations and avoid common pitfalls</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="text-sm font-medium text-primary">3</span>
+            </div>
+            <div>
+              <p class="font-medium">Architecture & Implementation Strategies</p>
+              <p class="text-muted-foreground">Complete guide to building scalable AI-native platforms from friend circles to governments</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="text-sm font-medium text-primary">4</span>
+            </div>
+            <div>
+              <p class="font-medium">Code Examples & Templates</p>
+              <p class="text-muted-foreground">Ready-to-use patterns for Astro, React, Convex, and Effect.ts</p>
+            </div>
+          </li>
+        </ul>
+      </CardContent>
+      <CardFooter>
+        <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+          <a href="/playbook">
+            <Button variant="outline" size="lg" className="gap-2">
+              <BookOpen className="w-4 h-4" />
+              View Playbook Page
+            </Button>
+          </a>
+          <a href="/">
+            <Button variant="default" size="lg" className="gap-2">
+              Return Home
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </a>
+        </div>
+      </CardFooter>
+    </Card>
+
+    {/* Support Section */}
+    <div class="mt-8 text-center text-muted-foreground">
+      <p>Need help? <a href="/contact" class="text-primary hover:underline">Contact our support team</a></p>
+    </div>
+  </div>
+</Layout>

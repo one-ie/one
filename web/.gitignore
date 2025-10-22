@@ -39,3 +39,6 @@ pnpm-debug.log*
 # Sensitive data
 .env.*
 !.env.example
+
+# Stripe configuration (contains product IDs)
+.stripe-config.json

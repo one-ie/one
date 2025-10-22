@@ -1,0 +1,32 @@
+feature: tokens
+extends: core
+description: Creator tokens and token economy
+
+thingTypes:
+  - name: token
+    properties:
+      name: string
+      symbol: string
+      totalSupply: number
+      circulatingSupply: number
+      priceUSD: number
+      contractAddress: string
+      chain: string
+  - name: token_holder
+    properties:
+      walletAddress: string
+      balance: number
+      lockedBalance: number
+
+connectionTypes:
+  - name: holds_tokens
+    fromType: user
+    toType: token
+
+eventTypes:
+  - name: tokens_purchased
+    thingType: token
+  - name: tokens_sold
+    thingType: token
+  - name: tokens_transferred
+    thingType: token

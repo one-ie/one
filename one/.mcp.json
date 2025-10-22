@@ -1,0 +1,57 @@
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
+    },
+    "cloudflare-builds": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://builds.mcp.cloudflare.com/sse"
+      ],
+      "env": {
+        "CLOUDFLARE_API_KEY": "${CLOUDFLARE_GLOBAL_API_KEY}",
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_GLOBAL_API_KEY}"
+      }
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ]
+    },
+    "claude": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@anthropic-ai/mcp-server-claude"
+      ],
+      "env": {
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
+      }
+    },
+    "framelink-figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--figma-api-key=${FIGMA_ACCESS_TOKEN}",
+        "--stdio"
+      ]
+    },
+    "astro-docs": {
+      "transport": "http",
+      "url": "https://mcp.docs.astro.build/mcp"
+    },
+    "stripe": {
+      "transport": "http",
+      "url": "https://mcp.stripe.com/"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+feature: core
+extends: null
+description: Core ontology always present in every ONE installation
+
+thingTypes:
+  - name: page
+    properties:
+      title: string
+      slug: string
+      content: string
+  - name: user
+    properties:
+      email: string
+      displayName: string
+  - name: file
+    properties:
+      url: string
+      mimeType: string
+      size: number
+  - name: link
+    properties:
+      url: string
+      title: string
+  - name: note
+    properties:
+      content: string
+
+connectionTypes:
+  - name: created_by
+    fromType: '*'
+    toType: user
+  - name: updated_by
+    fromType: '*'
+    toType: user
+  - name: viewed_by
+    fromType: '*'
+    toType: user
+  - name: favorited_by
+    fromType: '*'
+    toType: user
+
+eventTypes:
+  - name: thing_created
+    thingType: '*'
+  - name: thing_updated
+    thingType: '*'
+  - name: thing_deleted
+    thingType: '*'
+  - name: thing_viewed
+    thingType: '*'

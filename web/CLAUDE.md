@@ -342,6 +342,48 @@ const BlogSchema = z.object({
 - Add `@source` directive to scan component directories
 - Border colors are automatically applied via `* { border-color: hsl(var(--color-border)); }` in global.css
 
+**CRITICAL: Gradient Text & Transparency Prevention**:
+
+⚠️ **NEVER use manual `bg-clip-text` patterns** - they cause transparent/invisible text in Tailwind v4.
+
+```html
+<!-- ❌ FORBIDDEN - Manual gradient text (becomes transparent) -->
+<h1 class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+  Text becomes invisible
+</h1>
+
+<!-- ✅ CORRECT - Use the .gradient-text utility class -->
+<h1 class="gradient-text">
+  Always readable gradient text
+</h1>
+```
+
+**Why This Matters:**
+- Tailwind v4 handles background opacity differently than v3
+- Manual `bg-clip-text text-transparent` patterns fail without `!important` flags
+- Browser compatibility issues with `-webkit-background-clip`
+- The `.gradient-text` utility in `global.css` handles all edge cases
+
+**The `.gradient-text` Utility Provides:**
+1. Guaranteed visibility with `!important` flags on all properties
+2. Animated gradient background (8s infinite loop)
+3. Browser fallbacks (`@supports` queries for unsupported browsers)
+4. Proper display mode (`inline-block`) for gradient rendering
+5. Works in both light and dark modes
+
+**All Transparency Issues Are Fixed Site-Wide:**
+
+The `global.css` file contains 14 categories of fixes (lines 386-628) that prevent:
+- Transparent modals and dialogs
+- Invisible gradient text
+- See-through backdrop blur elements
+- Transparent popovers and dropdowns
+- Invisible UI components
+
+See `/TRANSPARENCY-FIXES.md` for complete documentation.
+
+**Golden Rule:** Use semantic utility classes, never manual CSS patterns for gradients.
+
 ## Development Guidelines
 
 ### React Component Usage in Astro
@@ -391,6 +433,8 @@ import { Card } from '@/components/ui/card';
 - **Styling Issues**: Use `className` not `class` in React components
 - **Render Props Not Working**: Astro JSX doesn't support React render props - render content directly in component
 - **Image Optimization**: Use Astro's `<Image>` component in .astro files, plain `<img>` in React components
+- **Transparent Gradient Text**: NEVER use `bg-clip-text text-transparent` manually - use `.gradient-text` utility class instead
+- **Transparent Modals/Dialogs**: All fixed in `global.css` - no action needed, just avoid overriding with inline styles
 
 ## Project Structure Notes
 

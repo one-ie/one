@@ -1,0 +1,113 @@
+---
+/**
+ * Wishlist Page
+ * Displays saved wishlist items with localStorage persistence
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { WishlistPage } from '@/components/ecommerce/interactive/Wishlist';
+
+// Mock all products - in production, fetch from API or content collection
+const allProducts = [
+  {
+    id: '1',
+    slug: 'premium-cotton-tshirt',
+    name: 'Premium Cotton T-Shirt',
+    description: 'Ultra-soft premium cotton t-shirt',
+    price: 29.99,
+    compareAtPrice: 39.99,
+    images: ['/images/products/tshirt-1.jpg'],
+    thumbnail: '/images/products/tshirt-1.jpg',
+    category: 'apparel',
+    tags: ['cotton', 'casual'],
+    inStock: true,
+    inventory: 48,
+    rating: 4.5,
+    reviewCount: 128,
+    featured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    slug: 'cotton-hoodie',
+    name: 'Cotton Hoodie',
+    description: 'Comfortable cotton hoodie',
+    price: 49.99,
+    compareAtPrice: 69.99,
+    thumbnail: '/images/products/hoodie-1.jpg',
+    images: ['/images/products/hoodie-1.jpg'],
+    category: 'apparel',
+    tags: ['cotton', 'casual'],
+    inStock: true,
+    inventory: 25,
+    rating: 4.7,
+    reviewCount: 89,
+    featured: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '3',
+    slug: 'denim-jeans',
+    name: 'Classic Denim Jeans',
+    description: 'Timeless denim jeans',
+    price: 59.99,
+    compareAtPrice: 79.99,
+    thumbnail: '/images/products/jeans-1.jpg',
+    images: ['/images/products/jeans-1.jpg'],
+    category: 'apparel',
+    tags: ['denim', 'casual'],
+    inStock: true,
+    inventory: 15,
+    rating: 4.6,
+    reviewCount: 134,
+    featured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '4',
+    slug: 'sneakers',
+    name: 'Premium Sneakers',
+    description: 'Comfortable premium sneakers',
+    price: 89.99,
+    thumbnail: '/images/products/sneakers-1.jpg',
+    images: ['/images/products/sneakers-1.jpg'],
+    category: 'footwear',
+    tags: ['sneakers', 'casual'],
+    inStock: true,
+    inventory: 8,
+    rating: 4.8,
+    reviewCount: 256,
+    featured: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '5',
+    slug: 'leather-jacket',
+    name: 'Leather Jacket',
+    description: 'Premium leather jacket',
+    price: 199.99,
+    compareAtPrice: 249.99,
+    thumbnail: '/images/products/jacket-1.jpg',
+    images: ['/images/products/jacket-1.jpg'],
+    category: 'apparel',
+    tags: ['leather', 'premium'],
+    inStock: true,
+    inventory: 5,
+    rating: 4.9,
+    reviewCount: 178,
+    featured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+---
+
+<Layout title="My Wishlist - ONE Store" description="View your saved wishlist items">
+  <div class="min-h-screen bg-background">
+    <WishlistPage client:load allProducts={allProducts} />
+  </div>
+</Layout>

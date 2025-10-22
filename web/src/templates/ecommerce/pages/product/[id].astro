@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Layout from '../../../../layouts/Layout.astro';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -8,11 +8,12 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import { products } from '@/lib/products';
+import { products } from '../../lib/products';
+import type { Product } from '../../lib/types';
 import { ShoppingCart, Heart, Star, TruckIcon, RefreshCcw } from 'lucide-react';
 
 const { id } = Astro.params;
-const product = products.find((p) => p.id === id);
+const product = products.find((p: Product) => p.id === id);
 
 if (!product) {
   return Astro.redirect('/shop');
@@ -20,7 +21,7 @@ if (!product) {
 
 // Get related products (same category, exclude current)
 const relatedProducts = products
-  .filter((p) => p.category === product.category && p.id !== product.id)
+  .filter((p: Product) => p.category === product.category && p.id !== product.id)
   .slice(0, 4);
 
 const displayPrice = product.salePrice || product.price;
@@ -63,7 +64,7 @@ const savings = product.salePrice
           {
             product.images.length > 1 && (
               <div class="grid grid-cols-4 gap-4">
-                {product.images.map((image, index) => (
+                {product.images.map((image: string, index: number) => (
                   <div class="aspect-square overflow-hidden rounded-md border bg-muted cursor-pointer hover:border-primary transition-colors">
                     <img
                       src={image}
@@ -85,15 +86,15 @@ const savings = product.salePrice
                 <h1 class="text-4xl font-bold tracking-tight">{product.name}</h1>
                 <div class="flex items-center gap-2">
                   <div class="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star class="h-4 w-4 fill-primary text-primary" />
+                    {[...Array(5)].map((_: unknown, i: number) => (
+                      <Star key={i} className="h-4 w-4 fill-primary text-primary" />
                     ))}
                   </div>
                   <span class="text-sm text-muted-foreground">(2,143 reviews)</span>
                 </div>
               </div>
               <Button variant="outline" size="icon">
-                <Heart class="h-5 w-5" />
+                <Heart className="h-5 w-5" />
               </Button>
             </div>
 
@@ -104,7 +105,7 @@ const savings = product.salePrice
                   <span class="text-2xl text-muted-foreground line-through">
                     ${product.price}
                   </span>
-                  <Badge variant="destructive" class="text-sm">
+                  <Badge variant="destructive" className="text-sm">
                     Save {savings}%
                   </Badge>
                 </>
@@ -112,12 +113,12 @@ const savings = product.salePrice
             </div>
 
             {product.isSale && (
-              <Badge variant="destructive" class="text-sm">
+              <Badge variant="destructive" className="text-sm">
                 Sale - Limited Time Only
               </Badge>
             )}
             {product.isNew && (
-              <Badge variant="secondary" class="text-sm">
+              <Badge variant="secondary" className="text-sm">
                 New Arrival
               </Badge>
             )}
@@ -133,8 +134,8 @@ const savings = product.salePrice
           <div class="space-y-3">
             <label class="text-sm font-semibold">Select Size:</label>
             <div class="flex flex-wrap gap-2">
-              {product.sizes.map((size) => (
-                <Button variant="outline" class="min-w-[60px]">
+              {product.sizes.map((size: string) => (
+                <Button variant="outline" className="min-w-[60px]">
                   {size}
                 </Button>
               ))}
@@ -147,8 +148,8 @@ const savings = product.salePrice
               Select Color: <span class="font-normal text-muted-foreground">{product.colors[0]}</span>
             </label>
             <div class="flex flex-wrap gap-2">
-              {product.colors.map((color) => (
-                <Badge variant="outline" class="cursor-pointer px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-colors">
+              {product.colors.map((color: string) => (
+                <Badge variant="outline" className="cursor-pointer px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-colors">
                   {color}
                 </Badge>
               ))}
@@ -164,11 +165,11 @@ const savings = product.salePrice
 
           <!-- Add to Cart -->
           <div class="space-y-3">
-            <Button size="lg" class="w-full h-14 text-lg">
-              <ShoppingCart class="mr-2 h-5 w-5" />
+            <Button size="lg" className="w-full h-14 text-lg">
+              <ShoppingCart className="mr-2 h-5 w-5" />
               Add to Cart - ${displayPrice}
             </Button>
-            <Button size="lg" variant="outline" class="w-full h-14 text-lg">
+            <Button size="lg" variant="outline" className="w-full h-14 text-lg">
               Buy Now
             </Button>
           </div>
@@ -176,15 +177,15 @@ const savings = product.salePrice
           <!-- Features -->
           <div class="space-y-3 pt-6 border-t">
             <div class="flex items-center gap-3 text-sm">
-              <TruckIcon class="h-5 w-5 text-primary" />
+              <TruckIcon className="h-5 w-5 text-primary" />
               <span>Free shipping on orders over $100</span>
             </div>
             <div class="flex items-center gap-3 text-sm">
-              <RefreshCcw class="h-5 w-5 text-primary" />
+              <RefreshCcw className="h-5 w-5 text-primary" />
               <span>30-day easy returns</span>
             </div>
             <div class="flex items-center gap-3 text-sm">
-              <Star class="h-5 w-5 text-primary" />
+              <Star className="h-5 w-5 text-primary" />
               <span>Premium quality guaranteed</span>
             </div>
           </div>
@@ -194,10 +195,10 @@ const savings = product.salePrice
       <!-- Product Details Tabs -->
       <div class="mt-20 border-t pt-12">
         <div class="grid gap-8 md:grid-cols-3">
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader>
-              <CardTitle class="text-lg">Product Details</CardTitle>
-              <CardDescription class="text-sm leading-relaxed">
+              <CardTitle className="text-lg">Product Details</CardTitle>
+              <CardDescription className="text-sm leading-relaxed">
                 <ul class="mt-4 space-y-2">
                   <li><strong>Category:</strong> {product.category}</li>
                   <li><strong>Type:</strong> {product.subcategory}</li>
@@ -209,10 +210,10 @@ const savings = product.salePrice
             </CardHeader>
           </Card>
 
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader>
-              <CardTitle class="text-lg">Shipping & Returns</CardTitle>
-              <CardDescription class="text-sm leading-relaxed">
+              <CardTitle className="text-lg">Shipping & Returns</CardTitle>
+              <CardDescription className="text-sm leading-relaxed">
                 <ul class="mt-4 space-y-2">
                   <li>• Free shipping on orders over $100</li>
                   <li>• Standard shipping: 5-7 business days</li>
@@ -224,10 +225,10 @@ const savings = product.salePrice
             </CardHeader>
           </Card>
 
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
             <CardHeader>
-              <CardTitle class="text-lg">Care Instructions</CardTitle>
-              <CardDescription class="text-sm leading-relaxed">
+              <CardTitle className="text-lg">Care Instructions</CardTitle>
+              <CardDescription className="text-sm leading-relaxed">
                 <ul class="mt-4 space-y-2">
                   <li>• Machine wash cold</li>
                   <li>• Tumble dry low</li>
@@ -247,9 +248,9 @@ const savings = product.salePrice
           <div class="mt-20 border-t pt-12">
             <h2 class="mb-8 text-3xl font-bold">You May Also Like</h2>
             <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {relatedProducts.map((relatedProduct) => (
+              {relatedProducts.map((relatedProduct: Product) => (
                 <a href={`/product/${relatedProduct.id}`}>
-                  <Card class="group overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+                  <Card className="group overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
                     <div class="aspect-square overflow-hidden">
                       <img
                         src={relatedProduct.images[0]}
@@ -258,8 +259,8 @@ const savings = product.salePrice
                         loading="lazy"
                       />
                     </div>
-                    <CardHeader class="space-y-2">
-                      <CardTitle class="text-lg line-clamp-1">
+                    <CardHeader className="space-y-2">
+                      <CardTitle className="text-lg line-clamp-1">
                         {relatedProduct.name}
                       </CardTitle>
                       <div class="pt-2">

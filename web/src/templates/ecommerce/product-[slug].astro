@@ -1,0 +1,209 @@
+---
+/**
+ * Product Details Page Template
+ * Features: Gallery, variants, add to cart, reviews, related products
+ * Dynamic route: /store/product/[slug]
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { ProductGallery } from '@/components/ecommerce/interactive/ProductGallery';
+import { VariantSelector } from '@/components/ecommerce/interactive/VariantSelector';
+import { AddToCartButton } from '@/components/ecommerce/interactive/AddToCartButton';
+import { QuantitySelector } from '@/components/ecommerce/interactive/QuantitySelector';
+import { PriceDisplay } from '@/components/ecommerce/static/PriceDisplay';
+import { ReviewStars } from '@/components/ecommerce/static/ReviewStars';
+import { Breadcrumbs, type BreadcrumbItem } from '@/components/ecommerce/static/Breadcrumbs';
+import { ProductCard } from '@/components/ecommerce/interactive/ProductCard';
+
+const { slug } = Astro.params;
+
+// Mock product - replace with content collection or API
+const product = {
+  id: '1',
+  slug: slug || 'sample-product',
+  name: 'Premium Cotton T-Shirt',
+  description: 'Ultra-soft premium cotton t-shirt. Perfect for everyday wear with a modern fit and sustainable materials.',
+  price: 29.99,
+  compareAtPrice: 39.99,
+  images: [
+    '/images/products/tshirt-1.jpg',
+    '/images/products/tshirt-2.jpg',
+    '/images/products/tshirt-3.jpg',
+  ],
+  thumbnail: '/images/products/tshirt-1.jpg',
+  category: 'apparel',
+  tags: ['cotton', 'casual', 'sustainable'],
+  inStock: true,
+  inventory: 48,
+  rating: 4.5,
+  reviewCount: 128,
+  featured: true,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  variants: [
+    {
+      id: 'size',
+      name: 'Size',
+      type: 'size' as const,
+      options: [
+        { value: 'S', label: 'Small', inStock: true },
+        { value: 'M', label: 'Medium', inStock: true },
+        { value: 'L', label: 'Large', inStock: true },
+        { value: 'XL', label: 'Extra Large', inStock: false },
+      ],
+    },
+    {
+      id: 'color',
+      name: 'Color',
+      type: 'color' as const,
+      options: [
+        { value: '#000000', label: 'Black', inStock: true },
+        { value: '#FFFFFF', label: 'White', inStock: true },
+        { value: '#4A5568', label: 'Gray', inStock: true },
+      ],
+    },
+  ],
+};
+
+const relatedProducts = [
+  // Add related products here
+];
+
+const breadcrumbs: BreadcrumbItem[] = [
+  { label: 'Categories', href: '/store' },
+  { label: 'Apparel', href: '/store/category/apparel' },
+  { label: product.name },
+];
+---
+
+<Layout title={`${product.name} - ONE Store`} description={product.description}>
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-8">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="grid gap-8 lg:grid-cols-2">
+        <!-- Product Gallery -->
+        <div>
+          <ProductGallery client:load images={product.images} productName={product.name} />
+        </div>
+
+        <!-- Product Info -->
+        <div>
+          <h1 class="text-3xl font-bold text-foreground">{product.name}</h1>
+
+          <div class="mt-4">
+            <ReviewStars rating={product.rating} reviewCount={product.reviewCount} />
+          </div>
+
+          <div class="mt-4">
+            <PriceDisplay price={product.price} compareAtPrice={product.compareAtPrice} size="lg" />
+          </div>
+
+          <p class="mt-6 text-muted-foreground">{product.description}</p>
+
+          <!-- Variants -->
+          {product.variants && product.variants.length > 0 && (
+            <div class="mt-8">
+              <VariantSelector client:load variants={product.variants} />
+            </div>
+          )}
+
+          <!-- Quantity -->
+          <div class="mt-6">
+            <label class="mb-2 block text-sm font-medium text-foreground">Quantity</label>
+            <QuantitySelector client:load initialQuantity={1} max={product.inventory} />
+          </div>
+
+          <!-- Add to Cart -->
+          <div class="mt-8">
+            <AddToCartButton
+              client:load
+              product={{
+                id: product.id,
+                name: product.name,
+                slug: product.slug,
+                price: product.price,
+                image: product.thumbnail,
+              }}
+              size="lg"
+              class="w-full"
+            />
+          </div>
+
+          <!-- Stock Status -->
+          <div class="mt-4">
+            {product.inStock ? (
+              <p class="text-sm text-green-600">
+                ✓ In stock ({product.inventory} available)
+              </p>
+            ) : (
+              <p class="text-sm text-destructive">Out of stock</p>
+            )}
+          </div>
+
+          <!-- Features -->
+          <div class="mt-8 space-y-3 border-t border-border pt-6">
+            <div class="flex items-center gap-3 text-sm">
+              <svg class="h-5 w-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-muted-foreground">Free shipping on orders over $50</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+              <svg class="h-5 w-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-muted-foreground">30-day returns</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+              <svg class="h-5 w-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-muted-foreground">1-year warranty</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Details Tabs -->
+      <div class="mt-16">
+        <div class="border-b border-border">
+          <nav class="-mb-px flex gap-8">
+            <button class="border-b-2 border-primary px-1 py-4 text-sm font-medium text-primary">
+              Description
+            </button>
+            <button class="border-b-2 border-transparent px-1 py-4 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground">
+              Reviews ({product.reviewCount})
+            </button>
+            <button class="border-b-2 border-transparent px-1 py-4 text-sm font-medium text-muted-foreground hover:border-border hover:text-foreground">
+              Shipping
+            </button>
+          </nav>
+        </div>
+        <div class="py-8">
+          <div class="prose prose-sm max-w-none dark:prose-invert">
+            <p>Detailed product description goes here. This section can include:</p>
+            <ul>
+              <li>Material composition</li>
+              <li>Care instructions</li>
+              <li>Sizing information</li>
+              <li>Sustainability features</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Products -->
+      {relatedProducts.length > 0 && (
+        <div class="mt-16">
+          <h2 class="mb-8 text-2xl font-bold text-foreground">You May Also Like</h2>
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
+            {relatedProducts.map((product) => (
+              <ProductCard client:load product={product} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>

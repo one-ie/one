@@ -7,9 +7,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    setupFiles: ['./tests/config/setup.ts'],
+    setupFiles: ['./tests/setup.ts'],
     include: ['tests/**/*.test.{ts,tsx}', 'src/tests/**/*.test.{ts,tsx}'],
-    exclude: ['node_modules', 'dist', '.astro', 'test'],
+    exclude: ['node_modules', 'dist', '.astro'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
