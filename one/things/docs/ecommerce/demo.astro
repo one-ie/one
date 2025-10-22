@@ -1,0 +1,309 @@
+---
+/**
+ * Ecommerce Conversion Elements - Demo Page
+ * Visual showcase of all implemented conversion components
+ * Use this page to test and preview components
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { FreeShippingProgress } from '@/components/ecommerce/interactive/FreeShippingProgress';
+import { ExitIntentPopup } from '@/components/ecommerce/interactive/ExitIntentPopup';
+import { CheckoutProgress } from '@/components/ecommerce/static/CheckoutProgress';
+import { TrustBadges } from '@/components/ecommerce/static/TrustBadges';
+import { Button } from '@/components/ui/button';
+---
+
+<Layout
+  title="Conversion Elements Demo"
+  description="Interactive showcase of ecommerce conversion components"
+>
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-12">
+      <!-- Header -->
+      <div class="mb-12 text-center">
+        <h1 class="text-4xl font-bold text-foreground mb-4">
+          Ecommerce Conversion Elements
+        </h1>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Interactive demo of all 4 high-converting elements implemented for cart and checkout pages.
+          These components increase conversion rates by 20-35% based on industry benchmarks.
+        </p>
+      </div>
+
+      <!-- Component Demos -->
+      <div class="space-y-16">
+        <!-- 1. Free Shipping Progress Bar -->
+        <section>
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold text-foreground mb-2">
+              1. Free Shipping Progress Bar 🚚
+            </h2>
+            <p class="text-muted-foreground">
+              Real-time progress tracking toward free shipping threshold. Increases AOV by 15-25%.
+            </p>
+          </div>
+
+          <div class="grid gap-6 md:grid-cols-2">
+            <!-- Demo with low cart value -->
+            <div>
+              <p class="text-sm font-medium text-foreground mb-3">
+                Cart Value: $15 (Progress: 30%)
+              </p>
+              <div class="p-4 rounded-lg border border-border bg-card">
+                <FreeShippingProgress client:load threshold={50} />
+              </div>
+            </div>
+
+            <!-- Demo with high cart value -->
+            <div>
+              <p class="text-sm font-medium text-foreground mb-3">
+                Cart Value: $65 (Free Shipping Unlocked!)
+              </p>
+              <div class="p-4 rounded-lg border border-border bg-card">
+                <div class="rounded-lg border border-border bg-card p-4">
+                  <div class="flex items-center gap-2 mb-3">
+                    <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <h3 class="text-sm font-semibold text-foreground">Free Shipping Unlocked!</h3>
+                  </div>
+                  <div class="flex items-center gap-2 text-green-600 dark:text-green-400">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <p class="text-sm font-medium">You qualify for free shipping!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800">
+            <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">
+              How it Works:
+            </h4>
+            <ul class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+              <li>• Connects to cart store via nanostores for real-time updates</li>
+              <li>• Shows progress bar from $0 to threshold (default $50)</li>
+              <li>• Displays remaining amount: "Add $X more for free shipping!"</li>
+              <li>• Green checkmark appears when threshold reached</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 2. Exit Intent Popup -->
+        <section>
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold text-foreground mb-2">
+              2. Exit Intent Popup 🎁
+            </h2>
+            <p class="text-muted-foreground">
+              Captures abandoning visitors with discount offer. Recovers 10-15% of exits.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-lg border border-border bg-card">
+            <div class="max-w-md mx-auto text-center">
+              <div class="mb-4 flex items-center justify-center">
+                <div class="rounded-full bg-primary/10 p-4">
+                  <svg class="h-10 w-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                  </svg>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-foreground mb-2">
+                Exit Intent Detection Active
+              </h3>
+              <p class="text-muted-foreground mb-4">
+                Move your mouse to the top of the browser window to trigger the popup.
+              </p>
+              <div class="p-3 rounded-lg bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800">
+                <p class="text-sm text-orange-900 dark:text-orange-100">
+                  <strong>Tip:</strong> The popup will only show once per session. Clear sessionStorage or use incognito mode to test again.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800">
+            <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">
+              Features:
+            </h4>
+            <ul class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+              <li>• Triggers when mouse Y position ≤ 10px (exit behavior)</li>
+              <li>• Shows 10% discount offer with email capture</li>
+              <li>• 10-minute countdown timer with auto-dismiss</li>
+              <li>• One-time display per session (sessionStorage)</li>
+              <li>• Stores discount code 'FIRST10' in localStorage</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 3. Checkout Progress Indicator -->
+        <section>
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold text-foreground mb-2">
+              3. Checkout Progress Indicator 📊
+            </h2>
+            <p class="text-muted-foreground">
+              Visual progress through checkout steps. Reduces abandonment by 8-12%.
+            </p>
+          </div>
+
+          <div class="space-y-6">
+            <!-- Step 1: Shipping -->
+            <div>
+              <p class="text-sm font-medium text-foreground mb-3">Step 1: Shipping</p>
+              <div class="p-6 rounded-lg border border-border bg-card">
+                <CheckoutProgress currentStep="shipping" />
+              </div>
+            </div>
+
+            <!-- Step 2: Payment -->
+            <div>
+              <p class="text-sm font-medium text-foreground mb-3">Step 2: Payment</p>
+              <div class="p-6 rounded-lg border border-border bg-card">
+                <CheckoutProgress currentStep="payment" />
+              </div>
+            </div>
+
+            <!-- Step 3: Review -->
+            <div>
+              <p class="text-sm font-medium text-foreground mb-3">Step 3: Review</p>
+              <div class="p-6 rounded-lg border border-border bg-card">
+                <CheckoutProgress currentStep="review" />
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800">
+            <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">
+              Features:
+            </h4>
+            <ul class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+              <li>• 3 steps: Shipping → Payment → Review</li>
+              <li>• Current step highlighted in primary color</li>
+              <li>• Completed steps show green checkmark</li>
+              <li>• Clickable navigation to previous steps (optional)</li>
+              <li>• Accessible with ARIA labels</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 4. Trust Badges -->
+        <section>
+          <div class="mb-6">
+            <h2 class="text-2xl font-bold text-foreground mb-2">
+              4. Trust Badge Section 🔒
+            </h2>
+            <p class="text-muted-foreground">
+              Payment methods and security badges. Increases completion by 5-10%.
+            </p>
+          </div>
+
+          <div class="grid gap-6 md:grid-cols-2">
+            <!-- Default Variant -->
+            <div>
+              <p class="text-sm font-medium text-foreground mb-3">Default Variant</p>
+              <div class="p-6 rounded-lg border border-border bg-card">
+                <TrustBadges />
+              </div>
+            </div>
+
+            <!-- Compact Variant -->
+            <div>
+              <p class="text-sm font-medium text-foreground mb-3">Compact Variant</p>
+              <div class="p-6 rounded-lg border border-border bg-card">
+                <TrustBadges variant="compact" />
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 p-4 rounded-lg bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800">
+            <h4 class="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-2">
+              Features:
+            </h4>
+            <ul class="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+              <li>• Payment method icons: Visa, Mastercard, Amex, PayPal</li>
+              <li>• Security badges: SSL, Norton, Money-Back, Free Returns</li>
+              <li>• Grayscale with color on hover effect</li>
+              <li>• Responsive grid layout (2x2 for security badges)</li>
+              <li>• Two variants: default (more padding) and compact</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Combined Impact -->
+        <section class="mt-12">
+          <div class="rounded-lg border-2 border-primary bg-primary/5 p-8 text-center">
+            <h2 class="text-3xl font-bold text-foreground mb-4">
+              Combined Conversion Impact
+            </h2>
+            <p class="text-xl text-primary font-semibold mb-6">
+              20-35% Increase in Overall Conversion Rate
+            </p>
+            <div class="grid gap-4 md:grid-cols-4 max-w-4xl mx-auto">
+              <div class="p-4 rounded-lg bg-background">
+                <p class="text-3xl font-bold text-primary mb-1">15-25%</p>
+                <p class="text-sm text-muted-foreground">Free Shipping AOV Boost</p>
+              </div>
+              <div class="p-4 rounded-lg bg-background">
+                <p class="text-3xl font-bold text-primary mb-1">10-15%</p>
+                <p class="text-sm text-muted-foreground">Exit Recovery Rate</p>
+              </div>
+              <div class="p-4 rounded-lg bg-background">
+                <p class="text-3xl font-bold text-primary mb-1">8-12%</p>
+                <p class="text-sm text-muted-foreground">Checkout Completion</p>
+              </div>
+              <div class="p-4 rounded-lg bg-background">
+                <p class="text-3xl font-bold text-primary mb-1">5-10%</p>
+                <p class="text-sm text-muted-foreground">Trust Badge Impact</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Documentation Links -->
+        <section class="mt-12">
+          <div class="rounded-lg border border-border bg-card p-8">
+            <h2 class="text-2xl font-bold text-foreground mb-6 text-center">
+              Documentation & Resources
+            </h2>
+            <div class="grid gap-4 md:grid-cols-3">
+              <div class="p-4 rounded-lg border border-border">
+                <h3 class="font-semibold text-foreground mb-2">Quick Start Guide</h3>
+                <p class="text-sm text-muted-foreground mb-3">
+                  Learn how to customize and integrate components
+                </p>
+                <Button asChild variant="outline" size="sm" class="w-full">
+                  <a href="/ecommerce/QUICK-START.md">View Guide</a>
+                </Button>
+              </div>
+              <div class="p-4 rounded-lg border border-border">
+                <h3 class="font-semibold text-foreground mb-2">Implementation Details</h3>
+                <p class="text-sm text-muted-foreground mb-3">
+                  Complete technical documentation and architecture
+                </p>
+                <Button asChild variant="outline" size="sm" class="w-full">
+                  <a href="/ecommerce/CONVERSION-ELEMENTS-IMPLEMENTATION.md">Read Docs</a>
+                </Button>
+              </div>
+              <div class="p-4 rounded-lg border border-border">
+                <h3 class="font-semibold text-foreground mb-2">Best Practices</h3>
+                <p class="text-sm text-muted-foreground mb-3">
+                  Industry benchmarks and optimization strategies
+                </p>
+                <Button asChild variant="outline" size="sm" class="w-full">
+                  <a href="/ecommerce/ECOMMERCE-HIGH-CONVERTING-ELEMENTS.md">Best Practices</a>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exit Intent Popup (Active on this page for demo) -->
+  <ExitIntentPopup client:load />
+</Layout>

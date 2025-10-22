@@ -12,6 +12,7 @@ import {
   getDefaultProvider,
   defaultProvider,
   type ProviderConfig,
+  type ProviderType,
 } from "@/providers/factory";
 import type { ConvexReactClient } from "convex/react";
 import { Effect } from "effect";

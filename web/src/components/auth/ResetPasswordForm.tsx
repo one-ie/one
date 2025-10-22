@@ -31,7 +31,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
             description: "This password reset link is invalid or has expired. Please request a new one."
           })
         }
-      } catch (err) {
+      } catch {
         setTokenValid(false)
       }
     }

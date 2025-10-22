@@ -1,0 +1,215 @@
+---
+/**
+ * Store Homepage Template
+ * Features: Hero, Category Grid, Featured Collections, Testimonials
+ * Performance: 90% static HTML, minimal JavaScript
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { ProductCard } from '@/components/ecommerce/interactive/ProductCard';
+import { CategoryCard } from '@/components/ecommerce/static/CategoryCard';
+import { ProductGrid } from '@/components/ecommerce/static/ProductGrid';
+import { Button } from '@/components/ui/button';
+
+// Mock data - replace with content collections or API calls
+const featuredProducts = [
+  {
+    id: '1',
+    slug: 'premium-tshirt',
+    name: 'Premium Cotton T-Shirt',
+    description: 'Ultra-soft premium cotton',
+    price: 29.99,
+    compareAtPrice: 39.99,
+    images: ['/images/products/tshirt-1.jpg'],
+    thumbnail: '/images/products/tshirt-1.jpg',
+    category: 'apparel',
+    tags: ['cotton', 'casual'],
+    inStock: true,
+    rating: 4.5,
+    reviewCount: 128,
+    featured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    slug: 'wireless-headphones',
+    name: 'Wireless Bluetooth Headphones',
+    description: 'Premium sound quality',
+    price: 149.99,
+    images: ['/images/products/headphones-1.jpg'],
+    thumbnail: '/images/products/headphones-1.jpg',
+    category: 'electronics',
+    tags: ['audio', 'wireless'],
+    inStock: true,
+    rating: 4.8,
+    reviewCount: 342,
+    featured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '3',
+    slug: 'leather-wallet',
+    name: 'Genuine Leather Wallet',
+    description: 'Handcrafted leather',
+    price: 59.99,
+    images: ['/images/products/wallet-1.jpg'],
+    thumbnail: '/images/products/wallet-1.jpg',
+    category: 'accessories',
+    tags: ['leather', 'handmade'],
+    inStock: true,
+    rating: 4.7,
+    reviewCount: 89,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
+
+const categories = [
+  {
+    id: 'apparel',
+    slug: 'apparel',
+    name: 'Apparel',
+    description: 'Clothing and fashion',
+    image: '/images/categories/apparel.jpg',
+    productCount: 156,
+  },
+  {
+    id: 'electronics',
+    slug: 'electronics',
+    name: 'Electronics',
+    description: 'Tech and gadgets',
+    image: '/images/categories/electronics.jpg',
+    productCount: 89,
+  },
+  {
+    id: 'accessories',
+    slug: 'accessories',
+    name: 'Accessories',
+    description: 'Complete your look',
+    image: '/images/categories/accessories.jpg',
+    productCount: 234,
+  },
+];
+---
+
+<Layout title="ONE Store - Premium Products" description="Discover premium products">
+  <div class="min-h-screen bg-background">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 py-20 md:py-32">
+      <div class="container mx-auto px-4">
+        <div class="mx-auto max-w-3xl text-center">
+          <h1 class="text-4xl font-bold tracking-tight text-foreground md:text-6xl">
+            Discover Premium
+            <span class="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              Quality Products
+            </span>
+          </h1>
+          <p class="mt-6 text-lg text-muted-foreground md:text-xl">
+            Shop our curated collection of premium products. Free shipping on orders over $50.
+          </p>
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
+            <Button asChild size="lg">
+              <a href="#featured">Shop Now</a>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <a href="/store/category/all">View All Products</a>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="mb-8 text-center">
+          <h2 class="text-3xl font-bold text-foreground">Shop by Category</h2>
+          <p class="mt-2 text-muted-foreground">Explore our diverse product categories</p>
+        </div>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {categories.map((category) => <CategoryCard category={category} />)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="featured" class="bg-muted/30 py-16">
+      <div class="container mx-auto px-4">
+        <div class="mb-8 text-center">
+          <h2 class="text-3xl font-bold text-foreground">Featured Products</h2>
+          <p class="mt-2 text-muted-foreground">Hand-picked favorites just for you</p>
+        </div>
+        <ProductGrid columns={3}>
+          {featuredProducts.map((product) => (
+            <ProductCard client:load product={product} />
+          ))}
+        </ProductGrid>
+        <div class="mt-8 text-center">
+          <Button asChild variant="outline">
+            <a href="/store/category/all">View All Products →</a>
+          </Button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="mb-8 text-center">
+          <h2 class="text-3xl font-bold text-foreground">Customer Reviews</h2>
+          <p class="mt-2 text-muted-foreground">See what our customers are saying</p>
+        </div>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div class="rounded-lg border border-border bg-card p-6">
+            <div class="mb-4 flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-muted-foreground">"Exceptional quality and fast shipping. Highly recommend!"</p>
+            <p class="mt-4 font-semibold text-foreground">- Sarah J.</p>
+          </div>
+          <div class="rounded-lg border border-border bg-card p-6">
+            <div class="mb-4 flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-muted-foreground">"Best online shopping experience. Products are exactly as described."</p>
+            <p class="mt-4 font-semibold text-foreground">- Michael R.</p>
+          </div>
+          <div class="rounded-lg border border-border bg-card p-6">
+            <div class="mb-4 flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <svg key={i} class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-muted-foreground">"Customer service is outstanding. Will definitely shop again!"</p>
+            <p class="mt-4 font-semibold text-foreground">- Emily K.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gradient-to-r from-primary via-secondary to-accent py-16">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold text-white">Ready to Shop?</h2>
+        <p class="mt-4 text-lg text-white/90">
+          Join thousands of happy customers. Free shipping on orders over $50.
+        </p>
+        <Button asChild size="lg" variant="secondary" class="mt-8">
+          <a href="/store/category/all">Browse All Products</a>
+        </Button>
+      </div>
+    </section>
+  </div>
+</Layout>

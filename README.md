@@ -1,4 +1,4 @@
-# ONE Platform v3.5.0
+# ONE Platform v3.6.0
 
 # ONE
 

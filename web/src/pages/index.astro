@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { GetStartedPrompt } from '@/components/GetStartedPrompt';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -106,8 +107,18 @@ const outerOrbits = [
   },
 ];
 
+// Detect if this is ONE Platform or a customer org
+const isONE = import.meta.env.ORG_NAME === "one" || !import.meta.env.ORG_NAME;
+const orgName = import.meta.env.ORG_NAME || "ONE";
 ---
 
+{!isONE ? (
+  <!-- Customer org: Show GetStartedPrompt -->
+  <Layout title={`${orgName} - Get Started`}>
+    <GetStartedPrompt client:load orgName={orgName} />
+  </Layout>
+) : (
+  <!-- ONE Platform: Show full homepage -->
 <Layout title="ONE - Build AI Agents, Applications, and Your Audience">
   <style is:global>
     /* Desktop only: hide header until scroll on home page */
@@ -116,7 +127,9 @@ const outerOrbits = [
         opacity: 0;
         pointer-events: none;
         transform: translateY(-12px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
       }
       body.home-header-hidden.home-header-visible header[data-home-header] {
         opacity: 1;
@@ -223,7 +236,8 @@ const outerOrbits = [
           class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground"
           data-usal="fade-up duration-700 delay-200"
         >
-          From kids learning to code to enterprises managing billions in revenue—the same 6-dimension ontology scales to your needs.
+          From kids learning to code to enterprises managing billions in
+          revenue—the same 6-dimension ontology scales to your needs.
         </p>
       </div>
 
@@ -242,7 +256,8 @@ const outerOrbits = [
             </div>
             <CardTitle className="text-xl">For Kids 🧒</CardTitle>
             <CardDescription className="leading-relaxed">
-              Create, share, and play safely. Learn to build your first AI agent or community.
+              Create, share, and play safely. Learn to build your first AI agent
+              or community.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
               <Badge variant="secondary" className="text-xs">Communities</Badge>
@@ -265,7 +280,8 @@ const outerOrbits = [
             </div>
             <CardTitle className="text-xl">For Young People 🧑‍💻</CardTitle>
             <CardDescription className="leading-relaxed">
-              Learn skills, build projects, start your first side hustle. Launch your career.
+              Learn skills, build projects, start your first side hustle. Launch
+              your career.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
               <Badge variant="secondary" className="text-xs">Courses</Badge>
@@ -288,7 +304,8 @@ const outerOrbits = [
             </div>
             <CardTitle className="text-xl">For Creators 🧑‍🎨</CardTitle>
             <CardDescription className="leading-relaxed">
-              Build your audience, clone yourself, monetize your passion. AI works for you 24/7.
+              Build your audience, clone yourself, monetize your passion. AI
+              works for you 24/7.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
               <Badge variant="secondary" className="text-xs">AI Clones</Badge>
@@ -311,11 +328,13 @@ const outerOrbits = [
             </div>
             <CardTitle className="text-xl">For Sellers 🛒</CardTitle>
             <CardDescription className="leading-relaxed">
-              Sell products, manage customers, automate sales. AI agents handle the funnel.
+              Sell products, manage customers, automate sales. AI agents handle
+              the funnel.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
               <Badge variant="secondary" className="text-xs">Products</Badge>
-              <Badge variant="secondary" className="text-xs">Sales Agents</Badge>
+              <Badge variant="secondary" className="text-xs">Sales Agents</Badge
+              >
               <Badge variant="secondary" className="text-xs">Analytics</Badge>
             </div>
           </CardHeader>
@@ -334,7 +353,8 @@ const outerOrbits = [
             </div>
             <CardTitle className="text-xl">For Marketers 📈</CardTitle>
             <CardDescription className="leading-relaxed">
-              Launch campaigns, generate leads, analyze performance. Data-driven automation.
+              Launch campaigns, generate leads, analyze performance. Data-driven
+              automation.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
               <Badge variant="secondary" className="text-xs">Campaigns</Badge>
@@ -357,7 +377,8 @@ const outerOrbits = [
             </div>
             <CardTitle className="text-xl">For Designers 🎨</CardTitle>
             <CardDescription className="leading-relaxed">
-              Create assets, build templates, maintain brand consistency. Design at scale.
+              Create assets, build templates, maintain brand consistency. Design
+              at scale.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
               <Badge variant="secondary" className="text-xs">Templates</Badge>
@@ -380,10 +401,12 @@ const outerOrbits = [
             </div>
             <CardTitle className="text-xl">For Engineers ⚙️</CardTitle>
             <CardDescription className="leading-relaxed">
-              Connect systems, automate workflows, build integrations. APIs that just work.
+              Connect systems, automate workflows, build integrations. APIs that
+              just work.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
-              <Badge variant="secondary" className="text-xs">Integrations</Badge>
+              <Badge variant="secondary" className="text-xs">Integrations</Badge
+              >
               <Badge variant="secondary" className="text-xs">Workflows</Badge>
               <Badge variant="secondary" className="text-xs">APIs</Badge>
             </div>
@@ -403,7 +426,8 @@ const outerOrbits = [
             </div>
             <CardTitle className="text-xl">For Executives 🤵</CardTitle>
             <CardDescription className="leading-relaxed">
-              Monitor performance, make data-driven decisions, oversee strategy. Business intelligence.
+              Monitor performance, make data-driven decisions, oversee strategy.
+              Business intelligence.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
               <Badge variant="secondary" className="text-xs">Analytics</Badge>
@@ -418,9 +442,13 @@ const outerOrbits = [
         class="mt-16 rounded-lg border border-primary/20 bg-primary/5 p-8 backdrop-blur text-center"
       >
         <p class="text-lg leading-relaxed">
-          <strong class="text-foreground">Same platform. Same 6 dimensions. Infinite possibilities.</strong>
+          <strong class="text-foreground"
+            >Same platform. Same 6 dimensions. Infinite possibilities.</strong
+          >
           <br class="hidden sm:block" />
-          <span class="text-muted-foreground">The ontology adapts to YOUR world, not the other way around.</span>
+          <span class="text-muted-foreground"
+            >The ontology adapts to YOUR world, not the other way around.</span
+          >
         </p>
         <div class="mt-6">
           <a href="/ontology">
@@ -435,9 +463,7 @@ const outerOrbits = [
   </section>
 
   <!-- How It Works -->
-  <section
-    class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
-  >
+  <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
     <div class="mx-auto max-w-full sm:max-w-6xl">
       <!-- Orbiting Circles with Logos -->
       <div
@@ -453,8 +479,7 @@ const outerOrbits = [
               stroke="currentColor"
               stroke-opacity="0.12"
               stroke-width="1.5"
-              stroke-dasharray="6 4"
-            ></circle>
+              stroke-dasharray="6 4"></circle>
             <circle
               cx="450"
               cy="450"
@@ -463,8 +488,7 @@ const outerOrbits = [
               stroke="currentColor"
               stroke-opacity="0.1"
               stroke-width="1.5"
-              stroke-dasharray="6 4"
-            ></circle>
+              stroke-dasharray="6 4"></circle>
           </svg>
         </div>
 
@@ -483,61 +507,65 @@ const outerOrbits = [
           </div>
         </div>
 
-        {innerOrbits.map(({ startAngle, duration, logo, name, caption }, index) => (
-          <OrbitingCircles
-            radius={240}
-            duration={duration}
-            startAngle={startAngle}
-            client:load
-          >
-            <div class="flex flex-col items-center text-center">
-              <div
-                class="flex h-14 w-14 items-center justify-center rounded-full bg-background/90 p-2 shadow-sm backdrop-blur"
+        {
+          innerOrbits.map(
+            ({ startAngle, duration, logo, name, caption }, index) => (
+              <OrbitingCircles
+                radius={240}
+                duration={duration}
+                startAngle={startAngle}
+                client:load
               >
-                <img
-                  src={logo}
-                  alt={name}
-                  class="h-full w-full object-contain"
-                  loading="lazy"
-                />
-              </div>
-              <span class="mt-2 text-sm font-medium text-foreground">
-                {name}
-              </span>
-              <span class="text-xs text-muted-foreground whitespace-nowrap">
-                {caption}
-              </span>
-            </div>
-          </OrbitingCircles>
-        ))}
+                <div class="flex flex-col items-center text-center">
+                  <div class="flex h-14 w-14 items-center justify-center rounded-full bg-background/90 p-2 shadow-sm backdrop-blur">
+                    <img
+                      src={logo}
+                      alt={name}
+                      class="h-full w-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <span class="mt-2 text-sm font-medium text-foreground">
+                    {name}
+                  </span>
+                  <span class="text-xs text-muted-foreground whitespace-nowrap">
+                    {caption}
+                  </span>
+                </div>
+              </OrbitingCircles>
+            )
+          )
+        }
 
-        {outerOrbits.map(({ startAngle, duration, logo, name, caption }, index) => (
-          <OrbitingCircles
-            radius={360}
-            duration={duration}
-            startAngle={startAngle}
-            client:load
-          >
-            <div class="flex flex-col items-center text-center">
-              <div
-                class="flex h-16 w-16 items-center justify-center rounded-full bg-card/70 p-3 shadow-md backdrop-blur"
+        {
+          outerOrbits.map(
+            ({ startAngle, duration, logo, name, caption }, index) => (
+              <OrbitingCircles
+                radius={360}
+                duration={duration}
+                startAngle={startAngle}
+                client:load
               >
-                <img
-                  src={logo}
-                  alt={name}
-                  class="h-full w-full object-contain"
-                  loading="lazy"
-                />
-              </div>
-              <span class="mt-2 text-sm font-semibold text-foreground">
-                {name}
-              </span>
-              <span class="text-xs text-muted-foreground whitespace-nowrap">
-                {caption}
-              </span>
-            </div>
-          </OrbitingCircles>
-        ))}
+                <div class="flex flex-col items-center text-center">
+                  <div class="flex h-16 w-16 items-center justify-center rounded-full bg-card/70 p-3 shadow-md backdrop-blur">
+                    <img
+                      src={logo}
+                      alt={name}
+                      class="h-full w-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <span class="mt-2 text-sm font-semibold text-foreground">
+                    {name}
+                  </span>
+                  <span class="text-xs text-muted-foreground whitespace-nowrap">
+                    {caption}
+                  </span>
+                </div>
+              </OrbitingCircles>
+            )
+          )
+        }
       </div>
 
       <div class="mb-20 space-y-4 text-center">
@@ -585,13 +613,16 @@ const outerOrbits = [
             </CardDescription>
             <div class="space-y-2 pt-2">
               <div class="text-xs text-muted-foreground">
-                <span class="font-semibold text-foreground">Creator:</span> "CREATE my AI clone"
+                <span class="font-semibold text-foreground">Creator:</span> "CREATE
+                my AI clone"
               </div>
               <div class="text-xs text-muted-foreground">
-                <span class="font-semibold text-foreground">Seller:</span> "RECORD purchase event"
+                <span class="font-semibold text-foreground">Seller:</span> "RECORD
+                purchase event"
               </div>
               <div class="text-xs text-muted-foreground">
-                <span class="font-semibold text-foreground">Engineer:</span> "CONNECT to Stripe API"
+                <span class="font-semibold text-foreground">Engineer:</span> "CONNECT
+                to Stripe API"
               </div>
             </div>
           </CardHeader>
@@ -614,13 +645,20 @@ const outerOrbits = [
             </CardDescription>
             <div class="space-y-2 pt-2">
               <div class="text-xs text-muted-foreground">
-                <Check className="inline h-3 w-3 text-green-500" /> <span class="font-semibold text-foreground">ai_clone</span> entity type exists
+                <Check className="inline h-3 w-3 text-green-500" />
+                <span class="font-semibold text-foreground">ai_clone</span> entity
+                type exists
               </div>
               <div class="text-xs text-muted-foreground">
-                <Check className="inline h-3 w-3 text-green-500" /> <span class="font-semibold text-foreground">tokens_purchased</span> event valid
+                <Check className="inline h-3 w-3 text-green-500" />
+                <span class="font-semibold text-foreground"
+                  >tokens_purchased</span
+                > event valid
               </div>
               <div class="text-xs text-muted-foreground">
-                <Check className="inline h-3 w-3 text-green-500" /> <span class="font-semibold text-foreground">Stripe</span> service available
+                <Check className="inline h-3 w-3 text-green-500" />
+                <span class="font-semibold text-foreground">Stripe</span> service
+                available
               </div>
             </div>
           </CardHeader>
@@ -645,15 +683,20 @@ const outerOrbits = [
             <div class="space-y-2 pt-2">
               <div class="flex items-center gap-2">
                 <Badge variant="secondary" className="text-xs">Backend</Badge>
-                <span class="text-xs text-muted-foreground">Mutations + Queries</span>
+                <span class="text-xs text-muted-foreground"
+                  >Mutations + Queries</span
+                >
               </div>
               <div class="flex items-center gap-2">
                 <Badge variant="secondary" className="text-xs">Frontend</Badge>
-                <span class="text-xs text-muted-foreground">React Components</span>
+                <span class="text-xs text-muted-foreground"
+                  >React Components</span
+                >
               </div>
               <div class="flex items-center gap-2">
                 <Badge variant="secondary" className="text-xs">Tests</Badge>
-                <span class="text-xs text-muted-foreground">50+ test cases</span>
+                <span class="text-xs text-muted-foreground">50+ test cases</span
+                >
               </div>
             </div>
           </CardHeader>
@@ -676,13 +719,18 @@ const outerOrbits = [
             </CardDescription>
             <div class="space-y-2 pt-2">
               <div class="text-xs text-muted-foreground">
-                <Globe className="inline h-3 w-3 text-primary" /> <span class="font-semibold text-foreground">330+ locations</span> worldwide
+                <Globe className="inline h-3 w-3 text-primary" />
+                <span class="font-semibold text-foreground">330+ locations</span
+                > worldwide
               </div>
               <div class="text-xs text-muted-foreground">
-                <Zap className="inline h-3 w-3 text-primary" /> <span class="font-semibold text-foreground">&lt; 330ms</span> average response
+                <Zap className="inline h-3 w-3 text-primary" />
+                <span class="font-semibold text-foreground">&lt; 330ms</span> average
+                response
               </div>
               <div class="text-xs text-muted-foreground">
-                <Check className="inline h-3 w-3 text-green-500" /> <span class="font-semibold text-foreground">Free tier</span> unlimited
+                <Check className="inline h-3 w-3 text-green-500" />
+                <span class="font-semibold text-foreground">Free tier</span> unlimited
               </div>
             </div>
           </CardHeader>
@@ -839,7 +887,9 @@ All deployed`}</code></pre>
               <CardTitle className="text-2xl">Sales Agent</CardTitle>
               <div class="flex gap-2">
                 <Badge variant="outline" className="text-xs">For Sellers</Badge>
-                <Badge variant="outline" className="text-xs">For Executives</Badge>
+                <Badge variant="outline" className="text-xs"
+                  >For Executives</Badge
+                >
               </div>
             </div>
             <CardDescription
@@ -877,8 +927,11 @@ WHEN lead sends message:
             <div class="flex items-center justify-between mb-2">
               <CardTitle className="text-2xl">Content Agent</CardTitle>
               <div class="flex gap-2">
-                <Badge variant="outline" className="text-xs">For Creators</Badge>
-                <Badge variant="outline" className="text-xs">For Marketers</Badge>
+                <Badge variant="outline" className="text-xs">For Creators</Badge
+                >
+                <Badge variant="outline" className="text-xs"
+                  >For Marketers</Badge
+                >
               </div>
             </div>
             <CardDescription
@@ -916,7 +969,9 @@ EVERY DAY at 8am:
               <CardTitle className="text-2xl">Support Agent</CardTitle>
               <div class="flex gap-2">
                 <Badge variant="outline" className="text-xs">For Sellers</Badge>
-                <Badge variant="outline" className="text-xs">For Educators</Badge>
+                <Badge variant="outline" className="text-xs"
+                  >For Educators</Badge
+                >
               </div>
             </div>
             <CardDescription
@@ -954,8 +1009,12 @@ WHEN customer asks question:
             <div class="flex items-center justify-between mb-2">
               <CardTitle className="text-2xl">Research Agent</CardTitle>
               <div class="flex gap-2">
-                <Badge variant="outline" className="text-xs">For Marketers</Badge>
-                <Badge variant="outline" className="text-xs">For Executives</Badge>
+                <Badge variant="outline" className="text-xs"
+                  >For Marketers</Badge
+                >
+                <Badge variant="outline" className="text-xs"
+                  >For Executives</Badge
+                >
               </div>
             </div>
             <CardDescription
@@ -1007,7 +1066,9 @@ EVERY WEEK:
   </section>
 
   <!-- Connections/Protocols Section -->
-  <section class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
+  <section
+    class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32"
+  >
     <div class="mx-auto max-w-full sm:max-w-6xl">
       <div class="mb-20 space-y-4 text-center">
         <Badge
@@ -1030,7 +1091,8 @@ EVERY WEEK:
           class="mx-auto max-w-3xl text-lg leading-relaxed text-muted-foreground"
           data-usal="fade-up duration-700 delay-200"
         >
-          Built on open standards. Connect to any AI framework, payment system, or communication platform. No vendor lock-in.
+          Built on open standards. Connect to any AI framework, payment system,
+          or communication platform. No vendor lock-in.
         </p>
       </div>
 
@@ -1048,7 +1110,9 @@ EVERY WEEK:
             </div>
             <CardTitle className="text-xl">ACP</CardTitle>
             <CardDescription className="leading-relaxed">
-              Agent Communication Protocol. REST-based messaging, task delegation, and multi-agent coordination. Linux Foundation standard.
+              Agent Communication Protocol. REST-based messaging, task
+              delegation, and multi-agent coordination. Linux Foundation
+              standard.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -1066,7 +1130,8 @@ EVERY WEEK:
             </div>
             <CardTitle className="text-xl">MCP</CardTitle>
             <CardDescription className="leading-relaxed">
-              Model Context Protocol. Universal AI connectivity. Access ontology, semantic search, and RAG pipelines. Anthropic standard.
+              Model Context Protocol. Universal AI connectivity. Access
+              ontology, semantic search, and RAG pipelines. Anthropic standard.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -1084,7 +1149,8 @@ EVERY WEEK:
             </div>
             <CardTitle className="text-xl">A2A</CardTitle>
             <CardDescription className="leading-relaxed">
-              Agent-to-Agent Protocol. Framework-agnostic collaboration across LangGraph, CrewAI, and custom systems. Google + Linux Foundation.
+              Agent-to-Agent Protocol. Framework-agnostic collaboration across
+              LangGraph, CrewAI, and custom systems. Google + Linux Foundation.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -1102,7 +1168,9 @@ EVERY WEEK:
             </div>
             <CardTitle className="text-xl">AP2</CardTitle>
             <CardDescription className="leading-relaxed">
-              Agent Payments Protocol. Secure autonomous transactions with verifiable credentials. Credit cards, crypto, bank transfers. 60+ partners.
+              Agent Payments Protocol. Secure autonomous transactions with
+              verifiable credentials. Credit cards, crypto, bank transfers. 60+
+              partners.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -1120,7 +1188,8 @@ EVERY WEEK:
             </div>
             <CardTitle className="text-xl">X402</CardTitle>
             <CardDescription className="leading-relaxed">
-              HTTP-Native Payments. Instant micropayments via HTTP 402. Zero fees, 2-second settlement, blockchain-agnostic. Pay-per-API-call.
+              HTTP-Native Payments. Instant micropayments via HTTP 402. Zero
+              fees, 2-second settlement, blockchain-agnostic. Pay-per-API-call.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -1138,7 +1207,9 @@ EVERY WEEK:
             </div>
             <CardTitle className="text-xl">AG-UI</CardTitle>
             <CardDescription className="leading-relaxed">
-              Agent-Generated UI. Dynamic interfaces from structured JSON. Charts, tables, forms—all type-safe and composable. Real-time rendering.
+              Agent-Generated UI. Dynamic interfaces from structured JSON.
+              Charts, tables, forms—all type-safe and composable. Real-time
+              rendering.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -1148,9 +1219,13 @@ EVERY WEEK:
         class="mt-16 rounded-lg border border-primary/20 bg-primary/5 p-8 backdrop-blur text-center"
       >
         <p class="text-lg leading-relaxed">
-          <strong class="text-foreground">One ontology. Six protocols. Universal interoperability.</strong>
+          <strong class="text-foreground"
+            >One ontology. Six protocols. Universal interoperability.</strong
+          >
           <br class="hidden sm:block" />
-          <span class="text-muted-foreground">Connect anything to everything with type-safe, open standards.</span>
+          <span class="text-muted-foreground"
+            >Connect anything to everything with type-safe, open standards.</span
+          >
         </p>
         <div class="mt-6">
           <a href="/connections">
@@ -1279,9 +1354,7 @@ EVERY WEEK:
             >
               <Globe className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-xl"
-              >Deploy Anywhere</CardTitle
-            >
+            <CardTitle className="text-xl">Deploy Anywhere</CardTitle>
             <CardDescription className="leading-relaxed">
               Download and run locally. Own 100% of data and agents. Operate on
               your infrastructure with zero lock-in.
@@ -1383,13 +1456,15 @@ EVERY WEEK:
         >
           Describe Your Website
           <br />
-          <span class="text-muted-foreground">Get Astro Pages & Components</span>
+          <span class="text-muted-foreground">Get Astro Pages & Components</span
+          >
         </h2>
         <p
           class="mx-auto max-w-2xl text-lg text-muted-foreground"
           data-usal="fade-up duration-700 delay-200"
         >
-          Describe your website in plain English. The system generates Astro pages, React components, and deploys to the edge.
+          Describe your website in plain English. The system generates Astro
+          pages, React components, and deploys to the edge.
         </p>
       </div>
 
@@ -1422,7 +1497,8 @@ STYLE: Modern, clean, primary color blue
 DEPLOY: To Cloudflare Pages`}</code></pre>
           </div>
           <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Six lines of English. Generates Astro pages, React components, responsive layout, and deploys globally.
+            Six lines of English. Generates Astro pages, React components,
+            responsive layout, and deploys globally.
           </p>
         </div>
 
@@ -1459,7 +1535,8 @@ CREATE page /blog/[slug]
   - Related posts`}</code></pre>
           </div>
           <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Complete blog system with type-safe content collections, dynamic routing, and automatic sitemap generation.
+            Complete blog system with type-safe content collections, dynamic
+            routing, and automatic sitemap generation.
           </p>
         </div>
 
@@ -1467,7 +1544,8 @@ CREATE page /blog/[slug]
           <div class="mb-4 flex items-center justify-between">
             <h3 class="text-xl font-semibold">Create Documentation</h3>
             <div class="flex gap-2">
-              <Badge variant="outline" className="text-xs">For Developers</Badge>
+              <Badge variant="outline" className="text-xs">For Developers</Badge
+              >
               <Badge variant="outline" className="text-xs">For Teams</Badge>
             </div>
           </div>
@@ -1498,7 +1576,8 @@ ADD features:
   - Edit on GitHub links`}</code></pre>
           </div>
           <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Professional docs site with search, navigation, and interactive examples. Like Astro, Convex, or shadcn docs.
+            Professional docs site with search, navigation, and interactive
+            examples. Like Astro, Convex, or shadcn docs.
           </p>
         </div>
 
@@ -1507,7 +1586,8 @@ ADD features:
             <h3 class="text-xl font-semibold">Build E-commerce Store</h3>
             <div class="flex gap-2">
               <Badge variant="outline" className="text-xs">For Sellers</Badge>
-              <Badge variant="outline" className="text-xs">For Businesses</Badge>
+              <Badge variant="outline" className="text-xs">For Businesses</Badge
+              >
             </div>
           </div>
           <div
@@ -1536,7 +1616,8 @@ ADD features:
   - Admin dashboard`}</code></pre>
           </div>
           <p class="mt-4 text-sm leading-relaxed text-muted-foreground">
-            Full e-commerce site with Stripe payments, inventory tracking, and order management. Production-ready.
+            Full e-commerce site with Stripe payments, inventory tracking, and
+            order management. Production-ready.
           </p>
         </div>
       </div>
@@ -1546,7 +1627,8 @@ ADD features:
           <strong class="text-foreground">No coding required.</strong> Describe websites
           in English, get production Astro apps.
           <br class="hidden sm:block" />
-          From simple landing pages to complex e-commerce—all generated and deployed to the edge.
+          From simple landing pages to complex e-commerce—all generated and deployed
+          to the edge.
         </p>
       </div>
     </div>
@@ -1687,7 +1769,7 @@ ADD features:
   </section>
 
   <!-- Performance Chart Section -->
-  <PerformanceChart client:load />
+  <PerformanceChart client:only="react" />
 
   <!-- Why ONE Section -->
   <section class="px-6 py-24 md:px-8 md:py-32">
@@ -1777,10 +1859,12 @@ ADD features:
               </div>
               <div class="flex items-center justify-between">
                 <CardTitle className="text-xl">Landing Pages</CardTitle>
-                <Badge variant="outline" className="text-xs">For Everyone</Badge>
+                <Badge variant="outline" className="text-xs">For Everyone</Badge
+                >
               </div>
               <CardDescription className="text-sm leading-relaxed">
-                SaaS, product launches, marketing campaigns. Hero sections, pricing tables, testimonials. Deploy in minutes.
+                SaaS, product launches, marketing campaigns. Hero sections,
+                pricing tables, testimonials. Deploy in minutes.
               </CardDescription>
               <div class="flex flex-wrap gap-2 pt-2">
                 <Badge variant="secondary" className="text-xs">Hero</Badge>
@@ -1799,10 +1883,13 @@ ADD features:
               </div>
               <div class="flex items-center justify-between">
                 <CardTitle className="text-xl">Documentation Sites</CardTitle>
-                <Badge variant="outline" className="text-xs">For Developers</Badge>
+                <Badge variant="outline" className="text-xs"
+                  >For Developers</Badge
+                >
               </div>
               <CardDescription className="text-sm leading-relaxed">
-                Technical docs, API references, knowledge bases. Auto-generated nav, full-text search, version control.
+                Technical docs, API references, knowledge bases. Auto-generated
+                nav, full-text search, version control.
               </CardDescription>
               <div class="flex flex-wrap gap-2 pt-2">
                 <Badge variant="secondary" className="text-xs">MDX</Badge>
@@ -1824,7 +1911,8 @@ ADD features:
                 <Badge variant="outline" className="text-xs">For Sellers</Badge>
               </div>
               <CardDescription className="text-sm leading-relaxed">
-                Online stores with Stripe payments. Product catalogs, shopping carts, inventory, order management.
+                Online stores with Stripe payments. Product catalogs, shopping
+                carts, inventory, order management.
               </CardDescription>
               <div class="flex flex-wrap gap-2 pt-2">
                 <Badge variant="secondary" className="text-xs">Products</Badge>
@@ -2037,7 +2125,7 @@ ADD features:
         >
           <span class="block">Download Free.</span>
           <span
-            class="block bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent"
+            class="block gradient-text"
           >
             Deploy Now.
           </span>
@@ -2091,10 +2179,7 @@ ADD features:
         class="flex flex-col gap-4 sm:flex-row sm:justify-center"
         data-usal="fade-up duration-700 delay-300"
       >
-        <a
-          href="/download"
-          class="group"
-        >
+        <a href="/download" class="group">
           <Button
             size="lg"
             className="h-18 w-full sm:w-auto px-12 text-lg font-bold shadow-2xl shadow-primary/30 transition-all hover:scale-105 hover:shadow-primary/50"
@@ -2251,3 +2336,4 @@ ADD features:
     </div>
   </section>
 </Layout>
+)}

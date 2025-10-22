@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '../../../layouts/Layout.astro';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -9,12 +9,13 @@ import {
   CardContent,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { products } from '@/lib/products';
+import { products } from '../lib/products';
+import type { Product } from '../lib/types';
 import { ShoppingBag, TruckIcon, RefreshCcw, ShieldCheck, Star } from 'lucide-react';
 
 // Get featured products (new arrivals and sale items)
-const newArrivals = products.filter((p) => p.isNew).slice(0, 4);
-const saleItems = products.filter((p) => p.isSale).slice(0, 4);
+const newArrivals = products.filter((p: Product) => p.isNew).slice(0, 4);
+const saleItems = products.filter((p: Product) => p.isSale).slice(0, 4);
 ---
 
 <Layout title="Sho's Shop - Premium Streetwear & Contemporary Fashion">
@@ -37,7 +38,7 @@ const saleItems = products.filter((p) => p.isSale).slice(0, 4);
       <div class="text-center space-y-10">
         <!-- Brand Badge -->
         <div class="space-y-8 animate-fade-in">
-          <Badge variant="outline" class="text-sm font-semibold uppercase tracking-wider px-6 py-2 bg-background/80 backdrop-blur border-primary/30">
+          <Badge variant="outline" className="text-sm font-semibold uppercase tracking-wider px-6 py-2 bg-background/80 backdrop-blur border-primary/30">
             Premium Fashion
           </Badge>
 
@@ -116,7 +117,7 @@ const saleItems = products.filter((p) => p.isSale).slice(0, 4);
 
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {
-          newArrivals.map((product) => (
+          newArrivals.map((product: Product) => (
             <a href={`/product/${product.id}`}>
               <Card className="group overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
                 <div class="aspect-square overflow-hidden">
@@ -180,7 +181,7 @@ const saleItems = products.filter((p) => p.isSale).slice(0, 4);
 
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {
-          saleItems.map((product) => (
+          saleItems.map((product: Product) => (
             <a href={`/product/${product.id}`}>
               <Card className="group overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
                 <div class="aspect-square overflow-hidden relative">

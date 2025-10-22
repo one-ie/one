@@ -1,0 +1,135 @@
+---
+/**
+ * Category Page Template
+ * Features: Product grid, filters, sorting, pagination
+ * Dynamic route: /store/category/[slug]
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { ProductCard } from '@/components/ecommerce/interactive/ProductCard';
+import { FilterSidebar } from '@/components/ecommerce/interactive/FilterSidebar';
+import { ProductGrid } from '@/components/ecommerce/static/ProductGrid';
+import { Breadcrumbs, type BreadcrumbItem } from '@/components/ecommerce/static/Breadcrumbs';
+
+const { slug } = Astro.params;
+
+// Mock data - replace with content collections or API
+const category = {
+  id: slug || 'all',
+  slug: slug || 'all',
+  name: slug === 'all' ? 'All Products' : slug?.charAt(0).toUpperCase() + slug?.slice(1),
+  description: 'Browse our collection',
+  productCount: 42,
+};
+
+const products = [
+  {
+    id: '1',
+    slug: 'product-1',
+    name: 'Sample Product 1',
+    description: 'High quality product',
+    price: 49.99,
+    compareAtPrice: 69.99,
+    images: ['/images/products/sample-1.jpg'],
+    thumbnail: '/images/products/sample-1.jpg',
+    category: slug || 'all',
+    tags: ['new', 'sale'],
+    inStock: true,
+    rating: 4.5,
+    reviewCount: 42,
+    featured: true,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  // Add more products...
+];
+
+const categories = [
+  { id: 'apparel', name: 'Apparel' },
+  { id: 'electronics', name: 'Electronics' },
+  { id: 'accessories', name: 'Accessories' },
+];
+
+const tags = ['new', 'sale', 'premium', 'eco-friendly'];
+
+const breadcrumbs: BreadcrumbItem[] = [
+  { label: 'Categories', href: '/store' },
+  { label: category.name },
+];
+---
+
+<Layout title={`${category.name} - ONE Store`} description={category.description}>
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-8">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold text-foreground">{category.name}</h1>
+        <p class="mt-2 text-muted-foreground">
+          {category.productCount} products
+        </p>
+      </div>
+
+      <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+        <!-- Filters Sidebar -->
+        <aside class="mb-8 lg:mb-0">
+          <div class="rounded-lg border border-border bg-card p-6">
+            <h2 class="mb-4 text-lg font-semibold text-foreground">Filters</h2>
+            <FilterSidebar client:load categories={categories} tags={tags} />
+          </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <div class="lg:col-span-3">
+          <ProductGrid columns={3}>
+            {products.map((product) => (
+              <ProductCard client:load product={product} />
+            ))}
+          </ProductGrid>
+
+          <!-- Empty State -->
+          {products.length === 0 && (
+            <div class="py-16 text-center">
+              <svg
+                class="mx-auto h-16 w-16 text-muted-foreground"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                />
+              </svg>
+              <h3 class="mt-4 text-lg font-semibold text-foreground">No products found</h3>
+              <p class="mt-2 text-muted-foreground">Try adjusting your filters</p>
+            </div>
+          )}
+
+          <!-- Pagination Placeholder -->
+          {products.length > 0 && (
+            <div class="mt-8 flex justify-center gap-2">
+              <button class="rounded-md border border-border bg-background px-4 py-2 text-sm hover:bg-accent">
+                Previous
+              </button>
+              <button class="rounded-md border border-primary bg-primary px-4 py-2 text-sm text-primary-foreground">
+                1
+              </button>
+              <button class="rounded-md border border-border bg-background px-4 py-2 text-sm hover:bg-accent">
+                2
+              </button>
+              <button class="rounded-md border border-border bg-background px-4 py-2 text-sm hover:bg-accent">
+                3
+              </button>
+              <button class="rounded-md border border-border bg-background px-4 py-2 text-sm hover:bg-accent">
+                Next
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

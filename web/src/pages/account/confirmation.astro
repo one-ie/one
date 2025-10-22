@@ -1,0 +1,278 @@
+---
+/**
+ * Order Confirmation Page
+ * Displays order details after successful payment
+ *
+ * URL: /orders/confirmation?orderId=pi_xxx
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+// Get order ID from URL
+const orderId = Astro.url.searchParams.get('orderId');
+
+let order: any = null;
+let error: string | null = null;
+
+if (!orderId) {
+  error = 'No order ID provided';
+} else {
+  try {
+    // Fetch order status from API
+    const response = await fetch(
+      `${Astro.url.origin}/api/checkout/status/${orderId}`
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      error = errorData.error || 'Failed to load order details';
+    } else {
+      order = await response.json();
+    }
+  } catch (err) {
+    console.error('Order fetch error:', err);
+    error = 'Failed to load order details';
+  }
+}
+
+/**
+ * Format currency
+ */
+function formatCurrency(amount: number, currency: string = 'usd'): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency.toUpperCase(),
+  }).format(amount / 100);
+}
+
+/**
+ * Format date
+ */
+function formatDate(timestamp: number): string {
+  return new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  }).format(new Date(timestamp));
+}
+---
+
+<Layout title="Order Confirmation - ONE Platform">
+  <div class="min-h-screen bg-background py-12">
+    <div class="container mx-auto max-w-3xl px-4">
+      {
+        error ? (
+          /* Error State */
+          <Card>
+            <CardContent className="p-8 text-center">
+              <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
+                <svg
+                  class="h-8 w-8 text-destructive"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+              <h1 class="mb-2 text-2xl font-bold">Order Not Found</h1>
+              <p class="text-muted-foreground">{error}</p>
+              <Button className="mt-6">
+                <a href="/">Return Home</a>
+              </Button>
+            </CardContent>
+          </Card>
+        ) : order?.status === 'succeeded' ? (
+          /* Success State */
+          <div class="space-y-6">
+            {/* Success Header */}
+            <Card>
+              <CardContent className="p-8 text-center">
+                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                  <svg
+                    class="h-8 w-8 text-green-600 dark:text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+                <h1 class="mb-2 text-3xl font-bold">Order Confirmed!</h1>
+                <p class="text-muted-foreground">
+                  Thank you for your purchase. We've sent a confirmation email
+                  with your order details.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Order Details */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Order Details</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <p class="text-sm text-muted-foreground">Order ID</p>
+                    <p class="font-mono text-sm">{order.paymentIntentId}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-muted-foreground">Order Date</p>
+                    <p class="text-sm">{formatDate(Date.now())}</p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-muted-foreground">Payment Status</p>
+                    <p class="text-sm">
+                      <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200">
+                        Paid
+                      </span>
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-muted-foreground">Total Amount</p>
+                    <p class="text-lg font-semibold">
+                      {formatCurrency(order.amount, order.currency)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Next Steps */}
+            <Card>
+              <CardHeader>
+                <CardTitle>What's Next?</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div class="flex gap-3">
+                  <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    1
+                  </div>
+                  <div>
+                    <p class="font-medium">Order Confirmation</p>
+                    <p class="text-sm text-muted-foreground">
+                      We've sent a confirmation email with your receipt and
+                      order details.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    2
+                  </div>
+                  <div>
+                    <p class="font-medium">Processing</p>
+                    <p class="text-sm text-muted-foreground">
+                      Your order is being prepared for shipment. You'll receive
+                      a tracking number soon.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    3
+                  </div>
+                  <div>
+                    <p class="font-medium">Delivery</p>
+                    <p class="text-sm text-muted-foreground">
+                      Estimated delivery in 5-7 business days. Track your
+                      package with the link in your shipping confirmation.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Actions */}
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <Button className="flex-1">
+                <a href="/orders" class="flex items-center gap-2">
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                    />
+                  </svg>
+                  View All Orders
+                </a>
+              </Button>
+              <Button variant="outline" className="flex-1">
+                <a href="/">Continue Shopping</a>
+              </Button>
+            </div>
+          </div>
+        ) : order?.status === 'processing' ? (
+          /* Processing State */
+          <Card>
+            <CardContent className="p-8 text-center">
+              <div class="mx-auto mb-4 h-16 w-16 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+              <h1 class="mb-2 text-2xl font-bold">Processing Payment</h1>
+              <p class="text-muted-foreground">
+                Please wait while we confirm your payment...
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          /* Failed State */
+          <Card>
+            <CardContent className="p-8 text-center">
+              <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
+                <svg
+                  class="h-8 w-8 text-destructive"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <h1 class="mb-2 text-2xl font-bold">Payment Failed</h1>
+              <p class="text-muted-foreground">
+                {order?.error || 'Something went wrong with your payment.'}
+              </p>
+              <Button className="mt-6">
+                <a href="/checkout">Try Again</a>
+              </Button>
+            </CardContent>
+          </Card>
+        )
+      }
+
+      {/* Support Section */}
+      <Card className="mt-6">
+        <CardContent className="p-6 text-center">
+          <p class="text-sm text-muted-foreground">
+            Need help with your order?{' '}
+            <a href="/support" class="font-medium text-primary hover:underline">
+              Contact Support
+            </a>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  </div>
+</Layout>

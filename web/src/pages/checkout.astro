@@ -1,0 +1,121 @@
+---
+/**
+ * Checkout Page Template
+ * Features: Shipping form, payment processing, order summary
+ * Multi-step checkout with progress indicator and trust badges
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { CheckoutFormWrapper } from '@/components/ecommerce/CheckoutFormWrapper';
+import { CheckoutProgress } from '@/components/ecommerce/static/CheckoutProgress';
+import { TrustBadges } from '@/components/ecommerce/static/TrustBadges';
+---
+
+<Layout title="Checkout - ONE Store" description="Complete your purchase">
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold text-foreground mb-8">Checkout</h1>
+
+      <!-- Checkout Progress Indicator -->
+      <div class="mb-8">
+        <CheckoutProgress currentStep="shipping" />
+      </div>
+
+      <div class="mt-8 grid gap-8 lg:grid-cols-3">
+        <!-- Checkout Form -->
+        <div class="lg:col-span-2">
+          <div class="rounded-lg border border-border bg-card p-6">
+            <CheckoutFormWrapper client:load />
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+          <div class="rounded-lg border border-border bg-card p-6 sticky top-4">
+            <h2 class="text-lg font-semibold text-foreground">Order Summary</h2>
+
+            <div id="order-items" class="mt-4 space-y-3">
+              <!-- Order items will be rendered here -->
+            </div>
+
+            <div class="mt-6 space-y-3 border-t border-border pt-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Subtotal</span>
+                <span id="order-subtotal" class="font-medium text-foreground">$0.00</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Shipping</span>
+                <span class="font-medium text-foreground">Free</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Tax</span>
+                <span class="font-medium text-foreground">$0.00</span>
+              </div>
+              <div class="border-t border-border pt-3">
+                <div class="flex justify-between">
+                  <span class="text-base font-semibold text-foreground">Total</span>
+                  <span id="order-total" class="text-base font-bold text-foreground">$0.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="mt-6 border-t border-border pt-6">
+              <TrustBadges variant="compact" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side order summary -->
+  <script>
+    import { $cart, $cartSubtotal, $cartTotal } from '@/stores/cart';
+
+    function renderOrderSummary() {
+      const cart = $cart.get();
+      const orderItemsEl = document.getElementById('order-items');
+      const subtotalEl = document.getElementById('order-subtotal');
+      const totalEl = document.getElementById('order-total');
+
+      if (!orderItemsEl || !subtotalEl || !totalEl) return;
+
+      // Redirect if cart is empty
+      if (cart.items.length === 0) {
+        window.location.href = '/products';
+        return;
+      }
+
+      orderItemsEl.innerHTML = cart.items
+        .map(
+          (item) => `
+        <div class="flex gap-3">
+          <img
+            src="${item.image || '/placeholder.jpg'}"
+            alt="${item.name}"
+            class="h-16 w-16 rounded-md object-cover"
+          />
+          <div class="flex-1">
+            <p class="text-sm font-medium text-foreground">${item.name}</p>
+            <p class="text-xs text-muted-foreground">Qty: ${item.quantity}</p>
+          </div>
+          <p class="text-sm font-medium text-foreground">$${(item.price * item.quantity).toFixed(2)}</p>
+        </div>
+      `
+        )
+        .join('');
+
+      const subtotal = $cartSubtotal.get();
+      const total = $cartTotal.get();
+      subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+      totalEl.textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Initial render
+    renderOrderSummary();
+
+    // Subscribe to cart changes
+    $cart.subscribe(renderOrderSummary);
+  </script>
+</Layout>

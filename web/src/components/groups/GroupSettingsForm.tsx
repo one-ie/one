@@ -2,9 +2,8 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useMutation } from 'convex/react';
-import { api } from '@/lib/convex-api';
-import type { Id } from '@/lib/convex-api';
+import { useUpdateGroup, useDeleteGroup } from '@/hooks/useGroups';
+import type { Id } from '@/types/convex';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -63,8 +62,8 @@ export function GroupSettingsForm({ group, user }: GroupSettingsFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isArchiving, setIsArchiving] = React.useState(false);
 
-  const updateGroup = useMutation(api.mutations.groups.update);
-  const archiveGroup = useMutation(api.mutations.groups.archive);
+  const updateGroup = useUpdateGroup(group._id);
+  const deleteGroup = useDeleteGroup(group._id);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -79,8 +78,7 @@ export function GroupSettingsForm({ group, user }: GroupSettingsFormProps) {
   const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     try {
-      await updateGroup({
-        groupId: group._id,
+      await updateGroup.mutate({
         name: values.name,
         description: values.description,
         settings: {
@@ -101,7 +99,7 @@ export function GroupSettingsForm({ group, user }: GroupSettingsFormProps) {
   const handleArchive = async () => {
     setIsArchiving(true);
     try {
-      await archiveGroup({ groupId: group._id });
+      await deleteGroup.mutate();
       toast.success('Group archived successfully');
       window.location.href = '/groups';
     } catch (error: any) {

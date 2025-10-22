@@ -1,0 +1,155 @@
+---
+/**
+ * Checkout Page Template
+ * Features: Shipping form, payment processing, order summary
+ * Multi-step checkout with Stripe integration
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { CheckoutForm } from '@/components/ecommerce/interactive/CheckoutForm';
+---
+
+<Layout title="Checkout - ONE Store" description="Complete your purchase">
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold text-foreground">Checkout</h1>
+
+      <div class="mt-8 grid gap-8 lg:grid-cols-3">
+        <!-- Checkout Form -->
+        <div class="lg:col-span-2">
+          <div class="rounded-lg border border-border bg-card p-6">
+            <div id="checkout-form-container">
+              <!-- Form will be hydrated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+          <div class="rounded-lg border border-border bg-card p-6 sticky top-4">
+            <h2 class="text-lg font-semibold text-foreground">Order Summary</h2>
+
+            <div id="order-items" class="mt-4 space-y-3">
+              <!-- Order items will be rendered here -->
+            </div>
+
+            <div class="mt-6 space-y-3 border-t border-border pt-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Subtotal</span>
+                <span id="order-subtotal" class="font-medium text-foreground">$0.00</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Shipping</span>
+                <span class="font-medium text-foreground">Free</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Tax</span>
+                <span class="font-medium text-foreground">$0.00</span>
+              </div>
+              <div class="border-t border-border pt-3">
+                <div class="flex justify-between">
+                  <span class="text-base font-semibold text-foreground">Total</span>
+                  <span id="order-total" class="text-base font-bold text-foreground">$0.00</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="mt-6 space-y-2 border-t border-border pt-6">
+              <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span>256-bit SSL encryption</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <span>PCI DSS compliant</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Money-back guarantee</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side rendering -->
+  <script>
+    import { $cart, $cartSubtotal, $cartTotal, cartActions } from '@/stores/cart';
+    import { CheckoutForm } from '@/components/ecommerce/interactive/CheckoutForm';
+    import { createElement } from 'react';
+    import { createRoot } from 'react-dom/client';
+
+    function renderOrderSummary() {
+      const cart = $cart.get();
+      const orderItemsEl = document.getElementById('order-items');
+      const subtotalEl = document.getElementById('order-subtotal');
+      const totalEl = document.getElementById('order-total');
+
+      if (!orderItemsEl || !subtotalEl || !totalEl) return;
+
+      // Redirect if cart is empty
+      if (cart.items.length === 0) {
+        window.location.href = '/store/cart';
+        return;
+      }
+
+      orderItemsEl.innerHTML = cart.items
+        .map(
+          (item) => `
+        <div class="flex gap-3">
+          <img
+            src="${item.image || '/placeholder.jpg'}"
+            alt="${item.name}"
+            class="h-16 w-16 rounded-md object-cover"
+          />
+          <div class="flex-1">
+            <p class="text-sm font-medium text-foreground">${item.name}</p>
+            <p class="text-xs text-muted-foreground">Qty: ${item.quantity}</p>
+          </div>
+          <p class="text-sm font-medium text-foreground">$${(item.price * item.quantity).toFixed(2)}</p>
+        </div>
+      `
+        )
+        .join('');
+
+      const subtotal = $cartSubtotal.get();
+      const total = $cartTotal.get();
+      subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+      totalEl.textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Hydrate checkout form
+    const formContainer = document.getElementById('checkout-form-container');
+    if (formContainer) {
+      const root = createRoot(formContainer);
+      const total = $cartTotal.get();
+
+      root.render(
+        createElement(CheckoutForm, {
+          total,
+          onSubmit: (data) => {
+            console.log('Order submitted:', data);
+            // In production: process payment, create order, clear cart
+            cartActions.clearCart();
+            window.location.href = '/store/order-confirmation';
+          },
+        })
+      );
+    }
+
+    // Initial render
+    renderOrderSummary();
+
+    // Subscribe to cart changes
+    $cart.subscribe(renderOrderSummary);
+  </script>
+</Layout>

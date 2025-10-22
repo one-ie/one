@@ -1,0 +1,286 @@
+---
+/**
+ * Order Confirmation Page
+ * Displays successful order details after Stripe payment
+ * Features: Order summary, tracking info, next steps
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import { CheckCircle, Package, Mail, ArrowRight } from 'lucide-react';
+import { TrustBadges } from '@/components/ecommerce/static/TrustBadges';
+
+// In production, you'd fetch order details from database using query params
+const searchParams = new URL(Astro.request.url).searchParams;
+const paymentIntentId = searchParams.get('payment_intent');
+const clientSecret = searchParams.get('payment_intent_client_secret');
+
+// Order data will be loaded client-side from localStorage
+// This is just fallback data for SSR
+const fallbackOrder = {
+  id: 'ORD-LOADING',
+  date: new Date().toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }),
+  total: '$0.00',
+  subtotal: '$0.00',
+  shipping: '$0.00',
+  tax: '$0.00',
+  email: 'customer@example.com',
+  shippingAddress: {
+    fullName: 'Loading...',
+    addressLine1: '',
+    city: '',
+    state: '',
+    postalCode: '',
+  },
+  items: [],
+};
+---
+
+<Layout
+  title="Order Confirmed - ONE Store"
+  description="Thank you for your order"
+>
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-12">
+      <!-- Success Header -->
+      <div class="max-w-3xl mx-auto text-center mb-12" data-usal="fade-up duration-700">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6 animate-bounce">
+          <CheckCircle className="h-12 w-12 text-green-600" />
+        </div>
+        <h1 class="text-4xl font-bold text-foreground mb-4" data-usal="fade-up duration-700 delay-100">
+          Order Confirmed!
+        </h1>
+        <p class="text-lg text-muted-foreground mb-2">
+          Thank you for your purchase. Your order has been received and is
+          being processed.
+        </p>
+        <p class="text-sm text-muted-foreground">
+          A confirmation email has been sent to{' '}
+          <span class="font-medium text-foreground" id="order-email">{fallbackOrder.email}</span>
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto grid gap-8 lg:grid-cols-3">
+        <!-- Order Summary -->
+        <div class="lg:col-span-2 space-y-6" data-usal="fade-right duration-700 delay-200">
+          <!-- Order Info -->
+          <div class="rounded-lg border border-border bg-card p-6">
+            <h2 class="text-xl font-semibold text-foreground mb-4">
+              Order Details
+            </h2>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p class="text-muted-foreground mb-1">Order Number</p>
+                <p class="font-medium text-foreground" id="order-id">{fallbackOrder.id}</p>
+              </div>
+              <div>
+                <p class="text-muted-foreground mb-1">Order Date</p>
+                <p class="font-medium text-foreground" id="order-date">{fallbackOrder.date}</p>
+              </div>
+              <div>
+                <p class="text-muted-foreground mb-1">Total Amount</p>
+                <p class="font-medium text-foreground text-lg" id="order-total">
+                  {fallbackOrder.total}
+                </p>
+              </div>
+              <div>
+                <p class="text-muted-foreground mb-1">Payment Status</p>
+                <p class="font-medium text-green-600">Paid</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Address -->
+          <div class="rounded-lg border border-border bg-card p-6">
+            <h2 class="text-xl font-semibold text-foreground mb-4">
+              Shipping Address
+            </h2>
+            <div class="text-sm text-foreground" id="shipping-address">
+              <p class="font-medium mb-1">{fallbackOrder.shippingAddress.fullName}</p>
+              <p>{fallbackOrder.shippingAddress.addressLine1}</p>
+              <p>
+                {fallbackOrder.shippingAddress.city}, {fallbackOrder.shippingAddress.state}{' '}
+                {fallbackOrder.shippingAddress.postalCode}
+              </p>
+            </div>
+          </div>
+
+          <!-- Order Items -->
+          <div class="rounded-lg border border-border bg-card p-6">
+            <h2 class="text-xl font-semibold text-foreground mb-4">
+              Order Items
+            </h2>
+            <div class="space-y-4" id="order-items">
+              <p class="text-sm text-muted-foreground">Loading order items...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next Steps Sidebar -->
+        <div class="lg:col-span-1" data-usal="fade-left duration-700 delay-300">
+          <div class="rounded-lg border border-border bg-card p-6 space-y-6 sticky top-4">
+            <h2 class="text-xl font-semibold text-foreground">Next Steps</h2>
+
+            <div class="space-y-4">
+              <div class="flex gap-3">
+                <div class="flex-shrink-0">
+                  <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Mail className="h-4 w-4 text-primary" />
+                  </div>
+                </div>
+                <div>
+                  <h3 class="font-medium text-foreground mb-1">
+                    Check Your Email
+                  </h3>
+                  <p class="text-sm text-muted-foreground">
+                    We've sent a confirmation with your order details and
+                    receipt.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex gap-3">
+                <div class="flex-shrink-0">
+                  <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Package className="h-4 w-4 text-primary" />
+                  </div>
+                </div>
+                <div>
+                  <h3 class="font-medium text-foreground mb-1">
+                    Track Your Order
+                  </h3>
+                  <p class="text-sm text-muted-foreground">
+                    You'll receive shipping updates via email. Estimated
+                    delivery: 3-5 business days.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-border space-y-3">
+              <Button asChild className="w-full" size="lg">
+                <a href="/account/orders">
+                  <Package className="mr-2 h-4 w-4" />
+                  View My Orders
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="w-full" size="lg">
+                <a href="/products">
+                  <ArrowRight className="mr-2 h-4 w-4" />
+                  Continue Shopping
+                </a>
+              </Button>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="pt-4 border-t border-border">
+              <TrustBadges variant="compact" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Help Section -->
+      <div class="max-w-3xl mx-auto mt-12 text-center">
+        <p class="text-sm text-muted-foreground">
+          Need help with your order?{' '}
+          <a
+            href="/support"
+            class="text-primary hover:underline font-medium"
+          >
+            Contact Support
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load real order data from localStorage -->
+  <script>
+    function loadOrderData() {
+      const orderDataStr = localStorage.getItem('lastOrder');
+
+      if (!orderDataStr) {
+        console.warn('No order data found in localStorage');
+        return;
+      }
+
+      try {
+        const order = JSON.parse(orderDataStr);
+
+        // Update order ID
+        const orderIdEl = document.getElementById('order-id');
+        if (orderIdEl) orderIdEl.textContent = order.id;
+
+        // Update order date
+        const orderDateEl = document.getElementById('order-date');
+        if (orderDateEl) {
+          const date = new Date(order.date);
+          orderDateEl.textContent = date.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          });
+        }
+
+        // Update total
+        const orderTotalEl = document.getElementById('order-total');
+        if (orderTotalEl) orderTotalEl.textContent = `$${order.total.toFixed(2)}`;
+
+        // Update email
+        const orderEmailEl = document.getElementById('order-email');
+        if (orderEmailEl) orderEmailEl.textContent = order.email;
+
+        // Update shipping address
+        const shippingAddressEl = document.getElementById('shipping-address');
+        if (shippingAddressEl && order.shippingAddress) {
+          shippingAddressEl.innerHTML = `
+            <p class="font-medium mb-1">${order.shippingAddress.fullName}</p>
+            <p>${order.shippingAddress.addressLine1}</p>
+            ${order.shippingAddress.addressLine2 ? `<p>${order.shippingAddress.addressLine2}</p>` : ''}
+            <p>${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.postalCode}</p>
+            ${order.shippingAddress.country ? `<p>${order.shippingAddress.country}</p>` : ''}
+          `;
+        }
+
+        // Update order items
+        const orderItemsEl = document.getElementById('order-items');
+        if (orderItemsEl && order.items && order.items.length > 0) {
+          orderItemsEl.innerHTML = order.items
+            .map(
+              (item: any) => `
+            <div class="flex gap-4">
+              <img
+                src="${item.image || '/placeholder.jpg'}"
+                alt="${item.name}"
+                class="h-20 w-20 rounded-md object-cover"
+              />
+              <div class="flex-1">
+                <p class="font-medium text-foreground">${item.name}</p>
+                <p class="text-sm text-muted-foreground">
+                  Quantity: ${item.quantity}
+                </p>
+              </div>
+              <p class="font-medium text-foreground">$${(item.price * item.quantity).toFixed(2)}</p>
+            </div>
+          `
+            )
+            .join('');
+        }
+
+        // Clear the stored order data after loading (optional)
+        // localStorage.removeItem('lastOrder');
+
+      } catch (error) {
+        console.error('Error loading order data:', error);
+      }
+    }
+
+    // Load order data when page loads
+    loadOrderData();
+  </script>
+</Layout>

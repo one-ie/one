@@ -1,0 +1,31 @@
+feature: blog
+extends: core
+description: Blog and content publishing
+
+thingTypes:
+  - name: blog_post
+    properties:
+      title: string
+      slug: string
+      content: string
+      excerpt: string
+      featuredImage: string
+      publishedAt: number
+      tags: string[]
+      category: string
+  - name: blog_category
+    properties:
+      name: string
+      slug: string
+      description: string
+
+connectionTypes:
+  - name: posted_in
+    fromType: blog_post
+    toType: blog_category
+
+eventTypes:
+  - name: blog_post_published
+    thingType: blog_post
+  - name: blog_post_viewed
+    thingType: blog_post

@@ -64,8 +64,8 @@ web/src/tests/                   # New consolidated test location
 | `web/tests/config/providers.test.ts` | `web/src/tests/providers/providers.test.ts` | Infrastructure |
 | `web/tests/services/ThingService.test.ts` | `web/src/tests/things/entities/ThingService.test.ts` | Things |
 | `web/tests/services/validation.test.ts` | `web/src/tests/things/validation/validation.test.ts` | Things |
-| `web/test/utils/file-resolver.test.ts` | `web/src/tests/utils/file-resolver.test.ts` | Utility |
-| `web/test/components/InstallationFileBrowser.test.tsx` | `web/src/tests/components/InstallationFileBrowser.test.tsx` | Component |
+| `web/tests/utils/file-resolver.test.ts` | `web/src/tests/utils/file-resolver.test.ts` | Utility |
+| `web/tests/components/InstallationFileBrowser.test.tsx` | `web/src/tests/components/InstallationFileBrowser.test.tsx` | Component |
 
 **Total Files Moved:** 22 files (19 test files + 3 supporting files)
 
@@ -278,7 +278,7 @@ import { api } from "../../../../../backend/convex/_generated/api";
 
 6. ❌ Delete old test directories after verification:
    ```bash
-   rm -rf web/test web/tests web/src/providers/__tests__
+   rm -rf web/src/providers/__tests__
    ```
 
 ### Short-term (Expand Coverage)
@@ -335,8 +335,7 @@ Before deleting old directories, verify:
 ## Rollback Plan
 
 If issues arise, old test files still exist in original locations:
-- `web/test/`
-- `web/tests/`
+- `web/tests/` (current location for non-migrated tests)
 - `web/src/providers/__tests__/`
 
 **Do NOT delete these until:**

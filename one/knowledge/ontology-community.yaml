@@ -1,0 +1,42 @@
+feature: community
+extends: core
+description: Forums, discussions, and direct messaging
+
+thingTypes:
+  - name: forum_topic
+    properties:
+      title: string
+      slug: string
+      content: string
+      isPinned: boolean
+      isLocked: boolean
+      viewCount: number
+      replyCount: number
+  - name: forum_reply
+    properties:
+      content: string
+      topicId: string
+      replyToId: string
+  - name: direct_message
+    properties:
+      content: string
+      recipientId: string
+      readAt: number
+
+connectionTypes:
+  - name: follows
+    fromType: user
+    toType: user
+  - name: member_of
+    fromType: user
+    toType: group
+
+eventTypes:
+  - name: topic_created
+    thingType: forum_topic
+  - name: topic_replied
+    thingType: forum_reply
+  - name: message_sent
+    thingType: direct_message
+  - name: user_followed
+    thingType: user

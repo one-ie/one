@@ -8,6 +8,8 @@
  * - Global utilities
  */
 
+/* global global */
+
 import { vi } from 'vitest';
 
 // Set up environment variables for tests

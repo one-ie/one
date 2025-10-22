@@ -4,8 +4,7 @@
  */
 
 import * as React from "react";
-import { useQuery } from "convex/react";
-import { api } from "@/lib/convex-api";
+import { useGroup, useGroups, type Group } from "@/hooks/useGroups";
 import { ChevronRight, ChevronDown, Users, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,22 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import type { Id } from "@/types/convex";
 
-interface Group {
-  _id: Id<"groups">;
-  slug: string;
-  name: string;
-  type:
-    | "friend_circle"
-    | "business"
-    | "community"
-    | "dao"
-    | "government"
-    | "organization";
-  parentGroupId?: Id<"groups">;
-  status: "active" | "archived";
-  settings: {
-    visibility: "public" | "private";
-  };
+interface GroupWithDepth extends Group {
   depth?: number;
 }
 
@@ -54,14 +38,15 @@ function GroupNode({
   onGroupClick,
   selectedGroupId,
 }: {
-  group: Group;
+  group: GroupWithDepth;
   onGroupClick?: (groupId: Id<"groups">) => void;
   selectedGroupId?: Id<"groups">;
 }) {
   const [isExpanded, setIsExpanded] = React.useState(true);
 
-  const subgroups = useQuery(api.queries.groups.getSubgroups, {
+  const { data: subgroups, loading: loadingSubgroups } = useGroups({
     parentGroupId: group._id,
+    status: 'active',
   });
 
   const hasChildren = subgroups && subgroups.length > 0;
@@ -113,7 +98,7 @@ function GroupNode({
 
       {hasChildren && isExpanded && (
         <div className="mt-1">
-          {subgroups.map((subgroup: Group) => (
+          {subgroups.map((subgroup) => (
             <GroupNode
               key={subgroup._id}
               group={{ ...subgroup, depth: depth + 1 }}
@@ -134,17 +119,10 @@ export function GroupHierarchy({
   maxDepth = 10,
   className,
 }: GroupHierarchyProps) {
-  const rootGroup = useQuery(api.queries.groups.getById, {
-    groupId: rootGroupId,
-  });
-
-  const hierarchy = useQuery(api.queries.groups.getHierarchy, {
-    rootGroupId,
-    maxDepth,
-  });
+  const { data: rootGroup, loading, error } = useGroup(rootGroupId);
 
   // Loading state
-  if (rootGroup === undefined || hierarchy === undefined) {
+  if (loading) {
     return (
       <div className={cn("space-y-2", className)}>
         <Skeleton className="h-10 w-full" />
@@ -156,12 +134,11 @@ export function GroupHierarchy({
   }
 
   // Error state
-  if (!rootGroup) {
+  if (error || !rootGroup) {
     return (
       <div className={cn("rounded-lg border border-destructive p-4", className)}>
         <p className="text-sm text-destructive">
-          Group not found. The group may have been deleted or you may not have
-          access.
+          {error?.message || "Group not found. The group may have been deleted or you may not have access."}
         </p>
       </div>
     );

@@ -1,5 +1,5 @@
 import { atom } from 'nanostores';
-import type { CartItem } from '@/types/products';
+import type { CartItem } from './types';
 
 export const cartItems = atom<CartItem[]>([]);
 

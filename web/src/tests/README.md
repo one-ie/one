@@ -398,8 +398,7 @@ Add new test files to the directory structure and coverage statistics.
 ## Migration from Old Structure
 
 **Old Structure (Scattered):**
-- `web/test/` - Utils and components tests
-- `web/tests/` - Auth, providers, services, config, groups tests
+- `web/tests/` - Auth, providers, services, config, groups, utils, and components tests
 - `web/src/providers/__tests__/` - DataProvider test
 
 **New Structure (Ontology-Based):**

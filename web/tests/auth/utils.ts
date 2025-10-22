@@ -17,10 +17,12 @@ export function generateTestEmail(prefix: string = "test"): string {
 }
 
 /**
- * Generate a secure random password
+ * Generate a secure random password using Web Crypto API
  */
 export function generateTestPassword(): string {
-  return `Test${Math.random().toString(36).slice(2)}Pass123!`;
+  // Use crypto.randomUUID() for cryptographically secure randomness
+  const secureRandom = crypto.randomUUID().replace(/-/g, '').slice(0, 12);
+  return `Test${secureRandom}Pass123!`;
 }
 
 /**
@@ -54,7 +56,18 @@ export class TestLogger {
 
   log(message: string): void {
     const elapsed = Date.now() - this.startTime;
-    console.log(`[${this.testName}] [${elapsed}ms] ${message}`);
+    // Sanitize message to prevent accidental logging of sensitive data
+    const sanitizedMessage = this.sanitizeForLogging(message);
+    console.log(`[${this.testName}] [${elapsed}ms] ${sanitizedMessage}`);
+  }
+
+  private sanitizeForLogging(message: string): string {
+    // Remove potential sensitive patterns (passwords, tokens, etc.)
+    return message
+      .replace(/password[=:]\s*[^\s,}]+/gi, 'password=***')
+      .replace(/token[=:]\s*[^\s,}]+/gi, 'token=***')
+      .replace(/secret[=:]\s*[^\s,}]+/gi, 'secret=***')
+      .replace(/api[_-]?key[=:]\s*[^\s,}]+/gi, 'api_key=***');
   }
 
   success(message: string): void {

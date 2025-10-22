@@ -1,0 +1,171 @@
+---
+/**
+ * Example Product Listing Page with Advanced Filtering & Search
+ * Demonstrates integration of FilterSidebar, ProductSearch, and SortDropdown
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { FilterSidebar } from '@/components/ecommerce/interactive/FilterSidebar';
+import { ProductSearch } from '@/components/ecommerce/interactive/ProductSearch';
+import { SortDropdown } from '@/components/ecommerce/interactive/SortDropdown';
+import { ProductGrid } from '@/components/ecommerce/static/ProductGrid';
+
+// Mock data - Replace with actual database queries
+const categories = [
+  { id: 'electronics', name: 'Electronics', count: 24 },
+  { id: 'clothing', name: 'Clothing', count: 56 },
+  { id: 'home', name: 'Home & Garden', count: 32 },
+  { id: 'sports', name: 'Sports & Outdoors', count: 18 },
+  { id: 'books', name: 'Books', count: 42 },
+];
+
+const tags = ['Featured', 'New Arrival', 'Sale', 'Popular', 'Best Seller', 'Limited Edition'];
+
+const products = [
+  {
+    id: '1',
+    slug: 'wireless-headphones',
+    name: 'Premium Wireless Headphones',
+    description: 'High-quality wireless headphones with noise cancellation',
+    price: 149.99,
+    compareAtPrice: 199.99,
+    images: ['/images/headphones-1.jpg', '/images/headphones-2.jpg'],
+    thumbnail: '/images/headphones-thumb.jpg',
+    category: 'electronics',
+    tags: ['Featured', 'Best Seller'],
+    inStock: true,
+    inventory: 42,
+    rating: 4.5,
+    reviewCount: 128,
+    featured: true,
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-20'),
+  },
+  // Add more products...
+];
+
+const title = 'Shop All Products';
+const description = 'Browse our complete collection of products with advanced filtering and search.';
+---
+
+<Layout title={title} description={description}>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-foreground mb-2">{title}</h1>
+      <p class="text-muted-foreground">{description}</p>
+    </div>
+
+    <!-- Main Grid: Sidebar + Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+      <!-- Desktop Sidebar -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-4">
+          <h2 class="text-lg font-semibold text-foreground mb-4">Filters</h2>
+          <FilterSidebar
+            client:load
+            categories={categories}
+            tags={tags}
+            minPrice={0}
+            maxPrice={500}
+            onFilterChange={(filters) => {
+              console.log('Filters changed:', filters);
+              // In production, this would update the product grid
+            }}
+          />
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="lg:col-span-3">
+
+        <!-- Search Bar -->
+        <div class="mb-6">
+          <ProductSearch
+            client:load
+            products={products}
+            categories={categories}
+            placeholder="Search products by name, description, or tags..."
+            showResultsCount={true}
+            onSearchResults={(results) => {
+              console.log('Search results:', results);
+              // In production, this would update the product grid
+            }}
+          />
+        </div>
+
+        <!-- Toolbar: Mobile Filter + Sort -->
+        <div class="flex items-center justify-between mb-6 gap-4">
+
+          <!-- Mobile Filter Button (shows Sheet drawer) -->
+          <div class="lg:hidden flex-1">
+            <FilterSidebar
+              client:load
+              isMobile={true}
+              categories={categories}
+              tags={tags}
+              minPrice={0}
+              maxPrice={500}
+            />
+          </div>
+
+          <!-- Sort Dropdown -->
+          <div class="flex-shrink-0">
+            <SortDropdown
+              client:load
+              value="newest"
+              persistPreference={true}
+              onChange={(sortBy) => {
+                console.log('Sort changed:', sortBy);
+                // In production, this would re-sort the product grid
+              }}
+            />
+          </div>
+        </div>
+
+        <!-- Product Count Info -->
+        <div class="mb-4 text-sm text-muted-foreground">
+          Showing <span class="font-medium text-foreground">{products.length}</span> products
+        </div>
+
+        <!-- Product Grid -->
+        <ProductGrid products={products} />
+
+        <!-- Pagination (Future Enhancement) -->
+        <div class="mt-8 flex justify-center">
+          <p class="text-sm text-muted-foreground">
+            More pagination controls would go here
+          </p>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Additional custom styles if needed */
+  .sticky {
+    position: sticky;
+  }
+</style>
+
+<script>
+  /**
+   * Client-side enhancements
+   * This script runs in the browser for interactive features
+   */
+
+  // Example: Track filter interactions
+  document.addEventListener('filterChange', (event) => {
+    console.log('Filter analytics:', event.detail);
+    // Send to analytics service
+  });
+
+  // Example: Track search queries
+  document.addEventListener('searchQuery', (event) => {
+    console.log('Search analytics:', event.detail);
+    // Send to analytics service
+  });
+</script>

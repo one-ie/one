@@ -1,0 +1,114 @@
+---
+export const prerender = false; // Must be server-rendered to retrieve Stripe session
+
+import Layout from "../layouts/Layout.astro";
+import Stripe from "stripe";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Check, ArrowRight, Mail, Calendar } from 'lucide-react';
+import type { Stripe as StripeType } from 'stripe';
+
+const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY) as StripeType;
+const sessionId = Astro.url.searchParams.get('session_id');
+
+let session;
+try {
+  if (!sessionId) throw new Error('No session ID provided');
+  session = await stripe.checkout.sessions.retrieve(sessionId);
+} catch (e) {
+  return Astro.redirect('/stripe');
+}
+
+const { name, email } = session.customer_details || {};
+---
+
+<Layout title="ONE - Course Enrollment Confirmation">
+  <div class="container max-w-3xl mx-auto px-4 py-12">
+    {/* Success Message */}
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-6">
+        <Check className="w-8 h-8 text-green-600" />
+      </div>
+      <h1 class="text-4xl font-bold mb-4">Payment Successful!</h1>
+      {name && <p class="text-xl text-muted-foreground mb-2">Thank you for enrolling, {name}!</p>}
+      <p class="text-muted-foreground">Your course access will begin on June 1st, 2025</p>
+    </div>
+
+    {/* Payment Details Card */}
+    <Card className="mb-8">
+      <CardHeader>
+        <h2 class="text-2xl font-semibold">Enrollment Details</h2>
+      </CardHeader>
+      <CardContent>
+        <div class="space-y-4">
+          {email && (
+            <div class="flex items-start gap-3">
+              <Mail className="w-5 h-5 mt-1 text-muted-foreground" />
+              <div>
+                <p class="font-medium">Confirmation Email</p>
+                <p class="text-muted-foreground">We've sent your payment confirmation to {email}</p>
+              </div>
+            </div>
+          )}
+          <div class="flex items-start gap-3">
+            <Calendar className="w-5 h-5 mt-1 text-muted-foreground" />
+            <div>
+              <p class="font-medium">Course Start Date</p>
+              <p class="text-muted-foreground">
+                Your course begins <span class="font-medium">June 1st, 2025</span>. You'll receive your login credentials and course materials before the start date.
+              </p>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+
+    {/* Next Steps */}
+    <Card>
+      <CardHeader>
+        <h2 class="text-2xl font-semibold">Next Steps</h2>
+      </CardHeader>
+      <CardContent>
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="text-sm font-medium text-primary">1</span>
+            </div>
+            <div>
+              <p class="font-medium">Save the Date: June 1st, 2025</p>
+              <p class="text-muted-foreground">Add the course start date to your calendar to ensure you're ready to begin!</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="text-sm font-medium text-primary">2</span>
+            </div>
+            <div>
+              <p class="font-medium">Watch Your Inbox</p>
+              <p class="text-muted-foreground">We'll send your login details and course preparation materials before June 1st</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+              <span class="text-sm font-medium text-primary">3</span>
+            </div>
+            <div>
+              <p class="font-medium">Prepare Your Schedule</p>
+              <p class="text-muted-foreground">Block out time in your calendar for the course starting June 1st to maximize your learning experience</p>
+            </div>
+          </li>
+        </ul>
+      </CardContent>
+      <CardFooter>
+        <div class="flex justify-center w-full">
+          <a href="/" class="inline-flex items-center">
+            <Button variant="default" size="lg" className="gap-2">
+              Return Home
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+          </a>
+        </div>
+      </CardFooter>
+    </Card>
+  </div>
+</Layout>

@@ -2,6 +2,50 @@
 
 @import "tw-animate-css";
 
+/* Premium Shop Hero Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% auto;
+  animation: gradient 3s ease infinite;
+}
+
 @custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
 
@@ -41,6 +85,8 @@
   --color-sidebar-accent-foreground: 36 8% 96%;
   --color-sidebar-border: 0 0% 100% / 0.1;
   --color-sidebar-ring: 216 63% 17%;
+  --color-gold: 45 93% 47%;
+  --color-gold-foreground: 0 0% 0%;
   --radius-lg: 1.5rem;
   --radius-md: 0.75rem;
   --radius-sm: 0.375rem;
@@ -185,13 +231,43 @@ html, body {
 
 /* Keep gradient text readable when background clipping is unavailable */
 .bg-clip-text.text-transparent {
-  color: hsl(var(--primary));
+  color: hsl(var(--color-primary)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
 }
 
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .bg-clip-text.text-transparent {
-    color: transparent;
-    -webkit-text-fill-color: transparent;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+}
+
+/* Ensure gradient backgrounds work with text clipping */
+.bg-clip-text {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-box-decoration-break: clone !important;
+  box-decoration-break: clone !important;
+}
+
+/* Premium gradient text utility - guaranteed to work */
+.gradient-text {
+  background: linear-gradient(to right, hsl(var(--color-primary)), hsl(216 100% 50%), hsl(var(--color-secondary))) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  animation: gradient 8s ease infinite !important;
+}
+
+/* Fallback for browsers that don't support background-clip */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .gradient-text {
+    background: none !important;
+    -webkit-text-fill-color: inherit !important;
+    color: hsl(var(--color-primary)) !important;
   }
 }
 
@@ -259,4 +335,307 @@ html, body {
 body {
   background-color: hsl(var(--color-background));
   color: hsl(var(--color-foreground));
+}
+
+/* Ultra-Premium Shop Page Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* ============================================================================
+   SITE-WIDE TRANSPARENCY & MODAL FIXES
+   Prevents transparent modals, popups, and unreadable gradient text
+   ============================================================================ */
+
+/* 1. MODAL & DIALOG FIXES - Ensure opaque backgrounds */
+[role="dialog"],
+[role="alertdialog"],
+.modal,
+.popup,
+.dialog,
+[data-radix-dialog-content],
+[data-radix-alert-dialog-content],
+[data-vaul-drawer],
+[data-state="open"] {
+  background-color: hsl(var(--color-card)) !important;
+  --tw-bg-opacity: 1 !important;
+}
+
+/* Ensure modal overlays are always visible */
+[data-radix-dialog-overlay],
+[data-radix-alert-dialog-overlay],
+[data-vaul-overlay],
+.modal-overlay,
+.dialog-overlay {
+  background-color: hsla(0, 0%, 0%, 0.75) !important;
+  opacity: 1 !important;
+}
+
+/* Dark mode modal overlays */
+.dark [data-radix-dialog-overlay],
+.dark [data-radix-alert-dialog-overlay],
+.dark [data-vaul-overlay],
+.dark .modal-overlay {
+  background-color: hsla(0, 0%, 0%, 0.85) !important;
+}
+
+/* 2. BACKDROP BLUR FIXES - Ensure proper background */
+.backdrop-blur,
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur-lg,
+.backdrop-blur-xl,
+[class*="backdrop-blur"] {
+  position: relative;
+}
+
+/* Add solid background to backdrop blur elements */
+.backdrop-blur::before,
+.backdrop-blur-sm::before,
+.backdrop-blur-md::before,
+.backdrop-blur-lg::before,
+.backdrop-blur-xl::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: hsl(var(--color-background) / 0.8);
+  z-index: -1;
+  border-radius: inherit;
+}
+
+/* Dark mode backdrop backgrounds */
+.dark .backdrop-blur::before,
+.dark .backdrop-blur-sm::before,
+.dark .backdrop-blur-md::before,
+.dark .backdrop-blur-lg::before,
+.dark .backdrop-blur-xl::before {
+  background-color: hsl(var(--color-background) / 0.9);
+}
+
+/* 3. GRADIENT TEXT FIXES - Always readable */
+.gradient-text {
+  /* Ensure gradient is always visible */
+  background: linear-gradient(
+    to right,
+    hsl(var(--color-primary)),
+    hsl(280 100% 60%),
+    hsl(var(--color-secondary))
+  ) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  display: inline-block !important;
+  animation: gradient 8s ease infinite !important;
+}
+
+/* Fallback for unsupported browsers */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .gradient-text {
+    background: none !important;
+    -webkit-text-fill-color: inherit !important;
+    color: hsl(var(--color-primary)) !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* Fix any bg-clip-text issues */
+.bg-clip-text {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-box-decoration-break: clone !important;
+  box-decoration-break: clone !important;
+  display: inline-block !important;
+}
+
+/* Ensure text-transparent works correctly */
+.text-transparent {
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* 4. GLASS MORPHISM FIXES - Proper backgrounds */
+.glass,
+[class*="bg-background/"],
+[class*="bg-card/"] {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Ensure glass elements have proper backgrounds */
+.glass::before,
+.bg-background\/10::before,
+.bg-background\/20::before,
+.bg-background\/30::before,
+.bg-background\/40::before,
+.bg-background\/50::before,
+.bg-card\/10::before,
+.bg-card\/20::before,
+.bg-card\/30::before,
+.bg-card\/40::before,
+.bg-card\/50::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 0.9;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+/* 5. POPOVER & DROPDOWN FIXES */
+[data-radix-popover-content],
+[data-radix-dropdown-menu-content],
+[data-radix-select-content],
+[data-radix-tooltip-content] {
+  background-color: hsl(var(--color-popover)) !important;
+  color: hsl(var(--color-popover-foreground)) !important;
+  --tw-bg-opacity: 1 !important;
+  border: 1px solid hsl(var(--color-border)) !important;
+}
+
+/* 6. CARD TRANSPARENCY FIXES */
+.bg-card {
+  background-color: hsl(var(--color-card)) !important;
+  --tw-bg-opacity: 1 !important;
+}
+
+.bg-background {
+  background-color: hsl(var(--color-background)) !important;
+  --tw-bg-opacity: 1 !important;
+}
+
+/* 7. TEXT ON GRADIENT BACKGROUNDS - Always readable */
+[class*="bg-gradient"] > *,
+[style*="background: linear-gradient"] > *,
+[style*="background: radial-gradient"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 8. ENSURE MINIMUM OPACITY FOR ALL BACKGROUNDS */
+[class*="bg-"],
+[style*="background-color"] {
+  min-height: 1px; /* Force rendering */
+}
+
+/* 9. FIX TRANSPARENT BUTTONS AND INPUTS */
+button,
+input,
+textarea,
+select {
+  background-color: hsl(var(--color-background));
+}
+
+/* Button specific fixes */
+button[class*="bg-"] {
+  --tw-bg-opacity: 1 !important;
+}
+
+/* 10. SHEET/DRAWER FIXES */
+[data-vaul-drawer] {
+  background-color: hsl(var(--color-card)) !important;
+  --tw-bg-opacity: 1 !important;
+}
+
+/* 11. PREVENT TEXT BECOMING INVISIBLE */
+* {
+  /* Ensure text always has some contrast */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force minimum contrast for all text */
+body * {
+  text-shadow: none !important;
+}
+
+/* Except for gradient text which needs the effect */
+.gradient-text {
+  text-shadow: none !important;
+}
+
+/* 12. COMMAND PALETTE / SEARCH MODAL FIXES */
+[cmdk-root],
+[cmdk-dialog],
+.command-palette {
+  background-color: hsl(var(--color-background)) !important;
+  --tw-bg-opacity: 1 !important;
+}
+
+/* 13. TOAST/NOTIFICATION FIXES */
+[data-sonner-toast],
+.toast,
+.notification {
+  background-color: hsl(var(--color-card)) !important;
+  border: 1px solid hsl(var(--color-border)) !important;
+  --tw-bg-opacity: 1 !important;
+}
+
+/* 14. ENSURE MODAL CONTENT IS ALWAYS ABOVE OVERLAY */
+[data-radix-dialog-content],
+[data-radix-alert-dialog-content] {
+  z-index: 51 !important;
+}
+
+[data-radix-dialog-overlay],
+[data-radix-alert-dialog-overlay] {
+  z-index: 50 !important;
+}
+
+/* ============================================================================
+   END TRANSPARENCY FIXES
+   ============================================================================ */
+
+@layer base {
+  * {
+    border-color: hsl(var(--color-border));
+    outline-color: hsl(var(--color-ring) / 0.5);
+  }
+  body {
+    background-color: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+  }
 }

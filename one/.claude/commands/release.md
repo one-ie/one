@@ -227,6 +227,58 @@ Before running `/release`, ensure:
 
 **CRITICAL:** The `CLOUDFLARE_GLOBAL_API_KEY` in `.env` provides **FULL ACCESS** to the Cloudflare API. This is required for fully automated deployments via `/release` command.
 
+## Frontend Onboarding Environment Variables
+
+**New in v3.6.0:** The frontend now supports organization-specific onboarding via environment variables in `web/.env.local`:
+
+```bash
+# Organization Configuration (Frontend Onboarding)
+ORG_NAME=your-org-name          # Reserved: "one" for ONE Platform
+ORG_WEBSITE=https://example.com # Reserved: "https://one.ie" for ONE Platform
+ORG_FOLDER=your-org-folder      # Reserved: "onegroup", "one" for ONE Platform
+ONE_BACKEND=off                 # "off" = frontend-only, "on" = full platform
+```
+
+**How it works:**
+- `ORG_NAME=one` → Full ONE Platform homepage with complete navigation
+- `ORG_NAME=acme` → Customer org homepage with GetStartedPrompt interface
+- `ONE_BACKEND=off` → Frontend-only mode (no Convex, no auth)
+- `ONE_BACKEND=on` → Full platform with backend features
+
+**Reserved values** (protected in CLI via validation):
+- Name: `one`
+- Folders: `onegroup`, `one`
+- Website: `https://one.ie`, `one.ie`
+
+**Testing:**
+See `TESTING-ONBOARDING.md` for complete test guide.
+
+## MCP Server Configuration
+
+**Important:** The `.mcp.json` file configures MCP (Model Context Protocol) servers and is automatically synced to all target repositories:
+
+```json
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    },
+    "stripe": {
+      "url": "https://mcp.stripe.com"
+    }
+  }
+}
+```
+
+**What it provides:**
+- **shadcn MCP:** Access to shadcn/ui component library via MCP
+- **Stripe MCP:** Stripe API integration via Model Context Protocol
+
+**Synced to:**
+- `cli/.mcp.json` - For CLI MCP server access
+- `apps/one/one/.mcp.json` - For assembly repo MCP access
+
 ## Post-Release Tasks
 
 After `/release` succeeds, remind user to:
@@ -237,6 +289,11 @@ After `/release` succeeds, remind user to:
 5. Check for errors in first 24 hours
 
 ## Installation Folder Sync (Optional)
+
+**Note:** `INSTALLATION_NAME` is different from `ORG_NAME`:
+- `INSTALLATION_NAME` - Backend/filesystem identifier for org-specific documentation
+- `ORG_NAME` - Frontend environment variable controlling UI/branding
+- Both can have the same value (e.g., "acme") but serve different purposes
 
 If installation folders need to be synced across repositories:
 
@@ -269,18 +326,22 @@ cat >> CHANGELOG.md <<EOF
 ## [${NEW_VERSION}] - $(date +%Y-%m-%d)
 
 ### Added
+- Frontend onboarding system with ORG_NAME/ORG_WEBSITE/ONE_BACKEND
+- Reserved name validation in CLI (prevents use of "one", "one.ie")
+- GetStartedPrompt component for customer organizations
+- MinimalSidebar layout with Blog + License only
 - Installation folder multi-tenancy support
 - Hierarchical file resolution with group support
 - CLI: \`npx oneie init\` to create installation folders
 - Frontend: Auto-resolution of installation-specific files
-- Deployment: Cloudflare Pages integration for installation folders
 
 ### Changed
-- Terminology: "group folder" → "installation folder"
-- Environment: \`GROUP_NAME\` → \`INSTALLATION_NAME\`
+- Frontend conditionally renders based on ORG_NAME environment variable
+- Backend can be disabled with ONE_BACKEND=off for frontend-only development
 - Documentation updated across CLAUDE.md, AGENTS.md, README.md
 
 ### Security
+- Reserved name protection prevents brand confusion
 - Path traversal prevention in file resolution
 - Symlink validation
 - Audit logging for file access

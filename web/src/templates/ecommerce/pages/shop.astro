@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '../../../layouts/Layout.astro';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -7,7 +7,8 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import { products } from '@/lib/products';
+import { products } from '../lib/products';
+import type { Product } from '../lib/types';
 
 // Get URL parameters for filtering
 const url = new URL(Astro.request.url);
@@ -19,17 +20,17 @@ const subcategory = url.searchParams.get('subcategory');
 let filteredProducts = products;
 
 if (category) {
-  filteredProducts = filteredProducts.filter((p) => p.category === category);
+  filteredProducts = filteredProducts.filter((p: Product) => p.category === category);
 }
 
 if (subcategory) {
-  filteredProducts = filteredProducts.filter((p) => p.subcategory === subcategory);
+  filteredProducts = filteredProducts.filter((p: Product) => p.subcategory === subcategory);
 }
 
 if (filter === 'new') {
-  filteredProducts = filteredProducts.filter((p) => p.isNew);
+  filteredProducts = filteredProducts.filter((p: Product) => p.isNew);
 } else if (filter === 'sale') {
-  filteredProducts = filteredProducts.filter((p) => p.isSale);
+  filteredProducts = filteredProducts.filter((p: Product) => p.isSale);
 }
 
 // Get page title based on filters
@@ -55,33 +56,33 @@ if (filter === 'sale') pageTitle = 'Sale Items';
       <!-- Filter Bar -->
       <div class="mb-12 flex flex-wrap items-center justify-center gap-3">
         <a href="/shop">
-          <Badge variant={!category && !filter ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+          <Badge variant={!category && !filter ? 'default' : 'outline'} className="cursor-pointer px-4 py-2">
             All
           </Badge>
         </a>
         <a href="/shop?filter=new">
-          <Badge variant={filter === 'new' ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+          <Badge variant={filter === 'new' ? 'default' : 'outline'} className="cursor-pointer px-4 py-2">
             New Arrivals
           </Badge>
         </a>
         <a href="/shop?filter=sale">
-          <Badge variant={filter === 'sale' ? 'destructive' : 'outline'} class="cursor-pointer px-4 py-2">
+          <Badge variant={filter === 'sale' ? 'destructive' : 'outline'} className="cursor-pointer px-4 py-2">
             Sale
           </Badge>
         </a>
         <div class="mx-4 h-6 w-px bg-border"></div>
         <a href="/shop?category=men">
-          <Badge variant={category === 'men' ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+          <Badge variant={category === 'men' ? 'default' : 'outline'} className="cursor-pointer px-4 py-2">
             Men
           </Badge>
         </a>
         <a href="/shop?category=women">
-          <Badge variant={category === 'women' ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+          <Badge variant={category === 'women' ? 'default' : 'outline'} className="cursor-pointer px-4 py-2">
             Women
           </Badge>
         </a>
         <a href="/shop?category=unisex">
-          <Badge variant={category === 'unisex' ? 'default' : 'outline'} class="cursor-pointer px-4 py-2">
+          <Badge variant={category === 'unisex' ? 'default' : 'outline'} className="cursor-pointer px-4 py-2">
             Unisex
           </Badge>
         </a>
@@ -91,9 +92,9 @@ if (filter === 'sale') pageTitle = 'Sale Items';
       {
         filteredProducts.length > 0 ? (
           <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product: Product) => (
               <a href={`/product/${product.id}`}>
-                <Card class="group overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+                <Card className="group overflow-hidden border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
                   <div class="aspect-square overflow-hidden relative">
                     <img
                       src={product.images[0]}
@@ -102,23 +103,23 @@ if (filter === 'sale') pageTitle = 'Sale Items';
                       loading="lazy"
                     />
                     {product.isNew && (
-                      <Badge variant="secondary" class="absolute top-4 left-4">
+                      <Badge variant="secondary" className="absolute top-4 left-4">
                         New
                       </Badge>
                     )}
                     {product.isSale && (
-                      <Badge variant="destructive" class="absolute top-4 right-4">
+                      <Badge variant="destructive" className="absolute top-4 right-4">
                         Sale
                       </Badge>
                     )}
                   </div>
-                  <CardHeader class="space-y-2">
+                  <CardHeader className="space-y-2">
                     <div class="flex items-start justify-between">
-                      <CardTitle class="text-lg line-clamp-1">
+                      <CardTitle className="text-lg line-clamp-1">
                         {product.name}
                       </CardTitle>
                     </div>
-                    <CardDescription class="line-clamp-2">
+                    <CardDescription className="line-clamp-2">
                       {product.description}
                     </CardDescription>
                     <div class="flex items-center gap-3 pt-2">
@@ -136,8 +137,8 @@ if (filter === 'sale') pageTitle = 'Sale Items';
                       )}
                     </div>
                     <div class="flex flex-wrap gap-1 pt-2">
-                      {product.colors.slice(0, 4).map((color) => (
-                        <Badge variant="outline" class="text-xs">
+                      {product.colors.slice(0, 4).map((color: string) => (
+                        <Badge variant="outline" className="text-xs">
                           {color}
                         </Badge>
                       ))}

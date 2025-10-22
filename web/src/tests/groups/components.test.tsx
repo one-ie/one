@@ -3,6 +3,8 @@
  * Tests for GroupSelector, GroupHierarchy, GroupTypeSelector, GroupCard
  */
 
+/* global HTMLSelectElement */
+
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createRequire } from "module";
 import {

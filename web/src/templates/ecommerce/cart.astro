@@ -1,0 +1,212 @@
+---
+/**
+ * Shopping Cart Page Template
+ * Features: Cart items list, quantity controls, subtotal, checkout button
+ * Interactive cart state with nanostores
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+---
+
+<Layout title="Shopping Cart - ONE Store" description="Review your cart">
+  <div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold text-foreground">Shopping Cart</h1>
+
+      <div class="mt-8 grid gap-8 lg:grid-cols-3">
+        <!-- Cart Items -->
+        <div class="lg:col-span-2">
+          <div id="cart-items" class="space-y-4">
+            <!-- Cart items will be rendered here by client-side JavaScript -->
+            <div class="rounded-lg border border-border bg-card p-6 text-center">
+              <p class="text-muted-foreground">Loading cart...</p>
+            </div>
+          </div>
+
+          <!-- Empty Cart Message -->
+          <div id="empty-cart" class="hidden rounded-lg border border-border bg-card p-12 text-center">
+            <svg
+              class="mx-auto h-16 w-16 text-muted-foreground"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
+            </svg>
+            <h2 class="mt-4 text-xl font-semibold text-foreground">Your cart is empty</h2>
+            <p class="mt-2 text-muted-foreground">Add some products to get started</p>
+            <Button asChild class="mt-6">
+              <a href="/store">Continue Shopping</a>
+            </Button>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+          <div class="rounded-lg border border-border bg-card p-6 sticky top-4">
+            <h2 class="text-lg font-semibold text-foreground">Order Summary</h2>
+
+            <div class="mt-4 space-y-3">
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Subtotal</span>
+                <span id="cart-subtotal" class="font-medium text-foreground">$0.00</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Shipping</span>
+                <span class="font-medium text-foreground">Free</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-muted-foreground">Tax</span>
+                <span class="font-medium text-foreground">Calculated at checkout</span>
+              </div>
+              <div class="border-t border-border pt-3">
+                <div class="flex justify-between">
+                  <span class="text-base font-semibold text-foreground">Total</span>
+                  <span id="cart-total" class="text-base font-bold text-foreground">$0.00</span>
+                </div>
+              </div>
+            </div>
+
+            <Button asChild class="mt-6 w-full" size="lg">
+              <a href="/store/checkout">Proceed to Checkout</a>
+            </Button>
+
+            <Button asChild variant="outline" class="mt-3 w-full">
+              <a href="/store">Continue Shopping</a>
+            </Button>
+
+            <!-- Trust Badges -->
+            <div class="mt-6 space-y-2 border-t border-border pt-6">
+              <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span>Secure checkout</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Free shipping over $50</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>30-day returns</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client-side cart rendering -->
+  <script>
+    import { $cart, $cartSubtotal, $cartTotal, cartActions } from '@/stores/cart';
+
+    function renderCart() {
+      const cart = $cart.get();
+      const cartItemsEl = document.getElementById('cart-items');
+      const emptyCartEl = document.getElementById('empty-cart');
+      const subtotalEl = document.getElementById('cart-subtotal');
+      const totalEl = document.getElementById('cart-total');
+
+      if (!cartItemsEl || !emptyCartEl || !subtotalEl || !totalEl) return;
+
+      if (cart.items.length === 0) {
+        cartItemsEl.classList.add('hidden');
+        emptyCartEl.classList.remove('hidden');
+      } else {
+        cartItemsEl.classList.remove('hidden');
+        emptyCartEl.classList.add('hidden');
+
+        cartItemsEl.innerHTML = cart.items
+          .map(
+            (item) => `
+          <div class="flex gap-4 rounded-lg border border-border bg-card p-4">
+            <img
+              src="${item.image || '/placeholder.jpg'}"
+              alt="${item.name}"
+              class="h-24 w-24 rounded-md object-cover"
+            />
+            <div class="flex-1">
+              <h3 class="font-semibold text-foreground">
+                <a href="/store/product/${item.slug}" class="hover:text-primary">
+                  ${item.name}
+                </a>
+              </h3>
+              ${
+                item.variant
+                  ? `<p class="mt-1 text-sm text-muted-foreground">
+                       ${item.variant.size ? `Size: ${item.variant.size}` : ''}
+                       ${item.variant.color ? `Color: ${item.variant.color}` : ''}
+                     </p>`
+                  : ''
+              }
+              <p class="mt-2 font-medium text-foreground">$${item.price.toFixed(2)}</p>
+            </div>
+            <div class="flex flex-col items-end justify-between">
+              <button
+                class="text-muted-foreground hover:text-destructive"
+                onclick="removeItem('${item.id}')"
+                aria-label="Remove item"
+              >
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <div class="flex items-center gap-2">
+                <button
+                  class="rounded-md border border-border bg-background px-2 py-1 hover:bg-accent"
+                  onclick="updateQuantity('${item.id}', ${item.quantity - 1})"
+                  ${item.quantity <= 1 ? 'disabled' : ''}
+                >
+                  −
+                </button>
+                <span class="w-8 text-center font-medium">${item.quantity}</span>
+                <button
+                  class="rounded-md border border-border bg-background px-2 py-1 hover:bg-accent"
+                  onclick="updateQuantity('${item.id}', ${item.quantity + 1})"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        `
+          )
+          .join('');
+      }
+
+      const subtotal = $cartSubtotal.get();
+      const total = $cartTotal.get();
+      subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+      totalEl.textContent = `$${total.toFixed(2)}`;
+    }
+
+    // Make functions available globally
+    (window as any).removeItem = (itemId: string) => {
+      cartActions.removeItem(itemId);
+      renderCart();
+    };
+
+    (window as any).updateQuantity = (itemId: string, quantity: number) => {
+      cartActions.updateQuantity(itemId, quantity);
+      renderCart();
+    };
+
+    // Initial render
+    renderCart();
+
+    // Subscribe to cart changes
+    $cart.subscribe(renderCart);
+  </script>
+</Layout>

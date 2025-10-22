@@ -47,6 +47,73 @@ const stream = defineCollection({
   schema: StreamSchema,
 });
 
+// Define the Products schema (ecommerce ontology - thing type: product)
+const ProductSchema = z.object({
+  id: z.string().optional(), // Unique identifier (optional, defaults to slug)
+  name: z.string(),
+  description: z.string(),
+  price: z.number(),
+  compareAtPrice: z.number().optional(),
+  salePrice: z.number().optional(), // Discounted price
+  isSale: z.boolean().optional().default(false), // Whether product is on sale
+  isNew: z.boolean().optional().default(false), // Whether product is new
+  images: z.array(z.string()),
+  category: z.string(), // References categories collection
+  collections: z.array(z.string()).optional(), // References collections collection
+  variants: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        sku: z.string(),
+        price: z.number(),
+        inStock: z.boolean(),
+        options: z.record(z.string()), // { color: "red", size: "M" }
+      })
+    )
+    .optional(),
+  inStock: z.boolean().default(true),
+  featured: z.boolean().default(false),
+  tags: z.array(z.string()).optional(),
+  metadata: z.record(z.any()).optional(),
+});
+
+// Define the Products collection
+const products = defineCollection({
+  type: 'content',
+  schema: ProductSchema,
+});
+
+// Define the Categories schema (ecommerce ontology - thing type: category)
+const CategorySchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  image: z.string().optional(),
+  parent: z.string().optional(), // Slug of parent category for hierarchy
+  order: z.number().default(0),
+});
+
+// Define the Categories collection
+const categories = defineCollection({
+  type: 'content',
+  schema: CategorySchema,
+});
+
+// Define the Collections schema (ecommerce ontology - thing type: collection)
+const ProductCollectionSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  image: z.string().optional(),
+  featured: z.boolean().default(false),
+  products: z.array(z.string()), // Array of product slugs
+});
+
+// Define the Collections collection
+const productCollections = defineCollection({
+  type: 'content',
+  schema: ProductCollectionSchema,
+});
+
 // Note: Installation-specific documentation is handled via file-resolver utility
 // in Astro pages, not through content collections. This allows dynamic resolution
 // based on INSTALLATION_NAME environment variable at runtime.
@@ -54,8 +121,14 @@ const stream = defineCollection({
 export const collections = {
   blog: blog,
   stream: stream,
+  products: products,
+  categories: categories,
+  collections: productCollections,
 };
 
 // Export schema types
 export type BlogSchema = z.infer<typeof BlogSchema>;
 export type StreamSchema = z.infer<typeof StreamSchema>;
+export type ProductSchema = z.infer<typeof ProductSchema>;
+export type CategorySchema = z.infer<typeof CategorySchema>;
+export type ProductCollectionSchema = z.infer<typeof ProductCollectionSchema>;

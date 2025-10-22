@@ -33,8 +33,8 @@ import {
     </div>
 
     <div class="mx-auto max-w-full sm:max-w-6xl space-y-8 text-center">
-      <Badge variant="outline" class="inline-flex items-center gap-2">
-        <Network class="h-4 w-4" />
+      <Badge variant="outline" className="inline-flex items-center gap-2">
+        <Network className="h-4 w-4" />
         Universal Connectivity
       </Badge>
 
@@ -44,7 +44,7 @@ import {
           <span class="col-start-1 row-start-1 text-[hsl(var(--primary))]">Anything</span>
           <span
             aria-hidden="true"
-            class="col-start-1 row-start-1 bg-gradient-to-r from-[hsl(var(--primary))] via-[hsl(var(--primary)/0.8)] to-[hsl(var(--primary)/0.6)] bg-clip-text text-transparent"
+            class="col-start-1 row-start-1 gradient-text"
           >
             Anything
           </span>
@@ -59,15 +59,15 @@ import {
 
       <div class="flex flex-wrap justify-center gap-4">
         <a href="#protocols">
-          <Button size="lg" class="h-14 px-8 text-lg">
+          <Button size="lg" className="h-14 px-8 text-lg">
             Explore Protocols
-            <ArrowRight class="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </a>
         <a href="https://github.com/one-ie/one" target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="lg" class="h-14 px-8 text-lg">
+          <Button variant="outline" size="lg" className="h-14 px-8 text-lg">
             View Documentation
-            <Globe class="ml-2 h-5 w-5" />
+            <Globe className="ml-2 h-5 w-5" />
           </Button>
         </a>
       </div>
@@ -78,8 +78,8 @@ import {
   <section id="protocols" class="border-y bg-muted/50 px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
     <div class="mx-auto max-w-full sm:max-w-6xl">
       <div class="mb-20 space-y-4 text-center">
-        <Badge variant="outline" class="mb-2 inline-flex items-center gap-2">
-          <Layers class="h-4 w-4" />
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Layers className="h-4 w-4" />
           Six Core Protocols
         </Badge>
         <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
@@ -92,145 +92,145 @@ import {
 
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <!-- ACP - Agent Communication Protocol -->
-        <Card class="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
-          <CardHeader class="space-y-4">
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+          <CardHeader className="space-y-4">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
-              <MessageSquare class="h-6 w-6 text-primary" />
+              <MessageSquare className="h-6 w-6 text-primary" />
             </div>
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <CardTitle class="text-xl">ACP</CardTitle>
-                <Badge variant="secondary" class="text-xs">REST API</Badge>
+                <CardTitle className="text-xl">ACP</CardTitle>
+                <Badge variant="secondary" className="text-xs">REST API</Badge>
               </div>
               <div class="text-sm font-medium text-muted-foreground">Agent Communication Protocol</div>
             </div>
-            <CardDescription class="leading-relaxed">
+            <CardDescription className="leading-relaxed">
               REST-based protocol for AI agent communication. Send messages, delegate tasks, and coordinate multi-agent workflows. Supports all data modalities.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
-              <Badge variant="outline" class="text-xs">Linux Foundation</Badge>
-              <Badge variant="outline" class="text-xs">Multimodal</Badge>
-              <Badge variant="outline" class="text-xs">Async-First</Badge>
+              <Badge variant="outline" className="text-xs">Linux Foundation</Badge>
+              <Badge variant="outline" className="text-xs">Multimodal</Badge>
+              <Badge variant="outline" className="text-xs">Async-First</Badge>
             </div>
           </CardHeader>
         </Card>
 
         <!-- MCP - Model Context Protocol -->
-        <Card class="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
-          <CardHeader class="space-y-4">
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+          <CardHeader className="space-y-4">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
-              <Layers class="h-6 w-6 text-primary" />
+              <Layers className="h-6 w-6 text-primary" />
             </div>
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <CardTitle class="text-xl">MCP</CardTitle>
-                <Badge variant="secondary" class="text-xs">Context</Badge>
+                <CardTitle className="text-xl">MCP</CardTitle>
+                <Badge variant="secondary" className="text-xs">Context</Badge>
               </div>
               <div class="text-sm font-medium text-muted-foreground">Model Context Protocol</div>
             </div>
-            <CardDescription class="leading-relaxed">
+            <CardDescription className="leading-relaxed">
               Universal connectivity for AI systems. Access the 6-dimension ontology, semantic search, and RAG pipelines. Native Claude Code integration.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
-              <Badge variant="outline" class="text-xs">Anthropic</Badge>
-              <Badge variant="outline" class="text-xs">RAG-Ready</Badge>
-              <Badge variant="outline" class="text-xs">Vector Search</Badge>
+              <Badge variant="outline" className="text-xs">Anthropic</Badge>
+              <Badge variant="outline" className="text-xs">RAG-Ready</Badge>
+              <Badge variant="outline" className="text-xs">Vector Search</Badge>
             </div>
           </CardHeader>
         </Card>
 
         <!-- A2A - Agent-to-Agent -->
-        <Card class="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
-          <CardHeader class="space-y-4">
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+          <CardHeader className="space-y-4">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
-              <Bot class="h-6 w-6 text-primary" />
+              <Bot className="h-6 w-6 text-primary" />
             </div>
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <CardTitle class="text-xl">A2A</CardTitle>
-                <Badge variant="secondary" class="text-xs">Framework</Badge>
+                <CardTitle className="text-xl">A2A</CardTitle>
+                <Badge variant="secondary" className="text-xs">Framework</Badge>
               </div>
               <div class="text-sm font-medium text-muted-foreground">Agent-to-Agent Protocol</div>
             </div>
-            <CardDescription class="leading-relaxed">
+            <CardDescription className="leading-relaxed">
               Universal language for AI agents to collaborate. Framework-agnostic coordination across LangGraph, CrewAI, Semantic Kernel, and custom systems.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
-              <Badge variant="outline" class="text-xs">Google</Badge>
-              <Badge variant="outline" class="text-xs">Linux Foundation</Badge>
-              <Badge variant="outline" class="text-xs">Coordination</Badge>
+              <Badge variant="outline" className="text-xs">Google</Badge>
+              <Badge variant="outline" className="text-xs">Linux Foundation</Badge>
+              <Badge variant="outline" className="text-xs">Coordination</Badge>
             </div>
           </CardHeader>
         </Card>
 
         <!-- AP2 - Agent Payments -->
-        <Card class="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
-          <CardHeader class="space-y-4">
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+          <CardHeader className="space-y-4">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
-              <DollarSign class="h-6 w-6 text-primary" />
+              <DollarSign className="h-6 w-6 text-primary" />
             </div>
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <CardTitle class="text-xl">AP2</CardTitle>
-                <Badge variant="secondary" class="text-xs">Payments</Badge>
+                <CardTitle className="text-xl">AP2</CardTitle>
+                <Badge variant="secondary" className="text-xs">Payments</Badge>
               </div>
               <div class="text-sm font-medium text-muted-foreground">Agent Payments Protocol</div>
             </div>
-            <CardDescription class="leading-relaxed">
+            <CardDescription className="leading-relaxed">
               Secure agent-led payments with cryptographic trust. Verifiable credentials, autonomous transactions, multi-platform bookings. Credit cards, crypto, bank transfers.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
-              <Badge variant="outline" class="text-xs">Google + 60 Orgs</Badge>
-              <Badge variant="outline" class="text-xs">Autonomous</Badge>
-              <Badge variant="outline" class="text-xs">Web3</Badge>
+              <Badge variant="outline" className="text-xs">Google + 60 Orgs</Badge>
+              <Badge variant="outline" className="text-xs">Autonomous</Badge>
+              <Badge variant="outline" className="text-xs">Web3</Badge>
             </div>
           </CardHeader>
         </Card>
 
         <!-- X402 - HTTP Payments -->
-        <Card class="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
-          <CardHeader class="space-y-4">
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+          <CardHeader className="space-y-4">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
-              <Wallet class="h-6 w-6 text-primary" />
+              <Wallet className="h-6 w-6 text-primary" />
             </div>
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <CardTitle class="text-xl">X402</CardTitle>
-                <Badge variant="secondary" class="text-xs">Micropayments</Badge>
+                <CardTitle className="text-xl">X402</CardTitle>
+                <Badge variant="secondary" className="text-xs">Micropayments</Badge>
               </div>
               <div class="text-sm font-medium text-muted-foreground">HTTP-Native Payments</div>
             </div>
-            <CardDescription class="leading-relaxed">
+            <CardDescription className="leading-relaxed">
               Instant digital payments via HTTP 402. Zero fees, ~2 second settlement, blockchain-agnostic. Pay-per-API-call, pay-per-GB, micropayments as low as $0.001.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
-              <Badge variant="outline" class="text-xs">Coinbase</Badge>
-              <Badge variant="outline" class="text-xs">Zero Fees</Badge>
-              <Badge variant="outline" class="text-xs">Multi-Chain</Badge>
+              <Badge variant="outline" className="text-xs">Coinbase</Badge>
+              <Badge variant="outline" className="text-xs">Zero Fees</Badge>
+              <Badge variant="outline" className="text-xs">Multi-Chain</Badge>
             </div>
           </CardHeader>
         </Card>
 
         <!-- AG-UI - Agent-Generated UI -->
-        <Card class="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
-          <CardHeader class="space-y-4">
+        <Card className="group border-border/50 bg-card/50 backdrop-blur transition-all hover:scale-[1.02] hover:border-primary/20 hover:bg-card hover:shadow-lg hover:shadow-primary/5">
+          <CardHeader className="space-y-4">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/15">
-              <Link2 class="h-6 w-6 text-primary" />
+              <Link2 className="h-6 w-6 text-primary" />
             </div>
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <CardTitle class="text-xl">AG-UI</CardTitle>
-                <Badge variant="secondary" class="text-xs">Interface</Badge>
+                <CardTitle className="text-xl">AG-UI</CardTitle>
+                <Badge variant="secondary" className="text-xs">Interface</Badge>
               </div>
               <div class="text-sm font-medium text-muted-foreground">Agent-Generated UI</div>
             </div>
-            <CardDescription class="leading-relaxed">
+            <CardDescription className="leading-relaxed">
               Dynamic interfaces from structured JSON. Agents send component specs, frontend renders securely. Charts, tables, forms, actions—all type-safe and composable.
             </CardDescription>
             <div class="flex flex-wrap gap-2 pt-2">
-              <Badge variant="outline" class="text-xs">ONE Platform</Badge>
-              <Badge variant="outline" class="text-xs">Type-Safe</Badge>
-              <Badge variant="outline" class="text-xs">Real-Time</Badge>
+              <Badge variant="outline" className="text-xs">ONE Platform</Badge>
+              <Badge variant="outline" className="text-xs">Type-Safe</Badge>
+              <Badge variant="outline" className="text-xs">Real-Time</Badge>
             </div>
           </CardHeader>
         </Card>
@@ -242,8 +242,8 @@ import {
   <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
     <div class="mx-auto max-w-full sm:max-w-6xl">
       <div class="mb-20 space-y-4 text-center">
-        <Badge variant="outline" class="mb-2 inline-flex items-center gap-2">
-          <Zap class="h-4 w-4" />
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Zap className="h-4 w-4" />
           Better Together
         </Badge>
         <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
@@ -265,11 +265,11 @@ import {
             </div>
             <div class="space-y-2 text-sm">
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">MCP</Badge>
+                <Badge variant="secondary" className="text-xs">MCP</Badge>
                 <span class="text-muted-foreground">Agent accesses product catalog via semantic search</span>
               </div>
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">ACP</Badge>
+                <Badge variant="secondary" className="text-xs">ACP</Badge>
                 <span class="text-muted-foreground">Query multiple merchants in parallel</span>
               </div>
             </div>
@@ -282,11 +282,11 @@ import {
             </div>
             <div class="space-y-2 text-sm">
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">A2A</Badge>
+                <Badge variant="secondary" className="text-xs">A2A</Badge>
                 <span class="text-muted-foreground">Coordinate flight, hotel, and car rental agents</span>
               </div>
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">AG-UI</Badge>
+                <Badge variant="secondary" className="text-xs">AG-UI</Badge>
                 <span class="text-muted-foreground">Display booking options as interactive cards</span>
               </div>
             </div>
@@ -299,11 +299,11 @@ import {
             </div>
             <div class="space-y-2 text-sm">
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">AP2</Badge>
+                <Badge variant="secondary" className="text-xs">AP2</Badge>
                 <span class="text-muted-foreground">Execute autonomous payment with mandates</span>
               </div>
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">X402</Badge>
+                <Badge variant="secondary" className="text-xs">X402</Badge>
                 <span class="text-muted-foreground">Micropayments for API calls (~$0.001 each)</span>
               </div>
             </div>
@@ -323,8 +323,8 @@ import {
   <section class="px-4 py-20 sm:px-6 sm:py-24 md:px-8 md:py-32">
     <div class="mx-auto max-w-full sm:max-w-6xl">
       <div class="mb-20 space-y-4 text-center">
-        <Badge variant="outline" class="mb-2 inline-flex items-center gap-2">
-          <Layers class="h-4 w-4" />
+        <Badge variant="outline" className="mb-2 inline-flex items-center gap-2">
+          <Layers className="h-4 w-4" />
           The Ontology Advantage
         </Badge>
         <h2 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
@@ -349,27 +349,27 @@ import {
             </div>
             <div class="space-y-2 text-sm">
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">groups</Badge>
+                <Badge variant="secondary" className="text-xs">groups</Badge>
                 <span class="text-muted-foreground">Multi-tenant isolation</span>
               </div>
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">people</Badge>
+                <Badge variant="secondary" className="text-xs">people</Badge>
                 <span class="text-muted-foreground">Authorization layer</span>
               </div>
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">things</Badge>
+                <Badge variant="secondary" className="text-xs">things</Badge>
                 <span class="text-muted-foreground">All entities</span>
               </div>
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">connections</Badge>
+                <Badge variant="secondary" className="text-xs">connections</Badge>
                 <span class="text-muted-foreground">All relationships</span>
               </div>
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">events</Badge>
+                <Badge variant="secondary" className="text-xs">events</Badge>
                 <span class="text-muted-foreground">All actions</span>
               </div>
               <div class="flex items-start gap-2">
-                <Badge variant="secondary" class="text-xs">knowledge</Badge>
+                <Badge variant="secondary" className="text-xs">knowledge</Badge>
                 <span class="text-muted-foreground">Labels & vectors</span>
               </div>
             </div>
@@ -402,19 +402,19 @@ import {
             </div>
             <div class="space-y-3">
               <div class="flex items-start gap-2">
-                <Check class="mt-1 h-4 w-4 shrink-0 text-green-500" />
+                <Check className="mt-1 h-4 w-4 shrink-0 text-green-500" />
                 <span class="text-sm text-muted-foreground">Add new protocols without migrations</span>
               </div>
               <div class="flex items-start gap-2">
-                <Check class="mt-1 h-4 w-4 shrink-0 text-green-500" />
+                <Check className="mt-1 h-4 w-4 shrink-0 text-green-500" />
                 <span class="text-sm text-muted-foreground">Existing code keeps working</span>
               </div>
               <div class="flex items-start gap-2">
-                <Check class="mt-1 h-4 w-4 shrink-0 text-green-500" />
+                <Check className="mt-1 h-4 w-4 shrink-0 text-green-500" />
                 <span class="text-sm text-muted-foreground">Type-safe protocol usage</span>
               </div>
               <div class="flex items-start gap-2">
-                <Check class="mt-1 h-4 w-4 shrink-0 text-green-500" />
+                <Check className="mt-1 h-4 w-4 shrink-0 text-green-500" />
                 <span class="text-sm text-muted-foreground">Universal querying across protocols</span>
               </div>
             </div>
@@ -428,14 +428,14 @@ import {
 
         <div class="grid gap-6 md:grid-cols-2">
           <!-- ACP Example -->
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
-            <CardHeader class="space-y-3">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
               <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <MessageSquare class="h-5 w-5 text-primary" />
+                  <MessageSquare className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <CardTitle class="text-lg">ACP - Agent Messages</CardTitle>
+                  <CardTitle className="text-lg">ACP - Agent Messages</CardTitle>
                   <p class="text-xs text-muted-foreground">Communication tracked in events</p>
                 </div>
               </div>
@@ -456,14 +456,14 @@ import {
           </Card>
 
           <!-- MCP Example -->
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
-            <CardHeader class="space-y-3">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
               <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Globe class="h-5 w-5 text-primary" />
+                  <Globe className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <CardTitle class="text-lg">MCP - Context Access</CardTitle>
+                  <CardTitle className="text-lg">MCP - Context Access</CardTitle>
                   <p class="text-xs text-muted-foreground">Resources exposed via things</p>
                 </div>
               </div>
@@ -487,14 +487,14 @@ import {
           </Card>
 
           <!-- A2A Example -->
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
-            <CardHeader class="space-y-3">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
               <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Bot class="h-5 w-5 text-primary" />
+                  <Bot className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <CardTitle class="text-lg">A2A - Task Delegation</CardTitle>
+                  <CardTitle className="text-lg">A2A - Task Delegation</CardTitle>
                   <p class="text-xs text-muted-foreground">Connections track delegation</p>
                 </div>
               </div>
@@ -514,14 +514,14 @@ import {
           </Card>
 
           <!-- AP2 Example -->
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
-            <CardHeader class="space-y-3">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
               <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <DollarSign class="h-5 w-5 text-primary" />
+                  <DollarSign className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <CardTitle class="text-lg">AP2 - Mandates</CardTitle>
+                  <CardTitle className="text-lg">AP2 - Mandates</CardTitle>
                   <p class="text-xs text-muted-foreground">Intent stored as thing</p>
                 </div>
               </div>
@@ -544,14 +544,14 @@ import {
           </Card>
 
           <!-- X402 Example -->
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
-            <CardHeader class="space-y-3">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
               <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Wallet class="h-5 w-5 text-primary" />
+                  <Wallet className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <CardTitle class="text-lg">X402 - Micropayments</CardTitle>
+                  <CardTitle className="text-lg">X402 - Micropayments</CardTitle>
                   <p class="text-xs text-muted-foreground">Payment events with network</p>
                 </div>
               </div>
@@ -571,14 +571,14 @@ import {
           </Card>
 
           <!-- AG-UI Example -->
-          <Card class="border-border/50 bg-card/50 backdrop-blur">
-            <CardHeader class="space-y-3">
+          <Card className="border-border/50 bg-card/50 backdrop-blur">
+            <CardHeader className="space-y-3">
               <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Link2 class="h-5 w-5 text-primary" />
+                  <Link2 className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <CardTitle class="text-lg">AG-UI - Components</CardTitle>
+                  <CardTitle className="text-lg">AG-UI - Components</CardTitle>
                   <p class="text-xs text-muted-foreground">UI messages as things</p>
                 </div>
               </div>
@@ -612,7 +612,7 @@ import {
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <div class="space-y-2 rounded-lg border border-border/50 bg-card/50 p-4">
             <div class="flex items-center gap-2">
-              <Badge variant="secondary" class="text-xs">MCP</Badge>
+              <Badge variant="secondary" className="text-xs">MCP</Badge>
               <span class="text-sm font-semibold">Access Preferences</span>
             </div>
             <p class="text-xs text-muted-foreground">Agent queries user budget and past trips via MCP resources</p>
@@ -620,7 +620,7 @@ import {
 
           <div class="space-y-2 rounded-lg border border-border/50 bg-card/50 p-4">
             <div class="flex items-center gap-2">
-              <Badge variant="secondary" class="text-xs">ACP</Badge>
+              <Badge variant="secondary" className="text-xs">ACP</Badge>
               <span class="text-sm font-semibold">Query Travel Agents</span>
             </div>
             <p class="text-xs text-muted-foreground">Send parallel messages to flight, hotel, and car rental agents</p>
@@ -628,7 +628,7 @@ import {
 
           <div class="space-y-2 rounded-lg border border-border/50 bg-card/50 p-4">
             <div class="flex items-center gap-2">
-              <Badge variant="secondary" class="text-xs">A2A</Badge>
+              <Badge variant="secondary" className="text-xs">A2A</Badge>
               <span class="text-sm font-semibold">Coordinate Booking</span>
             </div>
             <p class="text-xs text-muted-foreground">Multi-agent coordination across travel services</p>
@@ -636,7 +636,7 @@ import {
 
           <div class="space-y-2 rounded-lg border border-border/50 bg-card/50 p-4">
             <div class="flex items-center gap-2">
-              <Badge variant="secondary" class="text-xs">AG-UI</Badge>
+              <Badge variant="secondary" className="text-xs">AG-UI</Badge>
               <span class="text-sm font-semibold">Show Options</span>
             </div>
             <p class="text-xs text-muted-foreground">Display vacation packages as interactive cards</p>
@@ -644,7 +644,7 @@ import {
 
           <div class="space-y-2 rounded-lg border border-border/50 bg-card/50 p-4">
             <div class="flex items-center gap-2">
-              <Badge variant="secondary" class="text-xs">AP2</Badge>
+              <Badge variant="secondary" className="text-xs">AP2</Badge>
               <span class="text-sm font-semibold">Create Mandate</span>
             </div>
             <p class="text-xs text-muted-foreground">User approves $2700 payment with verifiable credential</p>
@@ -652,7 +652,7 @@ import {
 
           <div class="space-y-2 rounded-lg border border-border/50 bg-card/50 p-4">
             <div class="flex items-center gap-2">
-              <Badge variant="secondary" class="text-xs">X402</Badge>
+              <Badge variant="secondary" className="text-xs">X402</Badge>
               <span class="text-sm font-semibold">API Micropayments</span>
             </div>
             <p class="text-xs text-muted-foreground">$0.01 payments for each booking API call</p>
@@ -731,73 +731,73 @@ knowledge
       </div>
 
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card class="border-border/50 bg-card/50 backdrop-blur">
-          <CardHeader class="space-y-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Globe class="h-6 w-6 text-primary" />
+              <Globe className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle class="text-xl">Universal Interoperability</CardTitle>
-            <CardDescription class="leading-relaxed">
+            <CardTitle className="text-xl">Universal Interoperability</CardTitle>
+            <CardDescription className="leading-relaxed">
               Connect to any AI framework, payment system, or communication platform. No vendor lock-in.
             </CardDescription>
           </CardHeader>
         </Card>
 
-        <Card class="border-border/50 bg-card/50 backdrop-blur">
-          <CardHeader class="space-y-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Shield class="h-6 w-6 text-primary" />
+              <Shield className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle class="text-xl">Type-Safe & Secure</CardTitle>
-            <CardDescription class="leading-relaxed">
+            <CardTitle className="text-xl">Type-Safe & Secure</CardTitle>
+            <CardDescription className="leading-relaxed">
               All protocols mapped to the ontology. Type-safe validation, cryptographic trust, complete audit trail.
             </CardDescription>
           </CardHeader>
         </Card>
 
-        <Card class="border-border/50 bg-card/50 backdrop-blur">
-          <CardHeader class="space-y-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Zap class="h-6 w-6 text-primary" />
+              <Zap className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle class="text-xl">Zero Integration Cost</CardTitle>
-            <CardDescription class="leading-relaxed">
+            <CardTitle className="text-xl">Zero Integration Cost</CardTitle>
+            <CardDescription className="leading-relaxed">
               One ontology, six protocols. Every integration follows the same pattern. Add new protocols in hours, not months.
             </CardDescription>
           </CardHeader>
         </Card>
 
-        <Card class="border-border/50 bg-card/50 backdrop-blur">
-          <CardHeader class="space-y-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Network class="h-6 w-6 text-primary" />
+              <Network className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle class="text-xl">Ecosystem Amplification</CardTitle>
-            <CardDescription class="leading-relaxed">
+            <CardTitle className="text-xl">Ecosystem Amplification</CardTitle>
+            <CardDescription className="leading-relaxed">
               Plug into existing MCP, ACP, A2A, AP2, and X402 ecosystems. Instant access to thousands of agents and services.
             </CardDescription>
           </CardHeader>
         </Card>
 
-        <Card class="border-border/50 bg-card/50 backdrop-blur">
-          <CardHeader class="space-y-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Layers class="h-6 w-6 text-primary" />
+              <Layers className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle class="text-xl">Ontology-First Design</CardTitle>
-            <CardDescription class="leading-relaxed">
+            <CardTitle className="text-xl">Ontology-First Design</CardTitle>
+            <CardDescription className="leading-relaxed">
               Protocol details stored in metadata. Same 6-dimension ontology handles all protocols. Clean separation of concerns.
             </CardDescription>
           </CardHeader>
         </Card>
 
-        <Card class="border-border/50 bg-card/50 backdrop-blur">
-          <CardHeader class="space-y-3">
+        <Card className="border-border/50 bg-card/50 backdrop-blur">
+          <CardHeader className="space-y-3">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Check class="h-6 w-6 text-primary" />
+              <Check className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle class="text-xl">Future-Proof</CardTitle>
-            <CardDescription class="leading-relaxed">
+            <CardTitle className="text-xl">Future-Proof</CardTitle>
+            <CardDescription className="leading-relaxed">
               New protocols emerge? Add them to metadata. Ontology stays stable. Your code doesn't break.
             </CardDescription>
           </CardHeader>
@@ -817,7 +817,7 @@ knowledge
         <h2 class="text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
           Start Building
           <br />
-          <span class="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+          <span class="gradient-text">
             Universal Connections
           </span>
         </h2>
@@ -829,30 +829,30 @@ knowledge
 
       <div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
         <a href="/download">
-          <Button size="lg" class="h-14 w-full sm:w-auto px-12 text-lg font-bold shadow-xl shadow-primary/30">
+          <Button size="lg" className="h-14 w-full sm:w-auto px-12 text-lg font-bold shadow-xl shadow-primary/30">
             Download Free
-            <ArrowRight class="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </a>
         <a href="https://github.com/one-ie/one/tree/main/one/connections" target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="lg" class="h-14 w-full sm:w-auto px-12 text-lg font-bold">
+          <Button variant="outline" size="lg" className="h-14 w-full sm:w-auto px-12 text-lg font-bold">
             View Protocol Specs
-            <Globe class="ml-2 h-5 w-5" />
+            <Globe className="ml-2 h-5 w-5" />
           </Button>
         </a>
       </div>
 
       <div class="flex flex-wrap items-center justify-center gap-6 pt-6 text-base font-medium text-muted-foreground">
         <span class="flex items-center gap-2">
-          <Check class="h-5 w-5 text-primary" />
+          <Check className="h-5 w-5 text-primary" />
           Open Source
         </span>
         <span class="flex items-center gap-2">
-          <Check class="h-5 w-5 text-primary" />
+          <Check className="h-5 w-5 text-primary" />
           Linux Foundation
         </span>
         <span class="flex items-center gap-2">
-          <Check class="h-5 w-5 text-primary" />
+          <Check className="h-5 w-5 text-primary" />
           Production Ready
         </span>
       </div>

@@ -127,7 +127,7 @@
 │                                                          │
 │  ┌────────────────────────────────────────────────────┐ │
 │  │  DataProvider Interface (Universal API)            │ │
-│  │  organizations: { get, list, update }              │ │
+│  │  groups: { get, list, update }              │ │
 │  │  people: { get, list, create, update }             │ │
 │  │  things: { get, list, create, update, delete }     │ │
 │  │  connections: { create, getRelated, getCount }     │ │
@@ -173,7 +173,7 @@
 │        ACTUAL BACKENDS (Examples)                        │
 │                                                          │
 │  Convex:                                                 │
-│    6 tables → organizations, people, things,             │
+│    6 tables → groups, people, things,             │
 │               connections, events, knowledge             │
 │                                                          │
 │  WordPress:                                              │
@@ -210,7 +210,7 @@
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│  1. ORGANIZATIONS → Who owns this space?             │
+│  1. GROUPS → Who owns this space?             │
 │     Multi-tenant isolation, perfect data boundaries  │
 └──────────────────────────────────────────────────────┘
                         ↓
@@ -244,10 +244,10 @@
 
 ### Example: User Creates a Course
 
-**Organizations (Dimension 1):**
+**Groups (Dimension 1):**
 
 ```typescript
-organizationId: "fitnesspro_123"; // All operations scoped here
+groupId: "fitnesspro_123"; // All operations scoped here
 ```
 
 **People (Dimension 2):**
@@ -258,7 +258,7 @@ organizationId: "fitnesspro_123"; // All operations scoped here
   _id: Id<'people'>,
   email: "sarah@fitnesspro.com",
   role: "org_owner",              // Authorization level
-  organizationId: "fitnesspro_123"
+  groupId: "fitnesspro_123"
 }
 ```
 
@@ -270,7 +270,7 @@ organizationId: "fitnesspro_123"; // All operations scoped here
   _id: Id<'things'>,
   thingType: "course",
   name: "Fitness Fundamentals",
-  organizationId: "fitnesspro_123",
+  groupId: "fitnesspro_123",
   properties: {
     description: "...",
     price: 99,
@@ -288,7 +288,7 @@ organizationId: "fitnesspro_123"; // All operations scoped here
   fromPersonId: sarah_person_id,  // Person ID (Dimension 2)!
   toThingId: course_thing_id,     // Thing ID (Dimension 3)
   relationshipType: "owns",
-  organizationId: "fitnesspro_123"
+  groupId: "fitnesspro_123"
 }
 ```
 
@@ -301,7 +301,7 @@ organizationId: "fitnesspro_123"; // All operations scoped here
   eventType: "course_created",
   actorId: sarah_person_id,       // Person who did it (REQUIRED)
   targetId: course_thing_id,      // What was created
-  organizationId: "fitnesspro_123",
+  groupId: "fitnesspro_123",
   timestamp: Date.now()
 }
 ```
@@ -316,7 +316,7 @@ organizationId: "fitnesspro_123"; // All operations scoped here
   text: "Fitness Fundamentals...",
   embedding: [...],               // 768-dim vector
   sourceThingId: course_thing_id,
-  organizationId: "fitnesspro_123",
+  groupId: "fitnesspro_123",
   labels: ["course", "fitness", "beginner"]
 }
 ```
@@ -429,7 +429,7 @@ export class CourseService extends Effect.Service<CourseService>()(
         create: (params: {
           name: string;
           creatorId: string;
-          organizationId: string;
+          groupId: string;
           properties: any;
         }) =>
           Effect.gen(function* () {
@@ -437,7 +437,7 @@ export class CourseService extends Effect.Service<CourseService>()(
             const courseId = yield* provider.things.create({
               type: "course",
               name: params.name,
-              organizationId: params.organizationId,
+              groupId: params.organizationId,
               properties: params.properties,
             });
 
@@ -446,7 +446,7 @@ export class CourseService extends Effect.Service<CourseService>()(
               fromPersonId: params.creatorId, // Person ID!
               toThingId: courseId,
               relationshipType: "owns",
-              organizationId: params.organizationId,
+              groupId: params.organizationId,
             });
 
             // 5. Log event (course created)
@@ -454,7 +454,7 @@ export class CourseService extends Effect.Service<CourseService>()(
               type: "course_created",
               actorId: params.creatorId, // Person who did it
               targetId: courseId,
-              organizationId: params.organizationId,
+              groupId: params.organizationId,
               metadata: {
                 courseName: params.name,
                 creatorEmail: "sarah@fitnesspro.com",
@@ -493,7 +493,7 @@ export function CreateCourseForm() {
       const courseId = yield* courseService.create({
         name: formData.name,
         creatorId: currentUser.id,
-        organizationId: currentOrg.id,
+        groupId: currentGroup.id,
         properties: {
           description: formData.description,
           price: formData.price,
@@ -1691,14 +1691,12 @@ PUBLIC_ONE_ORG_ID=org_abc123
 **Detailed Implementation Guides:**
 
 - **Any Backend**: See `one/connections/any-backend.md`
-
   - Databases: Convex, Supabase, Neon, PlanetScale, MongoDB, PostgreSQL
   - CMS: WordPress, Strapi, Contentful, Sanity, Ghost
   - SaaS: Notion, Airtable, Shopify, Salesforce
   - Custom: Your own REST/GraphQL API
 
 - **ONE Backend (BaaS)**: See `one/features/use-one-backend.md`
-
   - Setup & onboarding
   - API key management
   - Pricing tiers
