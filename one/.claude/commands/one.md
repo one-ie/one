@@ -2,45 +2,31 @@
 
 ## Instructions for Claude
 
-When user types `/one`, follow this fast flow:
+When user types `/one`, display the ONE Platform welcome screen and provide quick access to all commands.
 
-### Step 1: Quick Initialization (< 2 seconds)
+### Step 1: Check Status (< 1 second)
 
-Run these checks IN PARALLEL (single bash command):
+Run quick parallel checks:
 
 ```bash
 find . -maxdepth 2 -name ".onboarding.json" -type f 2>/dev/null | head -1 && \
-lsof -ti:4321 2>/dev/null && \
-[ -d web ] && echo "web_exists"
+lsof -ti:4321 2>/dev/null
 ```
 
-**Parse the output:**
-- Line 1: Path to .onboarding.json (if exists)
-- Line 2: Process ID if server running (if exists)
-- Line 3: "web_exists" if web directory found
+**Parse output:**
+- Line 1: Path to `.onboarding.json` (if exists)
+- Line 2: Server PID (if running)
 
-### Step 2: Read Onboarding Data
+### Step 2: Read Onboarding Data (if exists)
 
-If `.onboarding.json` found, read it to extract:
+If `.onboarding.json` found, read to extract:
 - `user.name`
 - `organization.name`
 - `website.url`
 
-### Step 3: Start Web Server (if not running)
+### Step 3: Display Welcome Screen
 
-If server NOT running AND web directory exists:
-
-```bash
-cd web && bun run dev > /dev/null 2>&1 &
-```
-
-**Show to user:**
-```
-🚀 Starting dev server...
-✓ Server running at http://localhost:4321
-```
-
-### Step 4: Display Welcome (< 3 seconds total)
+**WITH onboarding data:**
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -54,75 +40,58 @@ cd web && bun run dev > /dev/null 2>&1 &
 
        Make Your Ideas Real
 
+   https://one.ie  •  npx oneie
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Welcome, [user.name]!
+Welcome back, [user.name]!
 
 Organization: [organization.name]
 Website: [website.url]
-Dev Server: http://localhost:4321
+Dev Server: http://localhost:4321 [✓ Running / ⭕ Stopped]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🤖 AI is analyzing your website...
+🚀 Quick Commands
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-agent-onboard is running in the background to:
-• Extract your brand (colors, fonts, voice)
-• Detect existing features
-• Recommend new features
+Server Management:
+• /server         - Check server status
+• /server start   - Start development server
+• /server stop    - Stop development server
+• /server restart - Restart development server
 
-This takes ~2 minutes. Continue working while it runs!
+Onboarding & Setup:
+• /onboard        - Analyze website & extract brand
+
+Feature Development:
+• /build          - Build features with AI specialists
+• /design         - Create wireframes & UI components
+• /deploy         - Deploy to production
+
+Workflow Management:
+• /now            - View current task
+• /next           - Advance to next inference
+• /todo           - View complete task list
+• /done           - Mark task complete
+
+Analytics & Insights:
+• /see            - View analytics & explore courses
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✨ Try this now!
+💡 Quick Start
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Edit your homepage:
+1. Start server: /server start
+2. Analyze website: /onboard
+3. Build features: /build [feature-name]
+4. Deploy: /deploy
 
-  "Change the hero heading on the homepage to say
-   'Welcome to [organization.name]' and update the
-   subtext to match our brand"
-
-I'll update web/src/pages/index.astro with your brand!
+Or just tell me what you want to build!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Step 5: Launch agent-onboard (Background)
-
-**IMPORTANT:** Launch agent-onboard using Task tool in the BACKGROUND. DO NOT WAIT for it to complete.
-
-```
-Analyze website [website.url] for onboarding:
-
-1. Extract brand identity (colors, logo, fonts, tone)
-2. Detect existing features and content types
-3. Map detected features to 6-dimension ontology
-4. Create installation-specific branding documentation
-5. Recommend features based on analysis
-
-Save results to:
-- /[org-slug]/knowledge/brand-guide.md
-- /[org-slug]/knowledge/features.md
-- /[org-slug]/knowledge/ontology-mapping.md
-
-Update .onboarding.json with results.
-```
-
-### Step 6: Wait for User Input
-
-User will either:
-1. Give you a command to edit their homepage
-2. Wait for onboarding to complete
-3. Ask questions
-
-**Be ready to help immediately!**
-
----
-
-## Fallback (No Onboarding Data)
-
-If no `.onboarding.json` found, show:
+**WITHOUT onboarding data:**
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -136,9 +105,28 @@ If no `.onboarding.json` found, show:
 
        Make Your Ideas Real
 
+   https://one.ie  •  npx oneie
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Dev Server: http://localhost:4321
+Dev Server: http://localhost:4321 [✓ Running / ⭕ Stopped]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 Essential Commands
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Get Started:
+• /server start   - Start development server
+• /onboard        - Analyze your website & extract brand
+
+Build & Deploy:
+• /build          - Build features with AI specialists
+• /deploy         - Deploy to production
+
+Need Help?
+• /server         - Full server management commands
+• /now            - View current workflow state
+• /see            - Explore platform capabilities
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✨ What would you like to build?
@@ -157,10 +145,59 @@ Just tell me what you want!
 
 ---
 
+## Command Reference
+
+### Server Commands
+
+Use `/server` for all development server management:
+- `/server` - Check if server is running
+- `/server start` - Start server in background
+- `/server stop` - Stop running server
+- `/server restart` - Restart server
+
+See `.claude/commands/server.md` for implementation details.
+
+### Onboarding Commands
+
+Use `/onboard` to analyze websites and extract brand identity:
+- Analyzes website structure and content
+- Extracts brand colors, fonts, and voice
+- Maps features to 6-dimension ontology
+- Creates installation-specific documentation
+
+See `.claude/commands/onboard.md` for implementation details.
+
+### Workflow Commands
+
+Use workflow commands for inference-based development:
+- `/now` - Display current inference and progress
+- `/next` - Advance to next inference
+- `/todo` - View complete 100-inference sequence
+- `/done` - Mark current inference complete
+
+See `one/knowledge/todo.md` for the 100-inference template.
+
+---
+
 ## Key Principles
 
-1. **FAST** - Show UI in < 3 seconds
-2. **BACKGROUND** - Don't make user wait for analysis
-3. **ACTIONABLE** - Give immediate example they can try
-4. **FRIENDLY** - Use their name and org name
-5. **SIMPLE** - No menus, just get started
+1. **FAST** - Show welcome screen instantly (< 1 second)
+2. **CLEAR** - Display server status and available commands
+3. **MODULAR** - Each feature has dedicated command
+4. **ACTIONABLE** - Provide specific next steps
+5. **HELPFUL** - Guide users to right command for their needs
+
+---
+
+## Implementation Notes
+
+**DO NOT:**
+- Start server automatically (let user control with `/server start`)
+- Launch agent-onboard automatically (let user run `/onboard`)
+- Block waiting for background processes
+
+**DO:**
+- Display current status (server running/stopped, onboarding complete/pending)
+- Show relevant commands based on context
+- Guide users to specific commands for detailed operations
+- Keep welcome screen fast and lightweight
