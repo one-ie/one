@@ -12,11 +12,38 @@
       "args": [
         "-y",
         "mcp-remote",
-        "https://builds.mcp.cloudflare.com/sse"
+        "https://builds.mcp.cloudflare.com/mcp"
       ],
       "env": {
-        "CLOUDFLARE_API_KEY": "${CLOUDFLARE_GLOBAL_API_KEY}",
-        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_GLOBAL_API_KEY}"
+        "CLOUDFLARE_ACCOUNT_ID": "${CLOUDFLARE_ACCOUNT_ID}",
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_GLOBAL_API_KEY}",
+        "CLOUDFLARE_EMAIL": "${CLOUDFLARE_EMAIL}"
+      }
+    },
+    "cloudflare-observability": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://observability.mcp.cloudflare.com/mcp"
+      ],
+      "env": {
+        "CLOUDFLARE_ACCOUNT_ID": "${CLOUDFLARE_ACCOUNT_ID}",
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_GLOBAL_API_KEY}",
+        "CLOUDFLARE_EMAIL": "${CLOUDFLARE_EMAIL}"
+      }
+    },
+    "cloudflare-docs": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://docs.mcp.cloudflare.com/mcp"
+      ],
+      "env": {
+        "CLOUDFLARE_ACCOUNT_ID": "${CLOUDFLARE_ACCOUNT_ID}",
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_GLOBAL_API_KEY}",
+        "CLOUDFLARE_EMAIL": "${CLOUDFLARE_EMAIL}"
       }
     },
     "chrome-devtools": {
