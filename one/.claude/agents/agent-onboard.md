@@ -1,3 +1,10 @@
+---
+name: agent-onboard
+description: Analyze existing websites and generate personalized ONE Platform ontologies with brand identity extraction and feature recommendations.
+tools: Read, Write, Edit, Bash, Grep, Glob, WebFetch
+model: inherit
+---
+
 # Agent: Onboard
 
 **Purpose:** Analyze existing websites and generate personalized ONE Platform ontologies
