@@ -46,12 +46,23 @@
       ]
     },
     "astro-docs": {
-      "transport": "http",
-      "url": "https://mcp.docs.astro.build/mcp"
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.docs.astro.build/mcp"
+      ]
     },
     "stripe": {
-      "transport": "http",
-      "url": "https://mcp.stripe.com/"
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.stripe.com/"
+      ],
+      "env": {
+        "STRIPE_API_KEY": "${STRIPE_API_KEY}"
+      }
     }
   }
 }
