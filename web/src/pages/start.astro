@@ -1,0 +1,316 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { CopyButton } from '@/components/CopyButton';
+import { CheckCircle2, Sparkles, Code, Shirt } from 'lucide-react';
+
+const ecommercePrompt = `Build an ecommerce store for creating and selling custom clothes:
+
+1. Product catalog with categories (T-shirts, Hoodies, Pants, etc.)
+2. Product detail pages with multiple images, sizes, colors
+3. Shopping cart with add/remove items
+4. Checkout flow with Stripe integration
+5. Order management for customers
+6. Product reviews and ratings
+
+Use the ONE Platform 6-dimension ontology:
+- Things: products, orders, users, reviews
+- Connections: user owns order, product has review
+- Events: product_created, order_placed, review_posted
+- Knowledge: product descriptions, size guides
+
+Make it mobile-responsive with dark mode support using Tailwind v4.
+Deploy to Cloudflare Pages when done.`;
+
+const coursePrompt = `Build an online course platform with video lessons, quizzes, student progress tracking, course certificates, and payment integration. Include instructor dashboard and student portal.`;
+
+const blogPrompt = `Create a blog with admin panel for managing posts, categories, tags, and comments. Include rich text editor, image uploads, SEO metadata, and RSS feed generation.`;
+
+const eventPrompt = `Build an event ticketing platform where users can create events, set ticket prices, manage attendee lists, send confirmation emails, and generate QR code tickets.`;
+
+const fitnessPrompt = `Build a fitness tracking app where users can log workouts, track progress with charts, set fitness goals, and get AI-powered workout recommendations based on their history.`;
+
+const forumPrompt = `Create a community forum with threaded discussions, upvoting/downvoting, user karma, moderation tools, and real-time notifications for replies.`;
+---
+
+<Layout title="Your Server is Running | ONE Platform">
+  <div class="min-h-screen bg-background">
+    <!-- Success Banner -->
+    <div class="border-b border-border bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-teal-500/10">
+      <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="flex items-center gap-3 mb-4">
+          <CheckCircle2 class="h-8 w-8 text-green-500" />
+          <h1 class="text-3xl font-bold gradient-text">
+            Your Server is Running!
+          </h1>
+        </div>
+        <div class="flex items-center gap-2 text-muted-foreground">
+          <Badge variant="outline" class="bg-green-500/10 text-green-700 dark:text-green-400">
+            Live at http://localhost:4321
+          </Badge>
+          <span class="text-sm">Ready to build with Claude Code</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-12 max-w-4xl">
+
+      <!-- ONE Platform Intro -->
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 mb-4">
+          <Sparkles class="h-6 w-6 text-primary" />
+          <h2 class="text-2xl font-bold">Make Your Ideas Real</h2>
+        </div>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+          You're running the ONE Platform - a complete AI-native development environment.
+          Just describe what you want to build, and Claude Code will create it for you.
+        </p>
+      </div>
+
+      <!-- How to Use Claude Code -->
+      <Card class="mb-8">
+        <CardHeader>
+          <div class="flex items-center gap-2">
+            <Code class="h-5 w-5 text-primary" />
+            <CardTitle>How to Use Claude Code</CardTitle>
+          </div>
+          <CardDescription>
+            Open Claude Code and copy one of these prompts to get started
+          </CardDescription>
+        </CardHeader>
+        <CardContent class="space-y-6">
+
+          <!-- Step 1 -->
+          <div>
+            <div class="flex items-start gap-3">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
+                1
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold mb-2">Click a Copy Button</h3>
+                <p class="text-sm text-muted-foreground">
+                  Choose one of the examples below and click the "Copy Prompt" button to copy it to your clipboard
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div>
+            <div class="flex items-start gap-3">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
+                2
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold mb-2">Paste into Claude Code</h3>
+                <p class="text-sm text-muted-foreground">
+                  Open Claude Code and paste the prompt. Be specific if you want to customize it!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div>
+            <div class="flex items-start gap-3">
+              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
+                3
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold mb-2">Watch Claude Build It</h3>
+                <p class="text-sm text-muted-foreground">
+                  Claude will read the ONE Platform documentation, map your feature to the 6-dimension ontology,
+                  and generate production-ready code using Astro + React 19 + Tailwind v4.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </CardContent>
+      </Card>
+
+      <!-- Featured Example: Ecommerce Store -->
+      <Card class="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent mb-6">
+        <CardHeader>
+          <div class="flex items-center gap-2">
+            <Shirt class="h-5 w-5 text-primary" />
+            <CardTitle>Featured Example: Build an Ecommerce Store</CardTitle>
+          </div>
+          <CardDescription>
+            Create a complete online store for selling custom clothing
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="bg-background rounded-lg p-4 border border-border mb-4">
+            <pre class="text-sm leading-relaxed whitespace-pre-wrap font-mono text-foreground"><code>{ecommercePrompt}</code></pre>
+          </div>
+
+          <div class="flex justify-center mb-4">
+            <CopyButton client:load text={ecommercePrompt} className="w-full max-w-md h-14 text-lg font-semibold" />
+          </div>
+
+          <div class="p-3 bg-muted/50 rounded-lg border border-border">
+            <p class="text-sm text-muted-foreground">
+              <strong class="text-foreground">What happens next:</strong> Claude will create the complete
+              ecommerce frontend with product catalog, shopping cart, checkout (Stripe), order management,
+              and reviews using Astro + React 19, then deploy to Cloudflare Pages.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <!-- More Examples -->
+      <Card>
+        <CardHeader>
+          <CardTitle>More Examples to Try</CardTitle>
+          <CardDescription>
+            Each example is a complete, production-ready feature
+          </CardDescription>
+        </CardHeader>
+        <CardContent class="space-y-4">
+
+          <!-- Example 1 -->
+          <div class="bg-muted/30 rounded-lg p-4 border border-border">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-semibold">🎓 Online Course Platform</h4>
+              <CopyButton client:load text={coursePrompt} className="h-9" />
+            </div>
+            <p class="text-sm text-muted-foreground">
+              Build a Udemy-style platform for creating and selling courses with video lessons, quizzes, and certificates.
+            </p>
+          </div>
+
+          <!-- Example 2 -->
+          <div class="bg-muted/30 rounded-lg p-4 border border-border">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-semibold">📝 Blog with CMS</h4>
+              <CopyButton client:load text={blogPrompt} className="h-9" />
+            </div>
+            <p class="text-sm text-muted-foreground">
+              Create a full-featured blog with admin panel, content management, and SEO optimization.
+            </p>
+          </div>
+
+          <!-- Example 3 -->
+          <div class="bg-muted/30 rounded-lg p-4 border border-border">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-semibold">🎫 Event Ticketing System</h4>
+              <CopyButton client:load text={eventPrompt} className="h-9" />
+            </div>
+            <p class="text-sm text-muted-foreground">
+              Build an Eventbrite-like platform for creating events, selling tickets, and managing attendees.
+            </p>
+          </div>
+
+          <!-- Example 4 -->
+          <div class="bg-muted/30 rounded-lg p-4 border border-border">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-semibold">🏋️ Fitness Tracking App</h4>
+              <CopyButton client:load text={fitnessPrompt} className="h-9" />
+            </div>
+            <p class="text-sm text-muted-foreground">
+              Create a personal fitness tracker with workout logs, progress charts, and goal setting.
+            </p>
+          </div>
+
+          <!-- Example 5 -->
+          <div class="bg-muted/30 rounded-lg p-4 border border-border">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-semibold">💬 Community Forum</h4>
+              <CopyButton client:load text={forumPrompt} className="h-9" />
+            </div>
+            <p class="text-sm text-muted-foreground">
+              Build a Reddit-style community forum with posts, comments, upvotes, and user profiles.
+            </p>
+          </div>
+
+        </CardContent>
+      </Card>
+
+      <!-- Quick Tips -->
+      <div class="mt-8 p-6 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg border border-border">
+        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Sparkles class="h-5 w-5 text-primary" />
+          Pro Tips for Better Results
+        </h3>
+        <ul class="space-y-2 text-sm text-muted-foreground">
+          <li class="flex items-start gap-2">
+            <span class="text-primary font-bold">•</span>
+            <span><strong class="text-foreground">Be specific:</strong> The more detail you provide, the better Claude can implement exactly what you want</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-primary font-bold">•</span>
+            <span><strong class="text-foreground">Mention the ontology:</strong> Explicitly map features to things, connections, events, and knowledge</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-primary font-bold">•</span>
+            <span><strong class="text-foreground">Request deployment:</strong> Add "Deploy to Cloudflare Pages when done" for automatic deployment</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-primary font-bold">•</span>
+            <span><strong class="text-foreground">Ask for features:</strong> Request specific integrations like Stripe, OAuth, email, analytics, etc.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-primary font-bold">•</span>
+            <span><strong class="text-foreground">Iterate freely:</strong> You can always ask Claude to modify or enhance what it builds</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Footer Links -->
+      <div class="mt-12 pt-8 border-t border-border text-center">
+        <p class="text-sm text-muted-foreground mb-4">
+          Want to learn more about the ONE Platform architecture?
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="/ontology" class="text-sm text-primary hover:underline">
+            6-Dimension Ontology →
+          </a>
+          <a href="/architecture" class="text-sm text-primary hover:underline">
+            Architecture Guide →
+          </a>
+          <a href="/docs" class="text-sm text-primary hover:underline">
+            Complete Documentation →
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .gradient-text {
+    background: linear-gradient(90deg,
+      hsl(var(--color-primary)) 0%,
+      hsl(var(--color-chart-1)) 50%,
+      hsl(var(--color-chart-2)) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 8s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes gradient {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  @supports not (background-clip: text) {
+    .gradient-text {
+      -webkit-text-fill-color: inherit;
+      color: hsl(var(--color-foreground));
+    }
+  }
+
+  pre code {
+    display: block;
+    line-height: 1.6;
+  }
+</style>
+</Layout>
