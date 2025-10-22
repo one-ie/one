@@ -12,6 +12,12 @@ CONVEX_DEPLOYMENT = "prod:shocking-falcon-870"
 CLOUDFLARE_ACCOUNT_ID = "627e0c7ccbe735a4a7cabf91e377bbad"
 GITHUB_CLIENT_ID = "55c60b9b2850097d51b7"
 
+# Frontend Onboarding System (v3.6.0+)
+ORG_NAME = "one"                    # Reserved: "one" for ONE Platform
+ORG_WEBSITE = "https://one.ie"      # Reserved: "https://one.ie" for ONE Platform
+ORG_FOLDER = "onegroup"             # Reserved: "onegroup" for ONE Platform
+ONE_BACKEND = "on"                  # "on" = full platform, "off" = frontend-only
+
 [[kv_namespaces]]
 binding = "SESSION"
 id = "3c7a77f517f6434a9fea95a3fa5537c1"
@@ -20,11 +26,29 @@ id = "3c7a77f517f6434a9fea95a3fa5537c1"
 # Note: Custom domains (web.one.ie, one.ie) are configured in Cloudflare Pages dashboard
 [env.production]
 [env.production.vars]
+NODE_VERSION = "22.16.0"
+PUBLIC_CONVEX_URL = "https://shocking-falcon-870.convex.cloud"
+CONVEX_DEPLOYMENT = "prod:shocking-falcon-870"
+CLOUDFLARE_ACCOUNT_ID = "627e0c7ccbe735a4a7cabf91e377bbad"
+GITHUB_CLIENT_ID = "55c60b9b2850097d51b7"
 INSTALLATION_NAME = "one-group"
 PUBLIC_INSTALLATION_NAME = "one-group"
+ORG_NAME = "one"
+ORG_WEBSITE = "https://one.ie"
+ORG_FOLDER = "onegroup"
+ONE_BACKEND = "on"
 
 # Preview environment
 [env.preview]
 [env.preview.vars]
+NODE_VERSION = "22.16.0"
+PUBLIC_CONVEX_URL = "https://shocking-falcon-870.convex.cloud"
+CONVEX_DEPLOYMENT = "prod:shocking-falcon-870"
+CLOUDFLARE_ACCOUNT_ID = "627e0c7ccbe735a4a7cabf91e377bbad"
+GITHUB_CLIENT_ID = "55c60b9b2850097d51b7"
 INSTALLATION_NAME = "one-group"
 PUBLIC_INSTALLATION_NAME = "one-group"
+ORG_NAME = "one"
+ORG_WEBSITE = "https://one.ie"
+ORG_FOLDER = "onegroup"
+ONE_BACKEND = "on"

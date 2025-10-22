@@ -29,6 +29,8 @@ export default defineConfig({
     resolve: {
       alias: {
         lodash: 'lodash-es',
+        // React 19 + Cloudflare Edge compatibility
+        'react-dom/server': 'react-dom/server.edge',
       },
       dedupe: ['react', 'react-dom'],
     },
