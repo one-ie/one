@@ -62,12 +62,15 @@ export class TestLogger {
   }
 
   private sanitizeForLogging(message: string): string {
-    // Remove potential sensitive patterns (passwords, tokens, etc.)
+    // Remove potential sensitive patterns (passwords, tokens, user IDs, emails, etc.)
     return message
       .replace(/password[=:]\s*[^\s,}]+/gi, 'password=***')
       .replace(/token[=:]\s*[^\s,}]+/gi, 'token=***')
       .replace(/secret[=:]\s*[^\s,}]+/gi, 'secret=***')
-      .replace(/api[_-]?key[=:]\s*[^\s,}]+/gi, 'api_key=***');
+      .replace(/api[_-]?key[=:]\s*[^\s,}]+/gi, 'api_key=***')
+      .replace(/user[_-]?id[=:]?\s*[^\s,}]+/gi, 'userId=***')
+      .replace(/uid[=:]?\s*[^\s,}]+/gi, 'uid=***')
+      .replace(/email[=:]?\s*[^\s,}]+/gi, 'email=***');
   }
 
   success(message: string): void {
