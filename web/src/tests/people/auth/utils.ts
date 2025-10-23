@@ -1,5 +1,5 @@
 import { ConvexHttpClient } from "convex/browser";
-
+import * as crypto from "crypto";
 /**
  * Test utilities for auth tests
  */
@@ -13,14 +13,18 @@ export const convex = new ConvexHttpClient(
  * Generate a unique test email
  */
 export function generateTestEmail(prefix: string = "test"): string {
-  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2)}@test.com`;
+  // Use crypto randomBytes for more secure randomness in test emails
+  const randomPart = crypto.randomBytes(8).toString("hex");
+  return `${prefix}-${Date.now()}-${randomPart}@test.com`;
 }
 
 /**
  * Generate a secure random password
  */
 export function generateTestPassword(): string {
-  return `Test${Math.random().toString(36).slice(2)}Pass123!`;
+  // Use crypto randomBytes for secure password generation
+  const randomPart = crypto.randomBytes(8).toString("hex");
+  return `Test${randomPart}Pass123!`;
 }
 
 /**
