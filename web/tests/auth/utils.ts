@@ -64,13 +64,23 @@ export class TestLogger {
   private sanitizeForLogging(message: string): string {
     // Remove potential sensitive patterns (passwords, tokens, user IDs, emails, etc.)
     return message
-      .replace(/password[=:]\s*[^\s,}]+/gi, 'password=***')
-      .replace(/token[=:]\s*[^\s,}]+/gi, 'token=***')
-      .replace(/secret[=:]\s*[^\s,}]+/gi, 'secret=***')
-      .replace(/api[_-]?key[=:]\s*[^\s,}]+/gi, 'api_key=***')
-      .replace(/user[_-]?id[=:]?\s*[^\s,}]+/gi, 'userId=***')
-      .replace(/uid[=:]?\s*[^\s,}]+/gi, 'uid=***')
-      .replace(/email[=:]?\s*[^\s,}]+/gi, 'email=***');
+      // Password (password=secret, password: secret)
+      .replace(/password\s*[:=]\s*[^\s,}]+/gi, 'password=***')
+      // Token (token=secret, token: secret)
+      .replace(/token\s*[:=]\s*[^\s,}]+/gi, 'token=***')
+      // Secret (secret=..., secret: ...)
+      .replace(/secret\s*[:=]\s*[^\s,}]+/gi, 'secret=***')
+      // API key (api_key=..., api-key: ...)
+      .replace(/api[_-]?key\s*[:=]\s*[^\s,}]+/gi, 'api_key=***')
+      // User ID (userId=..., user-id: ..., user id: ...)
+      .replace(/user[_\s-]*id\s*[:=]?\s*[^\s,}]+/gi, 'userId=***')
+      // UID (uid=..., uid: ...)
+      .replace(/uid\s*[:=]?\s*[^\s,}]+/gi, 'uid=***')
+      // Email (email=..., email: ...)
+      .replace(/email\s*[:=]?\s*[^\s,}]+/gi, 'email=***')
+      // --- extra: mask patterns at end after a colon, e.g. 'OAuth signin: <userId>'
+      // (handles e.g. any word ending in 'id' after a colon)
+      .replace(/(\b(user[_\s-]*id|uid|email|token|secret|api[_-]?key|password)\b)\s*:\s*[^\s,}]+/gi, '$1: ***');
   }
 
   success(message: string): void {
