@@ -4,7 +4,11 @@
 
 When user types `/server [action]`, manage the ONE Platform development server.
 
-IMPORTANT: Check if cd web && bun install
+**CRITICAL:** For `/server start` and `/server restart`:
+1. Check if web/node_modules exists
+2. If missing, run `cd web && bun install` FIRST
+3. Only then run `bun run dev`
+4. This prevents "failed to start" errors from missing dependencies
 
 ### Supported Actions
 
@@ -91,13 +95,54 @@ Are you in the ONE Platform root directory?
 Current directory: [pwd]
 ```
 
-### Step 3: Start Server in Background
+### Step 3: Check Dependencies are Installed
+
+Check if `node_modules` exists in web/:
+
+```bash
+[ -d web/node_modules ] && echo "installed" || echo "missing"
+```
+
+**If dependencies not installed:**
+
+Show progress message and install:
+
+```
+📦 Installing dependencies...
+
+Installing:
+  cd web && bun install
+```
+
+Run the install:
+
+```bash
+cd web && bun install
+```
+
+**If install succeeds, continue to Step 4.**
+
+**If install fails, show error:**
+
+```
+❌ Failed to install dependencies
+
+Try manually:
+cd web && bun install
+
+Common issues:
+• Node.js/Bun not installed
+• package.json corrupted
+• Network issues
+```
+
+### Step 4: Start Server in Background
 
 ```bash
 cd web && bun run dev > /dev/null 2>&1 &
 ```
 
-### Step 4: Wait and Verify (2 seconds)
+### Step 5: Wait and Verify (2 seconds)
 
 ```bash
 sleep 2 && lsof -ti:4321 2>/dev/null
@@ -212,14 +257,28 @@ lsof -ti:4321 | xargs kill 2>/dev/null
 sleep 1
 ```
 
-### Step 2: Start Server
+### Step 2: Check Dependencies are Installed
+
+Check if `node_modules` exists in web/:
+
+```bash
+[ -d web/node_modules ] && echo "installed" || echo "missing"
+```
+
+**If dependencies not installed, run:**
+
+```bash
+cd web && bun install
+```
+
+### Step 3: Start Server
 
 ```bash
 cd web && bun run dev > /dev/null 2>&1 &
 sleep 2
 ```
 
-### Step 3: Verify Running
+### Step 4: Verify Running
 
 ```bash
 lsof -ti:4321 2>/dev/null
