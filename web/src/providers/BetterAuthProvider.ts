@@ -286,7 +286,7 @@ export function createBetterAuthProvider(client: ConvexReactClient) {
       }),
 
     // ===== VERIFY 2FA =====
-    verify2FA: (args: Verify2FAArgs) =>
+    verify2FA: (_args: Verify2FAArgs) =>
       Effect.tryPromise({
         try: async () => {
           const token = getAuthToken();

@@ -4,6 +4,8 @@
 
 When user types `/server [action]`, manage the ONE Platform development server.
 
+IMPORTANT: Check if cd web && bun install
+
 ### Supported Actions
 
 - `/server` or `/server status` - Check server status

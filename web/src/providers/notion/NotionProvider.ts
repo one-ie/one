@@ -13,13 +13,11 @@
 
 import { Effect, Layer } from "effect";
 import { Client } from "@notionhq/client";
-import type {
-  PageObjectResponse,
-  DatabaseObjectResponse,
-} from "@notionhq/client/build/src/api-endpoints";
+import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 import type {
   DataProvider,
+  Group,
   Thing,
   Connection,
   Event,
@@ -27,12 +25,15 @@ import type {
   ThingKnowledge,
   CreateThingInput,
   UpdateThingInput,
+  CreateGroupInput,
+  UpdateGroupInput,
   CreateConnectionInput,
   CreateEventInput,
   CreateKnowledgeInput,
   ListThingsOptions,
   ListConnectionsOptions,
   ListEventsOptions,
+  ListGroupsOptions,
   SearchKnowledgeOptions,
 } from "../DataProvider";
 import {
@@ -45,6 +46,8 @@ import {
   QueryError,
   EventCreateError,
   KnowledgeNotFoundError,
+  GroupNotFoundError,
+  GroupCreateError,
 } from "../DataProvider";
 
 // ============================================================================
@@ -390,6 +393,38 @@ export const makeNotionProvider = (config: NotionProviderConfig): DataProvider =
 
   return {
     auth: {} as any, // Notion provider doesn't handle auth
+
+    // ===== GROUPS =====
+    groups: {
+      get: (id: string) =>
+        Effect.fail(
+          new GroupNotFoundError(id, "Notion provider does not support groups")
+        ),
+
+      getBySlug: (slug: string) =>
+        Effect.fail(
+          new GroupNotFoundError(slug, "Notion provider does not support groups")
+        ),
+
+      list: () =>
+        Effect.succeed([]),
+
+      create: () =>
+        Effect.fail(
+          new GroupCreateError("Notion provider does not support creating groups")
+        ),
+
+      update: () =>
+        Effect.fail(
+          new GroupNotFoundError("", "Notion provider does not support updating groups")
+        ),
+
+      delete: () =>
+        Effect.fail(
+          new GroupNotFoundError("", "Notion provider does not support deleting groups")
+        ),
+    },
+
     // ===== THINGS =====
     things: {
       get: (id: string) =>

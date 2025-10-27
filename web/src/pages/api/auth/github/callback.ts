@@ -19,12 +19,11 @@ export const GET: APIRoute = async ({ url, cookies, redirect, locals }) => {
     const clientSecret = env.GITHUB_CLIENT_SECRET || import.meta.env.GITHUB_CLIENT_SECRET;
     const redirectUri = `${url.origin}/api/auth/github/callback`;
 
+    // Debug logging (sanitized - no sensitive data)
     console.log("GitHub OAuth Debug:", {
-      clientId,
-      redirectUri,
+      hasClientId: !!clientId,
       hasClientSecret: !!clientSecret,
-      clientSecretLength: clientSecret?.length || 0,
-      codeLength: code.length,
+      hasCode: !!code,
       hasRuntime: !!runtime,
       hasEnv: !!env
     });
@@ -62,7 +61,13 @@ export const GET: APIRoute = async ({ url, cookies, redirect, locals }) => {
     }
 
     if (!tokenData.access_token) {
-      console.error("GitHub token exchange failed:", tokenData);
+      // Sanitize token data before logging (remove any tokens)
+      const sanitizedData = {
+        error: tokenData.error,
+        error_description: tokenData.error_description,
+        error_uri: tokenData.error_uri,
+      };
+      console.error("GitHub token exchange failed:", sanitizedData);
       return redirect(`/account/signin?error=github_token_failed&details=${encodeURIComponent(tokenData.error_description || tokenData.error || 'No access token')}`);
     }
 

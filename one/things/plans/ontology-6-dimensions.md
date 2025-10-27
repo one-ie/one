@@ -1,27 +1,30 @@
 # Migration Plan: 4-Table Ontology → 6-Dimension Ontology
 
-**Version:** 1.0.0
+**Version:** 2.0.0
 **Created:** 2025-10-10
-**Status:** Planning
+**Updated:** 2025-10-24
+**Status:** ✅ Complete
 **Goal:** Transform ONE Platform from a 4-table ontology to a complete 6-dimension architecture that scales from children learning to build AI apps to enterprise platforms serving millions.
 
 ---
 
 ## Executive Summary
 
-The ONE Platform currently uses a "4-table ontology" (Things, Connections, Events, Knowledge). This plan expands it to a **6-dimension ontology** that explicitly includes Organizations and People as first-class dimensions, creating a complete reality-aware architecture.
+The ONE Platform has been successfully upgraded from a "4-table ontology" (Things, Connections, Events, Knowledge) to a **6-dimension ontology** that explicitly includes Groups and People as first-class dimensions, creating a complete reality-aware architecture.
 
 **Why This Matters:**
 
-- **For Children:** "I own a lemonade stand (Organization), I'm the owner (Person), I sell lemonade (Things), customers buy it (Connections), sales happen (Events), and I learn what works (Knowledge)"
+- **For Children:** "I own a lemonade stand (Group), I'm the owner (Person), I sell lemonade (Things), customers buy it (Connections), sales happen (Events), and I learn what works (Knowledge)"
 - **For Enterprises:** Multi-tenant SaaS platforms with clear ownership, governance, data isolation, and intelligence
 
 **Key Changes:**
 
-- `4 tables` → `6 dimensions`
-- Explicit Organizations (multi-tenant isolation boundary)
-- Explicit People (authorization & governance)
-- Enhanced documentation throughout `/one/*`
+- `4 tables` → `6 dimensions` ✅
+- Explicit Groups (multi-tenant isolation with hierarchical nesting) ✅
+- Explicit People (authorization & governance) ✅
+- Enhanced documentation throughout `/one/*` ✅
+
+**Note:** We use "Groups" not "Organizations" to support hierarchical nesting from friend circles → businesses → DAOs → governments.
 
 ---
 
@@ -55,39 +58,42 @@ The ONE Platform currently uses a "4-table ontology" (Things, Connections, Event
 
 ```
 ┌──────────────────────────────────────────────┐
-│              1. ORGANIZATIONS                 │
-│  THE isolation boundary for multi-tenancy    │
-│  Who owns what at the org level              │
+│                  1. GROUPS                    │
+│  Multi-tenant isolation with hierarchical     │
+│  nesting: friend circles → businesses →      │
+│  DAOs → governments (all group types)        │
 └──────────────────────────────────────────────┘
                     ↓
 ┌──────────────────────────────────────────────┐
 │                 2. PEOPLE                     │
 │  Who can do what (authorization)             │
-│  Platform owner, org owners, users           │
+│  Platform owner, group owners, users         │
 └──────────────────────────────────────────────┘
                     ↓
 ┌──────────────────────────────────────────────┐
 │                 3. THINGS                     │
 │  What exists - entities, agents, content     │
-│  Created within org context                  │
+│  Created within group context (via groupId)  │
 └──────────────────────────────────────────────┘
                     ↓
 ┌──────────────────────────────────────────────┐
 │              4. CONNECTIONS                   │
 │  How things relate - ownership, membership   │
-│  Scoped to organizations                     │
+│  Scoped to groups (via groupId)              │
 └──────────────────────────────────────────────┘
                     ↓
 ┌──────────────────────────────────────────────┐
 │                 5. EVENTS                     │
 │  What happened - actions, state changes      │
 │  Actor (person) + target (thing) + time      │
+│  Scoped to groups (via groupId)              │
 └──────────────────────────────────────────────┘
                     ↓
 ┌──────────────────────────────────────────────┐
 │               6. KNOWLEDGE                    │
 │  What it means - vectors, embeddings, RAG    │
 │  Intelligence layer for all dimensions       │
+│  Scoped to groups (via groupId)              │
 └──────────────────────────────────────────────┘
 ```
 

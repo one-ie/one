@@ -13,7 +13,7 @@
 
 import type { ConvexReactClient } from "convex/react";
 import type { DataProvider } from "./DataProvider";
-import { createConvexProvider, type ConvexProviderConfig } from "./ConvexProvider";
+import { createConvexProvider } from "./ConvexProvider";
 import { Layer } from "effect";
 import { DataProviderService } from "./DataProvider";
 
@@ -83,8 +83,8 @@ export function createDataProvider(config: ProviderConfig): DataProvider {
       throw new Error("Supabase provider not yet implemented.");
 
     default:
-      const _exhaustive: never = config;
-      throw new Error(`Unknown provider type: ${JSON.stringify(config)}`);
+      const _exhaustive: never = config as never;
+      throw new Error(`Unknown provider type: ${JSON.stringify(_exhaustive)}`);
   }
 }
 

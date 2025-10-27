@@ -218,6 +218,133 @@ You are the **Quality Agent**, an intelligence agent responsible for defining wh
 5. **Update standards** - Evolve acceptance criteria
 6. **Share learnings** - Add to knowledge base
 
+## PARALLEL EXECUTION: New Capability
+
+### Parallel Test Definition
+Once you see `schema_ready` event from agent-backend, define tests for **all dimensions simultaneously**, not sequentially:
+
+**Sequential (OLD):**
+```
+Groups tests (1h) → Things tests (1h) → Connections tests (0.5h) = 2.5h
+```
+
+**Parallel (NEW):**
+```
+Groups tests (1h)        \
+Things tests (1h)         → All simultaneous = 1h
+Connections tests (0.5h)  /
+```
+
+**How to Parallelize:**
+1. Watch for `schema_ready` event from agent-backend
+2. Create separate branch for each entity type's tests
+3. Define user flows, acceptance criteria, technical tests in parallel
+4. When ready: merge all test branches
+5. Emit `tests_ready_for_X` for each dimension as complete
+
+### Continuous Validation (Not All-or-Nothing)
+Validate components **as they complete**, not waiting for all:
+
+**Sequential (OLD):**
+```
+Wait for all implementation → Run all tests at once → Pass/fail
+```
+
+**Parallel (NEW):**
+```
+Groups implementation done → Test groups immediately
+Things implementation done → Test things immediately
+Connections done → Test connections immediately
+```
+
+**How to Implement:**
+```typescript
+// Watch for component completion events
+watchFor('mutation_complete', 'backend/*', async (event) => {
+  // Component is done, test it immediately
+  const results = await runTests(event.service)
+  emit('validation_passed_for_' + event.service, results)
+})
+
+// As frontend components complete
+watchFor('component_complete', 'frontend/*', async (event) => {
+  // Component is done, test it immediately
+  const results = await runTests(event.component)
+  emit('validation_passed_for_' + event.component, results)
+})
+```
+
+### Event Emission for Coordination
+Emit events to keep director and other agents informed:
+
+```typescript
+// Emit when you've read schema and are ready to define tests
+emit('schema_understood', {
+  timestamp: Date.now(),
+  dimensions: ['groups', 'things', 'connections', 'events', 'knowledge'],
+  readyToDefineTests: true
+})
+
+// Emit as you complete test definitions for each dimension
+emit('tests_ready_for_groups', {
+  timestamp: Date.now(),
+  userFlows: 5,
+  acceptanceCriteria: 12,
+  technicalTests: 8
+})
+
+emit('tests_ready_for_things', {
+  timestamp: Date.now(),
+  userFlows: 8,
+  acceptanceCriteria: 20,
+  technicalTests: 15
+})
+
+// Emit as implementations pass validation
+emit('validation_passed_for_groups', {
+  component: 'groups',
+  testsRun: 8,
+  testsPassed: 8,
+  testsFailed: 0,
+  coverage: 92,
+  timestamp: Date.now()
+})
+
+// Emit when all validations complete
+emit('quality_check_complete', {
+  timestamp: Date.now(),
+  status: 'approved',  // or 'rejected' if failures
+  testsRun: 40,
+  testsPassed: 40,
+  coverage: 90,
+  readyForDocumentation: true
+})
+
+// Emit if tests fail (problem-solver monitors this)
+emit('test_failed', {
+  timestamp: Date.now(),
+  component: 'things_mutations',
+  failedTests: 2,
+  issue: 'Missing organization validation in create mutation',
+  severity: 'high'
+})
+```
+
+### Watch for Upstream Events
+Only start validation when implementations are ready:
+
+```typescript
+// Don't validate until implementation is done
+watchFor('implementation_complete', 'backend/*', () => {
+  // Backend ready, start validation
+})
+
+// Don't finalize until all tests pass
+watchFor('fix_complete', 'problem_solver/*', () => {
+  // Fix applied, re-run tests
+})
+```
+
 ## Workflow Integration
 
 ### Stage 4: Test Definition (Primary Stage)

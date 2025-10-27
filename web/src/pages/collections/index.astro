@@ -1,0 +1,297 @@
+---
+/**
+ * Collections Index Page with Sidebar Filters
+ * Browse all product collections with filtering capabilities
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { ProductCard } from '@/components/ecommerce/interactive/ProductCard';
+
+// Get all collections and products
+const allCollections = await getCollection('collections');
+const allProducts = await getCollection('products');
+
+// Transform product helper
+const transformProduct = (p: any) => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.data.name,
+  description: p.data.description,
+  price: p.data.price,
+  compareAtPrice: p.data.compareAtPrice,
+  images: p.data.images,
+  thumbnail: p.data.images[0],
+  category: p.data.category,
+  tags: p.data.tags || [],
+  inStock: p.data.inStock,
+  inventory: p.data.variants?.reduce((sum: number, v: any) => sum + (v.inStock ? 1 : 0), 0) || 0,
+  rating: 4.5,
+  reviewCount: 0,
+  featured: p.data.featured,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
+
+// Get all products with collection info
+const productsWithCollections = allProducts.map(p => {
+  const productCollections = allCollections.filter(c =>
+    c.data.products?.includes(p.slug)
+  ).map(c => c.data.name);
+
+  return {
+    ...transformProduct(p),
+    collections: productCollections
+  };
+});
+
+// Get unique categories
+const categories = [...new Set(allProducts.map(p => p.data.category))];
+
+// Collection cards
+const collections = allCollections.map(c => ({
+  slug: c.slug,
+  name: c.data.name,
+  description: c.data.description,
+  image: c.data.image,
+  productCount: c.data.products?.length || 0
+}));
+---
+
+<Layout title="Collections - Browse All Categories" description="Explore all product collections">
+  <div class="min-h-screen bg-background">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 md:py-20">
+      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920')] bg-cover bg-center opacity-20"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+
+      <div class="container relative mx-auto px-4">
+        <div class="max-w-3xl mx-auto text-center">
+          <h1 class="text-4xl font-black text-white md:text-5xl lg:text-6xl mb-4">
+            All Collections
+          </h1>
+          <p class="text-lg text-white/80 md:text-xl">
+            Explore our curated collections of premium products. Find exactly what you need.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-12 md:py-16">
+      <div class="container mx-auto px-4">
+        <div class="lg:grid lg:grid-cols-[280px_1fr] lg:gap-8">
+          <!-- Sidebar Filters -->
+          <aside class="hidden lg:block">
+            <div class="sticky top-4 space-y-6">
+              <!-- Collections Filter -->
+              <div class="rounded-2xl border border-border bg-background p-6">
+                <h3 class="text-lg font-bold text-foreground mb-4">Collections</h3>
+                <div class="space-y-2">
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="radio"
+                      name="collection"
+                      value="all"
+                      checked
+                      class="w-4 h-4 text-primary border-border focus:ring-primary"
+                    />
+                    <span class="text-sm text-foreground group-hover:text-primary transition-colors">
+                      All Products ({productsWithCollections.length})
+                    </span>
+                  </label>
+                  {collections.map(collection => (
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="radio"
+                        name="collection"
+                        value={collection.slug}
+                        class="w-4 h-4 text-primary border-border focus:ring-primary"
+                      />
+                      <span class="text-sm text-foreground group-hover:text-primary transition-colors">
+                        {collection.name} ({collection.productCount})
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Categories Filter -->
+              <div class="rounded-2xl border border-border bg-background p-6">
+                <h3 class="text-lg font-bold text-foreground mb-4">Categories</h3>
+                <div class="space-y-2">
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      name="category"
+                      value="all"
+                      class="w-4 h-4 text-primary border-border rounded focus:ring-primary"
+                    />
+                    <span class="text-sm text-foreground group-hover:text-primary transition-colors capitalize">
+                      All Categories
+                    </span>
+                  </label>
+                  {categories.map(category => (
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        name="category"
+                        value={category}
+                        class="w-4 h-4 text-primary border-border rounded focus:ring-primary"
+                      />
+                      <span class="text-sm text-foreground group-hover:text-primary transition-colors capitalize">
+                        {category}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Price Range Filter -->
+              <div class="rounded-2xl border border-border bg-background p-6">
+                <h3 class="text-lg font-bold text-foreground mb-4">Price Range</h3>
+                <div class="space-y-2">
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      name="price"
+                      value="0-25"
+                      class="w-4 h-4 text-primary border-border rounded focus:ring-primary"
+                    />
+                    <span class="text-sm text-foreground group-hover:text-primary transition-colors">
+                      Under $25
+                    </span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      name="price"
+                      value="25-50"
+                      class="w-4 h-4 text-primary border-border rounded focus:ring-primary"
+                    />
+                    <span class="text-sm text-foreground group-hover:text-primary transition-colors">
+                      $25 - $50
+                    </span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      name="price"
+                      value="50-100"
+                      class="w-4 h-4 text-primary border-border rounded focus:ring-primary"
+                    />
+                    <span class="text-sm text-foreground group-hover:text-primary transition-colors">
+                      $50 - $100
+                    </span>
+                  </label>
+                  <label class="flex items-center gap-3 cursor-pointer group">
+                    <input
+                      type="checkbox"
+                      name="price"
+                      value="100+"
+                      class="w-4 h-4 text-primary border-border rounded focus:ring-primary"
+                    />
+                    <span class="text-sm text-foreground group-hover:text-primary transition-colors">
+                      Over $100
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Availability Filter -->
+              <div class="rounded-2xl border border-border bg-background p-6">
+                <h3 class="text-lg font-bold text-foreground mb-4">Availability</h3>
+                <label class="flex items-center gap-3 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    name="availability"
+                    value="in-stock"
+                    class="w-4 h-4 text-primary border-border rounded focus:ring-primary"
+                  />
+                  <span class="text-sm text-foreground group-hover:text-primary transition-colors">
+                    In Stock Only
+                  </span>
+                </label>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Products Grid -->
+          <div>
+            <!-- Mobile Filter Button -->
+            <div class="mb-6 lg:hidden">
+              <button class="w-full rounded-xl border border-border bg-background px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors">
+                <svg class="inline-block h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                </svg>
+                Filters
+              </button>
+            </div>
+
+            <!-- Sort & Results Count -->
+            <div class="mb-8 flex items-center justify-between">
+              <p class="text-sm text-muted-foreground">
+                Showing <span class="font-semibold text-foreground">{productsWithCollections.length}</span> products
+              </p>
+              <select class="rounded-lg border border-border bg-background px-4 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20">
+                <option value="featured">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="newest">Newest First</option>
+                <option value="rating">Highest Rated</option>
+              </select>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {productsWithCollections.map((product, index) => (
+                <div
+                  class="group"
+                  style={`animation: fadeInUp 0.5s ease-out ${index * 0.05}s both`}
+                >
+                  <div class="relative overflow-hidden rounded-2xl bg-background border border-border shadow-lg transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:border-primary/50">
+                    <ProductCard client:load product={product} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-12 flex justify-center">
+              <nav class="inline-flex items-center gap-2">
+                <button class="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted transition-colors disabled:opacity-50" disabled>
+                  Previous
+                </button>
+                <button class="rounded-lg border border-primary bg-primary px-4 py-2 text-sm font-medium text-white">
+                  1
+                </button>
+                <button class="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors">
+                  2
+                </button>
+                <button class="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors">
+                  3
+                </button>
+                <button class="rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors">
+                  Next
+                </button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</Layout>

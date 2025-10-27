@@ -1,18 +1,33 @@
 /**
- * Service Layer Exports
+ * Shop Services - Ecommerce functionality
  *
- * Backend-agnostic business logic services for the ONE Platform.
- * Complete 6-dimension architecture with validation and error handling.
+ * Exports all ecommerce services built on the 6-dimension ontology
  */
 
-// Core Services
-export { ThingService } from "./ThingService";
-export { ConnectionService } from "./ConnectionService";
-export { EventService } from "./EventService";
-export { KnowledgeService } from "./KnowledgeService";
-export { OrganizationService } from "./OrganizationService";
-export { PeopleService } from "./PeopleService";
+export { ProductService } from "./ProductService";
+export type {
+  ProductVariant,
+  ProductProperties,
+  CreateProductInput,
+  UpdateProductInput,
+} from "./ProductService";
 
-// Types
-export * from "./types";
-export * from "./constants";
+export { CartService } from "./CartService";
+export type { CartItemMetadata, CartItem, Cart } from "./CartService";
+
+export { OrderService } from "./OrderService";
+export type {
+  OrderItem,
+  ShippingAddress,
+  OrderProperties,
+  OrderStatus,
+  CreateOrderInput,
+} from "./OrderService";
+
+export { ReviewService } from "./ReviewService";
+export type {
+  ReviewProperties,
+  CreateReviewInput,
+  UpdateReviewInput,
+  Review,
+} from "./ReviewService";

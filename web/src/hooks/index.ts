@@ -219,3 +219,50 @@ export {
   useConnectionTypes,
   useEventTypes,
 } from './useOntology';
+
+// ============================================================================
+// DEMO INFRASTRUCTURE
+// ============================================================================
+
+export {
+  // Connection monitoring
+  useBackendConnection,
+  getConnectionState,
+  checkBackendHealth,
+  initializeBackendConnection,
+  cleanupBackendConnection,
+  // Data fetching
+  useDemoData,
+  fetchDemoBatch,
+  prefetchDemoData,
+  invalidateDemoCache,
+  clearDemoCache,
+  clearDemoCacheForResource,
+  // Mutations
+  useDemoCreateMutation,
+  useDemoUpdateMutation,
+  useDemoDeleteMutation,
+  useDemoCustomMutation,
+  // Filters
+  useDemoFilters,
+  getDemoFilters,
+  initializeDemoFilters,
+  // Utilities
+  useDebounce,
+  debounce,
+  createDebounce,
+  // Types
+  type ConnectionStatus,
+  type ConnectionState,
+  type ResourceType,
+  type DemoDataOptions,
+  type DemoDataResult,
+  type MutationMethod,
+  type DemoMutationOptions,
+  type DemoMutationResult,
+  type ThingType,
+  type ThingStatus,
+  type ViewMode,
+  type DemoFilters,
+  type FilterState,
+} from './demo';

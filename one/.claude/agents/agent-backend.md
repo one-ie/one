@@ -2,6 +2,7 @@
 name: agent-backend
 description: Use proactively when implementing Convex backend features including schema design, mutations, queries, services, event logging, and multi-tenant organization scoping for the 6-dimension ontology.
 tools: Read, Write, Edit, Bash, Grep, Glob
+skills: agent-backend:create-mutation, agent-backend:create-query, agent-backend:design-schema
 model: inherit
 ---
 
@@ -271,6 +272,88 @@ export default defineSchema({
 - Apply proven patterns (mutation, query, schema, service)
 - Follow Effect.ts patterns for business logic
 - Reference lessons learned to avoid past mistakes
+
+## PARALLEL EXECUTION: New Capability
+
+### Parallel CRUD Implementation
+When implementing multiple entity types (Groups, Things, Connections, etc.), implement them **in parallel**, not sequentially:
+
+**Sequential (OLD):**
+```
+Groups CRUD (2h) → Things CRUD (2h) → Connections CRUD (1.5h) = 5.5h total
+```
+
+**Parallel (NEW):**
+```
+Groups CRUD (2h)  \
+Things CRUD (2h)   → All simultaneous = 2h total
+Connections (1.5h) /
+```
+
+**How to Parallelize:**
+1. Create separate branch for each entity type (groups, things, connections)
+2. Implement mutations/queries for each in parallel
+3. When ready: merge all branches
+4. Run tests for each to validate
+
+### Event Emission for Coordination
+Emit events to keep other agents informed of your progress:
+
+```typescript
+// Emit when schema is complete (unblocks agent-quality and agent-frontend)
+emit('schema_ready', {
+  timestamp: Date.now(),
+  completedModules: ['groups', 'things', 'connections', 'events', 'knowledge'],
+  nextSteps: 'Ready for test definition and component development'
+})
+
+// Emit hourly progress (helps agent-director track overall progress)
+emit('progress_update', {
+  timestamp: Date.now(),
+  completed: ['groups_schema', 'groups_mutations', 'groups_queries'],
+  inProgress: ['things_mutations'],
+  remaining: ['connections', 'events', 'knowledge', 'effect_layer'],
+  estimatedHoursRemaining: 3
+})
+
+// Emit when each service is complete
+emit('mutation_complete', {
+  service: 'groups',
+  operationsCompleted: ['create', 'read', 'update', 'delete'],
+  testsCovered: 8,
+  timestamp: Date.now()
+})
+
+// Emit when completely done
+emit('implementation_complete', {
+  timestamp: Date.now(),
+  modulesImplemented: 5,
+  totalTests: 40,
+  readyForQuality: true
+})
+
+// Emit if you get stuck waiting on quality feedback
+emit('blocked_waiting_for', {
+  blocker: 'schema_validation_feedback',
+  detail: 'Waiting for agent-quality to approve schema design',
+  timestamp: Date.now()
+})
+```
+
+### Watch for Upstream Events
+Don't start work that has dependencies:
+
+```typescript
+// Don't implement Effect.ts layer until mutations/queries complete
+watchFor('mutation_complete', 'events/all', () => {
+  // All mutations done, now safe to build Effect.ts layer
+})
+
+// Don't create optimization if tests are still failing
+watchFor('test_passed', 'quality/all', () => {
+  // All tests passing, now safe to optimize
+})
+```
 
 # Common Ontology Types Reference
 

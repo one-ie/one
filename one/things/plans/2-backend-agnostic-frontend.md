@@ -12,33 +12,36 @@
 
 ## Executive Summary
 
-Transform the current tightly-coupled Astro/React frontend + Convex backend architecture into a fully backend-agnostic system using the DataProvider interface pattern. This enables organizations to use ANY backend (Convex, WordPress, Notion, Supabase, custom APIs) by changing ONE line of configuration.
+Transform the current tightly-coupled Astro/React frontend + Convex backend architecture into a fully backend-agnostic system using the DataProvider interface pattern. This enables groups to use ANY backend (Convex, WordPress, Notion, Supabase, custom APIs) by changing ONE line of configuration.
 
-**Strategic Value:** Removes vendor lock-in, enables multi-backend federation, supports organizations with existing infrastructure, proves ontology is truly protocol-agnostic.
+**Strategic Value:** Removes vendor lock-in, enables multi-backend federation, supports groups with existing infrastructure, proves ontology is truly protocol-agnostic.
 
 ---
 
 ## Ontology Validation
 
-### ✅ Organizations (Dimension 1)
-- Each organization configures `properties.backendProvider`
+### ✅ Groups (Dimension 1)
+- Each group configures `properties.backendProvider`
 - Multi-tenant isolation maintained across all providers
-- Organizations can swap providers independently
+- Groups can swap providers independently
+- Hierarchical nesting supported (parent/child groups can use different backends)
 
 ### ✅ People (Dimension 2)
-- Only `org_owner` role can configure backend providers
+- Only `group_owner` role can configure backend providers
 - Authorization enforced at backend, not frontend
-- All 4 roles work identically across providers
+- All 4 roles work identically across providers (platform_owner, group_owner, group_user, customer)
 
 ### ✅ Things (Dimension 3)
 - New thing type: `external_connection` (backend configurations)
 - All 66 thing types work through DataProvider interface
 - Generic ThingService handles all types uniformly
+- Things scoped to groups via `groupId`
 
 ### ✅ Connections (Dimension 4)
-- New relationship: `configured_by` (org → external_connection)
+- New relationship: `configured_by` (group → external_connection)
 - Uses consolidated type: `communicated` with protocol metadata
 - Cross-backend connections supported
+- Connections scoped to groups via `groupId`
 
 ### ✅ Events (Dimension 5)
 - New event: `provider_changed` (when backend swaps)

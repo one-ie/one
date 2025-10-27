@@ -1,0 +1,645 @@
+---
+// web/src/pages/demo/things.astro
+import Layout from '@/layouts/Layout.astro';
+import { getDemoApiClient } from '@/lib/demo-api';
+import { DEMO_GROUP_ID } from '@/config/demo';
+import ThingsPlayground from '@/components/demo/things/ThingsPlayground';
+import {
+  Package,
+  Users,
+  User,
+  Zap,
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle2,
+  AlertCircle,
+  FileJson,
+  Rocket,
+  GitBranch,
+  Code2,
+  Database,
+} from 'lucide-react';
+
+// Get API client
+const client = getDemoApiClient();
+
+// Fetch demo things data
+let things: any[] = [];
+
+try {
+  const response = await client.getPaginated('http/things', {
+    limit: 50
+  });
+  things = response.items || [];
+} catch (e) {
+  // Error caught but not needed - will show demo data
+}
+
+// Entity type categories with examples
+const entityCategories = [
+  {
+    category: 'Core Entities',
+    emoji: '👤',
+    color: 'blue',
+    types: [
+      { type: 'creator', description: 'Human creator with content & audience', examples: 'Anthony, Sarah, etc.' },
+      { type: 'ai_clone', description: 'Digital twin/avatar of creator', examples: 'Anthony AI Clone' },
+      { type: 'audience_member', description: 'Fan, user, or consumer', examples: 'John Doe, Sarah Smith' },
+      { type: 'organization', description: 'Multi-tenant organization or group', examples: 'Acme Corp, Team Alpha' },
+    ]
+  },
+  {
+    category: 'AI Agents',
+    emoji: '🤖',
+    color: 'purple',
+    types: [
+      { type: 'strategy_agent', description: 'Vision, planning, OKRs', examples: '2024 Q1 Planning Agent' },
+      { type: 'marketing_agent', description: 'Content strategy, SEO, distribution', examples: 'Blog SEO Optimizer' },
+      { type: 'sales_agent', description: 'Funnels, conversion, follow-up', examples: 'Lead Qualifier' },
+      { type: 'service_agent', description: 'Support, onboarding, success', examples: 'Customer Support Bot' },
+    ]
+  },
+  {
+    category: 'Content',
+    emoji: '📝',
+    color: 'green',
+    types: [
+      { type: 'blog_post', description: 'Written article or blog post', examples: '"Building AI Products"' },
+      { type: 'video', description: 'Video content', examples: 'YouTube videos, tutorials' },
+      { type: 'podcast', description: 'Audio content', examples: 'Episode #42: AI Future' },
+      { type: 'course', description: 'Educational course with lessons', examples: 'Prompt Engineering 101' },
+    ]
+  },
+  {
+    category: 'Products',
+    emoji: '🛍️',
+    color: 'orange',
+    types: [
+      { type: 'digital_product', description: 'Templates, tools, assets', examples: 'AI Prompt Templates' },
+      { type: 'membership', description: 'Tiered membership program', examples: 'Premium Membership' },
+      { type: 'nft', description: 'NFT collectible or digital asset', examples: 'Limited Edition NFT' },
+      { type: 'consultation', description: '1-on-1 session or consultation', examples: '30-min Strategy Call' },
+    ]
+  },
+  {
+    category: 'Tokens & Finance',
+    emoji: '💰',
+    color: 'yellow',
+    types: [
+      { type: 'token', description: 'Token instance or balance', examples: 'ACME Token holder: John' },
+      { type: 'token_contract', description: 'Smart contract for token', examples: 'ACME Token (ERC-20)' },
+      { type: 'payment', description: 'Payment transaction record', examples: 'Invoice #2024-001' },
+      { type: 'subscription', description: 'Recurring subscription', examples: 'Premium Monthly' },
+    ]
+  },
+  {
+    category: 'Community',
+    emoji: '👥',
+    color: 'pink',
+    types: [
+      { type: 'community', description: 'Community space or group', examples: 'AI Builders Community' },
+      { type: 'conversation', description: 'Discussion thread or topic', examples: '#general channel' },
+      { type: 'message', description: 'Individual message', examples: '"Great insights! 🚀"' },
+      { type: 'notification', description: 'System notification', examples: 'New follower alert' },
+    ]
+  },
+  {
+    category: 'Platform',
+    emoji: '🌐',
+    color: 'indigo',
+    types: [
+      { type: 'website', description: 'Auto-generated creator website', examples: 'anthony.one.ie' },
+      { type: 'landing_page', description: 'Custom landing page', examples: 'Product launch page' },
+      { type: 'livestream', description: 'Live broadcast event', examples: 'AMA Session' },
+      { type: 'media_asset', description: 'Images, videos, documents', examples: 'Profile picture' },
+    ]
+  },
+  {
+    category: 'Auth & Sessions',
+    emoji: '🔐',
+    color: 'red',
+    types: [
+      { type: 'session', description: 'User session (Better Auth)', examples: 'Browser session #123' },
+      { type: 'oauth_account', description: 'OAuth connection', examples: 'GitHub account link' },
+      { type: 'verification_token', description: 'Email/2FA verification', examples: 'Email verify code' },
+      { type: 'password_reset_token', description: 'Password reset token', examples: 'Reset request token' },
+    ]
+  },
+];
+---
+
+<Layout title="Things - Entities with Properties">
+  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <!-- Hero Section -->
+      <div class="mb-12 text-center">
+        <div class="mb-6 inline-flex items-center justify-center gap-3 px-4 py-2 bg-white rounded-full shadow-lg">
+          <Package class="w-8 h-8 text-blue-600" />
+          <span class="text-sm font-semibold text-slate-600">6-Dimension Ontology</span>
+        </div>
+        <h1 class="text-5xl font-bold text-slate-900 mb-4">
+          Things
+          <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Entities with Properties
+          </span>
+        </h1>
+        <p class="text-xl text-slate-600 mb-6 max-w-2xl mx-auto">
+          Everything in ONE is a "Thing" — users, content, tokens, agents, and more. 66+ entity types with flexible properties.
+        </p>
+        <div class="inline-flex gap-3">
+          <a href="/demo" class="px-4 py-2 bg-slate-200 text-slate-900 rounded-lg hover:bg-slate-300 transition font-semibold inline-flex items-center gap-2">
+            <ChevronLeft class="w-4 h-4" />
+            Back to Demo
+          </a>
+          <a href="/demo/connections" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold inline-flex items-center gap-2">
+            Next: Connections
+            "<ChevronRight className=""w-4 h-4" />
+          </a>
+        </div>
+      </div>
+
+      <!-- 6-Dimension Highlight -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">The 6-Dimension Ontology</h2>
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+          <a href="/demo/groups" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-blue-600 transition">
+            <Users class="w-8 h-8 mb-2 text-slate-600 group-hover:text-blue-600" />
+            <h3 class="font-semibold text-slate-900">Groups</h3>
+            <p class="text-sm text-slate-600">Multi-tenant isolation</p>
+          </a>
+          <a href="/demo/people" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-blue-600 transition">
+            <User class="w-8 h-8 mb-2 text-slate-600 group-hover:text-blue-600" />
+            <h3 class="font-semibold text-slate-900">People</h3>
+            <p class="text-sm text-slate-600">Authorization & roles</p>
+          </a>
+          <div class="p-4 rounded-lg border-2 border-blue-600 bg-blue-50">
+            <Package class="w-8 h-8 mb-2 text-blue-600" />
+            <h3 class="font-semibold text-slate-900">Things</h3>
+            <p class="text-sm text-blue-600 font-semibold flex items-center gap-1"><ChevronLeft class="w-4 h-4" /> You are here</p>
+          </div>
+          <a href="/demo/connections" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-blue-600 transition">
+            <GitBranch class="w-8 h-8 mb-2 text-slate-600 group-hover:text-blue-600" />
+            <h3 class="font-semibold text-slate-900">Connections</h3>
+            <p class="text-sm text-slate-600">Relationships</p>
+          </a>
+          <a href="/demo/events" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-blue-600 transition">
+            <Database class="w-8 h-8 mb-2 text-slate-600 group-hover:text-blue-600" />
+            <h3 class="font-semibold text-slate-900">Events</h3>
+            <p class="text-sm text-slate-600">Audit trail</p>
+          </a>
+          <a href="/demo/search" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-blue-600 transition">
+            <Code2 class="w-8 h-8 mb-2 text-slate-600 group-hover:text-blue-600" />
+            <h3 class="font-semibold text-slate-900">Knowledge</h3>
+            <p class="text-sm text-slate-600">RAG & vectors</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Interactive Playground -->
+      <div class="mb-12">
+        <ThingsPlayground client:load initialThings={things} groupId={DEMO_GROUP_ID} />
+      </div>
+
+      <!-- What Are Things? -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">What Are Things?</h2>
+        <div class="prose prose-slate max-w-none">
+          <p class="text-lg text-slate-600 mb-4">
+            A <strong>Thing</strong> is any entity you can point to and say "this is a [something]". It's the noun in your system.
+          </p>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-green-50 border-l-4 border-green-600 p-4">
+              <h3 class="font-semibold text-green-900 mb-2 flex items-center gap-2">
+                <CheckCircle2 class="w-5 h-5" />
+                Things Include:
+              </h3>
+              <ul class="text-green-800 space-y-1 text-sm">
+                <li>• Users and creators</li>
+                <li>• AI agents and clones</li>
+                <li>• Blog posts, videos, courses</li>
+                <li>• Tokens and payments</li>
+                <li>• Communities and conversations</li>
+                <li>• Sessions and notifications</li>
+              </ul>
+            </div>
+            <div class="bg-red-50 border-l-4 border-red-600 p-4">
+              <h3 class="font-semibold text-red-900 mb-2 flex items-center gap-2">
+                "<AlertCircle className=""w-5 h-5" />
+                Not Things:
+              </h3>
+              <ul class="text-red-800 space-y-1 text-sm">
+                <li>• Relationships → Connections</li>
+                <li>• Actions → Events</li>
+                <li>• Categories → Knowledge/Labels</li>
+                <li>• Groups → Groups dimension</li>
+                <li>• Abstract concepts</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Entity Types Showcase -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 mb-8">66+ Entity Types</h2>
+        <div class="space-y-8">
+          {entityCategories.map((cat) => (
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div class={`bg-gradient-to-r from-${cat.color}-50 to-${cat.color}-100 px-6 py-4 border-l-4 border-${cat.color}-600`}>
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <span class="text-3xl">{cat.emoji}</span>
+                  {cat.category}
+                </h3>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-6">
+                {cat.types.map((item) => (
+                  <div class="border rounded-lg p-4 hover:shadow-md transition">
+                    <div class="font-mono text-sm font-bold text-blue-600 mb-1">{item.type}</div>
+                    <p class="text-sm text-slate-700 mb-2">{item.description}</p>
+                    <p class="text-xs text-slate-500 italic">e.g. {item.examples}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Status Lifecycle -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">Status Lifecycle</h2>
+        <p class="text-slate-600 mb-6">Every thing has a status that tracks its lifecycle in the system.</p>
+        <div class="flex items-center gap-3 flex-wrap">
+          <div class="flex-1 min-w-[150px] text-center p-4 bg-yellow-50 rounded-lg border-2 border-yellow-600">
+            <div class="text-sm font-mono font-bold text-yellow-700 mb-1">draft</div>
+            <p class="text-xs text-yellow-600">Initial creation</p>
+          </div>
+          <div class="text-slate-400">"<ChevronRight className=""w-6 h-6" /></div>
+          <div class="flex-1 min-w-[150px] text-center p-4 bg-blue-50 rounded-lg border-2 border-blue-600">
+            <div class="text-sm font-mono font-bold text-blue-700 mb-1">active</div>
+            <p class="text-xs text-blue-600">In use</p>
+          </div>
+          <div class="text-slate-400">"<ChevronRight className=""w-6 h-6" /></div>
+          <div class="flex-1 min-w-[150px] text-center p-4 bg-green-50 rounded-lg border-2 border-green-600">
+            <div class="text-sm font-mono font-bold text-green-700 mb-1">published</div>
+            <p class="text-xs text-green-600">Visible</p>
+          </div>
+          <div class="text-slate-400">"<ChevronRight className=""w-6 h-6" /></div>
+          <div class="flex-1 min-w-[150px] text-center p-4 bg-gray-50 rounded-lg border-2 border-gray-600">
+            <div class="text-sm font-mono font-bold text-gray-700 mb-1">archived</div>
+            <p class="text-xs text-gray-600">Historical</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TypeScript Types -->
+      <div class="mb-12 bg-slate-900 rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-slate-800 px-6 py-4 border-l-4 border-blue-600">
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            "<FileJson className=""w-5 h-5" />
+            TypeScript Types
+          </h3>
+        </div>
+        <div class="p-6 overflow-x-auto">
+          <pre class="text-sm text-slate-200"><code>{`interface Thing {
+  _id: Id<'entities'>;
+  type: string;                    // 66+ entity types
+  name: string;                    // Display name
+  properties: Record<string, any>; // Type-specific properties
+  status: 'draft' | 'active' | 'published' | 'archived';
+  createdAt: number;
+  updatedAt: number;
+  deletedAt?: number;
+}
+
+// Examples:
+const creator: Thing = {
+  type: 'creator',
+  name: 'Anthony',
+  properties: {
+    email: 'anthony@one.ie',
+    username: 'anthony',
+    niche: ['AI', 'Tech', 'Entrepreneurship'],
+    totalFollowers: 50000,
+    role: 'platform_owner'
+  }
+};
+
+const course: Thing = {
+  type: 'course',
+  name: 'Building AI Products',
+  properties: {
+    description: 'Learn to build AI products',
+    duration: '12 weeks',
+    price: 9900, // cents
+    studentCount: 1200
+  }
+};
+
+const token: Thing = {
+  type: 'token',
+  name: 'ACME Token',
+  properties: {
+    contractAddress: '0x...',
+    blockchain: 'base',
+    totalSupply: 1000000,
+    price: 0.25 // USD
+  }
+};`}</code></pre>
+        </div>
+      </div>
+
+      <!-- React Hook Examples -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            "<Zap className=""w-5 h-5" />
+            React Hook Examples
+          </h3>
+        </div>
+        <div class="p-6 space-y-6">
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">List all things of a type</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`import { useThings } from '@/hooks/useThings';
+
+export function CourseList() {
+  const courses = useThings({ type: 'course', limit: 10 });
+
+  if (courses === undefined) return <div>Loading...</div>;
+
+  return (
+    <div class="grid grid-cols-3 gap-4">
+      {courses.map(course => (
+        <div key={course._id}>
+          <h2>{course.name}</h2>
+          <p>{course.properties.description}</p>
+          <span class="text-sm text-slate-600">
+            {course.properties.studentCount} students
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}`}</code></pre>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">Get a single thing by ID</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`import { useThing } from '@/hooks/useThing';
+
+export function CourseDetail({ courseId }: { courseId: Id<'entities'> }) {
+  const course = useThing(courseId);
+
+  if (course === undefined) return <div>Loading...</div>;
+  if (course === null) return <div>Not found</div>;
+
+  return (
+    <div>
+      <h1>{course.name}</h1>
+      <p>{course.properties.description}</p>
+      <button onClick={() => enrollCourse(courseId)}>
+        Enroll Now
+      </button>
+    </div>
+  );
+}`}</code></pre>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">Search things by name</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`import { useThingSearch } from '@/hooks/useThingSearch';
+
+export function ThingSearch() {
+  const [query, setQuery] = useState('');
+  const results = useThingSearch(query);
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search things..."
+      />
+      {results && results.map(thing => (
+        <div key={thing._id} class="p-4 border rounded">
+          <strong>{thing.name}</strong>
+          <p class="text-sm text-slate-600">{thing.type}</p>
+        </div>
+      ))}
+    </div>
+  );
+}`}</code></pre>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">Create a thing</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`import { useCreateThing } from '@/hooks/useCreateThing';
+
+export function CreateCourseForm() {
+  const createThing = useCreateThing();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCreate = async (data: any) => {
+    setIsLoading(true);
+    try {
+      const thingId = await createThing({
+        type: 'course',
+        name: data.title,
+        properties: {
+          description: data.description,
+          duration: data.duration,
+          price: data.price * 100, // cents
+        }
+      });
+      toast.success('Course created!');
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return <CourseForm onSubmit={handleCreate} isLoading={isLoading} />;
+}`}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REST API Examples -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4">
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            "<Rocket className=""w-5 h-5" />
+            REST API Examples
+          </h3>
+        </div>
+        <div class="p-6 space-y-6">
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">List things by type</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`# List all courses
+curl -X GET "https://api.one.ie/api/things?type=course&limit=10" \\
+  -H "Authorization: Bearer YOUR_TOKEN" \\
+  -H "Content-Type: application/json"
+
+# Response:
+{
+  "data": [
+    {
+      "_id": "k0p8f2m1",
+      "type": "course",
+      "name": "Building AI Products",
+      "properties": {
+        "description": "Learn to build AI products",
+        "duration": "12 weeks",
+        "price": 9900,
+        "studentCount": 1200
+      },
+      "status": "published",
+      "createdAt": 1698765432000
+    }
+  ],
+  "total": 42
+}`}</code></pre>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">Get a specific thing</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`curl -X GET "https://api.one.ie/api/things/k0p8f2m1" \\
+  -H "Authorization: Bearer YOUR_TOKEN" \\
+  -H "Content-Type: application/json"
+
+# Response:
+{
+  "data": {
+    "_id": "k0p8f2m1",
+    "type": "course",
+    "name": "Building AI Products",
+    "properties": { ... },
+    "status": "published",
+    "createdAt": 1698765432000
+  }
+}`}</code></pre>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">Create a thing</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`curl -X POST "https://api.one.ie/api/things" \\
+  -H "Authorization: Bearer YOUR_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "type": "course",
+    "name": "Advanced AI Techniques",
+    "properties": {
+      "description": "Deep dive into AI techniques",
+      "duration": "8 weeks",
+      "price": 15000,
+      "level": "advanced"
+    },
+    "status": "draft"
+  }'
+
+# Response:
+{
+  "data": {
+    "_id": "m9x2k1p5",
+    "type": "course",
+    "name": "Advanced AI Techniques",
+    ...
+  }
+}`}</code></pre>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">Update a thing</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`curl -X PATCH "https://api.one.ie/api/things/k0p8f2m1" \\
+  -H "Authorization: Bearer YOUR_TOKEN" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "name": "Building AI Products (2025 Edition)",
+    "properties": {
+      "price": 11900,
+      "studentCount": 1500
+    },
+    "status": "published"
+  }'
+
+# Response: Updated thing object`}</code></pre>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-slate-900 mb-3">Delete a thing</h4>
+            <div class="bg-slate-900 rounded p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-200"><code>{`curl -X DELETE "https://api.one.ie/api/things/k0p8f2m1" \\
+  -H "Authorization: Bearer YOUR_TOKEN" \\
+  -H "Content-Type: application/json"
+
+# Response: { "success": true }`}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Concepts -->
+      <div class="mb-12 grid md:grid-cols-3 gap-6">
+        <div class="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-6">
+          <h3 class="font-bold text-blue-900 mb-2 text-lg">Immutable ID</h3>
+          <p class="text-blue-800 text-sm">
+            Every thing gets a unique <code class="bg-blue-200 px-1 rounded">_id</code> that never changes. Use this for relationships and events.
+          </p>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-lg p-6">
+          <h3 class="font-bold text-purple-900 mb-2 text-lg">Flexible Properties</h3>
+          <p class="text-purple-800 text-sm">
+            Store any JSON in <code class="bg-purple-200 px-1 rounded">properties</code>. No schema changes needed for new fields.
+          </p>
+        </div>
+        <div class="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg p-6">
+          <h3 class="font-bold text-green-900 mb-2 text-lg">Type Safety</h3>
+          <p class="text-green-800 text-sm">
+            Things are fully typed in TypeScript. The <code class="bg-green-200 px-1 rounded">type</code> field determines which properties exist.
+          </p>
+        </div>
+      </div>
+
+      <!-- Next Steps -->
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-8 text-center text-white mb-12">
+        <h2 class="text-3xl font-bold mb-4">Ready to Learn More?</h2>
+        <p class="mb-6 text-blue-100 text-lg">
+          Things connect to other things via Connections, and all actions are logged as Events.
+        </p>
+        <a href="/demo/connections" class="inline-block bg-white text-blue-600 font-bold px-8 py-3 rounded-lg hover:bg-blue-50 transition">
+          Explore Connections →
+        </a>
+      </div>
+
+      <!-- Resources -->
+      <div class="text-center">
+        <h3 class="text-lg font-semibold text-slate-900 mb-4">Learn More</h3>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/one/knowledge/ontology.md" class="text-blue-600 hover:underline">Ontology Spec</a>
+          <span class="text-slate-300">•</span>
+          <a href="/demo/api" class="text-blue-600 hover:underline">Full API Docs</a>
+          <span class="text-slate-300">•</span>
+          <a href="/demo" class="text-blue-600 hover:underline">Back to Demo Home</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -19,145 +19,148 @@ import { SocialProofNotification } from '@/components/ecommerce/interactive/Soci
 // Get all products from content collection
 const allProducts = await getCollection('products');
 
-// Get featured products (limit to 3 for homepage)
-const featuredProducts = allProducts
-  .filter(p => p.data.featured)
-  .slice(0, 3)
-  .map(p => ({
-    id: p.id,
-    slug: p.slug,
-    name: p.data.name,
-    description: p.data.description,
-    price: p.data.price,
-    compareAtPrice: p.data.compareAtPrice,
-    images: p.data.images,
-    thumbnail: p.data.images[0],
-    category: p.data.category,
-    tags: p.data.tags || [],
-    inStock: p.data.inStock,
-    inventory: p.data.variants?.reduce((sum, v) => sum + (v.inStock ? 1 : 0), 0) || 0,
-    rating: 4.5,
-    reviewCount: 0,
-    featured: p.data.featured,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
+// Transform product helper function
+const transformProduct = (p: any) => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.data.name,
+  description: p.data.description,
+  price: p.data.price,
+  compareAtPrice: p.data.compareAtPrice,
+  images: p.data.images,
+  thumbnail: p.data.images[0],
+  category: p.data.category,
+  tags: p.data.tags || [],
+  inStock: p.data.inStock,
+  inventory: p.data.variants?.reduce((sum: number, v: any) => sum + (v.inStock ? 1 : 0), 0) || 0,
+  rating: 4.5,
+  reviewCount: 0,
+  featured: p.data.featured,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
 
-// Get actual collections from content
+// Get all collections from content
 const allCollections = await getCollection('collections');
-const collections = allCollections.map(collection => ({
-  id: collection.id,
-  slug: collection.slug,
-  name: collection.data.name,
-  description: collection.data.description,
-  image: collection.data.image || '/placeholder.jpg',
-  productCount: collection.data.products?.length || 0,
-}));
+
+// Get collection-specific products
+const newArrivalsCollection = allCollections.find(c => c.slug === 'new-arrivals');
+const newArrivalsProducts = newArrivalsCollection?.data.products
+  ?.map((slug: string) => allProducts.find(p => p.slug === slug))
+  .filter(Boolean)
+  .slice(0, 4)
+  .map(transformProduct) || [];
+
+const bestSellersCollection = allCollections.find(c => c.slug === 'bestsellers');
+const bestSellersProducts = bestSellersCollection?.data.products
+  ?.map((slug: string) => allProducts.find(p => p.slug === slug))
+  .filter(Boolean)
+  .slice(0, 4)
+  .map(transformProduct) || [];
+
+const saleCollection = allCollections.find(c => c.slug === 'sale');
+const saleProducts = saleCollection?.data.products
+  ?.map((slug: string) => allProducts.find(p => p.slug === slug))
+  .filter(Boolean)
+  .slice(0, 4)
+  .map(transformProduct) || [];
+
+// Get category collections (filter out special collections)
+const categoryCollections = allCollections
+  .filter(c => !['new-arrivals', 'bestsellers', 'sale'].includes(c.slug))
+  .map(collection => ({
+    id: collection.id,
+    slug: collection.slug,
+    name: collection.data.name,
+    description: collection.data.description,
+    image: collection.data.image || '/placeholder.jpg',
+    productCount: collection.data.products?.length || 0,
+    products: collection.data.products
+      ?.map((slug: string) => allProducts.find(p => p.slug === slug))
+      .filter(Boolean)
+      .slice(0, 3)
+      .map(transformProduct) || []
+  }));
 ---
 
 <Layout title="ONE Store - Premium Products" description="Discover premium products">
   <div class="min-h-screen bg-background">
-    <!-- Hero Section - Ultra Premium Cinematic -->
-    <section class="relative overflow-hidden py-32 md:py-40 lg:py-48">
-      <!-- Premium Gradient Background with Noise Texture -->
-      <div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/10"></div>
-
-      <!-- Animated Premium Orbs with Blur -->
-      <div class="absolute inset-0 opacity-40">
-        <div class="absolute left-0 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-primary/30 to-purple-500/20 blur-[100px] animate-[float_8s_ease-in-out_infinite]"></div>
-        <div class="absolute right-0 bottom-0 h-[700px] w-[700px] translate-x-1/2 translate-y-1/2 rounded-full bg-gradient-to-br from-secondary/30 to-pink-500/20 blur-[120px] animate-[float_10s_ease-in-out_infinite] [animation-delay:2s]"></div>
-        <div class="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-violet-500/20 to-blue-500/20 blur-[100px] animate-[float_12s_ease-in-out_infinite] [animation-delay:4s]"></div>
+    <!-- Hero Section - Clean & Modern with Background -->
+    <section class="relative overflow-hidden min-h-[85vh] flex items-center">
+      <!-- Background Image with Overlay -->
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95"></div>
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920')] bg-cover bg-center opacity-30"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
       </div>
 
-      <!-- Premium Grid Pattern Overlay -->
-      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]"></div>
+      <!-- Subtle Grid Pattern -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.015)_1px,transparent_1px)] bg-[size:80px_80px]"></div>
 
-      <div class="container relative mx-auto px-4">
-        <div class="mx-auto max-w-5xl text-center">
-          {/* Premium Trust Badges with Glass Morphism */}
-          <div class="mb-12 flex flex-wrap justify-center gap-4 animate-[fadeIn_1s_ease-out]">
-            <div class="group relative overflow-hidden rounded-full backdrop-blur-xl bg-background/30 border border-white/10 px-6 py-3 shadow-2xl transition-all duration-500 hover:scale-105 hover:border-primary/50 hover:bg-background/40">
-              <div class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative flex items-center gap-2">
-                <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="text-sm font-semibold tracking-wide">Free Shipping $50+</span>
-              </div>
+      <div class="container relative mx-auto px-4 py-24">
+        <div class="mx-auto max-w-4xl text-center">
+          {/* Premium Trust Badges - Simplified */}
+          <div class="mb-10 flex flex-wrap justify-center gap-3 animate-[fadeIn_0.8s_ease-out]">
+            <div class="flex items-center gap-2 rounded-full backdrop-blur-md bg-white/5 border border-white/10 px-5 py-2.5 shadow-lg transition-all hover:bg-white/10">
+              <svg class="h-4 w-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-sm font-medium text-white/90">Free Shipping $50+</span>
             </div>
-            <div class="group relative overflow-hidden rounded-full backdrop-blur-xl bg-background/30 border border-white/10 px-6 py-3 shadow-2xl transition-all duration-500 hover:scale-105 hover:border-primary/50 hover:bg-background/40">
-              <div class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative flex items-center gap-2">
-                <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="text-sm font-semibold tracking-wide">30-Day Returns</span>
-              </div>
+            <div class="flex items-center gap-2 rounded-full backdrop-blur-md bg-white/5 border border-white/10 px-5 py-2.5 shadow-lg transition-all hover:bg-white/10">
+              <svg class="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span class="text-sm font-medium text-white/90">30-Day Returns</span>
             </div>
-            <div class="group relative overflow-hidden rounded-full backdrop-blur-xl bg-background/30 border border-white/10 px-6 py-3 shadow-2xl transition-all duration-500 hover:scale-105 hover:border-primary/50 hover:bg-background/40">
-              <div class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative flex items-center gap-2">
-                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                <span class="text-sm font-semibold tracking-wide">4.9/5 Stars (2.5k)</span>
-              </div>
+            <div class="flex items-center gap-2 rounded-full backdrop-blur-md bg-white/5 border border-white/10 px-5 py-2.5 shadow-lg transition-all hover:bg-white/10">
+              <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span class="text-sm font-medium text-white/90">4.9/5 Stars</span>
             </div>
           </div>
 
-          {/* Benefit-Driven Main Heading */}
-          <h1 class="text-6xl font-black tracking-tight text-foreground md:text-7xl lg:text-8xl xl:text-9xl animate-[fadeInUp_1s_ease-out_0.2s_both]">
-            <span class="block mb-4">Sustainable Comfort</span>
-            <span class="block gradient-text">That Moves With You</span>
+          {/* Main Heading - Cleaner */}
+          <h1 class="text-5xl font-black tracking-tight text-white md:text-6xl lg:text-7xl animate-[fadeInUp_0.8s_ease-out_0.1s_both]">
+            <span class="block mb-3">Sustainable Comfort</span>
+            <span class="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">That Moves With You</span>
           </h1>
 
-          {/* Specific Value Proposition Subheading */}
-          <p class="mx-auto mt-10 max-w-3xl text-xl text-muted-foreground md:text-2xl lg:text-3xl leading-relaxed font-light animate-[fadeInUp_1s_ease-out_0.4s_both]">
-            Ethically crafted essentials from organic materials.
-            <span class="block mt-3 font-semibold gradient-text">Built to last, designed to impress.</span>
-            Free shipping, free returns, lifetime guarantee.
+          {/* Subheading - Concise */}
+          <p class="mx-auto mt-8 max-w-2xl text-lg text-white/80 md:text-xl leading-relaxed animate-[fadeInUp_0.8s_ease-out_0.2s_both]">
+            Ethically crafted essentials from organic materials. Built to last, designed to impress.
           </p>
 
-          {/* Action-Oriented CTA Buttons */}
-          <div class="mt-14 flex flex-col gap-6 sm:flex-row sm:justify-center animate-[fadeInUp_1s_ease-out_0.6s_both]">
-            <a href="/products" class="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-primary via-purple-600 to-secondary px-10 py-5 text-lg font-bold text-white shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
-              <div class="absolute inset-0 bg-gradient-to-r from-primary via-purple-600 to-secondary opacity-0 blur-xl group-hover:opacity-100 transition-opacity duration-500"></div>
-              <svg class="relative h-6 w-6 transition-transform duration-500 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* CTA Buttons - Simplified */}
+          <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center animate-[fadeInUp_0.8s_ease-out_0.3s_both]">
+            <a href="/products" class="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-8 py-4 text-base font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+              <svg class="h-5 w-5 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <span class="relative">Shop New Arrivals</span>
-              <div class="absolute inset-0 -z-10 bg-gradient-to-r from-primary via-purple-600 to-secondary blur-2xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
+              <span>Shop New Arrivals</span>
             </a>
-            <a href="#value-props" class="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full border-2 border-primary/50 backdrop-blur-xl bg-background/30 px-10 py-5 text-lg font-bold text-foreground shadow-2xl transition-all duration-500 hover:scale-105 hover:border-primary hover:bg-background/50">
-              <span class="relative">See Our Story</span>
-              <svg class="relative h-6 w-6 transition-transform duration-500 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href="#value-props" class="group inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/30 backdrop-blur-md bg-white/5 px-8 py-4 text-base font-semibold text-white transition-all duration-300 hover:bg-white/10 hover:border-white/50">
+              <span>See Our Story</span>
+              <svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </a>
           </div>
 
-          {/* Premium Social Proof Stats with Glass Morphism */}
-          <div class="mt-20 grid grid-cols-3 gap-8 border-t border-white/10 pt-16 animate-[fadeInUp_1s_ease-out_0.8s_both]">
-            <div class="group relative overflow-hidden rounded-2xl backdrop-blur-xl bg-background/20 border border-white/10 p-6 transition-all duration-500 hover:scale-105 hover:border-primary/50 hover:bg-background/30">
-              <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative">
-                <div class="text-4xl font-black md:text-5xl gradient-text">50k+</div>
-                <div class="mt-3 text-sm font-semibold text-muted-foreground tracking-wide">Happy Customers</div>
-              </div>
+          {/* Social Proof Stats - Compact */}
+          <div class="mt-16 grid grid-cols-3 gap-6 pt-10 border-t border-white/10 animate-[fadeInUp_0.8s_ease-out_0.4s_both]">
+            <div class="text-center">
+              <div class="text-3xl font-black text-white md:text-4xl">50k+</div>
+              <div class="mt-1 text-sm text-white/70">Happy Customers</div>
             </div>
-            <div class="group relative overflow-hidden rounded-2xl backdrop-blur-xl bg-background/20 border border-white/10 p-6 transition-all duration-500 hover:scale-105 hover:border-primary/50 hover:bg-background/30">
-              <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative">
-                <div class="text-4xl font-black md:text-5xl gradient-text">4.9</div>
-                <div class="mt-3 text-sm font-semibold text-muted-foreground tracking-wide">Average Rating</div>
-              </div>
+            <div class="text-center">
+              <div class="text-3xl font-black text-white md:text-4xl">4.9</div>
+              <div class="mt-1 text-sm text-white/70">Average Rating</div>
             </div>
-            <div class="group relative overflow-hidden rounded-2xl backdrop-blur-xl bg-background/20 border border-white/10 p-6 transition-all duration-500 hover:scale-105 hover:border-primary/50 hover:bg-background/30">
-              <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div class="relative">
-                <div class="text-4xl font-black md:text-5xl gradient-text">24/7</div>
-                <div class="mt-3 text-sm font-semibold text-muted-foreground tracking-wide">Support Available</div>
-              </div>
+            <div class="text-center">
+              <div class="text-3xl font-black text-white md:text-4xl">24/7</div>
+              <div class="mt-1 text-sm text-white/70">Support Available</div>
             </div>
           </div>
         </div>
@@ -294,201 +297,328 @@ const collections = allCollections.map(collection => ({
       </div>
     </section>
 
-    <!-- Collections Section - Ultra Luxury -->
-    <section id="collections" class="relative py-32 md:py-40 overflow-hidden">
-      <!-- Premium Background with Subtle Gradients -->
-      <div class="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,105,180,0.1),transparent_50%)]"></div>
+    <!-- Categories Section - With Products -->
+    <section id="categories" class="relative py-20 md:py-24 overflow-hidden">
+      <!-- Background -->
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-background via-slate-50 to-background dark:from-background dark:via-slate-900 dark:to-background"></div>
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1920')] bg-cover bg-center opacity-[0.03]"></div>
+      </div>
 
       <div class="container relative mx-auto px-4">
-        <div class="mb-20 text-center">
-          <div class="inline-flex items-center gap-2 rounded-full backdrop-blur-xl bg-background/30 border border-white/10 px-6 py-2 mb-6 shadow-xl">
-            <div class="h-2 w-2 rounded-full bg-gradient-to-r from-primary to-secondary animate-pulse"></div>
-            <span class="text-sm font-bold tracking-wider uppercase">Curated Collections</span>
+        <div class="mb-12 text-center">
+          <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-5 py-2 mb-6">
+            <div class="h-2 w-2 rounded-full bg-primary animate-pulse"></div>
+            <span class="text-sm font-semibold tracking-wide uppercase text-primary">Shop by Category</span>
           </div>
-          <h2 class="text-5xl font-black text-foreground md:text-6xl lg:text-7xl mb-6">
-            <span class="block mb-2">Shop by</span>
-            <span class="gradient-text">Collection</span>
+          <h2 class="text-4xl font-black text-foreground md:text-5xl mb-4">
+            Browse Collections
           </h2>
-          <p class="mx-auto mt-8 max-w-3xl text-xl text-muted-foreground md:text-2xl leading-relaxed font-light">
-            Explore our carefully curated collections, each designed to bring you
-            <span class="font-semibold text-foreground"> the finest selection</span>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+            Explore our carefully curated collections with handpicked products
           </p>
         </div>
-        <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-          {collections.map((collection, index) => (
+
+        <div class="space-y-16">
+          {categoryCollections.map((collection, collectionIndex) => (
             <div
-              class="group relative overflow-hidden rounded-3xl backdrop-blur-xl bg-background/40 border border-white/10 p-8 shadow-2xl transition-all duration-700 hover:scale-105 hover:border-primary/50 hover:bg-background/60 hover:shadow-[0_25px_80px_rgba(0,0,0,0.25)]"
-              style={`animation: fadeInUp 0.8s ease-out ${index * 0.1 + 0.3}s both`}
+              class="space-y-6"
+              style={`animation: fadeInUp 0.6s ease-out ${collectionIndex * 0.2}s both`}
             >
-              <div class="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/5 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <div class="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-primary/20 blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-              <CategoryCard category={collection} />
+              {/* Category Header */}
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-2xl font-bold text-foreground md:text-3xl">{collection.name}</h3>
+                  <p class="mt-2 text-muted-foreground">{collection.description}</p>
+                </div>
+                <a
+                  href={`/collections/${collection.slug}`}
+                  class="hidden sm:inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors"
+                >
+                  <span>View All</span>
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+              </div>
+
+              {/* Category Products */}
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {collection.products.map((product, productIndex) => (
+                  <div class="group">
+                    <div class="relative overflow-hidden rounded-2xl bg-background border border-border shadow-lg transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:border-primary/50">
+                      <ProductCard client:load product={product} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mobile View All Link */}
+              <div class="sm:hidden text-center pt-4">
+                <a
+                  href={`/collections/${collection.slug}`}
+                  class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors"
+                >
+                  <span>View All {collection.name}</span>
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </a>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- Featured Products Section - Ultra Luxury -->
-    <section id="featured" class="relative overflow-hidden py-32 md:py-40">
-      <!-- Premium Layered Background -->
-      <div class="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.15),transparent_70%)]"></div>
-
-      <!-- Floating Orbs -->
-      <div class="absolute left-1/4 top-20 h-[400px] w-[400px] rounded-full bg-gradient-to-br from-primary/20 to-transparent blur-[100px] animate-[float_15s_ease-in-out_infinite]"></div>
-      <div class="absolute right-1/4 bottom-20 h-[400px] w-[400px] rounded-full bg-gradient-to-br from-secondary/20 to-transparent blur-[100px] animate-[float_12s_ease-in-out_infinite] [animation-delay:3s]"></div>
+    <!-- New Arrivals Section -->
+    <section id="new-arrivals" class="relative overflow-hidden py-20 md:py-24">
+      <!-- Background -->
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-background to-slate-50 dark:to-slate-900"></div>
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1445205170230-053b83016050?w=1920')] bg-cover bg-center opacity-[0.04]"></div>
+      </div>
 
       <div class="container relative mx-auto px-4">
-        <div class="mb-20 text-center">
-          <div class="inline-flex items-center gap-2 rounded-full backdrop-blur-xl bg-gradient-to-r from-primary/10 via-purple-500/10 to-secondary/10 border border-white/10 px-6 py-2 mb-6 shadow-xl">
-            <svg class="h-4 w-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        <div class="mb-12 text-center">
+          <div class="inline-flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/20 px-5 py-2 mb-6">
+            <svg class="h-4 w-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
-            <span class="text-sm font-bold tracking-wider uppercase">Bestsellers</span>
+            <span class="text-sm font-semibold tracking-wide uppercase text-blue-600 dark:text-blue-400">Just In</span>
           </div>
-          <h2 class="text-5xl font-black text-foreground md:text-6xl lg:text-7xl mb-6">
-            <span class="block mb-2">Featured</span>
-            <span class="gradient-text">Products</span>
+          <h2 class="text-4xl font-black text-foreground md:text-5xl mb-4">
+            New Arrivals
           </h2>
-          <p class="mx-auto mt-8 max-w-3xl text-xl text-muted-foreground md:text-2xl leading-relaxed font-light">
-            Discover our most loved products,
-            <span class="font-semibold text-foreground"> handpicked by our team</span> and cherished by thousands of customers
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+            {newArrivalsCollection?.data.description || 'Fresh additions to our catalog'}
           </p>
         </div>
 
-        <div class="relative">
-          <ProductGrid columns={3}>
-            {featuredProducts.map((product, index) => (
-              <div
-                class="group"
-                style={`animation: fadeInUp 0.8s ease-out ${index * 0.15}s both`}
-              >
-                <div class="relative overflow-hidden rounded-3xl backdrop-blur-xl bg-background/40 border border-white/10 p-2 shadow-2xl transition-all duration-700 hover:scale-105 hover:border-primary/50 hover:bg-background/60 hover:shadow-[0_30px_90px_rgba(0,0,0,0.3)]">
-                  <div class="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/5 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                  <ProductCard client:load product={product} />
-                </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {newArrivalsProducts.map((product, index) => (
+            <div
+              class="group"
+              style={`animation: fadeInUp 0.5s ease-out ${index * 0.08}s both`}
+            >
+              <div class="relative overflow-hidden rounded-2xl bg-background border border-border shadow-lg transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:border-blue-500/50">
+                <ProductCard client:load product={product} />
               </div>
-            ))}
-          </ProductGrid>
+            </div>
+          ))}
         </div>
 
-        <div class="mt-20 text-center">
-          <a href="/products" class="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full bg-gradient-to-r from-primary via-purple-600 to-secondary px-12 py-6 text-lg font-bold text-white shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
-            <span class="relative">View All Products</span>
-            <svg class="relative h-6 w-6 transition-transform duration-500 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="mt-12 text-center">
+          <a href="/collections/new-arrivals" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors">
+            <span>View All New Arrivals</span>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-            <div class="absolute inset-0 -z-10 bg-gradient-to-r from-primary via-purple-600 to-secondary blur-2xl opacity-50 group-hover:opacity-75 transition-opacity duration-500"></div>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- Testimonials Section - Ultra Sophisticated -->
-    <section class="relative py-32 md:py-40 overflow-hidden">
-      <!-- Premium Gradient Background -->
-      <div class="absolute inset-0 bg-gradient-to-br from-muted/30 via-background to-primary/5"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(120,119,198,0.1),transparent_50%)]"></div>
+    <!-- Best Sellers Section -->
+    <section id="best-sellers" class="relative overflow-hidden py-20 md:py-24 bg-muted/30">
+      <!-- Background -->
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-background via-muted/50 to-background"></div>
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1920')] bg-cover bg-center opacity-[0.03]"></div>
+      </div>
 
       <div class="container relative mx-auto px-4">
-        <div class="mb-20 text-center">
-          <div class="inline-flex items-center gap-2 rounded-full backdrop-blur-xl bg-background/30 border border-white/10 px-6 py-2 mb-6 shadow-xl">
-            <div class="flex -space-x-2">
-              <div class="h-6 w-6 rounded-full bg-gradient-to-br from-primary to-purple-600 border-2 border-background"></div>
-              <div class="h-6 w-6 rounded-full bg-gradient-to-br from-purple-600 to-secondary border-2 border-background"></div>
-              <div class="h-6 w-6 rounded-full bg-gradient-to-br from-secondary to-pink-600 border-2 border-background"></div>
-            </div>
-            <span class="text-sm font-bold tracking-wider uppercase">50k+ Reviews</span>
+        <div class="mb-12 text-center">
+          <div class="inline-flex items-center gap-2 rounded-full bg-yellow-500/10 border border-yellow-500/20 px-5 py-2 mb-6">
+            <svg class="h-4 w-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span class="text-sm font-semibold tracking-wide uppercase text-yellow-600 dark:text-yellow-500">Top Rated</span>
           </div>
-          <h2 class="text-5xl font-black text-foreground md:text-6xl lg:text-7xl mb-6">
-            <span class="block mb-2">Loved by</span>
-            <span class="gradient-text">Customers</span>
+          <h2 class="text-4xl font-black text-foreground md:text-5xl mb-4">
+            Best Sellers
           </h2>
-          <p class="mx-auto mt-8 max-w-3xl text-xl text-muted-foreground md:text-2xl leading-relaxed font-light">
-            Join thousands of satisfied customers who trust us for
-            <span class="font-semibold text-foreground"> premium quality</span> and exceptional service
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+            {bestSellersCollection?.data.description || 'Our most popular products'}
           </p>
         </div>
-        <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {bestSellersProducts.map((product, index) => (
+            <div
+              class="group"
+              style={`animation: fadeInUp 0.5s ease-out ${index * 0.08}s both`}
+            >
+              <div class="relative overflow-hidden rounded-2xl bg-background border border-border shadow-lg transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:border-yellow-500/50">
+                <ProductCard client:load product={product} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-12 text-center">
+          <a href="/collections/bestsellers" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors">
+            <span>View All Best Sellers</span>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sale Section -->
+    <section id="sale" class="relative overflow-hidden py-20 md:py-24">
+      <!-- Background with Sale Image -->
+      <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-red-600/95 via-pink-600/90 to-purple-600/95"></div>
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1607083206968-13611e3d76db?w=1920')] bg-cover bg-center opacity-20"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+      </div>
+
+      <div class="container relative mx-auto px-4">
+        <div class="mb-12 text-center">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-5 py-2 mb-6 backdrop-blur-sm">
+            <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+            <span class="text-sm font-semibold tracking-wide uppercase text-white">Limited Time</span>
+          </div>
+          <h2 class="text-4xl font-black text-white md:text-5xl mb-4">
+            Sale - Up to 40% Off
+          </h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-white/90">
+            {saleCollection?.data.description || 'Limited time offers and seasonal discounts'}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {saleProducts.map((product, index) => (
+            <div
+              class="group"
+              style={`animation: fadeInUp 0.5s ease-out ${index * 0.08}s both`}
+            >
+              <div class="relative overflow-hidden rounded-2xl bg-white border-2 border-white/20 shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl hover:border-white">
+                <div class="absolute top-3 right-3 z-10 rounded-full bg-red-500 px-3 py-1 text-xs font-bold text-white shadow-lg">
+                  SALE
+                </div>
+                <ProductCard client:load product={product} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-12 text-center">
+          <a href="/collections/sale" class="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-base font-semibold text-red-600 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+            <span>View All Sale Items</span>
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="relative py-20 md:py-24 overflow-hidden bg-muted/20">
+      <div class="container relative mx-auto px-4">
+        <div class="mb-12 text-center">
+          <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-5 py-2 mb-6">
+            <div class="flex -space-x-2">
+              <div class="h-5 w-5 rounded-full bg-gradient-to-br from-primary to-purple-600 border-2 border-background"></div>
+              <div class="h-5 w-5 rounded-full bg-gradient-to-br from-purple-600 to-secondary border-2 border-background"></div>
+              <div class="h-5 w-5 rounded-full bg-gradient-to-br from-secondary to-pink-600 border-2 border-background"></div>
+            </div>
+            <span class="text-sm font-semibold tracking-wide uppercase text-primary">50k+ Reviews</span>
+          </div>
+          <h2 class="text-4xl font-black text-foreground md:text-5xl mb-4">
+            Loved by Customers
+          </h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+            Join thousands of satisfied customers who trust us for premium quality and exceptional service
+          </p>
+        </div>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
           <!-- Testimonial 1 -->
-          <div class="group relative overflow-hidden rounded-3xl backdrop-blur-xl bg-background/40 border border-white/10 p-10 shadow-2xl transition-all duration-700 hover:scale-105 hover:border-primary/50 hover:bg-background/60 hover:shadow-[0_30px_90px_rgba(0,0,0,0.25)]">
-            <div class="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/5 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-            <div class="absolute -right-24 -top-24 h-48 w-48 rounded-full bg-gradient-to-br from-primary/20 to-transparent blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-            <div class="relative">
-              <div class="mb-8 flex items-center gap-1">
-                {[...Array(5)].map(() => (
-                  <svg class="h-6 w-6 text-yellow-400 drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
+          <div class="group relative overflow-hidden rounded-2xl border border-border bg-background p-8 transition-all hover:shadow-xl hover:border-primary/50">
+            <div class="mb-6 flex items-center gap-1">
+              {[...Array(5)].map(() => (
+                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-base text-foreground leading-relaxed mb-6">
+              "Exceptional quality and fast shipping. The attention to detail is remarkable. Highly recommend!"
+            </p>
+            <div class="flex items-center gap-3 pt-4 border-t border-border">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-600 text-white font-semibold">
+                SJ
               </div>
-              <p class="text-lg text-foreground/90 leading-relaxed font-light mb-8">
-                "Exceptional quality and fast shipping. The attention to detail is remarkable. Highly recommend!"
-              </p>
-              <div class="flex items-center gap-4 pt-6 border-t border-white/10">
-                <div class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-purple-600 text-white font-bold text-lg shadow-xl">
-                  SJ
-                </div>
-                <div>
-                  <p class="font-bold text-foreground text-lg">Sarah Johnson</p>
-                  <p class="text-sm text-muted-foreground flex items-center gap-1">
-                    <svg class="h-4 w-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>
-                    Verified Buyer
-                  </p>
-                </div>
+              <div>
+                <p class="font-semibold text-foreground">Sarah Johnson</p>
+                <p class="text-sm text-muted-foreground flex items-center gap-1">
+                  <svg class="h-4 w-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  Verified Buyer
+                </p>
               </div>
             </div>
           </div>
-          <div class="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all hover:shadow-xl hover:border-primary/50">
-            <div class="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-primary/5 transition-transform group-hover:scale-150"></div>
-            <div class="relative">
-              <div class="mb-6 flex items-center gap-1">
-                {[...Array(5)].map(() => (
-                  <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
+
+          <!-- Testimonial 2 -->
+          <div class="group relative overflow-hidden rounded-2xl border border-border bg-background p-8 transition-all hover:shadow-xl hover:border-primary/50">
+            <div class="mb-6 flex items-center gap-1">
+              {[...Array(5)].map(() => (
+                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-base text-foreground leading-relaxed mb-6">
+              "Best online shopping experience. Products are exactly as described. Customer service is top-notch!"
+            </p>
+            <div class="flex items-center gap-3 pt-4 border-t border-border">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-secondary text-white font-semibold">
+                MR
               </div>
-              <p class="text-base text-muted-foreground leading-relaxed">
-                "Best online shopping experience. Products are exactly as described. Customer service is top-notch!"
-              </p>
-              <div class="mt-6 flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
-                  MR
-                </div>
-                <div>
-                  <p class="font-semibold text-foreground">Michael Rodriguez</p>
-                  <p class="text-sm text-muted-foreground">Verified Buyer</p>
-                </div>
+              <div>
+                <p class="font-semibold text-foreground">Michael Rodriguez</p>
+                <p class="text-sm text-muted-foreground flex items-center gap-1">
+                  <svg class="h-4 w-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  Verified Buyer
+                </p>
               </div>
             </div>
           </div>
-          <div class="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all hover:shadow-xl hover:border-primary/50">
-            <div class="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-primary/5 transition-transform group-hover:scale-150"></div>
-            <div class="relative">
-              <div class="mb-6 flex items-center gap-1">
-                {[...Array(5)].map(() => (
-                  <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
+
+          <!-- Testimonial 3 -->
+          <div class="group relative overflow-hidden rounded-2xl border border-border bg-background p-8 transition-all hover:shadow-xl hover:border-primary/50">
+            <div class="mb-6 flex items-center gap-1">
+              {[...Array(5)].map(() => (
+                <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p class="text-base text-foreground leading-relaxed mb-6">
+              "Outstanding quality and service. The entire experience exceeded my expectations. Will shop again!"
+            </p>
+            <div class="flex items-center gap-3 pt-4 border-t border-border">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-secondary to-pink-600 text-white font-semibold">
+                EK
               </div>
-              <p class="text-base text-muted-foreground leading-relaxed">
-                "Outstanding quality and service. The entire experience exceeded my expectations. Will shop again!"
-              </p>
-              <div class="mt-6 flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
-                  EK
-                </div>
-                <div>
-                  <p class="font-semibold text-foreground">Emily Kim</p>
-                  <p class="text-sm text-muted-foreground">Verified Buyer</p>
-                </div>
+              <div>
+                <p class="font-semibold text-foreground">Emily Kim</p>
+                <p class="text-sm text-muted-foreground flex items-center gap-1">
+                  <svg class="h-4 w-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  Verified Buyer
+                </p>
               </div>
             </div>
           </div>
@@ -497,20 +627,20 @@ const collections = allCollections.map(collection => ({
     </section>
 
     <!-- Value Proposition Section - Key Differentiators -->
-    <section id="value-props" class="relative py-24 md:py-32 overflow-hidden">
+    <section id="value-props" class="relative py-16 md:py-20 overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background"></div>
       <div class="container relative mx-auto px-4">
-        <div class="mb-16 text-center">
-          <h2 class="text-4xl font-black text-foreground md:text-5xl lg:text-6xl mb-6">
+        <div class="mb-12 text-center">
+          <h2 class="text-3xl font-black text-foreground md:text-4xl mb-4">
             Why Choose Us
           </h2>
-          <p class="mx-auto max-w-2xl text-lg text-muted-foreground">
+          <p class="mx-auto max-w-2xl text-base text-muted-foreground">
             We're not just another apparel brand. Here's what makes us different.
           </p>
         </div>
 
         <!-- Three-Column Differentiators -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <div class="group relative overflow-hidden rounded-2xl bg-background border border-border p-8 transition-all hover:shadow-xl hover:border-primary/50">
             <div class="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-primary/5 transition-transform group-hover:scale-150"></div>
             <div class="relative">
@@ -558,14 +688,14 @@ const collections = allCollections.map(collection => ({
         </div>
 
         <!-- Risk Reversal Guarantees -->
-        <div class="rounded-3xl bg-gradient-to-br from-primary/10 via-purple-500/10 to-secondary/10 border border-primary/20 p-12">
-          <div class="text-center mb-10">
-            <h3 class="text-3xl font-black text-foreground mb-4">Shop Risk-Free</h3>
-            <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <div class="rounded-2xl bg-gradient-to-br from-primary/10 via-purple-500/10 to-secondary/10 border border-primary/20 p-8 md:p-10">
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-black text-foreground md:text-3xl mb-3">Shop Risk-Free</h3>
+            <p class="text-base text-muted-foreground max-w-2xl mx-auto">
               We stand behind every product we sell with industry-leading guarantees
             </p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="text-center">
               <div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-primary text-white text-2xl font-bold">
                 ∞
@@ -602,135 +732,80 @@ const collections = allCollections.map(collection => ({
       </div>
     </section>
 
-    <!-- Sustainability & Values Section -->
-    <section class="py-24 md:py-32 bg-muted/20">
-      <div class="container mx-auto px-4">
-        <div class="mb-16 text-center">
-          <Badge variant="outline" className="mb-4">Our Values</Badge>
-          <h2 class="text-4xl font-bold text-foreground md:text-5xl lg:text-6xl">
-            Sustainable by Design
+    <!-- Beautiful CTA Section -->
+    <section class="relative overflow-hidden py-16 md:py-20">
+      <!-- Elegant Gradient Background -->
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920')] bg-cover bg-center opacity-10"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+
+      <div class="container relative mx-auto px-4">
+        <div class="mx-auto max-w-4xl text-center">
+          <h2 class="text-4xl font-black text-white md:text-5xl mb-6">
+            Ready to Explore?
           </h2>
-          <p class="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Creating timeless essentials while protecting the planet
+          <p class="text-lg text-white/80 md:text-xl mb-10 max-w-2xl mx-auto">
+            Discover thousands of products across all collections. Find exactly what you're looking for.
           </p>
-        </div>
-        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <!-- Sustainable Materials -->
-          <div class="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all hover:border-primary/50 hover:shadow-lg">
-            <div class="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-green-500/5 transition-transform group-hover:scale-150"></div>
-            <div class="relative">
-              <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-green-500/10 text-green-600 dark:text-green-400">
-                <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+
+          <!-- Beautiful Button Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <a href="/collections" class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+              <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="relative">
+                <div class="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-white/20">
+                  <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">All Collections</h3>
+                <p class="text-sm text-white/70">Browse all categories</p>
               </div>
-              <h3 class="mb-2 text-xl font-bold text-foreground">Sustainable Materials</h3>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                Every piece made from organic cotton, recycled polyester, or regenerative fibers.
-              </p>
-            </div>
-          </div>
+            </a>
 
-          <!-- Ethical Production -->
-          <div class="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all hover:border-primary/50 hover:shadow-lg">
-            <div class="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-primary/5 transition-transform group-hover:scale-150"></div>
-            <div class="relative">
-              <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
+            <a href="/collections/new-arrivals" class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-600 to-purple-700 p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+              <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="relative">
+                <div class="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-white/20">
+                  <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">New Arrivals</h3>
+                <p class="text-sm text-white/70">Latest products</p>
               </div>
-              <h3 class="mb-2 text-xl font-bold text-foreground">Ethical Production</h3>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                Fair wages, safe conditions, and transparent supply chains. Always.
-              </p>
-            </div>
-          </div>
+            </a>
 
-          <!-- Carbon Neutral -->
-          <div class="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all hover:border-primary/50 hover:shadow-lg">
-            <div class="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-blue-500/5 transition-transform group-hover:scale-150"></div>
-            <div class="relative">
-              <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                </svg>
+            <a href="/collections/sale" class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-red-600 to-red-700 p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl sm:col-span-2 lg:col-span-1">
+              <div class="absolute inset-0 bg-gradient-to-br from-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div class="relative">
+                <div class="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-white/20">
+                  <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1">Sale Items</h3>
+                <p class="text-sm text-white/70">Up to 40% off</p>
               </div>
-              <h3 class="mb-2 text-xl font-bold text-foreground">Carbon Neutral Shipping</h3>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                We offset 100% of delivery emissions and use plastic-free packaging.
-              </p>
-            </div>
-          </div>
-
-          <!-- Built to Last -->
-          <div class="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition-all hover:border-primary/50 hover:shadow-lg">
-            <div class="absolute right-0 top-0 h-24 w-24 translate-x-6 -translate-y-6 rounded-full bg-purple-500/5 transition-transform group-hover:scale-150"></div>
-            <div class="relative">
-              <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 class="mb-2 text-xl font-bold text-foreground">Built to Last</h3>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                Quality over quantity. We design for decades, not seasons.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-secondary py-24 md:py-32">
-      <!-- Animated Background Pattern -->
-      <div class="absolute inset-0 opacity-10">
-        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
-      </div>
-
-      <!-- Gradient Orbs -->
-      <div class="absolute left-0 top-0 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/10 blur-3xl"></div>
-      <div class="absolute bottom-0 right-0 h-96 w-96 translate-x-1/2 translate-y-1/2 rounded-full bg-white/10 blur-3xl"></div>
-
-      <div class="container relative mx-auto px-4 text-center">
-        <div class="mx-auto max-w-3xl">
-          <h2 class="text-4xl font-bold text-white md:text-5xl lg:text-6xl">
-            Start Shopping Today
-          </h2>
-          <p class="mx-auto mt-6 max-w-2xl text-lg text-white/90 md:text-xl">
-            Join over 50,000 happy customers who trust us for premium quality products, exceptional service, and unbeatable value.
-          </p>
-          <div class="mt-12 flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button asChild size="lg" variant="secondary" className="h-14 px-8 text-base font-semibold shadow-xl hover:shadow-2xl">
-              <a href="/products">
-                Browse All Products
-                <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="h-14 border-2 border-white bg-transparent px-8 text-base font-semibold text-white hover:bg-white/10">
-              <a href="#collections">Explore Collections</a>
-            </Button>
+            </a>
           </div>
 
           <!-- Trust Indicators -->
-          <div class="mt-16 flex flex-wrap justify-center gap-8 border-t border-white/20 pt-12">
-            <div class="flex items-center gap-2 text-white/90">
-              <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <div class="mt-12 flex flex-wrap justify-center gap-6 pt-8 border-t border-white/10">
+            <div class="flex items-center gap-2 text-white/70">
+              <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
-              <span class="text-sm font-medium">4.9/5 Rating</span>
+              <span class="text-sm font-medium">50k+ Reviews</span>
             </div>
-            <div class="flex items-center gap-2 text-white/90">
-              <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center gap-2 text-white/70">
+              <svg class="h-5 w-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
-              <span class="text-sm font-medium">Free Shipping Over $50</span>
+              <span class="text-sm font-medium">Free Shipping $50+</span>
             </div>
-            <div class="flex items-center gap-2 text-white/90">
-              <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center gap-2 text-white/70">
+              <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
               <span class="text-sm font-medium">Secure Checkout</span>

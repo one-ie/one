@@ -1,0 +1,39 @@
+---
+/**
+ * DemoNav - Demo Navigation Component
+ *
+ * Renders the main navigation for demo pages with active state
+ */
+
+import { DEMO_NAVIGATION } from '@/config/demo';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '' } = Astro.props;
+---
+
+<nav class="space-y-2">
+  {DEMO_NAVIGATION.map((item) => {
+    const isActive =
+      currentPath === item.path || currentPath.startsWith(item.path + '/');
+
+    return (
+      <a
+        href={item.path}
+        class={`
+          block px-4 py-3 rounded-lg transition-all duration-200
+          ${
+            isActive
+              ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-l-4 border-blue-500 font-medium'
+              : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 border-l-4 border-transparent'
+          }
+        `}
+      >
+        <div class="font-semibold text-sm">{item.title}</div>
+        <div class="text-xs opacity-75 mt-1">{item.description}</div>
+      </a>
+    );
+  })}
+</nav>

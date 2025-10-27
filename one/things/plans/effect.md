@@ -1,58 +1,543 @@
-# Integrating Effect.ts and confect into Astro-shadcn-Convex for AI Agents
+# Effect.ts Integration Plan: Backend-Agnostic Architecture
 
-**Effect.ts and confect transform your Convex AI agent development** by bringing functional programming's robust error handling, structured concurrency, and type safety to the reactive database stack. Based on production deployments like 14.ai (AI customer support platform), this integration provides industrial-strength reliability for building sophisticated agents with multi-step workflows, provider fallbacks, and complex state management. The combination works: Convex handles reactive data and real-time synchronization while Effect.ts manages external API calls, error recovery, and dependency injection.
+**Status:** ✅ Phase 1-2 Complete (DataProvider + Services) | 🚧 Phases 3-7 In Progress
+**Version:** 2.0.0 - Backend-Agnostic Edition
+**Last Updated:** 2025-10-24
+
+## Executive Summary
+
+**Effect.ts powers the backend-agnostic architecture of ONE Platform** by providing type-safe, composable services that work with ANY backend (Convex, WordPress, Supabase, Notion, etc.). This document describes how Effect.ts integrates with the DataProvider pattern to enable:
+
+1. **Backend Independence**: Frontend works with any backend that implements the 6-dimension ontology
+2. **Type Safety**: Complete type inference from database to UI with zero runtime overhead
+3. **Composability**: Services compose via Layer.mergeAll for dependency injection
+4. **Error Handling**: Tagged errors replace try/catch throughout the stack
+5. **Testing**: Mock providers enable isolated service testing
+
+**Key Principle:** Build the architecture right. Build features once. Never refactor for flexibility.
+
+Based on production patterns from 14.ai (AI customer support) and the unified implementation plan (11 weeks to complete platform).
+
+---
+
+## Architecture Overview: The Three Layers
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    FRONTEND (Astro + React)                      │
+│  - Backend-agnostic UI and pages                                │
+│  - Uses services, never calls backend directly                  │
+│  - Works with ANY backend via DataProvider                      │
+└─────────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────────┐
+│              EFFECT.TS SERVICES (Backend-Agnostic)              │
+│  - ThingService (all 66 types)                                  │
+│  - ConnectionService (all 25 types)                             │
+│  - EventService (all 67 events)                                 │
+│  - KnowledgeService (RAG + vectors)                             │
+│  - GroupService, PeopleService                                  │
+│                                                                  │
+│  ✅ Type-safe with tagged errors                                │
+│  ✅ Composable via Layer.mergeAll                               │
+│  ✅ Testable with mock providers                                │
+│  ✅ Backend-agnostic via DataProvider                           │
+└─────────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────────┐
+│         DATAPROVIDER INTERFACE (Universal Backend API)          │
+│  groups:      { get, list, update }                            │
+│  people:      { get, list, create, update }                    │
+│  things:      { get, list, create, update, delete }           │
+│  connections: { create, getRelated, getCount }                 │
+│  events:      { log, query }                                   │
+│  knowledge:   { embed, search }                                │
+│                                                                  │
+│  ✅ Implementation-agnostic interface                           │
+│  ✅ 6-dimension ontology as contract                            │
+│  ✅ Swap backends by changing ONE line                          │
+└─────────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────────┐
+│        BACKEND PROVIDERS (Choose One - ONE Line Config!)        │
+│                                                                  │
+│  ConvexProvider     ✅ Complete                                 │
+│  WordPressProvider  🚧 Planned (Phase 7)                        │
+│  SupabaseProvider   🚧 Planned (Phase 7)                        │
+│  NotionProvider     🚧 Planned (Future)                         │
+│  CustomProvider     🚧 Roll your own                            │
+│                                                                  │
+│  All implement the same DataProvider interface                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Key Architectural Decisions
+
+**1. Backend-Agnostic by Default**
+- Services use `DataProvider`, not direct backend calls
+- Frontend can work with Convex, WordPress, Supabase, etc.
+- Change backend = edit ONE line in `astro.config.ts`
+
+**2. 6-Dimension Ontology as Source of Truth**
+- Every feature maps to: groups, people, things, connections, events, knowledge
+- DataProvider interface enforces this structure
+- Backends implement the ontology their own way (see `one/knowledge/ontology.md`)
+
+**3. Effect.ts for Services, Not Everywhere**
+- Backend: Effect.ts services with typed errors
+- Frontend: Standard React hooks (useEffectRunner for complex flows)
+- Keep it simple: Effect where it adds value, standard TypeScript elsewhere
+
+**4. Separation Enables Installation**
+- When users run `npx oneie`, they get frontend only
+- Backend is OFF by default (users can connect their own)
+- Organizations can use existing infrastructure (WordPress, Notion, etc.)
+
+---
+
+## Current Status (from unified-implementation-plan.md)
+
+### ✅ COMPLETED (Phases 1-2: 4 weeks)
+
+**Phase 1: DataProvider Foundation** ✅
+- DataProvider interface complete: `/web/src/providers/DataProvider.ts`
+- ConvexProvider implementation complete
+- Typed errors (ThingNotFoundError, etc.)
+- Backend swapping works (change ONE line)
+
+**Phase 2: Effect.ts Service Layer** ✅
+- All 6 dimension services complete:
+  - `/web/src/services/ThingService.ts` (66 types)
+  - `/web/src/services/ConnectionService.ts` (25 types)
+  - `/web/src/services/EventService.ts` (67 events)
+  - `/web/src/services/KnowledgeService.ts` (RAG)
+  - `/web/src/services/GroupService.ts`
+  - `/web/src/services/PeopleService.ts`
+- React hooks: `useEffectRunner` in `/web/src/hooks/`
+- Dependency injection via Layer.mergeAll
+- Tagged errors throughout (no try/catch)
+
+### 🚧 REMAINING (Phases 3-7: 7 weeks)
+
+**Phase 3: Backend Implementation** (NOT STARTED)
+- Implement CRUD mutations for all 66 thing types
+- Add event logging to all mutations
+- Enforce group scoping
+- Add rate limiting
+
+**Phase 4: Frontend Integration** (NOT STARTED)
+- Multi-tenant dashboard
+- Entity management UI (all 66 types)
+- Connection visualization
+- Real-time event timeline
+
+**Phase 5: RAG & Knowledge** (NOT STARTED)
+- Chunking service (800 tokens, 200 overlap)
+- Embedding service (OpenAI integration)
+- RAG ingestion pipeline
+- Vector search
+
+**Phase 6: Testing** (PARTIAL - auth tests exist)
+- Backend service coverage (90%)
+- Frontend coverage (70%)
+- Multi-backend tests
+- CI/CD pipeline
+
+**Phase 7: Multi-Backend** (OPTIONAL)
+- WordPressProvider
+- SupabaseProvider
+- CompositeProvider (multi-backend routing)
+
+---
 
 ## Integration approaches
 
-### Understanding confect's role
+### Understanding confect's role (Optional - For Convex Backend Only)
 
 Confect isn't just a thin wrapper—it's a comprehensive framework that **deeply integrates Effect.ts with Convex**. Created by RJ Dellecese, confect replaces Convex's native validator system with Effect's schema library and transforms all Convex APIs to return `Effect` types instead of `Promise`. Where Convex returns `A | null`, confect returns `Option<A>`, and errors become explicit in the Effect type signature. This provides end-to-end type safety from database operations through business logic to HTTP APIs with automatic OpenAPI documentation.
 
-### Project structure with Effect and confect
+### Project structure with backend-agnostic Effect.ts
 
-Your Astro-shadcn-Convex project extends naturally with Effect code living primarily in the Convex backend:
+ONE Platform uses a clean separation between frontend (Effect.ts services) and backend (any provider):
 
 ```
-your-project/
-├── src/                          # Astro frontend
-│   ├── components/
-│   │   └── ui/                   # Shadcn components (React)
-│   ├── pages/
-│   │   └── index.astro
-│   └── lib/
-│       └── convex.tsx            # Convex client setup
-├── convex/                       # Convex backend (Effect-focused)
-│   ├── _generated/               # Auto-generated types
-│   ├── schema.ts                 # Effect Schema definitions
-│   ├── confect.ts                # Generated function constructors
-│   ├── functions.ts              # Effect-based queries/mutations
-│   ├── functions.schemas.ts      # Args/returns validators
-│   ├── lib/                      # Effect services and layers
-│   │   ├── services/
-│   │   │   ├── Database.ts
-│   │   │   ├── AI.ts
-│   │   │   └── VectorStore.ts
-│   │   └── layers/
-│   │       ├── DatabaseLive.ts
-│   │       ├── AILive.ts
-│   │       └── index.ts         # Combined app layers
-│   ├── agents/                  # Agent-specific code
-│   │   ├── schemas/
-│   │   │   └── agentSchemas.ts
-│   │   ├── services/
-│   │   │   ├── AgentService.ts
-│   │   │   └── ToolRegistry.ts
-│   │   ├── tools/
-│   │   │   ├── search.ts
-│   │   │   └── database.ts
-│   │   └── workflows/
-│   │       └── orchestration.ts
-│   └── http/
-│       └── api.ts               # Effect HTTP APIs
-├── convex.json
-├── astro.config.mjs
-└── tsconfig.json
+ONE/
+├── web/                         # Frontend (Backend-Agnostic)
+│   ├── src/
+│   │   ├── pages/              # Astro pages (SSR)
+│   │   ├── components/         # React components + shadcn/ui
+│   │   ├── services/           # ✅ Effect.ts services (backend-agnostic)
+│   │   │   ├── ThingService.ts
+│   │   │   ├── ConnectionService.ts
+│   │   │   ├── EventService.ts
+│   │   │   ├── KnowledgeService.ts
+│   │   │   ├── GroupService.ts
+│   │   │   └── PeopleService.ts
+│   │   ├── providers/          # ✅ DataProvider interface & implementations
+│   │   │   ├── DataProvider.ts          # Universal interface
+│   │   │   ├── convex/
+│   │   │   │   └── ConvexProvider.ts    # Convex implementation
+│   │   │   ├── wordpress/
+│   │   │   │   └── WordPressProvider.ts # WordPress implementation (planned)
+│   │   │   └── supabase/
+│   │   │       └── SupabaseProvider.ts  # Supabase implementation (planned)
+│   │   ├── hooks/              # React hooks
+│   │   │   ├── useEffectRunner.ts       # Run Effect programs in React
+│   │   │   └── useProvider.ts           # Access current DataProvider
+│   │   └── lib/
+│   │       └── errors.ts       # Tagged error types
+│   └── astro.config.ts         # ✅ Configure provider here (ONE LINE!)
+│
+├── backend/                     # Backend (Convex - OPTIONAL)
+│   └── convex/
+│       ├── schema.ts           # 6-dimension ontology (groups, entities, connections, events, knowledge)
+│       ├── auth.ts             # Better Auth configuration
+│       ├── queries/            # Read operations
+│       ├── mutations/          # Write operations
+│       └── _generated/         # Auto-generated types
+│
+├── one/                         # Platform documentation (41 files)
+│   ├── knowledge/
+│   │   ├── ontology.md         # ✅ 6-dimension data model (source of truth)
+│   │   └── todo.md             # 100-inference execution template
+│   └── things/plans/
+│       ├── effect.md           # This file
+│       ├── separate.md         # Backend separation plan
+│       └── unified-implementation-plan.md  # Complete 11-week plan
+│
+└── apps/                        # Distribution targets
+    ├── oneie/                  # Main site (one.ie) - backend ON
+    └── one/                    # Demo site (demo.one.ie) - backend OFF
 ```
+
+**Key Differences from Standard Convex:**
+1. Services live in `/web/src/services/` (not backend)
+2. Services use `DataProvider` (not direct Convex calls)
+3. Backend is optional (users can bring their own)
+4. Frontend works standalone with mock providers for testing
+
+---
+
+## The Backend-Agnostic Pattern (Current Implementation)
+
+### DataProvider Interface (Universal Contract)
+
+```typescript
+// web/src/providers/DataProvider.ts
+import { Effect, Context } from "effect";
+
+// Universal interface ALL backends implement
+export interface DataProvider {
+  // Dimension 1: Groups
+  groups: {
+    get: (id: string) => Effect.Effect<Group, GroupNotFoundError>;
+    list: (params?: { status?: string }) => Effect.Effect<Group[], Error>;
+    update: (id: string, updates: Partial<Group>) => Effect.Effect<void, Error>;
+  };
+
+  // Dimension 2: People
+  people: {
+    get: (id: string) => Effect.Effect<Person, PersonNotFoundError>;
+    list: (params: { groupId?: string; role?: string }) => Effect.Effect<Person[], Error>;
+    create: (input: CreatePersonInput) => Effect.Effect<string, Error>;
+  };
+
+  // Dimension 3: Things
+  things: {
+    get: (id: string) => Effect.Effect<Thing, ThingNotFoundError>;
+    list: (params: { type: ThingType; groupId?: string }) => Effect.Effect<Thing[], Error>;
+    create: (input: CreateThingInput) => Effect.Effect<string, Error>;
+    update: (id: string, updates: Partial<Thing>) => Effect.Effect<void, Error>;
+    delete: (id: string) => Effect.Effect<void, Error>;
+  };
+
+  // Dimension 4: Connections
+  connections: {
+    create: (input: CreateConnectionInput) => Effect.Effect<string, Error>;
+    getRelated: (thingId: string) => Effect.Effect<Connection[], Error>;
+    getCount: (thingId: string) => Effect.Effect<number, Error>;
+  };
+
+  // Dimension 5: Events
+  events: {
+    log: (event: LogEventInput) => Effect.Effect<void, Error>;
+    query: (params: QueryEventsInput) => Effect.Effect<Event[], Error>;
+  };
+
+  // Dimension 6: Knowledge
+  knowledge: {
+    embed: (text: string) => Effect.Effect<number[], Error>;
+    search: (params: SearchKnowledgeInput) => Effect.Effect<KnowledgeChunk[], Error>;
+  };
+}
+
+export const DataProvider = Context.GenericTag<DataProvider>("DataProvider");
+```
+
+### Backend-Agnostic Service Example
+
+```typescript
+// web/src/services/ThingService.ts
+import { Effect } from "effect";
+import { DataProvider } from "@/providers/DataProvider";
+
+export class ThingService extends Effect.Service<ThingService>()(
+  "ThingService",
+  {
+    effect: Effect.gen(function* () {
+      const provider = yield* DataProvider;  // Backend-agnostic!
+
+      return {
+        // Create any of the 66 thing types
+        create: (type: ThingType, input: CreateThingInput) =>
+          Effect.gen(function* () {
+            // 1. Validate input (same for all backends)
+            yield* validateThingInput(type, input);
+
+            // 2. Create via provider (backend-specific implementation)
+            const thingId = yield* provider.things.create({
+              type,
+              name: input.name,
+              groupId: input.groupId,
+              properties: input.properties,
+            });
+
+            // 3. Log event automatically (via provider)
+            yield* provider.events.log({
+              type: "entity_created",
+              actorId: input.actorId,
+              targetId: thingId,
+              groupId: input.groupId,
+              metadata: { thingType: type },
+            });
+
+            return thingId;
+          }),
+
+        // Get thing by ID
+        get: (id: string) => provider.things.get(id),
+
+        // List things by type
+        list: (type: ThingType, groupId: string) =>
+          provider.things.list({ type, groupId }),
+
+        // Update thing
+        update: (id: string, updates: Partial<Thing>) =>
+          Effect.gen(function* () {
+            yield* provider.things.update(id, updates);
+
+            // Log event
+            yield* provider.events.log({
+              type: "entity_updated",
+              actorId: updates.actorId,
+              targetId: id,
+              groupId: updates.groupId,
+              metadata: { updates },
+            });
+          }),
+      };
+    }),
+    dependencies: [DataProvider],  // Inject provider
+  }
+) {}
+```
+
+### ConvexProvider Implementation
+
+```typescript
+// web/src/providers/convex/ConvexProvider.ts
+import { Effect, Layer } from "effect";
+import { ConvexHttpClient } from "convex/browser";
+import { DataProvider } from "../DataProvider";
+import { api } from "@/convex/_generated/api";
+
+export class ConvexProvider implements DataProvider {
+  constructor(private client: ConvexHttpClient) {}
+
+  things = {
+    create: (input) =>
+      Effect.tryPromise({
+        try: () => this.client.mutation(api.mutations.things.create, input),
+        catch: (error) => new Error(String(error)),
+      }),
+
+    get: (id) =>
+      Effect.tryPromise({
+        try: () => this.client.query(api.queries.things.get, { id }),
+        catch: (error) => new ThingNotFoundError(id),
+      }),
+
+    list: (params) =>
+      Effect.tryPromise({
+        try: () => this.client.query(api.queries.things.list, params),
+        catch: (error) => new Error(String(error)),
+      }),
+
+    update: (id, updates) =>
+      Effect.tryPromise({
+        try: () => this.client.mutation(api.mutations.things.update, { id, ...updates }),
+        catch: (error) => new Error(String(error)),
+      }),
+
+    delete: (id) =>
+      Effect.tryPromise({
+        try: () => this.client.mutation(api.mutations.things.delete, { id }),
+        catch: (error) => new Error(String(error)),
+      }),
+  };
+
+  // ... implement other dimensions (people, groups, connections, events, knowledge)
+}
+
+export const convexProvider = (config: { url: string }) =>
+  Layer.succeed(
+    DataProvider,
+    new ConvexProvider(new ConvexHttpClient(config.url))
+  );
+```
+
+### Configure Provider (ONE LINE!)
+
+```typescript
+// web/astro.config.ts
+import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
+import { convexProvider } from "./src/providers/convex";
+// import { wordpressProvider } from "./src/providers/wordpress";  // Alternative
+// import { supabaseProvider } from "./src/providers/supabase";     // Alternative
+
+export default defineConfig({
+  integrations: [
+    react(),
+    one({
+      // ✅ Change this ONE line to swap backends!
+      provider: convexProvider({ url: import.meta.env.PUBLIC_CONVEX_URL }),
+
+      // OR use WordPress:
+      // provider: wordpressProvider({ url: "https://blog.com", apiKey: env.WP_KEY }),
+
+      // OR use Supabase:
+      // provider: supabaseProvider({ url: env.SUPABASE_URL, key: env.SUPABASE_KEY }),
+    }),
+  ],
+});
+```
+
+### Frontend Usage (Completely Backend-Agnostic)
+
+```tsx
+// web/src/components/CreateCourse.tsx
+import { useEffectRunner } from "@/hooks/useEffectRunner";
+import { ThingService } from "@/services/ThingService";
+import { Effect } from "effect";
+
+export function CreateCourseForm() {
+  const { run, loading } = useEffectRunner();
+
+  const handleSubmit = async (formData: CourseFormData) => {
+    // Define Effect program
+    const program = Effect.gen(function* () {
+      const thingService = yield* ThingService;
+
+      // This works with ANY backend (Convex, WordPress, Supabase, etc.)!
+      const courseId = yield* thingService.create("course", {
+        name: formData.name,
+        groupId: currentGroup.id,
+        properties: {
+          description: formData.description,
+          price: formData.price,
+          duration: formData.duration,
+        },
+        actorId: currentUser.id,
+      });
+
+      return courseId;
+    });
+
+    // Run program (uses configured provider automatically)
+    const courseId = await run(program);
+
+    // Redirect to course page
+    navigate(`/courses/${courseId}`);
+  };
+
+  return <form onSubmit={handleSubmit}>...</form>;
+}
+```
+
+### Benefits of This Architecture
+
+**1. True Backend Independence**
+- Frontend code never imports backend-specific modules
+- Services use DataProvider interface only
+- Swap backends without changing a single service or component
+
+**2. Testing Without Backend**
+```typescript
+// web/src/services/__tests__/ThingService.test.ts
+import { Effect, Layer } from "effect";
+import { ThingService } from "../ThingService";
+
+const MockProvider = Layer.succeed(
+  DataProvider,
+  {
+    things: {
+      create: (input) => Effect.succeed("mock-id-123"),
+      get: (id) => Effect.succeed({ _id: id, type: "course", name: "Test" }),
+      // ... other methods
+    },
+    // ... other dimensions
+  }
+);
+
+test("should create course", async () => {
+  const program = Effect.gen(function* () {
+    const service = yield* ThingService;
+    return yield* service.create("course", { ... });
+  });
+
+  const result = await Effect.runPromise(
+    program.pipe(Effect.provide(MockProvider))
+  );
+
+  expect(result).toBe("mock-id-123");
+});
+```
+
+**3. Organizations Use Existing Infrastructure**
+```typescript
+// Organization A: Uses Convex (real-time)
+provider: convexProvider({ url: "..." })
+
+// Organization B: Uses WordPress (existing CMS)
+provider: wordpressProvider({ url: "https://blog.org", apiKey: "..." })
+
+// Organization C: Uses Supabase (PostgreSQL)
+provider: supabaseProvider({ url: "...", key: "..." })
+
+// Same frontend code works for all three!
+```
+
+**4. Deployment Flexibility**
+```bash
+# Development: Full stack
+ONE_BACKEND=on
+
+# Production (one.ie): Backend enabled
+ONE_BACKEND=on
+
+# Demo (demo.one.ie): Backend disabled
+ONE_BACKEND=off
+
+# User installation (npx oneie): Backend OFF by default
+ONE_BACKEND=off
+```
+
+---
+
+## Optional: Convex-Specific Integration with confect
+
+**Note:** This section is only relevant if you're using Convex as your backend AND want deeper Effect.ts integration in the backend layer. For most use cases, the DataProvider pattern above is sufficient.
 
 ### Schema definition with confect
 
@@ -971,3 +1456,278 @@ const robustAgentGeneration = (prompt: string) =>
 ```
 
 This integration of Effect.ts and confect into your Astro-shadcn-Convex stack provides industrial-strength reliability for production AI agents. The combination delivers type safety, robust error handling, and reactive data synchronization—critical capabilities for systems that users depend on. Start with confect for schema-first database design, introduce Effect for LLM integration with retry logic, and structure your agent logic as composable services. The learning investment pays dividends in reduced bugs, improved testability, and cleaner codebase architecture.
+
+---
+
+## Summary: How Everything Connects
+
+### The Complete Picture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                   ONE Platform Architecture                      │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 1. SOURCE OF TRUTH: 6-Dimension Ontology (one/knowledge/)      │
+│    - Groups (multi-tenant isolation, hierarchical nesting)      │
+│    - People (authorization & governance)                         │
+│    - Things (66 types: creators, courses, tokens, agents...)   │
+│    - Connections (25 types: owns, follows, enrolled_in...)     │
+│    - Events (67 types: created, purchased, completed...)        │
+│    - Knowledge (RAG: labels, chunks, vectors)                   │
+│                                                                  │
+│    ✅ Universal data model for ALL features                     │
+│    ✅ Scales from children to enterprises                       │
+│    ✅ Never needs breaking changes                              │
+└─────────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────────┐
+│ 2. BACKEND-AGNOSTIC SERVICES: Effect.ts (web/src/services/)    │
+│    - ThingService (create, get, list, update, delete)          │
+│    - ConnectionService (create, getRelated, getCount)          │
+│    - EventService (log, query)                                  │
+│    - KnowledgeService (embed, search)                           │
+│    - GroupService, PeopleService                                │
+│                                                                  │
+│    ✅ Use DataProvider interface (not backend-specific)         │
+│    ✅ Tagged errors (no try/catch)                              │
+│    ✅ Composable via Layer.mergeAll                             │
+│    ✅ Testable with mock providers                              │
+└─────────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────────┐
+│ 3. DATAPROVIDER INTERFACE (web/src/providers/)                 │
+│    - Universal contract ALL backends implement                  │
+│    - Enforces 6-dimension ontology structure                    │
+│    - Swap backends by changing ONE line                         │
+│                                                                  │
+│    Current: ConvexProvider ✅                                   │
+│    Planned: WordPressProvider, SupabaseProvider 🚧             │
+└─────────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────────┐
+│ 4. FRONTEND (web/src/)                                          │
+│    - Astro 5 pages (SSR)                                        │
+│    - React 19 components (islands)                              │
+│    - shadcn/ui (50+ components)                                 │
+│    - Tailwind v4 (CSS config)                                   │
+│                                                                  │
+│    ✅ Uses services, never calls backend directly               │
+│    ✅ Works with ANY backend via DataProvider                   │
+│    ✅ Can run without backend (demo mode)                       │
+└─────────────────────────────────────────────────────────────────┘
+                            ↓
+┌─────────────────────────────────────────────────────────────────┐
+│ 5. DEPLOYMENT (Release Strategy)                                │
+│                                                                  │
+│    Development (/web) → git push                                │
+│         ↓                                                        │
+│    one-ie/web (website source)                                  │
+│         ↓                                                        │
+│    ┌────────────────┬──────────────────┐                       │
+│    ↓                ↓                   ↓                        │
+│  one.ie      demo.one.ie         npx oneie                      │
+│  (full)        (demo)            (install)                      │
+│  Backend ON    Backend OFF       Backend OFF                    │
+│                                                                  │
+│  ✅ Single codebase                                             │
+│  ✅ Multiple deployments                                        │
+│  ✅ Environment-based features                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Key Principles Realized
+
+**1. ONE Ontology = Universal Data Model**
+- Every feature maps to 6 dimensions
+- DataProvider interface enforces this structure
+- Backends implement the ontology their way (Convex uses 5 tables, WordPress uses posts/meta, Supabase uses PostgreSQL schema)
+- Frontend doesn't care HOW data is stored, only THAT it follows the ontology
+
+**2. Backend-Agnostic = Maximum Flexibility**
+- Services use `DataProvider` (not Convex directly)
+- Organizations can use existing infrastructure (WordPress, Notion, etc.)
+- Frontend can run standalone (demo mode, testing, development)
+- Change backend = edit ONE line in `astro.config.ts`
+
+**3. Effect.ts = Type-Safe Services**
+- Tagged errors replace try/catch throughout services
+- Dependency injection via Layer.mergeAll
+- Testable with mock providers (no backend required)
+- Optional: Deep Convex integration with confect for advanced use cases
+
+**4. Separation Enables Distribution**
+```bash
+# When users run:
+npx oneie
+
+# They get:
+- Frontend (web/) ✅
+- Documentation (one/) ✅
+- Claude config (.claude/) ✅
+- Backend OFF by default ✅
+
+# Organizations can:
+- Use existing WordPress/Notion ✅
+- Connect their own Convex ✅
+- Build custom DataProvider ✅
+```
+
+### Release Strategy (architecture-summary.md)
+
+**Single Source → Multiple Targets**
+
+```
+/web (development - full features)
+  ↓
+git push → one-ie/web (website source)
+  ↓
+./scripts/release.sh patch main
+  → apps/oneie/ → git push → one-ie/oneie → one.ie (backend ON)
+
+./scripts/release.sh patch demo
+  → apps/one/ → git push → one-ie/one → demo.one.ie (backend OFF)
+```
+
+**Environment Configuration:**
+
+```bash
+# Development (.env.local)
+ONE_BACKEND=on
+ENABLE_ADMIN_FEATURES=true
+
+# Production one.ie (.env.main)
+ONE_BACKEND=on
+ENABLE_ADMIN_FEATURES=false
+
+# Demo demo.one.ie (.env.demo)
+ONE_BACKEND=off
+ENABLE_ADMIN_FEATURES=false
+
+# User installation (npx oneie)
+ONE_BACKEND=off  # Default
+```
+
+### Implementation Status (unified-implementation-plan.md)
+
+**✅ COMPLETE (Phases 1-2: 4 weeks)**
+- DataProvider interface and ConvexProvider
+- All 6 Effect.ts services (Thing, Connection, Event, Knowledge, Group, People)
+- React hooks (useEffectRunner, useProvider)
+- Tagged errors throughout
+- Backend-agnostic architecture validated
+
+**🚧 IN PROGRESS (Phases 3-7: 7 weeks remaining)**
+- Phase 3: Backend implementation (66 thing types, event logging, group scoping)
+- Phase 4: Frontend integration (multi-tenant dashboard, entity management UI)
+- Phase 5: RAG & Knowledge (chunking, embedding, vector search)
+- Phase 6: Testing (90% backend coverage, 70% frontend coverage)
+- Phase 7: Multi-Backend (WordPress, Supabase, Composite providers) - OPTIONAL
+
+### How to Use This Document
+
+**For AI Agents:**
+1. Read `one/knowledge/ontology.md` first (6-dimension model)
+2. Implement features using Effect.ts services (backend-agnostic)
+3. Services use DataProvider (never call backend directly)
+4. Follow the 100-inference sequence in `one/knowledge/todo.md`
+
+**For Developers:**
+1. Frontend development: Use Effect.ts services via hooks
+2. Backend development: Implement DataProvider for your backend
+3. Testing: Use mock providers (no backend required)
+4. Deployment: Configure provider in `astro.config.ts` (ONE LINE!)
+
+**For Organizations:**
+1. Install: `npx oneie` (gets frontend only, backend OFF)
+2. Choose backend: Convex, WordPress, Supabase, or custom
+3. Implement DataProvider for your chosen backend
+4. Configure: Edit ONE line in `astro.config.ts`
+
+### The Payoff
+
+**Before Backend-Agnostic Architecture:**
+- Frontend tightly coupled to Convex
+- Organizations must use Convex (no choice)
+- Can't test without backend
+- Can't use existing infrastructure
+- Hard to demo without signup
+
+**After Backend-Agnostic Architecture:**
+- Frontend works with ANY backend
+- Organizations use their existing systems
+- Test with mock providers (instant)
+- Leverage existing infrastructure investments
+- Demo works without backend
+
+**Build Once. Deploy Anywhere. Connect Anything.**
+
+---
+
+## Next Steps
+
+### For Immediate Implementation
+
+**1. Complete Phase 3: Backend Implementation**
+```bash
+# Backend mutations for all 66 thing types
+cd backend/convex/mutations/things.ts
+# Implement create/update/delete for each type
+# Add event logging to all mutations
+# Enforce group scoping
+```
+
+**2. Complete Phase 4: Frontend Integration**
+```bash
+# Multi-tenant dashboard
+cd web/src/pages/admin/
+# Build dashboard using ThingService
+# Add entity management UI
+# Visualize connections
+```
+
+**3. Complete Phase 5: RAG & Knowledge**
+```bash
+# Implement KnowledgeService features
+cd web/src/services/KnowledgeService.ts
+# Add chunking (800 tokens, 200 overlap)
+# Add embedding (OpenAI integration)
+# Add vector search
+```
+
+### For Future Exploration
+
+**1. Multi-Backend Support (Phase 7)**
+- WordPressProvider (REST API + WP metadata)
+- SupabaseProvider (PostgreSQL queries)
+- CompositeProvider (route by feature)
+
+**2. Advanced Effect.ts Features**
+- Stream for real-time LLM responses
+- Fiber for advanced concurrency
+- STM for transactional memory
+
+**3. Optional Convex Enhancements**
+- confect integration (schema-first)
+- Effect.ts in Convex backend
+- Deep type safety end-to-end
+
+---
+
+## Related Documentation
+
+- **`one/knowledge/ontology.md`** - 6-dimension data model (SOURCE OF TRUTH)
+- **`one/knowledge/todo.md`** - 100-inference execution template
+- **`one/things/plans/separate.md`** - Backend separation strategy
+- **`one/things/plans/unified-implementation-plan.md`** - Complete 11-week plan
+- **`one/things/plans/improve-codebase.md`** - Alternative 14-week plan (backend-first)
+- **`one/things/plans/architecture-summary.md`** - Deployment architecture
+- **`CLAUDE.md`** - Development workflow and patterns
+- **`web/AGENTS.md`** - Quick reference for Convex patterns
+
+---
+
+**The architecture is sound. The foundation is complete. Phases 1-2 prove the concept works. Now we finish the implementation and ship the complete platform.**
+
+**Build features once. Work with any backend. Scale infinitely.**

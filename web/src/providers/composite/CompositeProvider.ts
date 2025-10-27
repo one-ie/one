@@ -14,18 +14,22 @@ import { Effect, Layer } from "effect";
 import { DataProviderService } from "../DataProvider";
 import type {
   DataProvider,
+  Group,
   Thing,
   Connection,
   Event,
   Knowledge,
   CreateThingInput,
   UpdateThingInput,
+  CreateGroupInput,
+  UpdateGroupInput,
   CreateConnectionInput,
   CreateEventInput,
   CreateKnowledgeInput,
   ListThingsOptions,
   ListConnectionsOptions,
   ListEventsOptions,
+  ListGroupsOptions,
   SearchKnowledgeOptions,
   ThingKnowledge,
 } from "../DataProvider";
@@ -82,6 +86,60 @@ export const makeCompositeProvider = (config: CompositeProviderConfig): DataProv
   };
 
   return {
+    // ===== GROUPS =====
+    groups: {
+      get: (id: string) =>
+        Effect.gen(function* () {
+          const provider = defaultProvider;
+          return yield* provider.groups.get(id);
+        }),
+
+      getBySlug: (slug: string) =>
+        Effect.gen(function* () {
+          const provider = defaultProvider;
+          return yield* provider.groups.getBySlug(slug);
+        }),
+
+      list: (options?: ListGroupsOptions) =>
+        Effect.gen(function* () {
+          // Query all providers and merge results
+          const results: Group[] = [];
+
+          for (const route of config.routes) {
+            const groups = yield* route.provider.groups.list(options);
+            results.push(...groups);
+          }
+
+          // Sort by createdAt descending
+          results.sort((a, b) => b.createdAt - a.createdAt);
+
+          // Apply limit if specified
+          if (options?.limit) {
+            return results.slice(0, options.limit);
+          }
+
+          return results;
+        }),
+
+      create: (input: CreateGroupInput) =>
+        Effect.gen(function* () {
+          const provider = defaultProvider;
+          return yield* provider.groups.create(input);
+        }),
+
+      update: (id: string, input: UpdateGroupInput) =>
+        Effect.gen(function* () {
+          const provider = defaultProvider;
+          return yield* provider.groups.update(id, input);
+        }),
+
+      delete: (id: string) =>
+        Effect.gen(function* () {
+          const provider = defaultProvider;
+          return yield* provider.groups.delete(id);
+        }),
+    },
+
     // ===== THINGS =====
     things: {
       get: (id: string) =>

@@ -1,0 +1,233 @@
+---
+// web/src/pages/demo/search.astro
+import Layout from '@/layouts/Layout.astro';
+import { SearchDemo } from '@/components/demo/SearchDemo';
+import { DemoContainer } from '@/components/demo/DemoContainer';
+import { DemoHero } from '@/components/demo/DemoHero';
+import { DemoPlayground } from '@/components/demo/DemoPlayground';
+import CreateKnowledgeForm from '@/components/demo/CreateKnowledgeForm';
+import KnowledgeStats from '@/components/demo/KnowledgeStats';
+import SearchCodeExamples from '@/components/demo/SearchCodeExamples';
+import { Search as SearchIcon, BarChart3, Zap, Lightbulb, FileText, Sparkles } from 'lucide-react';
+
+// Get demo data
+const { DEMO_BACKEND_URL, DEMO_GROUP_ID } = await import('@/config/demo');
+
+// Try to fetch real knowledge data
+let knowledgeItems = [];
+let backendConnected = false;
+
+try {
+  const response = await fetch(`${DEMO_BACKEND_URL}/http/knowledge?groupId=${DEMO_GROUP_ID}`);
+  if (response.ok) {
+    const data = await response.json();
+    knowledgeItems = data.data || [];
+    backendConnected = true;
+  }
+} catch (e) {
+  // Standalone mode - SearchDemo will use mock data
+  console.log('Running in standalone mode for knowledge demo');
+}
+---
+
+<Layout title="Demo - Knowledge: Search & RAG (Dimension 6)">
+  <DemoContainer
+    title="Knowledge: Semantic Search & RAG"
+    description="Dimension 6 of 6 - Vector embeddings, semantic search, and knowledge base management"
+    backendUrl={DEMO_BACKEND_URL}
+    showConnectionStatus={true}
+  >
+    <!-- Hero Section -->
+    <DemoHero
+      title="Knowledge: The 6th Dimension"
+      description="Vector embeddings, semantic search, and RAG pipelines that power intelligent knowledge retrieval"
+      icon={SearchIcon}
+      badges={[
+        { label: 'Semantic Search', variant: 'success' },
+        { label: 'RAG Ready', variant: 'success' },
+        { label: 'Vector Embeddings', variant: 'info' }
+      ]}
+      ctaLabel="Scroll to Playground"
+      class="mb-12"
+    />
+
+    <!-- What is Knowledge Section -->
+    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8 mb-12">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">What is Knowledge?</h2>
+      <p class="text-slate-600 dark:text-slate-300 mb-6">
+        Knowledge is the 6th dimension of the ONE Platform ontology. It represents labels, embeddings, and semantic data that power intelligent search and RAG (Retrieval-Augmented Generation) systems.
+      </p>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
+          <div class="flex items-center gap-2 mb-2">
+            <SearchIcon size={20} class="text-yellow-600 dark:text-yellow-400" />
+            <h3 class="font-bold text-slate-900 dark:text-white">Full-Text Search</h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Search across all text content in the system with keyword matching and filtering</p>
+        </div>
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
+          <div class="flex items-center gap-2 mb-2">
+            "<BarChart3 size={20} className=""text-yellow-600 dark:text-yellow-400" />
+            <h3 class="font-bold text-slate-900 dark:text-white">Vector Embeddings</h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Semantic similarity search using high-dimensional embeddings for meaning-based results</p>
+        </div>
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
+          <div class="flex items-center gap-2 mb-2">
+            "<Zap size={20} className=""text-yellow-600 dark:text-yellow-400" />
+            <h3 class="font-bold text-slate-900 dark:text-white">RAG Pipeline</h3>
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300">Retrieve augmented generation combining semantic search with LLM generation for AI-powered responses</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Playground -->
+    <DemoPlayground
+      title="Interactive Knowledge Playground"
+      formSection={<CreateKnowledgeForm />}
+      dataSection={
+        <div class="space-y-6">
+          {backendConnected && knowledgeItems.length > 0 ? (
+            <div>
+              <h4 class="font-semibold text-slate-900 dark:text-white mb-4">Recent Knowledge Items ({knowledgeItems.length})</h4>
+              <div class="space-y-3">
+                {knowledgeItems.slice(0, 5).map((item: any, index: number) => (
+                  <div class="bg-slate-50 dark:bg-slate-700 rounded-lg p-4 border border-slate-200 dark:border-slate-600">
+                    <div class="flex items-start justify-between">
+                      <div class="flex-1">
+                        <h5 class="font-semibold text-slate-900 dark:text-white">{item.text?.substring(0, 60) || 'Knowledge Item'}...</h5>
+                        {item.labels && item.labels.length > 0 && (
+                          <div class="flex gap-2 mt-2">
+                            {item.labels.slice(0, 3).map((label: string, labelIndex: number) => (
+                              <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
+                                {label}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <div class="text-right text-xs text-slate-500 dark:text-slate-400">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div class="text-center py-8 text-slate-600 dark:text-slate-300">
+              "<FileText size={32} className=""mx-auto mb-3 opacity-50" />
+              <p>No knowledge items yet. Create some using the form on the left!</p>
+            </div>
+          )}
+        </div>
+      }
+      isLoading={false}
+      statusMessage={backendConnected ? { type: 'success', text: 'Backend connected - using real data' } : { type: 'info', text: 'Running in standalone mode with demo data' }}
+    />
+
+    <!-- Interactive Search Interface -->
+    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8 mb-12">
+      <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+        "<Sparkles size={24} className=""text-blue-600 dark:text-blue-400" />
+        Try Semantic Search
+      </h2>
+      <p class="text-slate-600 dark:text-slate-300 mb-6">
+        Type a query below to see how semantic search finds relevant knowledge across the system. Results are ranked by relevance using vector similarity.
+      </p>
+      <SearchDemo />
+    </div>
+
+    <!-- Code Examples -->
+    <SearchCodeExamples />
+
+    <!-- Knowledge Stats -->
+    <KnowledgeStats itemCount={knowledgeItems.length} backendConnected={backendConnected} />
+
+    <!-- Use Cases -->
+    <div class="grid md:grid-cols-2 gap-6 mb-12">
+      <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 border-l-4 border-blue-600">
+        <div class="flex items-center gap-2 mb-3">
+          "<Lightbulb size={20} className=""text-blue-600 dark:text-blue-400" />
+          <h3 class="font-bold text-slate-900 dark:text-white">Use Cases</h3>
+        </div>
+        <ul class="text-sm text-slate-600 dark:text-slate-300 space-y-2">
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> AI document and knowledge base search
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Semantic similarity and related content discovery
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Intelligent autocomplete and search suggestions
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Retrieval-augmented generation (RAG) for LLMs
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Content recommendation and knowledge graph traversal
+          </li>
+        </ul>
+      </div>
+      <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 border-l-4 border-purple-600">
+        <div class="flex items-center gap-2 mb-3">
+          "<Zap size={20} className=""text-purple-600 dark:text-purple-400" />
+          <h3 class="font-bold text-slate-900 dark:text-white">Technical Features</h3>
+        </div>
+        <ul class="text-sm text-slate-600 dark:text-slate-300 space-y-2">
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Vector embeddings (1,536 dimensions)
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Full-text search with BM25 ranking
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Faceted search with labels and filters
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Cosine similarity ranking (0-100%)
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-green-600 dark:text-green-400 font-bold">✓</span> Real-time indexing and updates
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 6-Dimension Circle Complete -->
+    <div class="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 rounded-lg shadow-lg p-8 text-white text-center mb-12">
+      <h2 class="text-3xl font-bold mb-4">Explored All 6 Dimensions!</h2>
+      <div class="max-w-2xl mx-auto mb-6">
+        <div class="grid grid-cols-6 gap-2 mb-4">
+          <a href="/demo/groups" class="py-2 px-1 bg-white/20 rounded hover:bg-white/30 transition text-xs font-semibold">Groups</a>
+          <a href="/demo/people" class="py-2 px-1 bg-white/20 rounded hover:bg-white/30 transition text-xs font-semibold">People</a>
+          <a href="/demo/things" class="py-2 px-1 bg-white/20 rounded hover:bg-white/30 transition text-xs font-semibold">Things</a>
+          <a href="/demo/connections" class="py-2 px-1 bg-white/20 rounded hover:bg-white/30 transition text-xs font-semibold">Connections</a>
+          <a href="/demo/events" class="py-2 px-1 bg-white/20 rounded hover:bg-white/30 transition text-xs font-semibold">Events</a>
+          <div class="py-2 px-1 bg-white rounded text-red-600 text-xs font-bold">Knowledge</div>
+        </div>
+      </div>
+      <p class="text-lg text-white/90 mb-8">
+        The complete 6-dimension ontology powers every feature in the ONE Platform. Ready to build?
+      </p>
+      <div class="space-y-3">
+        <a href="/demo" class="inline-block bg-white text-yellow-600 font-semibold px-8 py-3 rounded-lg hover:bg-yellow-50 transition">
+          Back to Demo Home
+        </a>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="bg-slate-100 dark:bg-slate-800 rounded-lg p-6 text-center">
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Continue your learning journey:</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/demo" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">← Back to Demo Home</a>
+        <span class="text-slate-300">•</span>
+        <a href="/one/knowledge/ontology.md" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">Ontology Specification</a>
+        <span class="text-slate-300">•</span>
+        <a href="/demo/api" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">Full API Documentation</a>
+      </div>
+    </div>
+  </DemoContainer>
+</Layout>

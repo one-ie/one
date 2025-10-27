@@ -62,15 +62,29 @@ export class TestLogger {
   }
 
   private sanitizeForLogging(message: string): string {
-    // Remove potential sensitive patterns (passwords, tokens, user IDs, emails, etc.)
+    // Remove potential sensitive patterns (passwords, tokens, emails, OAuth data, etc.)
     return message
+      // Password patterns
       .replace(/password[=:]\s*[^\s,}]+/gi, 'password=***')
+      // Token patterns (including OAuth tokens)
       .replace(/token[=:]\s*[^\s,}]+/gi, 'token=***')
+      .replace(/access[_-]?token[=:]\s*[^\s,}]+/gi, 'access_token=***')
+      .replace(/refresh[_-]?token[=:]\s*[^\s,}]+/gi, 'refresh_token=***')
+      .replace(/id[_-]?token[=:]\s*[^\s,}]+/gi, 'id_token=***')
+      // Secret patterns
       .replace(/secret[=:]\s*[^\s,}]+/gi, 'secret=***')
+      .replace(/client[_-]?secret[=:]\s*[^\s,}]+/gi, 'client_secret=***')
+      // API key patterns
       .replace(/api[_-]?key[=:]\s*[^\s,}]+/gi, 'api_key=***')
-      .replace(/user[_-]?id[=:]?\s*[^\s,}]+/gi, 'userId=***')
-      .replace(/uid[=:]?\s*[^\s,}]+/gi, 'uid=***')
-      .replace(/email[=:]?\s*[^\s,}]+/gi, 'email=***');
+      // Authorization code
+      .replace(/code[=:]\s*[^\s,}]+/gi, 'code=***')
+      // Email addresses (except @test.com for test data visibility)
+      .replace(/([a-zA-Z0-9._-]+@(?!test\.com)[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi, '[email]')
+      // Bearer tokens in headers
+      .replace(/Bearer\s+[A-Za-z0-9_.-]+/gi, 'Bearer ***')
+      // Any remaining sensitive key-value patterns
+      .replace(/auth[=:]\s*[^\s,}]+/gi, 'auth=***')
+      .replace(/credential[s]?[=:]\s*[^\s,}]+/gi, 'credentials=***');
   }
 
   success(message: string): void {

@@ -73,14 +73,14 @@ describe("Auth - Email & Password", () => {
         "NoNumbers!",
       ];
 
-      strongPasswords.forEach((password, idx) => {
+      strongPasswords.forEach((password) => {
         assert(isStrongPassword(password), `${password} should be strong`);
-        logger.log(`✓ Strong password [index ${idx}] validated`);
+        logger.log(`✓ Strong: ${password}`);
       });
 
-      weakPasswords.forEach((password, idx) => {
+      weakPasswords.forEach((password) => {
         assert(!isStrongPassword(password), `${password} should be weak`);
-        logger.log(`✗ Weak password [index ${idx}] correctly rejected`);
+        logger.log(`✗ Weak: ${password}`);
       });
 
       logger.success("Password strength validation working");

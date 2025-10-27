@@ -2,8 +2,8 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Activity, Clock, FileText, Tag, User, Grid, List } from 'lucide-react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Activity, Clock, Grid, List } from 'lucide-react';
 import { StreamSearch } from '@/components/StreamSearch';
 
 // Get all stream entries, sorted by date (newest first)
@@ -31,20 +31,6 @@ function formatDate(date: Date): string {
   }).format(date);
 }
 
-// Get relative time (e.g., "2 hours ago")
-function getRelativeTime(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
-
-  if (diffMins < 1) return 'just now';
-  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-  return formatDate(date);
-}
 ---
 
 <Layout title="Stream - Live Activity Feed | ONE Platform">

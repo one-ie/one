@@ -1,8 +1,8 @@
-# /one - ONE Cascade Intelligence Platform
+# /cascade - ONE Platform Agent Orchestration
 
-🌟 **Transform Ideas into Production-Ready Code**
+🌟 **Turn Ideas into Production-Ready Code**
 
-*Agent ONE orchestrates your workflow through 8 AI agents with the 6-dimension ontology. Simple, clear design optimized for all screens.*
+*agent-director orchestrates your workflow through 15 specialized AI agents with the 6-dimension ontology. Inference-based execution optimized for speed and quality.*
 
 ## Core Interface
 
@@ -20,28 +20,28 @@ When the `/one` command is invoked, display this main menu:
 ║                                                                  ║
 ╚══════════════════════════════════════════════════════════════════╝
 
-🏆 **CASCADE STATUS** - Agent-Orchestrated Workflow ✅
-   ✨ ONE Cascade v1.0.0 | 8 AI Agents | 6-Level Workflow
+🏆 **ORCHESTRATION STATUS** - agent-director in control ✅
+   ✨ ONE Platform v1.0.0 | 15 AI Agents | Inference-Based (1-100)
    🤖 98% Context Reduction | 🚀 5x Faster Execution
    🧪 Quality Loops Enabled | 📊 Continuous Learning Active
-   ⚡ Event-Driven Autonomy | 🎯 100x Simpler Configuration
+   ⚡ Event-Driven Autonomy | 🎯 6-Dimension Ontology Aligned
 
-🚀 **QUICK START** (Turn Ideas into Reality)
-   1. Start New Idea        → Transform any idea into working code
-   2. Build Your Plan       → Create feature collections & assign work
-   3. Launch Big Feature    → Specifications with quality gates
-   4. Create Tests & Design → User flows that drive implementation
-   5. Get Things Done       → Execute with 8 AI agents in parallel
+🚀 **INFERENCE WORKFLOW** (Infer 1-100: Plan → Implement → Learn)
+   1. /now              → Show current inference & task
+   2. /next             → Advance to next inference
+   3. /done             → Mark inference complete & advance
+   4. /plan             → View complete 100-inference plan
+   5. /build            → Build feature with specialists
 
-🤖 **AI COMMAND CENTER** (Your Personal Engineering Team)
-   6. Engineering Director  → Validates ideas, creates plans, assigns work
-   7. Backend Specialist    → Services, mutations, queries, schemas
-   8. Frontend Specialist   → Pages, components, UI/UX
-   9. Integration Specialist → Connections, data flows, workflows
-   A. Quality Agent         → Tests, validation, acceptance criteria
-   B. Design Agent          → Wireframes, components, test-driven design
-   C. Problem Solver        → Ultrathink mode, root cause analysis
-   D. Documenter           → Feature docs, user guides, knowledge base
+🤖 **AGENT COMMAND CENTER** (15 Specialized Agents, agent-director Orchestrates)
+   6. agent-director      → Orchestrator: plans, validates, delegates
+   7. agent-backend       → Backend: Convex mutations, queries, schema
+   8. agent-frontend      → Frontend: Astro pages, React components
+   9. agent-designer      → Designer: Wireframes, tokens, specs
+   A. agent-quality       → Quality: Tests, validation, acceptance criteria
+   B. agent-ops           → Operations: Deployment, CI/CD, infrastructure
+   C. agent-builder       → Builder: Feature implementation coordination
+   D. agent-problem-solver → Problem Solver: Root cause analysis
 
 ⚙️  **ADVANCED FEATURES** (Power Users)
    T. Template Library      → Workflow templates for common patterns
@@ -204,88 +204,140 @@ display: |
 
 ### AI Agents (6-9, A-D)
 
-#### 6. Engineering Director
+#### 6. agent-director (The Orchestrator)
 ```yaml
-action: show_engineering_director
+action: show_director_agent
 display: |
-  🎯 **ENGINEERING DIRECTOR AGENT**
+  🎯 **AGENT-DIRECTOR: THE ORCHESTRATOR**
 
-  Orchestrates workflow, validates ideas, creates plans, assigns work:
+  Central control: Plans features, validates ontology, delegates to 14 specialists
+  Works with inference-based execution (Infer 1-100) for precise planning.
 
   **Current Activity:**
-  - Validating 2 new ideas against ontology
-  - Managing 3 active plans (12 features total)
-  - Coordinating 8 specialists across 4 features
+  - Infer 47/100: Validating backend schema design
+  - Delegated to: agent-backend (implementing mutations)
+  - Delegated to: agent-frontend (building UI components)
+  - Delegated to: agent-designer (creating wireframes)
+  - Monitoring: agent-quality running tests in parallel
 
-  **Actions:**
-  1. Validate New Idea        → Check idea against ontology
-  2. Create Plan             → Turn idea into feature collection
-  3. Assign Features         → Delegate to specialists
-  4. Create Task Lists       → Break features into parallel tasks
-  5. Review Progress         → See all active work
-  6. Mark Complete           → Finalize feature after docs
+  **What agent-director Does:**
+  1. /now                  → Show current inference & context
+  2. /next                 → Advance to next inference in plan
+  3. /done                 → Mark inference complete, learn from it
+  4. /plan                 → View complete 100-inference roadmap
+  5. Create Feature Plan   → Break idea into 100 inferences
+  6. Assign to Specialist  → Delegate specific inference to agent
+  7. Coordinate Parallel   → Run multiple agents concurrently
+  8. Monitor Quality       → Watch tests, catch failures early
 
-  **Context Budget:** 200-1500 tokens
-  **Prompt File:** one/things/agents/agent-director.md
+  **Delegation Pattern:**
+  - Infer N: Identifies what's needed
+  - Assigns to specialist (backend, frontend, designer, etc.)
+  - Specialist executes with skill(s) from .claude/skills/
+  - Returns result to director for next inference
+  - agent-director learns and advances plan
+
+  **Context Budget:** 43,000 tokens (largest context)
+  **Prompt File:** .claude/agents/agent-director.md
+  **Skills:** See agent-director capabilities for delegation rules
+
+  B. Back to Main Menu
+
+  Choose action (1-8, B): _
+```
+
+#### 7. agent-backend (Backend Specialist)
+```yaml
+action: show_backend_agent
+display: |
+  ⚙️  **AGENT-BACKEND: BACKEND SPECIALIST**
+
+  Convex backend implementation: mutations, queries, schema, services, 6D ontology
+  Delegated by agent-director for inference tasks involving backend logic.
+
+  **Currently Executing (via agent-director delegation):**
+  - Infer 15: Implement course creation mutation
+  - Infer 16: Create course list query with filtering
+  - Infer 17: Design schema for course relationships
+
+  **Available Skills (from .claude/skills/):**
+  - agent-backend:create-mutation (8.3 KB)
+  - agent-backend:create-query (referenced)
+  - agent-backend:design-schema (referenced)
+
+  **What agent-backend Does:**
+  1. Design Schema         → Convex schema with 6-dimension alignment
+  2. Create Mutations      → Write operations with validation & events
+  3. Create Queries        → Read operations with filtering & pagination
+  4. Implement Services    → Effect.ts business logic layers
+  5. Update Schema         → Database schema evolution
+  6. Handle Failures       → Fix tests that agent-quality reports
+
+  **Delegation Rules:**
+  - agent-director assigns: "Implement course creation"
+  - agent-backend executes: Creates mutation with all 8 steps
+  - Uses skill: agent-backend:create-mutation for guidance
+  - Returns: Mutation code + event logging + quota checks
+  - agent-director: Marks inference complete, advances to next
+
+  **Integration Pattern:**
+  - Receives requests from: agent-director (via delegation)
+  - Coordinates with: agent-quality (gets test failures)
+  - Coordinates with: agent-frontend (uses same entities)
+  - Delegates to: agent-problem-solver (if tests fail)
+
+  **Context Budget:** 16,000 tokens
+  **Prompt File:** .claude/agents/agent-backend.md
+  **Skills Directory:** .claude/skills/ (agent-backend-*.md)
 
   B. Back to Main Menu
 
   Choose action (1-6, B): _
 ```
 
-#### 7. Backend Specialist
+#### 8. agent-frontend (Frontend Specialist)
 ```yaml
-action: show_backend_specialist
+action: show_frontend_agent
 display: |
-  ⚙️  **BACKEND SPECIALIST AGENT**
+  🎨 **AGENT-FRONTEND: FRONTEND SPECIALIST**
 
-  Services, mutations, queries, schemas - backend logic and data:
+  Astro 5 + React 19 UI implementation: pages, components, islands, performance
+  Delegated by agent-director for inference tasks involving frontend logic.
 
-  **Current Activity:**
-  - Implementing 3 features (CourseService, LessonService, EnrollmentService)
-  - Writing Effect.ts services with error handling
-  - Creating Convex mutations and queries
+  **Currently Executing (via agent-director delegation):**
+  - Infer 25: Create course list page with SSR
+  - Infer 26: Build enrollment button component
+  - Infer 27: Optimize Lighthouse scores
 
-  **Actions:**
-  1. Write Feature Spec      → Backend specification
-  2. Implement Service       → Effect.ts business logic
-  3. Create Mutations        → Convex write operations
-  4. Create Queries          → Convex read operations
-  5. Update Schema           → Database schema changes
-  6. Fix Problem             → Handle failed tests
-  7. Add Lesson Learned      → Capture knowledge
+  **Available Skills (from .claude/skills/):**
+  - agent-frontend:create-page (10 KB) - Astro pages with islands
+  - agent-frontend:create-component (referenced) - React components
+  - agent-frontend:optimize-performance (referenced) - Core Web Vitals
 
-  **Context Budget:** 1500-2500 tokens
-  **Prompt File:** one/things/agents/agent-backend.md
+  **What agent-frontend Does:**
+  1. Create Astro Pages      → SSR pages with data fetching at build time
+  2. Build React Components  → Interactive islands with proper hydration
+  3. Implement UI/UX         → Design tokens + shadcn/ui components
+  4. Optimize Performance    → 90+ Lighthouse scores, Core Web Vitals
+  5. Handle Responsiveness   → Mobile-first with Tailwind v4
+  6. Ensure Accessibility    → WCAG 2.1 AA compliance
 
-  B. Back to Main Menu
+  **Delegation Rules:**
+  - agent-director assigns: "Create course enrollment page"
+  - agent-frontend executes: Builds Astro page with React islands
+  - Uses skill: agent-frontend:create-page for guidance
+  - Returns: Page code + component specs + performance metrics
+  - agent-director: Marks inference complete, advances to next
 
-  Choose action (1-7, B): _
-```
+  **Integration Pattern:**
+  - Receives requests from: agent-director (via delegation)
+  - Coordinates with: agent-designer (uses wireframes + tokens)
+  - Coordinates with: agent-backend (queries entities)
+  - Coordinates with: agent-quality (gets test results)
 
-#### 8. Frontend Specialist
-```yaml
-action: show_frontend_specialist
-display: |
-  🎨 **FRONTEND SPECIALIST AGENT**
-
-  Pages, components, UI/UX - everything users see and interact with:
-
-  **Current Activity:**
-  - Building 2 features (Course Pages, Enrollment Flow)
-  - Creating Astro pages with SSR
-  - Implementing React components
-
-  **Actions:**
-  1. Write Feature Spec      → Frontend specification
-  2. Create Astro Page       → SSR page with data fetching
-  3. Build React Components  → Interactive UI components
-  4. Implement UI/UX         → Design system implementation
-  5. Fix Problem             → Handle failed tests
-  6. Add Lesson Learned      → Capture knowledge
-
-  **Context Budget:** 1500-2500 tokens
-  **Prompt File:** one/things/agents/agent-frontend.md
+  **Context Budget:** 16,000 tokens
+  **Prompt File:** .claude/agents/agent-frontend.md
+  **Skills Directory:** .claude/skills/ (agent-frontend-*.md)
 
   B. Back to Main Menu
 
@@ -321,58 +373,110 @@ display: |
   Choose action (1-6, B): _
 ```
 
-#### A. Quality Agent
+#### A. agent-quality (Quality Specialist)
 ```yaml
 action: show_quality_agent
 display: |
-  🧪 **QUALITY AGENT**
+  🧪 **AGENT-QUALITY: QUALITY SPECIALIST**
 
-  Tests, validation, acceptance criteria - ensuring correctness:
+  Test-driven requirements: user flows, acceptance criteria, test validation
+  Delegated by agent-director for inference tasks involving quality gates.
 
-  **Current Activity:**
-  - Defining tests for 4 features
-  - Validating 2 implementations against ontology
-  - Running test suites (unit, integration, e2e)
+  **Currently Executing (via agent-director delegation):**
+  - Infer 18: Define course creation user flows
+  - Infer 19: Create acceptance criteria for enrollment
+  - Infer 20: Run tests on backend mutations
 
-  **Actions:**
-  1. Validate Feature        → Check against ontology
-  2. Define User Flows       → What users must accomplish
-  3. Create Acceptance Criteria → How we know it works
-  4. Define Technical Tests  → Unit, integration, e2e
-  5. Run Tests               → Execute test suites
-  6. Validate Implementation → Check tests pass
+  **Available Skills (from .claude/skills/):**
+  - agent-quality:define-tests (referenced) - User flows + criteria
+  - agent-quality:run-tests (referenced) - Execute test suites
+  - agent-quality:validate-ontology (referenced) - 6D alignment check
 
-  **Context Budget:** 2000 tokens
-  **Prompt File:** one/things/agents/agent-quality.md
+  **What agent-quality Does:**
+  1. Define User Flows       → What users must accomplish
+  2. Create Acceptance Criteria → How we know feature works
+  3. Define Technical Tests  → Unit, integration, e2e tests
+  4. Run Test Suites         → Execute against implementations
+  5. Validate Ontology       → Check 6-dimension compliance
+  6. Report Failures         → Flag issues to agent-problem-solver
+
+  **Delegation Rules:**
+  - agent-director assigns: "Define tests for course creation"
+  - agent-quality executes: Creates user flows + acceptance criteria
+  - Returns: Test requirements for agent-designer (wireframes)
+  - Returns: Test requirements for agent-backend (mutations)
+  - Returns: Test requirements for agent-frontend (components)
+  - All specialists use quality requirements to drive implementation
+
+  **Quality Loop:**
+  1. agent-quality: Defines tests
+  2. agent-designer: Creates designs satisfying tests
+  3. Specialists: Implement to pass tests
+  4. agent-quality: Runs tests, reports failures
+  5. agent-problem-solver: Analyzes failures
+  6. Specialists: Fix issues
+  7. Repeat until all tests pass
+
+  **Integration Pattern:**
+  - Receives requests from: agent-director (via delegation)
+  - Provides requirements to: agent-designer, agent-backend, agent-frontend
+  - Reports failures to: agent-problem-solver (for analysis)
+  - Monitors: All implementations against acceptance criteria
+
+  **Context Budget:** 21,000 tokens
+  **Prompt File:** .claude/agents/agent-quality.md
+  **Skills Directory:** .claude/skills/ (agent-quality-*.md)
 
   B. Back to Main Menu
 
   Choose action (1-6, B): _
 ```
 
-#### B. Design Agent
+#### 9. agent-designer (Design Specialist)
 ```yaml
-action: show_design_agent
+action: show_designer_agent
 display: |
-  🎨 **DESIGN AGENT**
+  🎨 **AGENT-DESIGNER: DESIGN SPECIALIST**
 
-  Wireframes, components, test-driven design - UI that enables tests to pass:
+  Test-driven design: wireframes, components, tokens aligned to acceptance criteria
+  Delegated by agent-director for inference tasks involving design and UX.
 
-  **Current Activity:**
-  - Creating wireframes for 3 features
-  - Designing component architecture
-  - Setting design tokens (colors, spacing, timing)
+  **Currently Executing (via agent-director delegation):**
+  - Infer 28: Create course card wireframe
+  - Infer 29: Design enrollment form states
+  - Infer 30: Generate Tailwind design tokens from brand
 
-  **Actions:**
-  1. Create Wireframes       → UI that satisfies test criteria
-  2. Design Components       → Component architecture
-  3. Set Design Tokens       → Colors, spacing, timing
-  4. Ensure Accessibility    → WCAG AA compliance
-  5. Review Against Tests    → Validate design enables tests
+  **Available Skills (from .claude/skills/):**
+  - agent-designer:create-wireframe (11 KB) - Test-driven wireframes
+  - agent-designer:define-components (referenced) - Component specs
+  - agent-designer:set-design-tokens (referenced) - Token generation
 
-  **Philosophy:** Design exists to make tests pass
-  **Context Budget:** 2000 tokens
-  **Prompt File:** one/things/agents/agent-designer.md
+  **What agent-designer Does:**
+  1. Create Wireframes       → Maps acceptance criteria to UI elements
+  2. Design Components       → Specifies component hierarchy & props
+  3. Set Design Tokens       → Colors, spacing, typography from brand
+  4. Ensure Accessibility    → WCAG 2.1 AA contrast validation
+  5. Specify All States      → Default, loading, error, success, empty
+
+  **Delegation Rules:**
+  - agent-quality defines tests (user flows, acceptance criteria)
+  - agent-director assigns: "Design course enrollment form"
+  - agent-designer executes: Creates wireframe satisfying all acceptance criteria
+  - Uses skill: agent-designer:create-wireframe for guidance
+  - Returns: Wireframe + component specs + design tokens
+  - agent-frontend uses wireframe for implementation
+  - agent-director: Marks inference complete, advances to next
+
+  **Integration Pattern:**
+  - Receives requests from: agent-director (via delegation)
+  - Reads requirements from: agent-quality (acceptance criteria)
+  - Provides specs to: agent-frontend (implements wireframes)
+  - Validates with: WCAG AA accessibility checklist
+
+  **Design Philosophy:** Design exists to enable tests to pass
+  **Context Budget:** 15,000 tokens
+  **Prompt File:** .claude/agents/agent-designer.md
+  **Skills Directory:** .claude/skills/ (agent-designer-*.md)
 
   B. Back to Main Menu
 

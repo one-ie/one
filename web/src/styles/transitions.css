@@ -1,0 +1,427 @@
+/* ============================================================================
+   VIEW TRANSITIONS
+   Elegant page transition animations using Astro's View Transitions API
+   ============================================================================ */
+
+/* Respect user preferences for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ============================================================================
+   FADE + SCALE TRANSITION (DEFAULT)
+   Smooth fade with subtle scale for depth perception
+   ============================================================================ */
+
+::view-transition-old(root) {
+  animation: fade-out-scale 0.5s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+::view-transition-new(root) {
+  animation: fade-in-scale 0.5s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+@keyframes fade-out-scale {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================================
+   SLIDE TRANSITIONS (FOR DIRECTIONAL NAVIGATION)
+   Smooth slide in/out based on navigation direction
+   ============================================================================ */
+
+/* Slide left (backward navigation) */
+::view-transition-old(root)[data-direction="back"] {
+  animation: slide-out-right 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+::view-transition-new(root)[data-direction="back"] {
+  animation: slide-in-left 0.4s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide right (forward navigation) */
+::view-transition-old(root)[data-direction="forward"] {
+  animation: slide-out-left 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+::view-transition-new(root)[data-direction="forward"] {
+  animation: slide-in-right 0.4s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+@keyframes slide-out-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================================
+   BLUR EFFECT OVERLAY
+   Subtle background blur during transition for focus
+   ============================================================================ */
+
+::view-transition-group(root) {
+  mix-blend-mode: normal;
+}
+
+/* Add a subtle blur overlay for smoother transitions */
+::view-transition {
+  pointer-events: none;
+}
+
+/* ============================================================================
+   HEADER & NAVIGATION TRANSITIONS
+   Keep header stable while content transitions
+   ============================================================================ */
+
+header,
+nav,
+.sidebar,
+[class*="navbar"],
+[class*="header"] {
+  view-transition-name: navigation;
+}
+
+::view-transition-old(navigation) {
+  animation: fade-out 0.3s ease-out forwards;
+}
+
+::view-transition-new(navigation) {
+  animation: fade-in 0.3s ease-in forwards;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================================
+   CONTENT TRANSITIONS
+   Main content area gets the full transition effect
+   ============================================================================ */
+
+main,
+[role="main"],
+.main-content {
+  view-transition-name: main-content;
+}
+
+/* ============================================================================
+   SIDEBAR TRANSITIONS
+   Smooth transition for sidebar visibility changes
+   ============================================================================ */
+
+.sidebar-wrapper,
+[class*="sidebar"] {
+  view-transition-name: sidebar;
+}
+
+/* ============================================================================
+   MODAL & DIALOG TRANSITIONS
+   Elegant fade-in for overlays and dialogs
+   ============================================================================ */
+
+[role="dialog"],
+[data-radix-dialog-content],
+[data-radix-alert-dialog-content],
+.modal,
+.dialog {
+  view-transition-name: modal;
+}
+
+/* Custom transition for modals */
+@supports (view-transition-name: modal) {
+  [role="dialog"],
+  [data-radix-dialog-content] {
+    animation: modal-entrance 0.3s cubic-bezier(0, 0, 0.2, 1) forwards;
+  }
+}
+
+@keyframes modal-entrance {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================================================
+   ELEMENT-SPECIFIC TRANSITIONS
+   Smooth transitions for common UI elements
+   ============================================================================ */
+
+/* Button transitions */
+button,
+a[class*="button"],
+[role="button"] {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card transitions */
+.card,
+[class*="card"] {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Link transitions */
+a {
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   LOADING STATE TRANSITIONS
+   Smooth fade for loading indicators
+   ============================================================================ */
+
+.loading,
+[class*="skeleton"],
+[data-loading="true"] {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================================================
+   PAGE-SPECIFIC TRANSITIONS
+   Different transitions for different page types
+   ============================================================================ */
+
+/* Blog post transitions */
+.blog-post,
+[class*="article"] {
+  view-transition-name: article-content;
+}
+
+::view-transition-old(article-content) {
+  animation: slide-out-left 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+::view-transition-new(article-content) {
+  animation: slide-in-right 0.4s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+/* Dashboard transitions */
+.dashboard,
+[class*="dashboard"] {
+  view-transition-name: dashboard-content;
+}
+
+::view-transition-old(dashboard-content) {
+  animation: fade-out 0.3s ease-out forwards;
+}
+
+::view-transition-new(dashboard-content) {
+  animation: fade-in 0.3s ease-in forwards;
+}
+
+/* ============================================================================
+   PERFORMANCE OPTIMIZATIONS
+   Ensure smooth 60fps transitions
+   ============================================================================ */
+
+/* Use transform for animations (GPU accelerated) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  will-change: transform, opacity;
+}
+
+/* Disable transitions on low-power devices */
+@media (prefers-color-scheme: dark) and (prefers-reduced-motion: no-preference) {
+  /* Enhanced transitions in dark mode for premium feel */
+  ::view-transition-old(root) {
+    animation-duration: 0.5s;
+  }
+
+  ::view-transition-new(root) {
+    animation-duration: 0.5s;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  /* Shorter durations on mobile for snappier feel */
+  ::view-transition-old(root) {
+    animation-duration: 0.3s;
+  }
+
+  ::view-transition-new(root) {
+    animation-duration: 0.3s;
+  }
+
+  /* Reduced motion for mobile */
+  @media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root) {
+      animation: fade-out 0.3s ease-out forwards;
+    }
+
+    ::view-transition-new(root) {
+      animation: fade-in 0.3s ease-in forwards;
+    }
+  }
+}
+
+/* ============================================================================
+   CROSS-FADE VARIANT (ALTERNATIVE)
+   Use for minimal, elegant transitions
+   ============================================================================ */
+
+.layout-cross-fade ::view-transition-old(root) {
+  animation: cross-fade-out 0.4s ease-in-out forwards;
+}
+
+.layout-cross-fade ::view-transition-new(root) {
+  animation: cross-fade-in 0.4s ease-in-out forwards;
+}
+
+@keyframes cross-fade-out {
+  from {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  to {
+    opacity: 0;
+    filter: brightness(0.95);
+  }
+}
+
+@keyframes cross-fade-in {
+  from {
+    opacity: 0;
+    filter: brightness(1.05);
+  }
+  to {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+/* ============================================================================
+   ANIMATION STATE CLASSES
+   Control transitions with CSS classes
+   ============================================================================ */
+
+.transition-fade {
+  view-transition-name: transition-fade;
+}
+
+.transition-slide {
+  view-transition-name: transition-slide;
+}
+
+.transition-zoom {
+  view-transition-name: transition-zoom;
+}
+
+/* Zoom variant */
+::view-transition-old(transition-zoom) {
+  animation: zoom-out 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+::view-transition-new(transition-zoom) {
+  animation: zoom-in 0.4s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+@keyframes zoom-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

@@ -1113,11 +1113,10 @@ Examples:
 
 ```typescript
 type EventType =
-  // ENTITY LIFECYCLE (4)
-  | 'entity_created'
-  | 'entity_updated'
-  | 'entity_deleted'
-  | 'entity_archived'
+  // THING LIFECYCLE (3) - Consolidated with metadata.thingType
+  | 'thing_created'      // metadata: { thingType: "group" | "user" | "course" | etc. }
+  | 'thing_updated'      // metadata: { thingType, action: "updated" | "archived" | "restored" }
+  | 'thing_deleted'      // metadata: { thingType, action: "deleted" | "archived", deletionType: "soft" | "hard" }
 
   // USER EVENTS (5)
   | 'user_registered'
@@ -1134,9 +1133,7 @@ type EventType =
   | 'two_factor_enabled'
   | 'two_factor_disabled'
 
-  // GROUP EVENTS (5)
-  | 'group_created'
-  | 'group_updated'
+  // GROUP-SPECIFIC EVENTS (3) - Not lifecycle events (those use thing_*)
   | 'user_invited_to_group'
   | 'user_joined_group'
   | 'user_removed_from_group'
@@ -1147,20 +1144,16 @@ type EventType =
   | 'theme_changed'
   | 'preferences_updated'
 
-  // AI/CLONE EVENTS (4)
-  | 'clone_created'
-  | 'clone_updated'
+  // AI/CLONE EVENTS (2) - Creation uses thing_created with thingType: "clone"
   | 'voice_cloned'
   | 'appearance_cloned'
 
-  // AGENT EVENTS (4)
-  | 'agent_created'
+  // AGENT EVENTS (3) - Creation uses thing_created with thingType: "agent"
   | 'agent_executed'
   | 'agent_completed'
   | 'agent_failed'
 
-  // TOKEN EVENTS (7)
-  | 'token_created'
+  // TOKEN EVENTS (6) - Creation uses thing_created with thingType: "token"
   | 'token_minted'
   | 'token_burned'
   | 'tokens_purchased'
@@ -1168,8 +1161,7 @@ type EventType =
   | 'tokens_unstaked'
   | 'tokens_transferred'
 
-  // COURSE EVENTS (5)
-  | 'course_created'
+  // COURSE EVENTS (4) - Creation uses thing_created with thingType: "course"
   | 'course_enrolled'
   | 'lesson_completed'
   | 'course_completed'

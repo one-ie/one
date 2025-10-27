@@ -40,13 +40,13 @@ const forumPrompt = `Create a community forum with threaded discussions, upvotin
     <div class="border-b border-border bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-teal-500/10">
       <div class="container mx-auto px-4 py-8 max-w-4xl">
         <div class="flex items-center gap-3 mb-4">
-          <CheckCircle2 class="h-8 w-8 text-green-500" />
+          <CheckCircle2 className="h-8 w-8 text-green-500" />
           <h1 class="text-3xl font-bold gradient-text">
             Your Server is Running!
           </h1>
         </div>
         <div class="flex items-center gap-2 text-muted-foreground">
-          <Badge variant="outline" class="bg-green-500/10 text-green-700 dark:text-green-400">
+          <Badge variant="outline" className="bg-green-500/10 text-green-700 dark:text-green-400">
             Live at http://localhost:4321
           </Badge>
           <span class="text-sm">Ready to build with Claude Code</span>
@@ -60,7 +60,7 @@ const forumPrompt = `Create a community forum with threaded discussions, upvotin
       <!-- ONE Platform Intro -->
       <div class="text-center mb-12">
         <div class="inline-flex items-center gap-2 mb-4">
-          <Sparkles class="h-6 w-6 text-primary" />
+          <Sparkles className="h-6 w-6 text-primary" />
           <h2 class="text-2xl font-bold">Make Your Ideas Real</h2>
         </div>
         <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -70,17 +70,17 @@ const forumPrompt = `Create a community forum with threaded discussions, upvotin
       </div>
 
       <!-- How to Use Claude Code -->
-      <Card class="mb-8">
+      <Card className="mb-8">
         <CardHeader>
           <div class="flex items-center gap-2">
-            <Code class="h-5 w-5 text-primary" />
+            <Code className="h-5 w-5 text-primary" />
             <CardTitle>How to Use Claude Code</CardTitle>
           </div>
           <CardDescription>
             Open Claude Code and copy one of these prompts to get started
           </CardDescription>
         </CardHeader>
-        <CardContent class="space-y-6">
+        <CardContent className="space-y-6">
 
           <!-- Step 1 -->
           <div>
@@ -132,10 +132,10 @@ const forumPrompt = `Create a community forum with threaded discussions, upvotin
       </Card>
 
       <!-- Featured Example: Ecommerce Store -->
-      <Card class="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent mb-6">
+      <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-transparent mb-6">
         <CardHeader>
           <div class="flex items-center gap-2">
-            <Shirt class="h-5 w-5 text-primary" />
+            <Shirt className="h-5 w-5 text-primary" />
             <CardTitle>Featured Example: Build an Ecommerce Store</CardTitle>
           </div>
           <CardDescription>
@@ -169,7 +169,7 @@ const forumPrompt = `Create a community forum with threaded discussions, upvotin
             Each example is a complete, production-ready feature
           </CardDescription>
         </CardHeader>
-        <CardContent class="space-y-4">
+        <CardContent className="space-y-4">
 
           <!-- Example 1 -->
           <div class="bg-muted/30 rounded-lg p-4 border border-border">
@@ -232,7 +232,7 @@ const forumPrompt = `Create a community forum with threaded discussions, upvotin
       <!-- Quick Tips -->
       <div class="mt-8 p-6 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-lg border border-border">
         <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-          <Sparkles class="h-5 w-5 text-primary" />
+          <Sparkles className="h-5 w-5 text-primary" />
           Pro Tips for Better Results
         </h3>
         <ul class="space-y-2 text-sm text-muted-foreground">

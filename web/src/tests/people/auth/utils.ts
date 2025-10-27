@@ -1,5 +1,5 @@
 import { ConvexHttpClient } from "convex/browser";
-import * as crypto from "crypto";
+
 /**
  * Test utilities for auth tests
  */
@@ -13,18 +13,14 @@ export const convex = new ConvexHttpClient(
  * Generate a unique test email
  */
 export function generateTestEmail(prefix: string = "test"): string {
-  // Use crypto randomBytes for more secure randomness in test emails
-  const randomPart = crypto.randomBytes(8).toString("hex");
-  return `${prefix}-${Date.now()}-${randomPart}@test.com`;
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2)}@test.com`;
 }
 
 /**
  * Generate a secure random password
  */
 export function generateTestPassword(): string {
-  // Use crypto randomBytes for secure password generation
-  const randomPart = crypto.randomBytes(8).toString("hex");
-  return `Test${randomPart}Pass123!`;
+  return `Test${Math.random().toString(36).slice(2)}Pass123!`;
 }
 
 /**
@@ -58,7 +54,35 @@ export class TestLogger {
 
   log(message: string): void {
     const elapsed = Date.now() - this.startTime;
-    console.log(`[${this.testName}] [${elapsed}ms] ${message}`);
+    // Sanitize message to prevent accidental logging of sensitive data
+    const sanitizedMessage = this.sanitizeForLogging(message);
+    console.log(`[${this.testName}] [${elapsed}ms] ${sanitizedMessage}`);
+  }
+
+  private sanitizeForLogging(message: string): string {
+    // Remove potential sensitive patterns (passwords, tokens, emails, OAuth data, etc.)
+    return message
+      // Password patterns
+      .replace(/password[=:]\s*[^\s,}]+/gi, 'password=***')
+      // Token patterns (including OAuth tokens)
+      .replace(/token[=:]\s*[^\s,}]+/gi, 'token=***')
+      .replace(/access[_-]?token[=:]\s*[^\s,}]+/gi, 'access_token=***')
+      .replace(/refresh[_-]?token[=:]\s*[^\s,}]+/gi, 'refresh_token=***')
+      .replace(/id[_-]?token[=:]\s*[^\s,}]+/gi, 'id_token=***')
+      // Secret patterns
+      .replace(/secret[=:]\s*[^\s,}]+/gi, 'secret=***')
+      .replace(/client[_-]?secret[=:]\s*[^\s,}]+/gi, 'client_secret=***')
+      // API key patterns
+      .replace(/api[_-]?key[=:]\s*[^\s,}]+/gi, 'api_key=***')
+      // Authorization code
+      .replace(/code[=:]\s*[^\s,}]+/gi, 'code=***')
+      // Email addresses (except @test.com for test data visibility)
+      .replace(/([a-zA-Z0-9._-]+@(?!test\.com)[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi, '[email]')
+      // Bearer tokens in headers
+      .replace(/Bearer\s+[A-Za-z0-9_.-]+/gi, 'Bearer ***')
+      // Any remaining sensitive key-value patterns
+      .replace(/auth[=:]\s*[^\s,}]+/gi, 'auth=***')
+      .replace(/credential[s]?[=:]\s*[^\s,}]+/gi, 'credentials=***');
   }
 
   success(message: string): void {

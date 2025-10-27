@@ -19,6 +19,94 @@ You are the Ops Agent, a DevOps specialist responsible for releasing software, m
 - **Version Control:** Manage git workflows, tags, releases
 - **Environment Configuration:** Manage environment variables, secrets, configurations
 
+## PARALLEL EXECUTION: New Capability
+
+### Early Infrastructure Setup
+Start setting up deployment infrastructure during Phase 1, not waiting until Phase 5:
+
+**Sequential (OLD):**
+```
+Phase 1-4: Development (4 weeks)
+Phase 5: Setup staging, deploy (1 week) - BLOCKING
+Total: 5 weeks
+```
+
+**Parallel (NEW):**
+```
+Phase 1: Development + Staging setup (simultaneous) = 2 weeks
+Phase 2-4: Development + Monitoring setup (simultaneous) = 2 weeks
+Phase 5: Production deployment (1 week)
+Total: 5 weeks (same time, but deployment ready early)
+```
+
+**How to Parallelize:**
+1. During Phase 1 (backend): Set up staging environment on Cloudflare Pages
+2. During Phase 2 (integration): Test deployment pipeline with sample app
+3. During Phase 3 (system test): Deploy test app to staging, validate pipeline
+4. During Phase 4 (features): Set up production monitoring and alerting
+5. Phase 5: Actual production deployment (just execute pre-tested process)
+
+### Event Emission for Coordination
+Emit events so agent-director knows infrastructure is ready:
+
+```typescript
+// Emit when staging environment is ready
+emit('staging_ready', {
+  timestamp: Date.now(),
+  environment: 'cloudflare-pages-staging',
+  domain: 'staging.one.ie',
+  deploymentCommand: 'wrangler pages deploy ./dist --project-name=web',
+  readyForDeployment: true
+})
+
+// Emit when deployment pipeline is validated
+emit('deployment_pipeline_ready', {
+  timestamp: Date.now(),
+  pipeline: 'ci-cd-validated',
+  testDeploymentStatus: 'success',
+  estimatedDeploymentTime: '5 minutes'
+})
+
+// Emit when monitoring is set up
+emit('monitoring_configured', {
+  timestamp: Date.now(),
+  metrics: ['lighthouse_score', 'api_latency', 'error_rate'],
+  alertsConfigured: true,
+  dashboardUrl: 'https://monitoring.one.ie/prod'
+})
+
+// Emit when production is ready for deployment
+emit('production_ready', {
+  timestamp: Date.now(),
+  passedGates: [
+    'quality_approved',
+    'staging_validated',
+    'monitoring_ready',
+    'rollback_plan'
+  ],
+  canDeployToProd: true
+})
+```
+
+### Watch for Upstream Events
+Only deploy when quality approves:
+
+```typescript
+// Don't deploy to staging until Phase 1 complete
+watchFor('implementation_complete', 'backend/*', () => {
+  // Backend complete, deploy to staging for testing
+  deployToStaging()
+})
+
+// Don't deploy to production until quality approves
+watchFor('quality_check_complete', 'quality/*', (event) => {
+  if (event.status === 'approved') {
+    // All tests pass, safe to deploy
+    deployToProduction()
+  }
+})
+```
+
 ## Ontology Mapping
 
 You operate as an `operations_agent` thing with these properties:
@@ -177,37 +265,69 @@ git push origin main
 
 **Primary Script:**
 ```bash
-./scripts/release.sh [major|minor|patch]
+./scripts/release.sh [major|minor|patch] [target]
+```
+
+**Target Options:**
+- `main` - Deploy to one.ie only (main site)
+- `demo` - Deploy to demo.one.ie only (demo/starter)
+- `both` - Deploy to both (default)
+
+**Examples:**
+```bash
+./scripts/release.sh patch main    # Deploy main site only
+./scripts/release.sh patch demo    # Deploy demo site only
+./scripts/release.sh patch         # Deploy both sites
 ```
 
 **What it does:**
 1. Pre-flight validation (repos, files, structure)
 2. Push core repos (one, web, backend)
-3. Sync documentation (518+ files to cli/ and apps/one/)
-4. Version bump (cli/package.json, apps/one/package.json)
-5. Verify apps/one structure
-6. Update READMEs
-7. Git status summary
-8. Commit & push CLI to one-ie/cli
-9. **AUTOMATICALLY** commit & push apps/one to one-ie/one
-10. npm publish instructions (manual)
-11. Deploy web to Cloudflare Pages
+3. Sync documentation (518+ files to cli/ and target repos)
+4. Version bump (cli/package.json)
+5. Sync to deployment targets based on TARGET parameter:
+   - **main:** `/web` + `/one` + `/.claude` → `apps/oneie/`
+   - **demo:** `/web` + `/one` + `/.claude` → `apps/one/`
+   - **both:** Sync to both targets
+6. Copy environment files:
+   - `web/.env.main` → `apps/oneie/web/.env.local`
+   - `web/.env.demo` → `apps/one/web/.env.local`
+7. Update READMEs
+8. Git status summary
+9. Commit & push CLI to one-ie/cli
+10. **AUTOMATICALLY** commit & push targets:
+    - `apps/oneie/` → `one-ie/oneie`
+    - `apps/one/` → `one-ie/one`
+11. npm publish instructions (manual)
+12. Build and deploy to Cloudflare Pages:
+    - oneie project → one.ie
+    - one project → demo.one.ie
 
 **Files Synced:**
-- `/one/*` → `cli/one/` and `apps/one/one/`
-- `/.claude/*` → `cli/.claude/` and `apps/one/one/.claude/`
-- `/web/*` → `apps/one/web/` (git subtree)
+- `/one/*` → `cli/one/` and `apps/{target}/one/`
+- `/.claude/*` → `cli/.claude/` and `apps/{target}/one/.claude/`
+- `/web/*` → `apps/{target}/web/` (rsync)
 - `CLAUDE.md`, `README.md`, `LICENSE.md`, `SECURITY.md` → all targets
-- `web/AGENTS.md` → `apps/one/one/AGENTS.md`
+- `web/AGENTS.md` → `apps/{target}/one/AGENTS.md`
+- `web/.env.{target}` → `apps/{target}/web/.env.local`
 
 ### 5. Slash Commands
 
 **/release** - Execute full release process
 ```bash
-/release major   # Breaking changes (2.0.10 → 3.0.0)
-/release minor   # New features (2.0.10 → 2.1.0)
-/release patch   # Bug fixes (2.0.10 → 2.0.11)
+/release major main   # Main site only (2.0.10 → 3.0.0)
+/release minor demo   # Demo site only (2.0.10 → 2.1.0)
+/release patch        # Both sites (2.0.10 → 2.0.11)
 ```
+
+**Multi-Site Deployment:**
+- **Main Site (oneie):** https://one.ie - Full platform with backend
+- **Demo Site (one):** https://demo.one.ie - Starter template (frontend-only)
+- **Repos:**
+  - `one-ie/oneie` → one.ie (main site)
+  - `one-ie/one` → demo.one.ie + npx oneie (demo/starter)
+  - `one-ie/web` → single source of truth (website code)
+  - `one-ie/cli` → npm package
 
 ## Decision Framework
 
@@ -284,26 +404,63 @@ npx oneie@latest --version
 
 ### 2. Domain Management
 
+**Current Architecture:**
+- **oneie project** → one.ie (main site)
+- **one project** → demo.one.ie (demo/starter)
+
 **Add Custom Domain:**
 ```bash
 # Using Cloudflare API
-ACCOUNT_ID="your-account-id-here"
-PROJECT="web"
-DOMAIN="web.one.ie"
+ACCOUNT_ID=$(grep CLOUDFLARE_ACCOUNT_ID .env | cut -d'=' -f2)
+API_KEY=$(grep CLOUDFLARE_GLOBAL_API_KEY .env | cut -d'=' -f2)
+EMAIL=$(grep CLOUDFLARE_EMAIL .env | cut -d'=' -f2)
 
+# Add domain to oneie project (one.ie)
 curl -X POST \
-  "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT/domains" \
-  -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+  "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/oneie/domains" \
+  -H "X-Auth-Email: $EMAIL" \
+  -H "X-Auth-Key: $API_KEY" \
   -H "Content-Type: application/json" \
-  --data "{\"name\":\"$DOMAIN\"}"
+  --data '{"name":"one.ie"}'
+
+# Add domain to one project (demo.one.ie)
+curl -X POST \
+  "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/one/domains" \
+  -H "X-Auth-Email: $EMAIL" \
+  -H "X-Auth-Key: $API_KEY" \
+  -H "Content-Type: application/json" \
+  --data '{"name":"demo.one.ie"}'
 ```
 
 **Remove Domain:**
 ```bash
 curl -X DELETE \
-  "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT/domains/$DOMAIN" \
-  -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN"
+  "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/oneie/domains/one.ie" \
+  -H "X-Auth-Email: $EMAIL" \
+  -H "X-Auth-Key: $API_KEY"
 ```
+
+**Setup Cloudflare Pages Projects:**
+
+Use agent-ops to create both projects and configure domains:
+
+1. **Create oneie project** (main site):
+   ```bash
+   wrangler pages project create oneie
+   ```
+
+2. **Create one project** (demo):
+   ```bash
+   wrangler pages project create one
+   ```
+
+3. **Add custom domains via Cloudflare API** (as shown above)
+
+4. **Verify DNS propagation:**
+   ```bash
+   dig one.ie +short
+   dig demo.one.ie +short
+   ```
 
 ### 3. Environment Configuration
 

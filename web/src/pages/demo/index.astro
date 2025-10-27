@@ -1,0 +1,302 @@
+---
+// web/src/pages/demo/index.astro
+import Layout from '@/layouts/Layout.astro';
+import { DEMO_NAVIGATION, DEMO_STATISTICS } from '@/config/demo';
+import { getDemoApiClient, getDemoStatistics } from '@/lib/demo-api';
+import { Users, User, Package, BarChart3, Rocket, CheckCircle2, RefreshCw, Zap, Shield, Activity } from 'lucide-astro';
+
+// Fetch demo statistics
+const stats = await getDemoStatistics();
+const hasBackend = stats.groups.error === null || stats.things.error === null;
+
+---
+
+<Layout title="Demo - Frontend-Backend Integration">
+  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <!-- Hero -->
+      <div class="mb-12 text-center">
+        <h1 class="text-4xl font-bold text-slate-900 mb-4">
+          Demo: Frontend-Backend Integration
+        </h1>
+        <p class="text-xl text-slate-600 mb-4">
+          Complete backend-agnostic architecture using Effect-TS
+        </p>
+        <div class="inline-flex gap-2">
+          <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium flex items-center gap-1">
+            <CheckCircle2 size={16} /> Production Ready
+          </span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium flex items-center gap-1">
+            <Package size={16} /> Full Type Safe
+          </span>
+          <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium flex items-center gap-1">
+            <RefreshCw size={16} /> Backend Agnostic
+          </span>
+        </div>
+      </div>
+
+      <!-- Navigation Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
+        {DEMO_NAVIGATION.map((item) => (
+          <a href={item.path} class="group">
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow hover:shadow-lg transition p-4 text-center h-full flex flex-col justify-center">
+              <div class="flex justify-center mb-2">
+                <Activity size={32} class="text-blue-600 dark:text-blue-400" />
+              </div>
+              <h3 class="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                {item.title}
+              </h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">{item.description}</p>
+            </div>
+          </a>
+        ))}
+
+        <a href="/demo/api" class="group">
+          <div class="bg-white dark:bg-slate-800 rounded-lg shadow hover:shadow-lg transition p-4 text-center h-full flex flex-col justify-center">
+            <div class="flex justify-center mb-2">
+              <Rocket size={32} class="text-blue-600 dark:text-blue-400" />
+            </div>
+            <h3 class="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+              API
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">REST endpoints</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Overview Section -->
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <!-- Architecture -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold text-slate-900 mb-4">Architecture</h2>
+          <div class="space-y-3 text-slate-600 text-sm">
+            <div class="flex items-start gap-3">
+              <span class="text-blue-600 font-bold">1.</span>
+              <div>
+                <p class="font-semibold text-slate-900">Effect-TS Foundation</p>
+                <p>Type-safe service layer with dependency injection</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-600 font-bold">2.</span>
+              <div>
+                <p class="font-semibold text-slate-900">4 Backend Providers</p>
+                <p>Convex, HTTP, Markdown, Composite</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-600 font-bold">3.</span>
+              <div>
+                <p class="font-semibold text-slate-900">6 Ontology Services</p>
+                <p>Groups, People, Things, Connections, Events, Knowledge</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-600 font-bold">4.</span>
+              <div>
+                <p class="font-semibold text-slate-900">43 React Hooks</p>
+                <p>Ready to use in components</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-600 font-bold">5.</span>
+              <div>
+                <p class="font-semibold text-slate-900">13 API Endpoints</p>
+                <p>REST interface following ontology structure</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Features -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold text-slate-900 mb-4">Key Features</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <CheckCircle2 size={24} class="text-green-600 flex-shrink-0" />
+              <div>
+                <p class="font-semibold text-slate-900">Backend Agnostic</p>
+                <p class="text-sm text-slate-600">Switch backends with one environment variable</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <RefreshCw size={24} class="text-blue-600 flex-shrink-0" />
+              <div>
+                <p class="font-semibold text-slate-900">Standalone Mode</p>
+                <p class="text-sm text-slate-600">Frontend runs without backend</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <Shield size={24} class="text-purple-600 flex-shrink-0" />
+              <div>
+                <p class="font-semibold text-slate-900">Type Safe</p>
+                <p class="text-sm text-slate-600">Full TypeScript inference throughout</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <Zap size={24} class="text-yellow-600 flex-shrink-0" />
+              <div>
+                <p class="font-semibold text-slate-900">Feature Flags</p>
+                <p class="text-sm text-slate-600">13 configurable flags for selective functionality</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <BarChart3 size={24} class="text-indigo-600 flex-shrink-0" />
+              <div>
+                <p class="font-semibold text-slate-900">Ontology Aligned</p>
+                <p class="text-sm text-slate-600">Everything follows 6-dimension model</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <CheckCircle2 size={24} class="text-slate-600 flex-shrink-0" />
+              <div>
+                <p class="font-semibold text-slate-900">No Breaking Changes</p>
+                <p class="text-sm text-slate-600">Fully backward compatible</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Data Section -->
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">Backend Connection Status</h2>
+
+        {hasBackend ? (
+          <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <p class="text-green-800">
+              <span class="font-semibold">✅ Connected</span> - Backend is responding with live data
+            </p>
+          </div>
+        ) : (
+          <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p class="text-red-800">
+              <span class="font-semibold">❌ Disconnected</span> - Backend is not responding. Please ensure the backend is running at https://veracious-marlin-319.convex.cloud
+            </p>
+          </div>
+        )}
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Groups Stats -->
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <Users size={20} class="text-blue-600" /> Groups
+            </h3>
+            {stats.groups.error ? (
+              <div class="bg-slate-50 rounded p-4 text-center text-slate-600">
+                <p class="text-2xl font-bold text-slate-900 mb-1">-</p>
+                <p class="text-xs text-slate-600">{stats.groups.error}</p>
+              </div>
+            ) : (
+              <div class="bg-slate-50 rounded p-4 text-center">
+                <p class="text-3xl font-bold text-blue-600">{stats.groups.count}</p>
+                <p class="text-sm text-slate-600 mt-2">groups available</p>
+              </div>
+            )}
+          </div>
+
+          <!-- Things Stats -->
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <Package size={20} class="text-blue-600" /> Things
+            </h3>
+            {stats.things.error ? (
+              <div class="bg-slate-50 rounded p-4 text-center text-slate-600">
+                <p class="text-2xl font-bold text-slate-900 mb-1">-</p>
+                <p class="text-xs text-slate-600">{stats.things.error}</p>
+              </div>
+            ) : (
+              <div class="bg-slate-50 rounded p-4 text-center">
+                <p class="text-3xl font-bold text-green-600">{stats.things.count}</p>
+                <p class="text-sm text-slate-600 mt-2">entities available</p>
+              </div>
+            )}
+          </div>
+
+          <!-- People Stats -->
+          <div>
+            <h3 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <User size={20} class="text-blue-600" /> People
+            </h3>
+            {stats.people.error ? (
+              <div class="bg-slate-50 rounded p-4 text-center text-slate-600">
+                <p class="text-2xl font-bold text-slate-900 mb-1">-</p>
+                <p class="text-xs text-slate-600">{stats.people.error}</p>
+              </div>
+            ) : (
+              <div class="bg-slate-50 rounded p-4 text-center">
+                <p class="text-3xl font-bold text-purple-600">{stats.people.count}</p>
+                <p class="text-sm text-slate-600 mt-2">users available</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Statistics -->
+      <div class="grid md:grid-cols-3 gap-4 mt-12">
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 text-center">
+          <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
+            {DEMO_STATISTICS.linesOfCode.toLocaleString()}+
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Lines of Code</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 text-center">
+          <div class="text-3xl font-bold text-green-600 dark:text-green-400">
+            {DEMO_STATISTICS.thingTypes}
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Thing Types</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 text-center">
+          <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
+            {DEMO_STATISTICS.eventTypes}
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Event Types</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 text-center">
+          <div class="text-3xl font-bold text-orange-600 dark:text-orange-400">
+            {DEMO_STATISTICS.connectionTypes}
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Connection Types</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 text-center">
+          <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+            {DEMO_STATISTICS.reactHooks}
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">React Hooks</p>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 text-center">
+          <div class="text-3xl font-bold text-pink-600 dark:text-pink-400">
+            {DEMO_STATISTICS.typeСoverage}%
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Type Safe</p>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-8 text-center text-white">
+        <h2 class="text-2xl font-bold mb-4">Ready to Explore?</h2>
+        <p class="mb-6 text-blue-100">
+          Click on any dimension above to see live examples and code
+        </p>
+        <a href="/demo/groups" class="inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition">
+          Start with Groups →
+        </a>
+      </div>
+
+      <!-- Documentation Links -->
+      <div class="mt-12 text-center">
+        <h3 class="text-lg font-semibold text-slate-900 mb-4">Learn More</h3>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/READ-ME-FIRST.md" class="text-blue-600 hover:underline">Read Me First</a>
+          <span class="text-slate-300">•</span>
+          <a href="/FRONTEND-BACKEND-INTEGRATION-QUICK-START.md" class="text-blue-600 hover:underline">Quick Start</a>
+          <span class="text-slate-300">•</span>
+          <a href="/web/src/pages/api/README.md" class="text-blue-600 hover:underline">API Docs</a>
+          <span class="text-slate-300">•</span>
+          <a href="/one/things/plans/integrate-frontend-and-backend.md" class="text-blue-600 hover:underline">Full Plan</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,195 @@
+---
+// web/src/pages/demo/people.astro
+import Layout from '@/layouts/Layout.astro';
+import { ConvexHttpClient } from 'convex/browser';
+import { ChevronLeft, User, Users, Lock, CheckCircle2, Search } from 'lucide-astro';
+import { PeopleDemo } from '@/components/demo/PeopleDemo';
+
+const convex = new ConvexHttpClient(
+  import.meta.env.PUBLIC_CONVEX_URL || 'https://veracious-marlin-319.convex.cloud'
+);
+
+let people: any[] = [];
+let currentPerson: any = null;
+let isConnected = false;
+let errorMessage = '';
+let groupId = '';
+
+try {
+  // Step 1: Get first group using Convex query
+  const defaultGroup = await convex.query('queries/init:getDefaultGroup' as any, {}) as any;
+
+  if (!defaultGroup?._id) {
+    throw new Error('No default group found in backend');
+  }
+
+  groupId = defaultGroup._id;
+
+  // Step 2: Get people from that group using correct Convex query path
+  const peopleResult = await convex.query('queries/people:list' as any, {
+    groupId,
+    limit: 100
+  }) as any;
+
+  people = Array.isArray(peopleResult) ? peopleResult : [];
+  isConnected = true; // Connected successfully
+} catch (e) {
+  // Backend connection failed - show error message
+  errorMessage = e instanceof Error ? e.message : String(e);
+  console.error('Failed to connect to backend:', errorMessage);
+}
+---
+
+<Layout title="Demo - People: Authorization & Governance">
+  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <a href="/demo" class="text-blue-600 hover:text-blue-700 text-sm font-medium mb-4 inline-flex items-center gap-2">
+        <ChevronLeft class="w-4 h-4" />
+        Back to Demo
+      </a>
+      <h1 class="text-4xl font-bold text-slate-900 mb-4">
+        People: Authorization & Governance
+      </h1>
+      <p class="text-xl text-slate-600 mb-6">
+        Dimension 2 of 6 - Define who can do what with role-based access control
+      </p>
+
+      <!-- Role Hierarchy -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+        <div class="bg-red-50 border-2 border-red-600 rounded-lg p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <Lock class="w-5 h-5 text-red-700" />
+            <div class="text-xs font-bold text-red-700">LEVEL 1</div>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-3">Platform Owner</h3>
+          <div class="text-sm text-slate-700 space-y-2">
+            <div class="flex items-center gap-2">
+              <CheckCircle2 class="w-4 h-4 text-red-600" />
+              <p>Full system access</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <CheckCircle2 class="w-4 h-4 text-red-600" />
+              <p>Manage all orgs</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-orange-50 border-2 border-orange-600 rounded-lg p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <Users class="w-5 h-5 text-orange-700" />
+            <div class="text-xs font-bold text-orange-700">LEVEL 2</div>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-3">Org Owner</h3>
+          <div class="text-sm text-slate-700 space-y-2">
+            <div class="flex items-center gap-2">
+              <CheckCircle2 class="w-4 h-4 text-orange-600" />
+              <p>Manage org</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <CheckCircle2 class="w-4 h-4 text-orange-600" />
+              <p>Create users</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-blue-50 border-2 border-blue-600 rounded-lg p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <User class="w-5 h-5 text-blue-700" />
+            <div class="text-xs font-bold text-blue-700">LEVEL 3</div>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-3">Org User</h3>
+          <div class="text-sm text-slate-700 space-y-2">
+            <div class="flex items-center gap-2">
+              <CheckCircle2 class="w-4 h-4 text-blue-600" />
+              <p>Use features</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <CheckCircle2 class="w-4 h-4 text-blue-600" />
+              <p>Create content</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-green-50 border-2 border-green-600 rounded-lg p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <User class="w-5 h-5 text-green-700" />
+            <div class="text-xs font-bold text-green-700">LEVEL 4</div>
+          </div>
+          <h3 class="font-bold text-slate-900 mb-3">Customer</h3>
+          <div class="text-sm text-slate-700 space-y-2">
+            <div class="flex items-center gap-2">
+              <CheckCircle2 class="w-4 h-4 text-green-600" />
+              <p>Limited access</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <CheckCircle2 class="w-4 h-4 text-green-600" />
+              <p>View content</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Examples -->
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">React Hooks</h2>
+        <pre class="bg-slate-900 text-slate-100 p-4 rounded overflow-auto"><code>{`// Get current user
+const { person, isLoading } = usePerson();
+
+// Check authorization
+const { canPerformAction } = useAuthorization();
+
+// List users in group
+const { people } = usePeople({ groupId: 'group_123' });
+
+// Get specific user
+const { person: user } = usePersonById('person_123');`}</code></pre>
+      </div>
+
+      <!-- Live Data -->
+      {isConnected ? (
+        <PeopleDemo client:load initialPeople={people} currentPerson={currentPerson} isStandaloneMode={false} groupId={groupId} />
+      ) : (
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-2">
+              <Search class="w-6 h-6 text-slate-700" />
+              <h2 class="text-2xl font-bold text-slate-900">Live Data</h2>
+            </div>
+            <span class="text-xs font-semibold bg-red-100 text-red-700 px-3 py-1 rounded-full">
+              Backend Disconnected
+            </span>
+          </div>
+          <div class="bg-red-50 border-l-4 border-red-600 p-4">
+            <p class="font-semibold text-red-900 mb-2">Unable to Connect to Backend</p>
+            <p class="text-red-800 text-sm mb-3">
+              The application is trying to connect to the backend at <code class="bg-red-100 px-1 rounded text-xs">https://veracious-marlin-319.convex.cloud</code> but the connection failed.
+            </p>
+            {errorMessage && (
+              <p class="text-red-800 text-sm mb-3 bg-red-100 p-2 rounded font-mono">
+                Error: {errorMessage}
+              </p>
+            )}
+            <p class="text-red-800 text-sm mb-3">
+              To see live data, ensure:
+            </p>
+            <ul class="text-red-800 text-sm space-y-1 ml-4">
+              <li>✓ Backend service is running at <code class="bg-red-100 px-1 rounded text-xs">https://veracious-marlin-319.convex.cloud</code></li>
+              <li>✓ You have network connectivity</li>
+              <li>✓ Browser can reach Convex Cloud</li>
+              <li>✓ Groups table has data</li>
+              <li>✓ People (entities with type='creator') exist in a group</li>
+            </ul>
+            <p class="text-red-800 text-sm mt-3">
+              Check browser console for detailed error messages.
+            </p>
+          </div>
+        </div>
+      )}
+
+      <!-- Next -->
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-8 text-white text-center">
+        <h2 class="text-2xl font-bold mb-4">Ready for Entities?</h2>
+        <a href="/demo/things" class="inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50">
+          Go to Things →
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

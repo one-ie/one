@@ -80,7 +80,7 @@ describe('Test 1: Global Ontology is Universal', () => {
     }
   });
 
-  test('Global ontology defines 67+ event types', () => {
+  test('Global ontology defines 64+ event types (consolidated pattern)', () => {
     const content = readFileSync(ontologyPath, 'utf-8');
 
     // Look for the "type EventType =" section
@@ -90,7 +90,9 @@ describe('Test 1: Global Ontology is Universal', () => {
     if (eventTypeSection) {
       // Count literal types
       const typeMatches = eventTypeSection[0].match(/\| '[\w_]+'/g) || [];
-      expect(typeMatches.length).toBeGreaterThanOrEqual(67);
+      // Updated from 67 to 64 after consolidating lifecycle events
+      // (thing_created/updated/deleted replaces group_created, clone_created, agent_created, token_created, course_created)
+      expect(typeMatches.length).toBeGreaterThanOrEqual(64);
     }
   });
 
@@ -144,20 +146,20 @@ describe('Test 1: Global Ontology is Universal', () => {
   test('Global ontology includes core event types', () => {
     const content = readFileSync(ontologyPath, 'utf-8');
 
-    // Core event types that MUST exist
+    // Core event types that MUST exist (using consolidated pattern)
     const coreEvents = [
-      'entity_created',
-      'entity_updated',
-      'user_registered',
-      'group_created',
-      'agent_executed',
-      'tokens_purchased',
-      'course_enrolled',
-      'inference_request',
-      'nft_minted',
-      'payment_event',
-      'commerce_event',
-      'communication_event'
+      'thing_created',        // Consolidated lifecycle event (replaces entity_created, group_created, etc.)
+      'thing_updated',        // Consolidated update event
+      'thing_deleted',        // Consolidated deletion event
+      'user_registered',      // User-specific
+      'agent_executed',       // Agent-specific
+      'tokens_purchased',     // Token-specific
+      'course_enrolled',      // Course-specific
+      'inference_request',    // Inference-specific
+      'nft_minted',          // NFT-specific
+      'payment_event',       // Consolidated payment event
+      'commerce_event',      // Consolidated commerce event
+      'communication_event'  // Consolidated communication event
     ];
 
     for (const type of coreEvents) {

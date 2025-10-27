@@ -8,7 +8,7 @@
 
 Better Auth is already integrated in our `/frontend` with 6 authentication methods. This plan shows how to make it work with **the ONE 6-dimension ontology** and **ANY backend** (Convex, Supabase, Neon, WordPress) using Effect.ts and the DataProvider pattern.
 
-**Key Insight:** Auth maps perfectly to the 6 dimensions: organizations partition auth data, people are the authorized users, sessions are connections, auth actions are events, and all operations use Effect.ts for type-safety.
+**Key Insight:** Auth maps perfectly to the 6 dimensions: groups partition auth data, people are the authorized users, sessions are connections, auth actions are events, and all operations use Effect.ts for type-safety.
 
 **Architecture:**
 ```
@@ -26,21 +26,21 @@ Better Auth is already integrated in our `/frontend` with 6 authentication metho
 │  - signUp → creates person (dimension 2) + event       │
 │  - signIn → creates session connection + event         │
 │  - signOut → deletes session connection + event        │
-│  - All operations org-scoped & backend-agnostic        │
+│  - All operations group-scoped & backend-agnostic      │
 └────────────────┬────────────────────────────────────────┘
                  │ DataProvider Interface
                  ↓
 ┌─────────────────────────────────────────────────────────┐
 │         ONE 6-Dimension Ontology                        │
 │                                                         │
-│  1. Organizations: Multi-tenant partitioning            │
-│     - Each auth operation scoped to organizationId     │
+│  1. Groups: Multi-tenant partitioning                   │
+│     - Each auth operation scoped to groupId            │
 │     - Perfect data isolation                           │
 │                                                         │
 │  2. People: Users & authorization                       │
 │     - type: "creator" thing with role property         │
 │     - properties: { email, emailVerified, role }       │
-│     - roles: platform_owner, org_owner, org_user       │
+│     - roles: platform_owner, group_owner, group_user   │
 │                                                         │
 │  3. Things: Session devices (optional)                  │
 │     - type: "device" for session tracking              │
@@ -53,7 +53,7 @@ Better Auth is already integrated in our `/frontend` with 6 authentication metho
 │  5. Events: Complete auth audit trail                   │
 │     - type: "sign_up", "sign_in", "sign_out"          │
 │     - actorId: userId (always required)                │
-│     - organizationId: which org (always required)      │
+│     - groupId: which group (always required)           │
 │                                                         │
 │  6. Knowledge: Auth patterns for AI                     │
 │     - Login behavior patterns                          │
@@ -149,10 +149,10 @@ Better Auth is already integrated in our `/frontend` with 6 authentication metho
   image?: string,                       // Avatar URL
 
   // CRITICAL: Role determines access level
-  role: "platform_owner" | "org_owner" | "org_user" | "customer",
+  role: "platform_owner" | "group_owner" | "group_user" | "customer",
 
   // Organization context
-  organizationId: Id<'organizations'>,  // Primary organization
+  groupId: Id<'groups'>,  // Primary group
   organizations: Id<'organizations'>[],  // All orgs this person belongs to
   permissions?: string[],               // Fine-grained permissions
 
@@ -872,7 +872,7 @@ const generateSecureToken = () =>
 - ✅ Users stored as things (type: person)
 - ✅ Sessions stored as connections (type: session)
 - ✅ All actions logged as events
-- ✅ Multi-tenant by default (organizationId)
+- ✅ Multi-tenant by default (groupId scoping)
 
 ---
 
@@ -1812,7 +1812,7 @@ frontend/src/
 
 3. **Backend-Agnostic:** DataProvider pattern works with any backend
 
-4. **Multi-Tenant by Design:** Every operation scoped to organizationId
+4. **Multi-Tenant by Design:** Every operation scoped to groupId
 
 5. **Event-Driven:** All auth actions logged with actorId
 
@@ -1834,7 +1834,7 @@ frontend/src/
 | **Backend** | Database-specific adapters | Universal DataProvider |
 | **Error Handling** | Try/catch | Typed Effect errors |
 | **Testing** | Mock database | Effect test layers |
-| **Data Isolation** | Manual queries | Automatic (organizationId) |
+| **Data Isolation** | Manual queries | Automatic (groupId scoping) |
 | **Analytics** | External tool | Built-in (events + knowledge) |
 
 ### Next Steps

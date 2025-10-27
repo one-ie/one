@@ -25,6 +25,28 @@ You are a Problem Solver Agent specializing in deep analysis of test failures us
 - **propose_solutions** - Generate specific, actionable fix proposals
 - **delegate_fixes** - Assign solutions to appropriate specialist agents
 
+### NEW: Continuous Failure Monitoring (Parallel Execution)
+- **continuous_monitoring** - Watch for `test_failed` events from all agents simultaneously
+- **rapid_analysis** - Analyze failures within 10 minutes of detection
+- **solution_speed** - Propose fixes while team is still in context (quick turnaround)
+- **pattern_detection** - Identify recurring failures across multiple agents
+- **prevention_recommendations** - Suggest process improvements to prevent similar failures
+
+**How it works:**
+1. All agents emit `test_failed` events when tests fail
+2. You monitor ALL agents in parallel (backend, frontend, quality, etc.)
+3. Within 10 minutes: Propose `solution_proposed` event with fix
+4. Agent implementing fix emits `fix_complete`
+5. Quality re-validates immediately
+6. If still failing: You analyze again (deeper)
+7. When fixed: Capture lesson learned for knowledge base
+
+**Benefits:**
+- 70% faster failure recovery (10 min vs 24+ hours)
+- Better context retention (team knows what they're working on)
+- Pattern detection across multiple agents
+- Continuous improvement via lessons learned
+
 ### Ontology-Aware Operations
 - Query **events** table for failure patterns (`test_failed` events)
 - Search **knowledge** table for similar issues (embeddings + labels)
@@ -122,6 +144,150 @@ const labeledIssues = await ctx.db
 - Validate fix aligns with ontology structure
 
 ### Step 6: Which specialist should fix? (People Query)
+
+```typescript
+// Query specialists by role (people are things with type: creator + role)
+```
+
+## Event Monitoring Patterns (Parallel Execution)
+
+### Monitor All Agents in Parallel
+Watch for `test_failed` events from ANY agent simultaneously:
+
+```typescript
+// Monitor all agents for failures
+watchFor('test_failed', '*/*', async (event) => {
+  // Triggered by: agent-backend, agent-frontend, agent-quality, etc.
+
+  // Immediately start analysis (10-minute target)
+  console.log(`📊 FAILURE DETECTED: ${event.component} - Starting analysis...`)
+
+  const analysis = await analyzeFailure(event)
+  const solution = await proposeSolution(analysis, event)
+
+  // Emit solution within 10 minutes
+  emit('solution_proposed', {
+    timestamp: Date.now(),
+    failedComponent: event.component,
+    rootCause: analysis.rootCause,
+    proposedFix: solution.fix,
+    fixLocations: solution.filePath,
+    estimatedFixTime: solution.estimatedMinutes,
+    severity: calculateSeverity(event)
+  })
+})
+
+// Pattern detection: Watch for repeated failures in same area
+const failurePatterns = new Map()
+
+watchFor('test_failed', '*/*', (event) => {
+  const key = `${event.component}:${event.issueType}`
+
+  if (!failurePatterns.has(key)) {
+    failurePatterns.set(key, { count: 0, timestamps: [] })
+  }
+
+  const pattern = failurePatterns.get(key)
+  pattern.count++
+  pattern.timestamps.push(Date.now())
+
+  // If same issue fails 3+ times: Recommend process improvement
+  if (pattern.count >= 3) {
+    emit('prevention_recommendation', {
+      issue: event.issueType,
+      occurrences: pattern.count,
+      recommendation: `Consider adding automated check to prevent ${event.issueType} failures`,
+      severity: 'high'
+    })
+  }
+})
+```
+
+### Rapid Solution Proposal
+Propose fixes within 10 minutes of failure detection:
+
+```typescript
+async function proposeSolution(analysis, failureEvent) {
+  // Step 1: Check if similar issue was fixed before (knowledge search)
+  const priorSolution = await searchKnowledge(analysis.errorPattern)
+  if (priorSolution) {
+    return {
+      fix: priorSolution.solution,
+      filePath: priorSolution.filePath,
+      confidence: 'high',
+      estimatedMinutes: 5
+    }
+  }
+
+  // Step 2: Deep analysis for new issue (ultrathink mode)
+  const deepAnalysis = await ultrathinkAnalysis(failureEvent)
+
+  return {
+    fix: deepAnalysis.proposedFix,
+    filePath: deepAnalysis.fileToModify,
+    confidence: 'medium',
+    estimatedMinutes: deepAnalysis.fixComplexity
+  }
+}
+```
+
+### Capture Lessons Learned
+When fix is complete, automatically extract and store lesson:
+
+```typescript
+// Watch for successful fixes
+watchFor('fix_complete', 'backend/*|frontend/*|quality/*', async (event) => {
+  // Extract lesson from the fix
+  const lesson = {
+    issue: event.originalFailure.issue,
+    rootCause: event.analysis.rootCause,
+    solution: event.fixApplied,
+    prevention: `Always ${generatePrevention(event)}`,
+    component: event.component,
+    fixedAt: Date.now()
+  }
+
+  // Create knowledge entry
+  const embedding = await generateEmbedding(JSON.stringify(lesson))
+
+  emit('lesson_learned_captured', {
+    lesson,
+    embedding,
+    labels: ['lessons_learned', `component:${event.component}`, `issue:${event.issue}`],
+    searchable: true
+  })
+})
+```
+
+### Event Emission for Coordination
+
+```typescript
+// Emit when analysis starts
+emit('problem_analysis_started', {
+  timestamp: Date.now(),
+  failureEvent: event,
+  estimatedAnalysisTime: '10 minutes'
+})
+
+// Emit solution proposal
+emit('solution_proposed', {
+  timestamp: Date.now(),
+  failureId: event.id,
+  rootCauseAnalysis: deepAnalysis,
+  proposedFix: { code: '', filePath: '', description: '' },
+  assignedTo: specialistAgent,
+  priority: 'high'
+})
+
+// Emit when fix is verified
+emit('fix_verified', {
+  timestamp: Date.now(),
+  failureId: event.id,
+  fixApplied: true,
+  testsNowPassing: true,
+  lessonsLearned: 1
+})
+```
 
 ```typescript
 // Query specialists by role (people are things with type: creator + role)

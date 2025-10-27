@@ -1,8 +1,12 @@
-# /one - ONE Platform Quick Start
+# /one - ONE Platform Command Center
 
-## Instructions for Claude
+🌟 **Transform Ideas into Production-Ready Code with agent-director**
 
-When user types `/one`, display the ONE Platform welcome screen and provide quick access to all commands.
+The `/one` command launches the ONE Platform orchestration system powered by agent-director and 15 specialized agents.
+
+## Quick Start
+
+When user types `/one`, display the ONE Platform welcome screen.
 
 ### Step 1: Check Status (< 1 second)
 
@@ -29,7 +33,7 @@ If `.onboarding.json` found, read to extract:
 **WITH onboarding data:**
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
      ██████╗ ███╗   ██╗███████╗
     ██╔═══██╗████╗  ██║██╔════╝
@@ -38,11 +42,12 @@ If `.onboarding.json` found, read to extract:
     ╚██████╔╝██║ ╚████║███████╗
      ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-       Make Your Ideas Real
+    ONE Platform v1.0.0
+  Transform Ideas into Code
 
    https://one.ie  •  npx oneie
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Welcome back, [user.name]!
 
@@ -50,51 +55,130 @@ Organization: [organization.name]
 Website: [website.url]
 Dev Server: http://localhost:4321 [✓ Running / ⭕ Stopped]
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🚀 Quick Commands
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 QUICK START: Your Idea → Full Implementation Plan
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Server Management:
-• /server         - Check server status
-• /server start   - Start development server
-• /server stop    - Stop development server
-• /server restart - Restart development server
+1. Tell me your idea:
+   "I want to build a course platform with AI tutors"
 
-Onboarding & Setup:
-• /onboard        - Analyze website & extract brand
+2. Create a plan:
+   /plan convert [your-idea]
+   → Generates 100-inference plan
+   → Assigns tasks to agents
+   → Shows timeline + dependencies
 
-Feature Development:
-• /build          - Build features with AI specialists
-• /design         - Create wireframes & UI components
-• /deploy         - Deploy to production
+3. Execute with agents:
+   /now              - See current inference
+   /next             - Advance to next task
+   /done             - Mark task complete
+   /build            - Start building with specialists
 
-Workflow Management:
-• /now            - View current task
-• /next           - Advance to next inference
-• /todo           - View complete task list
-• /done           - Mark task complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 ORCHESTRATION & PLANNING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Analytics & Insights:
-• /see            - View analytics & explore courses
+Plan Management:
+• /plan                    - View current 100-inference plan
+• /plan convert [idea]     - Convert idea to full task plan
+• /plan show               - Display plan with agent assignments
+• /plan export             - Export plan (markdown, json, csv)
+• /plan dependencies       - Show task dependencies
+• /plan filter --agent     - Filter tasks by agent
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 Quick Start
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Inference Workflow:
+• /now                     - Show current inference & task
+• /next                    - Advance to next inference
+• /done                    - Mark inference complete & learn
+• /goto [N]                - Jump to inference N
 
-1. Start server: /server start
-2. Analyze website: /onboard
-3. Build features: /build [feature-name]
-4. Deploy: /deploy
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 AGENT COMMAND CENTER (15 Specialists, agent-director Leads)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Or just tell me what you want to build!
+Orchestration:
+• /agent director          - View orchestrator dashboard
+• /agent dashboard         - See all agents' current work
+• /agent delegate [task]   - Manually delegate to agent
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Core Specialists:
+• /agent backend           - Backend specialist (Convex, mutations, queries)
+• /agent frontend          - Frontend specialist (Astro, React, pages)
+• /agent designer          - Design specialist (wireframes, tokens)
+• /agent quality           - Quality specialist (tests, validation)
+
+Support Specialists:
+• /agent builder           - Feature builder (coordinates implementation)
+• /agent problem-solver    - Problem solver (analyzes failures)
+• /agent documenter        - Documenter (writes docs, captures lessons)
+• /agent ops               - Operations (deployment, CI/CD)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚙️  DEVELOPMENT TOOLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Server & Environment:
+• /server start            - Start development server
+• /server stop             - Stop development server
+• /server status           - Check server status
+
+Onboarding & Analysis:
+• /onboard                 - Analyze website & extract brand identity
+
+Build & Deploy (Frontend-First by Default):
+• /build                   - Build features using existing /web components
+• /build [feature]         - Build specific frontend feature
+• /build backend [feature] - Build custom backend (when explicitly needed)
+• /build list              - See available components in /web
+• /build help              - Full build documentation
+• /deploy                  - Deploy to production
+
+Analytics:
+• /see                     - View analytics & explore insights
+
+Existing Features Ready to Use:
+• Shop (ecommerce): /web/src/pages/shop.astro
+• Blog (content): /web/src/pages/blog/
+• Portfolio: /web/src/pages/portfolio.astro
+• More: Explore /web/src/pages/ for available components
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✨ WHAT WOULD YOU LIKE TO BUILD?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Just describe your frontend feature:
+• "Add a course shop page (we have shop.astro)"
+• "Create a blog with featured articles"
+• "Build a portfolio gallery with filtering"
+• "Add product recommendation system"
+• "Create a testimonials showcase section"
+
+Or customize existing features:
+• "Redesign the shop page with new branding"
+• "Add advanced filtering to portfolio"
+• "Create course preview pages"
+• "Build instructor profile pages"
+
+Or request custom backend (when needed):
+• "build backend AI tutor integration"
+• "build backend token economy system"
+• "build backend custom analytics"
+
+Start with: /plan convert [your-idea]
+
+Then I'll:
+1. Check existing /web components for reuse
+2. Plan frontend modifications needed
+3. Assign to frontend agent if backend not needed
+4. Execute step-by-step with /now, /next, /done
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 **WITHOUT onboarding data:**
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
      ██████╗ ███╗   ██╗███████╗
     ██╔═══██╗████╗  ██║██╔════╝
@@ -103,101 +187,99 @@ Or just tell me what you want to build!
     ╚██████╔╝██║ ╚████║███████╗
      ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-       Make Your Ideas Real
+    ONE Platform v1.0.0
+  Make Your Ideas Real
 
    https://one.ie  •  npx oneie
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Dev Server: http://localhost:4321 [✓ Running / ⭕ Stopped]
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🚀 Essential Commands
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 QUICK START: Turn Your Idea Into a Detailed Task Plan
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Get Started:
-• /server start   - Start development server
-• /onboard        - Analyze your website & extract brand
+1. Start your idea:
+   /plan convert "I want to build a course platform"
 
-Build & Deploy:
-• /build          - Build features with AI specialists
-• /deploy         - Deploy to production
+   This will:
+   ✅ Create a 100-inference plan
+   ✅ Assign tasks to 15 specialists
+   ✅ Show dependencies and timeline
+   ✅ List all ontology dimensions involved
 
-Need Help?
-• /server         - Full server management commands
-• /now            - View current workflow state
-• /see            - Explore platform capabilities
+2. Execute step-by-step:
+   /now                 - See current task
+   /next                - Move to next inference
+   /done                - Mark complete & advance
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✨ What would you like to build?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. See your agents working:
+   /agent dashboard     - See all agents' current work
+   /agent [name]        - View specific agent's tasks
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 ESSENTIAL COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Planning:
+  /plan convert [idea]     - Convert idea to 100-inference plan
+  /plan show              - Show current plan with agent assignments
+  /plan dependencies      - Show task dependencies
+
+Execution:
+  /now                    - View current inference & task
+  /next                   - Advance to next inference
+  /done                   - Mark complete & advance
+  /build [feature]        - Build with specialists
+
+Agents:
+  /agent dashboard        - See all agents at work
+  /agent director         - View orchestrator status
+  /agent [name]           - View specific agent
+
+Setup:
+  /server start           - Start dev server
+  /onboard                - Analyze your website
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✨ READY TO TRANSFORM YOUR IDEA?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Start here:
+  /plan convert "Your idea here"
 
 Examples:
-• "Build a landing page for my product"
-• "Create a blog with content management"
-• "Add user authentication"
-• "Set up payment processing"
+  • /plan convert "Build a course platform with AI tutors"
+  • /plan convert "Create a blog with SEO and analytics"
+  • /plan convert "Add real-time notifications to my app"
 
-Just tell me what you want!
+Then:
+  • /plan show              - See your full plan
+  • /now                    - Start executing
+  • /agent dashboard        - Watch your agents work
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-
----
-
-## Command Reference
-
-### Server Commands
-
-Use `/server` for all development server management:
-- `/server` - Check if server is running
-- `/server start` - Start server in background
-- `/server stop` - Stop running server
-- `/server restart` - Restart server
-
-See `.claude/commands/server.md` for implementation details.
-
-### Onboarding Commands
-
-Use `/onboard` to analyze websites and extract brand identity:
-- Analyzes website structure and content
-- Extracts brand colors, fonts, and voice
-- Maps features to 6-dimension ontology
-- Creates installation-specific documentation
-
-See `.claude/commands/onboard.md` for implementation details.
-
-### Workflow Commands
-
-Use workflow commands for inference-based development:
-- `/now` - Display current inference and progress
-- `/next` - Advance to next inference
-- `/todo` - View complete 100-inference sequence
-- `/done` - Mark current inference complete
-
-See `one/knowledge/todo.md` for the 100-inference template.
-
----
-
-## Key Principles
-
-1. **FAST** - Show welcome screen instantly (< 1 second)
-2. **CLEAR** - Display server status and available commands
-3. **MODULAR** - Each feature has dedicated command
-4. **ACTIONABLE** - Provide specific next steps
-5. **HELPFUL** - Guide users to right command for their needs
 
 ---
 
 ## Implementation Notes
 
 **DO NOT:**
-- Start server automatically (let user control with `/server start`)
-- Launch agent-onboard automatically (let user run `/onboard`)
-- Block waiting for background processes
+- Start server automatically
+- Launch agent-onboard automatically
+- Block waiting for processes
 
 **DO:**
-- Display current status (server running/stopped, onboarding complete/pending)
-- Show relevant commands based on context
-- Guide users to specific commands for detailed operations
-- Keep welcome screen fast and lightweight
+- Show current status (server, onboarding)
+- Guide users to `/plan convert [idea]` as first step
+- Reference cascade system for orchestration
+- Show agent-director as central coordinator
+- Highlight 15-specialist availability
+
+**Key Integration Points:**
+- `/plan convert` merges CASCADE planning into plan command
+- Agent assignments are automatic based on inference type
+- Dependencies are calculated and shown
+- Quality loop is visualized in task breakdown

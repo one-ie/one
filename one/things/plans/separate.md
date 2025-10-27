@@ -18,7 +18,7 @@
 **Target State:**
 
 - Frontend uses DataProvider interface
-- Backend is pluggable - organizations can use Convex, their existing WordPress site, Notion databases, or any other backend
+- Backend is pluggable - groups can use Convex, their existing WordPress site, Notion databases, or any other backend
 - Existing auth tests continue to pass
 - All current functionality preserved while adding flexibility
 
@@ -39,7 +39,7 @@
 
 - Add backend flexibility (support WordPress, Notion, Shopify, etc.)
 - Enable multi-backend federation (auth in Convex, blog in WordPress, products in Shopify)
-- Allow organizations to use existing infrastructure
+- Allow groups to use existing infrastructure
 - Remove Convex lock-in
 
 **Migration Approach:**
@@ -100,7 +100,7 @@
 
 - ⚠️ Frontend tightly coupled to Convex (works, but inflexible)
 - ⚠️ Can't swap backend without rewriting frontend
-- ⚠️ Organizations must use Convex (can't use existing WordPress/Notion)
+- ⚠️ Groups must use Convex (can't use existing WordPress/Notion)
 - ⚠️ Hard to add mobile/desktop apps without Convex SDK
 - ⚠️ No multi-backend support (can't federate data from Shopify/WordPress)
 

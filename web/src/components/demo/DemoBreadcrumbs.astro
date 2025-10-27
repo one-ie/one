@@ -1,0 +1,47 @@
+---
+/**
+ * DemoBreadcrumbs - Breadcrumb Navigation
+ *
+ * Displays navigation path with proper hierarchy
+ */
+
+import { ChevronRight } from 'lucide-astro';
+
+interface Props {
+  items: Array<{
+    label: string;
+    path?: string;
+    current?: boolean;
+  }>;
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="flex items-center gap-2">
+  {items.map((item, index) => (
+    <>
+      {index > 0 && (
+        <ChevronRight size={16} class="text-slate-400 dark:text-slate-600 mx-1" />
+      )}
+      {item.path && !item.current ? (
+        <a
+          href={item.path}
+          class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition"
+        >
+          {item.label}
+        </a>
+      ) : (
+        <span
+          class={`text-sm ${
+            item.current
+              ? 'text-slate-900 dark:text-white font-medium'
+              : 'text-slate-600 dark:text-slate-400'
+          }`}
+        >
+          {item.label}
+        </span>
+      )}
+    </>
+  ))}
+</nav>

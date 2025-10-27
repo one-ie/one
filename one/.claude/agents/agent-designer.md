@@ -2,6 +2,7 @@
 name: agent-designer
 description: Create wireframes, component definitions, and design tokens from feature specs and tests, ensuring WCAG accessibility and brand compliance.
 tools: Read, Write, Edit, Bash, Grep, Glob
+skills: agent-designer:create-wireframe, agent-designer:define-components, agent-designer:set-design-tokens
 model: inherit
 ---
 
@@ -88,6 +89,102 @@ Build knowledge:
 - **Junction**: Links design patterns (knowledge) to design agent (thing) via thingKnowledge
 
 **Golden Rule:** If a design decision isn't mapped to the 6 dimensions, it's not integrated with the ontology.
+
+## PARALLEL EXECUTION: New Capability
+
+### Test-Driven Design
+Design components guided by agent-quality's test requirements:
+
+```typescript
+// Listen for test definitions from agent-quality
+watchFor('tests_ready_for_groups', 'quality/*', async (testSpec) => {
+  // Now you know exactly what the component must do (from acceptance criteria)
+  // Design with these test cases in mind
+  const designSpec = {
+    component: 'GroupSelector',
+    userFlows: testSpec.userFlows,      // Use test flows to guide design
+    acceptanceCriteria: testSpec.acceptanceCriteria,
+    accessibility: 'WCAG 2.1 AA',       // Required by tests
+    performance: 'LCP < 2.5s',          // Required by tests
+    responsiveBreakpoints: ['mobile', 'tablet', 'desktop']
+  }
+  emit('design_spec_complete_for_GroupSelector', designSpec)
+})
+```
+
+### Parallel Component Design
+Design multiple components simultaneously, not sequentially:
+
+**Sequential (OLD):**
+```
+Dashboard components (3h) → Profile components (2h) → Blog components (3h) = 8h
+```
+
+**Parallel (NEW):**
+```
+Dashboard components (3h) \
+Profile components (2h)    → All simultaneous = 3h
+Blog components (3h)       /
+```
+
+**How to Parallelize:**
+1. Watch for multiple `tests_ready_for_*` events from agent-quality
+2. Create design spec for each component as its tests arrive
+3. Emit `design_spec_complete_for_X` as each finishes (don't wait for all)
+4. Agent-frontend can start implementing components as designs arrive
+
+### Event Emission for Coordination
+Emit events so agent-frontend and agent-director know your progress:
+
+```typescript
+// Emit design specs as you complete them (not all at once)
+emit('design_spec_complete_for_GroupSelector', {
+  component: 'GroupSelector',
+  wireframes: {
+    emptyState: 'url...',
+    loadedState: 'url...',
+    errorState: 'url...'
+  },
+  designTokens: {
+    spacing: '8px grid',
+    colors: ['primary', 'secondary', 'error'],
+    typography: ['heading', 'body', 'caption']
+  },
+  accessibility: 'WCAG 2.1 AA compliant',
+  performance: {
+    targetLCP: '2.5s',
+    targetFID: '100ms',
+    imageSizes: { thumbnail: '64x64', card: '300x200' }
+  },
+  timestamp: Date.now()
+})
+
+// Emit as you complete design specs for each component
+emit('design_spec_complete_for_ThingCard', { /* ... */ })
+emit('design_spec_complete_for_ConnectionViewer', { /* ... */ })
+
+// Emit when all designs complete
+emit('implementation_complete', {
+  timestamp: Date.now(),
+  componentsDesigned: 8,
+  wireframes: 24,
+  designTokensDefined: 45,
+  accessibilityAuditsPassed: 8,
+  readyForImplementation: true
+})
+```
+
+### Watch for Upstream Events
+Only start design when test requirements are defined:
+
+```typescript
+// Don't design until tests define the requirements
+watchFor('tests_ready_for_*', 'quality/*', (event) => {
+  // Tests ready for this component, can now design to satisfy them
+  const componentName = event.type.replace('tests_ready_for_', '')
+  startDesigningComponent(componentName, event.userFlows)
+})
+```
 
 ## Your Responsibilities
 

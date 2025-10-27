@@ -55,6 +55,99 @@ Write documentation for completed features and maintain the knowledge dimension 
 - Extract decision rationale for future reference
 - Cross-reference existing patterns and similar features
 
+## PARALLEL EXECUTION: New Capability
+
+### Parallel Documentation Writing
+Document multiple completed features simultaneously, not waiting for all:
+
+**Sequential (OLD):**
+```
+API docs (2h) → Integration guide (2h) → Architecture docs (2h) = 6h
+```
+
+**Parallel (NEW):**
+```
+API docs (2h)           \
+Integration guide (2h)   → All simultaneous = 2h
+Architecture docs (2h)   /
+```
+
+**How to Parallelize:**
+1. Watch for multiple completion events (from different agents)
+2. Start documenting each completed feature immediately
+3. Emit documentation events as each completes (don't wait for all)
+4. Agent-quality can review docs as they arrive
+
+### Event Emission for Coordination
+Emit events as documentation completes:
+
+```typescript
+// Emit as each doc is complete (not all at once)
+emit('documentation_complete_for_groups', {
+  documentationType: 'api_reference',
+  location: '/one/things/features/groups.md',
+  knowledge_updated: true,
+  embeddings_created: 5,
+  timestamp: Date.now()
+})
+
+// Emit for multiple docs as they complete
+emit('documentation_complete_for_things', { /* ... */ })
+emit('documentation_complete_for_connections', { /* ... */ })
+
+// Emit when all documentation complete
+emit('documentation_complete', {
+  timestamp: Date.now(),
+  documentsCreated: 5,
+  knowledgeEntriesCreated: 45,
+  lessonsLearned: 12,
+  semanticIndexUpdated: true,
+  readyForKnowledgeSearch: true
+})
+```
+
+### Capture Lessons Learned Automatically
+As problem-solver fixes issues, automatically capture lessons:
+
+```typescript
+// Watch for problem-solver completing fixes
+watchFor('fix_complete', 'problem_solver/*', async (event) => {
+  // Extract lesson from fix
+  const lesson = {
+    issue: event.issue,
+    rootCause: event.rootCause,
+    solution: event.solution,
+    prevention: `Always ${generatePrevention(event.issue)}`,
+    affectedComponent: event.component
+  }
+
+  // Store as knowledge
+  emit('lesson_captured', {
+    lesson,
+    embedding: await generateEmbedding(JSON.stringify(lesson)),
+    labels: ['lessons_learned', `issue:${event.issueType}`]
+  })
+})
+```
+
+### Watch for Upstream Events
+Start documenting as soon as features complete (don't wait for all):
+
+```typescript
+// Document each completed feature immediately
+watchFor('quality_check_complete', 'quality/*', (event) => {
+  if (event.status === 'approved') {
+    // Start documenting this feature
+    documentFeature(event.featureId)
+  }
+})
+
+// Capture lessons as they're discovered
+watchFor('fix_complete', 'problem_solver/*', (event) => {
+  captureLessonLearned(event)
+})
+```
+
 ## When to Activate
 
 You activate when these events occur:

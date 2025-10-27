@@ -1,0 +1,47 @@
+---
+/**
+ * Backend Integration Test Page
+ *
+ * Tests full-stack data flow:
+ * Frontend → ConvexProvider → Backend → Database → Frontend
+ *
+ * Visit: http://localhost:4321/test/integration
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { BackendIntegrationTest } from '@/components/test/BackendIntegrationTest';
+import { DataProviderProvider } from '@/hooks/useDataProvider';
+import { makeConvexProvider } from '@/providers/convex/ConvexProvider';
+
+// Initialize Convex provider with backend URL
+const convexUrl = import.meta.env.PUBLIC_CONVEX_URL || 'https://shocking-falcon-870.convex.cloud';
+const provider = makeConvexProvider({ url: convexUrl });
+---
+
+<Layout title="Backend Integration Tests">
+  <div class="container mx-auto py-12">
+    <div class="mb-8 text-center">
+      <h1 class="text-4xl font-bold mb-4">Backend Integration Tests</h1>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        Testing complete data flow across all 6 dimensions:
+        Groups, People, Things, Connections, Events, and Knowledge
+      </p>
+    </div>
+
+    <DataProviderProvider client:load provider={provider}>
+      <BackendIntegrationTest client:load />
+    </DataProviderProvider>
+
+    <div class="mt-12 text-center">
+      <a href="/" class="text-sm text-muted-foreground hover:text-foreground">
+        ← Back to Home
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+  }
+</style>

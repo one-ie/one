@@ -18,35 +18,40 @@ Transform the current tightly-coupled Astro/React frontend + Convex backend arch
 
 ## Ontology Validation
 
-### ✅ Organizations (Dimension 1)
-- Each organization configures `properties.backendProvider`
+### ✅ Groups (Dimension 1)
+- Each group configures `properties.backendProvider` (optional)
 - Multi-tenant isolation maintained across all providers
-- Organizations can swap providers independently
+- Groups can swap providers independently
+- Hierarchical nesting supported (parent/child groups can use different backends)
 
 ### ✅ People (Dimension 2)
-- Only `org_owner` role can configure backend providers
+- Only `group_owner` role can configure backend providers
 - Authorization enforced at backend, not frontend
-- All 4 roles work identically across providers
+- All 4 roles work identically across providers (platform_owner, group_owner, group_user, customer)
 
 ### ✅ Things (Dimension 3)
 - New thing type: `external_connection` (backend configurations)
 - All 66 thing types work through DataProvider interface
 - Generic ThingService handles all types uniformly
+- Things scoped to groups via `groupId`
 
 ### ✅ Connections (Dimension 4)
-- New relationship: `configured_by` (org → external_connection)
+- New relationship: `configured_by` (group → external_connection)
 - Uses consolidated type: `communicated` with protocol metadata
 - Cross-backend connections supported
+- Connections scoped to groups via `groupId`
 
 ### ✅ Events (Dimension 5)
 - New event: `provider_changed` (when backend swaps)
 - Uses consolidated type: `communication_event` with protocol metadata
 - Complete audit trail preserved
+- Events scoped to groups via `groupId`
 
 ### ✅ Knowledge (Dimension 6)
 - Labels: Backend provider capabilities
 - Tags: `protocol:data_provider`, `provider:convex`, `status:active`
 - RAG can index provider documentation
+- Knowledge scoped to groups via `groupId`
 
 **Verdict:** ✅ PASS - All 6 dimensions successfully mapped
 

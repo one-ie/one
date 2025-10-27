@@ -1,0 +1,775 @@
+---
+// web/src/pages/demo/events.astro
+import Layout from '@/layouts/Layout.astro';
+import { Activity, BarChart3, Shield, Clock, Search, Home, Link2, User, Package } from 'lucide-astro';
+import EventsDemo from '@/components/demo/EventsDemo';
+
+// Event type categories for display
+const eventCategories = {
+  'Lifecycle Events': [
+    { type: 'thing_created', description: 'Thing created (user, course, token, etc.)', color: 'blue' },
+    { type: 'thing_updated', description: 'Thing updated or modified', color: 'blue' },
+    { type: 'thing_deleted', description: 'Thing archived or deleted', color: 'blue' },
+  ],
+  'User Events': [
+    { type: 'user_registered', description: 'New user registered', color: 'green' },
+    { type: 'user_verified', description: 'Email verified or account confirmed', color: 'green' },
+    { type: 'user_login', description: 'User logged in', color: 'green' },
+    { type: 'user_logout', description: 'User logged out', color: 'green' },
+    { type: 'profile_updated', description: 'User updated their profile', color: 'green' },
+  ],
+  'Authentication Events': [
+    { type: 'password_reset_requested', description: 'Password reset initiated', color: 'yellow' },
+    { type: 'password_reset_completed', description: 'Password successfully reset', color: 'yellow' },
+    { type: 'email_verification_sent', description: 'Verification email sent', color: 'yellow' },
+    { type: 'email_verified', description: 'Email address verified', color: 'yellow' },
+    { type: 'two_factor_enabled', description: '2FA enabled on account', color: 'yellow' },
+    { type: 'two_factor_disabled', description: '2FA disabled on account', color: 'yellow' },
+  ],
+  'Commerce Events': [
+    { type: 'tokens_purchased', description: 'User purchased tokens', color: 'orange' },
+    { type: 'token_minted', description: 'New token minted', color: 'orange' },
+    { type: 'token_burned', description: 'Token destroyed/burned', color: 'orange' },
+    { type: 'tokens_transferred', description: 'Tokens sent between users', color: 'orange' },
+  ],
+  'Course Events': [
+    { type: 'course_enrolled', description: 'User enrolled in a course', color: 'purple' },
+    { type: 'lesson_completed', description: 'User completed a lesson', color: 'purple' },
+    { type: 'course_completed', description: 'User finished entire course', color: 'purple' },
+    { type: 'certificate_earned', description: 'User earned certificate', color: 'purple' },
+  ],
+  'Inference Events': [
+    { type: 'inference_request', description: 'AI inference requested', color: 'indigo' },
+    { type: 'inference_completed', description: 'AI inference finished', color: 'indigo' },
+    { type: 'inference_failed', description: 'AI inference failed', color: 'indigo' },
+    { type: 'inference_quota_exceeded', description: 'Monthly inference limit reached', color: 'indigo' },
+  ],
+  'Blockchain Events': [
+    { type: 'nft_minted', description: 'NFT created on-chain', color: 'red' },
+    { type: 'nft_transferred', description: 'NFT ownership transferred', color: 'red' },
+    { type: 'contract_deployed', description: 'Smart contract deployed', color: 'red' },
+    { type: 'tokens_bridged', description: 'Tokens bridged cross-chain', color: 'red' },
+  ],
+};
+
+// Flatten event types for quick lookup
+const allEventTypes = Object.values(eventCategories).flat();
+---
+
+<Layout title="Events - Complete Audit Trail">
+  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <!-- Hero Section -->
+      <div class="mb-12 text-center">
+        <div class="inline-flex items-center gap-2 mb-4">
+          <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">
+            Dimension 5 of 6
+          </span>
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+            Audit Trail
+          </span>
+        </div>
+        <h1 class="text-5xl font-bold text-slate-900 mb-4">
+          Events
+        </h1>
+        <p class="text-xl text-slate-600 mb-6">
+          Complete, immutable event log for audit trails, analytics, and compliance
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <span class="inline-flex items-center gap-2 text-sm text-slate-700">
+            <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+            67+ Event Types
+          </span>
+          <span class="inline-flex items-center gap-2 text-sm text-slate-700">
+            <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+            Immutable Log
+          </span>
+          <span class="inline-flex items-center gap-2 text-sm text-slate-700">
+            <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+            Timeline View
+          </span>
+          <span class="inline-flex items-center gap-2 text-sm text-slate-700">
+            <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
+            Real-Time Tracking
+          </span>
+        </div>
+      </div>
+
+      <!-- 6-Dimension Ontology Visualization -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">6-Dimension Ontology Map</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <a href="/demo/groups" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-blue-600 hover:bg-blue-50 transition">
+            <h3 class="font-semibold text-slate-900 mb-2 group-hover:text-blue-600">1. Groups</h3>
+            <p class="text-sm text-slate-600">Multi-tenant isolation & nesting</p>
+          </a>
+
+          <a href="/demo/people" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-green-600 hover:bg-green-50 transition">
+            <h3 class="font-semibold text-slate-900 mb-2 group-hover:text-green-600">2. People</h3>
+            <p class="text-sm text-slate-600">Authorization & roles</p>
+          </a>
+
+          <a href="/demo/things" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-purple-600 hover:bg-purple-50 transition">
+            <h3 class="font-semibold text-slate-900 mb-2 group-hover:text-purple-600">3. Things</h3>
+            <p class="text-sm text-slate-600">Entities (courses, agents, tokens)</p>
+          </a>
+
+          <a href="/demo/connections" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-indigo-600 hover:bg-indigo-50 transition">
+            <h3 class="font-semibold text-slate-900 mb-2 group-hover:text-indigo-600">4. Connections</h3>
+            <p class="text-sm text-slate-600">Relationships & metadata</p>
+          </a>
+
+          <div class="p-4 rounded-lg border-2 border-orange-600 bg-orange-50">
+            <h3 class="font-semibold text-slate-900 mb-2 text-orange-700">5. Events (You Are Here)</h3>
+            <p class="text-sm text-slate-600">Complete audit trail</p>
+          </div>
+
+          <a href="/demo/search" class="group p-4 rounded-lg border-2 border-slate-200 hover:border-pink-600 hover:bg-pink-50 transition">
+            <h3 class="font-semibold text-slate-900 mb-2 group-hover:text-pink-600">6. Knowledge</h3>
+            <p class="text-sm text-slate-600">Labels, embeddings, RAG</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Interactive Events Playground -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">Interactive Event Timeline</h2>
+        <EventsDemo client:load />
+      </div>
+
+      <!-- What are Events Section -->
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <!-- Explanation -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold text-slate-900 mb-4">What are Events?</h2>
+          <div class="space-y-4 text-slate-700">
+            <p>
+              Events are the immutable record of everything that happens in the system. Every action—whether a user registration, content publication, token transfer, or AI inference—is logged as an event.
+            </p>
+            <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <p class="font-semibold text-orange-900 mb-2">Immutable Log Pattern</p>
+              <p class="text-sm text-orange-800">
+                Once recorded, events can never be changed. This creates a complete audit trail for compliance, analytics, and system debugging. Events are the source of truth for what happened and when.
+              </p>
+            </div>
+            <div class="space-y-2">
+              <p class="font-semibold text-slate-900">Event Records Include:</p>
+              <ul class="text-sm space-y-1 list-disc list-inside">
+                <li>What happened (event type)</li>
+                <li>Who/what caused it (actor)</li>
+                <li>What was affected (target)</li>
+                <li>When it occurred (timestamp)</li>
+                <li>Additional context (metadata)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Characteristics -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold text-slate-900 mb-4">Key Characteristics</h2>
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center h-10 w-10 rounded-md bg-orange-500 text-white font-bold">
+                  1
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900">Immutable</h3>
+                <p class="text-sm text-slate-600">Once recorded, events cannot be changed or deleted. This ensures historical accuracy.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center h-10 w-10 rounded-md bg-orange-500 text-white font-bold">
+                  2
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900">Time-Ordered</h3>
+                <p class="text-sm text-slate-600">Every event has a precise timestamp, enabling temporal queries and replay.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center h-10 w-10 rounded-md bg-orange-500 text-white font-bold">
+                  3
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900">Complete Context</h3>
+                <p class="text-sm text-slate-600">Metadata stores protocol-specific and event-specific details.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center h-10 w-10 rounded-md bg-orange-500 text-white font-bold">
+                  4
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900">Queryable Timeline</h3>
+                <p class="text-sm text-slate-600">Query events by actor, target, time range, or type for analytics.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="flex items-center justify-center h-10 w-10 rounded-md bg-orange-500 text-white font-bold">
+                  5
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-slate-900">Compliance Ready</h3>
+                <p class="text-sm text-slate-600">Perfect for regulatory requirements (GDPR, SOC 2, audit trails).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Types Section -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-8">Event Types (67+)</h2>
+        <div class="space-y-8">
+          {Object.entries(eventCategories).map(([category, eventList]: [string, any]) => (
+            <div class="border-b border-slate-200 pb-8 last:border-b-0">
+              <h3 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <span class="w-3 h-3 bg-orange-500 rounded-full"></span>
+                {category}
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {eventList.map((event: any) => (
+                  <div class="p-4 rounded-lg bg-slate-50 border border-slate-200 hover:border-orange-400 hover:bg-orange-50 transition">
+                    <code class="text-sm font-mono text-orange-700 font-semibold">{event.type}</code>
+                    <p class="text-sm text-slate-600 mt-1">{event.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Event Structure -->
+      <div class="mb-12 bg-slate-900 text-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold mb-6">Event Structure (TypeScript)</h2>
+        <div class="overflow-x-auto">
+          <pre class="text-sm leading-relaxed"><code>{`interface Event {
+  _id: Id<'events'>;
+
+  // Core event data
+  type: EventType;              // What happened
+  actorId: Id<'things'>;        // Who/what caused it
+  targetId?: Id<'things'>;      // What was affected (optional)
+  timestamp: number;             // When it happened (milliseconds)
+
+  // Rich context
+  metadata: {
+    // Protocol-specific metadata
+    protocol?: 'a2a' | 'acp' | 'ap2' | 'x402' | 'ag-ui';
+
+    // Event-specific data (flexible JSON)
+    [key: string]: any;
+
+    // Common metadata examples:
+    // - amount, currency, paymentId (for payment events)
+    // - contentType, action, platform (for content events)
+    // - mandateType, autoExecute (for mandate events)
+    // - network, txHash (for blockchain events)
+  };
+}
+
+// Example: User purchased tokens
+{
+  type: 'tokens_purchased',
+  actorId: 'user_123',
+  targetId: 'token_456',
+  timestamp: 1698765432000,
+  metadata: {
+    amount: 100,
+    usdAmount: 10.00,
+    paymentId: 'pi_1234567890',
+    txHash: '0xabcdef123456',
+    protocol: 'stripe'
+  }
+}`}</code></pre>
+        </div>
+      </div>
+
+      <!-- React Hook Examples -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">React Hook Examples</h2>
+        <div class="space-y-6">
+          <!-- useEvents Hook -->
+          <div class="border-l-4 border-orange-500 pl-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">useEvents Hook</h3>
+            <p class="text-sm text-slate-600 mb-4">Fetch events with real-time updates</p>
+            <div class="bg-slate-900 text-white rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm"><code>{`import { useEvents } from '@/hooks/useEvents';
+
+export function EventList() {
+  const {
+    events,
+    loading,
+    error,
+    hasMore,
+    loadMore
+  } = useEvents({
+    limit: 20,
+    sortBy: 'timestamp',
+    order: 'desc'
+  });
+
+  if (loading) return <div>Loading events...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
+  return (
+    <div>
+      {events.map(event => (
+        <EventCard key={event._id} event={event} />
+      ))}
+      {hasMore && (
+        <button onClick={loadMore}>Load More</button>
+      )}
+    </div>
+  );
+}`}</code></pre>
+            </div>
+          </div>
+
+          <!-- useEventsByActor Hook -->
+          <div class="border-l-4 border-orange-500 pl-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">useEventsByActor Hook</h3>
+            <p class="text-sm text-slate-600 mb-4">Get all events caused by a specific actor (person/thing)</p>
+            <div class="bg-slate-900 text-white rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm"><code>{`import { useEventsByActor } from '@/hooks/useEventsByActor';
+
+export function UserActivityTimeline({ userId }: { userId: string }) {
+  const events = useEventsByActor(userId, {
+    limit: 50,
+    startTime: Date.now() - 7 * 24 * 60 * 60 * 1000  // Last 7 days
+  });
+
+  return (
+    <div class="space-y-4">
+      <h2>Activity for {userId}</h2>
+      {events?.map(event => (
+        <EventItem key={event._id} event={event} />
+      ))}
+    </div>
+  );
+}`}</code></pre>
+            </div>
+          </div>
+
+          <!-- useEventsByTarget Hook -->
+          <div class="border-l-4 border-orange-500 pl-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">useEventsByTarget Hook</h3>
+            <p class="text-sm text-slate-600 mb-4">Get all events that affected a specific thing</p>
+            <div class="bg-slate-900 text-white rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm"><code>{`import { useEventsByTarget } from '@/hooks/useEventsByTarget';
+
+export function CourseHistory({ courseId }: { courseId: string }) {
+  const events = useEventsByTarget(courseId);
+
+  return (
+    <div>
+      <h3>Course Events</h3>
+      <div class="space-y-2">
+        {events?.map((event: any) => (
+          <div class="p-3 bg-slate-100 rounded">
+            <div class="font-semibold">{event.type}</div>
+            <div class="text-sm text-slate-600">
+              {new Date(event.timestamp).toLocaleString()}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}`}</code></pre>
+            </div>
+          </div>
+
+          <!-- useEventTimeline Hook -->
+          <div class="border-l-4 border-orange-500 pl-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">useEventTimeline Hook</h3>
+            <p class="text-sm text-slate-600 mb-4">Get events for an entity with optional filtering</p>
+            <div class="bg-slate-900 text-white rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm"><code>{`import { useEventTimeline } from '@/hooks/useEventTimeline';
+
+export function EntityTimeline({ entityId }: { entityId: string }) {
+  const {
+    events,
+    filteredEvents,
+    filter,
+    setFilter
+  } = useEventTimeline(entityId);
+
+  return (
+    <div>
+      <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+        <option value="">All Events</option>
+        <option value="created">Created</option>
+        <option value="updated">Updated</option>
+        <option value="interacted">Interacted</option>
+      </select>
+
+      <div class="mt-6 space-y-4">
+        {(filteredEvents || events)?.map(event => (
+          <TimelineEvent key={event._id} event={event} />
+        ))}
+      </div>
+    </div>
+  );
+}`}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance & Auditing -->
+      <div class="mb-12 grid md:grid-cols-2 gap-8">
+        <!-- Compliance Use Cases -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold text-slate-900 mb-6">Compliance Benefits</h2>
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <Shield class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">GDPR Compliance</h3>
+                <p class="text-sm text-slate-600">Track data access and deletion requests with complete audit trail</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <Shield class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">SOC 2 Type II</h3>
+                <p class="text-sm text-slate-600">Immutable event log proves security and control effectiveness</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <BarChart3 class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">Financial Audits</h3>
+                <p class="text-sm text-slate-600">Complete payment and transaction history for verification</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <Activity class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">Incident Investigation</h3>
+                <p class="text-sm text-slate-600">Replay events to understand exactly what happened and why</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <Clock class="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">Change Management</h3>
+                <p class="text-sm text-slate-600">Track all modifications with actor, target, and timestamp</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics Use Cases -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold text-slate-900 mb-6">Analytics Applications</h2>
+          <div class="space-y-4">
+            <div class="flex gap-4">
+              <BarChart3 class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">User Behavior</h3>
+                <p class="text-sm text-slate-600">Analyze user actions: logins, content views, purchases, etc.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <BarChart3 class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">Funnel Analysis</h3>
+                <p class="text-sm text-slate-600">Track conversion: signup → verification → purchase → completion</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <BarChart3 class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">Revenue Attribution</h3>
+                <p class="text-sm text-slate-600">Link all revenue events to original source and campaign</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <BarChart3 class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">Course Performance</h3>
+                <p class="text-sm text-slate-600">Track enrollments, completion rates, and certificate earning</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <Activity class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 class="font-semibold text-slate-900">Real-Time Insights</h3>
+                <p class="text-sm text-slate-600">Build dashboards that update as events are recorded</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Patterns -->
+      <div class="mb-12 bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">Advanced Patterns</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- Event Replay -->
+          <div class="border-l-4 border-orange-500 pl-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">Event Replay</h3>
+            <p class="text-sm text-slate-600 mb-4">Reconstruct system state by replaying events in order</p>
+            <div class="bg-slate-900 text-white rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm"><code>{`// Get all events for entity from creation to now
+const events = await provider.events.list({
+  targetId: entityId,
+  startTime: 0,  // From creation
+  endTime: Date.now(),
+  sortBy: 'timestamp',
+  order: 'asc'
+});
+
+// Replay events to reconstruct state
+let state = { created: false, updated: false, deleted: false };
+events.forEach(event => {
+  if (event.type === 'thing_created') state.created = true;
+  if (event.type === 'thing_updated') state.updated = true;
+  if (event.type === 'thing_deleted') state.deleted = true;
+});
+
+// Final state reflects all changes ever made
+console.log(state); // { created: true, updated: true, deleted: false }`}</code></pre>
+            </div>
+          </div>
+
+          <!-- Time-Based Queries -->
+          <div class="border-l-4 border-orange-500 pl-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">Time-Based Queries</h3>
+            <p class="text-sm text-slate-600 mb-4">Query events within specific time windows for analytics</p>
+            <div class="bg-slate-900 text-white rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm"><code>{`// Events from last 24 hours
+const last24h = await provider.events.list({
+  startTime: Date.now() - 24 * 60 * 60 * 1000,
+  endTime: Date.now()
+});
+
+// Revenue this month
+const thisMonth = await provider.events.list({
+  eventType: 'tokens_purchased',
+  startTime: new Date(Date.now()).setDate(1),
+  endTime: Date.now()
+});
+
+// Peak activity hours
+const peakHours = events
+  .map(e => new Date(e.timestamp).getHours())
+  .reduce((acc, h) => {
+    acc[h] = (acc[h] || 0) + 1;
+    return acc;
+  }, {});`}</code></pre>
+            </div>
+          </div>
+
+          <!-- Event Filtering -->
+          <div class="border-l-4 border-orange-500 pl-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">Smart Filtering</h3>
+            <p class="text-sm text-slate-600 mb-4">Combine filters for powerful event queries</p>
+            <div class="bg-slate-900 text-white rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm"><code>{`// All tokens purchased by creator_123 in last month
+const purchases = await provider.events.list({
+  eventType: 'tokens_purchased',
+  actorId: 'creator_123',
+  startTime: Date.now() - 30 * 24 * 60 * 60 * 1000,
+  order: 'desc'
+});
+
+// Calculate total revenue
+const totalRevenue = purchases.reduce((sum, evt) =>
+  sum + (evt.metadata.usdAmount || 0), 0);
+
+console.log(\`Total tokens purchased: \${totalRevenue}\`);
+`}</code></pre>
+            </div>
+          </div>
+
+          <!-- Metadata Patterns -->
+          <div class="border-l-4 border-orange-500 pl-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">Metadata Best Practices</h3>
+            <p class="text-sm text-slate-600 mb-4">Structured metadata enables rich analytics</p>
+            <div class="bg-slate-900 text-white rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm"><code>{`// Always include these in metadata:
+const event = {
+  type: 'payment_event',
+  actorId: userId,
+  targetId: paymentId,
+  timestamp: Date.now(),
+  metadata: {
+    // Protocol for protocol-agnostic querying
+    protocol: 'stripe',
+
+    // Status for state machines
+    status: 'completed',
+
+    // Financial data
+    amount: 99.99,
+    currency: 'USD',
+
+    // Traceability
+    transactionId: 'txn_123',
+
+    // Context
+    source: 'mobile_app',
+    userAgent: 'iOS/1.2.3'
+  }
+};`}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation to Other Dimensions -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">Explore Other Dimensions</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <a href="/demo/groups" class="group">
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 text-center">
+              <div class="flex justify-center mb-3">
+                <User class="w-8 h-8 text-blue-600 group-hover:text-blue-700" />
+              </div>
+              <h3 class="font-semibold text-slate-900 group-hover:text-blue-600">Groups</h3>
+              <p class="text-sm text-slate-600">Multi-tenant isolation</p>
+            </div>
+          </a>
+
+          <a href="/demo/people" class="group">
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 text-center">
+              <div class="flex justify-center mb-3">
+                <User class="w-8 h-8 text-green-600 group-hover:text-green-700" />
+              </div>
+              <h3 class="font-semibold text-slate-900 group-hover:text-green-600">People</h3>
+              <p class="text-sm text-slate-600">Authorization & roles</p>
+            </div>
+          </a>
+
+          <a href="/demo/things" class="group">
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 text-center">
+              <div class="flex justify-center mb-3">
+                <Package class="w-8 h-8 text-purple-600 group-hover:text-purple-700" />
+              </div>
+              <h3 class="font-semibold text-slate-900 group-hover:text-purple-600">Things</h3>
+              <p class="text-sm text-slate-600">Entities & objects</p>
+            </div>
+          </a>
+
+          <a href="/demo/connections" class="group">
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 text-center">
+              <div class="flex justify-center mb-3">
+                <Link2 class="w-8 h-8 text-indigo-600 group-hover:text-indigo-700" />
+              </div>
+              <h3 class="font-semibold text-slate-900 group-hover:text-indigo-600">Connections</h3>
+              <p class="text-sm text-slate-600">Relationships</p>
+            </div>
+          </a>
+
+          <a href="/demo/search" class="group">
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 text-center">
+              <div class="flex justify-center mb-3">
+                <Search class="w-8 h-8 text-pink-600 group-hover:text-pink-700" />
+              </div>
+              <h3 class="font-semibold text-slate-900 group-hover:text-pink-600">Search</h3>
+              <p class="text-sm text-slate-600">Knowledge & RAG</p>
+            </div>
+          </a>
+
+          <a href="/demo" class="group">
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6 text-center">
+              <div class="flex justify-center mb-3">
+                <Home class="w-8 h-8 text-slate-600 group-hover:text-slate-700" />
+              </div>
+              <h3 class="font-semibold text-slate-900 group-hover:text-slate-600">Demo Hub</h3>
+              <p class="text-sm text-slate-600">All dimensions</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Key Takeaways -->
+      <div class="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-lg shadow-lg p-8 border border-orange-200">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">Key Takeaways</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="space-y-4">
+            <div class="flex gap-3">
+              <span class="text-orange-600 text-2xl font-bold">1</span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Events are Immutable</h3>
+                <p class="text-sm text-slate-600">Once recorded, events cannot be modified. This ensures historical accuracy for audits and compliance.</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-orange-600 text-2xl font-bold">2</span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Complete Audit Trail</h3>
+                <p class="text-sm text-slate-600">Every action is logged with actor, target, timestamp, and rich metadata for full traceability.</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-orange-600 text-2xl font-bold">3</span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Queryable Timeline</h3>
+                <p class="text-sm text-slate-600">Events can be filtered by time, actor, target, or type for analytics and reporting.</p>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="flex gap-3">
+              <span class="text-orange-600 text-2xl font-bold">4</span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Flexible Metadata</h3>
+                <p class="text-sm text-slate-600">Each event includes protocol-specific metadata for protocol-agnostic event handling.</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-orange-600 text-2xl font-bold">5</span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Real-Time & Historical</h3>
+                <p class="text-sm text-slate-600">Stream live events or query historical timelines for both monitoring and analysis.</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-orange-600 text-2xl font-bold">6</span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Compliance Ready</h3>
+                <p class="text-sm text-slate-600">Perfect for GDPR, SOC 2, financial audits, and regulatory requirements.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="mt-12 bg-gradient-to-r from-orange-600 to-yellow-600 rounded-lg shadow-lg p-8 text-center text-white">
+        <h2 class="text-3xl font-bold mb-4">Ready to Track Everything?</h2>
+        <p class="text-lg mb-6 text-orange-100">
+          Events give you complete visibility into your system's history and behavior
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="/demo/search" class="inline-block bg-white text-orange-600 font-semibold px-6 py-3 rounded-lg hover:bg-orange-50 transition">
+            Explore Knowledge & Search →
+          </a>
+          <a href="/demo" class="inline-block border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
+            Back to Demo Hub
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

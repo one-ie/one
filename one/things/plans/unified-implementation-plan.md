@@ -22,7 +22,7 @@
 - ConnectionService (all 25 types) - `/web/src/services/ConnectionService.ts`
 - EventService (all 67 events) - `/web/src/services/EventService.ts`
 - KnowledgeService (RAG foundation) - `/web/src/services/KnowledgeService.ts`
-- OrganizationService (groups) - `/web/src/services/OrganizationService.ts`
+- GroupService (hierarchical groups with nesting) - `/web/src/services/GroupService.ts`
 - PeopleService - `/web/src/services/PeopleService.ts`
 - React hooks (useEffectRunner) - `/web/src/hooks/`
 - Typed errors throughout
@@ -96,11 +96,11 @@ Task: Implement CRUD mutations for Priority 1 entity types (core entities)
 - Enforce group scoping
 - Add rate limiting
 
-Entity types to implement:
+Entity types to implement (Priority 1 - Core):
 1. creator
 2. ai_clone
 3. audience_member
-4. organization
+4. organization (thing type for multi-tenant organizations)
 
 **Estimated Time:** 3-4 days
 **Risk:** Low (pattern is clear, just replication)

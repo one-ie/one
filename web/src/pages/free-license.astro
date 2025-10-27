@@ -2,9 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { marked } from 'marked';
 
 // Read LICENSE.md content at build time
-const licenseContent = readFileSync(resolve('..', 'LICENSE.md'), 'utf-8');
+const licenseMarkdown = readFileSync(resolve('..', 'LICENSE.md'), 'utf-8');
+const licenseContent = await marked.parse(licenseMarkdown);
 ---
 
 <Layout title="FREE License" description="ONE Platform License - Free Forever">

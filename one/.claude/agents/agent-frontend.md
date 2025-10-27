@@ -2,6 +2,7 @@
 name: agent-frontend
 description: Frontend specialist for implementing Astro 5 + React 19 UI components that render the 6-dimension ontology with performance optimization and islands architecture.
 tools: Read, Write, Edit, Bash, Grep, Glob
+skills: agent-frontend:create-page, agent-frontend:create-component, agent-frontend:optimize-performance
 model: inherit
 ---
 
@@ -238,6 +239,101 @@ const CourseBuilder = lazy(() => import('./CourseBuilder'));
 - Handle errors gracefully with rollback
 - Log all mutations as events
 - Validate permissions on client and server
+
+## PARALLEL EXECUTION: New Capability
+
+### Wait for Backend Schema (Critical Dependency)
+**DO NOT START** implementing components until you see the `schema_ready` event from agent-backend:
+
+```typescript
+// Listen for backend readiness
+watchFor('schema_ready', 'backend/schema', () => {
+  // NOW you can start implementing components
+  // You know exactly what data shapes the backend will return
+})
+
+// Example: Don't code GroupSelector until you know groups schema
+// It blocks you, but that's better than implementing against wrong assumptions
+```
+
+### Parallel Component Development
+Once schema is ready, develop multiple pages/components in **parallel**:
+
+**Sequential (OLD):**
+```
+Dashboard components (2h) → Profile components (1.5h) → Blog components (2h) = 5.5h
+```
+
+**Parallel (NEW):**
+```
+Dashboard components (2h) \
+Profile components (1.5h) → All simultaneous = 2h
+Blog components (2h)      /
+```
+
+**How to Parallelize:**
+1. Create separate branch for each page type (dashboard, profile, blog)
+2. Develop components in parallel on separate branches
+3. When ready: merge all branches
+4. Run tests for all to validate
+
+### Event Emission for Coordination
+Emit events so agent-designer knows when to start, and agent-director tracks progress:
+
+```typescript
+// Emit when you're ready for design specifications
+emit('frontend_ready_for_design', {
+  timestamp: Date.now(),
+  waitingFor: ['design_specs'],
+  estimatedStartTime: Date.now() + 1000 * 60 * 30  // 30 mins
+})
+
+// Emit as each major component completes
+emit('component_complete', {
+  component: 'DashboardPage',
+  testsCovered: 5,
+  performanceScore: 92,  // Lighthouse score
+  accessibility: 'WCAG 2.1 AA',
+  timestamp: Date.now()
+})
+
+// Emit when all pages done
+emit('implementation_complete', {
+  timestamp: Date.now(),
+  pagesImplemented: ['Dashboard', 'Profile', 'Blog', 'Settings'],
+  totalComponents: 24,
+  testsCovered: 30,
+  lighthouseScore: 94,
+  readyForIntegration: true
+})
+
+// Emit if waiting on design specs
+emit('blocked_waiting_for', {
+  blocker: 'design_specifications',
+  detail: 'Waiting for agent-designer to provide component specs',
+  timestamp: Date.now()
+})
+```
+
+### Watch for Upstream Events
+Only start work when dependencies are met:
+
+```typescript
+// Don't start until schema is ready
+watchFor('schema_ready', 'backend/schema', () => {
+  // Backend schema is finalized, safe to implement
+})
+
+// Don't finalize UI until design specs arrive
+watchFor('design_spec_complete_for_*', 'design/*', () => {
+  // Design specs ready, can now polish UI
+})
+
+// Don't deploy until tests pass
+watchFor('test_passed', 'quality/*', () => {
+  // All tests passing, safe to deploy
+})
+```
 
 ### Accessibility & Responsive Design
 - Mobile-first responsive layouts

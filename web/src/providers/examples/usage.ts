@@ -5,9 +5,9 @@
  */
 
 import { Effect, Layer } from "effect";
-import { convexProvider, ConvexProviderLive } from "../convex/ConvexProvider";
+import { convexProvider } from "../convex/ConvexProvider";
 import { wordPressProvider } from "../wordpress/WordPressProvider";
-import { compositeProvider, CompositeProviderLive } from "../composite/CompositeProvider";
+import { compositeProvider } from "../composite/CompositeProvider";
 import { DataProviderService } from "../DataProvider";
 import { ThingService } from "../../services/ThingService";
 import { ConnectionService } from "../../services/ConnectionService";
@@ -421,12 +421,6 @@ export const runAllExamples = async () => {
   } catch (error) {
     console.error("\n✗ Example failed:", error);
   }
-};
-
-// Mock embed function for testing
-const mockEmbedFunction = async (text: string): Promise<number[]> => {
-  // Return a mock 3072-dimensional embedding (OpenAI text-embedding-3-large size)
-  return Array.from({ length: 3072 }, () => Math.random());
 };
 
 // Run examples if executed directly

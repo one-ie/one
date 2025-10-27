@@ -70,7 +70,7 @@ Transform the mail UI into `src/pages/app/index.astro` - matching the exact Figm
 **Ontology Mapping:**
 ```
 Messages → Things     (all entities)
-Groups   → Org View   (organization-scoped)
+Groups   → Group View   (group-scoped)
 Agents   → AI Agents  (type: "agent")
 Tools    → Protocols  (integrations/services)
 People   → Users      (type: "user")

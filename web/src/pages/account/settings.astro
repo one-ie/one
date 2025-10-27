@@ -182,12 +182,8 @@ const user = Astro.locals.user;
 </Layout>
 
 <script>
-  import { ConvexHttpClient } from 'convex/browser';
-  import { api } from '@/lib/convex-api';
-
   const convexUrl =
     import.meta.env.PUBLIC_CONVEX_URL || import.meta.env.NEXT_PUBLIC_CONVEX_URL;
-  const client = new ConvexHttpClient(convexUrl);
 
   document.addEventListener('DOMContentLoaded', () => {
     // Profile form handler

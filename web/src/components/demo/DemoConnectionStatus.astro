@@ -1,0 +1,87 @@
+---
+/**
+ * DemoConnectionStatus - Connection Status Bar
+ *
+ * Shows real-time backend connection status at the top of demo pages
+ */
+
+import { Activity } from 'lucide-astro';
+---
+
+<div
+  id="connection-status-bar"
+  class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shadow-sm px-4 py-2"
+>
+  <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <Activity size={16} class="text-slate-400" />
+        <span id="status-label" class="text-sm text-slate-600 dark:text-slate-400">
+          Checking backend connection...
+        </span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 text-xs">
+      <span id="latency-display" class="text-slate-500 dark:text-slate-400">--</span>
+      <div id="status-indicator" class="w-2 h-2 rounded-full bg-slate-300 animate-pulse"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { getDemoApiClient } from '@/lib/demo-api';
+
+  async function checkConnection() {
+    const client = getDemoApiClient();
+    const statusLabel = document.getElementById('status-label');
+    const latencyDisplay = document.getElementById('latency-display');
+    const statusIndicator = document.getElementById('status-indicator');
+
+    if (!statusLabel || !latencyDisplay || !statusIndicator) return;
+
+    try {
+      const result = await client.checkHealth();
+
+      if (result.status === 'online') {
+        statusLabel.textContent = 'Backend connected';
+        statusLabel.classList.remove('text-slate-600', 'dark:text-slate-400');
+        statusLabel.classList.add('text-green-700', 'dark:text-green-300');
+
+        statusIndicator.classList.remove('bg-slate-300', 'animate-pulse', 'bg-red-500');
+        statusIndicator.classList.add('bg-green-500');
+
+        if (result.latency) {
+          latencyDisplay.textContent = `${result.latency}ms`;
+        }
+      } else {
+        statusLabel.textContent = 'Backend unavailable (standalone mode)';
+        statusLabel.classList.remove('text-slate-600', 'dark:text-slate-400');
+        statusLabel.classList.add('text-amber-700', 'dark:text-amber-300');
+
+        statusIndicator.classList.remove('bg-slate-300', 'animate-pulse', 'bg-green-500');
+        statusIndicator.classList.add('bg-amber-500');
+
+        latencyDisplay.textContent = '--';
+      }
+    } catch (error) {
+      statusLabel.textContent = 'Backend unavailable (standalone mode)';
+      statusLabel.classList.remove('text-slate-600', 'dark:text-slate-400');
+      statusLabel.classList.add('text-amber-700', 'dark:text-amber-300');
+
+      statusIndicator.classList.remove('bg-slate-300', 'animate-pulse', 'bg-green-500');
+      statusIndicator.classList.add('bg-amber-500');
+
+      latencyDisplay.textContent = '--';
+    }
+  }
+
+  // Check on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkConnection);
+  } else {
+    checkConnection();
+  }
+
+  // Re-check every 30 seconds
+  setInterval(checkConnection, 30000);
+</script>

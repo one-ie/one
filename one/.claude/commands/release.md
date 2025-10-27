@@ -25,6 +25,12 @@ This command **MUST** delegate to the `agent-ops` specialist agent, which has th
 - `/release major` - Breaking changes (3.3.5 → 4.0.0)
 - `/release sync` - Sync files without version bump
 
+## Deployment Targets
+
+- `/release patch main` - Deploy to one.ie (main site)
+- `/release patch demo` - Deploy to demo.one.ie (demo/starter)
+- `/release patch` - Deploy to both (default)
+
 ## Your Task
 
 **CRITICAL:** You MUST delegate this entire release to the `agent-ops` specialist by using the Task tool:
@@ -57,16 +63,21 @@ IMPORTANT: The CLOUDFLARE_GLOBAL_API_KEY is set in .env and provides FULL ACCESS
 4. If warnings only, continue
 
 ### Step 2: Version Bump & Sync (if not "sync")
-1. Run `./scripts/release.sh [patch|minor|major]`
+1. Run `./scripts/release.sh [patch|minor|major] [main|demo]`
 2. This will:
    - Bump version in cli/package.json
-   - Sync 518+ files to cli/ and apps/one/:
-     - `/one/*` → `cli/one/` and `apps/one/one/`
-     - `/.claude/*` → `cli/.claude/` and `apps/one/one/.claude/`
-     - `/web/*` → `apps/one/web/` (git subtree)
+   - Sync 518+ files based on target:
+     - **For main:** `/web` + `/one` + `/.claude` → `apps/oneie/`
+     - **For demo:** `/web` + `/one` + `/.claude` → `apps/one/`
+     - **For both:** Sync to both targets
+   - Files synced:
+     - `/one/*` → `cli/one/` and `apps/{target}/one/`
+     - `/.claude/*` → `cli/.claude/` and `apps/{target}/one/.claude/`
+     - `/web/*` → `apps/{target}/web/` (rsync)
      - `CLAUDE.md`, `README.md`, `LICENSE.md`, `SECURITY.md` → all targets
-     - `web/AGENTS.md` → `apps/one/one/AGENTS.md`
-   - **AUTOMATICALLY** commit and push apps/one/ to one-ie/one (no confirmation needed)
+     - `web/AGENTS.md` → `apps/{target}/one/AGENTS.md`
+   - Copy environment file (.env.main or .env.demo) to apps/{target}/web/.env.local
+   - **AUTOMATICALLY** commit and push to GitHub repos (no confirmation needed)
    - Show git status for review
 3. When prompted for cli/ "Commit and push?", answer 'y'
 4. When prompted "Create tag?", answer 'y'
@@ -80,30 +91,41 @@ IMPORTANT: The CLOUDFLARE_GLOBAL_API_KEY is set in .env and provides FULL ACCESS
 
 ### Step 4: Build & Deploy Web to Cloudflare
 
-**Automatic Mode (if CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are set):**
+**Multi-Site Architecture:**
+- **Main Site (oneie project):** https://one.ie - Full platform with backend
+- **Demo Site (one project):** https://demo.one.ie - Starter template (frontend-only)
+
+**Automatic Mode (if CLOUDFLARE_GLOBAL_API_KEY is set):**
 1. The release script automatically detects credentials
-2. Builds web with `cd web && bun run build`
-3. Deploys via `scripts/cloudflare-deploy.sh` using Cloudflare API
-4. Shows deployment status and URLs
-5. **Zero confirmation needed** - fully automated!
+2. Syncs web to apps/oneie/ or apps/one/ based on target
+3. Copies appropriate .env file (.env.main or .env.demo)
+4. Builds web with environment-specific config
+5. Deploys via Cloudflare API
+6. Shows deployment status and URLs
+7. **Zero confirmation needed** - fully automated!
 
 **Manual Mode (if credentials not set):**
-1. `cd web`
+1. `cd apps/oneie/web` (or `apps/one/web` for demo)
 2. Run `bun run build`
-3. When prompted "Deploy web to Cloudflare Pages via wrangler?", answer 'y'
-4. Script runs `wrangler pages deploy dist --project-name=web`
+3. When prompted "Deploy to Cloudflare Pages?", answer 'y'
+4. Script runs `wrangler pages deploy dist --project-name=oneie` (or `one`)
 5. Capture deployment URL and report to user
 
 **Standalone Deployment:**
 ```bash
-# Deploy directly via Cloudflare module
-scripts/cloudflare-deploy.sh deploy web web/dist production
+# Deploy main site
+scripts/cloudflare-deploy.sh deploy oneie apps/oneie/web/dist production
+
+# Deploy demo site
+scripts/cloudflare-deploy.sh deploy one apps/one/web/dist production
 
 # Check deployment status
-scripts/cloudflare-deploy.sh status web
+scripts/cloudflare-deploy.sh status oneie
+scripts/cloudflare-deploy.sh status one
 
 # List recent deployments
-scripts/cloudflare-deploy.sh list web 5
+scripts/cloudflare-deploy.sh list oneie 5
+scripts/cloudflare-deploy.sh list one 5
 ```
 
 ### Step 5: Verification

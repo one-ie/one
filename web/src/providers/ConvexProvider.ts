@@ -10,9 +10,9 @@
 
 import { Effect } from "effect";
 import type { ConvexReactClient } from "convex/react";
-import type { FunctionReference } from "convex/server";
 import type {
   DataProvider,
+  Group,
   Thing,
   Connection,
   Event,
@@ -20,12 +20,15 @@ import type {
   ThingKnowledge,
   CreateThingInput,
   UpdateThingInput,
+  CreateGroupInput,
+  UpdateGroupInput,
   CreateConnectionInput,
   CreateEventInput,
   CreateKnowledgeInput,
   ListThingsOptions,
   ListConnectionsOptions,
   ListEventsOptions,
+  ListGroupsOptions,
   SearchKnowledgeOptions,
   ThingNotFoundError,
   ThingCreateError,
@@ -34,6 +37,7 @@ import type {
   ConnectionCreateError,
   EventCreateError,
   KnowledgeNotFoundError,
+  GroupNotFoundError,
   QueryError,
 } from "./DataProvider";
 import { createBetterAuthProvider } from "./BetterAuthProvider";
@@ -94,6 +98,104 @@ export function createConvexProvider(config: ConvexProviderConfig): DataProvider
   }
 
   return {
+    // ===== GROUPS =====
+    groups: {
+      get: (id: string) =>
+        queryToEffect(
+          () =>
+            client.query("groups:get" as any, { id }).then((result) => {
+              if (!result) {
+                throw new Error(`Group not found: ${id}`);
+              }
+              return result as Group;
+            }),
+          (message) =>
+            ({
+              _tag: "GroupNotFoundError",
+              id,
+              message,
+            }) as GroupNotFoundError
+        ),
+
+      getBySlug: (slug: string) =>
+        queryToEffect(
+          () =>
+            client.query("groups:getBySlug" as any, { slug }).then((result) => {
+              if (!result) {
+                throw new Error(`Group not found: ${slug}`);
+              }
+              return result as Group;
+            }),
+          (message) =>
+            ({
+              _tag: "GroupNotFoundError",
+              id: slug,
+              message,
+            }) as GroupNotFoundError
+        ),
+
+      list: (options?: ListGroupsOptions) =>
+        queryToEffect(
+          () => client.query("groups:list" as any, options || {}).then((result) => result as Group[]),
+          (message, cause) =>
+            ({
+              _tag: "QueryError",
+              message,
+              cause,
+            }) as QueryError
+        ),
+
+      create: (input: CreateGroupInput) =>
+        mutationToEffect(
+          () =>
+            client.mutation("groups:create" as any, {
+              slug: input.slug,
+              name: input.name,
+              type: input.type,
+              parentGroupId: input.parentGroupId,
+              description: input.description,
+              metadata: input.metadata,
+              settings: input.settings,
+              status: "active",
+              createdAt: Date.now(),
+              updatedAt: Date.now(),
+            }),
+          (message, cause) =>
+            ({
+              _tag: "GroupCreateError",
+              message,
+              cause,
+            }) as any
+        ),
+
+      update: (id: string, input: UpdateGroupInput) =>
+        mutationToEffect(
+          () =>
+            client.mutation("groups:update" as any, {
+              id,
+              ...input,
+              updatedAt: Date.now(),
+            }),
+          (message, cause) =>
+            ({
+              _tag: "QueryError",
+              message,
+              cause,
+            }) as QueryError
+        ),
+
+      delete: (id: string) =>
+        mutationToEffect(
+          () => client.mutation("groups:delete" as any, { id }),
+          (message) =>
+            ({
+              _tag: "GroupNotFoundError",
+              id,
+              message,
+            }) as GroupNotFoundError
+        ),
+    },
+
     // ===== THINGS =====
     things: {
       get: (id: string) =>

@@ -87,7 +87,7 @@ describe("Auth - OAuth", () => {
         name: "OAuth Only User",
         providerId,
       });
-      logger.log(`OAuth user created (${typeof oauthResult.userId === "string" && oauthResult.userId.length > 4 ? oauthResult.userId.slice(0, 4) + '...' : 'ID'})`);
+      logger.log(`OAuth user created: ${oauthResult.userId}`);
 
       // Verify user exists and has session
       const user = await getCurrentUser(api, oauthResult.token);

@@ -17,5 +17,5 @@
     "jsx": "preserve",
     "jsxImportSource": "react"
   },
-  "exclude": ["node_modules", "dist", "test", "tests", "**/*.test.ts", "**/*.test.tsx", "src/templates"]
+  "exclude": ["node_modules", "dist", "test", "tests", "**/*.test.ts", "**/*.test.tsx", "src/templates", "src/lib/ontology/_archived", "src/pages/demo/_disabled"]
 }

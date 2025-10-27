@@ -1,0 +1,228 @@
+---
+// web/src/pages/demo/api.astro
+import Layout from '@/layouts/Layout.astro';
+import { ChevronLeft, BarChart3, Users, User, Package, Link, Search } from 'lucide-astro';
+---
+
+<Layout title="Demo - REST API Endpoints">
+  <main class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <a href="/demo" class="text-blue-600 hover:text-blue-700 text-sm font-medium mb-4 inline-flex items-center gap-1">
+        <ChevronLeft size={16} />
+        Back to Demo
+      </a>
+      <h1 class="text-4xl font-bold text-slate-900 mb-4">
+        REST API: 13 Endpoints
+      </h1>
+      <p class="text-xl text-slate-600 mb-6">
+        Complete REST API following the 6-dimension ontology structure
+      </p>
+
+      <!-- Overview -->
+      <div class="grid md:grid-cols-2 gap-6 mb-12">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <BarChart3 size={20} class="text-slate-900" />
+            <h3 class="font-bold text-slate-900">By Dimension</h3>
+          </div>
+          <div class="space-y-2 text-sm text-slate-600">
+            <p><span class="text-blue-600 font-semibold">✓</span> Groups: 4 endpoints</p>
+            <p><span class="text-purple-600 font-semibold">✓</span> People: 2 endpoints</p>
+            <p><span class="text-orange-600 font-semibold">✓</span> Things: 4 endpoints</p>
+            <p><span class="text-cyan-600 font-semibold">✓</span> Connections: 3 endpoints</p>
+            <p><span class="text-red-600 font-semibold">✓</span> Events: 2 endpoints</p>
+            <p><span class="text-yellow-600 font-semibold">✓</span> Knowledge: 1 endpoint</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <BarChart3 size={20} class="text-slate-900" />
+            <h3 class="font-bold text-slate-900">Response Format</h3>
+          </div>
+          <pre class="text-xs bg-slate-900 text-slate-100 p-3 rounded"><code>{`{
+  "success": true,
+  "data": {...},
+  "error": null,
+  "timestamp": 1729859223
+}`}</code></pre>
+        </div>
+      </div>
+
+      <!-- All Endpoints -->
+      <div class="space-y-4 mb-12">
+        <!-- Groups -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-600">
+          <div class="flex items-center gap-2 mb-4">
+            <Users size={20} class="text-blue-600" />
+            <h3 class="font-bold text-blue-600 text-lg">Groups (4 endpoints)</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/groups</div>
+              <p class="text-xs text-slate-600">List all groups</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">POST /api/groups</div>
+              <p class="text-xs text-slate-600">Create group</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/groups/[id]</div>
+              <p class="text-xs text-slate-600">Get single group</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-blue-600">PUT /api/groups/[id]</div>
+              <p class="text-xs text-slate-600">Update group</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- People -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-600">
+          <div class="flex items-center gap-2 mb-4">
+            <User size={20} class="text-purple-600" />
+            <h3 class="font-bold text-purple-600 text-lg">People (2 endpoints)</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/people/me</div>
+              <p class="text-xs text-slate-600">Get current user</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/people/[id]</div>
+              <p class="text-xs text-slate-600">Get specific user</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Things -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-orange-600">
+          <div class="flex items-center gap-2 mb-4">
+            <Package size={20} class="text-orange-600" />
+            <h3 class="font-bold text-orange-600 text-lg">Things (4 endpoints)</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/things</div>
+              <p class="text-xs text-slate-600">List things (with filters)</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">POST /api/things</div>
+              <p class="text-xs text-slate-600">Create thing</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/things/[id]</div>
+              <p class="text-xs text-slate-600">Get single thing</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-blue-600">PUT /api/things/[id]</div>
+              <p class="text-xs text-slate-600">Update thing</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connections -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-cyan-600">
+          <div class="flex items-center gap-2 mb-4">
+            <Link size={20} class="text-cyan-600" />
+            <h3 class="font-bold text-cyan-600 text-lg">Connections (3 endpoints)</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/connections</div>
+              <p class="text-xs text-slate-600">List connections</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">POST /api/connections</div>
+              <p class="text-xs text-slate-600">Create connection</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/connections/[id]</div>
+              <p class="text-xs text-slate-600">Get single connection</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Events -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-red-600">
+          <div class="flex items-center gap-2 mb-4">
+            <BarChart3 size={20} class="text-red-600" />
+            <h3 class="font-bold text-red-600 text-lg">Events (2 endpoints)</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/events</div>
+              <p class="text-xs text-slate-600">List events (audit log)</p>
+            </div>
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">POST /api/events</div>
+              <p class="text-xs text-slate-600">Record event</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Knowledge -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-yellow-600">
+          <div class="flex items-center gap-2 mb-4">
+            <Search size={20} class="text-yellow-600" />
+            <h3 class="font-bold text-yellow-600 text-lg">Knowledge (1 endpoint)</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="border rounded p-3 hover:bg-slate-50">
+              <div class="font-mono text-sm font-bold text-green-600">GET /api/knowledge/search</div>
+              <p class="text-xs text-slate-600">Search knowledge base</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Query Parameters -->
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">Query Parameters</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-bold text-slate-900 mb-3">Filtering</h3>
+            <pre class="text-xs bg-slate-900 text-slate-100 p-3 rounded"><code>{`?type=course
+?status=active
+?groupId=group_123
+?search=python`}</code></pre>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 mb-3">Pagination & Sorting</h3>
+            <pre class="text-xs bg-slate-900 text-slate-100 p-3 rounded"><code>{`?limit=10&offset=0
+?sort=name&order=asc
+?sort=createdAt&order=desc`}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Example Curl -->
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6">Curl Examples</h2>
+        <div class="space-y-4">
+          <div>
+            <p class="font-bold text-slate-900 mb-2">List groups:</p>
+            <pre class="bg-slate-900 text-slate-100 p-3 rounded text-xs"><code>curl http://localhost:4321/api/groups</code></pre>
+          </div>
+          <div>
+            <p class="font-bold text-slate-900 mb-2">List courses:</p>
+            <pre class="bg-slate-900 text-slate-100 p-3 rounded text-xs"><code>curl "http://localhost:4321/api/things?type=course"</code></pre>
+          </div>
+          <div>
+            <p class="font-bold text-slate-900 mb-2">Search knowledge:</p>
+            <pre class="bg-slate-900 text-slate-100 p-3 rounded text-xs"><code>curl "http://localhost:4321/api/knowledge/search?q=python"</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documentation -->
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-8 text-white text-center">
+        <h2 class="text-2xl font-bold mb-4">Need More Details?</h2>
+        <p class="mb-6">Check out the complete API documentation</p>
+        <a href="/web/src/pages/api/README.md" class="inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50">
+          View Full API Docs →
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

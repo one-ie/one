@@ -17,22 +17,28 @@ import {
   ConnectionCreateError,
   EventCreateError,
   KnowledgeNotFoundError,
+  GroupNotFoundError,
+  GroupCreateError,
   QueryError,
 } from "../DataProvider";
 import type {
   DataProvider,
+  Group,
   Thing,
   Connection,
   Event,
   Knowledge,
   CreateThingInput,
   UpdateThingInput,
+  CreateGroupInput,
+  UpdateGroupInput,
   CreateConnectionInput,
   CreateEventInput,
   CreateKnowledgeInput,
   ListThingsOptions,
   ListConnectionsOptions,
   ListEventsOptions,
+  ListGroupsOptions,
   SearchKnowledgeOptions,
   ThingKnowledge,
 } from "../DataProvider";
@@ -54,6 +60,100 @@ export const makeConvexProvider = (config: ConvexProviderConfig): DataProvider =
   const client = config.client || new ConvexHttpClient(config.url);
 
   return {
+    // ===== GROUPS =====
+    groups: {
+      get: (id: string) =>
+        Effect.tryPromise({
+          try: async () => {
+            const result = await client.query("queries/groups:get" as any, { id: id as Id<"groups"> });
+            if (!result) {
+              throw new GroupNotFoundError(id, `Group with id ${id} not found`);
+            }
+            return result as Group;
+          },
+          catch: (error) => {
+            if (error instanceof GroupNotFoundError) return error;
+            return new GroupNotFoundError(id, String(error));
+          },
+        }),
+
+      getBySlug: (slug: string) =>
+        Effect.tryPromise({
+          try: async () => {
+            const result = await client.query("queries/groups:getBySlug" as any, { slug });
+            if (!result) {
+              throw new GroupNotFoundError(slug, `Group with slug ${slug} not found`);
+            }
+            return result as Group;
+          },
+          catch: (error) => {
+            if (error instanceof GroupNotFoundError) return error;
+            return new GroupNotFoundError(slug, String(error));
+          },
+        }),
+
+      list: (options?: ListGroupsOptions) =>
+        Effect.tryPromise({
+          try: async () => {
+            const result = await client.query("queries/groups:list" as any, {
+              type: options?.type,
+              status: options?.status,
+              parentGroupId: options?.parentGroupId,
+              limit: options?.limit,
+            });
+            return result as Group[];
+          },
+          catch: (error) => new QueryError("Failed to list groups", error),
+        }),
+
+      create: (input: CreateGroupInput) =>
+        Effect.tryPromise({
+          try: async () => {
+            const now = Date.now();
+            const result = await client.mutation("mutations/groups:create" as any, {
+              slug: input.slug,
+              name: input.name,
+              type: input.type,
+              parentGroupId: input.parentGroupId,
+              description: input.description,
+              metadata: input.metadata,
+              settings: input.settings,
+              status: "active",
+              createdAt: now,
+              updatedAt: now,
+            });
+            return result as string;
+          },
+          catch: (error) => new GroupCreateError(String(error), error),
+        }),
+
+      update: (id: string, input: UpdateGroupInput) =>
+        Effect.tryPromise({
+          try: async () => {
+            await client.mutation("mutations/groups:update" as any, {
+              id: id as Id<"groups">,
+              name: input.name,
+              description: input.description,
+              metadata: input.metadata,
+              settings: input.settings,
+              status: input.status,
+              updatedAt: Date.now(),
+            });
+          },
+          catch: (error) => new QueryError(String(error), error),
+        }),
+
+      delete: (id: string) =>
+        Effect.tryPromise({
+          try: async () => {
+            await client.mutation("mutations/groups:delete" as any, {
+              id: id as Id<"groups">,
+            });
+          },
+          catch: (error) => new GroupNotFoundError(id, String(error)),
+        }),
+    },
+
     // ===== THINGS =====
     things: {
       get: (id: string) =>

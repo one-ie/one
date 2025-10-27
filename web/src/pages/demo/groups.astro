@@ -1,0 +1,374 @@
+---
+// web/src/pages/demo/groups.astro
+import DemoLayout from '@/layouts/DemoLayout.astro';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import {
+  Users,
+  Zap,
+  Target,
+  Building2,
+  Briefcase,
+  Coins,
+  Users2,
+  Trophy,
+  Package,
+  Share2,
+} from 'lucide-astro';
+import { GroupsDemo } from '@/components/demo/GroupsDemo';
+
+let groups: any[] = [];
+let isConnected = false;
+let errorMessage = '';
+
+try {
+  // Fetch groups from Convex HTTP API
+  const response = await fetch('https://veracious-marlin-319.convex.cloud/http/groups', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    groups = Array.isArray(result.data) ? result.data : [];
+    isConnected = true;
+  }
+} catch (e) {
+  errorMessage = e instanceof Error ? e.message : 'Failed to connect to backend';
+  console.error('Failed to fetch groups:', errorMessage);
+}
+
+const groupTypeDescriptions: Record<string, string> = {
+  friend_circle: 'Casual collaboration between friends',
+  business: 'Formal business entity',
+  community: 'Interest-based community or team',
+  dao: 'Decentralized autonomous organization',
+  government: 'Government or institutional body',
+  organization: 'Multi-tenant organizational container',
+};
+---
+
+<DemoLayout title="Groups: Multi-Tenant Isolation" description="Hierarchical containers for collaboration and data isolation" dimension="organizations">
+  <!-- Hero & Overview Section -->
+  <div class="mb-12">
+    <div class="grid lg:grid-cols-2 gap-8">
+      <!-- Explanation -->
+      <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-6">What are Groups?</h2>
+        <div class="space-y-4 text-slate-600 dark:text-slate-300">
+          <p class="text-lg">
+            <strong>Groups</strong> are the foundational containers in the ONE Platform. They represent organizations, teams, communities, or any hierarchical structure.
+          </p>
+          <div class="space-y-3">
+            <div class="flex gap-3">
+              <Target class="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+              <div>
+                <p class="font-semibold text-slate-900 dark:text-white">Multi-Tenant Isolation</p>
+                <p class="text-sm">All data (people, things, connections, events) is scoped to a group</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <Building2 class="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+              <div>
+                <p class="font-semibold text-slate-900 dark:text-white">Infinite Nesting</p>
+                <p class="text-sm">Groups can contain sub-groups (org → department → team → ...)</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <Briefcase class="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+              <div>
+                <p class="font-semibold text-slate-900 dark:text-white">Flexible Scale</p>
+                <p class="text-sm">From 2-person friend circles to billion-person governments</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <Coins class="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+              <div>
+                <p class="font-semibold text-slate-900 dark:text-white">Billing & Plans</p>
+                <p class="text-sm">Groups have plans (starter, pro, enterprise) with quotas</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6-Dimension Diagram -->
+      <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8">
+        <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Groups in the 6-Dimension Ontology</h3>
+        <div class="space-y-3">
+          <div class="relative pl-6 pb-4 border-l-2 border-blue-200">
+            <div class="absolute left-0 top-0 w-4 h-4 bg-blue-600 rounded-full transform -translate-x-2.5"></div>
+            <p class="text-sm font-semibold text-blue-600">Dimension 1: GROUPS</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Hierarchical containers (who belongs where)</p>
+          </div>
+          <div class="relative pl-6 pb-4 border-l-2 border-slate-200 dark:border-slate-700">
+            <div class="absolute left-0 top-0 w-4 h-4 bg-slate-400 rounded-full transform -translate-x-2.5"></div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Dimension 2: PEOPLE</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Authorization & roles (who can do what)</p>
+          </div>
+          <div class="relative pl-6 pb-4 border-l-2 border-slate-200 dark:border-slate-700">
+            <div class="absolute left-0 top-0 w-4 h-4 bg-slate-400 rounded-full transform -translate-x-2.5"></div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Dimension 3: THINGS</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Entities & objects (what exists)</p>
+          </div>
+          <div class="relative pl-6 pb-4 border-l-2 border-slate-200 dark:border-slate-700">
+            <div class="absolute left-0 top-0 w-4 h-4 bg-slate-400 rounded-full transform -translate-x-2.5"></div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Dimension 4: CONNECTIONS</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Relationships between entities</p>
+          </div>
+          <div class="relative pl-6 pb-4 border-l-2 border-slate-200 dark:border-slate-700">
+            <div class="absolute left-0 top-0 w-4 h-4 bg-slate-400 rounded-full transform -translate-x-2.5"></div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Dimension 5: EVENTS</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Audit trail & actions over time</p>
+          </div>
+          <div class="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
+            <div class="absolute left-0 top-0 w-4 h-4 bg-slate-400 rounded-full transform -translate-x-2.5"></div>
+            <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Dimension 6: KNOWLEDGE</p>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Labels, embeddings, semantic search</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 Group Types -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">The 6 Group Types</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {['friend_circle', 'business', 'community', 'dao', 'government', 'organization'].map((type: string) => {
+        const iconMap = {
+          friend_circle: Users,
+          business: Building2,
+          community: Users2,
+          dao: Zap,
+          government: Trophy,
+          organization: Building2,
+        };
+        const IconComponent = iconMap[type as keyof typeof iconMap] || Package;
+        const typeLabel = type.replace(/_/g, ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
+        return (
+          <Card>
+            <CardHeader>
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                  <IconComponent className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <CardTitle className="text-lg">{typeLabel}</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p class="text-sm text-slate-600 dark:text-slate-400">
+                {groupTypeDescriptions[type as keyof typeof groupTypeDescriptions]}
+              </p>
+            </CardContent>
+          </Card>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Interactive Playground -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">Interactive Groups Playground</h2>
+    {isConnected ? (
+      <GroupsDemo client:load initialGroups={groups} isStandaloneMode={false} groupId="demo" />
+    ) : (
+      <Card>
+        <CardContent className="p-8">
+          <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-600 dark:border-yellow-800 p-4">
+            <p class="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">Backend Connection Error</p>
+            <p class="text-yellow-800 dark:text-yellow-200 text-sm mb-3">
+              Unable to connect to the backend. This is expected in standalone mode. The playground will show demo data instead.
+            </p>
+            {errorMessage && (
+              <p class="text-yellow-800 dark:text-yellow-200 text-sm bg-yellow-100 dark:bg-yellow-900/50 p-2 rounded font-mono">
+                Error: {errorMessage}
+              </p>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    )}
+  </section>
+
+  <!-- Code Examples -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">React Hook Example</h2>
+    <Card>
+      <CardContent className="p-8">
+        <p class="text-slate-600 dark:text-slate-400 mb-4">
+          Use the <code class="bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded text-sm font-mono text-slate-900 dark:text-slate-100">useQuery</code> hook to fetch group data in React components:
+        </p>
+        <pre class="bg-slate-950 text-slate-50 p-6 rounded-lg overflow-x-auto mb-6"><code>{`import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+
+export function GroupDashboard({ groupId }) {
+  const group = useQuery(api.groups.get, { id: groupId });
+
+  if (group === undefined) {
+    return <div>Loading...</div>;
+  }
+
+  if (group === null) {
+    return <div>Group not found</div>;
+  }
+
+  return (
+    <div>
+      <h1>{group.name}</h1>
+      <p>Type: {group.type}</p>
+      <p>Plan: {group.settings?.plan || 'starter'}</p>
+
+      {group.parentGroupId && (
+        <p>Parent: {group.parentGroupId}</p>
+      )}
+
+      <p>Status: {group.status}</p>
+    </div>
+  );
+}`}</code></pre>
+      </CardContent>
+    </Card>
+  </section>
+
+  <!-- TypeScript Types -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">TypeScript Type Definitions</h2>
+    <Card>
+      <CardContent className="p-8">
+        <pre class="bg-slate-950 text-slate-50 p-6 rounded-lg overflow-x-auto"><code>{`interface Group {
+  _id: string;
+  name: string;
+  type: 'friend_circle' | 'business' | 'community' | 'dao' | 'government' | 'organization';
+  parentGroupId?: string;  // Link to parent for hierarchies
+  description?: string;
+  settings: {
+    visibility: 'public' | 'private';
+    joinPolicy: 'open' | 'invite_only' | 'approval_required';
+    plan?: 'starter' | 'pro' | 'enterprise';
+    limits?: {
+      users: number;
+      storage: number;
+      apiCalls: number;
+    };
+  };
+  status: 'active' | 'archived';
+  createdAt: number;
+  updatedAt: number;
+}
+
+// Creating a new group
+interface CreateGroupInput {
+  name: string;
+  type: GroupType;
+  parentGroupId?: string;
+  description?: string;
+  settings?: Partial<Group['settings']>;
+}
+
+// Updating a group
+interface UpdateGroupInput {
+  name?: string;
+  description?: string;
+  settings?: Partial<Group['settings']>;
+  status?: 'active' | 'archived';
+}`}</code></pre>
+      </CardContent>
+    </Card>
+  </section>
+
+  <!-- Key Concepts -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-8">Key Concepts</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Data Scoping</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p class="text-slate-600 dark:text-slate-400">
+            Every record in the platform (people, things, connections, events, knowledge) belongs to exactly one group. This ensures complete data isolation between organizations.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Hierarchical Access</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p class="text-slate-600 dark:text-slate-400">
+            Parent groups can optionally access child group data, but child groups cannot access parent data. This prevents information leaks while enabling proper governance.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Billing & Plans</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p class="text-slate-600 dark:text-slate-400">
+            Organizations have plans (starter, pro, enterprise) with different quotas for users, storage, and API calls. Billing is determined at the group level.
+          </p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Flexible Join Policies</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p class="text-slate-600 dark:text-slate-400">
+            Groups can be open (anyone can join), invite-only (members must be invited), or approval-required (pending members need approval).
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  </section>
+
+  <!-- Next Steps -->
+  <section>
+    <Card>
+      <CardContent className="p-8">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Ready to Explore the Next Dimension?</h2>
+        <p class="text-slate-600 dark:text-slate-400 mb-6">
+          You've learned about Groups (Dimension 1). Now explore the other dimensions:
+        </p>
+        <div class="grid md:grid-cols-3 gap-4">
+          <a href="/demo/people" class="group">
+            <div class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition">
+              <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-2">
+                <Users class="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <h3 class="font-semibold text-slate-900 dark:text-white">People</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-400">Authorization & roles</p>
+            </div>
+          </a>
+
+          <a href="/demo/things" class="group">
+            <div class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 transition">
+              <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-2">
+                <Package class="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+              <h3 class="font-semibold text-slate-900 dark:text-white">Things</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-400">Entities & objects</p>
+            </div>
+          </a>
+
+          <a href="/demo/connections" class="group">
+            <div class="p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition">
+              <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mb-2">
+                <Share2 class="w-6 h-6 text-orange-600 dark:text-orange-400" />
+              </div>
+              <h3 class="font-semibold text-slate-900 dark:text-white">Connections</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-400">Relationships</p>
+            </div>
+          </a>
+        </div>
+      </CardContent>
+    </Card>
+  </section>
+</DemoLayout>

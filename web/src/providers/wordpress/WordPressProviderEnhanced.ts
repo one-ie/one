@@ -17,15 +17,19 @@ import type {
   Connection,
   Event,
   Knowledge,
+  Group,
   ThingKnowledge,
   CreateThingInput,
   UpdateThingInput,
   CreateConnectionInput,
   CreateEventInput,
   CreateKnowledgeInput,
+  CreateGroupInput,
+  UpdateGroupInput,
   ListThingsOptions,
   ListConnectionsOptions,
   ListEventsOptions,
+  ListGroupsOptions,
   SearchKnowledgeOptions,
   DataProvider,
 } from "../DataProvider";
@@ -39,6 +43,8 @@ import {
   EventCreateError,
   QueryError,
   KnowledgeNotFoundError,
+  GroupNotFoundError,
+  GroupCreateError,
 } from "../DataProvider";
 
 // ============================================================================
@@ -396,6 +402,38 @@ export const makeWordPressProvider = (config: WordPressProviderConfig): DataProv
 
   return {
     auth: {} as any, // WordPress provider doesn't handle auth directly
+
+    // ===== GROUPS =====
+    groups: {
+      get: (id: string) =>
+        Effect.fail(
+          new GroupNotFoundError(id, "WordPress provider does not support groups")
+        ),
+
+      getBySlug: (slug: string) =>
+        Effect.fail(
+          new GroupNotFoundError(slug, "WordPress provider does not support groups")
+        ),
+
+      list: () =>
+        Effect.succeed([]),
+
+      create: () =>
+        Effect.fail(
+          new GroupCreateError("WordPress provider does not support creating groups")
+        ),
+
+      update: () =>
+        Effect.fail(
+          new GroupNotFoundError("", "WordPress provider does not support updating groups")
+        ),
+
+      delete: () =>
+        Effect.fail(
+          new GroupNotFoundError("", "WordPress provider does not support deleting groups")
+        ),
+    },
+
     // ===== THINGS =====
     things: {
       get: (id: string) =>

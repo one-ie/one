@@ -1,0 +1,200 @@
+---
+/**
+ * DemoLayout - Shared Layout for All Demo Pages
+ *
+ * Features:
+ * - Navigation breadcrumbs
+ * - Connection status bar
+ * - Sidebar with dimension links
+ * - Footer with CTA
+ * - Dark mode toggle
+ */
+
+import Layout from '@/layouts/Layout.astro';
+import { DEMO_NAVIGATION } from '@/config/demo';
+import DemoNav from '@/components/demo/DemoNav.astro';
+import DemoConnectionStatus from '@/components/demo/DemoConnectionStatus.astro';
+import DemoBreadcrumbs from '@/components/demo/DemoBreadcrumbs.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  breadcrumbs?: Array<{
+    label: string;
+    path?: string;
+    current?: boolean;
+  }>;
+  dimension?: string;
+}
+
+const {
+  title,
+  description,
+  breadcrumbs = [{ label: 'Demo', path: '/demo' }, { label: title, current: true }],
+  dimension,
+} = Astro.props;
+---
+
+<Layout title={`${title} - Demo`}>
+  <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <!-- Connection Status Bar -->
+    <DemoConnectionStatus />
+
+    <!-- Main Layout -->
+    <div class="flex flex-col lg:flex-row">
+      <!-- Sidebar Navigation -->
+      <aside class="w-full lg:w-64 border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm">
+        <div class="sticky top-0 p-6">
+          <nav class="space-y-2">
+            {DEMO_NAVIGATION.map((item) => (
+              <a
+                href={item.path}
+                class={`
+                  block px-4 py-2 rounded-lg transition-colors
+                  ${dimension === item.dimension || breadcrumbs.some((b) => b.label === item.title)
+                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-l-4 border-blue-500'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
+                }
+                `}
+              >
+                <div class="font-semibold text-sm">{item.title}</div>
+                <div class="text-xs opacity-75">{item.description}</div>
+              </a>
+            ))}
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1">
+        <!-- Breadcrumbs -->
+        <div class="border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 sticky top-0 z-10">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <DemoBreadcrumbs items={breadcrumbs} />
+          </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div class="mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">
+              {title}
+            </h1>
+            {description && (
+              <p class="text-lg text-slate-600 dark:text-slate-400">
+                {description}
+              </p>
+            )}
+          </div>
+
+          <!-- Slot for page content -->
+          <slot />
+        </div>
+
+        <!-- Footer -->
+        <footer class="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 mt-12">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+              <!-- Explore -->
+              <div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Explore</h3>
+                <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                  {DEMO_NAVIGATION.map((item) => (
+                    <li>
+                      <a href={item.path} class="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                        {item.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <!-- Learn -->
+              <div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Learn</h3>
+                <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                  <li>
+                    <a href="/one/knowledge/ontology.md" class="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                      6-Dimension Ontology
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/one/connections/workflow.md" class="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                      Development Workflow
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/one/connections/patterns.md" class="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                      Code Patterns
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Resources -->
+              <div>
+                <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Resources</h3>
+                <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                  <li>
+                    <a href="/demo/api" class="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                      API Documentation
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/one-ie" class="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                      GitHub
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://one.ie" class="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                      ONE Platform
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-8">
+              <h3 class="text-xl font-bold mb-2">Ready to Build?</h3>
+              <p class="text-blue-100 mb-4">
+                Use this demo foundation to create your own feature-rich applications.
+              </p>
+              <a
+                href="/demo"
+                class="inline-block bg-white text-blue-600 font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition"
+              >
+                Explore All Dimensions →
+              </a>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-slate-200 dark:border-slate-700 pt-8 text-center text-sm text-slate-600 dark:text-slate-400">
+              <p>
+                Part of the <a href="https://one.ie" class="text-blue-600 hover:underline">ONE Platform</a>
+                Demo Infrastructure
+              </p>
+              <p class="mt-2">
+                Built with Astro, React, TypeScript, and Effect.ts
+              </p>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <style>
+    /* Smooth transitions for sidebar highlighting */
+    a {
+      transition: all 0.2s ease-in-out;
+    }
+
+    /* Gradient background animation (subtle) */
+    :global(body) {
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: none; /* Disabled by default, can be enabled if desired */
+    }
+  </style>
+</Layout>

@@ -9,7 +9,6 @@
  */
 
 import { Effect, Context } from "effect";
-import type { Id } from "@/types/convex";
 
 // ============================================================================
 // ERROR TYPES
@@ -48,6 +47,16 @@ export class EventCreateError {
 export class KnowledgeNotFoundError {
   readonly _tag = "KnowledgeNotFoundError";
   constructor(readonly id: string, readonly message?: string) {}
+}
+
+export class GroupNotFoundError {
+  readonly _tag = "GroupNotFoundError";
+  constructor(readonly id: string, readonly message?: string) {}
+}
+
+export class GroupCreateError {
+  readonly _tag = "GroupCreateError";
+  constructor(readonly message: string, readonly cause?: unknown) {}
 }
 
 export class QueryError {
@@ -135,6 +144,8 @@ export type DataProviderError =
   | ConnectionCreateError
   | EventCreateError
   | KnowledgeNotFoundError
+  | GroupNotFoundError
+  | GroupCreateError
   | QueryError
   | AuthError;
 
@@ -144,12 +155,39 @@ export type DataProviderError =
 
 export type ThingStatus = "active" | "inactive" | "draft" | "published" | "archived";
 
+export type GroupType = "friend_circle" | "business" | "community" | "dao" | "government" | "organization";
+export type GroupStatus = "active" | "archived";
+
+export interface Group {
+  _id: string;
+  slug: string;
+  name: string;
+  type: GroupType;
+  parentGroupId?: string;
+  description?: string;
+  metadata?: Record<string, any>;
+  settings?: {
+    visibility?: "public" | "private";
+    joinPolicy?: "open" | "invite_only" | "approval_required";
+    plan?: "starter" | "pro" | "enterprise";
+    limits?: {
+      users?: number;
+      storage?: number;
+      apiCalls?: number;
+    };
+  };
+  status: GroupStatus;
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface Thing {
   _id: string;
   type: string;
   name: string;
   properties: Record<string, any>;
   status: ThingStatus;
+  groupId?: string;
   createdAt: number;
   updatedAt: number;
   deletedAt?: number;
@@ -197,6 +235,7 @@ export interface Connection {
   strength?: number;
   validFrom?: number;
   validTo?: number;
+  groupId?: string;
   createdAt: number;
   updatedAt?: number;
   deletedAt?: number;
@@ -208,6 +247,7 @@ export interface Event {
   actorId: string;
   targetId?: string;
   timestamp: number;
+  groupId?: string;
   metadata?: Record<string, any>;
 }
 
@@ -254,6 +294,7 @@ export interface CreateThingInput {
   name: string;
   properties: Record<string, any>;
   status?: ThingStatus;
+  groupId?: string;
 }
 
 export interface UpdateThingInput {
@@ -270,13 +311,34 @@ export interface CreateConnectionInput {
   strength?: number;
   validFrom?: number;
   validTo?: number;
+  groupId?: string;
 }
 
 export interface CreateEventInput {
   type: string;
   actorId: string;
   targetId?: string;
+  groupId?: string;
   metadata?: Record<string, any>;
+}
+
+export interface CreateGroupInput {
+  slug: string;
+  name: string;
+  type: GroupType;
+  parentGroupId?: string;
+  description?: string;
+  metadata?: Record<string, any>;
+  settings?: {
+    visibility?: "public" | "private";
+    joinPolicy?: "open" | "invite_only" | "approval_required";
+    plan?: "starter" | "pro" | "enterprise";
+    limits?: {
+      users?: number;
+      storage?: number;
+      apiCalls?: number;
+    };
+  };
 }
 
 export interface CreateKnowledgeInput {
@@ -296,9 +358,35 @@ export interface CreateKnowledgeInput {
 // QUERY OPTIONS
 // ============================================================================
 
+export interface ListGroupsOptions {
+  type?: GroupType;
+  status?: GroupStatus;
+  parentGroupId?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export interface UpdateGroupInput {
+  name?: string;
+  description?: string;
+  metadata?: Record<string, any>;
+  settings?: {
+    visibility?: "public" | "private";
+    joinPolicy?: "open" | "invite_only" | "approval_required";
+    plan?: "starter" | "pro" | "enterprise";
+    limits?: {
+      users?: number;
+      storage?: number;
+      apiCalls?: number;
+    };
+  };
+  status?: GroupStatus;
+}
+
 export interface ListThingsOptions {
   type?: string;
   status?: ThingStatus;
+  groupId?: string;
   limit?: number;
   offset?: number;
 }
@@ -398,6 +486,16 @@ export interface Disable2FAArgs {
 // ============================================================================
 
 export interface DataProvider {
+  // ===== GROUPS =====
+  groups: {
+    get: (id: string) => Effect.Effect<Group, GroupNotFoundError>;
+    getBySlug: (slug: string) => Effect.Effect<Group, GroupNotFoundError>;
+    list: (options?: ListGroupsOptions) => Effect.Effect<Group[], QueryError>;
+    create: (input: CreateGroupInput) => Effect.Effect<string, GroupCreateError>;
+    update: (id: string, input: UpdateGroupInput) => Effect.Effect<void, DataProviderError>;
+    delete: (id: string) => Effect.Effect<void, GroupNotFoundError>;
+  };
+
   // ===== THINGS =====
   things: {
     get: (id: string) => Effect.Effect<Thing, ThingNotFoundError>;

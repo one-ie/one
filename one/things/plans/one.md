@@ -82,15 +82,16 @@ Non-technical founders and creators are locked out. Developers spend weeks on bo
 
 ## The Solution
 
-ONE provides a complete operating system for AI businesses built on five simple primitives:
+ONE provides a complete operating system for AI businesses built on six dimensions that model reality:
 
-1. **People** - Set intent, govern outcomes, authorize actions (humans stay in command)
-2. **Things** - Every entity (agents, products, audiences, tokens) - 66 types out of the box
-3. **Connections** - Express relationships (ownership, memberships, revenue flows)
-4. **Events** - Chronicle every action (launches, interactions, transactions, insights)
-5. **Knowledge** - Store semantics (labels, chunks, embeddings that make agents intelligent)
+1. **Groups** - Multi-tenant isolation with hierarchical nesting (friend circles → businesses → DAOs → governments)
+2. **People** - Set intent, govern outcomes, authorize actions (humans stay in command)
+3. **Things** - Every entity (agents, products, audiences, tokens) - 66 types out of the box
+4. **Connections** - Express relationships (ownership, memberships, revenue flows) - 25 types
+5. **Events** - Chronicle every action (launches, interactions, transactions, insights) - 67 types
+6. **Knowledge** - Store semantics (labels, chunks, embeddings that make agents intelligent)
 
-Everything you build maps to these five tables, creating a unified ontology that makes AI agents intelligent, features composable, and your business scalable.
+Everything you build maps to these six dimensions, creating a unified ontology that makes AI agents intelligent, features composable, and your business infinitely scalable.
 
 ---
 

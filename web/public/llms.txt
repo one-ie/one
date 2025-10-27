@@ -1,0 +1,97 @@
+# ONE Platform
+
+> A multi-tenant AI-native platform built on a 6-dimension ontology that models reality through: Groups, People, Things, Connections, Events, and Knowledge.
+
+ONE Platform is a complete web framework combining Astro 5, React 19, Tailwind v4, and Convex backend with a universal 6-dimension ontology. Simple enough for children, powerful enough for enterprises.
+
+## Core Documentation
+
+- [6-Dimension Ontology](/one/knowledge/ontology.md): Universal data model specification (Version 1.0.0)
+- [Architecture Overview](/one/knowledge/architecture.md): Platform architecture and technology stack
+- [Development Workflow](/one/connections/workflow.md): 6-phase development process for any feature
+- [Golden Rules](/one/knowledge/rules.md): Critical rules for AI agents and developers
+- [Quick Reference](/AGENTS.md): Convex patterns and development shortcuts
+
+## Getting Started
+
+- [README](/README.md): Platform overview and quick start guide
+- [Installation Guide](/one/knowledge/installation.md): How to install and initialize ONE Platform
+- [First Feature](/one/knowledge/first-feature.md): Build your first feature in 5 minutes
+
+## The 6 Dimensions
+
+- [Groups](/one/knowledge/groups.md): Hierarchical containers (friend circles to governments)
+- [People](/one/knowledge/people.md): Authorization and governance (4 roles)
+- [Things](/one/knowledge/things.md): All entities (66+ types with flexible properties)
+- [Connections](/one/knowledge/connections.md): Relationships between entities (25+ types)
+- [Events](/one/knowledge/events.md): Actions and state changes (67+ event types)
+- [Knowledge](/one/knowledge/knowledge.md): Embeddings and semantic search (RAG)
+
+## Protocols & Integrations
+
+- [Protocol Overview](/one/connections/protocols.md): A2A, ACP, AP2, X402, AG-UI specifications
+- [Agent-to-Agent (A2A)](/one/connections/a2a.md): Inter-agent communication protocol
+- [Agent Communication Protocol (ACP)](/one/connections/acp.md): Structured agent messaging
+- [ElizaOS Integration](/one/things/eliza.md): Autonomous AI agents framework
+- [CopilotKit Integration](/one/things/copilotkit.md): Conversational UI components
+- [Blockchain Support](/one/connections/cryptonetworks.md): Multi-chain integration
+
+## Backend Development
+
+- [Schema Design](/backend/convex/schema.ts): 5-table implementation of 6 dimensions
+- [Queries Pattern](/one/connections/patterns.md): Read operations best practices
+- [Mutations Pattern](/one/connections/patterns.md): Write operations with event logging
+- [Effect.ts Services](/one/knowledge/effect.md): Pure business logic layer
+- [Better Auth Setup](/backend/convex/auth.ts): Multi-method authentication
+
+## Frontend Development
+
+- [Astro 5 Patterns](/one/knowledge/astro.md): SSR and island architecture
+- [React 19 Components](/one/knowledge/react.md): Component patterns with Convex hooks
+- [Tailwind v4 Styling](/one/knowledge/tailwind.md): CSS-based configuration guide
+- [shadcn/ui Components](/one/knowledge/shadcn.md): 50+ accessible components
+- [TypeScript Patterns](/one/knowledge/typescript.md): Strict mode best practices
+
+## Testing & Quality
+
+- [Testing Strategy](/one/knowledge/testing.md): Unit, integration, and E2E tests
+- [Authentication Tests](/web/test/auth): 50+ test cases for 6 auth methods
+- [Type Safety](/one/knowledge/types.md): Convex type generation workflow
+
+## Deployment
+
+- [Automated Release](/one/events/release.md): /release command (v3.0.0+)
+- [Cloudflare Pages](/one/knowledge/cloudflare.md): Frontend deployment guide
+- [Convex Cloud](/one/knowledge/convex-deploy.md): Backend deployment
+- [Environment Variables](/one/knowledge/environment.md): Configuration reference
+
+## Examples & Templates
+
+- [Lemonade Stand](/one/things/examples/lemonade-stand.md): Friend circle example
+- [Enterprise CRM](/one/things/examples/enterprise-crm.md): Organization example
+- [DAO Governance](/one/things/examples/dao.md): Decentralized community example
+
+## AI Agents
+
+- [Agent Director](/one/things/agent-director.md): Feature orchestration and validation
+- [Agent Backend](/one/things/agent-backend.md): Convex schema and service specialist
+- [Agent Frontend](/one/things/agent-frontend.md): Astro + React UI specialist
+- [Agent Ops](/one/things/agent-ops.md): Deployment and release automation
+- [Agent Quality](/one/things/agent-quality.md): Testing and validation specialist
+
+## Inference-Based Planning
+
+- [100-Inference Template](/one/knowledge/todo.md): How we plan features (not in days)
+- [Inference Workflow](/one/knowledge/inference-planning.md): Context-light execution
+- [Commands](/one/knowledge/commands.md): /now, /next, /todo, /done, /build, /deploy
+
+## Optional
+
+- [Revenue Model](/one/people/revenue.md): Freemium pricing strategy
+- [Organization Structure](/one/people/organization.md): Team and governance
+- [Roadmap](/one/things/plans/roadmap.md): Future enhancements
+- [Technical Debt](/one/things/plans/technical-debt.md): Known issues and plans
+- [Security Policy](/SECURITY.md): Vulnerability reporting
+- [License](/LICENSE.md): MIT License
+- [Contributing](/one/knowledge/contributing.md): How to contribute
+- [Changelog](/one/events/changelog.md): Release history

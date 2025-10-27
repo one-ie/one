@@ -4,8 +4,6 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import cloudflare from '@astrojs/cloudflare';
 import node from '@astrojs/node';
-import fs from 'fs-extra';
-import path from 'path';
 
 // Use Node adapter for local dev (avoids miniflare EPIPE issues with Node 20.11.0)
 // Use Cloudflare adapter for production builds

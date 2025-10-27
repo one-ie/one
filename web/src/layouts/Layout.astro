@@ -1,10 +1,13 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import { Sidebar } from '@/components/Sidebar';
 import { MinimalSidebar } from '@/components/MinimalSidebar';
 import { Toaster } from '@/components/ui/sonner';
 import { GlobalCartDrawer } from '@/components/ecommerce/GlobalCartDrawer';
+import { TransitionController } from '@/components/TransitionController';
 import ThemeInit from '@/components/ThemeInit.astro';
 import '../styles/global.css';
+import '../styles/transitions.css';
 
 interface Props {
   title: string;
@@ -39,6 +42,7 @@ const orgWebsite = import.meta.env.ORG_WEBSITE || "https://one.ie";
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    <ViewTransitions />
 
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
@@ -101,6 +105,9 @@ const orgWebsite = import.meta.env.ORG_WEBSITE || "https://one.ie";
     >
       Skip to main content
     </a>
+
+    <!-- Transition Controller for elegant page transitions -->
+    <TransitionController client:load />
 
     <!-- Always use Sidebar - it will decide what to render internally -->
     <Sidebar client:load>
