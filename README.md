@@ -1,5 +1,3 @@
-# ONE Platform v3.6.11
-
 # ONE
 
 ```

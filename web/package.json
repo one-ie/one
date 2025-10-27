@@ -1,11 +1,13 @@
 {
-  "name": "one",
+  "name": "oneie-starter",
   "type": "module",
   "version": "1.0.0",
   "packageManager": "bun@1.2.19",
   "scripts": {
     "dev": "astro dev",
-    "build": "bunx astro check && NODE_ENV=production bunx astro build",
+    "build": "NODE_ENV=production bunx astro build",
+    "build:starter": "./scripts/generate-starter.sh",
+    "check": "bunx astro check",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint src --ext .ts,.tsx,.astro",
@@ -18,8 +20,9 @@
     "stripe:setup": "bun run scripts/setup-stripe-products.ts",
     "stripe:list": "bun run scripts/list-stripe-products.ts",
     "stripe:fetch": "bun run scripts/fetch-stripe-product.ts",
-    "deploy": "../scripts/deploy-with-installation.sh",
-    "deploy:preview": "wrangler pages deploy dist --project-name=web --branch=preview",
+    "deploy": "bash -c 'source .wrangler-env && ../scripts/cloudflare-deploy.sh deploy web dist production'",
+    "deploy:preview": "bash -c 'source .wrangler-env && wrangler pages deploy dist --project-name=web --branch=preview'",
+    "deploy:wrangler": "bash -c 'source .wrangler-env && wrangler pages deploy dist --project-name=web'",
     "validate": "../scripts/validate-deployment.sh"
   },
   "dependencies": {

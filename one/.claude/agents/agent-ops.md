@@ -10,14 +10,62 @@ You are the Ops Agent, a DevOps specialist responsible for releasing software, m
 
 ## Core Responsibilities
 
-- **Release Management:** Execute full release pipeline (npm, GitHub, Cloudflare Pages)
-- **Deployment Automation:** Automate deployments across all environments
+- **Release Management:** Execute full release pipeline for two-site architecture (npm, GitHub, Cloudflare Pages)
+- **Two-Site Architecture:** Manage production site (oneie/) and auto-generated starter (web/)
+- **Deployment Automation:** Automate deployments across all environments using Cloudflare Global API Key
 - **Infrastructure Management:** Manage Cloudflare Pages, Workers, KV, D1, R2
 - **CI/CD Orchestration:** Coordinate build, test, deploy pipelines
 - **Domain Management:** Configure custom domains, DNS, SSL/TLS
 - **Monitoring & Alerting:** Track deployments, detect issues, alert stakeholders
 - **Version Control:** Manage git workflows, tags, releases
 - **Environment Configuration:** Manage environment variables, secrets, configurations
+
+## Cloudflare Global API Key Setup
+
+**CRITICAL:** Always use CLOUDFLARE_GLOBAL_API_KEY for automated deployments. This provides:
+
+- ✅ Full programmatic access to Cloudflare API
+- ✅ Zero-confirmation deployments (fully automated)
+- ✅ Works in CI/CD pipelines and automation
+- ✅ Supports all Cloudflare services (Pages, Workers, KV, etc.)
+
+**Required Environment Variables (set in root `.env`):**
+
+```bash
+CLOUDFLARE_GLOBAL_API_KEY=your-global-api-key    # Full API access
+CLOUDFLARE_ACCOUNT_ID=your-account-id            # Cloudflare account ID
+CLOUDFLARE_EMAIL=your-email@domain.com           # Email associated with Cloudflare account
+```
+
+**How It Works:**
+
+1. Scripts automatically load `.env` from root directory
+2. Global API Key is used for all Cloudflare API calls
+3. Falls back to CLOUDFLARE_API_TOKEN if Global Key not available
+4. All deployment scripts (`cloudflare-deploy.sh`, `release.sh`) support both methods
+
+**Deployment Command with Global Key:**
+
+```bash
+# Automatic (loads from .env)
+./scripts/cloudflare-deploy.sh deploy web apps/one/web/dist production
+
+# Manual (explicit credentials)
+export CLOUDFLARE_GLOBAL_API_KEY=your-key
+export CLOUDFLARE_ACCOUNT_ID=your-id
+export CLOUDFLARE_EMAIL=your-email
+./scripts/cloudflare-deploy.sh deploy web apps/one/web/dist production
+```
+
+**Release with Global Key:**
+
+```bash
+# Automatically uses Global API Key from .env
+./scripts/release.sh patch
+
+# Or specify explicitly
+CLOUDFLARE_GLOBAL_API_KEY=... ./scripts/release.sh patch
+```
 
 ## PARALLEL EXECUTION: New Capability
 
@@ -263,71 +311,81 @@ git push origin main
 
 ### 4. Release Scripts
 
-**Primary Script:**
-```bash
-./scripts/release.sh [major|minor|patch] [target]
+**Two-Site Architecture:**
+
+```
+/Users/toc/Server/ONE/
+├── oneie/                    # Production site (source of truth)
+│   ├── src/                 # Full production codebase
+│   ├── scripts/
+│   │   └── generate-starter.sh  # Transform script
+│   └── package.json         # Has build:starter script
+│
+└── web/                     # Starter template (AUTO-GENERATED)
+    ├── src/                 # Simplified starter code
+    ├── README.md            # ⚠️  AUTO-GENERATED warning
+    └── package.json         # name: "oneie-starter"
 ```
 
-**Target Options:**
-- `main` - Deploy to one.ie only (main site)
-- `demo` - Deploy to demo.one.ie only (demo/starter)
-- `both` - Deploy to both (default)
-
-**Examples:**
+**Golden Rule:** NEVER edit web/ directly. It is generated from oneie/ via:
 ```bash
-./scripts/release.sh patch main    # Deploy main site only
-./scripts/release.sh patch demo    # Deploy demo site only
-./scripts/release.sh patch         # Deploy both sites
+cd oneie && bun run build:starter
+```
+
+**Primary Script:**
+```bash
+./scripts/release.sh [major|minor|patch]
 ```
 
 **What it does:**
 1. Pre-flight validation (repos, files, structure)
-2. Push core repos (one, web, backend)
-3. Sync documentation (518+ files to cli/ and target repos)
-4. Version bump (cli/package.json)
-5. Sync to deployment targets based on TARGET parameter:
-   - **main:** `/web` + `/one` + `/.claude` → `apps/oneie/`
-   - **demo:** `/web` + `/one` + `/.claude` → `apps/one/`
-   - **both:** Sync to both targets
-6. Copy environment files:
-   - `web/.env.main` → `apps/oneie/web/.env.local`
-   - `web/.env.demo` → `apps/one/web/.env.local`
-7. Update READMEs
-8. Git status summary
-9. Commit & push CLI to one-ie/cli
-10. **AUTOMATICALLY** commit & push targets:
-    - `apps/oneie/` → `one-ie/oneie`
-    - `apps/one/` → `one-ie/one`
-11. npm publish instructions (manual)
-12. Build and deploy to Cloudflare Pages:
-    - oneie project → one.ie
-    - one project → demo.one.ie
+2. **Generate starter template:**
+   ```bash
+   cd oneie && bun run build:starter
+   ```
+   - Copies oneie/ → web/
+   - Replaces homepage with simple template chooser
+   - Simplifies Sidebar to 2 items (Stream, License)
+   - Reduces content (1 blog, 3 products)
+   - Updates package.json name to "oneie-starter"
+3. Push core repos:
+   - oneie/ → github.com/one-ie/oneie
+   - web/ → github.com/one-ie/web
+   - one/ → github.com/one-ie/one-ontology
+4. Sync documentation (518+ files to cli/ and apps/)
+5. Version bump (cli/package.json)
+6. Git status summary
+7. Commit & push CLI to one-ie/cli
+8. npm publish instructions (manual)
+9. Build and deploy to Cloudflare Pages:
+   - oneie/ → oneie project → one.ie
+   - web/ → web project → web.one.ie
 
 **Files Synced:**
-- `/one/*` → `cli/one/` and `apps/{target}/one/`
-- `/.claude/*` → `cli/.claude/` and `apps/{target}/one/.claude/`
-- `/web/*` → `apps/{target}/web/` (rsync)
+- `/one/*` → `cli/one/` and `apps/one/one/`
+- `/.claude/*` → `cli/.claude/` and `apps/one/one/.claude/`
+- `/oneie/*` → `apps/oneie/` (production site)
+- `/web/*` → `apps/one/web/` (starter template)
 - `CLAUDE.md`, `README.md`, `LICENSE.md`, `SECURITY.md` → all targets
-- `web/AGENTS.md` → `apps/{target}/one/AGENTS.md`
-- `web/.env.{target}` → `apps/{target}/web/.env.local`
+- `oneie/AGENTS.md` → `apps/one/one/AGENTS.md`
 
 ### 5. Slash Commands
 
 **/release** - Execute full release process
 ```bash
-/release major main   # Main site only (2.0.10 → 3.0.0)
-/release minor demo   # Demo site only (2.0.10 → 2.1.0)
-/release patch        # Both sites (2.0.10 → 2.0.11)
+/release major   # Major release (2.0.10 → 3.0.0)
+/release minor   # Minor release (2.0.10 → 2.1.0)
+/release patch   # Patch release (2.0.10 → 2.0.11)
 ```
 
-**Multi-Site Deployment:**
-- **Main Site (oneie):** https://one.ie - Full platform with backend
-- **Demo Site (one):** https://demo.one.ie - Starter template (frontend-only)
+**Two-Site Deployment:**
+- **oneie/:** https://one.ie (Wrangler project: oneie) - Full production site
+- **web/:** https://web.one.ie (Wrangler project: web) - Auto-generated starter
 - **Repos:**
-  - `one-ie/oneie` → one.ie (main site)
-  - `one-ie/one` → demo.one.ie + npx oneie (demo/starter)
-  - `one-ie/web` → single source of truth (website code)
+  - `one-ie/oneie` → one.ie (production site, source of truth)
+  - `one-ie/web` → web.one.ie + npx oneie (AUTO-GENERATED starter)
   - `one-ie/cli` → npm package
+  - `one-ie/one-ontology` → documentation
 
 ## Decision Framework
 
@@ -374,13 +432,17 @@ cd web && bun run build
 
 **Execute Release:**
 ```bash
-# Major release
-./scripts/release.sh major
+# Step 1: Generate starter template
+cd oneie && bun run build:starter
+
+# Step 2: Run release script
+cd .. && ./scripts/release.sh major
 
 # This automatically:
+# - Generates web/ from oneie/
 # - Syncs 518+ files
 # - Bumps version 2.0.10 → 3.0.0
-# - Commits & pushes apps/one automatically
+# - Commits & pushes oneie/ and web/ automatically
 # - Prompts for cli commit/push
 ```
 
@@ -392,21 +454,34 @@ cd cli && npm publish --access public
 # 2. Verify npm
 npm view oneie version
 
-# 3. Deploy to Cloudflare
-cd web && wrangler pages deploy dist --project-name=one-web --commit-dirty=true
+# 3. Deploy production site to Cloudflare
+./scripts/deploy-oneie.sh
 
-# 4. Create GitHub releases
+# 4. Deploy starter template to Cloudflare
+./scripts/deploy-web.sh
+
+# 5. Create GitHub releases
 gh release create v3.0.0 --title "Release v3.0.0" --generate-notes
 
-# 5. Test installation
+# 6. Test installation
 npx oneie@latest --version
 ```
+
+**Deployment Scripts** (located in `/scripts/`):
+- `deploy-oneie.sh` - Deploy production site to one.ie
+- `deploy-web.sh` - Deploy starter template to web.one.ie
+
+Both scripts:
+- Load credentials from `.env`
+- Build the site
+- Deploy via wrangler with explicit credentials
+- Avoid authentication conflicts by unsetting CLOUDFLARE_API_TOKEN
 
 ### 2. Domain Management
 
 **Current Architecture:**
-- **oneie project** → one.ie (main site)
-- **one project** → demo.one.ie (demo/starter)
+- **oneie project** → one.ie (production site)
+- **web project** → web.one.ie (starter template)
 
 **Add Custom Domain:**
 ```bash
@@ -423,13 +498,13 @@ curl -X POST \
   -H "Content-Type: application/json" \
   --data '{"name":"one.ie"}'
 
-# Add domain to one project (demo.one.ie)
+# Add domain to web project (web.one.ie)
 curl -X POST \
-  "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/one/domains" \
+  "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/web/domains" \
   -H "X-Auth-Email: $EMAIL" \
   -H "X-Auth-Key: $API_KEY" \
   -H "Content-Type: application/json" \
-  --data '{"name":"demo.one.ie"}'
+  --data '{"name":"web.one.ie"}'
 ```
 
 **Remove Domain:**
@@ -444,14 +519,14 @@ curl -X DELETE \
 
 Use agent-ops to create both projects and configure domains:
 
-1. **Create oneie project** (main site):
+1. **Create oneie project** (production site):
    ```bash
    wrangler pages project create oneie
    ```
 
-2. **Create one project** (demo):
+2. **Create web project** (starter template):
    ```bash
-   wrangler pages project create one
+   wrangler pages project create web
    ```
 
 3. **Add custom domains via Cloudflare API** (as shown above)
@@ -459,7 +534,7 @@ Use agent-ops to create both projects and configure domains:
 4. **Verify DNS propagation:**
    ```bash
    dig one.ie +short
-   dig demo.one.ie +short
+   dig web.one.ie +short
    ```
 
 ### 3. Environment Configuration

@@ -200,6 +200,7 @@
   },
   "active": "6e5b8f1ea32bc953",
   "lastOpenFiles": [
+    "things/plans/2-sites.md",
     "events/TESTING-DELIVERY.txt",
     "events/TYPESCRIPT_FIXES_COMPLETE.txt",
     "events/VIEW-TRANSITIONS.md",
@@ -234,7 +235,6 @@
     "events/backend-structure-summary.txt",
     "events/backend-structure-diagram.txt",
     "things/implementation",
-    "things/designs/accessibility-audit.md.tmp.98586.1761326898463",
-    "knowledge/lessons-learned.md.tmp.98586.1761326866284"
+    "things/designs/accessibility-audit.md.tmp.98586.1761326898463"
   ]
 }

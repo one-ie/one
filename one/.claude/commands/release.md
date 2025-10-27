@@ -18,18 +18,30 @@ This command **MUST** delegate to the `agent-ops` specialist agent, which has th
 6. Cloudflare deployments (using CLOUDFLARE_GLOBAL_API_KEY)
 7. Verification and reporting
 
+## Two-Site Architecture
+
+**CRITICAL:** ONE Platform uses a two-site architecture:
+
+- **oneie/** - Production site (source of truth) deployed to https://one.ie
+- **web/** - Starter template (AUTO-GENERATED) distributed via `npx oneie`
+
+**Golden Rule:** NEVER edit web/ directly. It is generated from oneie/ via transform script.
+
+**Workflow:**
+```
+oneie/ (edit here)
+   ↓
+   bun run build:starter (generates)
+   ↓
+web/ (never edit)
+```
+
 ## Release Types
 
 - `/release patch` - Bug fixes (3.3.5 → 3.3.6)
 - `/release minor` - New features (3.3.5 → 3.4.0)
 - `/release major` - Breaking changes (3.3.5 → 4.0.0)
 - `/release sync` - Sync files without version bump
-
-## Deployment Targets
-
-- `/release patch main` - Deploy to one.ie (main site)
-- `/release patch demo` - Deploy to demo.one.ie (demo/starter)
-- `/release patch` - Deploy to both (default)
 
 ## Your Task
 
@@ -62,93 +74,123 @@ IMPORTANT: The CLOUDFLARE_GLOBAL_API_KEY is set in .env and provides FULL ACCESS
 3. If errors found, report to user and STOP
 4. If warnings only, continue
 
-### Step 2: Version Bump & Sync (if not "sync")
-1. Run `./scripts/release.sh [patch|minor|major] [main|demo]`
+### Step 2: Generate Starter Template
+1. Generate web/ from oneie/ source:
+   ```bash
+   cd oneie
+   bun run build:starter
+   ```
+2. This runs `scripts/generate-starter.sh` which:
+   - Copies all files from oneie/ to web/
+   - Replaces homepage with simple 3-option template chooser
+   - Simplifies Sidebar.tsx to 2 navigation items (Stream, License)
+   - Reduces blog content to 1 example post
+   - Reduces products to 3 examples
+   - Updates package.json name to "oneie-starter"
+   - Creates AUTO-GENERATED warning in README.md
+3. Commit generated web/ changes
+
+### Step 3: Version Bump & Sync
+1. Run `./scripts/release.sh [patch|minor|major]`
 2. This will:
    - Bump version in cli/package.json
-   - Sync 518+ files based on target:
-     - **For main:** `/web` + `/one` + `/.claude` → `apps/oneie/`
-     - **For demo:** `/web` + `/one` + `/.claude` → `apps/one/`
-     - **For both:** Sync to both targets
-   - Files synced:
-     - `/one/*` → `cli/one/` and `apps/{target}/one/`
-     - `/.claude/*` → `cli/.claude/` and `apps/{target}/one/.claude/`
-     - `/web/*` → `apps/{target}/web/` (rsync)
+   - Sync 518+ files to distribution repos:
+     - `/one/*` → `cli/one/` and `apps/one/one/`
+     - `/.claude/*` → `cli/.claude/` and `apps/one/one/.claude/`
+     - `/oneie/*` → `apps/oneie/` (production site)
+     - `/web/*` → `apps/one/web/` (starter template)
      - `CLAUDE.md`, `README.md`, `LICENSE.md`, `SECURITY.md` → all targets
-     - `web/AGENTS.md` → `apps/{target}/one/AGENTS.md`
-   - Copy environment file (.env.main or .env.demo) to apps/{target}/web/.env.local
-   - **AUTOMATICALLY** commit and push to GitHub repos (no confirmation needed)
+     - `oneie/AGENTS.md` → `apps/one/one/AGENTS.md`
+   - **AUTOMATICALLY** commit and push to GitHub repos:
+     - oneie/ → github.com/one-ie/oneie
+     - web/ → github.com/one-ie/web
    - Show git status for review
 3. When prompted for cli/ "Commit and push?", answer 'y'
 4. When prompted "Create tag?", answer 'y'
 
-### Step 3: npm Publish
+### Step 4: npm Publish
 1. `cd cli`
 2. Run `npm publish --access public`
 3. Wait for completion
 4. Verify: `npm view oneie version`
 5. Report new version to user
 
-### Step 4: Build & Deploy Web to Cloudflare
+### Step 5: Build & Deploy to Cloudflare
 
-**Multi-Site Architecture:**
-- **Main Site (oneie project):** https://one.ie - Full platform with backend
-- **Demo Site (one project):** https://demo.one.ie - Starter template (frontend-only)
+**Two-Site Architecture:**
+- **oneie/** → https://one.ie (Wrangler project: oneie) - Full production site
+- **web/** → https://web.one.ie (Wrangler project: web) - Starter template
+
+**Deployment Process:**
+
+1. **Deploy Production Site (oneie/):**
+   ```bash
+   cd oneie
+   bun run build
+   wrangler pages deploy dist --project-name=oneie
+   # Deployed to: https://one.ie
+   ```
+
+2. **Deploy Starter Template (web/):**
+   ```bash
+   cd web
+   bun run build
+   wrangler pages deploy dist --project-name=web
+   # Deployed to: https://web.one.ie
+   ```
 
 **Automatic Mode (if CLOUDFLARE_GLOBAL_API_KEY is set):**
-1. The release script automatically detects credentials
-2. Syncs web to apps/oneie/ or apps/one/ based on target
-3. Copies appropriate .env file (.env.main or .env.demo)
-4. Builds web with environment-specific config
-5. Deploys via Cloudflare API
-6. Shows deployment status and URLs
-7. **Zero confirmation needed** - fully automated!
-
-**Manual Mode (if credentials not set):**
-1. `cd apps/oneie/web` (or `apps/one/web` for demo)
-2. Run `bun run build`
-3. When prompted "Deploy to Cloudflare Pages?", answer 'y'
-4. Script runs `wrangler pages deploy dist --project-name=oneie` (or `one`)
-5. Capture deployment URL and report to user
+- Scripts automatically use global API key from `.env`
+- Deploys via Cloudflare API without confirmation
+- Shows deployment status and URLs
+- **Zero manual intervention needed**
 
 **Standalone Deployment:**
 ```bash
-# Deploy main site
-scripts/cloudflare-deploy.sh deploy oneie apps/oneie/web/dist production
+# Deploy production site (oneie)
+scripts/cloudflare-deploy.sh deploy oneie oneie/dist production
 
-# Deploy demo site
-scripts/cloudflare-deploy.sh deploy one apps/one/web/dist production
+# Deploy starter template (web)
+scripts/cloudflare-deploy.sh deploy web web/dist production
 
 # Check deployment status
 scripts/cloudflare-deploy.sh status oneie
-scripts/cloudflare-deploy.sh status one
+scripts/cloudflare-deploy.sh status web
 
 # List recent deployments
 scripts/cloudflare-deploy.sh list oneie 5
-scripts/cloudflare-deploy.sh list one 5
+scripts/cloudflare-deploy.sh list web 5
 ```
 
-### Step 5: Verification
+### Step 6: Verification
 1. Test npm package: `npx oneie@latest --version`
 2. Report all live URLs:
    - npm: https://www.npmjs.com/package/oneie
-   - Web: https://web.one.ie (or Cloudflare URL)
+   - Production Site: https://one.ie
+   - Starter Template: https://web.one.ie
+   - GitHub oneie: https://github.com/one-ie/oneie
+   - GitHub web: https://github.com/one-ie/web
    - GitHub CLI: https://github.com/one-ie/cli
-   - GitHub One: https://github.com/one-ie/one
 
-### Step 6: Summary Report
+### Step 7: Summary Report
 Provide a concise summary:
 ```
 ✅ Release v2.0.X Complete!
 
 📦 npm: oneie@2.0.X (live)
-🌐 Web: https://web.one.ie (deployed)
+🌐 Production: https://one.ie (deployed)
+🎁 Starter: https://web.one.ie (deployed)
 🏷️ GitHub: v2.0.X tagged
 ⏱️ Total time: ~X minutes
+
+Architecture:
+- oneie/ → one.ie (full production site)
+- web/ → web.one.ie (auto-generated starter)
 
 Next steps:
 - Create GitHub releases
 - Test installation: npx oneie@latest
+- Test starter template: npx oneie init my-project
 - Monitor for errors
 ```
 

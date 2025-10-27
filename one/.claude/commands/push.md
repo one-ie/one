@@ -2,10 +2,23 @@
 
 **Purpose:** Intelligently commit and push changes to all ONE Platform repositories with contextual commit messages.
 
+## Two-Site Architecture
+
+**CRITICAL:** ONE Platform uses a two-site architecture:
+
+- **oneie/** - Production site (source of truth) → `github.com/one-ie/oneie`
+- **web/** - Starter template (AUTO-GENERATED) → `github.com/one-ie/web`
+
+**Golden Rule:** NEVER edit web/ directly. It is generated from oneie/ via:
+```bash
+cd oneie && bun run build:starter
+```
+
 ## How It Works
 
-This command analyzes changes across the monorepo and pushes to the appropriate repositories:
-- `/web` → `github.com/one-ie/web`
+This command analyzes changes across the repositories and pushes to:
+- `/oneie` → `github.com/one-ie/oneie` (production site)
+- `/web` → `github.com/one-ie/web` (auto-generated starter)
 - `/cli` → `github.com/one-ie/cli`
 - `/one` → `github.com/one-ie/one-ontology`
 - `/apps/one` → `github.com/one-ie/one` (assembly repository)
@@ -19,7 +32,10 @@ When the user runs `/push`, you MUST:
 Run git status in each directory to understand what changed:
 
 ```bash
-# Check web changes
+# Check oneie changes (production site)
+cd oneie && git status --short
+
+# Check web changes (should be AUTO-GENERATED only)
 cd web && git status --short
 
 # Check cli changes
@@ -31,6 +47,8 @@ cd one && git status --short
 # Check one assembly changes
 cd apps/one && git status --short
 ```
+
+**IMPORTANT:** If web/ has changes, ensure oneie/ was developed first and `bun run build:starter` was run.
 
 ### Step 2: Generate Contextual Commit Messages
 
@@ -62,19 +80,40 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 For each repository with changes:
 
-**Web Repository:**
+**Production Site Repository (oneie):**
 ```bash
-cd web
+cd oneie
 git add .
 git commit -m "$(cat <<'EOF'
 <type>: <description>
 
-<detailed explanation of web-specific changes>
+<detailed explanation of production site changes>
 
 Changes:
 - Updated component X with Y
 - Fixed Z issue in page A
 - Added new feature B
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+EOF
+)"
+git push origin main
+```
+
+**Starter Template Repository (web - AUTO-GENERATED):**
+```bash
+cd web
+git add .
+git commit -m "$(cat <<'EOF'
+chore: regenerate starter template from oneie
+
+Auto-generated from oneie/ production site.
+
+⚠️ This repository is AUTO-GENERATED. Do not edit directly.
+
+Generated via: cd oneie && bun run build:starter
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -156,14 +195,18 @@ Analyze the actual file changes to craft meaningful messages:
 
 **Example Analysis:**
 ```bash
-# For web changes
-git diff --stat web/
+# For oneie changes (production site)
+git diff --stat oneie/
 
 # Look for patterns:
 # - src/pages/*.astro → "page updates"
 # - src/components/*.tsx → "component changes"
 # - src/styles/*.css → "styling updates"
 # - package.json → "dependency updates"
+# - scripts/generate-starter.sh → "transform script updates"
+
+# For web changes (should always be "regenerated from oneie")
+git diff --stat web/
 ```
 
 **Example Smart Messages:**
@@ -234,7 +277,10 @@ After pushing, provide a clear summary:
 ✅ Multi-Repository Push Complete!
 
 📦 Repositories Updated:
-- web: feat: add hierarchical group navigation
+- oneie: feat: add hierarchical group navigation (production site)
+  → https://github.com/one-ie/oneie/commit/<hash>
+
+- web: chore: regenerate starter template from oneie (AUTO-GENERATED)
   → https://github.com/one-ie/web/commit/<hash>
 
 - cli: fix: resolve TypeScript errors in init command
@@ -246,8 +292,12 @@ After pushing, provide a clear summary:
 - apps/one: chore: sync assembly repository
   → https://github.com/one-ie/one/commit/<hash>
 
-🔗 Total commits: 4
+🔗 Total commits: 5
 ⏱️ Time: ~30 seconds
+
+Architecture:
+- oneie/ → one.ie (source of truth)
+- web/ → web.one.ie (generated)
 
 Next Steps:
 - Monitor CI/CD pipelines
@@ -262,8 +312,11 @@ Next Steps:
 If only one repository has changes, only push that one:
 
 ```bash
+# User: /push oneie
+# → Only push production site repository
+
 # User: /push web
-# → Only push web repository
+# → Only push starter template (must be regenerated first!)
 
 # User: /push cli one
 # → Push both cli and one repositories
@@ -419,12 +472,20 @@ Would commit and push:
 ## Integration with /release
 
 The `/push` command is complementary to `/release`:
-- Use `/push` for regular development commits
+- Use `/push` for regular development commits (oneie/ → web/)
 - Use `/release` for versioned releases with deployment
 
+**Two-Site Workflow:**
 ```
-Development workflow:
-/push → /push → /push → /release patch → /push
+Development:
+1. Edit oneie/ (production site)
+2. Run: cd oneie && bun run build:starter
+3. Run: /push (commits both oneie/ and web/)
+
+Release:
+1. Complete development cycle
+2. Run: /release patch
+3. Deploys both sites to Cloudflare
 ```
 
 ---
