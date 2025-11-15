@@ -33,3 +33,8 @@
 /nine-padel/
 one/events/nine-padel/
 .claude/hooks.log
+
+# Exclude generated/state files
+**/__pycache__/
+**/*.pyc
+.claude/state/cycle.json
