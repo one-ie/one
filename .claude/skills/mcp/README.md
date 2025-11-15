@@ -2,7 +2,7 @@
 
 **Purpose:** On-demand access to MCP (Model Context Protocol) servers as Claude skills
 **Status:** Migration Complete
-**Token Savings:** ~14,500 tokens (97% reduction)
+**Token Savings:** ~16,500 tokens (97% reduction)
 
 ---
 
@@ -21,8 +21,9 @@ chrome-devtools:       2,000 tokens
 figma:                 2,500 tokens
 astro-docs:            1,500 tokens
 stripe:                2,500 tokens
+convex-backend:        2,000 tokens
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Total:                15,000 tokens (ALWAYS)
+Total:                17,000 tokens (ALWAYS)
 ```
 
 **After (On-Demand Skills):**
@@ -31,7 +32,7 @@ Default (no MCPs):         0 tokens
 Skill metadata:           50 tokens (when invoked)
 Skill instructions:      500 tokens (when used)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Savings:            ~14,500 tokens (97%)
+Savings:            ~16,500 tokens (97%)
 ```
 
 ---
@@ -110,11 +111,19 @@ Savings:            ~14,500 tokens (97%)
 ### Backend Agent Skills
 
 **Agent:** `agent-backend`
-**MCP Skills:** NONE
+**MCP Skills:** convex-backend
 
-**Total backend savings:** 0 tokens (no MCP context ever loaded)
+1. **[mcp:convex-backend](./convex-backend.md)**
+   - Query Convex deployment data
+   - Inspect schema and tables
+   - View function specifications
+   - Check execution logs
+   - Manage environment variables
+   - **Saves:** ~1,500 tokens
 
-This is exactly what you wanted - backend agents get ZERO MCP context pollution!
+**Total backend savings:** ~1,500 tokens when not querying Convex
+
+**Note:** Backend gets ONLY Convex-specific tooling - no generic MCPs!
 
 ---
 
@@ -276,7 +285,20 @@ Deployment monitored
 Skill context cleared
 ```
 
-### Backend Development
+### Backend Development (Query Data)
+```bash
+User: "Show me all published courses"
+  ↓
+agent-backend invoked
+  ↓
+mcp:convex-backend skill loaded (~550 tokens)
+  ↓
+Query executed against Convex
+  ↓
+Results returned
+```
+
+### Backend Development (Create Mutation)
 ```bash
 User: "Create a course enrollment mutation"
   ↓
@@ -286,7 +308,7 @@ NO MCP skills loaded (0 tokens)
   ↓
 Mutation created
   ↓
-Zero MCP context consumed
+Only Convex-specific MCP available (not generic MCPs)
 ```
 
 ---
@@ -302,11 +324,12 @@ Zero MCP context consumed
 - [x] Migrate chrome-devtools MCP → skill
 - [x] Migrate figma MCP → skill
 - [x] Migrate cloudflare-docs MCP → skill
+- [x] Migrate convex-backend MCP → skill
+- [x] Update agent frontmatter with skill assignments
 - [x] Create MCP skills README
 - [x] Document token savings
 
 ### Next Steps
-- [ ] Update agent frontmatter with skill assignments
 - [ ] Update INDEX.md and REGISTRY.md
 - [ ] Test agent-specific skill loading
 - [ ] Document in CLAUDE.md
@@ -328,7 +351,7 @@ Zero MCP context consumed
   ]
 }
 ```
-**Token cost:** ~15,000 tokens always
+**Token cost:** ~17,000 tokens always
 
 ### New Way (On-Demand Skills)
 ```yaml

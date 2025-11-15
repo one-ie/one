@@ -2,6 +2,7 @@
 name: agent-backend
 description: Use proactively when implementing Convex backend features including schema design, mutations, queries, services, event logging, and multi-tenant organization scoping for the 6-dimension ontology.
 tools: Read, Write, Edit, Bash, Grep, Glob
+skills: mcp:convex-backend
 model: inherit
 color: red
 ---
