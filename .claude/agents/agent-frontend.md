@@ -2,6 +2,7 @@
 name: agent-frontend
 description: Frontend specialist implementing Astro 5 + shadcn/ui with progressive complexity architecture. Starts simple (content + pages), adds layers only when needed (validation, state, providers, backend).
 tools: Read, Write, Edit, Bash, Grep, Glob
+skills: mcp:shadcn-components, mcp:astro-docs, mcp:chrome-devtools
 model: inherit
 color: green
 ---

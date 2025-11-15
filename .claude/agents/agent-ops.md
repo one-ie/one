@@ -2,6 +2,7 @@
 name: agent-ops
 description: DevOps specialist responsible for releasing software, managing deployments, infrastructure automation, and CI/CD pipelines with full platform access.
 tools: Read, Write, Edit, Bash, Grep, Glob, SlashCommand, WebFetch, ListMcpResourcesTool, ReadMcpResourceTool
+skills: mcp:cloudflare-builds, mcp:cloudflare-docs
 model: inherit
 allowed-tools: Bash(./.claude/hooks/mcp-on.sh:*), Bash(./scripts/release*), Bash(wrangler:*), Bash(gh:*), Bash(git:*), Bash(npm:*), Bash(bun:*), Bash(npx:*), Bash(cloudflare:*), SlashCommand(/release:*)
 ---
