@@ -32,9 +32,11 @@
 /one.ie/
 /nine-padel/
 one/events/nine-padel/
-.claude/hooks.log
 
 # Exclude generated/state files
 **/__pycache__/
 **/*.pyc
+.claude/hooks.log
+.claude/hooks/.last-news-context
 .claude/state/cycle.json
+one/events/0-changes.md
