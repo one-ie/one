@@ -1,0 +1,65 @@
+{
+  "name": "@oneie/sdk",
+  "version": "0.6.0",
+  "description": "ONE substrate SDK — signals, units, persist, launch handoff.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./urls": "./dist/urls.js",
+    "./storage": "./dist/storage.js",
+    "./handoff": "./dist/handoff.js",
+    "./launch": "./dist/launch.js",
+    "./client": "./dist/client.js",
+    "./telemetry": "./dist/telemetry.js",
+    "./schemas": {
+      "types": "./dist/schemas.d.ts",
+      "import": "./dist/schemas.js"
+    },
+    "./errors": {
+      "types": "./dist/errors.d.ts",
+      "import": "./dist/errors.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
+    "./testing": {
+      "types": "./dist/testing/index.d.ts",
+      "import": "./dist/testing/index.js"
+    }
+  },
+  "peerDependencies": {
+    "react": "^19"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "bun run build"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2"
+  },
+  "license": "SEE LICENSE IN https://one.ie/free-license",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/one-ie/envelopes.git",
+    "directory": "packages/sdk"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
+}

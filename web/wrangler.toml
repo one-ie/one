@@ -1,0 +1,21 @@
+# ONE Demo — Integrated claw + landing page
+name = "one-demo"
+main = "dist/server/entry.mjs"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "dist/client"
+
+[vars]
+AGENT_ID = "one-demo"
+AGENT_NAME = "ONE Demo"
+AGENT_MODEL = "meta-llama/llama-4-maverick"
+ONE_API_URL = "https://dev.one.ie"
+
+# Custom domain
+[[routes]]
+pattern = "demo.one.ie"
+custom_domain = true
+
+# Secrets: wrangler secret put OPENROUTER_API_KEY

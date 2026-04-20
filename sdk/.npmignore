@@ -1,0 +1,5 @@
+# Exclude test artifacts that slip into dist/ before tsconfig exclude takes effect
+dist/**/*.test.js
+dist/**/*.test.js.map
+dist/**/*.test.d.ts
+dist/**/*.test.d.ts.map

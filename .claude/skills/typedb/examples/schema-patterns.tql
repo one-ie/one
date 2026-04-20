@@ -1,0 +1,539 @@
+# TypeQL 3.0 Schema Patterns
+# Common schema design patterns for TypeDB 3.x
+
+# ============================================================================
+# BASIC ENTITY PATTERNS
+# ============================================================================
+
+# Simple entity with key
+define
+entity user,
+    owns user-id @key,
+    owns name @card(1),
+    owns email @unique;
+
+# Entity with multiple optional attributes
+define
+entity profile,
+    owns profile-id @key,
+    owns bio,
+    owns avatar-url,
+    owns location,
+    owns website;
+
+# Entity with constrained attributes
+define
+attribute age, value integer @range(0..150);
+attribute status, value string @values("active", "inactive", "suspended", "deleted");
+attribute priority, value integer @range(1..5);
+
+entity task,
+    owns task-id @key,
+    owns title @card(1),
+    owns description,
+    owns status @card(1),
+    owns priority @card(1);
+
+# ============================================================================
+# TYPE HIERARCHY PATTERNS
+# ============================================================================
+
+# Abstract base with concrete subtypes
+define
+entity content @abstract,
+    owns content-id @key,
+    owns created-at @card(1),
+    owns updated-at;
+
+entity article sub content,
+    owns title @card(1),
+    owns body @card(1),
+    owns word-count;
+
+entity video sub content,
+    owns title @card(1),
+    owns duration @card(1),
+    owns video-url @card(1),
+    owns thumbnail-url;
+
+entity image sub content,
+    owns caption,
+    owns image-url @card(1),
+    owns width,
+    owns height;
+
+# Deep hierarchy
+define
+entity organization @abstract,
+    owns org-id @key,
+    owns name @card(1);
+
+entity company sub organization,
+    owns industry,
+    owns revenue,
+    owns employee-count;
+
+entity nonprofit sub organization,
+    owns mission,
+    owns tax-exempt-status;
+
+entity startup sub company,
+    owns funding-stage,
+    owns valuation;
+
+# ============================================================================
+# RELATION PATTERNS
+# ============================================================================
+
+# Simple binary relation
+define
+relation friendship,
+    relates friend @card(2);
+
+user plays friendship:friend;
+
+# Directed binary relation
+define
+relation follows,
+    relates follower @card(1),
+    relates followee @card(1);
+
+user plays follows:follower;
+user plays follows:followee;
+
+# Ternary relation
+define
+relation employment,
+    relates employer @card(1),
+    relates employee @card(1),
+    relates position @card(1),
+    owns start-date @card(1),
+    owns end-date,
+    owns salary;
+
+entity company,
+    plays employment:employer;
+
+entity person,
+    plays employment:employee;
+
+entity job-title,
+    plays employment:position;
+
+# Self-referential relation
+define
+relation management,
+    relates manager @card(1),
+    relates report @card(1..);
+
+person plays management:manager;
+person plays management:report;
+
+# Relation with attributes
+define
+relation transaction,
+    relates buyer @card(1),
+    relates seller @card(1),
+    relates item @card(1..),
+    owns transaction-id @key,
+    owns amount @card(1),
+    owns currency @card(1),
+    owns timestamp @card(1),
+    owns status @card(1);
+
+# ============================================================================
+# ROLE SPECIALIZATION PATTERNS
+# ============================================================================
+
+# Basic role specialization
+define
+relation interaction @abstract,
+    relates subject,
+    relates object;
+
+relation comment sub interaction,
+    relates commenter as subject,
+    relates commented-on as object,
+    owns content @card(1),
+    owns posted-at @card(1);
+
+user plays comment:commenter;
+content plays comment:commented-on;
+
+# Nested role specialization
+define
+relation engagement @abstract,
+    relates engager,
+    relates engaged-content;
+
+relation reaction sub engagement,
+    relates reactor as engager,
+    relates reacted-to as engaged-content,
+    owns reaction-type @card(1);
+
+relation share sub engagement,
+    relates sharer as engager,
+    relates shared-content as engaged-content,
+    owns shared-at @card(1);
+
+# ============================================================================
+# CARDINALITY PATTERNS
+# ============================================================================
+
+# Single required attribute
+define
+entity document,
+    owns title @card(1);  # Exactly one title required
+
+# Single optional attribute
+define
+entity contact,
+    owns phone @card(0..1);  # Zero or one phone
+
+# Multiple required attributes
+define
+entity product,
+    owns tag @card(1..);  # At least one tag required
+
+# Multiple optional attributes
+define
+entity post,
+    owns hashtag @card(0..);  # Any number of hashtags
+
+# Exact count
+define
+relation match,
+    relates team @card(2);  # Exactly 2 teams
+
+# Range
+define
+relation group-chat,
+    relates participant @card(2..100);  # 2 to 100 participants
+
+# ============================================================================
+# CONSTRAINT PATTERNS
+# ============================================================================
+
+# Unique key
+define
+entity account,
+    owns email @key;  # Unique identifier
+
+# Unique non-key
+define
+entity citizen,
+    owns citizen-id @key,
+    owns ssn @unique;  # Unique but not the key
+
+# Composite key (subkey)
+define
+entity flight,
+    owns flight-number @subkey("route"),
+    owns departure-date @subkey("route"),
+    owns departure-airport,
+    owns arrival-airport;
+
+# Value constraints
+define
+attribute percentage, value double @range(0.0..100.0);
+attribute rating, value integer @range(1..5);
+attribute email-address, value string @regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+attribute phone-number, value string @regex("^\\+?[1-9]\\d{1,14}$");
+attribute url, value string @regex("^https?://.*");
+attribute status, value string @values("pending", "active", "completed", "cancelled");
+attribute currency-code, value string @values("USD", "EUR", "GBP", "JPY", "CNY");
+
+# ============================================================================
+# INDEPENDENT ATTRIBUTE PATTERNS
+# ============================================================================
+
+# Audit log (survives without owner)
+define
+attribute log-entry, value string @independent;
+
+# Event history
+define
+attribute event-data, value string @independent;
+attribute event-timestamp, value datetime-tz @independent;
+
+# ============================================================================
+# CASCADE DELETE PATTERNS
+# ============================================================================
+
+# Cascade on owner deletion
+define
+relation ownership,
+    relates owner @cascade,  # Delete relation when owner deleted
+    relates owned;
+
+entity folder,
+    plays ownership:owner;
+
+entity file,
+    plays ownership:owned;
+
+# ============================================================================
+# POLYMORPHIC PATTERNS
+# ============================================================================
+
+# Interface-like pattern with plays
+define
+attribute name, value string;
+attribute description, value string;
+
+entity named-entity @abstract,
+    owns name @card(1);
+
+entity described-entity @abstract,
+    owns description;
+
+# Concrete types can inherit multiple abstracts
+entity product sub named-entity,
+    owns description,
+    owns price @card(1);
+
+entity category sub named-entity,
+    owns description,
+    owns parent-category;
+
+# ============================================================================
+# GRAPH/NETWORK PATTERNS
+# ============================================================================
+
+# Generic node and edge
+define
+attribute node-id, value string;
+attribute weight, value double;
+
+entity node @abstract,
+    owns node-id @key;
+
+relation edge,
+    relates source @card(1),
+    relates target @card(1),
+    owns weight @card(0..1);
+
+node plays edge:source;
+node plays edge:target;
+
+# Specific node types
+entity concept sub node,
+    owns concept-name @card(1);
+
+entity topic sub node,
+    owns topic-name @card(1);
+
+# ============================================================================
+# TIME-SERIES PATTERNS
+# ============================================================================
+
+# Time-indexed data
+define
+attribute timestamp, value datetime-tz;
+attribute value, value double;
+
+entity metric,
+    owns metric-id @key,
+    owns metric-name @card(1);
+
+entity data-point,
+    owns data-point-id @key,
+    owns timestamp @card(1),
+    owns value @card(1);
+
+relation metric-data,
+    relates metric-ref @card(1),
+    relates point @card(1..);
+
+metric plays metric-data:metric-ref;
+data-point plays metric-data:point;
+
+# ============================================================================
+# EVENT SOURCING PATTERNS
+# ============================================================================
+
+# Event base type
+define
+entity event @abstract,
+    owns event-id @key,
+    owns event-type @card(1),
+    owns occurred-at @card(1),
+    owns payload;
+
+entity user-event sub event,
+    owns user-ref @card(1);
+
+entity system-event sub event,
+    owns service-name @card(1);
+
+# Aggregate pattern
+define
+relation aggregate-events,
+    relates aggregate @card(1),
+    relates event-record @card(0..);
+
+# ============================================================================
+# ACCESS CONTROL PATTERNS
+# ============================================================================
+
+# Role-based access control (RBAC)
+define
+attribute permission-name, value string;
+attribute role-name, value string;
+
+entity permission,
+    owns permission-name @key;
+
+entity role,
+    owns role-name @key;
+
+relation role-permission,
+    relates granted-role @card(1),
+    relates granted-permission @card(1..);
+
+relation user-role,
+    relates assigned-user @card(1),
+    relates assigned-role @card(1..);
+
+role plays role-permission:granted-role;
+permission plays role-permission:granted-permission;
+user plays user-role:assigned-user;
+role plays user-role:assigned-role;
+
+# ============================================================================
+# MULTI-TENANCY PATTERNS
+# ============================================================================
+
+# Tenant isolation
+define
+attribute tenant-id, value string;
+
+entity tenant,
+    owns tenant-id @key,
+    owns tenant-name @card(1);
+
+# All tenant-scoped entities own tenant-id
+entity tenant-user,
+    owns user-id @key,
+    owns tenant-id @card(1),
+    owns username @card(1);
+
+entity tenant-resource,
+    owns resource-id @key,
+    owns tenant-id @card(1),
+    owns resource-name @card(1);
+
+# ============================================================================
+# VERSIONING PATTERNS
+# ============================================================================
+
+# Entity versioning
+define
+attribute version-number, value integer;
+attribute is-current, value boolean;
+
+entity versioned-document,
+    owns document-id,  # Not key - multiple versions share this
+    owns version-number,
+    owns is-current @card(1),
+    owns content @card(1),
+    owns created-at @card(1);
+
+# Version history relation
+relation version-history,
+    relates previous @card(0..1),
+    relates next @card(0..1);
+
+versioned-document plays version-history:previous;
+versioned-document plays version-history:next;
+
+# ============================================================================
+# COMPLETE EXAMPLE: E-COMMERCE SCHEMA
+# ============================================================================
+
+define
+
+# Attributes
+attribute uuid, value string;
+attribute sku, value string;
+attribute product-name, value string;
+attribute description, value string;
+attribute price, value decimal;
+attribute quantity, value integer @range(0..);
+attribute order-status, value string @values("pending", "confirmed", "shipped", "delivered", "cancelled");
+attribute address-line, value string;
+attribute city, value string;
+attribute postal-code, value string;
+attribute country, value string @values("US", "UK", "CA", "AU", "DE", "FR");
+attribute timestamp, value datetime-tz;
+
+# Customer
+entity customer,
+    owns uuid @key,
+    owns name @card(1),
+    owns email @unique,
+    plays order:buyer,
+    plays review:reviewer;
+
+# Product
+entity product,
+    owns sku @key,
+    owns product-name @card(1),
+    owns description,
+    owns price @card(1),
+    plays order-line:ordered-product,
+    plays review:reviewed-product;
+
+# Category
+entity category,
+    owns uuid @key,
+    owns category-name @card(1);
+
+relation product-category,
+    relates categorized-product @card(1),
+    relates product-category @card(1..);
+
+product plays product-category:categorized-product;
+category plays product-category:product-category;
+
+# Order
+entity order,
+    owns uuid @key,
+    owns order-status @card(1),
+    owns timestamp @card(1);
+
+relation order,
+    relates buyer @card(1),
+    relates purchased-item @card(1..);
+
+# Order line item
+relation order-line,
+    relates parent-order @card(1),
+    relates ordered-product @card(1),
+    owns quantity @card(1),
+    owns unit-price @card(1);
+
+order plays order-line:parent-order;
+
+# Shipping address
+entity address,
+    owns uuid @key,
+    owns address-line @card(1..3),
+    owns city @card(1),
+    owns postal-code @card(1),
+    owns country @card(1);
+
+relation shipping-address,
+    relates shipped-order @card(1),
+    relates destination @card(1);
+
+order plays shipping-address:shipped-order;
+address plays shipping-address:destination;
+
+# Review
+relation review,
+    relates reviewer @card(1),
+    relates reviewed-product @card(1),
+    owns rating @card(1),
+    owns review-text,
+    owns timestamp @card(1);

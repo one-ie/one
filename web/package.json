@@ -1,0 +1,28 @@
+{
+  "name": "one-demo",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "ONE demo - chatbot + landing page",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "NODE_ENV=production astro build",
+    "preview": "astro preview",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "astro": "^6.0.0",
+    "@astrojs/cloudflare": "^13.1.10",
+    "@astrojs/node": "^10.0.5",
+    "@astrojs/react": "^5.0.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.14.0"
+  }
+}

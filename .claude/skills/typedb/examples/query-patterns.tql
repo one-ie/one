@@ -1,0 +1,507 @@
+# TypeQL 3.0 Query Patterns
+# Common patterns for TypeDB 3.x queries
+
+# ============================================================================
+# SCHEMA DEFINITION PATTERNS
+# ============================================================================
+
+# Basic entity definition
+define
+entity user,
+    owns id @key,
+    owns name @card(1),
+    owns email @unique,
+    owns age;
+
+# Entity with role playing
+define
+entity company,
+    owns id @key,
+    owns name,
+    plays employment:employer,
+    plays ownership:owner;
+
+# Abstract entity with subtypes
+define
+entity content @abstract,
+    owns id @key,
+    owns created_at;
+
+entity article sub content,
+    owns title,
+    owns body;
+
+entity video sub content,
+    owns duration,
+    owns url;
+
+# Relation with multiple roles
+define
+relation employment,
+    relates employer @card(1),
+    relates employee @card(1..),
+    owns start_date,
+    owns end_date,
+    owns status @card(1);
+
+# Attribute with constraints
+define
+attribute status, value string @values("active", "inactive", "pending");
+attribute score, value double @range(0.0..100.0);
+attribute email, value string @regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+
+# ============================================================================
+# INSERT PATTERNS
+# ============================================================================
+
+# Insert single entity
+insert $u isa user,
+    has id "user-001",
+    has name "Alice",
+    has email "alice@example.com",
+    has age 30;
+
+# Insert multiple entities
+insert
+    $u1 isa user, has id "u1", has name "Alice";
+    $u2 isa user, has id "u2", has name "Bob";
+    $u3 isa user, has id "u3", has name "Carol";
+
+# Insert relation
+insert
+    $e isa employment,
+        links (employer: $company, employee: $person),
+        has start_date 2025-01-15,
+        has status "active";
+
+# Match-insert (create based on existing data)
+match
+    $u1 isa user, has name "Alice";
+    $u2 isa user, has name "Bob";
+insert
+    $f isa friendship, links (friend: $u1, friend: $u2);
+
+# ============================================================================
+# SELECT PATTERNS
+# ============================================================================
+
+# Basic select
+match $u isa user;
+select $u;
+
+# Select with attributes
+match
+    $u isa user,
+        has name $n,
+        has age $a;
+select $u, $n, $a;
+
+# Select with conditions
+match
+    $u isa user, has age $a;
+    $a >= 18;
+    $a <= 65;
+select $u, $a;
+
+# Select with string matching
+match
+    $u isa user, has name $n;
+    $n contains "Ali";
+select $u, $n;
+
+# Select with regex
+match
+    $u isa user, has email $e;
+    $e like ".*@company\\.com$";
+select $u, $e;
+
+# Select through relations
+match
+    $f isa friendship, links (friend: $u1, friend: $u2);
+    $u1 has name "Alice";
+    $u2 has name $n;
+select $n;
+
+# ============================================================================
+# DELETE PATTERNS
+# ============================================================================
+
+# Delete entity (cascades to relations and owned attributes)
+match $u isa user, has id "user-001";
+delete $u;
+
+# Delete attribute (the attribute value itself)
+match
+    $u isa user, has id "user-001";
+    $u has nickname $n;
+delete $n;
+
+# Delete ownership (keep attribute, remove from owner)
+match
+    $u isa user, has id "user-001";
+    $u has tag $t;
+delete has $t of $u;
+
+# Delete relation
+match
+    $f isa friendship, links (friend: $u1, friend: $u2);
+    $u1 has name "Alice";
+    $u2 has name "Bob";
+delete $f;
+
+# Delete role player from relation
+match
+    $e isa employment, links (employee: $emp);
+    $emp has id "emp-001";
+delete links (employee: $emp) of $e;
+
+# ============================================================================
+# UPDATE PATTERNS
+# ============================================================================
+
+# Update single-cardinality attribute
+# (only works for @card(0..1) or @card(1))
+match $u isa user, has id "user-001";
+update $u has status "inactive";
+
+# Match-delete-insert pattern for multi-value
+match
+    $u isa user, has id "user-001";
+    $u has age $old;
+delete $old;
+insert $u has age 31;
+
+# ============================================================================
+# PUT PATTERNS (UPSERT)
+# ============================================================================
+
+# Put entity (insert if not exists)
+put $u isa user, has id "user-001", has name "Alice";
+
+# Put with all data
+put
+    $u isa user, has id "user-001";
+    $u has name "Alice";
+    $u has age 30;
+
+# ============================================================================
+# FETCH PATTERNS (JSON OUTPUT)
+# ============================================================================
+
+# Basic fetch
+match $u isa user;
+fetch {
+    "id": $u.id,
+    "name": $u.name
+};
+
+# Fetch all attributes
+match $u isa user, has id "user-001";
+fetch {
+    "user": { $u.* }
+};
+
+# Fetch with nested subquery
+match $u isa user;
+fetch {
+    "name": $u.name,
+    "friends": [
+        match ($u, $friend) isa friendship;
+        fetch {
+            "friend_name": $friend.name
+        };
+    ]
+};
+
+# Fetch with computed values
+match
+    $u isa user, has age $a;
+    let $next_year = $a + 1;
+fetch {
+    "name": $u.name,
+    "age": $a,
+    "next_year_age": $next_year
+};
+
+# ============================================================================
+# REDUCE PATTERNS (AGGREGATIONS)
+# ============================================================================
+
+# Count
+match $u isa user;
+reduce $count = count;
+
+# Multiple aggregations
+match $u isa user, has age $a;
+reduce
+    $count = count,
+    $avg = mean($a),
+    $max = max($a),
+    $min = min($a),
+    $sum = sum($a),
+    $std = std($a);
+
+# Group by
+match
+    $u isa user, has status $s, has age $a;
+reduce $count = count, $avg_age = mean($a) groupby $s;
+
+# Count with condition
+match
+    $u isa user, has age $a;
+    $a >= 18;
+reduce $adult_count = count;
+
+# List aggregation
+match
+    $u isa user, has name $n;
+reduce $names = list($n);
+
+# ============================================================================
+# SORT/LIMIT/OFFSET PATTERNS
+# ============================================================================
+
+# Sort ascending
+match $u isa user, has age $a;
+select $u, $a;
+sort $a;
+
+# Sort descending
+match $u isa user, has score $s;
+select $u, $s;
+sort $s desc;
+
+# Multiple sort keys
+match $u isa user, has name $n, has age $a;
+select $n, $a;
+sort $a desc, $n asc;
+
+# Pagination
+match $u isa user;
+select $u;
+sort $u;
+offset 20;
+limit 10;
+
+# Top N pattern
+match
+    $u isa user, has score $s;
+select $u, $s;
+sort $s desc;
+limit 10;
+
+# ============================================================================
+# DISJUNCTION PATTERNS (OR)
+# ============================================================================
+
+# Simple OR
+match
+    $u isa user;
+    { $u has status "active"; } or { $u has status "pending"; };
+select $u;
+
+# Multiple branches
+match
+    $u isa user;
+    { $u has role "admin"; }
+    or { $u has role "moderator"; }
+    or { $u has role "editor"; };
+select $u;
+
+# Complex disjunction
+match
+    $u isa user, has age $a;
+    { $a < 18; } or { $a > 65; };
+select $u, $a;
+
+# ============================================================================
+# NEGATION PATTERNS (NOT)
+# ============================================================================
+
+# Simple negation
+match
+    $u isa user;
+    not { $u has status "deleted"; };
+select $u;
+
+# Negation with relation
+match
+    $u isa user;
+    not { ($u) isa ban; };
+select $u;
+
+# Complex negation
+match
+    $u isa user;
+    not {
+        $u has status "inactive";
+        $u has last_login $l;
+        $l < 2024-01-01;
+    };
+select $u;
+
+# ============================================================================
+# OPTIONAL PATTERNS (TRY)
+# ============================================================================
+
+# Optional attribute
+match
+    $u isa user, has name $n;
+    try { $u has email $e; };
+select $n, $e;
+
+# Optional relation
+match
+    $u isa user;
+    try { ($u, $manager) isa management; };
+select $u, $manager;
+
+# Multiple optionals
+match
+    $u isa user, has id $id;
+    try { $u has email $e; };
+    try { $u has phone $p; };
+select $id, $e, $p;
+
+# ============================================================================
+# FUNCTION PATTERNS
+# ============================================================================
+
+# Scalar function
+define
+fun user_age($user: user) -> integer:
+    match $user has age $a;
+    return first $a;
+
+# Stream function
+define
+fun user_friends($user: user) -> { user }:
+    match ($user, $friend) isa friendship;
+    return { $friend };
+
+# Aggregation function
+define
+fun friend_count($user: user) -> integer:
+    match ($user, $friend) isa friendship;
+    return count($friend);
+
+# Recursive function (transitive closure)
+define
+fun reachable($from: node) -> { node }:
+    match
+        { $_ isa edge, links (from: $from, to: $to); }
+        or {
+            let $mid in reachable($from);
+            $_ isa edge, links (from: $mid, to: $to);
+        };
+    return { $to };
+
+# Using functions in queries
+match
+    $u isa user, has name "Alice";
+    let $age = user_age($u);
+    let $friend in user_friends($u);
+select $friend, $age;
+
+# Ad-hoc function with 'with'
+with
+    fun is_adult($u: user) -> boolean:
+        match $u has age $a; $a >= 18;
+        return first true;
+match
+    $u isa user;
+    let $adult = is_adult($u);
+    $adult == true;
+select $u;
+
+# ============================================================================
+# COMPLEX PIPELINE PATTERNS
+# ============================================================================
+
+# Multi-stage pipeline
+match
+    $u isa user, has name $n;
+    ($u, $friend) isa friendship;
+reduce $friend_count = count groupby $u, $n;
+sort $friend_count desc;
+limit 10;
+select $n, $friend_count;
+
+# Pipeline with insert
+match
+    $u1 isa user, has name "Alice";
+    $u2 isa user;
+    not { ($u1, $u2) isa friendship; };
+    not { $u1 is $u2; };
+select $u2;
+limit 5;
+match
+    $u1 isa user, has name "Alice";
+insert
+    $f isa friendship, links (friend: $u1, friend: $u2);
+
+# ============================================================================
+# EXPRESSION PATTERNS
+# ============================================================================
+
+# Arithmetic expressions
+match
+    $u isa user, has age $a;
+    let $birth_year = 2025 - $a;
+    let $double_age = $a * 2;
+select $u, $birth_year, $double_age;
+
+# Built-in functions
+match
+    $u isa user, has score $s;
+    let $rounded = round($s);
+    let $floored = floor($s);
+    let $ceiled = ceil($s);
+    let $absolute = abs($s);
+select $u, $rounded, $floored, $ceiled, $absolute;
+
+# Conditional expressions
+match
+    $u isa user, has age $a;
+    let $category = if $a < 18 then "minor" else if $a < 65 then "adult" else "senior";
+select $u, $category;
+
+# ============================================================================
+# EXISTENCE CHECK PATTERNS
+# ============================================================================
+
+# Check if exists (count)
+match $u isa user, has email "test@example.com";
+reduce $exists = count;
+# Check: $exists > 0
+
+# Check if exists (limit 1)
+match $u isa user, has email "test@example.com";
+limit 1;
+# If returns result, exists
+
+# Check relation exists
+match
+    $u1 isa user, has name "Alice";
+    $u2 isa user, has name "Bob";
+    ($u1, $u2) isa friendship;
+reduce $exists = count;
+
+# ============================================================================
+# DISTINCT PATTERN
+# ============================================================================
+
+# Remove duplicates
+match
+    $f isa friendship, links (friend: $u);
+    $u has country $c;
+select $c;
+distinct;
+
+# Distinct with ordering
+match
+    $f isa friendship, links (friend: $u);
+    $u has age $a;
+select $a;
+distinct;
+sort $a desc;
