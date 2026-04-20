@@ -1,0 +1,10 @@
+# Copy to .dev.vars (wrangler local) or .env (astro dev on Node) and fill in.
+OPENROUTER_API_KEY=
+GROQ_API_KEY=
+TELEGRAM_TOKEN=
+DISCORD_TOKEN=
+AGENT_ID=one-demo
+AGENT_NAME=ONE Demo
+AGENT_MODEL=meta-llama/llama-4-maverick
+ONE_API_URL=https://dev.one.ie
+ONEIE_TELEMETRY_DISABLE=1

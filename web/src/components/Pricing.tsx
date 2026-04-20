@@ -1,3 +1,5 @@
+import { emitClick } from '@/lib/ui-signal'
+
 const plans = [
   {
     name: 'Free',
@@ -64,6 +66,7 @@ export function Pricing() {
                 ))}
               </ul>
               <button
+                onClick={() => emitClick('ui:pricing:select', { plan: plan.name })}
                 className={`w-full py-2 rounded-lg font-medium transition-colors ${
                   plan.highlight
                     ? 'bg-white text-indigo-600 hover:bg-zinc-100'

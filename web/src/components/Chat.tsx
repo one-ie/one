@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { emitClick } from '@/lib/ui-signal'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -52,7 +53,10 @@ export function Chat({ fullPage = false, onClose }: Props) {
         <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-900">
           <span className="font-medium">Chat with ONE</span>
           {onClose && (
-            <button onClick={onClose} className="text-zinc-400 hover:text-white">
+            <button
+              onClick={() => { emitClick('ui:chat:close'); onClose() }}
+              className="text-zinc-400 hover:text-white"
+            >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -87,7 +91,14 @@ export function Chat({ fullPage = false, onClose }: Props) {
       </div>
 
       <div className="p-4 border-t border-zinc-800">
-        <form onSubmit={(e) => { e.preventDefault(); send() }} className="flex gap-2">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            emitClick('ui:chat:send', { length: input.length })
+            send()
+          }}
+          className="flex gap-2"
+        >
           <input
             type="text"
             value={input}
