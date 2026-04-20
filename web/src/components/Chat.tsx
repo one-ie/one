@@ -14,7 +14,7 @@ interface Props {
 export function Chat({ fullPage = false, onClose }: Props) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [streaming, setStreaming] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -22,24 +22,69 @@ export function Chat({ fullPage = false, onClose }: Props) {
   }, [messages])
 
   const send = async () => {
-    if (!input.trim() || loading) return
+    if (!input.trim() || streaming) return
     const userMessage = input.trim()
     setInput('')
-    setMessages((prev) => [...prev, { role: 'user', content: userMessage }])
-    setLoading(true)
+    const nextHistory: Message[] = [...messages, { role: 'user', content: userMessage }]
+    setMessages([...nextHistory, { role: 'assistant', content: '' }])
+    setStreaming(true)
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch('/api/chat-stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage, history: messages }),
       })
-      const data = await res.json()
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.response || data.error || 'Error' }])
+
+      if (!res.ok || !res.body) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string }
+        setMessages([...nextHistory, { role: 'assistant', content: body.error ?? 'Error' }])
+        return
+      }
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buf = ''
+      let acc = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buf += decoder.decode(value, { stream: true })
+
+        let sep: number
+        while ((sep = buf.indexOf('\n\n')) !== -1) {
+          const raw = buf.slice(0, sep)
+          buf = buf.slice(sep + 2)
+          const lines = raw.split('\n')
+          let event = 'message'
+          let data = ''
+          for (const line of lines) {
+            if (line.startsWith('event: ')) event = line.slice(7)
+            else if (line.startsWith('data: ')) data += line.slice(6)
+          }
+          if (!data) continue
+          try {
+            const payload = JSON.parse(data) as { text?: string; error?: string }
+            if (event === 'delta' && payload.text) {
+              acc += payload.text
+              setMessages([...nextHistory, { role: 'assistant', content: acc }])
+            } else if (event === 'replace' && payload.text) {
+              acc = payload.text
+              setMessages([...nextHistory, { role: 'assistant', content: acc }])
+            } else if (event === 'error') {
+              acc = payload.error ?? 'Error'
+              setMessages([...nextHistory, { role: 'assistant', content: acc }])
+            }
+          } catch {
+            // skip malformed chunk
+          }
+        }
+      }
     } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', content: 'Connection error.' }])
+      setMessages([...nextHistory, { role: 'assistant', content: 'Connection error.' }])
     } finally {
-      setLoading(false)
+      setStreaming(false)
     }
   }
 
@@ -76,19 +121,14 @@ export function Chat({ fullPage = false, onClose }: Props) {
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
-              className={`max-w-[80%] px-4 py-2 rounded-2xl ${
+              className={`max-w-[80%] px-4 py-2 rounded-2xl whitespace-pre-wrap ${
                 msg.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-zinc-800 text-zinc-100'
               }`}
             >
-              {msg.content}
+              {msg.content || (streaming && i === messages.length - 1 ? '…' : '')}
             </div>
           </div>
         ))}
-        {loading && (
-          <div className="flex justify-start">
-            <div className="bg-zinc-800 px-4 py-2 rounded-2xl text-zinc-400 animate-pulse">Thinking...</div>
-          </div>
-        )}
       </div>
 
       <div className="p-4 border-t border-zinc-800">
@@ -109,7 +149,7 @@ export function Chat({ fullPage = false, onClose }: Props) {
           />
           <button
             type="submit"
-            disabled={loading || !input.trim()}
+            disabled={streaming || !input.trim()}
             className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 disabled:opacity-50 transition-colors"
           >
             Send

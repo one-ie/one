@@ -3,6 +3,8 @@ import type { Env } from './types'
 const DEFAULT_BASE = 'https://dev.one.ie'
 const sessionId = crypto.randomUUID().slice(0, 16)
 
+export type Outcome = 'result' | 'warn' | 'dissolve'
+
 export interface TelemetryEvent {
   channel: 'web' | 'telegram' | 'discord'
   model: string
@@ -11,12 +13,20 @@ export interface TelemetryEvent {
   latencyMs: number
   success: boolean
   error?: string
+  outcome?: Outcome
+}
+
+const WEIGHT: Record<Outcome, number> = {
+  result: 1,
+  warn: 0.5,
+  dissolve: 0.3,
 }
 
 export function emit(env: Env, agentId: string, event: TelemetryEvent): void {
   if ((env as unknown as { ONEIE_TELEMETRY_DISABLE?: string }).ONEIE_TELEMETRY_DISABLE) return
   const base = env.ONE_API_URL ?? DEFAULT_BASE
   const endpoint = `${base.replace(/\/$/, '')}/api/signal`
+  const outcome: Outcome = event.outcome ?? (event.success ? 'result' : 'warn')
 
   void fetch(endpoint, {
     method: 'POST',
@@ -25,14 +35,8 @@ export function emit(env: Env, agentId: string, event: TelemetryEvent): void {
       sender: `template:${agentId}:${sessionId}`,
       receiver: `template:${agentId}:${event.channel}`,
       data: JSON.stringify({
-        tags: [
-          'telemetry',
-          'template',
-          event.channel,
-          event.model,
-          event.success ? 'ok' : 'error',
-        ],
-        weight: event.success ? 1 : 0.5,
+        tags: ['telemetry', 'template', event.channel, event.model, outcome],
+        weight: WEIGHT[outcome],
         content: {
           session: sessionId,
           model: event.model,
