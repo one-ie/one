@@ -30,7 +30,7 @@ export async function POST({ request }: APIContext) {
   const agent = loadAgent(env as unknown as Record<string, string | undefined>)
   const start = Date.now()
 
-  const limit = rateLimit(`chat:${clientKey(request)}`, RATE_LIMIT, RATE_WINDOW_MS)
+  const limit = await rateLimit(env, `chat:${clientKey(request)}`, RATE_LIMIT, RATE_WINDOW_MS)
   if (!limit.allowed) {
     return json(
       { error: 'rate limited', retryAfterSec: limit.retryAfterSec },

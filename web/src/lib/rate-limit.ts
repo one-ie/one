@@ -1,11 +1,13 @@
-// Per-isolate sliding-window limiter. Module-scope Map persists across
-// requests within the same CF Workers isolate but not across isolates —
-// the limit is approximate, not strict. For strict limits, bind
-// Cloudflare's RateLimiting API in wrangler.toml.
+// Strict: Cloudflare RateLimiting binding (cross-isolate, see wrangler.toml).
+// Fallback: per-isolate sliding-window Map — approximate but zero config.
 
 interface Bucket {
   count: number
   resetAt: number
+}
+
+interface CfRateLimiter {
+  limit(opts: { key: string }): Promise<{ success: boolean }>
 }
 
 const buckets = new Map<string, Bucket>()
@@ -17,12 +19,27 @@ export interface LimitResult {
   retryAfterSec: number
 }
 
-export function rateLimit(
+export async function rateLimit(
+  env: { RATE_LIMITER?: CfRateLimiter },
   key: string,
   limit: number,
   windowMs: number,
   now: number = Date.now()
-): LimitResult {
+): Promise<LimitResult> {
+  if (env.RATE_LIMITER) {
+    const { success } = await env.RATE_LIMITER.limit({ key })
+    const retry = Math.ceil(windowMs / 1000)
+    return {
+      allowed: success,
+      remaining: success ? limit - 1 : 0,
+      resetAt: now + windowMs,
+      retryAfterSec: success ? 0 : retry,
+    }
+  }
+  return memoryLimit(key, limit, windowMs, now)
+}
+
+function memoryLimit(key: string, limit: number, windowMs: number, now: number): LimitResult {
   const b = buckets.get(key)
   if (!b || b.resetAt <= now) {
     const fresh: Bucket = { count: 1, resetAt: now + windowMs }
@@ -47,11 +64,11 @@ function sweep(now: number) {
 }
 
 export function clientKey(req: Request): string {
-  const cf = (req as Request & { headers: Headers }).headers
+  const h = req.headers
   return (
-    cf.get('cf-connecting-ip') ??
-    cf.get('x-real-ip') ??
-    cf.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    h.get('cf-connecting-ip') ??
+    h.get('x-real-ip') ??
+    h.get('x-forwarded-for')?.split(',')[0]?.trim() ??
     'anon'
   )
 }

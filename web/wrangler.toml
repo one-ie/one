@@ -18,4 +18,12 @@ ONE_API_URL = "https://dev.one.ie"
 pattern = "demo.one.ie"
 custom_domain = true
 
+# Strict cross-isolate rate limiter. namespace_id must be unique per account.
+# 20 requests per 60s window — matches the app-level constant in rate-limit.ts.
+[[unsafe.bindings]]
+name = "RATE_LIMITER"
+type = "ratelimit"
+namespace_id = "2901"
+simple = { limit = 20, period = 60 }
+
 # Secrets: wrangler secret put OPENROUTER_API_KEY
