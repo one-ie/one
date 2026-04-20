@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="https://one.ie/one-logo.svg" alt="ONE" width="120" />
-</p>
-
 <h1 align="center">ONE</h1>
 
 <p align="center">
