@@ -46,6 +46,7 @@ import type {
   ChatOpts,
   StreamEvent,
   StreamEventType,
+  UsageResponse,
 } from "./types.js";
 import { AuthError, RateLimitError, SubstrateError, TimeoutError, ValidationError } from "./errors.js";
 import { resolveApiKey, resolveBaseUrl } from "./urls.js";
@@ -386,6 +387,12 @@ export class SubstrateClient {
   async health(): Promise<Health> {
     const result = await this.r<Health>("/api/health");
     emit("toolkit:sdk:health", ["sdk", "method-health"]);
+    return result;
+  }
+
+  async usage(): Promise<UsageResponse> {
+    const result = await this.r<UsageResponse>("/api/dashboard/usage");
+    emit("toolkit:sdk:usage", ["sdk", "method-usage"]);
     return result;
   }
 

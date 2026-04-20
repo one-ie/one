@@ -198,6 +198,17 @@ export interface Stats {
   timestamp: string;
 }
 
+export interface UsageResponse {
+  tier: string;
+  calls_this_month: number;
+  agents_count: number;
+  api_limit: number;
+  agent_limit: number;
+  loops: string[];
+  highways_count: number;
+  upgrade_url: string;
+}
+
 export interface WorldInfo {
   units: number;
   agents: number;

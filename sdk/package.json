@@ -1,6 +1,6 @@
 {
   "name": "@oneie/sdk",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "ONE substrate SDK — signals, units, persist, launch handoff.",
   "type": "module",
   "main": "./dist/index.js",
@@ -51,6 +51,7 @@
     "prepublishOnly": "bun run build"
   },
   "devDependencies": {
+    "@types/node": "^22",
     "typescript": "5.9.2"
   },
   "license": "SEE LICENSE IN https://one.ie/free-license",
