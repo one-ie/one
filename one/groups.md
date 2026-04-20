@@ -33,40 +33,42 @@ From `src/schema/one.tql`:
 entity group,
     owns gid @key,
     owns name,
-    owns group-type,          # "world" | "team" | "org" | "community" | "dao" | "friends"
+    owns group-type,          # "world" | "team" | "org" | "community" | "dao" | "friends" | "personal"
     owns brand,               # white-label tag (e.g. "acme", "one", "donal")
+    owns visibility,          # "public" | "private" | "unlisted" — who can discover / join
+    owns plan,                # "starter" | "growth" | "enterprise" — tenant quota tier
+    owns fade-rate,           # per-group pheromone decay rate (overrides global)
+    owns sensitivity,         # per-group routing sensitivity
+    owns toxicity-threshold,  # per-group toxicity gate (default 2.0)
     plays hierarchy:parent,
     plays hierarchy:child,
     plays membership:group;
 
 relation hierarchy, relates parent, relates child;
 relation membership, relates group, relates member;
+    # membership owns member-role (RBAC role per group)
+
+# Signal scope — carried on every signal event
+# signal owns scope;   # "public" | "group" | "private"
+
+# Cross-group bridge indicator on path
+# path owns bridge-kind;   # "federation" | "export" | "escrow"
 ```
 
 Actors play `membership:member`. One actor can be in many groups.
 
-### Proposed additions (for this doc to be live)
+### Implemented attributes ✓
 
-```tql
-# Visibility — determines who can discover / join / receive
-attribute visibility, value string;   # "public" | "private" | "unlisted"
-group owns visibility;
+All four schema additions from the original proposal are live in `src/schema/one.tql`:
 
-# Signal scope — carried on every signal event
-attribute scope, value string;        # "public" | "group" | "private"
-signal owns scope;
+| Attribute | Entity | Values | Status |
+|-----------|--------|--------|--------|
+| `visibility` | `group` | `public`, `private`, `unlisted` | ✓ in schema, gated at API resolver |
+| `scope` | `signal`, `path`, `hypothesis` | `public`, `group`, `private` | ✓ in schema, enforced at `/api/signal` |
+| `member-role` | `membership` | `chairman`, `ceo`, `board`, `operator`, `agent`, `auditor` | ✓ in schema, role-check matrix live |
+| `bridge-kind` | `path` | `federation`, `export`, `escrow` | ✓ in schema, written by `/api/paths/bridge` |
 
-# Role tag on membership — enables RBAC layer (see below)
-attribute role, value string;         # "owner" | "admin" | "member" | "guest" | custom
-membership owns role;
-
-# Cross-group bridge indicator on path
-attribute bridge-kind, value string;  # "federation" | "export" | "escrow"
-path owns bridge-kind;
-```
-
-Four attributes. Everything else is a query pattern over what's already
-there.
+Additional attributes added in Cycle 3 (`plan`, `fade-rate`, `sensitivity`, `toxicity-threshold`) enable per-tenant configuration.
 
 ---
 
@@ -533,23 +535,25 @@ select $g, $r;
 
 ---
 
-## API Surface (proposed)
+## API Surface ✓ Live
+
+All endpoints are shipped as of Cycle 3 (2026-04-20).
 
 | Endpoint | Method | Auth | Purpose |
 |----------|--------|------|---------|
-| `/api/groups` | POST | API key | Create group (becomes owner). Can nest under `parent` (personal sub-groups, org teams) |
-| `/api/groups` | GET | Optional | List public + your private groups; each row includes your `role` + `group-type` |
+| `/api/groups` | POST | API key | Create group (becomes chairman). Can nest under `parent` via `hierarchy` |
+| `/api/groups` | GET | Optional | List own + public groups; each row includes `role` + `group-type` |
 | `/api/groups/:gid` | GET | Scoped | Group details (403 if private + non-member) |
-| `/api/groups/:gid` | PATCH | Owner/admin | Update name/visibility/brand. Personal groups: name only (gid + group-type frozen) |
-| `/api/groups/:gid` | DELETE | Owner | Cascade delete group + members + signals. On personal groups, also cascades `forget(uid)` |
-| `/api/groups/join` | POST | API key | Join public group (role: member); returns 403 on private (use invite flow) |
-| `/api/groups/invite` | POST | Admin | Invite uid with role |
-| `/api/groups/leave` | POST | API key | Leave group. Owner of non-personal must transfer first; personal chairman cannot leave (must DELETE) |
-| `/api/groups/:gid/members` | GET | Member | List members + roles |
-| `/api/groups/:gid/role` | PATCH | Owner/admin | Change a member's role |
-| `/api/groups/:gid/highways` | GET | Member | Proven paths within group |
-| `/api/paths/bridge` | POST | Both sides | Create federation edge (supports personal↔personal, personal↔org, org↔org) |
-| `/api/paths/bridge/:id` | DELETE | Either side | Dissolve bridge |
+| `/api/groups/:gid` | PATCH | `update_group` | Update name/visibility/brand. Personal groups: name only (`gid` + `group-type` frozen) |
+| `/api/groups/:gid` | DELETE | `delete_group` | Cascade delete group + memberships. Personal groups: also cascades `forget(uid)` |
+| `/api/groups/join` | POST | API key | Join public group (`role: member`); 403 on private (use invite flow) |
+| `/api/groups/leave` | POST | API key | Leave group. Chairman of non-personal must transfer first; personal chairman cannot leave (must DELETE) |
+| `/api/groups/:gid/members` | GET | Member | List members + roles (non-members get 403 even on auth) |
+| `/api/groups/:gid/invite` | POST | `invite_member` | Invite uid with role into a private group |
+| `/api/groups/:gid/role` | PATCH | `change_role` | Change a member's role; chairman transfer auto-demotes old chairman |
+| `/api/paths/bridge` | POST | Member | Federation handshake — first side → 202 pending; second side → 201 + TypeDB path with `bridge-kind="federation"` |
+| `/api/paths/bridge` | DELETE | Member | Dissolve bridge path (either side) |
+| `/api/inbox/:uid` | GET | Auth | Unified signal inbox across all uid's memberships |
 | `/api/auth/agent` | POST | Public/scoped | Mint actor — auto-writes personal group + chairman membership. Response: `{uid, apiKey, personalGid, role: "chairman", suggestedJoins}` |
 
 ---

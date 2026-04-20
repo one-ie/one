@@ -47,6 +47,11 @@ import type {
   StreamEvent,
   StreamEventType,
   UsageResponse,
+  GroupResponse,
+  ListGroupsResponse,
+  GroupMembersResponse,
+  BridgeResponse,
+  InboxResponse,
 } from "./types.js";
 import { AuthError, RateLimitError, SubstrateError, TimeoutError, ValidationError } from "./errors.js";
 import { resolveApiKey, resolveBaseUrl } from "./urls.js";
@@ -262,6 +267,81 @@ export class SubstrateClient {
     return result;
   }
 
+  async createGroup(opts: {
+    gid: string
+    name: string
+    groupType?: string
+    visibility?: string
+    plan?: string
+  }): Promise<GroupResponse> {
+    const result = await this.r<GroupResponse>(
+      "/api/groups",
+      { method: "POST", body: JSON.stringify(opts) },
+    )
+    emit("toolkit:sdk:createGroup", ["sdk", "method-createGroup", "stage:groups"])
+    return result
+  }
+
+  async listGroups(): Promise<ListGroupsResponse> {
+    const result = await this.r<ListGroupsResponse>("/api/groups")
+    emit("toolkit:sdk:listGroups", ["sdk", "method-listGroups", "stage:groups"])
+    return result
+  }
+
+  async joinGroup(gid: string): Promise<{ ok: boolean; gid: string; role: string }> {
+    const result = await this.r<{ ok: boolean; gid: string; role: string }>(
+      "/api/groups/join",
+      { method: "POST", body: JSON.stringify({ gid }) },
+    )
+    emit("toolkit:sdk:joinGroup", ["sdk", "method-joinGroup", "stage:groups"])
+    return result
+  }
+
+  async leaveGroup(gid: string): Promise<{ ok: boolean }> {
+    const result = await this.r<{ ok: boolean }>(
+      "/api/groups/leave",
+      { method: "POST", body: JSON.stringify({ gid }) },
+    )
+    emit("toolkit:sdk:leaveGroup", ["sdk", "method-leaveGroup", "stage:groups"])
+    return result
+  }
+
+  async groupMembers(gid: string): Promise<GroupMembersResponse> {
+    const result = await this.r<GroupMembersResponse>(
+      `/api/groups/${encodeURIComponent(gid)}/members`,
+    )
+    emit("toolkit:sdk:groupMembers", ["sdk", "method-groupMembers", "stage:groups"])
+    return result
+  }
+
+  async inviteMember(gid: string, uid: string, role = "member"): Promise<{ ok: boolean }> {
+    const result = await this.r<{ ok: boolean }>(
+      `/api/groups/${encodeURIComponent(gid)}/invite`,
+      { method: "POST", body: JSON.stringify({ uid, role }) },
+    )
+    emit("toolkit:sdk:inviteMember", ["sdk", "method-inviteMember", "stage:groups"])
+    return result
+  }
+
+  async bridge(from: string, to: string): Promise<BridgeResponse> {
+    const result = await this.r<BridgeResponse>(
+      "/api/paths/bridge",
+      { method: "POST", body: JSON.stringify({ from, to }) },
+    )
+    emit("toolkit:sdk:bridge", ["sdk", "method-bridge", "stage:groups"])
+    return result
+  }
+
+  async inbox(uid: string, opts?: { limit?: number; before?: string }): Promise<InboxResponse> {
+    const params = new URLSearchParams()
+    if (opts?.limit !== undefined) params.set("limit", String(opts.limit))
+    if (opts?.before !== undefined) params.set("before", opts.before)
+    const qs = params.size ? `?${params}` : ""
+    const result = await this.r<InboxResponse>(`/api/inbox/${encodeURIComponent(uid)}${qs}`)
+    emit("toolkit:sdk:inbox", ["sdk", "method-inbox", "stage:groups"])
+    return result
+  }
+
   async deployOnBehalf(opts: { owner: string; spec: Record<string, unknown> }): Promise<{ ok: boolean; uid: string; owner: string; inheritedPaths: Array<{ from: string; to: string; strength: number }> }> {
     const result = await this.r<{ ok: boolean; uid: string; owner: string; inheritedPaths: Array<{ from: string; to: string; strength: number }> }>(
       "/api/agents/deploy-on-behalf",
@@ -271,12 +351,12 @@ export class SubstrateClient {
     return result;
   }
 
-  async subscribe(opts: { receiver: string; tags: string[] }): Promise<{ ok: boolean; receiver: string; tags: string[] }> {
-    const result = await this.r<{ ok: boolean; receiver: string; tags: string[] }>(
+  async subscribe(opts: { receiver: string; tags: string[]; scope?: 'private' | 'public' }): Promise<{ ok: boolean; uid?: string; receiver?: string; subscriptions?: Array<{ tag: string; scope: string }> }> {
+    const result = await this.r<{ ok: boolean; uid?: string; receiver?: string; subscriptions?: Array<{ tag: string; scope: string }> }>(
       "/api/subscribe",
-      { method: "POST", body: JSON.stringify(opts) },
+      { method: "POST", body: JSON.stringify({ uid: opts.receiver, tags: opts.tags, scope: opts.scope }) },
     );
-    emit("toolkit:sdk:subscribe", ["stage:list"]);
+    emit("toolkit:sdk:subscribe", ["sdk", "method-subscribe", "stage:subscribe"]);
     return result;
   }
 

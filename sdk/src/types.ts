@@ -433,3 +433,60 @@ export interface RevenueResponse {
 }
 
 export type ExportResource = "units" | "groups" | "paths" | "highways" | "toxic" | "skills";
+
+// Groups — dimension 1
+export interface GroupItem {
+  gid: string
+  name: string
+  groupType: string
+  visibility: string
+  plan?: string
+  role?: string
+  memberCount?: number
+}
+
+export interface GroupResponse {
+  ok: boolean
+  gid: string
+  name: string
+  groupType: string
+  visibility: string
+  plan?: string
+}
+
+export interface ListGroupsResponse {
+  groups: GroupItem[]
+}
+
+export interface GroupMember {
+  uid: string
+  name?: string
+  role: string
+}
+
+export interface GroupMembersResponse {
+  gid: string
+  members: GroupMember[]
+}
+
+export interface BridgeResponse {
+  ok?: boolean
+  status?: "pending" | "bridged"
+  key?: string
+  gid?: string
+  awaiting?: string
+}
+
+export interface InboxSignal {
+  sender: string
+  senderName?: string
+  data?: unknown
+  amount?: number
+  success?: boolean
+  ts?: string
+}
+
+export interface InboxResponse {
+  uid: string
+  signals: InboxSignal[]
+}
