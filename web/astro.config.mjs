@@ -14,6 +14,7 @@ const adapter = isDev
     })
 
 export default defineConfig({
+  site: 'https://demo.one.ie',
   output: 'server',
   adapter,
   integrations: [react()],

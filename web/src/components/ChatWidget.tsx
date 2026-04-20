@@ -9,6 +9,8 @@ export function ChatWidget() {
     <>
       <button
         onClick={() => { emitClick('ui:widget:open'); setOpen(true) }}
+        aria-label="Open chat"
+        aria-expanded={open}
         className={`fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-500 transition-all z-50 ${
           open ? 'scale-0' : 'scale-100'
         }`}

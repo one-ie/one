@@ -55,6 +55,7 @@ export function Chat({ fullPage = false, onClose }: Props) {
           {onClose && (
             <button
               onClick={() => { emitClick('ui:chat:close'); onClose() }}
+              aria-label="Close chat"
               className="text-zinc-400 hover:text-white"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

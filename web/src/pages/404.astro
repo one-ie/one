@@ -1,0 +1,21 @@
+---
+import Layout from "@/layouts/Layout.astro"
+---
+
+<Layout title="Not found — ONE" description="That page doesn't exist.">
+  <main class="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center">
+    <p class="text-sm tracking-widest text-indigo-400 uppercase mb-3">404</p>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-3">Page not found</h1>
+    <p class="text-zinc-400 mb-8 max-w-md">
+      The page you were looking for isn't here. It may have moved, or the link may be wrong.
+    </p>
+    <div class="flex gap-3">
+      <a href="/" class="px-5 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-500 transition-colors">
+        Go home
+      </a>
+      <a href="/chat" class="px-5 py-2.5 bg-zinc-800 text-white rounded-lg font-medium hover:bg-zinc-700 transition-colors">
+        Open chat
+      </a>
+    </div>
+  </main>
+</Layout>
