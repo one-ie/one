@@ -4,9 +4,17 @@ import "@/styles/global.css"
 interface Props {
   title: string
   description?: string
+  ogImage?: string
 }
 
-const { title, description = "ONE — AI agents that actually learn." } = Astro.props
+const {
+  title,
+  description = "Deploy AI agents to web, Telegram, and Discord. Every conversation teaches the substrate.",
+  ogImage = "/favicon.svg",
+} = Astro.props
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString()
+const ogImageUrl = new URL(ogImage, Astro.site ?? Astro.url.origin).toString()
 ---
 
 <!doctype html>
@@ -16,6 +24,20 @@ const { title, description = "ONE — AI agents that actually learn." } = Astro.
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="ONE" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
     <title>{title}</title>
   </head>
   <body class="bg-zinc-950 text-zinc-100 antialiased">

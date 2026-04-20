@@ -42,7 +42,7 @@ export function Features() {
     <section className="px-6 py-20 bg-zinc-900/50">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-2xl font-bold text-center mb-12">Everything you need</h2>
-        <div className="grid sm:grid-cols-2 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((f) => (
             <div key={f.title} className="flex gap-4">
               <div className="flex-shrink-0 w-12 h-12 bg-indigo-600/20 text-indigo-400 rounded-lg flex items-center justify-center">

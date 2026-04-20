@@ -7,13 +7,18 @@ import { ChatWidget } from "@/components/ChatWidget"
 ---
 
 <Layout title="ONE — AI agents that actually learn">
-  <header class="px-6 py-5 border-b border-zinc-800/60">
+  <header class="px-6 py-5 border-b border-zinc-800/60 sticky top-0 bg-zinc-950/80 backdrop-blur z-40">
     <nav class="max-w-5xl mx-auto flex items-center justify-between">
-      <a href="/" class="font-semibold tracking-tight">ONE</a>
-      <div class="flex items-center gap-6 text-sm text-zinc-400">
-        <a href="#pricing" class="hover:text-white">Pricing</a>
-        <a href="/chat" class="hover:text-white">Chat</a>
-        <a href="https://dev.one.ie" class="hover:text-white">Docs</a>
+      <a
+        href="/"
+        class="font-semibold tracking-tight rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+      >
+        ONE
+      </a>
+      <div class="flex items-center gap-6 text-sm text-zinc-300">
+        <a href="#pricing" class="hover:text-white rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400">Pricing</a>
+        <a href="/chat" class="hover:text-white rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400">Chat</a>
+        <a href="https://dev.one.ie" class="hover:text-white rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400">Docs</a>
       </div>
     </nav>
   </header>
@@ -24,7 +29,7 @@ import { ChatWidget } from "@/components/ChatWidget"
     <Pricing client:visible />
   </main>
 
-  <footer class="px-6 py-10 border-t border-zinc-800/60 text-sm text-zinc-500">
+  <footer class="px-6 py-10 border-t border-zinc-800/60 text-sm text-zinc-400">
     <div class="max-w-5xl mx-auto flex items-center justify-between">
       <span>© ONE</span>
       <span>Built on the substrate</span>
