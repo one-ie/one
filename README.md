@@ -1,160 +1,394 @@
-# ONE
+<p align="center">
+  <img src="https://one.ie/one-logo.svg" alt="ONE" width="120" />
+</p>
 
-**Signal-based substrate for AI agents.** Markdown in → live agents out.
-The LLM is the only probabilistic step. Everything else is math.
+<h1 align="center">ONE</h1>
 
-## Quick start
+<p align="center">
+  <strong>AI agents that learn. Build in markdown. Deploy everywhere.</strong>
+</p>
+
+<p align="center">
+  <a href="https://npmjs.com/package/oneie"><img src="https://img.shields.io/npm/v/oneie.svg" alt="npm version"></a>
+  <a href="https://github.com/one-ie/one/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+  <a href="https://one.ie"><img src="https://img.shields.io/badge/docs-one.ie-green.svg" alt="Documentation"></a>
+</p>
+
+---
+
+Write a markdown file. Get a live AI agent that learns from every conversation, remembers users across sessions, and can charge for its services.
 
 ```bash
-# 1. Install the SDK (for your code)
-npm install @oneie/sdk
-
-# 2. Install the MCP server (for Claude Code / Cursor / Windsurf)
-npm install -g @oneie/mcp
-
-# 3. Clone the template org (CEO + marketing + community) to start building
-git clone https://github.com/one-ie/one my-company
-cd my-company
-cp -r agents/templates my-company/agents/my-org
+npx oneie
 ```
 
-Both packages are on npm:
-[`@oneie/sdk`](https://npmjs.com/package/@oneie/sdk) ·
-[`@oneie/mcp`](https://npmjs.com/package/@oneie/mcp)
+---
 
-### Wire MCP into Claude Code
+## See it work
 
-Add to `.claude/settings.json`:
-
-```json
-{
-  "mcpServers": {
-    "oneie": {
-      "command": "npx",
-      "args": ["@oneie/mcp"],
-      "env": { "ONEIE_API_URL": "https://api.one.ie" }
-    }
-  }
-}
-```
-
-You now have 40 substrate tools (signal, mark, warn, fade, follow, harden,
-commerce, observability) available from Claude. Details in `mcp/README.md`.
-
-### Use the SDK
-
-```ts
-import { getApiUrl, resolveApiKey } from "@oneie/sdk/urls";
-import * as storage from "@oneie/sdk/storage";
-
-await storage.put("my-key", { hello: "world" }, { apiKey: resolveApiKey() });
-```
-
-Full reference in `sdk/README.md`.
-
-## What you get
-
-- **Six dimensions** locked forever: Groups, Actors, Things, Paths, Events, Learning
-- **Seven loops** (L1-L7): signal → trail → fade → economic → evolution → knowledge → frontier
-- **Six verbs**: signal, mark, warn, fade, follow, harden
-- **Four outcomes** every task closes with: result, timeout, dissolved, failure
-
-Agents are markdown. Substrate is 670 lines. Brain is TypeDB. The LLM bootstraps
-the group; the group replaces the LLM.
-
-## Repo layout
-
-```
-one-ie/one/
-├── agents/           Agent markdown — starter templates in agents/templates/
-├── one/              Canonical docs: ontology, dictionary, patterns, rubrics
-├── sdk/              @oneie/sdk — TypeScript SDK for the substrate API
-├── mcp/              @oneie/mcp — MCP server for Claude/Cursor
-├── .claude/          Claude Code harness: commands, skills, rules, subagents
-├── README.md         this file
-├── CLAUDE.md         Claude Code context — auto-loaded by the CLI
-├── AGENTS.md         Agent manifest (cross-tool convention)
-└── LICENSE
-```
-
-Every top-level folder carries its own `README.md`, `CLAUDE.md`, `AGENTS.md`,
-and `LICENSE`. Cloning or cd'ing into any folder gives you scoped context.
-
-## Start here
-
-| Goal                          | Go to                              |
-|-------------------------------|------------------------------------|
-| Install and wire SDK + MCP    | (above — ⚡ 60 seconds)             |
-| Learn the vocabulary          | `one/dictionary.md`                |
-| Understand the 6 dimensions   | `one/one-ontology.md`              |
-| Write your first agent        | `agents/README.md`                 |
-| Use the SDK                   | `sdk/README.md`                    |
-| Plug into Claude Desktop      | `mcp/README.md`                    |
-| Customize Claude Code         | `.claude/README.md`                |
-
-## The three locked rules
-
-1. **Closed loop.** Every signal closes with `mark` / `warn` / `dissolve`. No silent returns.
-2. **Structural time only.** Plan in tasks → waves → cycles. Never days or sprints.
-3. **Deterministic results in every loop.** Every cycle reports verified numbers, not vibes.
-
-Full rationale in `one/patterns.md` and `one/rubrics.md`.
-
-## Agent format
-
-Every `.md` file under `agents/` is a deployable agent:
+**1. Write an agent in markdown:**
 
 ```markdown
 ---
 name: tutor
-model: anthropic/claude-haiku-4-5
+model: claude-haiku-4-5
 channels: [telegram, discord, web]
-group: my-company
 skills:
   - name: explain
     price: 0.01
-    tags: [education, explain]
-sensitivity: 0.6
+    tags: [education, math, science]
 ---
 
-You are a patient tutor...
+You are a patient tutor who explains concepts clearly.
+Break down complex topics into simple steps.
+Ask questions to check understanding.
 ```
 
-Parse, sync, and wire in three lines:
+**2. Deploy it:**
 
-```ts
-import { ONE, parse, syncAgent } from "@oneie/sdk";
-const spec = parse(await readFile("agents/templates/ceo.md", "utf8"));
-await syncAgent(spec);
+```bash
+npx oneie
 ```
 
-## The four outcomes
+**3. Talk to it:**
 
-Every `ask()` resolves to exactly one:
+Your agent is now live on Telegram, Discord, and web. Users can message it. It remembers them. It learns what works.
 
-```ts
+---
+
+## Why ONE?
+
+### Your agents get smarter over time
+
+Every conversation teaches your agents. Success strengthens pathways. Failure weakens them. After 1000 conversations, your agents route around problems you never anticipated.
+
+```
+Day 1:    Agent tries everything, some fails
+Day 30:   Agent avoids approaches that failed
+Day 90:   Agent finds optimal paths automatically
+```
+
+### Memory that actually works
+
+Not just chat history. Structured memory per user:
+
+- What topics interest them
+- What explanations worked
+- What to avoid
+- When they last engaged
+
+GDPR-compliant. One-click forget.
+
+### Commerce built in
+
+Set a price. Users pay. You earn.
+
+```markdown
+skills:
+  - name: tax-advice
+    price: 5.00      # $5 per question
+    tags: [tax, legal]
+```
+
+Escrow, settlement, revenue tracking — handled. You focus on the agent, not billing infrastructure.
+
+### Deploy once, run everywhere
+
+One markdown file → live on:
+
+| Channel | What you get |
+|---------|--------------|
+| **Telegram** | Instant bot, group support |
+| **Discord** | Server integration, slash commands |
+| **Web** | Embeddable chat widget |
+| **API** | Call from any application |
+
+### Works with your AI tools
+
+Native MCP integration:
+
+```json
+{
+  "mcpServers": {
+    "one": { "command": "npx", "args": ["@oneie/mcp"] }
+  }
+}
+```
+
+Claude Code, Cursor, Windsurf — 40 tools for signaling agents, checking memory, viewing analytics, managing commerce.
+
+---
+
+## Quick start
+
+### Full project (recommended)
+
+```bash
+npx oneie
+```
+
+Interactive setup: clones the platform, creates your org, wires Claude Code.
+
+### Just the SDK
+
+```bash
+npm install @oneie/sdk
+```
+
+```typescript
+import { ONE } from "@oneie/sdk";
+
+const one = new ONE();
+
+// Signal an agent
+await one.signal({ receiver: "tutor:explain", data: { topic: "calculus" } });
+
+// Ask and wait for response
+const { result } = await one.ask({ receiver: "tutor:explain", data: { topic: "calculus" } });
+
+// Check what's working
+const highways = await one.highways(10);  // top 10 proven paths
+```
+
+### MCP for Claude/Cursor
+
+```bash
+npm install -g @oneie/mcp
+```
+
+Then ask Claude: *"Signal the tutor agent to explain calculus"* — it just works.
+
+---
+
+## How it works
+
+ONE is a **substrate** — infrastructure that sits under your agents:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                     YOUR AGENTS                          │
+│   (markdown files with personality + skills + pricing)   │
+├─────────────────────────────────────────────────────────┤
+│                        ONE                               │
+│                                                          │
+│   Routing      →  signals flow to the right agent        │
+│   Memory       →  structured recall per user             │
+│   Learning     →  every outcome updates the graph        │
+│   Commerce     →  pricing, escrow, settlement            │
+│   Evolution    →  struggling agents auto-improve         │
+│                                                          │
+├─────────────────────────────────────────────────────────┤
+│                       LLM                                │
+│            (Claude, GPT, Llama — your choice)            │
+└─────────────────────────────────────────────────────────┘
+```
+
+The LLM handles conversation. ONE handles everything else.
+
+### The learning loop
+
+```
+User sends message
+        ↓
+ONE routes to best agent (learned from history)
+        ↓
+Agent responds (LLM generates)
+        ↓
+ONE records outcome
+        ↓
+    ┌───┴───┐
+    ↓       ↓
+Success   Failure
+mark()    warn()
+    ↓       ↓
+Path      Path
+stronger  weaker
+        ↓
+Next time: smarter routing
+```
+
+This compounds. Width (parallel agents) × Depth (chain of tasks) × Learning (outcome feedback) = agents that genuinely improve.
+
+---
+
+## Example agents
+
+### The Orchestrator (CEO)
+
+Routes work to specialists, makes final calls:
+
+```markdown
+---
+name: ceo
+model: claude-sonnet-4
+skills:
+  - name: delegate
+    tags: [management, routing]
+  - name: decide  
+    tags: [strategy, decisions]
+---
+
+You are the CEO. You don't do the work — you delegate to the right specialist
+and make final decisions when needed. Be decisive. Trust your team.
+```
+
+### The Helper (Support)
+
+Handles tickets, escalates when stuck:
+
+```markdown
+---
+name: support
+model: claude-haiku-4-5
+channels: [telegram, discord]
+skills:
+  - name: troubleshoot
+    price: 0
+    tags: [support, debug]
+  - name: escalate
+    tags: [support, escalation]
+---
+
+You handle customer support. Be helpful, be fast.
+If you can't solve it in 3 messages, escalate.
+```
+
+### The Expert (Paid Consultant)
+
+Charges per query:
+
+```markdown
+---
+name: tax-advisor
+model: claude-sonnet-4
+skills:
+  - name: tax-question
+    price: 5.00
+    tags: [tax, legal, advice]
+---
+
+You are a tax advisor. Be accurate. Cite sources.
+If you're uncertain, say so — don't guess on tax matters.
+```
+
+### The Team (Multi-Agent)
+
+CEO delegates to specialists:
+
+```
+agents/
+├── ceo.md           # Routes and decides
+├── researcher.md    # Deep research
+├── writer.md        # Content creation
+├── reviewer.md      # Quality check
+└── publisher.md     # Final delivery
+```
+
+Signal the CEO. Work flows through the team. Each step learns.
+
+---
+
+## The six verbs
+
+Everything in ONE uses six verbs. Learn these, you understand the whole system:
+
+| Verb | What it does | When to use |
+|------|--------------|-------------|
+| **signal** | Send a message to an agent | Starting any interaction |
+| **mark** | Record success, strengthen pathway | Task completed well |
+| **warn** | Record failure, weaken pathway | Task failed or was poor |
+| **fade** | Decay old pathways over time | Automatic — forgetting is healthy |
+| **follow** | Route to the strongest pathway | Automatic — routing decisions |
+| **harden** | Promote patterns to permanent knowledge | Automatic — confirmed learnings |
+
+```typescript
+// The closed loop pattern — every interaction ends with mark or warn
 const { result, timeout, dissolved } = await one.ask({ receiver: "tutor:explain" });
-if (result)        one.mark(edge, chainDepth);      // success
-else if (timeout)  /* neutral — not the agent's fault */;
-else if (dissolved) one.warn(edge, 0.5);             // missing capability
-else                one.warn(edge, 1);               // broken capability
+
+if (result)         one.mark(edge);       // success — path gets stronger
+else if (timeout)   /* neutral */;        // slow, not bad
+else if (dissolved) one.warn(edge, 0.5);  // missing — mild penalty
+else                one.warn(edge, 1);    // failed — full penalty
 ```
 
-Closed loop is non-negotiable. Silent resolves leak learning.
+---
 
-## Contribute
+## Packages
 
-- Read `one/dictionary.md` first — the vocabulary is load-bearing
-- Follow the 4-file convention in new folders (README / CLAUDE / AGENTS / LICENSE)
-- Every PR runs the rubric: fit · form · truth · taste ≥ 0.65 to merge
-- See `.claude/commands/do.md` for the W1-W4 cycle we run on every change
+| Package | Purpose | Install |
+|---------|---------|---------|
+| [`oneie`](https://npmjs.com/package/oneie) | CLI — scaffold, deploy, manage | `npx oneie` |
+| [`@oneie/sdk`](https://npmjs.com/package/@oneie/sdk) | TypeScript SDK — full API access | `npm i @oneie/sdk` |
+| [`@oneie/mcp`](https://npmjs.com/package/@oneie/mcp) | MCP server — AI IDE integration | `npm i -g @oneie/mcp` |
+
+---
+
+## What's in this repo
+
+```
+one-ie/one/
+│
+├── agents/          # Agent templates — copy and customize
+│   └── templates/   # CEO, support, researcher, writer...
+│
+├── one/             # Documentation
+│   ├── dictionary.md    # The vocabulary
+│   ├── lifecycle.md     # Agent journey
+│   ├── patterns.md      # Core patterns
+│   └── ...
+│
+├── sdk/             # @oneie/sdk source
+├── mcp/             # @oneie/mcp source
+├── web/             # Astro starter (chat UI + landing)
+│
+├── .claude/         # Claude Code harness
+│   ├── commands/    # /see, /create, /do, /sync
+│   ├── skills/      # /typedb, /deploy, /astro
+│   └── rules/       # Auto-loaded patterns
+│
+├── CLAUDE.md        # Context for Claude Code
+├── AGENTS.md        # Agent manifest
+└── LICENSE          # MIT
+```
+
+Every folder has its own README. Cd in, get scoped context.
+
+---
+
+## Documentation
+
+| Start here | What you'll learn |
+|------------|-------------------|
+| **[one/dictionary.md](one/dictionary.md)** | The vocabulary — this is the foundation |
+| **[agents/README.md](agents/README.md)** | Agent format — frontmatter, skills, channels |
+| **[sdk/README.md](sdk/README.md)** | SDK reference — methods, hooks, errors |
+| **[mcp/README.md](mcp/README.md)** | MCP tools — what's available in Claude/Cursor |
+| **[one/lifecycle.md](one/lifecycle.md)** | Agent journey — register → signal → highway → harden |
+| **[one/patterns.md](one/patterns.md)** | Core patterns — closed loop, zero returns |
+
+---
+
+## Community
+
+**Questions?** Open an issue or talk to [@onedotbot](https://t.me/onedotbot) on Telegram.
+
+**Contributing?** Read `one/dictionary.md` first — the vocabulary is load-bearing.
+
+---
 
 ## License
 
-MIT — see `LICENSE`.
+MIT — see [LICENSE](LICENSE).
 
-## See also
+---
 
-- `CLAUDE.md` — repo-wide context for Claude Code
-- `AGENTS.md` — the agent manifest
-- `one/` — canonical documentation
+<p align="center">
+  <strong>ONE</strong> — AI agents that learn.<br>
+  Build in markdown. Deploy everywhere.
+</p>
+
+<p align="center">
+  <a href="https://one.ie">one.ie</a> · 
+  <a href="https://npmjs.com/package/oneie">npm</a> · 
+  <a href="https://github.com/one-ie/one">github</a>
+</p>
