@@ -1,0 +1,27 @@
+---
+import { Chat } from '../components/Chat'
+import '../styles/global.css'
+---
+
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chat — ONE</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+    <header
+      class="flex items-center justify-between px-6 py-4 border-b border-zinc-800"
+    >
+      <a href="/" class="font-semibold text-lg hover:text-indigo-400 transition-colors">ONE</a>
+      <a
+        href="/"
+        class="text-sm text-zinc-400 hover:text-zinc-100 transition-colors"
+      >← Back to home</a>
+    </header>
+    <main>
+      <Chat client:load fullPage={true} />
+    </main>
+  </body>
+</html>

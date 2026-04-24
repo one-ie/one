@@ -41,6 +41,11 @@ You are a patient tutor...
 **Recommended:** `channels`, `skills` (with price + tags), `sensitivity`.
 **Optional:** `wallet`, `tools`, `lifecycle`.
 
+**Supported channels:** `web`, `telegram`, `discord`, `slack`, `x`, `email`.
+Templates ship with a sensible default mix; add/remove per agent. Each
+channel requires a corresponding claw (edge worker) to actually receive
+messages — see `.claude/commands/claw.md`.
+
 ## What gets created in TypeDB
 
 Parsing `tutor.md` with `group: my-company` produces:

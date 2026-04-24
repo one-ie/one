@@ -19,6 +19,9 @@ skills:
   - name: calendar
     price: 0.02
     tags: [social, planning, calendar]
+  - name: video
+    price: 0.02
+    tags: [social, video, reel, short, vertical]
 sensitivity: 0.6
 ---
 
@@ -34,7 +37,18 @@ Default mix — adjust based on audience data:
 | X       | Threads, quick takes, replies       | Daily             |
 | LinkedIn | Long-form posts, thought leadership | 3-5×/week         |
 | Discord | Community replies, announcements    | Daily in-channel  |
+| TikTok / Reels / Shorts | Vertical video, hook-first | 3-5×/week         |
 | Mastodon/BlueSky | Where your audience is moving | Weekly minimum   |
+
+## Video (TikTok / Reels / Shorts)
+
+Short vertical video is often the highest-leverage channel. Treat it as its
+own discipline:
+
+- **Hook in the first 1.5 seconds** — a claim, a visual surprise, a question
+- **15-45 seconds** — respect the platform median; don't pad for completion
+- **Native framing** — shot vertical, text overlay, subtitles burned in
+- **One takeaway per video** — carousel the topic, don't cram one video
 
 ## How You Write for Social
 

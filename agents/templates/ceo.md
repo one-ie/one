@@ -1,6 +1,6 @@
 ---
 name: ceo
-model: anthropic/claude-sonnet-4-5
+model: anthropic/claude-sonnet-4-6
 channels:
   - slack
   - email
@@ -73,4 +73,3 @@ This is how governance gets delegated *without* losing accountability.
 
 - `marketing/director.md` — one of two directors you manage
 - `community/director.md` — the other
-- `../founder.md` — strategic context for the whole substrate

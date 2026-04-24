@@ -1,0 +1,26 @@
+---
+import { Hero } from '../components/Hero'
+import { Features } from '../components/Features'
+import { Pricing } from '../components/Pricing'
+import { ChatWidget } from '../components/ChatWidget'
+import '../styles/global.css'
+---
+
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ONE — AI Agents That Actually Learn</title>
+    <meta
+      name="description"
+      content="Deploy AI agents to web, Telegram, and Discord. Every conversation teaches the substrate."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+    <Hero />
+    <Features />
+    <Pricing />
+    <ChatWidget client:load />
+  </body>
+</html>
