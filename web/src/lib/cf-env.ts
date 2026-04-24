@@ -8,7 +8,7 @@ export async function getEnv(): Promise<Record<string, string>> {
     const mod = (await import('cloudflare:workers' as string)) as { env?: Record<string, string> }
     if (mod.env) return mod.env
   } catch {
-    // cloudflare:workers unavailable (Node dev)
+    // cloudflare:workers unavailable (Node dev) — fall through to process.env
   }
-  return {}
+  return process.env as unknown as Record<string, string>
 }
