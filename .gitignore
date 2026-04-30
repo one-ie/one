@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# CLI publish artifacts
+oneie-dist.tar.gz
+*.tgz
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+.parcel-cache/
+.turbo/
+.next/
+.astro/
+.wrangler/
+
+# Eliza local state
+apps/eliza/.eliza/
+apps/eliza/.elizadb/
+
+# Obsidian vault internals (plugin code, workspace state)
+**/.obsidian/plugins/
+**/.obsidian/workspace*
+
+# Large media — host on CDN or use Git LFS, do not commit
+*.mov
+*.mp4
+*.mp3
+*.wav
+*.flac
+
+# Bun / lockfile artifacts that shouldn't ship per-app
+bun.lockb
