@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { Chat } from '../components/Chat'
+---
+
+<Layout title="Chat — ONE">
+  <div class="min-h-screen flex flex-col">
+    <header class="border-b border-zinc-800 px-6 py-4">
+      <div class="max-w-3xl mx-auto flex items-center justify-between">
+        <a href="/" class="text-lg font-semibold">ONE</a>
+        <a href="/" class="text-sm text-zinc-400 hover:text-white transition-colors">
+          Back to home
+        </a>
+      </div>
+    </header>
+    <div class="flex-1">
+      <Chat client:load fullPage />
+    </div>
+  </div>
+</Layout>

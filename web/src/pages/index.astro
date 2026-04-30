@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { Hero } from '../components/Hero'
+import { Features } from '../components/Features'
+import { ChatWidget } from '../components/ChatWidget'
+---
+
+<Layout title="ONE — AI Agents That Learn">
+  <main>
+    <Hero client:load />
+    <Features />
+  </main>
+  <ChatWidget client:load />
+</Layout>

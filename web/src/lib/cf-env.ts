@@ -10,5 +10,5 @@ export async function getEnv(): Promise<Record<string, string>> {
   } catch {
     // cloudflare:workers unavailable (Node dev)
   }
-  return {}
+  return process.env as Record<string, string>
 }
