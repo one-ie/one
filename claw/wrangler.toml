@@ -1,0 +1,31 @@
+# Claw — edge-native AI agents on Cloudflare Workers
+name = "claw"
+main = "src/index.ts"
+workers_dev = true
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+VERSION = "1.0.0"
+# Substrate gateway — TypeDB proxy. Replace with your own deployment.
+GATEWAY_URL = "https://one-gateway.oneie.workers.dev"
+
+# D1 — message + path storage. Provision: wrangler d1 create claw
+[[d1_databases]]
+binding = "DB"
+database_name = "claw"
+database_id = "REPLACE_ME"
+
+# KV — context cache, toxic cache, knowledge store. Provision: wrangler kv namespace create claw
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_ME"
+
+# Secrets (set with: wrangler secret put <NAME>)
+#   OPENROUTER_API_KEY     — required
+#   GROQ_API_KEY           — optional, used when model starts with `groq/`
+#   TELEGRAM_TOKEN         — default Telegram bot (webhook: /webhook/telegram)
+#   TELEGRAM_TOKEN_<NAME>  — extra bot (webhook: /webhook/telegram-<name>)
+#   DISCORD_TOKEN          — Discord bot token (webhook: /webhook/discord)
+#   BOT_PERSONA            — optional, key from src/personas.ts to use as worker default
+#   API_KEY                — optional; when set, all non-webhook routes require Bearer auth

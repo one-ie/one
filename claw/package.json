@@ -1,0 +1,21 @@
+{
+  "name": "claw",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Edge-native AI agents on Cloudflare Workers",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate": "wrangler d1 execute claw --file=migrations/0001_init.sql",
+    "migrate:local": "wrangler d1 execute claw --local --file=migrations/0001_init.sql",
+    "tail": "wrangler tail"
+  },
+  "dependencies": {
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241205.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.80.0"
+  }
+}
