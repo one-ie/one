@@ -8,7 +8,7 @@ export function ChatWidget() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className={`fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-500 transition-all z-50 ${
+        className={`fixed bottom-6 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-lg hover:brightness-110 transition-all z-50 ${
           open ? 'scale-0' : 'scale-100'
         }`}
       >
@@ -23,7 +23,7 @@ export function ChatWidget() {
       </button>
 
       {open && (
-        <div className="fixed bottom-6 right-6 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl z-50 overflow-hidden">
+        <div className="fixed bottom-6 right-6 bg-background border border-font/10 rounded-2xl shadow-2xl z-50 overflow-hidden">
           <Chat onClose={() => setOpen(false)} />
         </div>
       )}

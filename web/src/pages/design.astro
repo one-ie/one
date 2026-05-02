@@ -1,0 +1,441 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="ONE Design System">
+  <main class="design-page">
+    <header class="hero">
+      <h1>ONE Design System</h1>
+      <p>
+        6 colors. Extract from any site. Apply everywhere. Built on shadcn/ui.
+        Simplified to 6 extractable tokens.
+      </p>
+      <div class="mode-toggle" role="group" aria-label="Theme mode">
+        <button data-mode="light" type="button">
+          <span aria-hidden="true">☀</span> Light
+        </button>
+        <button data-mode="dark" type="button" aria-pressed="true">
+          <span aria-hidden="true">☾</span> Dark
+        </button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <div class="col">
+        <h2>The 6 Extractable Colors</h2>
+        <p class="muted">Extract from any website. Map to these 6 tokens. Apply everywhere.</p>
+
+        <ul class="tokens">
+          <li>
+            <span class="swatch" style="background: hsl(0 0% 93%);"></span>
+            <span class="swatch" style="background: hsl(0 0% 10%);"></span>
+            <div class="meta">
+              <strong>background</strong>
+              <span class="muted">Card surface · Sidebar color</span>
+            </div>
+            <div class="hsl">
+              <span>Light: 0 0% 93%</span>
+              <span>Dark: 0 0% 10%</span>
+            </div>
+          </li>
+          <li>
+            <span class="swatch" style="background: hsl(0 0% 100%);"></span>
+            <span class="swatch" style="background: hsl(0 0% 13%);"></span>
+            <div class="meta">
+              <strong>foreground</strong>
+              <span class="muted">Content area inside card</span>
+            </div>
+            <div class="hsl">
+              <span>Light: 0 0% 100%</span>
+              <span>Dark: 0 0% 13%</span>
+            </div>
+          </li>
+          <li>
+            <span class="swatch font-light">Aa</span>
+            <span class="swatch font-dark">Aa</span>
+            <div class="meta">
+              <strong>font</strong>
+              <span class="muted">Text color · Readable in both modes</span>
+            </div>
+            <div class="hsl">
+              <span>Light: 0 0% 13%</span>
+              <span>Dark: 0 0% 100%</span>
+            </div>
+          </li>
+          <li>
+            <span class="swatch" style="background: hsl(216 55% 25%);"></span>
+            <div class="meta wide">
+              <strong>primary</strong>
+              <span class="muted">Main CTA · Buttons</span>
+            </div>
+            <div class="hsl"><span>216 55% 25%</span></div>
+          </li>
+          <li>
+            <span class="swatch" style="background: hsl(219 14% 28%);"></span>
+            <div class="meta wide">
+              <strong>secondary</strong>
+              <span class="muted">Supporting actions</span>
+            </div>
+            <div class="hsl"><span>219 14% 28%</span></div>
+          </li>
+          <li>
+            <span class="swatch" style="background: hsl(105 22% 25%);"></span>
+            <div class="meta wide">
+              <strong>tertiary</strong>
+              <span class="muted">Accent · Was "accent"</span>
+            </div>
+            <div class="hsl"><span>105 22% 25%</span></div>
+          </li>
+        </ul>
+
+        <div class="note">
+          <strong>✨ Auto-Generated Variants</strong>
+          <span class="muted">
+            System creates: primary-light, primary-dark, secondary-light, etc. Ring = primary-dark.
+          </span>
+        </div>
+      </div>
+
+      <div class="col">
+        <h2>Cards + Buttons (shadcn)</h2>
+        <p class="muted">Cards use background/foreground. Buttons use primary/secondary/tertiary.</p>
+
+        <article class="card">
+          <header class="card-head">
+            <div>
+              <h3>Product Thing</h3>
+              <p class="muted">
+                Card uses <code>background</code> with <code>foreground</code> content area
+              </p>
+            </div>
+            <span class="badge">product</span>
+          </header>
+
+          <div class="content-area">
+            <strong>Content Area</strong>
+            <span class="muted">This uses foreground color</span>
+          </div>
+
+          <p class="price">$299</p>
+
+          <div class="buttons">
+            <button class="btn primary">Primary Button</button>
+            <button class="btn secondary">Secondary Button</button>
+            <button class="btn tertiary">Tertiary Button</button>
+            <button class="btn outline">Outline Button</button>
+            <button class="btn ghost">Ghost Button</button>
+            <button class="btn inverse">Inverse Button</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer muted">
+      6 tokens · 6 button variants · 1 card shape · One palette per workspace
+    </footer>
+  </main>
+
+  <script is:inline>
+    const html = document.documentElement
+    const buttons = document.querySelectorAll('.mode-toggle button')
+    buttons.forEach((b) => {
+      b.addEventListener('click', () => {
+        const mode = b.dataset.mode
+        html.classList.toggle('dark', mode === 'dark')
+        buttons.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.mode === mode)))
+      })
+    })
+  </script>
+</Layout>
+
+<style is:global>
+  .design-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 64px 32px;
+    color: var(--color-font);
+  }
+
+  /* Page bg slightly distinct from card bg, derived from background ± 4% L */
+  html.dark body:has(.design-page) {
+    background: hsl(0 0% 6%);
+  }
+  html:not(.dark) body:has(.design-page) {
+    background: hsl(0 0% 96%);
+  }
+
+  .design-page * {
+    box-sizing: border-box;
+  }
+
+  .design-page .hero {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .design-page .hero h1 {
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+  }
+
+  .design-page .hero p {
+    max-width: 640px;
+    margin: 0 auto;
+    color: color-mix(in oklab, var(--color-font) 65%, transparent);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .design-page .mode-toggle {
+    display: inline-flex;
+    gap: 4px;
+    margin-top: 32px;
+    padding: 4px;
+    background: var(--color-background);
+    border: 1px solid color-mix(in oklab, var(--color-font) 8%, transparent);
+    border-radius: 12px;
+  }
+
+  .design-page .mode-toggle button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: transparent;
+    color: color-mix(in oklab, var(--color-font) 70%, transparent);
+    border: 0;
+    border-radius: 8px;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .design-page .mode-toggle button[aria-pressed='true'] {
+    background: color-mix(in oklab, var(--color-font) 8%, transparent);
+    color: var(--color-font);
+  }
+
+  .design-page .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  @media (max-width: 960px) {
+    .design-page .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .design-page h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  .design-page .col > p {
+    margin: 0 0 24px;
+  }
+
+  .design-page .muted {
+    color: color-mix(in oklab, var(--color-font) 55%, transparent);
+    font-size: 14px;
+  }
+
+  .design-page .tokens {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .design-page .tokens li {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--color-background);
+    border: 1px solid color-mix(in oklab, var(--color-font) 6%, transparent);
+    border-radius: 12px;
+  }
+
+  .design-page .swatch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in oklab, var(--color-font) 8%, transparent);
+    font-weight: 600;
+  }
+
+  .design-page .font-light {
+    background: hsl(0 0% 100%);
+    color: hsl(0 0% 13%);
+  }
+
+  .design-page .font-dark {
+    background: hsl(0 0% 13%);
+    color: hsl(0 0% 100%);
+  }
+
+  .design-page .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .design-page .meta.wide {
+    grid-column: 3 / span 1;
+  }
+
+  .design-page .meta strong {
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .design-page .hsl {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    color: color-mix(in oklab, var(--color-font) 55%, transparent);
+  }
+
+  .design-page .note {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--color-background);
+    border: 1px solid color-mix(in oklab, var(--color-font) 6%, transparent);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .design-page .card {
+    padding: 24px;
+    background: var(--color-background);
+    border: 1px solid color-mix(in oklab, var(--color-font) 6%, transparent);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .design-page .card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .design-page .card-head h3 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .design-page .card-head p {
+    margin: 0;
+  }
+
+  .design-page .badge {
+    padding: 4px 12px;
+    background: var(--color-background);
+    border: 1px solid color-mix(in oklab, var(--color-font) 12%, transparent);
+    border-radius: 999px;
+    font-size: 12px;
+    color: color-mix(in oklab, var(--color-font) 70%, transparent);
+  }
+
+  .design-page code {
+    padding: 1px 6px;
+    background: color-mix(in oklab, var(--color-font) 8%, transparent);
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+  }
+
+  .design-page .content-area {
+    padding: 16px;
+    background: var(--color-foreground);
+    color: var(--color-font);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .design-page .content-area .muted {
+    color: color-mix(in oklab, var(--color-font) 60%, transparent);
+  }
+
+  .design-page .price {
+    margin: 4px 0;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .design-page .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .design-page .btn {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.12s ease;
+  }
+
+  .design-page .btn:hover {
+    filter: brightness(1.1);
+  }
+
+  .design-page .btn.primary {
+    background: var(--color-primary);
+    color: hsl(0 0% 100%);
+  }
+
+  .design-page .btn.secondary {
+    background: var(--color-secondary);
+    color: hsl(0 0% 100%);
+  }
+
+  .design-page .btn.tertiary {
+    background: var(--color-tertiary);
+    color: hsl(0 0% 100%);
+  }
+
+  .design-page .btn.outline {
+    background: transparent;
+    border-color: var(--color-primary);
+    color: var(--color-font);
+  }
+
+  .design-page .btn.ghost {
+    background: transparent;
+    color: var(--color-font);
+  }
+
+  .design-page .btn.inverse {
+    background: var(--color-font);
+    color: var(--color-foreground);
+  }
+
+  .design-page .footer {
+    margin-top: 64px;
+    text-align: center;
+  }
+</style>

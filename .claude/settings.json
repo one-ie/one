@@ -23,6 +23,9 @@
       "*.tql": ["skills/typedb/SKILL.md"],
       "src/engine/**/*.ts": ["rules/engine.md"],
       "src/components/**/*.tsx": ["rules/ui.md"],
+      "web/**/*.tsx": ["rules/design.md"],
+      "web/**/*.astro": ["rules/design.md"],
+      "web/**/*.css": ["rules/design.md"],
       "src/engine/bridge.ts": ["skills/sui.md", "skills/typedb/SKILL.md"],
       "src/lib/sui.ts": ["skills/sui.md"],
       "src/lib/typedb.ts": ["skills/typedb/SKILL.md"],
@@ -52,6 +55,17 @@
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/sync-todo-docs.sh",
             "timeout": 5000
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/design-check.sh",
+            "timeout": 5000,
+            "blocking": true
           }
         ]
       },

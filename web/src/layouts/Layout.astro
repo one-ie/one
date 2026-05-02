@@ -8,7 +8,7 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,11 +16,49 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
-  <body class="min-h-screen bg-zinc-950 text-zinc-100 antialiased">
+  <body class="min-h-screen antialiased">
     <slot />
   </body>
 </html>
 
 <style is:global>
   @import 'tailwindcss';
+
+  /*
+   * ONE Design System — 6 extractable tokens.
+   * See `/design` for the showcase, `design.md` for the spec.
+   *
+   * `--color-*: initial` wipes Tailwind's default palette so utilities like
+   * `bg-zinc-*`, `bg-indigo-*`, `text-emerald-*` literally produce no CSS.
+   * The system enforces itself: a wrong color is invisible in the browser.
+   */
+  @theme {
+    --color-*: initial;
+
+    /* Invariants — kept so text on brand fills is always readable */
+    --color-white: #fff;
+    --color-black: #000;
+    --color-transparent: transparent;
+    --color-current: currentColor;
+
+    /* The 6 extractable tokens */
+    --color-background: hsl(0 0% 93%);
+    --color-foreground: hsl(0 0% 100%);
+    --color-font: hsl(0 0% 13%);
+    --color-primary: hsl(216 55% 25%);
+    --color-secondary: hsl(219 14% 28%);
+    --color-tertiary: hsl(105 22% 25%);
+  }
+
+  /* Surface tokens flip with mode. Brand tokens don't. */
+  html.dark {
+    --color-background: hsl(0 0% 10%);
+    --color-foreground: hsl(0 0% 13%);
+    --color-font: hsl(0 0% 100%);
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-font);
+  }
 </style>
