@@ -22,9 +22,9 @@ clone  →  bun install  →  bun dev  →  edit content  →  bun run deploy
 | Layout + SEO | `Layout.astro` (title/description props, OG-ready, dark mode) | `src/layouts/Layout.astro` |
 | Design system | 6 editable tokens + auto-contrast labels + 3 depth levels | `design.md` · `/design` |
 | Theme editor | Live color picker; persists to `localStorage`; per-mode | `theme-editor.md` · `/design` |
-| Chat | Streaming AI chat (`Chat.tsx`) + floating widget (`ChatWidget.tsx`) | `src/components/Chat.tsx` |
+| Chat | Streaming AI chat (`Chat.tsx`) + floating widget (`ChatWidget.tsx`); token-by-token SSE; inline tool-approval UI | `src/components/Chat.tsx` |
 | Sidebar | Mini/full/sheet rail — collapsible groups, persisted state, mobile drawer | `src/components/sidebar/` · `sidebar.md` |
-| Chat backend | `/api/chat` SSE endpoint, `/api/health`, webhook handlers | `src/pages/api/` |
+| Chat backend | `/api/chat` streams AI SDK UIMessage SSE from `claw`; webhook handlers unified via `runAgent()` | `src/pages/api/` |
 | Auth-ready | Better Auth wired (Google plugin), passkey path documented | `passkeys.md` |
 | Payments | x402 receive side prod-ready; SDK send side in `apps/one-core` | `x402.md` |
 | Agents / brain | `claw` worker (Telegram/Discord/HTTP → LLM, D1+KV memory) | `claw/` |
@@ -117,10 +117,17 @@ Two surfaces, same backend:
 - `<Chat />` — full-page conversation (`/chat` route)
 - `<ChatWidget />` — floating bubble for any landing page
 
-Backend is `/api/chat` (Server-Sent Events streaming). Swap providers by
-editing one file — `claw/` ships an OpenRouter-backed worker (default:
-Haiku 4.5 for speed, Sonnet 4.6 for decisions). Memory + learning live in
-TypeDB / D1 / KV; the chat surface stays a thin client.
+Both use AI SDK v6 `useChat` with `DefaultChatTransport` — token-by-token
+streaming, automatic reconnect, and an inline Approve/Deny button row for
+any tool call that requires user consent before it writes to the substrate.
+
+Backend is `claw/` — a `ToolLoopAgent` worker on CF Workers (AI SDK v6).
+Model routing: OpenRouter by default (any model string), Groq if `GROQ_API_KEY`
+set + `groq/` prefix, AI SDK Gateway as final fallback. Swap models by
+editing one line in `claw/src/personas.ts`.
+
+`substrateMiddleware` wires pheromone learning to every LLM call automatically —
+no manual mark/warn calls needed from the chat path.
 
 Five access modes once you wire the SDK: web · API · `@oneie/sdk` ·
 `@oneie/mcp` · `npx oneie` CLI. Same substrate, five ways in.
@@ -208,7 +215,7 @@ Spec: `sidebar.md` · code: `web/src/components/sidebar/`.
 | UI | React 19 | Actions, `use()`, transitions, `ref` as prop |
 | Styling | Tailwind 4 + shadcn/ui | Token-locked palette, copy-paste components |
 | Runtime | Cloudflare Workers | Edge SSR, static assets, D1, KV |
-| AI | OpenRouter (Haiku / Sonnet) | One key, every model |
+| AI | AI SDK v6 (`ToolLoopAgent`, streaming, tool approval) · OpenRouter default | One key, every model; multi-step loops; approval gates |
 | Brain | TypeDB 3.0 | Path-based memory, agent learning |
 | Lang | TypeScript | Always typed; no `any` |
 

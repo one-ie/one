@@ -18,6 +18,7 @@
     "@astrojs/cloudflare": "^13.1.10",
     "@astrojs/node": "^10.0.5",
     "@astrojs/react": "^5.0.3",
+    "@cloudflare/vite-plugin": "^1.35.0",
     "@tailwindcss/vite": "^4.0.0",
     "ai": "^6",
     "astro": "^6.0.0",

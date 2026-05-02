@@ -28,6 +28,15 @@ export default defineConfig({
     ssr: {
       external: ['node:async_hooks'],
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('jsx-runtime') || id.includes('ui-signal')) return 'sidebar'
+          },
+        },
+      },
+    },
   },
   markdown: { syntaxHighlight: false },
   security: { checkOrigin: false },

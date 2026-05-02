@@ -64,7 +64,7 @@ without verification is superstition; with verification it's learning.
 | `agents/`    | Markdown agent definitions (templates in `agents/templates/`) | `agents/CLAUDE.md` |
 | `mcp/`       | `@oneie/mcp` — MCP server for Claude/Cursor | `mcp/CLAUDE.md` |
 | `sdk/`       | `@oneie/sdk` — TypeScript SDK | `sdk/CLAUDE.md` |
-| `claw/`      | Edge-native AI agent worker — Telegram/Discord/HTTP → LLM, substrate-backed memory (~660 LOC, Hono on CF Workers, D1+KV) | `claw/README.md` |
+| `claw/`      | Edge-native AI agent worker — Telegram/Discord/HTTP → `ToolLoopAgent` → streaming SSE; approval-gated substrate tools; `substrateMiddleware` auto-wires pheromone (Hono on CF Workers, D1+KV, AI SDK v6) | `claw/README.md` |
 | `one/`       | Canonical docs — ontology, dictionary, patterns, rubrics | `one/dictionary.md` |
 | `web/`       | Astro 6 + React 19 + CF Workers substrate app (chat UI, pages, dashboards) | `web/README.md` |
 | `.claude/`   | Claude Code harness — commands, skills, rules, subagents | `.claude/CLAUDE.md` |
@@ -95,7 +95,8 @@ duplicate state across layers; one brain, many surfaces.
 - **Tailwind 4** + **shadcn/ui** — styling
 - **TypeDB 3.0** — brain: paths, classification, learning
 - **Cloudflare Workers** — substrate runtime; D1 for signals/messages, KV for snapshots
-- **OpenRouter** — LLM router (default: Haiku 4.5 for speed, Sonnet 4.5 for decisions)
+- **AI SDK v6** (`ai@^6`, `@ai-sdk/react`) — `ToolLoopAgent`, `createAgentUIStreamResponse`, `useChat`; streaming + tool approval protocol
+- **OpenRouter** — default LLM provider via `@ai-sdk/openai-compatible`; Groq opt-in; AI SDK Gateway fallback
 
 ## The 4 outcomes
 

@@ -3,7 +3,7 @@ import { ChevronLeft } from 'lucide-react'
 import { Icon } from '@/components/ui/Icon'
 import { cn } from '@/lib/cn'
 import { emitClick } from '@/lib/ui-signal'
-import { useSidebar, usePathname, useMediaQuery } from '@/hooks/use-sidebar'
+import { useSidebar, usePathname } from '@/hooks/use-sidebar'
 import { getMenu } from '@/lib/menu'
 import { MenuItemNode } from './MenuItem'
 import { SheetMenu } from './SheetMenu'
@@ -14,7 +14,6 @@ interface Props {
 }
 
 export function Sidebar({ initial }: Props) {
-  const isMobile = useMediaQuery('(max-width: 767px)')
   const { open, toggle, set } = useSidebar(initial === 'full')
   const pathname = usePathname()
   const [sheetOpen, setSheetOpen] = useState(false)
@@ -24,22 +23,22 @@ export function Sidebar({ initial }: Props) {
     document.body.dataset.sidebarOpen = String(open)
   }, [open])
 
-  if (isMobile) {
-    return (
-      <SheetMenu
-        pathname={pathname}
-        isOpen={sheetOpen}
-        onOpen={() => setSheetOpen(true)}
-        onClose={() => setSheetOpen(false)}
-      />
-    )
-  }
-
+  // Render both branches; CSS handles the mobile/desktop split so the layout
+  // never reflows on hydration.
   return (
-    <aside
+    <>
+      <div className="md:hidden">
+        <SheetMenu
+          pathname={pathname}
+          isOpen={sheetOpen}
+          onOpen={() => setSheetOpen(true)}
+          onClose={() => setSheetOpen(false)}
+        />
+      </div>
+      <aside
       aria-label="Sidebar"
       className={cn(
-        'sticky top-0 z-30 flex h-screen flex-col bg-background',
+        'sticky top-0 z-30 hidden h-screen flex-col bg-background md:flex',
         'transition-[width] duration-200',
       )}
       style={{
@@ -53,7 +52,7 @@ export function Sidebar({ initial }: Props) {
           onClick={() => emitClick('ui:sidebar:nav', { href: '/', source: 'brand' })}
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
-          <img src="/icon.svg" alt="" aria-hidden width={40} height={40} className="rounded-lg" />
+          <img src="/icon.svg" alt="" aria-hidden width={40} height={40} className="rounded-lg" fetchPriority="high" decoding="async" />
           {open && <span>ONE</span>}
         </a>
       </header>
@@ -116,5 +115,6 @@ export function Sidebar({ initial }: Props) {
         />
       </button>
     </aside>
+    </>
   )
 }

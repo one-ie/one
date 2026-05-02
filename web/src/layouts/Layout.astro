@@ -18,6 +18,31 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full' 
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Critical tokens inlined — no network round-trip before first paint -->
+    <style is:inline>
+      :root {
+        --color-background: hsl(0 0% 93%);
+        --color-foreground: hsl(0 0% 100%);
+        --color-font: hsl(0 0% 13%);
+        --color-primary: hsl(216 55% 25%);
+        --color-secondary: hsl(219 14% 28%);
+        --color-tertiary: hsl(105 22% 25%);
+        --color-on-primary: #fff;
+        --color-on-secondary: #fff;
+        --color-on-tertiary: #fff;
+        --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
+        --color-page: color-mix(in oklab, var(--color-background) 96%, var(--color-font));
+      }
+      html.dark {
+        --color-background: hsl(0 0% 10%);
+        --color-foreground: hsl(0 0% 13%);
+        --color-font: hsl(0 0% 100%);
+      }
+      body { background: var(--color-page); color: var(--color-font); }
+      .page-shell { display: flex; align-items: flex-start; min-height: 100vh; }
+      .page-shell__content { flex: 1; min-width: 0; }
+      @media (max-width: 767px) { .page-shell { display: block; } }
+    </style>
     <script is:inline>
       try {
         const t = JSON.parse(localStorage.getItem('one:theme') || 'null')
@@ -48,7 +73,7 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full' 
       <slot />
     ) : (
       <div class="page-shell">
-        <Sidebar client:load initial={sidebar} />
+        <Sidebar client:idle initial={sidebar} />
         <main class="page-shell__content"><slot /></main>
       </div>
     )}
@@ -99,11 +124,8 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full' 
     --color-faint: color-mix(in oklab, var(--color-font) 40%, transparent);
     --color-ring: var(--color-primary);
 
-    /* Depth: page (L0) sits one shade off the card so card edges are visible.
-       Card = background (L1). Inner content/inputs = foreground (L2). */
     --color-page: color-mix(in oklab, var(--color-background) 96%, var(--color-font));
 
-    /* Polish constants — radius, shadow, transition. Bake into components. */
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
@@ -130,8 +152,6 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full' 
     border-radius: 2px;
   }
 
-  /* Sidebar shell — sidebar is a sticky aside in the flex row.
-     The aside owns its own width via inline style; this just lays them out. */
   .page-shell {
     display: flex;
     align-items: flex-start;
@@ -140,10 +160,9 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full' 
 
   .page-shell__content {
     flex: 1;
-    min-width: 0; /* prevent grid blow-out from long code blocks */
+    min-width: 0;
   }
 
-  /* Mobile: aside becomes a fixed drawer; main reclaims full width. */
   @media (max-width: 767px) {
     .page-shell {
       display: block;

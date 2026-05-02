@@ -1,18 +1,21 @@
 # claw
 
-Edge-native AI agents on Cloudflare Workers. Telegram + Discord webhooks → LLM → reply, with substrate-backed memory and pheromone learning. Zero cold start, ~660 LOC.
+Edge-native AI agents on Cloudflare Workers. Telegram + Discord webhooks → LLM → streaming reply, with substrate-backed memory and pheromone learning. Zero cold start.
+
+Built on **AI SDK v6** (`ToolLoopAgent` + `createAgentUIStreamResponse`) — the `/message` route streams the full agent loop to the browser over SSE, with tool approval gates surfaced as interactive UI in the chat.
 
 ---
 
 ## What it does
 
 - Receives messages from **Telegram**, **Discord**, or a direct **/message** API
-- Calls an LLM (OpenRouter or Groq) with conversation history + recalled memory
-- Replies in-channel
-- Strengthens / weakens substrate paths based on outcome (mark / warn)
-- Exposes `/memory`, `/forget`, `/explore` slash commands for the user
+- Runs a multi-step `ToolLoopAgent` loop (model → tool → model, up to `maxSteps`)
+- **Streams** the agent loop token-by-token to the browser via AI SDK UIMessage protocol
+- **Approval gates** — substrate write tools (`remember`, `mark`, `warn`) pause the loop and ask the user before running
+- Strengthens / weakens substrate paths based on LLM outcome (mark / warn) — wired automatically via `substrateMiddleware`
+- Exposes `/memory`, `/forget`, `/explore` slash commands in Telegram/Discord
 
-That's it. No containers, no queues, no DOs, no orchestration layer.
+No containers, no queues, no DOs, no orchestration layer.
 
 ---
 
@@ -23,10 +26,12 @@ That's it. No containers, no queues, no DOs, no orchestration layer.
 | GET  | `/health` | Status + version |
 | GET  | `/highways` | Top substrate paths (substrate visibility) |
 | GET  | `/messages/:group` | Conversation history for a group |
-| POST | `/message` | Direct API: `{group, text, sender?}` → `{response}` |
+| POST | `/message` | Direct API / web chat: streams AI SDK UIMessage SSE |
 | POST | `/webhook/:channel` | Telegram / Discord ingress (`telegram`, `telegram-<name>`, `discord`) |
 
 `API_KEY` env var: when set, all non-webhook routes require `Authorization: Bearer <key>`.
+
+`/message` accepts `{group, text, sender?}` (plain text API) or `{group, messages: UIMessage[]}` (web chat).
 
 ---
 
@@ -34,17 +39,21 @@ That's it. No containers, no queues, no DOs, no orchestration layer.
 
 ```
 src/
-├── index.ts       # Hono router (the only entry point)
-├── channels.ts    # telegram + discord normalize/send
-├── personas.ts    # worker-level default personas (BOT_PERSONA env)
-├── pipeline.ts    # ingest → recall → measure-outcome
-├── prompt.ts      # render ContextPack into system prompt
-├── classify.ts    # keyword tagger + valence detector
-├── memory.ts      # /memory, /forget, /explore handlers
-├── substrate.ts   # TypeDB via gateway (mark/warn/highways/recall)
-├── tools.ts       # function-calling tools the LLM can invoke
-├── browser.ts     # URL fetch + extract (cached 5 min in KV)
-└── types.ts
+├── index.ts            # Hono router (the only entry point)
+├── agents/
+│   └── builder.ts      # makeAgent() — ToolLoopAgent per persona
+├── aitools.ts          # v6 tool() map: 7 tools, approval gates on substrate writes
+├── middleware.ts        # substrateMiddleware (pheromone) + provider routing
+├── channels.ts         # telegram + discord normalize/send
+├── personas.ts         # worker-level default personas (BOT_PERSONA env)
+├── pipeline.ts         # ingest → recall → measure-outcome (webhook path)
+├── prompt.ts           # render ContextPack into system prompt (webhook path)
+├── classify.ts         # keyword tagger + valence detector
+├── memory.ts           # /memory, /forget, /explore handlers
+├── substrate.ts        # TypeDB via gateway (mark/warn/highways/recall)
+├── tools.ts            # legacy tool definitions (webhook path)
+├── browser.ts          # URL fetch + extract (cached 5 min in KV)
+└── types.ts            # Env, CallOptions, GroupContext
 ```
 
 ---
@@ -92,6 +101,22 @@ wrangler secret put TELEGRAM_TOKEN_SALES
 Webhook them at `/webhook/telegram-support`, `/webhook/telegram-sales`. Group ids will use prefixes `tg-support-`, `tg-sales-` and route via the matching token.
 
 To make a bot use a specific persona, set `BOT_PERSONA` to a key from `src/personas.ts`. Or fork the worker and edit `personas.ts` to add your own.
+
+---
+
+## Provider routing
+
+`resolveBaseModel` in `middleware.ts` picks the provider in order:
+
+1. **Groq** — if model ID starts with `groq/` and `GROQ_API_KEY` is set
+2. **OpenRouter** — if `OPENROUTER_API_KEY` is set (default for any model ID)
+3. **AI SDK Gateway** — fallback
+
+Swap the model string in `personas.ts` to use any OpenRouter-supported model. No code changes needed.
+
+`substrateMiddleware` wraps every call: on success it `mark()`s with strength weighted by cache-hit ratio; on failure it `warn()`s. The substrate learns which models and groups work best automatically.
+
+When `MODE=development`, `devToolsMiddleware` also attaches — the AI SDK DevTools browser panel shows full prompt/response/tool traces.
 
 ---
 
