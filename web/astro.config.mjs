@@ -17,6 +17,7 @@ export default defineConfig({
   output: 'server',
   adapter,
   integrations: [react()],
+  build: { inlineStylesheets: 'always' },
   vite: {
     plugins: [tailwindcss()],
     resolve: {
