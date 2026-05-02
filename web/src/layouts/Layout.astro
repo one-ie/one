@@ -15,6 +15,30 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      try {
+        const t = JSON.parse(localStorage.getItem('one:theme') || 'null')
+        if (t) {
+          if (t.mode === 'light') document.documentElement.classList.remove('dark')
+          else if (t.mode === 'dark') document.documentElement.classList.add('dark')
+
+          if (t.light && t.dark) {
+            const onLabel = (hsl) => (parseFloat(hsl.split(/\s+/)[2]) < 60 ? '#fff' : '#000')
+            const rule = (sel, set) => {
+              const decls = Object.entries(set).map(([k, v]) => '--color-' + k + ':hsl(' + v + ')')
+              ;['primary', 'secondary', 'tertiary'].forEach((b) => {
+                if (set[b]) decls.push('--color-on-' + b + ':' + onLabel(set[b]))
+              })
+              return sel + '{' + decls.join(';') + '}'
+            }
+            const s = document.createElement('style')
+            s.id = 'theme-overrides'
+            s.textContent = rule(':root', t.light) + rule('html.dark', t.dark)
+            document.head.appendChild(s)
+          }
+        }
+      } catch {}
+    </script>
   </head>
   <body class="min-h-screen antialiased">
     <slot />
@@ -25,8 +49,8 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
   @import 'tailwindcss';
 
   /*
-   * ONE Design System — 6 extractable tokens.
-   * See `/design` for the showcase, `design.md` for the spec.
+   * ONE Design System — 6 extractable tokens + 5 invariants + derived helpers.
+   * Editor: `/design`. Spec: `design.md`.
    *
    * `--color-*: initial` wipes Tailwind's default palette so utilities like
    * `bg-zinc-*`, `bg-indigo-*`, `text-emerald-*` literally produce no CSS.
@@ -35,11 +59,13 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
   @theme {
     --color-*: initial;
 
-    /* Invariants — kept so text on brand fills is always readable */
+    /* Invariants — never editable */
     --color-white: #fff;
     --color-black: #000;
     --color-transparent: transparent;
     --color-current: currentColor;
+    --color-destructive: hsl(0 70% 50%);
+    --color-success: hsl(140 60% 40%);
 
     /* The 6 extractable tokens */
     --color-background: hsl(0 0% 93%);
@@ -48,6 +74,18 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
     --color-primary: hsl(216 55% 25%);
     --color-secondary: hsl(219 14% 28%);
     --color-tertiary: hsl(105 22% 25%);
+
+    /* Derived — auto-contrast labels for brand fills (overwritten by editor) */
+    --color-on-primary: #fff;
+    --color-on-secondary: #fff;
+    --color-on-tertiary: #fff;
+  }
+
+  /* Derived helpers — plain CSS vars (not Tailwind tokens, used via var()) */
+  :root {
+    --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
+    --color-muted: color-mix(in oklab, var(--color-font) 60%, transparent);
+    --color-ring: var(--color-primary);
   }
 
   /* Surface tokens flip with mode. Brand tokens don't. */
@@ -60,5 +98,11 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
   body {
     background: var(--color-background);
     color: var(--color-font);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 </style>

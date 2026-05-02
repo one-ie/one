@@ -8,7 +8,7 @@ default palette so wrong colors emit no CSS. Don't fight the enforcement.
 
 ---
 
-## The 6 tokens (the only colors that exist)
+## The 6 editable tokens (the only colors a user can pick)
 
 | Token | Use for |
 | --- | --- |
@@ -19,28 +19,43 @@ default palette so wrong colors emit no CSS. Don't fight the enforcement.
 | `secondary` | Supporting actions, secondary buttons |
 | `tertiary` | Highlights, success checks, accents |
 
-Plus three invariants kept by the theme: `white`, `black`, `transparent`.
-Use `white` only for text on a brand fill (where readability across modes matters).
+## Plus 5 invariants (never editable)
+
+`white` · `black` · `transparent` · `destructive` (errors/deletes) · `success` (confirms).
+
+## Plus 6 derived (auto-computed — don't set directly)
+
+`on-primary` · `on-secondary` · `on-tertiary` (auto-contrast labels for brand fills) · `border` (= font @ 10%) · `muted` (= font @ 60%) · `ring` (= primary).
 
 ---
 
 ## Allowed utilities
 
 ```
-bg-{background|foreground|primary|secondary|tertiary|white|black|transparent}
-text-{font|primary|secondary|tertiary|white|black}
-border-{font|primary|secondary|tertiary}        ← always with /N alpha
+bg-{background|foreground|primary|secondary|tertiary|destructive|success|white|black|transparent}
+text-{font|primary|secondary|tertiary|on-primary|on-secondary|on-tertiary|destructive|success|white|black}
+border-{font|primary|secondary|tertiary}
 ring-{primary|secondary|tertiary}
 ```
 
-Alpha modifiers are encouraged for muted variants:
+**Use the auto-contrast `on-*` labels on brand fills** — they stay readable when the user picks any color:
 
 ```tsx
-text-font/60          // muted body text
-text-font/40          // disabled / placeholder
-border-font/10        // subtle borders
-bg-primary/20         // tinted brand backgrounds
+<button className="bg-primary text-on-primary">Primary</button>
+<button className="bg-tertiary text-on-tertiary">Tertiary</button>
 ```
+
+For muted text, borders, and focus rings, use alpha modifiers or `var()` — these are CSS-only helpers, not Tailwind utilities:
+
+```tsx
+text-font/60                                        // muted body text
+text-font/40                                        // disabled / placeholder
+border-font/10                                      // subtle borders
+bg-primary/20                                       // tinted brand backgrounds
+style={{ borderColor: 'var(--color-border)' }}      // when alpha modifier won't fit
+```
+
+The `--color-{border,muted,ring}` CSS vars exist (defined in `Layout.astro`) but are not Tailwind tokens — Tailwind v4 chokes on `var()` references inside `@theme`. Use them via `var()` only when needed.
 
 ---
 

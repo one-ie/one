@@ -23,19 +23,36 @@ Naming: `background` is the outer card/panel; `foreground` is the inner content 
 
 ---
 
-## Mapping to shadcn
+## What's editable, what's derived, what's invariant
 
-shadcn ships ~20 tokens. We expose 6. The rest are derived:
+**6 editable** (the picker on `/design` writes these):
 
 ```
-primary-light, primary-dark      ← lighten/darken primary by fixed L delta
-secondary-light, secondary-dark  ← same, from secondary
-tertiary-light, tertiary-dark    ← same, from tertiary
-ring                             = primary-dark
-border                           = background ± 8% L
-muted                            = background ± 4% L
-destructive                      = fixed red (not extractable)
+background  foreground  font  primary  secondary  tertiary
 ```
+
+**5 invariants** (never editable, no picker, no flip with mode):
+
+```
+white         #fff               (text on brand fills, fallback)
+black         #000               (text on light brand fills)
+transparent   transparent
+destructive   hsl(0 70% 50%)     (errors, deletes)
+success       hsl(140 60% 40%)   (confirms, completes)
+```
+
+**6 derived** (auto-computed from the editable 6 — never set directly):
+
+```
+on-primary    auto              white if L(primary)   < 60%, else black
+on-secondary  auto              white if L(secondary) < 60%, else black
+on-tertiary   auto              white if L(tertiary)  < 60%, else black
+border        font @ 10% alpha  every card/divider/chip border
+muted         font @ 60% alpha  secondary text, hints
+ring          = primary         focus-visible outline (global)
+```
+
+The `on-*` tokens make brand fills safe to edit: pick a yellow primary and the button label flips to black automatically. Buttons use `color: var(--color-on-primary)`, never `text-white`.
 
 Renames from stock shadcn:
 - `accent` → `tertiary` — ordinal naming alongside primary/secondary
@@ -83,23 +100,58 @@ Six button variants. `outline`, `ghost`, `inverse` are all derived — no new to
 
 ## CSS variables
 
+Source of truth: `web/src/layouts/Layout.astro` (`@theme` block).
+
 ```css
-:root {
-  --background: 0 0% 93%;
-  --foreground: 0 0% 100%;
-  --font:       0 0% 13%;
-  --primary:    216 55% 25%;
-  --secondary:  219 14% 28%;
-  --tertiary:   105 22% 25%;
+@theme {
+  --color-*: initial;  /* wipes Tailwind defaults — wrong colors emit no CSS */
+
+  /* Invariants */
+  --color-white: #fff;
+  --color-black: #000;
+  --color-transparent: transparent;
+  --color-destructive: hsl(0 70% 50%);
+  --color-success:     hsl(140 60% 40%);
+
+  /* The 6 editable tokens */
+  --color-background: hsl(0 0% 93%);
+  --color-foreground: hsl(0 0% 100%);
+  --color-font:       hsl(0 0% 13%);
+  --color-primary:    hsl(216 55% 25%);
+  --color-secondary:  hsl(219 14% 28%);
+  --color-tertiary:   hsl(105 22% 25%);
+
+  /* Derived — overwritten by the editor at runtime */
+  --color-on-primary:   #fff;
+  --color-on-secondary: #fff;
+  --color-on-tertiary:  #fff;
 }
 
-.dark {
-  --background: 0 0% 10%;
-  --foreground: 0 0% 13%;
-  --font:       0 0% 100%;
-  /* brand tokens unchanged */
+/* Plain CSS vars — Tailwind v4 can't resolve var() inside @theme, so derived
+   helpers that reference other tokens live here. Use via var() in CSS, not
+   as Tailwind utilities. */
+:root {
+  --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
+  --color-muted:  color-mix(in oklab, var(--color-font) 60%, transparent);
+  --color-ring:   var(--color-primary);
+}
+
+html.dark {
+  --color-background: hsl(0 0% 10%);
+  --color-foreground: hsl(0 0% 13%);
+  --color-font:       hsl(0 0% 100%);
+  /* brand tokens unchanged — brand is mode-agnostic */
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
 }
 ```
+
+## Live editor
+
+Visit `/design`. Click any of the 6 swatches. Picker → live update → `localStorage['one:theme']` persists across pages and reloads. Mode preference persists too. Reset button restores defaults. The `on-*` contrast labels are recomputed on every pick — pick yellow, button text goes black, automatically.
 
 ---
 
@@ -109,7 +161,9 @@ Six button variants. `outline`, `ghost`, `inverse` are all derived — no new to
 - Don't use shadcn's `accent` name; it's `tertiary` here.
 - Don't flip brand colors with mode — only surfaces flip.
 - Don't fork a component to recolor — change the token.
+- Don't hardcode `text-white` or `color: #fff` on brand fills — use `var(--color-on-{primary|secondary|tertiary})` so contrast stays correct under user picks.
+- Don't reach for a custom border or muted-text color — `var(--color-border)` and `var(--color-muted)` (or `text-font/60`) cover every case.
 
 ---
 
-*6 tokens. 6 button variants. 1 card shape. One palette per workspace.*
+*6 editable. 5 invariants. 6 derived. 6 button variants. 1 card. One palette per workspace.*
