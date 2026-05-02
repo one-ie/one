@@ -7,6 +7,10 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = "dist/client"
 
+[[kv_namespaces]]
+binding = "SESSION"
+id = "fdc28eb10d2443d7bb6402f92340bb8d"
+
 [vars]
 AGENT_ID = "one-demo"
 AGENT_NAME = "ONE Demo"
