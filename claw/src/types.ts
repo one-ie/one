@@ -2,6 +2,12 @@
  * Claw — types
  */
 
+export interface CallOptions {
+  group: string
+  channel: 'web' | 'telegram' | 'discord' | 'api'
+  userId?: string
+}
+
 export interface Env {
   DB: D1Database
   KV: KVNamespace
@@ -16,6 +22,8 @@ export interface Env {
   BOT_PERSONA?: string
   /** If set, all non-webhook routes require Authorization: Bearer <API_KEY>. */
   API_KEY?: string
+  /** Set to 'development' to enable AI SDK devtools middleware. */
+  MODE?: string
 }
 
 export interface Signal {

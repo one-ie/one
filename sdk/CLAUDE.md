@@ -64,9 +64,33 @@ const one = new ONE({
 - Don't narrow the Signal type locally — `{receiver, data?: unknown}` is frozen
 - Don't implement toxicity checks client-side — that's the substrate's job
 
+## Composition with AI SDK v6
+
+`@oneie/sdk` is the **substrate layer**. AI SDK v6 (Vercel) is the **LLM + wire
+layer**. They compose without wrapping each other — both read the same
+`agents/<name>.md` markdown:
+
+```
+agents/<file>.md  ──┬──→  @oneie/sdk    syncAgent() → TypeDB unit + skills + paths
+                    │
+                    └──→  AI SDK v6     ToolLoopAgent({ model, instructions, tools })
+```
+
+Each markdown `skill` becomes BOTH a paid TypeDB capability (this SDK) AND a
+v6 `tool()` whose `execute` calls `one.ask()`. The 4 outcomes
+(`result | timeout | dissolved | failure`) map directly to v6's `finishReason`
++ error taxonomy, so a single `LanguageModelV2Middleware` in
+`claw/src/middleware.ts` auto-closes every loop via `mark`/`warn` — Rule 1
+(closed loop) is enforced by the integration, not by hand.
+
+Glue file: `claw/src/agents/builder.ts` (~50 lines). Full spec:
+[`one/aisdk.md` § Seam with `@oneie/sdk`](../one/aisdk.md#seam-with-oneiesdk-the-agents-sdk).
+
 ## See also
 
 - Root `CLAUDE.md` — architecture
 - `one/DSL.md` — signal grammar
 - `one/sdk.md` — SDK contract (the spec this SDK implements)
+- `one/aisdk.md` — AI SDK v6 wire protocol & full integration seam
+- `agents/CLAUDE.md` — markdown contract that both SDKs consume
 - `mcp/` — MCP server wrapping the same API for Claude/Cursor

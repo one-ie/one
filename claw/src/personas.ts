@@ -10,6 +10,8 @@ export interface Persona {
   model: string
   systemPrompt: string
   tags?: string[]
+  /** Maximum tool-loop steps before stopping. Default: 5. */
+  maxSteps?: number
 }
 
 export const personas: Record<string, Persona> = {

@@ -26,6 +26,27 @@ Web      ──┘     ▲                  ▲
 
 Neither duplicates the other.
 
+### The two-SDK composition
+
+Inside `claw`, two SDKs compose without wrapping each other:
+
+```
+agents/<name>.md  ──┬──→  @oneie/sdk    TypeDB unit + skills + paths + payment
+                    │
+                    └──→  AI SDK v6     ToolLoopAgent (LLM + tools + wire protocol)
+```
+
+`@oneie/sdk` is the **substrate layer** (`signal`, `ask`, `mark`, `warn`,
+`pay`, `discover`). AI SDK v6 is the **LLM + wire layer** (`ToolLoopAgent`,
+`tool()`, `useChat`, `gateway`). Each markdown `skill` becomes BOTH a paid
+TypeDB capability AND a v6 `tool()`. The 4 outcomes
+(`result | timeout | dissolved | failure`) map to v6's `finishReason`
++ error taxonomy, so a single substrate middleware closes every loop —
+Rule 1 (closed loop) is enforced by the integration. Glue file:
+`claw/src/agents/builder.ts` (~50 lines).
+
+Full seam spec: [`aisdk.md` § Seam with `@oneie/sdk`](aisdk.md#seam-with-oneiesdk-the-agents-sdk). Inverse view: [`sdk.md` § Composition with AI SDK v6](sdk.md#composition-with-ai-sdk-v6).
+
 ---
 
 ## Open source vs cloud

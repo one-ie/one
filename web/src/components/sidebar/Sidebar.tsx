@@ -52,12 +52,7 @@ export function Sidebar({ initial }: Props) {
           onClick={() => emitClick('ui:sidebar:nav', { href: '/', source: 'brand' })}
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
-          <span
-            className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-on-primary text-sm font-bold"
-            aria-hidden
-          >
-            1
-          </span>
+          <img src="/icon.svg" alt="" aria-hidden width={40} height={40} className="rounded-lg" />
           {open && <span>ONE</span>}
         </a>
       </header>

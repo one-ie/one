@@ -1,47 +1,35 @@
 import { useState, useRef, useEffect } from 'react'
 import { X, Send } from 'lucide-react'
 import { Icon } from '@/components/ui/Icon'
-
-interface Message {
-  role: 'user' | 'assistant'
-  content: string
-}
+import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
+import { emitClick } from '@/lib/ui-signal'
 
 interface Props {
   fullPage?: boolean
   onClose?: () => void
+  group?: string
 }
 
-export function Chat({ fullPage = false, onClose }: Props) {
-  const [messages, setMessages] = useState<Message[]>([])
+export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
   const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  const { messages, sendMessage, addToolApprovalResponse, status } = useChat({
+    transport: new DefaultChatTransport({ api: '/api/chat', body: { group } }),
+  })
+
+  const loading = status === 'submitted' || status === 'streaming'
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages])
 
-  const send = async () => {
+  const send = () => {
     if (!input.trim() || loading) return
-    const userMessage = input.trim()
+    emitClick('ui:chat:send')
+    sendMessage({ text: input.trim() })
     setInput('')
-    setMessages((prev) => [...prev, { role: 'user', content: userMessage }])
-    setLoading(true)
-
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, history: messages }),
-      })
-      const data = await res.json()
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.response || data.error || 'Error' }])
-    } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', content: 'Connection error.' }])
-    } finally {
-      setLoading(false)
-    }
   }
 
   const containerClass = fullPage
@@ -76,15 +64,54 @@ export function Chat({ fullPage = false, onClose }: Props) {
             <p className="text-sm">Ask me anything about ONE.</p>
           </div>
         )}
-        {messages.map((msg, i) => (
-          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div
-              className={`max-w-[80%] px-4 py-2 rounded-2xl ${
-                msg.role === 'user' ? 'bg-primary text-on-primary' : 'bg-foreground text-font'
-              }`}
-            >
-              {msg.content}
-            </div>
+        {messages.map((msg) => (
+          <div key={msg.id} className={`flex flex-col gap-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+            {msg.parts.map((part, i) => {
+              if (part.type === 'text') {
+                return (
+                  <div
+                    key={i}
+                    className={`max-w-[80%] px-4 py-2 rounded-2xl ${
+                      msg.role === 'user' ? 'bg-primary text-on-primary' : 'bg-foreground text-font'
+                    }`}
+                  >
+                    {part.text}
+                  </div>
+                )
+              }
+              if (
+                (part.type === 'dynamic-tool' || part.type.startsWith('tool-')) &&
+                (part as { state?: string }).state === 'approval-requested'
+              ) {
+                const approvalPart = part as { type: string; state: string; input: unknown; approval: { id: string } }
+                return (
+                  <div
+                    key={i}
+                    className="bg-foreground border rounded-xl p-3 text-sm max-w-[80%]"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  >
+                    <p className="text-font/60 mb-2">Approve: <code>{approvalPart.type}</code>?</p>
+                    <pre className="text-xs text-font/40 mb-2 overflow-auto">{JSON.stringify(approvalPart.input, null, 2)}</pre>
+                    <div className="flex gap-2">
+                      <button
+                        className="bg-primary text-on-primary rounded-lg px-3 py-1.5 text-xs"
+                        onClick={() => addToolApprovalResponse({ id: approvalPart.approval.id, approved: true })}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        className="bg-foreground border rounded-lg px-3 py-1.5 text-xs"
+                        style={{ borderColor: 'var(--color-border)' }}
+                        onClick={() => addToolApprovalResponse({ id: approvalPart.approval.id, approved: false })}
+                      >
+                        Deny
+                      </button>
+                    </div>
+                  </div>
+                )
+              }
+              return null
+            })}
           </div>
         ))}
         {loading && (

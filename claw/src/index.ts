@@ -9,7 +9,9 @@
  *   POST /webhook/:channel     — channel webhook (telegram, telegram-<name>, discord)
  */
 
+import { createAgentUIStreamResponse, type UIMessage } from 'ai'
 import { Hono } from 'hono'
+import { makeAgent } from './agents/builder'
 import { normalize, send } from './channels'
 import { handleExplore, handleForget, handleMemory } from './memory'
 import { personas } from './personas'
@@ -130,81 +132,67 @@ app.get('/messages/:group', async (c) => {
   return c.json({ group, messages: result.results || [] })
 })
 
-// Direct API — sync LLM call, returns the reply
+// Direct API — streams AI SDK Agent UI protocol
 app.post('/message', async (c) => {
   try {
-    const { group, text, sender = 'user' } = (await c.req.json()) as {
+    const body = (await c.req.json()) as {
       group: string
-      text: string
+      text?: string
       sender?: string
+      messages?: UIMessage[]
     }
-    if (!group || !text) return c.json({ ok: false, error: 'group and text required' }, 400)
+    const { group, text, sender = 'user', messages: bodyMessages } = body
+    if (!group) return c.json({ ok: false, error: 'group required' }, 400)
 
     const groupUid = `claw:${group}`
     if (await isToxic(c.env, 'entry', groupUid).catch(() => false)) {
       return c.json({ ok: false, dissolved: true, reason: 'toxic' })
     }
 
-    await c.env.DB.prepare(
-      `INSERT OR IGNORE INTO groups (id, channel, name, created_at) VALUES (?, 'web', ?, ?)`,
-    )
-      .bind(group, group, Math.floor(Date.now() / 1000))
-      .run()
+    // Store user message when sent as plain text (direct API callers)
+    if (text) {
+      await c.env.DB.prepare(
+        `INSERT OR IGNORE INTO groups (id, channel, name, created_at) VALUES (?, 'web', ?, ?)`,
+      )
+        .bind(group, group, Math.floor(Date.now() / 1000))
+        .run()
 
-    const msgId = `web-${Date.now()}`
-    await c.env.DB.prepare(
-      `INSERT INTO messages (id, group_id, channel, sender, content, role, ts) VALUES (?, ?, 'web', ?, ?, 'user', ?)`,
-    )
-      .bind(msgId, group, sender, text, Date.now())
-      .run()
-
-    const [context, chatMessages] = await Promise.all([loadContext(c.env, group), buildMessages(c.env, group)])
-
-    const llm = resolveLLM(context.model, c.env)
-    const openaiTools = tools.map((t) => ({
-      type: 'function' as const,
-      function: { name: t.name, description: t.description, parameters: t.input_schema },
-    }))
-
-    const res = await fetch(llm.url, {
-      method: 'POST',
-      headers: llm.headers,
-      body: JSON.stringify({
-        model: llm.modelId,
-        max_tokens: 512,
-        messages: [{ role: 'system', content: context.systemPrompt }, ...chatMessages],
-        tools: openaiTools,
-      }),
-    })
-
-    if (!res.ok) {
-      warn(c.env, 'entry', groupUid, 0.5).catch(() => {})
-      return c.json({ ok: false, error: 'LLM request failed' }, 500)
+      await c.env.DB.prepare(
+        `INSERT INTO messages (id, group_id, channel, sender, content, role, ts) VALUES (?, ?, 'web', ?, ?, 'user', ?)`,
+      )
+        .bind(`web-${Date.now()}`, group, sender, text, Date.now())
+        .run()
     }
 
-    const data = (await res.json()) as { choices?: [{ message?: { content?: string; tool_calls?: unknown[] } }] }
-    const choice = data.choices?.[0]?.message
-    const reply = (choice?.content as string) || ''
-
-    if (choice?.tool_calls) {
-      for (const call of choice.tool_calls as { function: { name: string; arguments: string } }[]) {
-        executeTool(c.env, group, call.function.name, JSON.parse(call.function.arguments)).catch(() => {})
+    // Build UI message list from body or D1 history
+    let uiMessages: UIMessage[]
+    if (bodyMessages && bodyMessages.length > 0) {
+      uiMessages = bodyMessages
+    } else {
+      const history = await buildMessages(c.env, group)
+      uiMessages = history.map((m, i) => ({
+        id: `hist-${i}`,
+        role: m.role as 'user' | 'assistant',
+        parts: [{ type: 'text' as const, text: m.content }],
+      }))
+      if (text) {
+        uiMessages.push({
+          id: `msg-${Date.now()}`,
+          role: 'user',
+          parts: [{ type: 'text' as const, text }],
+        })
       }
     }
 
-    if (reply) {
-      const respId = `resp-${Date.now()}`
-      c.env.DB.prepare(
-        `INSERT INTO messages (id, group_id, channel, sender, content, role, ts) VALUES (?, ?, 'web', 'assistant', ?, 'assistant', ?)`,
-      )
-        .bind(respId, group, reply, Date.now())
-        .run()
-        .catch(() => {})
-      mark(c.env, 'entry', groupUid).catch(() => {})
-      return c.json({ ok: true, id: msgId, group, response: reply, responseId: respId })
-    }
+    const personaKey = c.env.BOT_PERSONA ?? null
+    const persona = (personaKey && personas[personaKey]) || personas.one
+    const agent = makeAgent(c.env, persona, group)
 
-    return c.json({ ok: true, id: msgId, group, response: null })
+    return createAgentUIStreamResponse({
+      agent,
+      uiMessages,
+      options: { group, channel: 'web', userId: sender },
+    })
   } catch (e) {
     console.error('Post message error:', e)
     return c.json({ ok: false, error: String(e) }, 500)
