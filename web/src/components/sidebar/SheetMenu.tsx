@@ -82,7 +82,7 @@ export function SheetMenu({ pathname, isOpen, onOpen, onClose }: Props) {
           {groups.map((g, i) => (
             <div key={i} className="mb-4">
               {g.label && (
-                <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-font/40">
+                <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-font/60">
                   {g.label}
                 </p>
               )}

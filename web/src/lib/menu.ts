@@ -1,11 +1,8 @@
 import {
-  LayoutDashboard,
+  Home,
   MessageSquare,
-  Wallet,
-  Settings,
-  ShoppingCart,
-  Tag,
-  Users,
+  Palette,
+  Zap,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -31,31 +28,10 @@ export function getMenu(): MenuGroup[] {
     {
       label: null,
       items: [
-        { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+        { href: '/', label: 'Home', icon: Home },
         { href: '/chat', label: 'Chat', icon: MessageSquare },
-      ],
-    },
-    {
-      label: 'Money',
-      items: [
-        {
-          href: '/wallet',
-          label: 'Wallet',
-          icon: Wallet,
-          submenus: [
-            { href: '/wallet', label: 'Balance' },
-            { href: '/wallet/activity', label: 'Activity' },
-          ],
-        },
-        { href: '/buy', label: 'Buy', icon: ShoppingCart },
-        { href: '/sell', label: 'Sell', icon: Tag },
-      ],
-    },
-    {
-      label: 'Account',
-      items: [
-        { href: '/users', label: 'Team', icon: Users },
-        { href: '/settings', label: 'Settings', icon: Settings },
+        { href: '/design', label: 'Design', icon: Palette },
+        { href: '/motion', label: 'Motion', icon: Zap },
       ],
     },
   ]

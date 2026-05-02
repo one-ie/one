@@ -60,7 +60,7 @@ export function makeAgent(
         ? `\n\n[context] group=${opts.options.group} channel=${opts.options.channel}`
         : ''
       return {
-        model: opts.model,
+        ...opts,
         instructions: `${opts.instructions ?? persona.systemPrompt}${ctx}`,
         experimental_context: opts.options,
       }

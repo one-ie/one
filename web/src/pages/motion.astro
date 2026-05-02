@@ -2,712 +2,690 @@
 import Layout from '@/layouts/Layout.astro'
 import Reveal from '@/components/motion/Reveal'
 import Stagger from '@/components/motion/Stagger'
-import Parallax from '@/components/motion/Parallax'
 import HeroScene from '@/components/motion/demo/HeroScene'
 import ScrollCounter from '@/components/motion/demo/ScrollCounter'
-import GlowGrid from '@/components/motion/demo/GlowGrid'
-import TypewriterDemo from '@/components/motion/demo/TypewriterDemo'
+import FeatureTabs from '@/components/motion/FeatureTabs'
 ---
 
 <Layout title="ONE Motion System">
-  <!-- ─── Hero ─────────────────────────────────────────────────────────── -->
-  <section class="hero-section">
-    <Reveal client:visible dist="lg" speed="slow" className="hero-text">
-      <p class="label">Motion System</p>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       1. HOOK — above the fold, immediate value, no fluff
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <Reveal client:visible dist="lg" speed="slow" className="hero-copy">
+      <p class="eyebrow">Motion System · v1</p>
       <h1>Crisp.<br/>Purposeful.<br/>Fast.</h1>
-      <p class="sub">
-        Four primitives. Six tokens. One mental model.<br/>
-        Scroll to explore every capability.
+      <p class="hero-sub">
+        Four primitives. One mental model. Ships near-zero JS
+        until each island enters the viewport.
       </p>
+      <div class="hero-meta">
+        <span class="meta-chip">motion 12</span>
+        <span class="meta-dot">·</span>
+        <span class="meta-chip">Astro 6 islands</span>
+        <span class="meta-dot">·</span>
+        <span class="meta-chip">WCAG AA</span>
+      </div>
     </Reveal>
 
     <HeroScene client:visible />
 
-    <div class="scroll-hint">
+    <div class="scroll-cue">
       <span>Scroll</span>
       <div class="scroll-line"></div>
     </div>
   </section>
 
-  <!-- ─── Primitives index ──────────────────────────────────────────────── -->
-  <section class="section">
-    <Reveal client:visible className="section-head">
-      <p class="label">Layer 1</p>
-      <h2>The four primitives</h2>
-      <p class="muted">Everything derives from these. Drop them in `.astro` files as islands.</p>
-    </Reveal>
-
-    <Stagger client:visible className="primitives-grid" stagger={0.1}>
-      <div class="prim-card">
-        <code>&lt;Reveal&gt;</code>
-        <p>Fade + translate on viewport enter. One-shot. The building block for 80% of your reveals.</p>
-        <div class="prim-tag">whileInView</div>
-      </div>
-      <div class="prim-card">
-        <code>&lt;Stagger&gt;</code>
-        <p>Parent that staggers children reveals. Lists, grids, feature rows — rhythm for free.</p>
-        <div class="prim-tag">staggerChildren</div>
-      </div>
-      <div class="prim-card">
-        <code>&lt;Parallax&gt;</code>
-        <p>Depth through scroll-bound translation. useScroll + useTransform, no second library.</p>
-        <div class="prim-tag">useScroll</div>
-      </div>
-      <div class="prim-card">
-        <code>&lt;ScrollScene&gt;</code>
-        <p>Pin + expose progress 0→1. Signature moments: hero reveals, before/after demos.</p>
-        <div class="prim-tag">scrubbed</div>
-      </div>
-    </Stagger>
-  </section>
-
-  <!-- ─── Reveal demo ───────────────────────────────────────────────────── -->
-  <section class="section reveal-demo">
-    <Reveal client:visible className="section-head">
-      <p class="label">Primitive 1</p>
-      <h2>Reveal</h2>
-    </Reveal>
-
-    <div class="reveal-variants">
-      <Reveal client:visible dist="sm" speed="fast" delay={0}>
-        <div class="demo-chip">dist=sm · fast</div>
-      </Reveal>
-      <Reveal client:visible dist="md" speed="base" delay={0.1}>
-        <div class="demo-chip active">dist=md · base ← default</div>
-      </Reveal>
-      <Reveal client:visible dist="lg" speed="slow" delay={0.2}>
-        <div class="demo-chip">dist=lg · slow</div>
-      </Reveal>
-    </div>
-
-    <Reveal client:visible delay={0.1} className="reveal-code-block">
-      <pre><code>{`<Reveal client:visible dist="md" speed="base" delay={0.1}>
-  <HeroHeadline />
-</Reveal>`}</code></pre>
-    </Reveal>
-  </section>
-
-  <!-- ─── Stagger demo ──────────────────────────────────────────────────── -->
-  <section class="section">
-    <Reveal client:visible className="section-head">
-      <p class="label">Primitive 2</p>
-      <h2>Stagger</h2>
-    </Reveal>
-
-    <Stagger client:visible className="stagger-row" stagger={0.07}>
-      {Array.from({ length: 8 }, (_, i) => (
-        <div class="stagger-bar" style={`--i:${i}`}></div>
-      ))}
-    </Stagger>
-
-    <Stagger client:visible className="feature-list" stagger={0.09}>
-      <div class="feature-row">
-        <span class="feature-icon">◈</span>
-        <div><strong>Works with any children</strong><p class="muted">Wraps each child in a motion div automatically.</p></div>
-      </div>
-      <div class="feature-row">
-        <span class="feature-icon">◈</span>
-        <div><strong>Configurable rhythm</strong><p class="muted">Tune <code>stagger</code> from tight (0.04s) to spacious (0.15s).</p></div>
-      </div>
-      <div class="feature-row">
-        <span class="feature-icon">◈</span>
-        <div><strong>Reduced motion safe</strong><p class="muted">Opacity only — the rhythm survives, translation doesn't.</p></div>
-      </div>
-      <div class="feature-row">
-        <span class="feature-icon">◈</span>
-        <div><strong>client:visible hydration</strong><p class="muted">Zero JS shipped until the list enters the viewport.</p></div>
-      </div>
-    </Stagger>
-  </section>
-
-  <!-- ─── Parallax demo ────────────────────────────────────────────────── -->
-  <section class="section parallax-section">
-    <Reveal client:visible className="section-head">
-      <p class="label">Primitive 3</p>
-      <h2>Parallax</h2>
-    </Reveal>
-
-    <div class="parallax-demo-area">
-      <Parallax client:visible speed={80} direction="up" className="para-layer para-back">
-        <div class="para-grid"></div>
-      </Parallax>
-      <Parallax client:visible speed={40} direction="up" className="para-layer para-mid">
-        <GlowGrid client:visible />
-      </Parallax>
-      <div class="para-layer para-front">
-        <Reveal client:visible dist="md">
-          <div class="para-label">
-            <h3>Layered depth</h3>
-            <p class="muted">Three layers at different speeds — back, mid, front. Scroll through to see the shift.</p>
-          </div>
-        </Reveal>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── ScrollScene demo ─────────────────────────────────────────────── -->
-  <section class="section">
-    <Reveal client:visible className="section-head">
-      <p class="label">Primitive 4</p>
-      <h2>ScrollScene</h2>
-      <p class="muted">Sticky pin + scrubbed progress. The signature moment.</p>
-    </Reveal>
-  </section>
-
-  <ScrollCounter client:visible height="280vh" className="scene-stage" />
-
-  <!-- ─── Tokens ────────────────────────────────────────────────────────── -->
-  <section class="section">
-    <Reveal client:visible className="section-head">
-      <p class="label">Layer 2</p>
-      <h2>Motion tokens</h2>
-      <p class="muted">Four numbers that make everything feel like the same product.</p>
-    </Reveal>
-
-    <Stagger client:visible className="token-grid" stagger={0.06}>
-      <div class="token-card">
-        <p class="token-label">ease.out</p>
-        <div class="token-curve" data-ease="out"></div>
-        <code>[0.22, 1, 0.36, 1]</code>
-        <p class="muted">Confident exit. Default for reveals.</p>
-      </div>
-      <div class="token-card">
-        <p class="token-label">ease.inOut</p>
-        <div class="token-curve" data-ease="inout"></div>
-        <code>[0.65, 0, 0.35, 1]</code>
-        <p class="muted">Scrubbed scroll. Smooth both ways.</p>
-      </div>
-      <div class="token-card">
-        <p class="token-label">ease.spring</p>
-        <div class="token-curve" data-ease="spring"></div>
-        <code>stiffness 380 · damping 32</code>
-        <p class="muted">Natural snap. Hover states, drawers.</p>
-      </div>
-      <div class="token-card">
-        <p class="token-label">duration</p>
-        <div class="duration-bars">
-          <div class="dur-bar" style="width:32%"><span>fast 0.32s</span></div>
-          <div class="dur-bar active" style="width:48%"><span>base 0.48s</span></div>
-          <div class="dur-bar" style="width:72%"><span>slow 0.72s</span></div>
-        </div>
-        <p class="muted">Short durations — nothing lingers.</p>
-      </div>
-    </Stagger>
-  </section>
-
-  <!-- ─── Reduced motion ────────────────────────────────────────────────── -->
-  <section class="section">
-    <Reveal client:visible className="section-head">
-      <p class="label">Layer 3</p>
-      <h2>Reduced motion</h2>
-    </Reveal>
-
-    <Stagger client:visible className="reduced-grid" stagger={0.08}>
-      <div class="reduced-card">
-        <p class="token-label">Reveal</p>
-        <p>opacity only · no y</p>
-      </div>
-      <div class="reduced-card">
-        <p class="token-label">Stagger</p>
-        <p>opacity only · rhythm preserved</p>
-      </div>
-      <div class="reduced-card">
-        <p class="token-label">Parallax</p>
-        <p>returns null transform</p>
-      </div>
-      <div class="reduced-card">
-        <p class="token-label">ScrollScene</p>
-        <p>progress flows · children branch</p>
-      </div>
-    </Stagger>
-
-    <Reveal client:visible delay={0.1} className="reduced-note">
-      <p>
-        Every primitive calls <code>usePrefersReducedMotion()</code>.
-        The choreography survives — the movement doesn't.
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       2. TENSION — name the problem before the solution
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="tension-section">
+    <Reveal client:visible dist="md" className="tension-inner">
+      <blockquote>
+        "Motion without discipline is noise.<br/>
+        Motion with discipline is product polish."
+      </blockquote>
+      <p class="tension-sub">
+        Most teams reach for a full animation library, ship 80 kb of JS, and get
+        janky layout animations in return. This system is different — one dependency,
+        four thin wrappers, no layout thrashing.
       </p>
     </Reveal>
   </section>
 
-  <!-- ─── Typewriter / spring demo ─────────────────────────────────────── -->
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       3. STATS BAR — social proof / credibility at a glance
+  ════════════════════════════════════════════════════════════════════════ -->
+  <div class="stats-bar-wrapper">
+    <Stagger client:visible className="stats-bar" stagger={0.08}>
+      <div class="stat">
+        <span class="stat-n">4</span>
+        <span class="stat-label">primitives</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <span class="stat-n">~30</span>
+        <span class="stat-label">lines each</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <span class="stat-n">0</span>
+        <span class="stat-label">extra deps</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <span class="stat-n">3</span>
+        <span class="stat-label">layers</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <span class="stat-n">AA</span>
+        <span class="stat-label">reduced motion</span>
+      </div>
+    </Stagger>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       4. OVERVIEW — "what you get" before the deep dive
+  ════════════════════════════════════════════════════════════════════════ -->
   <section class="section">
     <Reveal client:visible className="section-head">
-      <p class="label">Bonus</p>
-      <h2>Spring + layout</h2>
-      <p class="muted">motion's spring easing applied to layout-safe properties.</p>
-    </Reveal>
-
-    <TypewriterDemo client:visible />
-  </section>
-
-  <!-- ─── Close ────────────────────────────────────────────────────────── -->
-  <section class="section section-close">
-    <Reveal client:visible dist="lg" speed="slow" className="close-inner">
-      <h2>One system.<br/>Zero overhead.</h2>
+      <p class="eyebrow">Architecture</p>
+      <h2>Three layers, top to bottom</h2>
       <p class="muted">
-        Motion tree-shakes — unused primitives ship nothing.<br/>
-        <code>client:visible</code> defers hydration until each island enters the viewport.
+        Start with Primitives — they cover 95% of the site.<br/>
+        Tokens and reduced-motion handling come for free.
       </p>
-      <div class="close-pills">
-        <Stagger client:visible stagger={0.07} className="pills-row">
-          <span class="pill">motion 12</span>
-          <span class="pill">Astro 6</span>
-          <span class="pill">React 19</span>
-          <span class="pill">client:visible</span>
-          <span class="pill">4 primitives</span>
-          <span class="pill">WCAG AA</span>
-        </Stagger>
+    </Reveal>
+
+    <Stagger client:visible className="arch-grid" stagger={0.09}>
+      <div class="arch-card arch-card--1">
+        <div class="arch-num">1</div>
+        <div class="arch-body">
+          <strong>Primitives</strong>
+          <p>Reveal · Stagger · Parallax · ScrollScene</p>
+          <p class="muted small">Drop into <code>.astro</code> files as <code>client:visible</code> islands.</p>
+        </div>
       </div>
+      <div class="arch-card arch-card--2">
+        <div class="arch-num">2</div>
+        <div class="arch-body">
+          <strong>Tokens</strong>
+          <p>ease · duration · distance</p>
+          <p class="muted small">One source of truth. Change a number, everything feels the same.</p>
+        </div>
+      </div>
+      <div class="arch-card arch-card--3">
+        <div class="arch-num">3</div>
+        <div class="arch-body">
+          <strong>Reduced motion</strong>
+          <p>usePrefersReducedMotion()</p>
+          <p class="muted small">Every primitive consults this. Choreography survives, movement doesn't.</p>
+        </div>
+      </div>
+    </Stagger>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       5. FEATURE DEEP-DIVE — vertical tabs with live interactive demos
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="section section--wide">
+    <Reveal client:visible className="section-head">
+      <p class="eyebrow">Capabilities</p>
+      <h2>Every primitive, live</h2>
+      <p class="muted">Click a tab. Try the demo. All six capabilities in one place.</p>
+    </Reveal>
+
+    <FeatureTabs client:load />
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       6. SIGNATURE MOMENT — ScrollScene as a standalone experience
+  ════════════════════════════════════════════════════════════════════════ -->
+  <div class="scene-intro">
+    <Reveal client:visible className="scene-intro-text">
+      <p class="eyebrow">ScrollScene in the wild</p>
+      <h2>Scroll to advance the signal lifecycle</h2>
+    </Reveal>
+  </div>
+
+  <ScrollCounter client:visible height="260vh" className="scene-stage" />
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       7. PROOF — performance guardrails (handle objections)
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <Reveal client:visible className="section-head">
+      <p class="eyebrow">Performance</p>
+      <h2>The guardrails</h2>
+      <p class="muted">Built-in constraints so you can't accidentally ship slow animations.</p>
+    </Reveal>
+
+    <Stagger client:visible className="guardrails" stagger={0.07}>
+      <div class="guardrail">
+        <span class="gr-icon gr-good">✓</span>
+        <div>
+          <strong>transform + opacity only</strong>
+          <p class="muted small">Never top/left/width/height. Composited by the GPU.</p>
+        </div>
+      </div>
+      <div class="guardrail">
+        <span class="gr-icon gr-good">✓</span>
+        <div>
+          <strong>will-change: transform on parallax only</strong>
+          <p class="muted small">Applied per-element, not globally. Never promoted layers you don't need.</p>
+        </div>
+      </div>
+      <div class="guardrail">
+        <span class="gr-icon gr-good">✓</span>
+        <div>
+          <strong>contain: layout paint on ScrollScene</strong>
+          <p class="muted small">Prevents sticky sections triggering layout work elsewhere on the page.</p>
+        </div>
+      </div>
+      <div class="guardrail">
+        <span class="gr-icon gr-good">✓</span>
+        <div>
+          <strong>client:visible deferred hydration</strong>
+          <p class="muted small">Islands don't hydrate until they enter the viewport. First paint is pure HTML.</p>
+        </div>
+      </div>
+      <div class="guardrail">
+        <span class="gr-icon gr-warn">○</span>
+        <div>
+          <strong>Tree-shaking</strong>
+          <p class="muted small">Motion ships ESM. Unused primitives never reach the bundle.</p>
+        </div>
+      </div>
+    </Stagger>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       8. INSTALL — remove friction, show it's three lines
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="section install-section">
+    <Reveal client:visible className="section-head">
+      <p class="eyebrow">Integration</p>
+      <h2>Three steps</h2>
+    </Reveal>
+
+    <Stagger client:visible className="install-steps" stagger={0.1}>
+      <div class="install-step">
+        <div class="step-num">1</div>
+        <div>
+          <p class="step-label">Install</p>
+          <pre class="code-line"><code>bun add motion</code></pre>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">2</div>
+        <div>
+          <p class="step-label">Import a primitive</p>
+          <pre class="code-line"><code>import Reveal from '@/components/motion/Reveal'</code></pre>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">3</div>
+        <div>
+          <p class="step-label">Drop it in your Astro file</p>
+          <pre class="code-line"><code>&lt;Reveal client:visible&gt;&lt;HeroHeadline /&gt;&lt;/Reveal&gt;</code></pre>
+        </div>
+      </div>
+    </Stagger>
+
+    <Reveal client:visible delay={0.15} className="install-note">
+      <p>
+        <strong>That's it.</strong> No provider setup, no global config.
+        The motion tokens live in <code>src/lib/motion.ts</code> — edit the four numbers and
+        the whole site recalibrates.
+      </p>
     </Reveal>
   </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       9. CTA — close the loop, single action
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="cta-section">
+    <Reveal client:visible dist="lg" speed="slow" className="cta-inner">
+      <h2>One system.<br/>Zero overhead.</h2>
+      <p class="cta-sub">
+        Unused primitives tree-shake to nothing.<br/>
+        Islands defer until they're needed.
+      </p>
+      <Stagger client:visible stagger={0.06} className="cta-pills">
+        <span class="pill">motion 12</span>
+        <span class="pill">Astro 6</span>
+        <span class="pill">React 19</span>
+        <span class="pill">client:visible</span>
+        <span class="pill">4 primitives</span>
+        <span class="pill">WCAG AA</span>
+      </Stagger>
+    </Reveal>
+  </section>
+
 </Layout>
 
 <style>
-  /* ── base ──────────────────────────────────────────────────────────── */
-  :global(body) {
-    background: var(--color-page);
-    color: var(--color-font);
-  }
+/* ── reset / base ──────────────────────────────────────────────────────── */
+:global(body) {
+  background: var(--color-page);
+  color: var(--color-font);
+}
 
-  .label {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-primary);
-    margin-bottom: 0.5rem;
-  }
+* { box-sizing: border-box; }
 
-  .muted { color: var(--color-muted); }
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0 0 0.6rem;
+}
 
-  code {
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 0.82em;
-    color: var(--color-tertiary);
-  }
+.muted { color: var(--color-muted); }
+.small { font-size: 0.82rem; line-height: 1.5; }
 
-  /* ── hero ──────────────────────────────────────────────────────────── */
-  .hero-section {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 6rem clamp(1.5rem, 6vw, 8rem);
-    overflow: hidden;
-  }
+code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.82em;
+  color: var(--color-tertiary);
+}
 
-  :global(.hero-text) {
-    position: relative;
-    z-index: 2;
-    max-width: 540px;
-  }
+/* ── 1. Hero ───────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 5rem clamp(2rem, 7vw, 9rem);
+  overflow: hidden;
+}
 
-  .hero-section h1 {
-    font-size: clamp(3rem, 8vw, 6rem);
-    font-weight: 800;
-    line-height: 1.0;
-    letter-spacing: -0.03em;
-    margin: 0.5rem 0 1.25rem;
-  }
+:global(.hero-copy) {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+}
 
-  .hero-section .sub {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: var(--color-muted);
-    max-width: 400px;
-  }
+.hero h1 {
+  font-size: clamp(3.5rem, 9vw, 6.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin: 0.5rem 0 1.25rem;
+}
 
-  .scroll-hint {
-    position: absolute;
-    bottom: 2.5rem;
-    left: clamp(1.5rem, 6vw, 8rem);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-  }
+.hero-sub {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+  max-width: 400px;
+  margin: 0 0 1.5rem;
+}
 
-  .scroll-line {
-    width: 40px;
-    height: 1px;
-    background: var(--color-muted);
-    position: relative;
-    overflow: hidden;
-  }
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
 
-  .scroll-line::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--color-primary);
-    transform: translateX(-100%);
-    animation: scan 1.8s ease-in-out infinite;
-  }
+.meta-chip {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  padding: 0.25rem 0;
+}
 
-  @keyframes scan {
-    to { transform: translateX(100%); }
-  }
+.meta-dot { color: var(--color-border); font-size: 1.1rem; }
 
-  /* ── sections ───────────────────────────────────────────────────────── */
-  .section {
-    padding: 6rem clamp(1.5rem, 6vw, 8rem);
-    max-width: 1100px;
-    margin: 0 auto;
-    width: 100%;
-  }
+.scroll-cue {
+  position: absolute;
+  bottom: 2.5rem;
+  left: clamp(2rem, 7vw, 9rem);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
 
-  :global(.section-head) {
-    margin-bottom: 3rem;
-  }
+.scroll-line {
+  width: 44px;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-muted) 40%, transparent);
+  position: relative;
+  overflow: hidden;
+}
 
-  .section h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin: 0.5rem 0 0.75rem;
-  }
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+  transform: translateX(-100%);
+  animation: scan 2s ease-in-out infinite;
+}
 
-  /* ── primitives grid ──────────────────────────────────────────────── */
-  :global(.primitives-grid) {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
-  }
+@keyframes scan { to { transform: translateX(100%); } }
 
-  .prim-card {
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    box-shadow: var(--shadow-card);
-    transition: border-color 120ms var(--ease);
-  }
+/* ── 2. Tension ────────────────────────────────────────────────────────── */
+.tension-section {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-foreground);
+  padding: 5rem clamp(2rem, 7vw, 9rem);
+}
 
-  .prim-card:hover { border-color: var(--color-primary); }
+:global(.tension-inner) {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
 
-  .prim-card code {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--color-primary);
-  }
+blockquote {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+  color: var(--color-font);
+}
 
-  .prim-card p { font-size: 0.85rem; line-height: 1.55; color: var(--color-muted); }
+.tension-sub {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--color-muted);
+  margin: 0;
+}
 
-  .prim-tag {
-    margin-top: auto;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-tertiary);
-  }
+/* ── 3. Stats bar ──────────────────────────────────────────────────────── */
+.stats-bar-wrapper {
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+}
 
-  /* ── reveal demo ──────────────────────────────────────────────────── */
-  .reveal-variants {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
+:global(.stats-bar) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 1.75rem clamp(2rem, 7vw, 9rem);
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-  .demo-chip {
-    padding: 0.6rem 1.2rem;
-    border: 1px solid var(--color-border);
-    border-radius: 9999px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    background: var(--color-background);
-  }
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0 2.5rem;
+}
 
-  .demo-chip.active {
-    background: color-mix(in srgb, var(--color-primary) 12%, var(--color-foreground));
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-  }
+.stat-n {
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--color-font);
+  line-height: 1;
+}
 
-  :global(.reveal-code-block) {
-    background: var(--color-foreground);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    overflow: auto;
-  }
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
 
-  :global(.reveal-code-block) pre {
-    padding: 1.25rem 1.5rem;
-    margin: 0;
-    font-size: 0.83rem;
-    line-height: 1.65;
-  }
+.stat-div {
+  width: 1px;
+  height: 32px;
+  background: var(--color-border);
+}
 
-  /* ── stagger bar demo ─────────────────────────────────────────────── */
-  :global(.stagger-row) {
-    display: flex;
-    align-items: flex-end;
-    gap: 8px;
-    height: 80px;
-    margin-bottom: 3rem;
-  }
+/* ── 4. Architecture overview ──────────────────────────────────────────── */
+.section {
+  padding: 6rem clamp(2rem, 7vw, 9rem);
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
 
-  .stagger-bar {
-    flex: 1;
-    background: color-mix(in srgb, var(--color-primary) 60%, transparent);
-    border-radius: 4px 4px 0 0;
-    height: calc(30% + var(--i) * 10%);
-    transition: background 200ms;
-  }
+.section--wide {
+  max-width: 1200px;
+}
 
-  :global(.feature-list) {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+:global(.section-head) {
+  margin-bottom: 2.5rem;
+}
 
-  .feature-row {
-    display: flex;
-    gap: 1.25rem;
-    align-items: flex-start;
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--color-border);
-  }
+.section h2 {
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0.4rem 0 0.75rem;
+  line-height: 1.1;
+}
 
-  .feature-row:last-child { border-bottom: none; }
+:global(.arch-grid) {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
 
-  .feature-icon {
-    font-size: 1.1rem;
-    color: var(--color-tertiary);
-    flex-shrink: 0;
-    margin-top: 0.1rem;
-  }
+@media (max-width: 680px) {
+  :global(.arch-grid) { grid-template-columns: 1fr; }
+}
 
-  .feature-row strong { font-size: 0.95rem; display: block; margin-bottom: 0.2rem; }
-  .feature-row p { font-size: 0.83rem; line-height: 1.5; margin: 0; }
+.arch-card {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  box-shadow: var(--shadow-card);
+}
 
-  /* ── parallax section ────────────────────────────────────────────── */
-  .parallax-section {
-    max-width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-  }
+.arch-card--1 { border-left: 3px solid var(--color-primary); }
+.arch-card--2 { border-left: 3px solid var(--color-secondary); }
+.arch-card--3 { border-left: 3px solid var(--color-tertiary); }
 
-  .parallax-section :global(.section-head) {
-    padding: 0 clamp(1.5rem, 6vw, 8rem);
-  }
+.arch-num {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-border);
+  line-height: 1;
+  flex-shrink: 0;
+}
 
-  .parallax-demo-area {
-    position: relative;
-    height: 480px;
-    overflow: hidden;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-  }
+.arch-body strong { display: block; font-size: 0.92rem; margin-bottom: 0.25rem; }
+.arch-body p { font-size: 0.82rem; margin: 0 0 0.25rem; color: var(--color-muted); }
 
-  :global(.para-layer) {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+/* ── 6. Scene intro ────────────────────────────────────────────────────── */
+.scene-intro {
+  padding: 4rem clamp(2rem, 7vw, 9rem) 0;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
 
-  :global(.para-back) {
-    z-index: 0;
-    opacity: 0.4;
-  }
+:global(.scene-intro-text) {}
+.scene-intro h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0.4rem 0 0;
+}
 
-  :global(.para-mid) {
-    z-index: 1;
-    opacity: 0.7;
-  }
+:global(.scene-stage) {
+  background: var(--color-foreground);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  margin-top: 2rem;
+}
 
-  :global(.para-front) {
-    z-index: 2;
-    padding: 2rem clamp(1.5rem, 6vw, 8rem);
-    align-items: flex-end;
-    justify-content: flex-start;
-  }
+/* ── 7. Guardrails ─────────────────────────────────────────────────────── */
+:global(.guardrails) {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
 
-  .para-grid {
-    width: 100%;
-    height: 100%;
-    background-image:
-      linear-gradient(var(--color-border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
+.guardrail {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
 
-  .para-label {
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem 1.5rem;
-    max-width: 340px;
-    box-shadow: var(--shadow-pop);
-  }
+.guardrail:last-child { border-bottom: none; }
 
-  .para-label h3 { font-size: 1.1rem; font-weight: 700; margin: 0 0 0.4rem; }
-  .para-label p  { font-size: 0.83rem; line-height: 1.5; margin: 0; }
+.gr-icon {
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
 
-  /* ── scroll scene stage ──────────────────────────────────────────── */
-  :global(.scene-stage) {
-    background: var(--color-foreground);
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-  }
+.gr-good {
+  background: color-mix(in srgb, var(--color-tertiary) 15%, var(--color-foreground));
+  color: var(--color-tertiary);
+}
 
-  /* ── token grid ──────────────────────────────────────────────────── */
-  :global(.token-grid) {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem;
-  }
+.gr-warn {
+  background: color-mix(in srgb, var(--color-secondary) 15%, var(--color-foreground));
+  color: var(--color-secondary);
+}
 
-  .token-card {
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    box-shadow: var(--shadow-card);
-  }
+.guardrail strong { font-size: 0.9rem; display: block; margin-bottom: 0.2rem; }
 
-  .token-label {
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: var(--color-secondary);
-    margin: 0;
-  }
+/* ── 8. Install ────────────────────────────────────────────────────────── */
+.install-section { border-top: 1px solid var(--color-border); }
 
-  .token-curve {
-    height: 48px;
-    border-radius: var(--radius-sm);
-    background: var(--color-foreground);
-    border: 1px solid var(--color-border);
-    position: relative;
-    overflow: hidden;
-  }
+:global(.install-steps) {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
 
-  .token-curve::after {
-    content: '';
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
-    height: 2px;
-    background: var(--color-primary);
-    border-radius: 2px;
-    transform-origin: left center;
-  }
+.install-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
 
-  .token-curve[data-ease="out"]::after {
-    clip-path: path('M 0 0 C 30 0, 100 -30, 100 -30');
-  }
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-foreground));
+  border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
 
-  .duration-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+.step-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin: 0 0 0.4rem;
+}
 
-  .dur-bar {
-    height: 8px;
-    background: color-mix(in srgb, var(--color-secondary) 40%, transparent);
-    border-radius: 4px;
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
+.code-line {
+  background: var(--color-foreground);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 1rem;
+  margin: 0;
+  font-size: 0.8rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--color-tertiary);
+  overflow-x: auto;
+}
 
-  .dur-bar.active {
-    background: color-mix(in srgb, var(--color-primary) 70%, transparent);
-  }
+:global(.install-note) {
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-foreground));
+  border: 1px solid color-mix(in srgb, var(--color-primary) 15%, transparent);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.4rem;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+}
 
-  .dur-bar span {
-    position: absolute;
-    left: calc(100% + 8px);
-    font-size: 0.72rem;
-    color: var(--color-muted);
-    white-space: nowrap;
-  }
+:global(.install-note) strong { color: var(--color-font); }
 
-  /* ── reduced motion grid ─────────────────────────────────────────── */
-  :global(.reduced-grid) {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
+/* ── 9. CTA ────────────────────────────────────────────────────────────── */
+.cta-section {
+  border-top: 1px solid var(--color-border);
+  padding: 9rem clamp(2rem, 7vw, 9rem);
+}
 
-  .reduced-card {
-    background: var(--color-foreground);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1.25rem;
-  }
+:global(.cta-inner) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
 
-  .reduced-card p { font-size: 0.82rem; color: var(--color-muted); margin: 0.35rem 0 0; }
+.cta-section h2 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin: 0;
+}
 
-  :global(.reduced-note) {
-    background: color-mix(in srgb, var(--color-tertiary) 8%, var(--color-foreground));
-    border: 1px solid color-mix(in srgb, var(--color-tertiary) 20%, transparent);
-    border-radius: var(--radius-md);
-    padding: 1.25rem 1.5rem;
-    font-size: 0.88rem;
-    line-height: 1.65;
-  }
+.cta-sub {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+  margin: 0;
+}
 
-  /* ── close section ───────────────────────────────────────────────── */
-  .section-close {
-    padding-top: 8rem;
-    padding-bottom: 8rem;
-  }
+:global(.cta-pills) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
 
-  :global(.close-inner) {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.25rem;
-  }
-
-  .section-close h2 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
-    max-width: 600px;
-    margin: 0;
-  }
-
-  .section-close .muted {
-    font-size: 1rem;
-    line-height: 1.65;
-  }
-
-  :global(.pills-row) {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .pill {
-    padding: 0.4rem 0.9rem;
-    border: 1px solid var(--color-border);
-    border-radius: 9999px;
-    font-size: 0.78rem;
-    font-weight: 500;
-    background: var(--color-background);
-  }
+.pill {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: var(--color-background);
+  color: var(--color-muted);
+}
 </style>

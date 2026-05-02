@@ -8,6 +8,7 @@
 
 import { wrapLanguageModel, gateway, type LanguageModelMiddleware } from 'ai'
 import { createGroq } from '@ai-sdk/groq'
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
 import { devToolsMiddleware } from '@ai-sdk/devtools'
 import { mark, warn } from './substrate'
 import type { Env } from './types'
@@ -41,6 +42,15 @@ export const substrateMiddleware = (env: Env, group: string): LanguageModelMiddl
 export const resolveBaseModel = (env: Env, modelId: string) => {
   if (modelId.startsWith('groq/') && env.GROQ_API_KEY) {
     return createGroq({ apiKey: env.GROQ_API_KEY })(modelId.slice(5))
+  }
+  if (env.OPENROUTER_API_KEY) {
+    const openrouter = createOpenAICompatible({
+      name: 'openrouter',
+      baseURL: 'https://openrouter.ai/api/v1',
+      apiKey: env.OPENROUTER_API_KEY,
+      headers: { 'HTTP-Referer': 'https://one.ie', 'X-Title': 'Claw' },
+    })
+    return openrouter(modelId)
   }
   return gateway(modelId)
 }

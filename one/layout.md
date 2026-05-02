@@ -273,15 +273,76 @@ Pages override on a per-route basis. Global default is `icon`.
 
 ## Performance budget — 100% Lighthouse, zero CLS
 
+**Principle: performance through simplicity.** Every byte on the critical path should
+earn its place. Fewer hops, smaller payloads, no JS where CSS or HTML does the job.
+
 This shell is on the critical path for every page. Targets:
 
-| Metric | Target | How |
-| --- | --- | --- |
-| **CLS** | **0** | Mode resolved before paint via inline script; rail dimensions are CSS clamps with no JS-measured fallbacks; chat content is `contain: layout` so internal updates don't escape |
-| **LCP** | < 1.2s | Layout ships zero blocking JS; `<ChatHost />` is `client:idle` not `client:load` so it hydrates after LCP |
-| **FID/INP** | < 100ms | Switcher writes are sync; mode swap is a CSS attribute change, not a re-render |
-| **TBT** | < 50ms | Chat code is split via dynamic import; rail content lazy-loaded after first paint |
-| **Bundle** | < 30KB JS gzip on icon/none pages | `<Chat />` only loads when active mode is wide/rail OR user opens icon popover |
+| Metric | Target | Current (2026-05-02) | How |
+| --- | --- | --- | --- |
+| **Performance** | **100** | 99 | Three open gaps below |
+| **CLS** | **0** | 0 ✅ | Mode resolved before paint via inline script; CSS clamps, no JS measurement |
+| **LCP** | < 1.2s | 2.0s | `<Sidebar client:load>` is on the critical JS chain — fix: `client:idle` |
+| **FCP** | < 0.9s | 1.1s | `Layout.css` (5.9 KiB) blocks render for 160ms — fix: inline critical tokens |
+| **TBT** | < 50ms | 0ms ✅ | — |
+| **SI** | < 2.0s | 2.4s | Cascades from LCP/FCP fixes |
+| **Bundle** | < 30KB JS gzip on icon/none pages | ~96 KiB (49% unused in `client.js`) | deduplicate React, lazy-import Chat internals |
+
+### Open gaps (ranked by impact)
+
+**Gap 1 — `<Sidebar client:idle>` (est. −300ms LCP)**
+
+`Layout.astro` currently uses `client:load` for the Sidebar. This puts the entire
+Sidebar → jsx-runtime → ui-signal chain (3 sequential hops, 1,025ms critical path)
+in the blocking window. The Sidebar SSR-renders correctly without JS — the collapse
+toggle is the only interactive piece.
+
+```astro
+<!-- Layout.astro — was client:load -->
+<Sidebar client:idle initial={sidebar} />
+```
+
+Sidebar JS hydrates after LCP. The user sees a working sidebar on first paint; the
+toggle becomes interactive ~500ms later. Acceptable trade-off; collapse isn't above-fold intent.
+
+**Gap 2 — inline critical CSS (est. −160ms FCP)**
+
+`Layout.css` (5.9 KiB) is render-blocking. The critical subset — design tokens
+(`@theme` block, `:root` helpers, `html.dark`, `body`, `.page-shell`) — is ~1 KiB.
+
+```astro
+<!-- Layout.astro: inline the token block into <head> -->
+<style is:inline>
+  /* @theme, :root, html.dark, body, .page-shell only */
+</style>
+<!-- defer full Tailwind utilities -->
+<link rel="stylesheet" href={cssHref} media="print" onload="this.media='all'" />
+```
+
+Astro's `is:inline` prevents extraction to an external file. The remaining component
+utilities load non-blocking after paint.
+
+**Gap 3 — collapse JS micro-chunks (est. −1 round-trip)**
+
+`jsx-runtime.js` (0.92 KiB) and `ui-signal.js` (1.62 KiB) are fetched as separate
+hops at the tail of the chain. At 2.5 KiB combined, RTT cost > transfer cost.
+
+```js
+// astro.config.mjs
+vite: {
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('jsx-runtime') || id.includes('ui-signal')) return 'sidebar'
+        }
+      }
+    }
+  }
+}
+```
+
+Co-locating them with `Sidebar.js` collapses a 3-hop chain to 1.
 
 ### CLS prevention — the inline boot script
 

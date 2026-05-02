@@ -7,6 +7,7 @@ import { useSidebar, usePathname, useMediaQuery } from '@/hooks/use-sidebar'
 import { getMenu } from '@/lib/menu'
 import { MenuItemNode } from './MenuItem'
 import { SheetMenu } from './SheetMenu'
+import { ThemeToggle } from './ThemeToggle'
 
 interface Props {
   initial: 'mini' | 'full'
@@ -61,7 +62,7 @@ export function Sidebar({ initial }: Props) {
         {groups.map((g, i) => (
           <div key={i} className="mb-4">
             {g.label && open && (
-              <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-font/40">
+              <p className="mb-2 px-3 text-xs font-medium uppercase tracking-wider text-font/60">
                 {g.label}
               </p>
             )}
@@ -86,6 +87,13 @@ export function Sidebar({ initial }: Props) {
           </div>
         ))}
       </nav>
+
+      <footer
+        className="px-3 pb-4 pt-2"
+        style={{ borderTop: '1px solid var(--color-border)' }}
+      >
+        <ThemeToggle open={open} />
+      </footer>
 
       <button
         type="button"
