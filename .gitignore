@@ -64,3 +64,4 @@ apps/eliza/.elizadb/
 
 # Bun / lockfile artifacts that shouldn't ship per-app
 bun.lockb
+claw/.dev.vars

@@ -1,8 +1,178 @@
 # aisdk
 
-How the [Vercel AI SDK](https://ai-sdk.dev) integrates into `claw` (server) and `web` (client). Substrate-aware tools, end-to-end streaming, generative UI, one-line provider swap.
+> **Position:** layer 2 of 4 — [`integrate`](integrate.md) → `aisdk` → [`ai-elements`](ai-elements.md) → [`mcp`](mcp.md)
+> **Prereq:** `integrate.md` (claw + web wired, env-var seam in place)
+> **Enables:** `ai-elements.md` (renders `messages.parts`), `mcp.md` (rides on `tool()` + `streamText`)
+> **Owns:** the wire protocol — `streamText` ↔ `useChat`, `tool()`, `generateObject`. Anything else links here.
+
+Plan: install **every Vercel AI SDK feature** (https://ai-sdk.dev) cleanly across `claw/` (server) + `web/` (client) — one install pass, one provider matrix, zero drift.
 
 **Principle:** AI SDK owns the LLM call and the wire protocol. We own the substrate (`mark`, `warn`, `recall`) and surface it as `tool()` definitions. Web's `useChat` and claw's `streamText` speak the same protocol — zero custom SSE plumbing.
+
+**Mode:** lean. Spec locked (vendor surface), variance known (one SDK, one protocol), exit scalar (every primitive importable + `bun run build` green on both packages), files known.
+
+---
+
+## Prereqs (verify before install)
+
+| Requirement | Repo state | Action |
+|---|---|---|
+| Node 18+ | ✅ (bun) | none |
+| TypeScript ≥ 5 | ✅ | none |
+| React 19 (web only) | ✅ `^19.1.0` | none |
+| Zod | ❌ not in `claw/`/`web/` | add (`zod`) |
+| `claw/` package | ✅ Hono on CF Workers | adds `ai` + providers |
+| `web/` package | ✅ Astro 6 + React 19 | adds `@ai-sdk/react` |
+| `OPENROUTER_API_KEY` env | ✅ in `claw/.dev.vars` | none |
+| Groq / Anthropic / Google keys | optional | add per provider used |
+
+---
+
+## Wave 1 — Install (lean default)
+
+Install only what's wired today. Everything else is a one-line `bun add` when a persona's `model` field needs it.
+
+```bash
+# claw (server)
+cd claw
+bun add ai zod @ai-sdk/openai-compatible @ai-sdk/groq
+
+# web (client)
+cd ../web
+bun add ai @ai-sdk/react zod
+```
+
+**Gate:** `bun run build` green in both `claw/` and `web/`. No version skew (`ai` major must match across packages).
+
+**Add on demand** (one per persona, not "just in case"):
+
+| Provider package | When to add |
+|---|---|
+| `@ai-sdk/openai` | direct OpenAI keys (not via OpenRouter) |
+| `@ai-sdk/anthropic` | direct Anthropic keys; computer-use tool |
+| `@ai-sdk/google` | Gemini direct |
+| `@ai-sdk/mistral` `@ai-sdk/xai` `@ai-sdk/cohere` `@ai-sdk/deepseek` `@ai-sdk/perplexity` `@ai-sdk/fireworks` `@ai-sdk/togetherai` | direct keys for that vendor |
+| `@ai-sdk/replicate` `@ai-sdk/fal` | `generateImage` |
+| `@ai-sdk/elevenlabs` `@ai-sdk/deepgram` | `generateSpeech` / `transcribe` |
+| `@ai-sdk/azure` `@ai-sdk/amazon-bedrock` `@ai-sdk/google-vertex` | enterprise model routing |
+
+OpenRouter (via `openai-compatible`) covers ~all text models in one key today — start there.
+
+---
+
+## Wave 2 — Feature inventory (what becomes available)
+
+All exports from `ai` + `@ai-sdk/react` after W1:
+
+**Generation primitives (server, `ai`):**
+- `streamText` — token stream + tool calls
+- `generateText` — one-shot text
+- `streamObject` — partial structured output
+- `generateObject` — one-shot Zod-typed object
+- `embed`, `embedMany` — vector embeddings
+- `generateImage` — image gen (fal, replicate, openai)
+- `transcribe` — audio → text (deepgram, elevenlabs, openai)
+- `generateSpeech` — text → audio (elevenlabs, openai)
+
+**Tooling:**
+- `tool()` — Zod-schema'd tool definition with server `execute`
+- `stepCountIs`, `hasToolCall` — multi-step stop conditions
+- `experimental_createMCPClient` — MCP tools as AI SDK tools
+- Provider-defined tools (e.g. Anthropic computer-use, OpenAI web-search)
+
+**Streaming + protocol:**
+- `result.toUIMessageStreamResponse()` — SSE for `useChat`
+- `result.toDataStreamResponse()` — raw data stream
+- `createUIMessageStream`, `createDataStreamResponse` — custom streams
+- `smoothStream` — token smoothing transform
+
+**Middleware + observability:**
+- `wrapLanguageModel` + `LanguageModelV2Middleware` — caching, logging, redaction, guardrails
+- `experimental_telemetry` — OpenTelemetry spans
+- Provider registry (`createProviderRegistry`) — model id namespace per provider
+
+**React hooks (`@ai-sdk/react`):**
+- `useChat` — message list + stream
+- `useCompletion` — single-turn completion stream
+- `useObject` — `streamObject` consumer
+- `DefaultChatTransport` — pluggable transport
+
+**Errors + types:**
+- `APICallError`, `InvalidPromptError`, `NoSuchToolError`, `ToolExecutionError` — typed catches
+- `LanguageModel`, `UIMessage`, `ModelMessage` — wire types
+
+---
+
+## Wave 3 — Wire to repo
+
+Surfaces, mapped to features above. Each row is one PR-shaped slice.
+
+| Surface | Feature | File |
+|---|---|---|
+| LLM call (replace raw fetch) | `streamText` + provider swap | `claw/src/index.ts` |
+| Substrate tools | `tool()` map (8 tools) | `claw/src/aitools.ts` (new) |
+| Multi-step (browse → think → reply) | `stopWhen: stepCountIs(5)` | `claw/src/index.ts` |
+| Per-turn classification (replace `classify.ts`) | `generateObject` + Zod | `claw/src/classify.ts` |
+| Outcome detection | `generateObject` | `claw/src/pipeline.ts` |
+| Memory recall ranking | `embed` + `embedMany` | `claw/src/substrate.ts` |
+| Caching / logging / redaction | `wrapLanguageModel` middleware | `claw/src/middleware.ts` (new) |
+| Telemetry | `experimental_telemetry` → OTel | `claw/src/index.ts` |
+| MCP tools (consume `mcp/`) | `experimental_createMCPClient` | `claw/src/aitools.ts` |
+| Chat UI | `useChat` + `DefaultChatTransport` | `web/src/components/Chat.tsx` |
+| SSE proxy | `toUIMessageStreamResponse()` passthrough | `web/src/pages/api/chat.ts` |
+| Generative UI cards | `<ToolCard>` per `tool-*` part | `web/src/components/ToolCard.tsx` (new) |
+| Streaming structured tasks (web) | `useObject` + `streamObject` | per-feature route |
+| Voice → text input | `transcribe` (Deepgram) | `claw/src/voice.ts` (new, optional) |
+| Image gen surface | `generateImage` (fal) | per-feature route, optional |
+
+**Substrate convention:** every tool's `execute` closes the loop — `mark` on success, `warn` on failure — per `.claude/rules/engine.md`.
+
+(Code-level integration shape preserved below in **Shape** through **Health check** sections.)
+
+---
+
+## Wave 4 — Verify
+
+Deterministic gates (numbers, no vibes):
+
+```bash
+# claw
+cd claw
+bun run build                      # must succeed
+bunx tsc --noEmit                  # zero errors
+bun -e "import('ai').then(m => console.log(Object.keys(m).length))"  # ≥ 30 exports
+
+# web
+cd ../web
+bun run build
+bunx tsc --noEmit
+bun -e "import('@ai-sdk/react').then(m => console.log(Object.keys(m)))"  # includes useChat, useCompletion, useObject
+
+# end-to-end stream
+curl -N -X POST http://localhost:8787/message?stream=1 \
+  -H "Authorization: Bearer $CLAW_KEY" \
+  -H 'Content-Type: application/json' \
+  -d '{"group":"test","text":"browse https://example.com"}'
+# expect: text-delta + tool-call(browse) + tool-result + text-delta + finish
+```
+
+**Rubric (≥ 0.65 to ship):**
+- **fit** — `streamText`, `tool()`, `useChat`, `generateObject` all wired; ≥ 1 provider per modality (text, embed, image if used, audio if used)
+- **form** — no raw `fetch` to model APIs anywhere in `claw/`; no SSE parsing in `web/`
+- **truth** — `bun run build` + `tsc` clean both sides; health curl streams real deltas
+- **taste** — tools live in `aitools.ts` (not inline); provider keys never reach browser; one `pickModel()` switch, not provider branches scattered
+
+---
+
+## Don't
+
+- Don't pin `ai` to different majors across `claw/` and `web/` — protocol drift breaks the stream
+- Don't install every provider package "just in case" — add as the persona's `model` field needs them; the W1 list is a max, not a min
+- Don't bypass `streamText` for a quick prompt — use `generateText` from the same package
+- Don't define tools inline in `streamText({ tools: { … } })` — keep in `aitools.ts` for testability and reuse
+- Don't expose any provider key to the browser — `web/` only ever talks to `claw/`
+- Don't wrap `useChat` in a context provider unless you need cross-component shared state
+- Don't render tool results as raw JSON — one `<ToolCard>` per `toolName`, that's the protocol's whole point
 
 ---
 
@@ -209,32 +379,7 @@ Streaming end to end: tokens render as the LLM types, tool calls render as cards
 
 ## Generative UI
 
-Tools can return structured data; web renders custom components per tool name.
-
-```tsx
-function ToolCard({ part }: { part: { type: string; output?: unknown } }) {
-  if (part.type === 'tool-browse' && part.output) {
-    const r = part.output as { title: string; summary: string; facts: string[] }
-    return (
-      <div className="border rounded p-3 my-2">
-        <div className="text-sm text-muted-foreground">browsed</div>
-        <div className="font-semibold">{r.title}</div>
-        <div className="text-sm">{r.summary}</div>
-        <ul className="text-xs">{r.facts.map((f, i) => <li key={i}>{f}</li>)}</ul>
-      </div>
-    )
-  }
-  if (part.type === 'tool-remember') return <div className="text-xs">📌 remembered</div>
-  if (part.type === 'tool-mark')     return <div className="text-xs">✓ path strengthened</div>
-  if (part.type === 'tool-highways' && part.output) {
-    const r = part.output as { highways: { from: string; to: string; strength: number }[] }
-    return <HighwayMap edges={r.highways} />     // ReactFlow island
-  }
-  return null
-}
-```
-
-The chat surface stops being "text in, text out" and becomes a substrate viewer. Memory cards. Tool execution cards. Live highway maps. Same API, generative output.
+Render tool parts via the canonical `<Tool>` element from [`ai-elements`](ai-elements.md), switching on `part.type` (`tool-browse`, `tool-remember`, …). One component, every tool. Don't redefine `<ToolCard>` here — it lives in ai-elements once.
 
 ---
 
@@ -322,26 +467,7 @@ Net change in claw: `src/index.ts` shrinks ~80 lines. `src/tools.ts` shrinks to 
 
 ## Health check
 
-```bash
-# Streaming endpoint returns SSE
-curl -N -X POST https://claw.<acct>.workers.dev/message?stream=1 \
-  -H 'Authorization: Bearer <CLAW_KEY>' \
-  -H 'Content-Type: application/json' \
-  -d '{"group":"test","text":"browse https://example.com and tell me what it says"}'
-```
-
-Should stream:
-```
-data: {"type":"text-start","id":"msg_…"}
-data: {"type":"text-delta","id":"msg_…","textDelta":"Let"}
-…
-data: {"type":"tool-call","toolCallId":"…","toolName":"browse","input":{"url":"https://example.com"}}
-data: {"type":"tool-result","toolCallId":"…","output":{"title":"Example Domain",…}}
-data: {"type":"text-delta",…}
-data: {"type":"finish","finishReason":"stop"}
-```
-
-You're integrated.
+See [`integrate.md` § Health checks](integrate.md#health-checks-canonical--referenced-by-aisdkmd--mcpmd) — case 3 (streaming round-trip) covers this layer end-to-end.
 
 ---
 

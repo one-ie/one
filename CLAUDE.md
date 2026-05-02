@@ -61,15 +61,32 @@ without verification is superstition; with verification it's learning.
 
 | Folder       | What | Read first |
 |--------------|------|------------|
-| `agents/`    | Markdown agent definitions (templates in `agents/templates/`) | `agents/README.md` |
-| `one/`       | Canonical docs — ontology, dictionary, patterns, rubrics | `one/dictionary.md` |
-| `web/`       | Astro 6 + React 19 + CF Workers substrate app | `web/CLAUDE.md` |
-| `sdk/`       | `@oneie/sdk` — TypeScript SDK | `sdk/CLAUDE.md` |
+| `agents/`    | Markdown agent definitions (templates in `agents/templates/`) | `agents/CLAUDE.md` |
 | `mcp/`       | `@oneie/mcp` — MCP server for Claude/Cursor | `mcp/CLAUDE.md` |
+| `sdk/`       | `@oneie/sdk` — TypeScript SDK | `sdk/CLAUDE.md` |
+| `claw/`      | Edge-native AI agent worker — Telegram/Discord/HTTP → LLM, substrate-backed memory (~660 LOC, Hono on CF Workers, D1+KV) | `claw/README.md` |
+| `one/`       | Canonical docs — ontology, dictionary, patterns, rubrics | `one/dictionary.md` |
+| `web/`       | Astro 6 + React 19 + CF Workers substrate app (chat UI, pages, dashboards) | `web/README.md` |
 | `.claude/`   | Claude Code harness — commands, skills, rules, subagents | `.claude/CLAUDE.md` |
 
-Each folder carries its own `CLAUDE.md` with the local contract. Cd into a
+Each folder carries its own `CLAUDE.md` (or `README.md` where noted) with the local contract. Cd into a
 folder and Claude Code auto-loads its context on top of this one.
+
+**How they compose** (see `integrate.md` for the full picture):
+
+```
+Telegram ──┐
+Discord  ──┼──→ claw  ←──→  D1 / KV / TypeDB
+Web      ──┘     ▲                  ▲
+                 │                  │
+              web (Astro) ──────────┘
+```
+
+`claw` owns ingress + LLM + memory + learning. `web` owns UI + pages + payments.
+`sdk` and `mcp` are the external surfaces — TypeScript apps and MCP clients
+talk to the same substrate. `agents/` are markdown definitions consumed by
+`claw` (worker-level personas) and `mcp` (tool-callable roles). Never
+duplicate state across layers; one brain, many surfaces.
 
 ## Tech stack
 

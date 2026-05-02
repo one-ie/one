@@ -1,5 +1,9 @@
 # integrate
 
+> **Position:** layer 1 of 4 — `integrate` → [`aisdk`](aisdk.md) → [`ai-elements`](ai-elements.md) → [`mcp`](mcp.md)
+> **Prereq:** none (this is the foundation)
+> **Enables:** every layer above. Owns: architecture, two modes, env-var seam, **canonical health checks**.
+
 How `web/` (Astro) and `claw/` (CF Worker) compose — and how the whole repo runs standalone or federates with one.ie.
 
 **Principle:** one brain, many surfaces. `claw` thinks; `web` shows. Substrate state is shared, never duplicated. The repo is **complete on its own** — federation with one.ie is one URL away.
@@ -194,17 +198,36 @@ Claude.ai pattern, substrate-flavored.
 
 ---
 
-## Health check
+## Health checks (canonical — referenced by aisdk.md + mcp.md)
 
 ```bash
+# 1. Liveness
 curl https://claw.<acct>.workers.dev/health
+# expect: { ok: true, mcpServers?: [...], mcpToolsLoaded?: N, ... }
+
+# 2. Non-streaming round-trip (integrate Stage 1)
 curl -X POST https://claw.<acct>.workers.dev/message \
   -H 'Authorization: Bearer <CLAW_KEY>' \
   -H 'Content-Type: application/json' \
   -d '{"group":"test","text":"hello"}'
+# expect: 200 { response: "..." }
+
+# 3. Streaming round-trip (aisdk W3)
+curl -N -X POST https://claw.<acct>.workers.dev/message?stream=1 \
+  -H 'Authorization: Bearer <CLAW_KEY>' \
+  -H 'Content-Type: application/json' \
+  -d '{"group":"test","text":"browse https://example.com"}'
+# expect SSE: text-start → text-delta* → tool-call(browse) → tool-result → text-delta* → finish
+
+# 4. MCP tool round-trip (mcp.md, after wiring)
+curl -N -X POST https://claw.<acct>.workers.dev/message?stream=1 \
+  -H 'Authorization: Bearer <CLAW_KEY>' \
+  -H 'Content-Type: application/json' \
+  -d '{"group":"test","text":"send a slack message to #general saying hello"}'
+# expect SSE includes: tool-call(slack_send_message) → tool-result
 ```
 
-Both return 200. You're integrated.
+Each layer's "Health check" section is just a pointer back here.
 
 ---
 
