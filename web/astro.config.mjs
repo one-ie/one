@@ -27,7 +27,7 @@ export default defineConfig({
       },
     },
     ssr: {
-      external: ['node:async_hooks'],
+      external: ['node:async_hooks', 'cytoscape', 'mermaid', '@streamdown/mermaid', '@xyflow/react'],
     },
     build: {
       rollupOptions: {

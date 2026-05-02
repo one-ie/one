@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { MessageCircle } from 'lucide-react'
-import { Chat } from '@/components/Chat'
+import { ChatLazy } from '@/components/ChatLazy'
 import { Icon } from '@/components/ui/Icon'
 
 export function ChatWidget() {
@@ -25,7 +25,7 @@ export function ChatWidget() {
           className="fixed bottom-6 right-6 bg-background rounded-2xl z-50 overflow-hidden border"
           style={{ borderColor: 'var(--color-border)', boxShadow: 'var(--shadow-pop)' }}
         >
-          <Chat onClose={() => setOpen(false)} />
+          <ChatLazy onClose={() => setOpen(false)} />
         </div>
       )}
     </>

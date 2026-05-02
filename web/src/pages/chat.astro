@@ -1,10 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import { Chat } from '../components/Chat'
+import { ChatLazy } from '../components/ChatLazy'
 ---
 
 <Layout title="Chat — ONE" sidebar="mini">
   <div class="h-[100dvh] overflow-hidden">
-    <Chat client:load fullPage />
+    <ChatLazy client:only="react" fullPage />
   </div>
 </Layout>
