@@ -43,10 +43,10 @@ Goal: shadcn initialized, AI SDK already there from `aisdk-todo.md`, `components
 
 #### Status
 
-- [ ] **W1 recon** — read `web/components.json` (if exists), `web/src/components/ui/`, `web/tsconfig.json`, `web/astro.config.*`
-- [ ] **W2 decide** — confirm Astro mode + TS + Tailwind v4 + `src/` + `@/*` answers; verify shadcn init won't overwrite `Icon.tsx` / `IconBadge.tsx`
-- [ ] **W3 edit** — run `bunx shadcn@latest init` in `web/`; commit `components.json`
-- [ ] **W4 verify** — `bun run build` green; existing components untouched; rubric ≥ 0.65
+- [x] **W1 recon** — read `web/components.json` (if exists), `web/src/components/ui/`, `web/tsconfig.json`, `web/astro.config.*`
+- [x] **W2 decide** — confirm Astro mode + TS + Tailwind v4 + `src/` + `@/*` answers; verify shadcn init won't overwrite `Icon.tsx` / `IconBadge.tsx`
+- [x] **W3 edit** — run `bunx shadcn@latest init` in `web/`; commit `components.json`
+- [x] **W4 verify** — `bun run build` green; existing components untouched; rubric ≥ 0.65
 
 ### Cycle 2 — Install all 48 components
 
@@ -79,10 +79,10 @@ Try `bunx ai-elements@latest add --all` first; fall back to per-bucket loop from
 
 #### Status
 
-- [ ] **W1 recon** — verify shadcn init from C1 stuck; check no AI Elements already present
-- [ ] **W2 decide** — choose `--all` vs loop based on availability; confirm install path won't dump into `ui/`
-- [ ] **W3 edit** — run install (single agent — this is one CLI, not parallel-friendly)
-- [ ] **W4 verify** — count files, run build + tsc; rubric ≥ 0.65
+- [x] **W1 recon** — verify shadcn init from C1 stuck; check no AI Elements already present
+- [x] **W2 decide** — choose `--all` vs loop based on availability; confirm install path won't dump into `ui/`
+- [x] **W3 edit** — run install (single agent — this is one CLI, not parallel-friendly)
+- [x] **W4 verify** — count files, run build + tsc; rubric ≥ 0.65
 
 ### Cycle 3 — Wire core components to substrate
 
@@ -101,10 +101,10 @@ Defer (per spec §Don't — "wire as features need them"): `Attachments`, `Audio
 
 #### Status
 
-- [ ] **W1 recon** — read `Chat.tsx` (post-aisdk migration), inventory which parts arrive in stream
-- [ ] **W2 decide** — diff specs per task; preserve `emitClick` on every onClick
-- [ ] **W3 edit** — parallel edits
-- [ ] **W4 verify** — `bun run build`; visual smoke (open `/chat`, send a message, see `<Message>` render); rubric ≥ 0.65
+- [x] **W1 recon** — read `Chat.tsx` (post-aisdk migration), inventory which parts arrive in stream
+- [x] **W2 decide** — diff specs per task; preserve `emitClick` on every onClick
+- [x] **W3 edit** — parallel edits
+- [x] **W4 verify** — `bun run build`; visual smoke (open `/chat`, send a message, see `<Message>` render); rubric ≥ 0.65
 
 ---
 

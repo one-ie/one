@@ -1,9 +1,26 @@
-import { useState, useRef, useEffect } from 'react'
-import { X, Send } from 'lucide-react'
-import { Icon } from '@/components/ui/Icon'
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
+import { Mic, X } from 'lucide-react'
+import { Icon } from '@/components/ui/Icon'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { emitClick } from '@/lib/ui-signal'
+import { Conversation, ConversationContent } from '@/components/ai-elements/conversation'
+import { Message } from '@/components/ai-elements/message'
+import {
+  PromptInput,
+  PromptInputActionAddAttachments,
+  PromptInputActionMenu,
+  PromptInputActionMenuContent,
+  PromptInputActionMenuTrigger,
+  PromptInputBody,
+  PromptInputButton,
+  PromptInputSubmit,
+  PromptInputTextarea,
+  PromptInputTools,
+} from '@/components/ai-elements/prompt-input'
+import { Tool, ToolHeader } from '@/components/ai-elements/tool'
+import { Reasoning, ReasoningContent, ReasoningTrigger } from '@/components/ai-elements/reasoning'
+import type { DynamicToolUIPart, ToolUIPart } from 'ai'
 
 interface Props {
   fullPage?: boolean
@@ -12,31 +29,18 @@ interface Props {
 }
 
 export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
-  const [input, setInput] = useState('')
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  const { messages, sendMessage, addToolApprovalResponse, status } = useChat({
+  const { messages, sendMessage, addToolApprovalResponse, status, stop } = useChat({
     transport: new DefaultChatTransport({ api: '/api/chat', body: { group } }),
   })
 
-  const loading = status === 'submitted' || status === 'streaming'
-
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
-  }, [messages])
-
-  const send = () => {
-    if (!input.trim() || loading) return
-    emitClick('ui:chat:send')
-    sendMessage({ text: input.trim() })
-    setInput('')
-  }
-
   const containerClass = fullPage
-    ? 'flex flex-col h-[calc(100vh-73px)] max-w-3xl mx-auto'
-    : 'flex flex-col h-[500px] w-[380px]'
+    ? 'flex flex-col h-full max-w-3xl mx-auto text-base'
+    : 'flex flex-col h-[500px] w-[380px] text-base'
 
   return (
+    <>
+    <style>{`.chat-prompt [data-slot="input-group"]{border:none!important;box-shadow:none!important;outline:none!important}.chat-prompt textarea{border:none!important;box-shadow:none!important;outline:none!important}`}</style>
+    <TooltipProvider>
     <div className={containerClass}>
       {!fullPage && (
         <div
@@ -57,90 +61,116 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
         </div>
       )}
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 && (
-          <div className="text-center text-font/50 py-8">
-            <p className="text-lg mb-2">Hello!</p>
-            <p className="text-sm">Ask me anything about ONE.</p>
-          </div>
-        )}
-        {messages.map((msg) => (
-          <div key={msg.id} className={`flex flex-col gap-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-            {msg.parts.map((part, i) => {
-              if (part.type === 'text') {
-                return (
-                  <div
-                    key={i}
-                    className={`max-w-[80%] px-4 py-2 rounded-2xl ${
-                      msg.role === 'user' ? 'bg-primary text-on-primary' : 'bg-foreground text-font'
-                    }`}
-                  >
-                    {part.text}
-                  </div>
-                )
-              }
-              if (
-                (part.type === 'dynamic-tool' || part.type.startsWith('tool-')) &&
-                (part as { state?: string }).state === 'approval-requested'
-              ) {
-                const approvalPart = part as { type: string; state: string; input: unknown; approval: { id: string } }
-                return (
-                  <div
-                    key={i}
-                    className="bg-foreground border rounded-xl p-3 text-sm max-w-[80%]"
-                    style={{ borderColor: 'var(--color-border)' }}
-                  >
-                    <p className="text-font/60 mb-2">Approve: <code>{approvalPart.type}</code>?</p>
-                    <pre className="text-xs text-font/40 mb-2 overflow-auto">{JSON.stringify(approvalPart.input, null, 2)}</pre>
-                    <div className="flex gap-2">
-                      <button
-                        className="bg-primary text-on-primary rounded-lg px-3 py-1.5 text-xs"
-                        onClick={() => addToolApprovalResponse({ id: approvalPart.approval.id, approved: true })}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="bg-foreground border rounded-lg px-3 py-1.5 text-xs"
-                        style={{ borderColor: 'var(--color-border)' }}
-                        onClick={() => addToolApprovalResponse({ id: approvalPart.approval.id, approved: false })}
-                      >
-                        Deny
-                      </button>
-                    </div>
-                  </div>
-                )
-              }
-              return null
-            })}
-          </div>
-        ))}
-        {loading && (
-          <div className="flex justify-start">
-            <div className="bg-foreground px-4 py-2 rounded-2xl text-font/60 animate-pulse">Thinking...</div>
-          </div>
-        )}
-      </div>
+      <Conversation className="flex-1">
+        <ConversationContent className="p-4 space-y-4">
+          {messages.length === 0 && (
+            <div className="text-center text-font/50 py-8">
+              <p className="text-lg mb-2">Hello!</p>
+              <p className="text-sm">Ask me anything about ONE.</p>
+            </div>
+          )}
+          {messages.map((msg) => (
+            <Message key={msg.id} from={msg.role}>
+              {msg.parts.map((part, i) => {
+                if (part.type === 'text') {
+                  return msg.role === 'user'
+                    ? <div key={i} className="ml-auto max-w-[80%] px-4 py-2 rounded-2xl bg-foreground text-font">{part.text}</div>
+                    : <div key={i} className="max-w-[80%] text-font">{part.text}</div>
+                }
+                if (part.type === 'reasoning') {
+                  return (
+                    <Reasoning key={i} isStreaming={status === 'streaming'}>
+                      <ReasoningTrigger />
+                      <ReasoningContent>{part.text}</ReasoningContent>
+                    </Reasoning>
+                  )
+                }
+                if (
+                  (part.type === 'dynamic-tool' || part.type.startsWith('tool-')) &&
+                  (part as { state?: string }).state === 'approval-requested'
+                ) {
+                  const toolPart = part as ToolUIPart | DynamicToolUIPart
+                  const approvalId = (toolPart as { approval?: { id: string } }).approval?.id ?? ''
+                  const toolName = 'toolName' in toolPart ? toolPart.toolName : toolPart.type
+                  return (
+                    <Tool key={i}>
+                      <ToolHeader
+                        type={toolPart.type as DynamicToolUIPart['type']}
+                        state={toolPart.state as DynamicToolUIPart['state']}
+                        toolName={toolName}
+                      />
+                      <div className="flex gap-2 p-3">
+                        <button
+                          type="button"
+                          className="bg-primary text-on-primary rounded-lg px-3 py-1.5 text-xs"
+                          onClick={() => {
+                            emitClick('ui:chat:tool-approve')
+                            addToolApprovalResponse({ id: approvalId, approved: true })
+                          }}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          type="button"
+                          className="bg-foreground border rounded-lg px-3 py-1.5 text-xs"
+                          style={{ borderColor: 'var(--color-border)' }}
+                          onClick={() => {
+                            emitClick('ui:chat:tool-deny')
+                            addToolApprovalResponse({ id: approvalId, approved: false })
+                          }}
+                        >
+                          Deny
+                        </button>
+                      </div>
+                    </Tool>
+                  )
+                }
+                return null
+              })}
+            </Message>
+          ))}
+        </ConversationContent>
+      </Conversation>
 
-      <div className="p-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
-        <form onSubmit={(e) => { e.preventDefault(); send() }} className="flex gap-2">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message…"
-            className="flex-1 px-4 py-2 bg-background text-font placeholder:text-font/50 rounded-lg border focus:outline-none transition"
-            style={{ borderColor: 'var(--color-border)' }}
-          />
-          <button
-            type="submit"
-            disabled={loading || !input.trim()}
-            aria-label="Send message"
-            className="w-10 h-10 inline-flex items-center justify-center bg-primary text-on-primary rounded-lg hover:brightness-110 disabled:opacity-50 transition"
+      <div className="px-4 pb-4 pt-3">
+        <div className="chat-prompt rounded-xl bg-background overflow-hidden">
+          <PromptInput
+            className="[&>div]:h-auto [&>div]:items-end [&>div]:border-0 [&>div]:shadow-none [&>div]:outline-none"
+            onSubmit={({ text }) => {
+              if (!text.trim() || status === 'submitted' || status === 'streaming') return
+              emitClick('ui:chat:send')
+              sendMessage({ text: text.trim() })
+            }}
           >
-            <Icon icon={Send} size="md" />
-          </button>
-        </form>
+            <PromptInputActionMenu>
+              <PromptInputActionMenuTrigger tooltip="Add files" />
+              <PromptInputActionMenuContent>
+                <PromptInputActionAddAttachments />
+              </PromptInputActionMenuContent>
+            </PromptInputActionMenu>
+            <PromptInputBody>
+              <PromptInputTextarea
+                placeholder="Type a message…"
+                rows={5}
+                style={{ minHeight: '120px', paddingTop: '20px' }}
+                className="focus-visible:ring-0 focus-visible:border-0 focus-visible:outline-none border-0"
+              />
+            </PromptInputBody>
+            <PromptInputTools>
+              <PromptInputButton
+                size="icon-sm"
+                tooltip="Voice input"
+                onClick={() => emitClick('ui:chat:voice')}
+              >
+                <Mic className="size-4" />
+              </PromptInputButton>
+              <PromptInputSubmit status={status} onStop={stop} />
+            </PromptInputTools>
+          </PromptInput>
+        </div>
       </div>
     </div>
+    </TooltipProvider>
+    </>
   )
 }
