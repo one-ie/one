@@ -23,9 +23,21 @@ default palette so wrong colors emit no CSS. Don't fight the enforcement.
 
 `white` · `black` · `transparent` · `destructive` (errors/deletes) · `success` (confirms).
 
-## Plus 6 derived (auto-computed — don't set directly)
+## Plus derived helpers (auto-computed — don't set directly)
 
-`on-primary` · `on-secondary` · `on-tertiary` (auto-contrast labels for brand fills) · `border` (= font @ 10%) · `muted` (= font @ 60%) · `ring` (= primary).
+Color: `on-primary` · `on-secondary` · `on-tertiary` (auto-contrast labels for brand fills) · `border` (= font @ 10%) · `border-strong` (= font @ 20%) · `muted` (= font @ 60%) · `faint` (= font @ 40%) · `ring` (= primary) · `page` (= background mixed with 4% font — L0 page shell).
+
+Polish constants (baked, not exposed): `--radius-sm` 6px · `--radius-md` 10px · `--radius-lg` 16px · `--shadow-card` · `--shadow-pop` · `--ease` 120ms.
+
+## Three depth levels
+
+| Level | Surface | Where |
+| --- | --- | --- |
+| L0 page | `--color-page` | `<body>`, full-bleed shell |
+| L1 card | `--color-background` | Cards, sidebar, popovers, dropdowns |
+| L2 content | `--color-foreground` | Card body, inputs, code blocks |
+
+Sidebar = L1. Inputs = L2. There is no L3. A card header/footer shares the card surface; never tint them separately.
 
 ---
 
@@ -65,21 +77,88 @@ The `--color-{border,muted,ring}` CSS vars exist (defined in `Layout.astro`) but
 - ❌ Hex literals in JSX/CSS: `#fff`, `#0a0a0f`, `style={{ color: '#abc' }}`
 - ❌ Raw `hsl(...)` / `rgb(...)` outside `Layout.astro` (token source) and `design.astro` (showcase)
 - ❌ Adding a 7th token. Derive with alpha modifiers or `color-mix()`.
+- ❌ Mixing icon sets. Lucide only — via `<Icon>` / `<IconBadge>` (in `web/src/components/ui/`).
+- ❌ Inline SVG icons in React components. Import from `lucide-react` and wrap.
+- ❌ Unicode icon glyphs (☀ ☾ ▾ ✓ ✗). They render differently across OSes — use lucide.
 
 ---
 
 ## Patterns
 
-### Card
+### Card (header · body · footer)
+
+One shape, three slots. Header and footer share the card surface; only the body switches to `foreground`.
 
 ```tsx
-<div className="bg-background border border-font/10 rounded-xl p-6">
-  {/* card content */}
-  <div className="bg-foreground rounded-lg p-4">
-    {/* inner content area */}
+<article
+  className="bg-background border rounded-2xl flex flex-col"
+  style={{ borderColor: 'var(--color-border)', boxShadow: 'var(--shadow-card)' }}
+>
+  <header className="flex items-start justify-between gap-4 px-5 pt-5">
+    <div>
+      <h3 className="text-base font-bold">Title</h3>
+      <p className="text-font/60 text-sm">Meta</p>
+    </div>
+    <span className="px-2.5 py-1 rounded-full text-xs bg-foreground text-font/60 border" style={{ borderColor: 'var(--color-border)' }}>badge</span>
+  </header>
+
+  <div className="mx-5 mt-4 p-4 bg-foreground rounded-xl border" style={{ borderColor: 'var(--color-border)' }}>
+    {/* L2 — data, inputs, charts */}
   </div>
+
+  <footer
+    className="flex items-center justify-between gap-3 px-5 py-4 mt-4 border-t"
+    style={{ borderColor: 'var(--color-border)' }}
+  >
+    <span className="text-font/60 text-sm">Updated 2m ago</span>
+    <div className="flex gap-2">
+      <button className="px-4 py-2 rounded-lg text-font">Cancel</button>
+      <button className="px-4 py-2 rounded-lg bg-primary text-on-primary">Save</button>
+    </div>
+  </footer>
+</article>
+```
+
+### Icons
+
+One source: `lucide-react`. Two wrappers in `web/src/components/ui/`:
+
+```tsx
+import { Send, Zap } from 'lucide-react'
+import { Icon } from '@/components/ui/Icon'
+import { IconBadge } from '@/components/ui/IconBadge'
+
+// Inline — inherits parent color via currentColor
+<Icon icon={Send} size="md" />
+
+// Colored badge — feature grids, list rows, profile blocks
+<IconBadge icon={Zap} tone="primary" size="md" />
+```
+
+`Icon` sizes: `sm` 14 · `md` 16 · `lg` 20 · `xl` 24. Stroke is locked to 1.5.
+`IconBadge` tones: `primary` · `secondary` · `tertiary` · `neutral`. Surface is `color-mix(tone 14%, foreground)` — brighter than the card outer, tinted toward the tone color.
+
+In Astro pages where you can't easily import React, use inline SVG with `viewBox="0 0 24 24"`, `stroke="currentColor"`, `stroke-width="1.5"`, `stroke-linecap="round"`, `stroke-linejoin="round"`. Copy paths from `lucide.dev`. Never use unicode glyphs.
+
+### Form fields
+
+Inputs use `background` (sunken), not `foreground` (raised). The card body is `foreground`; inputs sink back to `background` so they stand out as interactive surfaces against the body.
+
+```tsx
+<div className="flex flex-col gap-1.5">
+  <label htmlFor="name" className="text-sm font-medium">Name</label>
+  <input
+    id="name"
+    type="text"
+    className="px-3.5 py-2.5 rounded-lg bg-background text-font border focus:outline-none"
+    style={{ borderColor: 'var(--color-border)' }}
+    placeholder="Ada Lovelace"
+  />
+  <span className="text-xs text-font/60">Shown on your public profile</span>
 </div>
 ```
+
+Focus uses `--color-ring` border + 3px `ring/25` glow. Error uses `aria-invalid='true'` → border `destructive`. Placeholder uses `--color-muted`. Checkbox/radio also use `bg-background` so they pop against the body.
 
 ### Buttons (6 variants)
 
@@ -125,7 +204,11 @@ There is no opt-out for other files.
 - Don't write `style={{ color: '...' }}` — break the token enforcement.
 - Don't use shadcn's `accent` name; it's `tertiary` here.
 - Don't flip brand colors with mode — only surfaces flip.
+- Don't add a 4th depth level. Page → card → content. A card header is not a 4th surface.
+- Don't pick off-scale radii or spacing. Snap to `radius-sm/md/lg` (6/10/16) and 4/8/12/16/20/24/32.
+- Don't animate longer than 200ms. Use `var(--ease)` (120ms) for color/border/filter.
+- Don't tint a card's header or footer with a different background — they share the card surface.
 
 ---
 
-*6 tokens. 6 button variants. 1 card shape. The build refuses to compile anything else.*
+*6 tokens. 3 depths. 1 card. 1 input. 6 button variants. The build refuses to compile anything else.*

@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
+import { X, Send } from 'lucide-react'
+import { Icon } from '@/components/ui/Icon'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -49,13 +51,19 @@ export function Chat({ fullPage = false, onClose }: Props) {
   return (
     <div className={containerClass}>
       {!fullPage && (
-        <div className="flex items-center justify-between px-4 py-3 border-b border-font/10 bg-background">
-          <span className="font-medium">Chat with ONE</span>
+        <div
+          className="flex items-center justify-between px-4 py-3 bg-background border-b"
+          style={{ borderColor: 'var(--color-border)' }}
+        >
+          <span className="font-medium text-sm">Chat with ONE</span>
           {onClose && (
-            <button onClick={onClose} className="text-font/60 hover:text-font">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close chat"
+              className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-font/60 hover:text-font hover:bg-foreground transition"
+            >
+              <Icon icon={X} size="md" />
             </button>
           )}
         </div>
@@ -72,7 +80,7 @@ export function Chat({ fullPage = false, onClose }: Props) {
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
               className={`max-w-[80%] px-4 py-2 rounded-2xl ${
-                msg.role === 'user' ? 'bg-primary text-white' : 'bg-foreground text-font'
+                msg.role === 'user' ? 'bg-primary text-on-primary' : 'bg-foreground text-font'
               }`}
             >
               {msg.content}
@@ -86,21 +94,23 @@ export function Chat({ fullPage = false, onClose }: Props) {
         )}
       </div>
 
-      <div className="p-4 border-t border-font/10">
+      <div className="p-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         <form onSubmit={(e) => { e.preventDefault(); send() }} className="flex gap-2">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-            className="flex-1 px-4 py-2 bg-foreground border border-font/10 rounded-lg text-font placeholder:text-font/40 focus:outline-none focus:border-primary"
+            placeholder="Type a message…"
+            className="flex-1 px-4 py-2 bg-background text-font placeholder:text-font/50 rounded-lg border focus:outline-none transition"
+            style={{ borderColor: 'var(--color-border)' }}
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="px-4 py-2 bg-primary text-white rounded-lg hover:brightness-110 disabled:opacity-50 transition"
+            aria-label="Send message"
+            className="w-10 h-10 inline-flex items-center justify-center bg-primary text-on-primary rounded-lg hover:brightness-110 disabled:opacity-50 transition"
           >
-            Send
+            <Icon icon={Send} size="md" />
           </button>
         </form>
       </div>

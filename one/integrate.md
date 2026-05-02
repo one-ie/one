@@ -105,6 +105,31 @@ Ship Mode A today, flip to Mode B later. No code changes.
 
 ---
 
+## Pre-flight pickups (fold into the plan that touches each file)
+
+Small known cleanups in `web/` that should ride with the plan that already
+rewrites the file, so we touch each file once. Don't do these as a separate
+sweep — fold them into the matching plan's W3.
+
+| Pickup | File | Picked up by |
+| --- | --- | --- |
+| Stream the chat (raw `fetch` → SSE; today blocks on full response) | `web/src/lib/llm.ts`, `web/src/pages/api/chat.ts`, `web/src/components/Chat.tsx` | `aisdk.md` W3 (`streamText` + `useChat`) |
+| Unify three handlers into one `handle(channel, normalize?, send?)` helper (chat.ts + telegram.ts + discord.ts repeat the same try/start/emit/catch shape) | `web/src/pages/api/chat.ts`, `web/src/pages/api/webhook/telegram.ts`, `web/src/pages/api/webhook/discord.ts`, new `web/src/lib/handler.ts` | `aisdk.md` W3 (when `chat.ts` is rewritten, fold the webhooks behind the same helper) |
+| Drop type-cast carnival: `getEnv(): Promise<Env>` directly; `loadAgent(env: Env)` not `Record<string, string \| undefined>`. Removes 4 `as unknown as` across the API routes | `web/src/lib/cf-env.ts`, `web/src/lib/agent.ts`, all 3 `api/*` routes | `aisdk.md` W3 (handlers are being rewritten anyway) |
+| Stable message id at creation (today `key={i}` flickers on regenerate/edit) | `web/src/components/Chat.tsx` | `ai-elements.md` W3 (`Message` / `Conversation` replace ad-hoc UI — give each message a `crypto.randomUUID()` at create time) |
+| `@/` path aliases in component imports (today `./ui/Icon`) | every new component installed by `ai-elements.md` | `ai-elements.md` W3 (set the convention from the first install) |
+| MCP-exposed tools should also stream through the same `streamText` path, not a parallel one | `web/src/pages/api/chat.ts` | `mcp.md` (after `aisdk.md` lands) |
+
+These six are the audit findings from the pre-migration code review. They're
+not blockers — the plans run fine without them — but folding each into its
+natural moment avoids touching the same files twice.
+
+The four independent fixes (Hero `client:load`, Pricing dead code, telemetry
+per-isolate `sessionId` leak, path aliases in existing components) ship
+ahead of these plans as a one-shot pre-migration sweep.
+
+---
+
 ## The wiring (Stage 1 — one fetch)
 
 `web/src/pages/api/chat.ts` calls OpenRouter today. Replace with claw:

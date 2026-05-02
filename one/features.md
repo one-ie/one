@@ -23,6 +23,7 @@ clone  →  bun install  →  bun dev  →  edit content  →  bun run deploy
 | Design system | 6 editable tokens + auto-contrast labels + 3 depth levels | `design.md` · `/design` |
 | Theme editor | Live color picker; persists to `localStorage`; per-mode | `theme-editor.md` · `/design` |
 | Chat | Streaming AI chat (`Chat.tsx`) + floating widget (`ChatWidget.tsx`) | `src/components/Chat.tsx` |
+| Sidebar | Mini/full/sheet rail — collapsible groups, persisted state, mobile drawer | `src/components/sidebar/` · `sidebar.md` |
 | Chat backend | `/api/chat` SSE endpoint, `/api/health`, webhook handlers | `src/pages/api/` |
 | Auth-ready | Better Auth wired (Google plugin), passkey path documented | `passkeys.md` |
 | Payments | x402 receive side prod-ready; SDK send side in `apps/one-core` | `x402.md` |
@@ -130,18 +131,72 @@ Spec: `chat.md` · `aisdk.md` · `ai-elements.md`.
 
 ## Layout
 
-One layout, slot-driven, fully typed.
+One layout, slot-driven, fully typed. Two orthogonal axes — **left = nav**,
+**right = chat** — each opted in per page with one prop.
 
 ```astro
-<Layout title="..." description="...">
-  <slot />
-</Layout>
+<Layout title="Dashboard" sidebar="full">          <!-- left rail, labels visible -->
+<Layout title="Wallet" sidebar="mini" chat="split"> <!-- icon rail + chat right -->
+<Layout title="Home">                              <!-- no rails (default) -->
 ```
 
 Built-in: dark mode (with no-flash inline script), Tailwind 4 globals,
 focus-visible ring on every interactive element using `--color-ring`,
-`min-h-screen antialiased` body. Add a header/nav/footer by composing more
-components — there's no framework lock-in to a particular layout shape.
+`min-h-screen antialiased` body. Pages never import the sidebar or chat
+components — flip a prop, the layout decides.
+
+Specs: `layout.md` (chat axis) · `sidebar.md` (nav axis).
+
+---
+
+## Sidebar
+
+A left rail navigation island, four modes, zero new dependencies.
+
+```astro
+<Layout title="Chat" sidebar="full">    <!-- 240px, icons + labels -->
+<Layout title="Wallet" sidebar="mini">  <!-- 72px, icons only -->
+<Layout title="Home">                   <!-- sidebar="none" (default) -->
+```
+
+| Mode | Width | When |
+| --- | --- | --- |
+| `none` | 0 | Marketing, legal, docs — top nav only |
+| `mini` | 72px | Dense workspaces; click a row to navigate |
+| `full` | 240px | App home; group labels + collapsible submenus |
+| `sheet` | drawer | Auto on mobile (`<768px`) — hamburger + backdrop + ESC |
+
+What you get:
+
+- **Persisted state.** Mini ↔ full toggle saved to `localStorage` per device
+- **Collapsible groups.** CSS-only accordion (`grid-rows: 0fr ↔ 1fr`); no animation library
+- **Mini → full smart-expand.** Clicking a collapsible group while mini auto-expands the rail and opens the group — one fluid gesture instead of a separate dropdown
+- **Active highlighting.** Active row sinks into `bg-foreground` with a left accent bar in `--color-primary` — same depth trick the form fields use
+- **Mobile drawer.** Below 768px the rail becomes a sheet with backdrop, body scroll-lock, and ESC-to-close
+- **Every click is a signal.** `ui:sidebar:{toggle,expand,collapse,sheet,nav}` dispatched as `CustomEvent` on `window` — telemetry / substrate bridge / devtools subscribe without coupling
+- **Six tokens, no exceptions.** Active = `bg-foreground`, labels = `text-font/60`, group headers = `text-font/40`, brand mark = `bg-primary text-on-primary`. The build kills wrong colors at compile time.
+
+Adding a route is one entry in `web/src/lib/menu.ts`:
+
+```ts
+{
+  label: 'Money',
+  items: [
+    { href: '/wallet', label: 'Wallet', icon: Wallet, submenus: [
+      { href: '/wallet', label: 'Balance' },
+      { href: '/wallet/activity', label: 'Activity' },
+    ]},
+    { href: '/buy', label: 'Buy', icon: ShoppingCart },
+  ],
+}
+```
+
+What it does **not** ship: zustand, radix, shadcn primitives. The upstream
+([salimi-my/shadcn-ui-sidebar](https://github.com/salimi-my/shadcn-ui-sidebar))
+wanted four radix packages plus zustand plus immer for one boolean — we
+ported the *shape* using native HTML, Tailwind 4, and a 30-line hook.
+
+Spec: `sidebar.md` · code: `web/src/components/sidebar/`.
 
 ---
 

@@ -214,6 +214,8 @@ export const sendSlack = async (env: Env, groupId: string, text: string): Promis
 
 MCP namespacing makes tool names predictable: `<server>_<tool>` (e.g. `slack_send_message`, `github_create_issue`). The `<Tool>` element from [`ai-elements`](ai-elements.md) renders every `tool-*` part — substrate tools and MCP tools alike — by switching on `part.type`. One component, every source. No `<ToolCard>` redefinition here.
 
+**Pre-flight pickup:** MCP-exposed tools must stream through the same `streamText` path as substrate tools, not a parallel one. Wire after `aisdk.md` lands — see `integrate.md` Pre-flight pickups.
+
 ---
 
 ## Federation (Mode B)

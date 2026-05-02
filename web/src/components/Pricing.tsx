@@ -1,3 +1,6 @@
+import { Check } from 'lucide-react'
+import { Icon } from '@/components/ui/Icon'
+
 const plans = [
   {
     name: 'Free',
@@ -30,50 +33,69 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section id="pricing" className="px-6 py-20">
+    <section id="pricing" className="px-6 py-24">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-4">Simple pricing</h2>
+        <h2 className="text-2xl font-bold tracking-tight text-center mb-2">Simple pricing</h2>
         <p className="text-center text-font/60 mb-12">Start free, scale when you're ready</p>
 
         <div className="grid sm:grid-cols-3 gap-6">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`rounded-xl p-6 ${
-                plan.highlight ? 'bg-primary ring-2 ring-tertiary' : 'bg-background border border-font/10'
-              }`}
-            >
-              <h3 className="font-semibold text-lg">{plan.name}</h3>
-              <p className={`text-sm ${plan.highlight ? 'text-white/80' : 'text-font/60'} mb-4`}>{plan.description}</p>
-              <div className="mb-6">
-                <span className="text-3xl font-bold">{plan.price}</span>
-                <span className={plan.highlight ? 'text-white/80' : 'text-font/60'}>{plan.period}</span>
-              </div>
-              <ul className="space-y-2 mb-6">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-sm">
-                    <svg className="w-4 h-4 text-tertiary flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <button
-                className={`w-full py-2 rounded-lg font-medium transition ${
-                  plan.highlight
-                    ? 'bg-font text-foreground hover:brightness-95'
-                    : 'bg-secondary text-white hover:brightness-110'
+          {plans.map((plan) => {
+            const isHighlight = plan.highlight
+            return (
+              <div
+                key={plan.name}
+                className={`rounded-2xl p-6 border ${
+                  isHighlight ? 'bg-primary text-on-primary' : 'bg-background'
                 }`}
+                style={{
+                  borderColor: isHighlight
+                    ? 'color-mix(in oklab, var(--color-on-primary) 18%, transparent)'
+                    : 'var(--color-border)',
+                  boxShadow: isHighlight
+                    ? 'var(--shadow-pop)'
+                    : 'var(--shadow-card)',
+                }}
               >
-                {plan.cta}
-              </button>
-            </div>
-          ))}
+                <h3 className="font-semibold text-lg">{plan.name}</h3>
+                <p className={`text-sm mb-4 ${isHighlight ? 'opacity-80' : 'text-font/60'}`}>
+                  {plan.description}
+                </p>
+                <div className="mb-6">
+                  <span className="text-3xl font-bold tracking-tight">{plan.price}</span>
+                  <span className={isHighlight ? 'opacity-80' : 'text-font/60'}>{plan.period}</span>
+                </div>
+                <ul className="space-y-2.5 mb-6">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm">
+                      <span
+                        className="mt-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full flex-shrink-0"
+                        style={{
+                          background: isHighlight
+                            ? 'color-mix(in oklab, var(--color-on-primary) 20%, transparent)'
+                            : 'color-mix(in oklab, var(--color-tertiary) 16%, var(--color-foreground))',
+                          color: isHighlight ? 'var(--color-on-primary)' : 'var(--color-tertiary)',
+                        }}
+                      >
+                        <Icon icon={Check} size="sm" />
+                      </span>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  type="button"
+                  className="w-full py-2.5 rounded-lg font-medium transition hover:brightness-110"
+                  style={
+                    isHighlight
+                      ? { background: 'var(--color-on-primary)', color: 'var(--color-primary)' }
+                      : { background: 'var(--color-secondary)', color: 'var(--color-on-secondary)' }
+                  }
+                >
+                  {plan.cta}
+                </button>
+              </div>
+            )
+          })}
         </div>
       </div>
     </section>

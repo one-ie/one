@@ -106,6 +106,10 @@ AI Elements are presentational. Map them to our existing pieces:
 
 **Substrate convention:** every interactive AI Element onClick wraps with `emitClick('ui:<surface>:<action>')` per `.claude/rules/ui.md`.
 
+**Pre-flight pickups** (see `integrate.md` Pre-flight pickups for full list):
+- When `Message` / `Conversation` replace the ad-hoc `Chat.tsx` UI, give each message a stable `crypto.randomUUID()` at creation — today's `key={i}` flickers on regenerate.
+- Use `@/` path aliases (`@/components/ui/X`) in every import the install touches; set the convention from the first component.
+
 ---
 
 ## Wave 4 — Verify

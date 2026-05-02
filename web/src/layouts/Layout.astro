@@ -1,10 +1,13 @@
 ---
+import { Sidebar } from '@/components/sidebar/Sidebar'
+
 interface Props {
   title: string
   description?: string
+  sidebar?: 'none' | 'mini' | 'full'
 }
 
-const { title, description = 'AI agents on the ONE substrate' } = Astro.props
+const { title, description = 'AI agents on the ONE substrate', sidebar = 'none' } = Astro.props
 ---
 
 <!doctype html>
@@ -40,8 +43,15 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
       } catch {}
     </script>
   </head>
-  <body class="min-h-screen antialiased">
-    <slot />
+  <body class="min-h-screen antialiased" data-sidebar={sidebar}>
+    {sidebar === 'none' ? (
+      <slot />
+    ) : (
+      <div class="page-shell">
+        <Sidebar client:load initial={sidebar} />
+        <main class="page-shell__content"><slot /></main>
+      </div>
+    )}
   </body>
 </html>
 
@@ -84,8 +94,22 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
   /* Derived helpers — plain CSS vars (not Tailwind tokens, used via var()) */
   :root {
     --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
+    --color-border-strong: color-mix(in oklab, var(--color-font) 20%, transparent);
     --color-muted: color-mix(in oklab, var(--color-font) 60%, transparent);
+    --color-faint: color-mix(in oklab, var(--color-font) 40%, transparent);
     --color-ring: var(--color-primary);
+
+    /* Depth: page (L0) sits one shade off the card so card edges are visible.
+       Card = background (L1). Inner content/inputs = foreground (L2). */
+    --color-page: color-mix(in oklab, var(--color-background) 96%, var(--color-font));
+
+    /* Polish constants — radius, shadow, transition. Bake into components. */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --shadow-card: 0 1px 2px color-mix(in oklab, var(--color-font) 6%, transparent);
+    --shadow-pop: 0 4px 16px color-mix(in oklab, var(--color-font) 10%, transparent);
+    --ease: 120ms ease;
   }
 
   /* Surface tokens flip with mode. Brand tokens don't. */
@@ -96,7 +120,7 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
   }
 
   body {
-    background: var(--color-background);
+    background: var(--color-page);
     color: var(--color-font);
   }
 
@@ -104,5 +128,25 @@ const { title, description = 'AI agents on the ONE substrate' } = Astro.props
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
     border-radius: 2px;
+  }
+
+  /* Sidebar shell — sidebar is a sticky aside in the flex row.
+     The aside owns its own width via inline style; this just lays them out. */
+  .page-shell {
+    display: flex;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+
+  .page-shell__content {
+    flex: 1;
+    min-width: 0; /* prevent grid blow-out from long code blocks */
+  }
+
+  /* Mobile: aside becomes a fixed drawer; main reclaims full width. */
+  @media (max-width: 767px) {
+    .page-shell {
+      display: block;
+    }
   }
 </style>

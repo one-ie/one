@@ -7,19 +7,26 @@
     "dev": "astro dev",
     "build": "NODE_ENV=production astro build",
     "preview": "astro preview",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "check": "astro check",
+    "verify": "bun run typecheck",
+    "hooks:install": "bash scripts/install-hooks.sh"
   },
   "dependencies": {
-    "astro": "^6.0.0",
     "@astrojs/cloudflare": "^13.1.10",
     "@astrojs/node": "^10.0.5",
     "@astrojs/react": "^5.0.3",
+    "@tailwindcss/vite": "^4.0.0",
+    "astro": "^6.0.0",
+    "lucide-react": "^1.14.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^4.0.0",
-    "@tailwindcss/vite": "^4.0.0"
+    "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@types/node": "^22.10.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "typescript": "^5.8.3",

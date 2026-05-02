@@ -28,6 +28,7 @@ export async function POST({ request }: APIContext) {
       responseLen: response.length,
       latencyMs: Date.now() - start,
       success: true,
+      sessionId: signal.group,
     })
 
     return new Response('OK', { status: 200 })

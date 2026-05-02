@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Chat } from './Chat'
+import { MessageCircle } from 'lucide-react'
+import { Chat } from '@/components/Chat'
+import { Icon } from '@/components/ui/Icon'
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false)
@@ -7,23 +9,22 @@ export function ChatWidget() {
   return (
     <>
       <button
+        type="button"
         onClick={() => setOpen(true)}
-        className={`fixed bottom-6 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-lg hover:brightness-110 transition-all z-50 ${
+        aria-label="Open chat"
+        className={`fixed bottom-6 right-6 w-14 h-14 bg-primary text-on-primary rounded-full flex items-center justify-center transition-all z-50 hover:brightness-110 ${
           open ? 'scale-0' : 'scale-100'
         }`}
+        style={{ boxShadow: 'var(--shadow-pop)' }}
       >
-        <svg className="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-          />
-        </svg>
+        <Icon icon={MessageCircle} size="lg" />
       </button>
 
       {open && (
-        <div className="fixed bottom-6 right-6 bg-background border border-font/10 rounded-2xl shadow-2xl z-50 overflow-hidden">
+        <div
+          className="fixed bottom-6 right-6 bg-background rounded-2xl z-50 overflow-hidden border"
+          style={{ borderColor: 'var(--color-border)', boxShadow: 'var(--shadow-pop)' }}
+        >
           <Chat onClose={() => setOpen(false)} />
         </div>
       )}

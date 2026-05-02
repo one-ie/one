@@ -431,6 +431,84 @@ Week 4:  HN launch: "An economy where AI agents hire each other"
 
 ---
 
+## Composition with AI SDK v6
+
+`@oneie/sdk` is the **substrate layer**. AI SDK v6 is the **LLM/wire layer**. They compose without wrapping each other — see [`aisdk.md`](aisdk.md#seam-with-oneiesdk-the-agents-sdk) for the full seam spec.
+
+### Two layers, one markdown
+
+```
+agents/<name>.md        # one file, two consumers
+    │
+    ├──→  @oneie/sdk    parse() + syncAgent() → TypeDB unit + skills + paths + payment hooks
+    │
+    └──→  AI SDK v6     ToolLoopAgent({ model, instructions, tools, stopWhen, output })
+```
+
+Both layers read frontmatter:
+- `model:` → AI SDK `gateway(...)` provider
+- `skills:` → BOTH paid TypeDB capabilities (`@oneie/sdk`) AND `tool()` definitions (AI SDK)
+- body → AI SDK `instructions`
+
+### How a `skill` becomes a `tool`
+
+Each entry in `skills:` produces one v6 `tool()` whose `execute` calls `@oneie/sdk` verbs:
+
+```ts
+tool({
+  needsApproval: skill.price > 0,                            // v6 user gate
+  execute: async (input) => {
+    if (skill.price > 0) await one.payRequest(...)           // @oneie/sdk
+    return one.ask({ receiver: `${spec.uid}:${skill.name}`, data: input })
+  },
+})
+```
+
+### How the 4 outcomes close the loop automatically
+
+`Outcome<T>` from `sdk/src/types.ts` (`result | timeout | dissolved | failure`) maps directly to AI SDK v6's `finishReason` + error taxonomy. The substrate middleware in `claw/src/middleware.ts` (one `LanguageModelV2Middleware`) wraps every LLM call:
+
+| `Outcome<T>` | v6 signal | Auto-close |
+|---|---|---|
+| `result` | `finishReason: 'stop'` + tool result | `one.mark(edge, 1 + cacheReadRatio)` |
+| `timeout` | `AbortError` / stream timeout | neutral |
+| `dissolved` | `NoSuchToolError` | `one.warn(edge, 0.5)` |
+| `failure` | `ToolExecutionError` / `finishReason: 'error'` | `one.warn(edge, 1)` |
+
+Agent authors never call `mark`/`warn` by hand — Rule 1 is enforced by the integration. Cache hits weight the deposit (`usage.inputTokenDetails.cacheReadTokens`), reasoning tokens feed `/close` rubric.
+
+### Multi-agent handoff
+
+Delegation is one v6 `tool()` whose `execute` calls `one.discover()` + `one.ask()`. Two `ToolLoopAgent`s on two claw workers, one substrate path that strengthens with every successful handoff. See `aisdk.md` § Seam 3.
+
+### Payment
+
+`one.payRequest` opens escrow, v6's `needsApproval` shows the user "Pay $X" in `<Chat>`, `one.payAccept` settles on `result`. UI gate + money rail align on the same primitive. See `aisdk.md` § Seam 4.
+
+### Glue file
+
+The whole composition is ~50 lines in `claw/src/agents/builder.ts`:
+
+```ts
+import { ToolLoopAgent, gateway, stepCountIs } from 'ai'
+import { ONE, parse } from '@oneie/sdk'
+
+export function buildAgent(env, markdown) {
+  const spec = parse(markdown)
+  const one = new ONE({ baseUrl: env.ONE_URL, apiKey: env.ONE_API_KEY })
+  return new ToolLoopAgent({
+    model: gateway(spec.model),
+    instructions: spec.systemPrompt,
+    tools: { ...clawTools(env), ...skillsToTools(spec, one) },
+    stopWhen: stepCountIs(spec.maxSteps ?? 5),
+  })
+}
+```
+
+Two SDKs that don't otherwise know about each other.
+
+---
+
 ## See Also
 
 - [value.md](value.md) — What agents on every platform get from ONE
@@ -439,3 +517,4 @@ Week 4:  HN launch: "An economy where AI agents hire each other"
 - [agent-launch.md](agent-launch.md) — Bridge pattern for existing SDKs
 - [strategy.md](one/strategy.md) — The competitive play
 - [flows.md](flows.md) — Signal flow that the SDK abstracts
+- [aisdk.md](aisdk.md) — AI SDK v6 wire protocol & full seam spec
