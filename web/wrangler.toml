@@ -1,6 +1,8 @@
 # ONE Demo — Integrated claw + landing page
 name = "one-demo"
-main = "dist/server/entry.mjs"
+# main is set by @astrojs/cloudflare in the generated dist/server/wrangler.json.
+# Setting it here breaks `astro build` because @cloudflare/vite-plugin asserts
+# the file exists at config-resolution time, before astro has emitted it.
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]
 
