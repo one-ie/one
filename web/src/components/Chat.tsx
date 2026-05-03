@@ -16,13 +16,14 @@ import {
   PromptInputActionMenuContent,
   PromptInputActionMenuTrigger,
   PromptInputBody,
+  PromptInputHeader,
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
   usePromptInputAttachments,
 } from '@/components/ai-elements/prompt-input'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { Image as ImageIcon, FileText, Camera } from 'lucide-react'
+import { Image as ImageIcon, FileText, Camera, Monitor } from 'lucide-react'
 import { Tool, ToolHeader } from '@/components/ai-elements/tool'
 import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion'
 import { Shimmer } from '@/components/ai-elements/shimmer'
@@ -34,6 +35,7 @@ import {
   Attachments,
   AttachmentInfo,
   AttachmentPreview,
+  AttachmentRemove,
 } from '@/components/ai-elements/attachments'
 import { SpeechInput } from '@/components/ai-elements/speech-input'
 import {
@@ -90,15 +92,6 @@ const VOICES = [
 type VoiceId = (typeof VOICES)[number]['id']
 const DEFAULT_VOICE: VoiceId = 'alloy'
 
-const PROMPT_FORM_ID = 'chat-prompt-form'
-
-function submitPromptForm() {
-  const form = document.getElementById(PROMPT_FORM_ID) as HTMLFormElement | null
-  if (!form) return
-  // Two RAFs ensures React has committed the attachment state before submit reads it.
-  requestAnimationFrame(() => requestAnimationFrame(() => form.requestSubmit()))
-}
-
 function FileInput({
   inputRef,
   accept,
@@ -116,13 +109,27 @@ function FileInput({
       className="sr-only"
       onChange={(e) => {
         const files = Array.from(e.currentTarget.files ?? [])
-        if (files.length) {
-          attachments.add(files)
-          submitPromptForm()
-        }
+        if (files.length) attachments.add(files)
         e.currentTarget.value = ''
       }}
     />
+  )
+}
+
+function AttachmentsPreview() {
+  const attachments = usePromptInputAttachments()
+  if (attachments.files.length === 0) return null
+  return (
+    <PromptInputHeader>
+      <Attachments variant="inline">
+        {attachments.files.map((a) => (
+          <Attachment data={a} key={a.id} onRemove={() => attachments.remove(a.id)}>
+            <AttachmentPreview />
+            <AttachmentRemove />
+          </Attachment>
+        ))}
+      </Attachments>
+    </PromptInputHeader>
   )
 }
 
@@ -176,7 +183,6 @@ function CameraDialog({ open, onClose }: { open: boolean; onClose: () => void })
       const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' })
       attachments.add([file])
       onClose()
-      submitPromptForm()
     }, 'image/jpeg', 0.92)
   }
 
@@ -206,10 +212,43 @@ function CameraDialog({ open, onClose }: { open: boolean; onClose: () => void })
 }
 
 function AddMenu() {
+  const attachments = usePromptInputAttachments()
   const [open, setOpen] = useState(false)
   const [cameraOpen, setCameraOpen] = useState(false)
   const picturesRef = useRef<HTMLInputElement | null>(null)
   const filesRef = useRef<HTMLInputElement | null>(null)
+
+  const captureScreenshot = async () => {
+    if (!navigator.mediaDevices?.getDisplayMedia) {
+      console.error('Screen capture unsupported')
+      return
+    }
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: false,
+      })
+      const track = stream.getVideoTracks()[0]
+      const video = document.createElement('video')
+      video.srcObject = stream
+      video.muted = true
+      await video.play()
+      await new Promise((r) => setTimeout(r, 120))
+      const canvas = document.createElement('canvas')
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      const ctx = canvas.getContext('2d')
+      if (ctx) ctx.drawImage(video, 0, 0)
+      track.stop()
+      canvas.toBlob((blob) => {
+        if (!blob) return
+        const file = new File([blob], `screenshot-${Date.now()}.png`, { type: 'image/png' })
+        attachments.add([file])
+      }, 'image/png')
+    } catch (e) {
+      console.error('screenshot error', e)
+    }
+  }
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const cancelClose = () => {
     if (closeTimer.current) {
@@ -227,13 +266,12 @@ function AddMenu() {
       <FileInput inputRef={filesRef} />
       <PromptInputActionMenu open={open} onOpenChange={setOpen} modal={false}>
         <div
-          className="inline-flex"
+          className="inline-flex self-end pb-2 pl-2"
           onMouseEnter={() => { cancelClose(); setOpen(true) }}
           onMouseLeave={scheduleClose}
         >
           <PromptInputActionMenuTrigger
-            tooltip="Add"
-            className="!size-9 !rounded-full [&>svg]:!size-4 !bg-foreground"
+            className="!size-9 !rounded-full [&>svg]:!size-4 !bg-foreground hover:!bg-primary hover:!text-on-primary data-[state=open]:!bg-primary data-[state=open]:!text-on-primary"
           />
         </div>
         <PromptInputActionMenuContent
@@ -243,6 +281,7 @@ function AddMenu() {
           onMouseLeave={scheduleClose}
         >
           <DropdownMenuItem
+            className="focus:!bg-primary focus:!text-on-primary"
             onSelect={(e) => {
               e.preventDefault()
               setOpen(false)
@@ -253,6 +292,7 @@ function AddMenu() {
             Pictures
           </DropdownMenuItem>
           <DropdownMenuItem
+            className="focus:!bg-primary focus:!text-on-primary"
             onSelect={(e) => {
               e.preventDefault()
               setOpen(false)
@@ -263,6 +303,7 @@ function AddMenu() {
             Files
           </DropdownMenuItem>
           <DropdownMenuItem
+            className="focus:!bg-primary focus:!text-on-primary"
             onSelect={(e) => {
               e.preventDefault()
               setOpen(false)
@@ -271,6 +312,17 @@ function AddMenu() {
           >
             <Camera className="mr-2 size-4 shrink-0" />
             Camera
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="focus:!bg-primary focus:!text-on-primary"
+            onSelect={(e) => {
+              e.preventDefault()
+              setOpen(false)
+              void captureScreenshot()
+            }}
+          >
+            <Monitor className="mr-2 size-4 shrink-0" />
+            Screenshot
           </DropdownMenuItem>
         </PromptInputActionMenuContent>
       </PromptInputActionMenu>
@@ -625,10 +677,12 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
           <div className="px-4 pb-4 pt-3">
             <div className="chat-prompt rounded-xl bg-background overflow-hidden">
               <PromptInput
-                id={PROMPT_FORM_ID}
+                multiple
+                globalDrop
                 className="[&>div]:h-auto [&>div]:items-end [&>div]:border-0 [&>div]:shadow-none [&>div]:outline-none"
                 onSubmit={({ text, files }) => submit(text, files)}
               >
+                <AttachmentsPreview />
                 <AddMenu />
                 <PromptInputBody>
                   <PromptInputTextarea
