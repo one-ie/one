@@ -1,7 +1,7 @@
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 import { Volume2, X, Wrench, AlertCircle } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { emitClick } from '@/lib/ui-signal'
@@ -12,7 +12,6 @@ import {
 } from '@/components/ai-elements/conversation'
 import {
   PromptInput,
-  PromptInputActionAddAttachments,
   PromptInputActionMenu,
   PromptInputActionMenuContent,
   PromptInputActionMenuTrigger,
@@ -20,7 +19,10 @@ import {
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
+  usePromptInputAttachments,
 } from '@/components/ai-elements/prompt-input'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { Image as ImageIcon, FileText, Camera } from 'lucide-react'
 import { Tool, ToolHeader } from '@/components/ai-elements/tool'
 import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion'
 import { Shimmer } from '@/components/ai-elements/shimmer'
@@ -87,6 +89,195 @@ const VOICES = [
 
 type VoiceId = (typeof VOICES)[number]['id']
 const DEFAULT_VOICE: VoiceId = 'alloy'
+
+const PROMPT_FORM_ID = 'chat-prompt-form'
+
+function submitPromptForm() {
+  const form = document.getElementById(PROMPT_FORM_ID) as HTMLFormElement | null
+  if (!form) return
+  // Two RAFs ensures React has committed the attachment state before submit reads it.
+  requestAnimationFrame(() => requestAnimationFrame(() => form.requestSubmit()))
+}
+
+function FileInput({
+  inputRef,
+  accept,
+}: {
+  inputRef: React.RefObject<HTMLInputElement | null>
+  accept?: string
+}) {
+  const attachments = usePromptInputAttachments()
+  return (
+    <input
+      ref={inputRef}
+      type="file"
+      accept={accept}
+      multiple
+      className="sr-only"
+      onChange={(e) => {
+        const files = Array.from(e.currentTarget.files ?? [])
+        if (files.length) {
+          attachments.add(files)
+          submitPromptForm()
+        }
+        e.currentTarget.value = ''
+      }}
+    />
+  )
+}
+
+function CameraDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const attachments = usePromptInputAttachments()
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const streamRef = useRef<MediaStream | null>(null)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!open) return
+    setError(null)
+    let cancelled = false
+    navigator.mediaDevices
+      ?.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
+      .then((stream) => {
+        if (cancelled) {
+          for (const t of stream.getTracks()) t.stop()
+          return
+        }
+        streamRef.current = stream
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+          videoRef.current.play().catch(() => {})
+        }
+      })
+      .catch((e: Error) => {
+        setError(e.message || 'Camera unavailable')
+      })
+    return () => {
+      cancelled = true
+      const s = streamRef.current
+      if (s) for (const t of s.getTracks()) t.stop()
+      streamRef.current = null
+    }
+  }, [open])
+
+  if (!open) return null
+
+  const capture = () => {
+    const video = videoRef.current
+    if (!video) return
+    const canvas = document.createElement('canvas')
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    ctx.drawImage(video, 0, 0)
+    canvas.toBlob((blob) => {
+      if (!blob) return
+      const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' })
+      attachments.add([file])
+      onClose()
+      submitPromptForm()
+    }, 'image/jpeg', 0.92)
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center p-4">
+      <div className="relative w-full max-w-2xl bg-background rounded-2xl overflow-hidden border" style={{ borderColor: 'var(--color-border)' }}>
+        {error ? (
+          <div className="p-8 text-center text-font">
+            <p className="mb-4">Camera unavailable: {error}</p>
+            <Button type="button" variant="outline" onClick={onClose}>Close</Button>
+          </div>
+        ) : (
+          <>
+            <video ref={videoRef} className="w-full h-auto bg-black" playsInline muted />
+            <div className="flex justify-between items-center gap-3 p-4">
+              <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
+              <Button type="button" onClick={capture} className="bg-primary text-on-primary">
+                <Camera className="size-4 mr-2" />
+                Capture
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function AddMenu() {
+  const [open, setOpen] = useState(false)
+  const [cameraOpen, setCameraOpen] = useState(false)
+  const picturesRef = useRef<HTMLInputElement | null>(null)
+  const filesRef = useRef<HTMLInputElement | null>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+  }
+  const scheduleClose = () => {
+    cancelClose()
+    closeTimer.current = setTimeout(() => setOpen(false), 400)
+  }
+  return (
+    <>
+      <FileInput inputRef={picturesRef} accept="image/*" />
+      <FileInput inputRef={filesRef} />
+      <PromptInputActionMenu open={open} onOpenChange={setOpen} modal={false}>
+        <div
+          className="inline-flex"
+          onMouseEnter={() => { cancelClose(); setOpen(true) }}
+          onMouseLeave={scheduleClose}
+        >
+          <PromptInputActionMenuTrigger
+            tooltip="Add"
+            className="!size-9 !rounded-full [&>svg]:!size-4 !bg-foreground"
+          />
+        </div>
+        <PromptInputActionMenuContent
+          sideOffset={4}
+          className="bg-foreground"
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
+        >
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault()
+              setOpen(false)
+              picturesRef.current?.click()
+            }}
+          >
+            <ImageIcon className="mr-2 size-4 shrink-0" />
+            Pictures
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault()
+              setOpen(false)
+              filesRef.current?.click()
+            }}
+          >
+            <FileText className="mr-2 size-4 shrink-0" />
+            Files
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault()
+              setOpen(false)
+              setCameraOpen(true)
+            }}
+          >
+            <Camera className="mr-2 size-4 shrink-0" />
+            Camera
+          </DropdownMenuItem>
+        </PromptInputActionMenuContent>
+      </PromptInputActionMenu>
+      <CameraDialog open={cameraOpen} onClose={() => setCameraOpen(false)} />
+    </>
+  )
+}
 
 function isToolPart(p: UIMessage['parts'][number]): p is ToolUIPart | DynamicToolUIPart {
   return p.type === 'dynamic-tool' || p.type.startsWith('tool-')
@@ -194,9 +385,11 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
     : 'flex flex-col h-[500px] w-[380px] text-base'
 
   const submit = (text: string, files?: FileUIPart[]) => {
-    if (!text.trim() || status === 'submitted' || status === 'streaming') return
+    if (status === 'submitted' || status === 'streaming') return
+    const trimmed = text.trim()
+    if (!trimmed && (!files || files.length === 0)) return
     emitClick('ui:chat:send')
-    sendMessage({ text: text.trim(), files })
+    sendMessage({ text: trimmed, files })
   }
 
   const lastMsg = messages[messages.length - 1]
@@ -316,7 +509,7 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                           return msg.role === 'user' ? (
                             <div
                               key={i}
-                              className="ml-auto px-4 py-2 rounded-2xl bg-foreground text-font"
+                              className="ml-auto px-5 py-3 rounded-2xl bg-background text-font"
                             >
                               {part.text}
                             </div>
@@ -432,21 +625,17 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
           <div className="px-4 pb-4 pt-3">
             <div className="chat-prompt rounded-xl bg-background overflow-hidden">
               <PromptInput
+                id={PROMPT_FORM_ID}
                 className="[&>div]:h-auto [&>div]:items-end [&>div]:border-0 [&>div]:shadow-none [&>div]:outline-none"
                 onSubmit={({ text, files }) => submit(text, files)}
               >
-                <PromptInputActionMenu>
-                  <PromptInputActionMenuTrigger tooltip="Add files" />
-                  <PromptInputActionMenuContent>
-                    <PromptInputActionAddAttachments />
-                  </PromptInputActionMenuContent>
-                </PromptInputActionMenu>
+                <AddMenu />
                 <PromptInputBody>
                   <PromptInputTextarea
                     placeholder="Type a message…"
                     rows={5}
                     style={{ minHeight: '120px', paddingTop: '20px' }}
-                    className="focus-visible:ring-0 focus-visible:border-0 focus-visible:outline-none border-0"
+                    className="text-lg focus-visible:ring-0 focus-visible:border-0 focus-visible:outline-none border-0"
                   />
                 </PromptInputBody>
                 <PromptInputTools>
@@ -462,10 +651,10 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="h-8 px-2 text-xs gap-1.5"
+                        className="h-10 px-3 text-sm gap-1.5"
                         onClick={() => emitClick('ui:chat:voice-open')}
                       >
-                        <Volume2 className="size-3.5" />
+                        <Volume2 className="size-4" />
                         {VOICES.find((v) => v.id === voice)?.label ?? 'Voice'}
                       </Button>
                     </VoiceSelectorTrigger>
@@ -496,12 +685,17 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                   <SpeechInput
                     variant="ghost"
                     size="icon-sm"
+                    className="!size-9 !rounded-full [&_svg]:!size-4"
                     onTranscriptionChange={(text) => {
                       emitClick('ui:chat:voice', { text })
                       submit(text)
                     }}
                   />
-                  <PromptInputSubmit status={status} onStop={stop} />
+                  <PromptInputSubmit
+                    status={status}
+                    onStop={stop}
+                    className="!size-9 !rounded-full [&>svg]:!size-4"
+                  />
                 </PromptInputTools>
               </PromptInput>
             </div>

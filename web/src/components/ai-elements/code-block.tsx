@@ -60,15 +60,13 @@ const addKeysToTokens = (lines: ThemedToken[][]): KeyedLine[] =>
 // Token rendering component
 const TokenSpan = ({ token }: { token: ThemedToken }) => (
   <span
-    className="dark:!bg-[var(--shiki-dark-bg)] dark:!text-[var(--shiki-dark)]"
+    className="text-[var(--shiki-light)] dark:text-[var(--shiki-dark)]"
     style={
       {
-        backgroundColor: token.bgColor,
-        color: token.color,
+        ...token.htmlStyle,
         fontStyle: isItalic(token.fontStyle) ? "italic" : undefined,
         fontWeight: isBold(token.fontStyle) ? "bold" : undefined,
         textDecoration: isUnderline(token.fontStyle) ? "underline" : undefined,
-        ...token.htmlStyle,
       } as CSSProperties
     }
   >
@@ -165,17 +163,20 @@ const getHighlighter = (
   return highlighterPromise;
 };
 
+const CODE_BG = "var(--color-background)";
+const CODE_FG = "var(--color-font)";
+
 // Create raw tokens for immediate display while highlighting loads
 const createRawTokens = (code: string): TokenizedCode => ({
-  bg: "transparent",
-  fg: "inherit",
+  bg: CODE_BG,
+  fg: CODE_FG,
   rootStyle: {},
   tokens: code.split("\n").map((line) =>
     line === ""
       ? []
       : [
           {
-            color: "inherit",
+            color: CODE_FG,
             content: line,
           } as ThemedToken,
         ]
@@ -214,27 +215,14 @@ export const highlightCode = (
 
       const result = highlighter.codeToTokens(code, {
         lang: langToUse,
-        themes: {
-          dark: "github-dark",
-          light: "github-light",
-        },
+        themes: { light: "github-light", dark: "github-dark" },
         defaultColor: false,
       });
 
-      const rootStyle: Record<string, string> = {};
-      if (typeof result.rootStyle === "string") {
-        for (const decl of result.rootStyle.split(";")) {
-          const [k, ...rest] = decl.split(":");
-          const key = k?.trim();
-          const val = rest.join(":").trim();
-          if (key && val) rootStyle[key] = val;
-        }
-      }
-
       const tokenized: TokenizedCode = {
-        bg: rootStyle["--shiki-light-bg"] ?? result.bg ?? "transparent",
-        fg: rootStyle["--shiki-light"] ?? result.fg ?? "inherit",
-        rootStyle,
+        bg: CODE_BG,
+        fg: CODE_FG,
+        rootStyle: {},
         tokens: result.tokens,
       };
 
@@ -274,9 +262,8 @@ const CodeBlockBody = memo(
         ({
           backgroundColor: tokenized.bg,
           color: tokenized.fg,
-          ...tokenized.rootStyle,
         }) as CSSProperties,
-      [tokenized.bg, tokenized.fg, tokenized.rootStyle]
+      [tokenized.bg, tokenized.fg]
     );
 
     const keyedLines = useMemo(
@@ -286,10 +273,7 @@ const CodeBlockBody = memo(
 
     return (
       <pre
-        className={cn(
-          "dark:!bg-[var(--shiki-dark-bg)] dark:!text-[var(--shiki-dark)] m-0 p-4 text-sm",
-          className
-        )}
+        className={cn("m-0 p-4 text-sm", className)}
         style={preStyle}
       >
         <code
