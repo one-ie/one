@@ -1,0 +1,13 @@
+# Hashed asset bundles — immutable, cache forever
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static assets in /public — cache for a day, allow CDN to cache longer
+/icon.svg
+  Cache-Control: public, max-age=86400, s-maxage=604800
+/favicon.svg
+  Cache-Control: public, max-age=86400, s-maxage=604800
+
+# Prerendered HTML — short browser cache, longer edge cache, allow stale
+/*
+  Cache-Control: public, max-age=300, s-maxage=86400, stale-while-revalidate=604800

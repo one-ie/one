@@ -128,3 +128,17 @@
     @apply font-sans;
     }
 }
+
+@keyframes shimmer-slide {
+  from { background-position: 100% center, 0 0; }
+  to   { background-position: 0% center, 0 0; }
+}
+
+.shimmer {
+  animation: shimmer-slide var(--shimmer-duration, 2s) linear infinite;
+  background-position: 100% center, 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer { animation: none; }
+}
