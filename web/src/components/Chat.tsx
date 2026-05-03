@@ -1,7 +1,7 @@
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 import { Volume2, X, Wrench, AlertCircle } from 'lucide-react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { emitClick } from '@/lib/ui-signal'
@@ -23,12 +23,9 @@ import {
 } from '@/components/ai-elements/prompt-input'
 import { Tool, ToolHeader } from '@/components/ai-elements/tool'
 import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion'
-import {
-  CodeBlock,
-  CodeBlockCopyButton,
-} from '@/components/ai-elements/code-block'
 import { Shimmer } from '@/components/ai-elements/shimmer'
 import { Message } from '@/components/ai-elements/message'
+import { MarkdownView } from '@/components/ai-elements/markdown'
 import { Reasoning, ReasoningContent, ReasoningTrigger } from '@/components/ai-elements/reasoning'
 import {
   Attachment,
@@ -65,7 +62,6 @@ import {
 } from '@/components/ai-elements/voice-selector'
 import { Button } from '@/components/ui/button'
 import type { DynamicToolUIPart, FileUIPart, ToolUIPart, UIMessage } from 'ai'
-import type { BundledLanguage } from 'shiki'
 
 interface Props {
   fullPage?: boolean
@@ -91,8 +87,6 @@ const VOICES = [
 
 type VoiceId = (typeof VOICES)[number]['id']
 const DEFAULT_VOICE: VoiceId = 'alloy'
-
-const FENCE = /```(\w+)?\n([\s\S]*?)```/g
 
 function isToolPart(p: UIMessage['parts'][number]): p is ToolUIPart | DynamicToolUIPart {
   return p.type === 'dynamic-tool' || p.type.startsWith('tool-')
@@ -125,29 +119,6 @@ function getMessageText(msg: UIMessage): string {
     .map((p) => p.text)
     .join('\n\n')
     .trim()
-}
-
-function renderTextWithCode(text: string): ReactNode[] {
-  const out: ReactNode[] = []
-  let last = 0
-  let i = 0
-  for (const m of text.matchAll(FENCE)) {
-    const start = m.index ?? 0
-    if (start > last) out.push(<span key={`t-${i}`}>{text.slice(last, start)}</span>)
-    const lang = (m[1] || 'text') as BundledLanguage
-    const code = m[2] ?? ''
-    out.push(
-      <CodeBlock key={`c-${i}`} code={code} language={lang} className="my-2">
-        <div className="absolute right-2 top-2">
-          <CodeBlockCopyButton onCopy={() => emitClick('ui:chat:copy')} />
-        </div>
-      </CodeBlock>,
-    )
-    last = start + m[0].length
-    i++
-  }
-  if (last < text.length) out.push(<span key={`t-${i}`}>{text.slice(last)}</span>)
-  return out
 }
 
 export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
@@ -273,18 +244,20 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                     <p className="text-lg mb-1">Hello!</p>
                     <p className="text-sm text-font/60">Ask me anything about ONE.</p>
                   </div>
-                  <Suggestions className="justify-center">
+                  <div className="flex flex-wrap justify-center items-center gap-2 px-6 py-2 max-w-2xl mx-auto">
                     {STARTERS.map((s) => (
                       <Suggestion
                         key={s}
                         suggestion={s}
+                        className="border h-auto px-5 py-3 text-base"
+                        style={{ borderColor: 'var(--color-border)' }}
                         onClick={(text) => {
                           emitClick('ui:chat:suggestion', { text })
                           submit(text)
                         }}
                       />
                     ))}
-                  </Suggestions>
+                  </div>
                 </div>
               )}
 
@@ -298,7 +271,9 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                 const speakingHere = speakFor?.id === msg.id
                 return (
                   <Message key={msg.id} from={msg.role}>
-                    <div className="flex flex-col gap-2 max-w-[80%] ml-auto data-[from=assistant]:ml-0">
+                    <div
+                      className={`flex flex-col gap-2 max-w-[80%] ${msg.role === 'assistant' ? 'mr-auto' : 'ml-auto'}`}
+                    >
                       {fileParts.length > 0 && (
                         <Attachments variant={msg.role === 'user' ? 'grid' : 'list'}>
                           {fileParts.map((f, i) => (
@@ -346,9 +321,12 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                               {part.text}
                             </div>
                           ) : (
-                            <div key={i} className="text-font">
-                              {renderTextWithCode(part.text)}
-                            </div>
+                            <MarkdownView
+                              key={i}
+                              className="text-font break-words space-y-2"
+                            >
+                              {part.text}
+                            </MarkdownView>
                           )
                         }
                         if (part.type === 'reasoning') {

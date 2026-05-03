@@ -118,6 +118,7 @@ interface TokenizedCode {
   tokens: ThemedToken[][];
   fg: string;
   bg: string;
+  rootStyle: Record<string, string>;
 }
 
 interface CodeBlockContextType {
@@ -168,6 +169,7 @@ const getHighlighter = (
 const createRawTokens = (code: string): TokenizedCode => ({
   bg: "transparent",
   fg: "inherit",
+  rootStyle: {},
   tokens: code.split("\n").map((line) =>
     line === ""
       ? []
@@ -216,11 +218,23 @@ export const highlightCode = (
           dark: "github-dark",
           light: "github-light",
         },
+        defaultColor: false,
       });
 
+      const rootStyle: Record<string, string> = {};
+      if (typeof result.rootStyle === "string") {
+        for (const decl of result.rootStyle.split(";")) {
+          const [k, ...rest] = decl.split(":");
+          const key = k?.trim();
+          const val = rest.join(":").trim();
+          if (key && val) rootStyle[key] = val;
+        }
+      }
+
       const tokenized: TokenizedCode = {
-        bg: result.bg ?? "transparent",
-        fg: result.fg ?? "inherit",
+        bg: rootStyle["--shiki-light-bg"] ?? result.bg ?? "transparent",
+        fg: rootStyle["--shiki-light"] ?? result.fg ?? "inherit",
+        rootStyle,
         tokens: result.tokens,
       };
 
@@ -256,11 +270,13 @@ const CodeBlockBody = memo(
     className?: string;
   }) => {
     const preStyle = useMemo(
-      () => ({
-        backgroundColor: tokenized.bg,
-        color: tokenized.fg,
-      }),
-      [tokenized.bg, tokenized.fg]
+      () =>
+        ({
+          backgroundColor: tokenized.bg,
+          color: tokenized.fg,
+          ...tokenized.rootStyle,
+        }) as CSSProperties,
+      [tokenized.bg, tokenized.fg, tokenized.rootStyle]
     );
 
     const keyedLines = useMemo(

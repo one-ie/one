@@ -7,9 +7,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import { cjk } from "@streamdown/cjk";
-import { code } from "@streamdown/code";
-import { math } from "@streamdown/math";
 import { BrainIcon, ChevronDownIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import {
@@ -22,9 +19,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { Streamdown } from "streamdown";
-
 import { Shimmer } from "./shimmer";
+import { MarkdownView } from "./markdown";
 
 interface ReasoningContextValue {
   isStreaming: boolean;
@@ -203,8 +199,6 @@ export type ReasoningContentProps = ComponentProps<
   children: string;
 };
 
-const streamdownPlugins = { cjk, code, math };
-
 export const ReasoningContent = memo(
   ({ className, children, ...props }: ReasoningContentProps) => (
     <CollapsibleContent
@@ -215,7 +209,7 @@ export const ReasoningContent = memo(
       )}
       {...props}
     >
-      <Streamdown plugins={streamdownPlugins}>{children}</Streamdown>
+      <MarkdownView className="break-words space-y-2">{children}</MarkdownView>
     </CollapsibleContent>
   )
 );
