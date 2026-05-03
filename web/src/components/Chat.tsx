@@ -19,7 +19,6 @@ import {
   PromptInputTools,
   usePromptInputAttachments,
 } from '@/components/ai-elements/prompt-input'
-import { Suggestion } from '@/components/ai-elements/suggestion'
 import { Shimmer } from '@/components/ai-elements/shimmer'
 import { Attachment, Attachments, AttachmentPreview, AttachmentRemove } from '@/components/ai-elements/attachments'
 import { SpeechInput } from '@/components/ai-elements/speech-input'
@@ -121,6 +120,23 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
     if (typeof window !== 'undefined') window.localStorage.setItem('chat:voice', voice)
   }, [voice])
 
+  // Consume ?q= once after mount and submit it (suggestion-button progressive enhancement)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const q = params.get('q')
+    if (!q) return
+    params.delete('q')
+    const next = params.toString()
+    window.history.replaceState(
+      null,
+      '',
+      window.location.pathname + (next ? `?${next}` : '') + window.location.hash,
+    )
+    sendMessage({ text: q })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(
     () => () => {
       if (speakFor) URL.revokeObjectURL(speakFor.url)
@@ -217,20 +233,34 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                     <p className="text-lg mb-1">Hello!</p>
                     <p className="text-sm text-font/60">Ask me anything about ONE.</p>
                   </div>
-                  <div className="flex flex-wrap justify-center items-center gap-2 px-6 py-2 max-w-2xl mx-auto">
+                  <form
+                    method="get"
+                    action="/chat"
+                    className="flex flex-wrap justify-center items-center gap-2 px-6 py-2 max-w-2xl mx-auto"
+                    onSubmit={(e) => {
+                      const submitter = (e.nativeEvent as SubmitEvent).submitter as
+                        | HTMLButtonElement
+                        | null
+                      const text = submitter?.value
+                      if (!text) return
+                      e.preventDefault()
+                      emitClick('ui:chat:suggestion', { text })
+                      submit(text)
+                    }}
+                  >
                     {STARTERS.map((s) => (
-                      <Suggestion
+                      <button
                         key={s}
-                        suggestion={s}
-                        className="border h-auto px-5 py-3 text-base"
+                        type="submit"
+                        name="q"
+                        value={s}
+                        className="border h-auto px-5 py-3 text-base rounded-2xl hover:bg-foreground transition cursor-pointer"
                         style={{ borderColor: 'var(--color-border)' }}
-                        onClick={(text) => {
-                          emitClick('ui:chat:suggestion', { text })
-                          submit(text)
-                        }}
-                      />
+                      >
+                        {s}
+                      </button>
                     ))}
-                  </div>
+                  </form>
                 </div>
               )}
 

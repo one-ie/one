@@ -49,11 +49,12 @@ export function Sidebar({ initial }: Props) {
       <header className={cn('flex items-center px-4 py-5', !open && 'justify-center px-0')}>
         <a
           href="/"
+          aria-label="ONE — home"
           onClick={() => emitClick('ui:sidebar:nav', { href: '/', source: 'brand' })}
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
           <img src="/icon.svg" alt="" aria-hidden width={40} height={40} className="rounded-lg" fetchPriority="high" decoding="async" />
-          {open && <span>ONE</span>}
+          {open && <span aria-hidden>ONE</span>}
         </a>
       </header>
 
