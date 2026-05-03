@@ -126,17 +126,25 @@ export const SpeechInput = ({
     speechRecognition.interimResults = true;
     speechRecognition.lang = lang;
 
+    let accumulated = "";
+    let fired = false;
+
     const handleStart = () => {
       setIsListening(true);
+      accumulated = "";
+      fired = false;
     };
 
     const handleEnd = () => {
       setIsListening(false);
+      if (accumulated && !fired) {
+        fired = true;
+        onTranscriptionChangeRef.current?.(accumulated.trim());
+      }
     };
 
     const handleResult = (event: Event) => {
       const speechEvent = event as SpeechRecognitionEvent;
-      let finalTranscript = "";
 
       for (
         let i = speechEvent.resultIndex;
@@ -145,12 +153,18 @@ export const SpeechInput = ({
       ) {
         const result = speechEvent.results[i];
         if (result.isFinal) {
-          finalTranscript += result[0]?.transcript ?? "";
+          accumulated += result[0]?.transcript ?? "";
         }
       }
 
-      if (finalTranscript) {
-        onTranscriptionChangeRef.current?.(finalTranscript);
+      if (accumulated && !fired) {
+        const trimmed = accumulated.trim();
+        const stable =
+          /[.!?]$/.test(trimmed) || trimmed.split(/\s+/).length >= 6;
+        if (stable) {
+          fired = true;
+          onTranscriptionChangeRef.current?.(trimmed);
+        }
       }
     };
 
@@ -292,7 +306,7 @@ export const SpeechInput = ({
       {isListening &&
         [0, 1, 2].map((index) => (
           <div
-            className="absolute inset-0 animate-ping rounded-full border-2 border-red-400/30"
+            className="absolute inset-0 animate-ping rounded-full border-2 border-destructive/30"
             key={index}
             style={{
               animationDelay: `${index * 0.3}s`,

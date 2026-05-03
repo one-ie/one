@@ -1,15 +1,15 @@
 ---
 export const prerender = true
 import Layout from '../layouts/Layout.astro'
-import { Chat } from '../components/Chat'
+import { Showcase } from '../components/Showcase'
 ---
 
-<Layout title="Chat — ONE" sidebar="mini">
+<Layout title="Showcase — ONE" sidebar="mini">
   <Fragment slot="head">
     <link rel="preconnect" href="/api/chat" />
     <link rel="dns-prefetch" href="/api/chat" />
   </Fragment>
   <div class="h-[100dvh] overflow-hidden">
-    <Chat client:idle fullPage />
+    <Showcase client:idle />
   </div>
 </Layout>

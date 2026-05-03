@@ -19,6 +19,7 @@ const adapter = isDev
       prerenderEnvironment: 'node',
       imageService: 'passthrough',
       sessions: false,
+      remoteBindings: false,
     })
 
 export default defineConfig({

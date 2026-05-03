@@ -12,3 +12,12 @@ export async function getEnv(): Promise<Record<string, string>> {
   }
   return process.env as Record<string, string>
 }
+
+export async function getCfCtx(): Promise<{ waitUntil(p: Promise<unknown>): void } | null> {
+  try {
+    const mod = (await import('cloudflare:workers' as string)) as { ctx?: { waitUntil(p: Promise<unknown>): void } }
+    return mod.ctx ?? null
+  } catch {
+    return null
+  }
+}

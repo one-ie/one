@@ -155,3 +155,9 @@ ls src/components/ai-elements | wc -l   # expect ≥ 48
 ---
 
 *One pass. One components dir. 48 elements. Then wire as features need them.*
+
+---
+
+## See also
+
+- `one/showcase.md` — starter → element mapping; which elements render for which prompt

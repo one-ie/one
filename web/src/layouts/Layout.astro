@@ -67,6 +67,7 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full' 
         }
       } catch {}
     </script>
+    <slot name="head" />
   </head>
   <body class="min-h-screen antialiased" data-sidebar={sidebar}>
     {sidebar === 'none' ? (

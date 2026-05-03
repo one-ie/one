@@ -1,8 +1,6 @@
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
-import { X } from 'lucide-react'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import { Icon } from '@/components/ui/Icon'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { emitClick } from '@/lib/ui-signal'
 import {
@@ -35,17 +33,48 @@ const AddMenu = lazy(() =>
 )
 
 interface Props {
-  fullPage?: boolean
-  onClose?: () => void
   group?: string
 }
 
-const STARTERS = [
-  'What is ONE?',
-  'Show highways',
-  'How do I sell a skill?',
-  'How do I buy?',
-] as const
+interface StarterCategory {
+  label: string
+  starters: string[]
+}
+
+const STARTER_CATEGORIES: StarterCategory[] = [
+  {
+    label: 'Explore ONE',
+    starters: [
+      'What is ONE?',
+      'Show me the signal highways',
+      'How do I sell a skill?',
+      'How do I buy?',
+    ],
+  },
+  {
+    label: 'See it think',
+    starters: [
+      'Explain how pheromone routing works',
+      'Walk me through a signal step by step',
+    ],
+  },
+  {
+    label: 'Code & files',
+    starters: [
+      'Show a TypeScript ONE signal handler',
+      'Show the schema for a path entity',
+      'List the agent files in this repo',
+    ],
+  },
+  {
+    label: 'Actions',
+    starters: ['Confirm: reset my session'],
+  },
+  {
+    label: 'Citations',
+    starters: ['Where does ONE store knowledge?'],
+  },
+]
 
 type VoiceId = 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer'
 const DEFAULT_VOICE: VoiceId = 'alloy'
@@ -83,7 +112,7 @@ function getMessageText(msg: UIMessage): string {
     .trim()
 }
 
-export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
+export function Showcase({ group = 'default' }: Props) {
   const { messages, sendMessage, addToolApprovalResponse, status, stop } = useChat({
     transport: new DefaultChatTransport({ api: '/api/chat', body: { group } }),
   })
@@ -93,7 +122,6 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
   const [speakFor, setSpeakFor] = useState<{ id: string; url: string } | null>(null)
   const [ttsAvailable, setTtsAvailable] = useState(false)
   const [ttsProvider, setTtsProvider] = useState<'openai' | 'cf' | null>(null)
-  const sendStartRef = useRef<number>(0)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -115,22 +143,11 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
     }).requestIdleCallback
     if (ric) ric(probe)
     else setTimeout(probe, 1500)
-    fetch('/api/chat', { method: 'GET' }).catch(() => {})
-    fetch('/api/chat/warmup', { method: 'POST' }).catch(() => {})
   }, [])
 
   useEffect(() => {
     if (typeof window !== 'undefined') window.localStorage.setItem('chat:voice', voice)
   }, [voice])
-
-  useEffect(() => {
-    if (status === 'submitted') sendStartRef.current = performance.now()
-    if (status === 'streaming' && sendStartRef.current) {
-      const ttft = performance.now() - sendStartRef.current
-      emitClick('ui:chat:ttft', { ms: ttft })
-      sendStartRef.current = 0
-    }
-  }, [status])
 
   // Consume ?q= once after mount and submit it (suggestion-button progressive enhancement)
   useEffect(() => {
@@ -186,10 +203,6 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
     }
   }
 
-  const containerClass = fullPage
-    ? 'flex flex-col h-full max-w-3xl mx-auto text-base'
-    : 'flex flex-col h-[500px] w-[380px] text-base'
-
   const submit = (text: string, files?: FileUIPart[]) => {
     if (status === 'submitted' || status === 'streaming') return
     const trimmed = text.trim()
@@ -209,26 +222,7 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
     <>
       <style>{`.chat-prompt [data-slot="input-group"]{border:none!important;box-shadow:none!important;outline:none!important}.chat-prompt textarea{border:none!important;box-shadow:none!important;outline:none!important}`}</style>
       <TooltipProvider>
-        <div className={containerClass}>
-          {!fullPage && (
-            <div
-              className="flex items-center justify-between px-4 py-3 bg-background border-b"
-              style={{ borderColor: 'var(--color-border)' }}
-            >
-              <span className="font-medium text-sm">Chat with ONE</span>
-              {onClose && (
-                <button
-                  type="button"
-                  onClick={onClose}
-                  aria-label="Close chat"
-                  className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-font/60 hover:text-font hover:bg-foreground transition"
-                >
-                  <Icon icon={X} size="md" />
-                </button>
-              )}
-            </div>
-          )}
-
+        <div className="flex flex-col h-full max-w-3xl mx-auto text-base">
           <Conversation className="flex-1">
             <ConversationContent className="p-4 space-y-4">
               {messages.length === 0 && (
@@ -247,8 +241,8 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                   </div>
                   <form
                     method="get"
-                    action="/chat"
-                    className="flex flex-wrap justify-center items-center gap-2 px-6 py-2 max-w-2xl mx-auto"
+                    action="/showcase"
+                    className="flex flex-col gap-6 px-6 py-2 max-w-2xl mx-auto w-full"
                     onSubmit={(e) => {
                       const submitter = (e.nativeEvent as SubmitEvent).submitter as
                         | HTMLButtonElement
@@ -260,17 +254,50 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                       submit(text)
                     }}
                   >
-                    {STARTERS.map((s) => (
-                      <button
-                        key={s}
-                        type="submit"
-                        name="q"
-                        value={s}
-                        className="border h-auto px-5 py-3 text-base rounded-2xl hover:bg-foreground transition cursor-pointer"
-                        style={{ borderColor: 'var(--color-border)' }}
-                      >
-                        {s}
-                      </button>
+                    {STARTER_CATEGORIES.map((cat) => (
+                      <div key={cat.label} className="w-full">
+                        <p className="text-xs text-font/60 uppercase tracking-wide mb-2 text-left">
+                          {cat.label}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {cat.starters.slice(0, 4).map((s) => (
+                            <button
+                              key={s}
+                              type="submit"
+                              name="q"
+                              value={s}
+                              className="border h-auto px-5 py-3 text-base rounded-2xl hover:bg-foreground transition cursor-pointer"
+                              style={{ borderColor: 'var(--color-border)' }}
+                            >
+                              {s}
+                            </button>
+                          ))}
+                          {cat.starters.length > 4 && (
+                            <details>
+                              <summary
+                                className="border h-auto px-5 py-3 text-base rounded-2xl hover:bg-foreground transition cursor-pointer list-none text-font/60"
+                                style={{ borderColor: 'var(--color-border)' }}
+                              >
+                                +{cat.starters.length - 4} more
+                              </summary>
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                {cat.starters.slice(4).map((s) => (
+                                  <button
+                                    key={s}
+                                    type="submit"
+                                    name="q"
+                                    value={s}
+                                    className="border h-auto px-5 py-3 text-base rounded-2xl hover:bg-foreground transition cursor-pointer"
+                                    style={{ borderColor: 'var(--color-border)' }}
+                                  >
+                                    {s}
+                                  </button>
+                                ))}
+                              </div>
+                            </details>
+                          )}
+                        </div>
+                      </div>
                     ))}
                   </form>
                 </div>
@@ -300,15 +327,6 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                     className="rounded-md animate-pulse"
                   />
                   <Shimmer>Thinking…</Shimmer>
-                </div>
-              )}
-              {status === 'submitted' && (
-                <div className="flex gap-3 px-4 py-3">
-                  <div className="w-6 h-6 rounded-full bg-foreground shrink-0" />
-                  <div className="flex flex-col gap-2 flex-1">
-                    <div className="h-3 bg-foreground rounded w-3/4 animate-pulse" />
-                    <div className="h-3 bg-foreground rounded w-1/2 animate-pulse" />
-                  </div>
                 </div>
               )}
             </ConversationContent>

@@ -7,7 +7,8 @@ Ship all four services to Cloudflare. Deterministic sandwich — W0 baseline, bu
 > **Post-migration (2026-04-18):** Astro site runs on **CF Workers with Static Assets** (not Pages). Deploy command is `wrangler deploy`.
 >
 > **Environment model:**
-> - **Dev (live):** `https://dev.one.ie` — deployed on every `main` push
+> - **Demo (live):** `https://demo.one.ie` — `one-demo` worker, deployed from `web/` (`wrangler deploy`)
+> - **Dev (live):** `https://dev.one.ie` — `one-substrate` worker, deployed on every `main` push
 > - **Production (planned):** `https://one.ie` — custom-domain cutover pending
 > - **Gateway (live, stable):** `https://api.one.ie` — same URL in both envs
 > - **Legacy idle:** `https://one-substrate.pages.dev` — paused Pages project, rollback only, **do not deploy**
@@ -169,6 +170,7 @@ Do not remove for production builds.
 
 | Service | URL | Config | Deploy command |
 |---------|-----|--------|---------------|
+| Astro Worker (demo) | `demo.one.ie` → `one-demo` | `web/wrangler.toml` | `cd web && wrangler deploy` |
 | Astro Worker (dev) | `dev.one.ie` → `one-substrate` | `wrangler.toml` (root) | `wrangler deploy` |
 | Astro Worker (prod, planned) | `one.ie` → `one-substrate` (or `[env.production]` variant) | `wrangler.toml` (root, future `[env.production]` section) | `wrangler deploy --env production` (when provisioned) |
 | Gateway | `api.one.ie` → `one-gateway` | `gateway/wrangler.toml` | `cd gateway && wrangler deploy` |
@@ -222,11 +224,13 @@ CI secrets required in `.github/workflows/deploy.yml` env block:
 
 ### `/deploy astro`
 
-1. `NODE_ENV=production bun run build`
-2. Check bundle size: `du -sh dist/_worker.js/`
-3. If > 12 MiB: check which chunk grew (`ls -lhS dist/_worker.js/chunks/ | head -15`)
-4. `wrangler deploy` (from repo root)
-5. Health: `curl -sL https://dev.one.ie/api/health | jq '.world.units'` (expect 140+)
+Deploys the demo worker (`one-demo`) to `demo.one.ie` from the `web/` directory.
+
+1. `cd web && NODE_ENV=production bun run build`
+2. Check bundle size: `du -sh web/dist/_worker.js/`
+3. If > 12 MiB: check which chunk grew (`ls -lhS web/dist/_worker.js/chunks/ | head -15`)
+4. `cd web && wrangler deploy`
+5. Health: `curl -sL https://demo.one.ie/api/health` (expect 200)
 
 ### `/deploy workers`
 

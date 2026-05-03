@@ -34,6 +34,7 @@ Apply to `docs/*.md`
 | Strategy | strategy.md, one-protocol.md, integration.md | The play |
 | Commerce | agent-launch.md, buy-and-sell.md, revenue.md | The business — buy-and-sell.md is mechanics, revenue.md is pricing |
 | Execution | TODO-*.md (template, task-management, SUI, rename, etc.) | Wave-based tasks, executed by /wave, self-verifying |
+| Showcase | showcase.md + showcase-todo.md | Showcase spec + build plan — starter → AI Element mapping for /chat empty state |
 
 README.md is the index. Link everything back to it.
 **NEW:** `TODO-SUI.md` — Sui integration phases 1-6, testnet complete, Phase 2 (identity) in flight. Use `/sui` skill.

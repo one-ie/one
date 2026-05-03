@@ -14,8 +14,15 @@ html_handling = "drop-trailing-slash"
 binding = "SESSION"
 id = "fdc28eb10d2443d7bb6402f92340bb8d"
 
+[[kv_namespaces]]
+binding = "CHAT_CACHE"
+id = "203df225c45e4c24a62896c9464368a2"
+
 [ai]
 binding = "AI"
+
+[placement]
+mode = "smart"
 
 [vars]
 AGENT_ID = "one-demo"
