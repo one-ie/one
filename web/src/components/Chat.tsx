@@ -10,7 +10,6 @@ import {
   ConversationContent,
   ConversationScrollButton,
 } from '@/components/ai-elements/conversation'
-import { Message } from '@/components/ai-elements/message'
 import {
   PromptInput,
   PromptInputActionAddAttachments,
@@ -23,13 +22,14 @@ import {
   PromptInputTools,
 } from '@/components/ai-elements/prompt-input'
 import { Tool, ToolHeader } from '@/components/ai-elements/tool'
-import { Reasoning, ReasoningContent, ReasoningTrigger } from '@/components/ai-elements/reasoning'
 import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion'
 import {
   CodeBlock,
   CodeBlockCopyButton,
 } from '@/components/ai-elements/code-block'
 import { Shimmer } from '@/components/ai-elements/shimmer'
+import { Message } from '@/components/ai-elements/message'
+import { Reasoning, ReasoningContent, ReasoningTrigger } from '@/components/ai-elements/reasoning'
 import {
   Attachment,
   Attachments,
@@ -158,11 +158,23 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
   const [voice, setVoice] = useState<VoiceId>(DEFAULT_VOICE)
   const [voiceOpen, setVoiceOpen] = useState(false)
   const [speakFor, setSpeakFor] = useState<{ id: string; url: string } | null>(null)
+  const [ttsAvailable, setTtsAvailable] = useState(false)
+  const [ttsProvider, setTtsProvider] = useState<'openai' | 'cf' | null>(null)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
     const saved = window.localStorage.getItem('chat:voice') as VoiceId | null
     if (saved && VOICES.some((v) => v.id === saved)) setVoice(saved)
+    fetch('/api/tts')
+      .then((r) => (r.ok ? r.json() : { available: false, provider: null }))
+      .then((j: { available?: boolean; provider?: 'openai' | 'cf' | null }) => {
+        setTtsAvailable(Boolean(j.available))
+        setTtsProvider(j.provider ?? null)
+      })
+      .catch(() => {
+        setTtsAvailable(false)
+        setTtsProvider(null)
+      })
   }, [])
 
   useEffect(() => {
@@ -391,7 +403,7 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                         }
                         return null
                       })}
-                      {msg.role === 'assistant' && hasText && (
+                      {msg.role === 'assistant' && hasText && ttsAvailable && (
                         <div className="flex items-center gap-2 mt-1">
                           <Button
                             type="button"
@@ -460,6 +472,7 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                   />
                 </PromptInputBody>
                 <PromptInputTools>
+                  {ttsAvailable && ttsProvider === 'openai' && (
                   <VoiceSelector
                     open={voiceOpen}
                     onOpenChange={setVoiceOpen}
@@ -501,6 +514,7 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                       </VoiceSelectorList>
                     </VoiceSelectorContent>
                   </VoiceSelector>
+                  )}
                   <SpeechInput
                     variant="ghost"
                     size="icon-sm"

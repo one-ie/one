@@ -1,4 +1,5 @@
 ---
+export const prerender = true
 import Layout from '../layouts/Layout.astro'
 import { Hero } from '../components/Hero'
 import { Features } from '../components/Features'
@@ -10,5 +11,5 @@ import { ChatWidget } from '../components/ChatWidget'
     <Hero />
     <Features />
   </main>
-  <ChatWidget client:idle />
+  <ChatWidget client:only="react" />
 </Layout>

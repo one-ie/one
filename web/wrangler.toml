@@ -13,6 +13,9 @@ directory = "dist/client"
 binding = "SESSION"
 id = "fdc28eb10d2443d7bb6402f92340bb8d"
 
+[ai]
+binding = "AI"
+
 [vars]
 AGENT_ID = "one-demo"
 AGENT_NAME = "ONE Demo"

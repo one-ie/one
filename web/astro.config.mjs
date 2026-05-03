@@ -3,8 +3,16 @@ import react from '@astrojs/react'
 import tailwindcss from '@tailwindcss/vite'
 import cloudflare from '@astrojs/cloudflare'
 import node from '@astrojs/node'
+import { readFileSync, existsSync } from 'node:fs'
 
 const isDev = process.env.NODE_ENV !== 'production'
+
+if (isDev && existsSync('.dev.vars')) {
+  for (const line of readFileSync('.dev.vars', 'utf8').split('\n')) {
+    const m = line.match(/^([A-Z0-9_]+)\s*=\s*(.*)$/)
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '')
+  }
+}
 const adapter = isDev
   ? node({ mode: 'standalone' })
   : cloudflare({
@@ -27,7 +35,15 @@ export default defineConfig({
       },
     },
     ssr: {
-      external: ['node:async_hooks', 'cytoscape', 'mermaid', '@streamdown/mermaid', '@xyflow/react'],
+      external: [
+        'node:async_hooks',
+        'cytoscape',
+        '@xyflow/react',
+        'shiki',
+        'media-chrome',
+        'media-chrome/react',
+        'motion',
+      ],
     },
     build: {
       rollupOptions: {
