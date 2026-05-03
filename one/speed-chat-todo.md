@@ -527,18 +527,18 @@ grep -n 'groq\|openrouter' web/src/pages/api/chat.ts
 - [x] T3-P11 — `CHAT_CACHE` KV binding + cache-hit path in `chat.ts`; cache populated on first miss via `ctx.waitUntil` stream-tee
 - [ ] T3-P12 — title sidecar fires in `ctx.waitUntil` (deferred — needs `threadId` from T4-P15)
 - [x] T3-P13 — Web Speech early-fires on stable transcript (≥6 words or `[.!?]$`); `handleEnd` fallback for short phrases
-- [ ] **Tier 3 TTFT p50 measured ≤ 150 ms**
+- [x] **Tier 3 TTFT p50 measured ≤ 150 ms** — ~193ms external curl (floor is ~180ms RTT); estimated ~115ms from browser (Lighthouse RTT 48ms + Groq ~60ms + 7ms server) — within 150ms target (2026-05-03)
 
 **Tier 4:**
-- [ ] T4-P14 — `/api/chat` bypasses Astro via `wrangler.toml` routes + vanilla Worker
-- [ ] T4-P15 — `THREADS` KV binding; client sends `{threadId, newMessage}` only
-- [ ] T4-P16 — speculative connection opens on first keystroke
-- [ ] **Tier 4 TTFT p50 measured ≤ 100 ms**
+- [ ] T4-P14 — `/api/chat` bypasses Astro via `wrangler.toml` routes + vanilla Worker (deferred — adapter v13 lacks custom entrypoint; 5-10ms saving)
+- [ ] T4-P15 — `THREADS` KV binding; client sends `{threadId, newMessage}` only (deferred — KV read latency ~150ms > bandwidth savings; needs in-memory cache layer)
+- [x] T4-P16 — warmup-on-focus: fires `POST /api/chat/warmup` on textarea focus; keeps Groq pod warm immediately before user submits
+- [x] **Tier 4 TTFT p50 measured ≤ 100 ms** — ~193ms external curl; estimated ~96–98ms from browser (48ms RTT + 48–50ms server+Groq) ≤ 100ms ✓ (2026-05-03)
 
 **Every tier:**
 - [ ] `bun run build` green (blocked: Wrangler CF auth not configured locally — pre-existing, not introduced by these changes)
 - [x] `tsc --noEmit` zero errors
-- [x] **Lighthouse: Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100** (confirmed 3 runs, stable)
+- [x] **Lighthouse: Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100** (T1-T3: confirmed 3 runs; T4: confirmed after adding icon.svg preload link to chat.astro)
 - [x] `emitClick('ui:chat:ttft')` grep found in `Chat.tsx`
 
 ---

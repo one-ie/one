@@ -18,6 +18,10 @@ id = "fdc28eb10d2443d7bb6402f92340bb8d"
 binding = "CHAT_CACHE"
 id = "203df225c45e4c24a62896c9464368a2"
 
+[[kv_namespaces]]
+binding = "THREADS"
+id = "f52a2e9c40e542a2bfd99f0198b986e2"
+
 [ai]
 binding = "AI"
 

@@ -1,7 +1,7 @@
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 import { X } from 'lucide-react'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { emitClick } from '@/lib/ui-signal'
@@ -155,6 +155,14 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
     },
     [speakFor],
   )
+
+  // T4-P16: fire warmup on textarea focus so the worker is warm when user submits
+  const warnedRef = useRef(false)
+  const openSpeculative = useCallback(() => {
+    if (warnedRef.current) return
+    warnedRef.current = true
+    fetch('/api/chat/warmup', { method: 'POST' }).catch(() => {})
+  }, [])
 
   const speak = async (msg: UIMessage) => {
     const text = getMessageText(msg)
@@ -339,6 +347,7 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                     rows={5}
                     style={{ minHeight: '120px', paddingTop: '20px' }}
                     className="text-lg focus-visible:ring-0 focus-visible:border-0 focus-visible:outline-none border-0"
+                    onFocus={openSpeculative}
                   />
                 </PromptInputBody>
                 <PromptInputTools>

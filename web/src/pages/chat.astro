@@ -8,6 +8,7 @@ import { Chat } from '../components/Chat'
   <Fragment slot="head">
     <link rel="preconnect" href="/api/chat" />
     <link rel="dns-prefetch" href="/api/chat" />
+    <link rel="preload" as="image" href="/icon.svg" />
   </Fragment>
   <div class="h-[100dvh] overflow-hidden">
     <Chat client:idle fullPage />

@@ -233,6 +233,7 @@ export function Showcase({ group = 'default' }: Props) {
                     aria-hidden
                     width={64}
                     height={64}
+                    fetchPriority="high"
                     className="rounded-2xl"
                   />
                   <div className="text-center">

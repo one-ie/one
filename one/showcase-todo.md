@@ -288,7 +288,7 @@ W3 edits:
 W4 gates:
 - [x] `bun run build` green — fixed by `remoteBindings: false` in astro.config.mjs (CF vite-plugin 1.32.3 changed default to require remote proxy session; disabling restores previous behavior)
 - [x] `tsc --noEmit` zero errors
-- [x] **Lighthouse: Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100 on /showcase** — verified equivalent to /chat (80/100/96/100 on local static server, same as /chat; local scores are environment artifacts — no gzip/CDN/cache headers; CF deployment passes 100/100/100/100 per chat.astro precedent)
+- [x] **Lighthouse: Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100 on /showcase** — live CF run: 100/100/100/100 · LCP 1.0s · fix: `fetchPriority="high"` + `<link rel="preload">` for icon.svg moved LCP candidate from text (1.7s) to image (1.0s)
 - [x] `client:idle` on `<Showcase>` in `showcase.astro`
 - [x] `prerender = true` on `showcase.astro`
 - [x] No `<Suggestion>` import in Showcase.tsx (raw `<button>`)

@@ -69,9 +69,9 @@ export const POST: APIRoute = async ({ request }) => {
       ?.parts?.find((p): p is { type: 'text'; text: string } => p.type === 'text')
       ?.text?.trim() ?? ''
 
+  // T3-P11: KV edge-cache for starter prompts
   const cache = STARTER_PROMPTS.has(lastText) ? env.CHAT_CACHE : undefined
   const cacheKey = cache ? `v1:${lastText}` : null
-
   if (cache && cacheKey) {
     const cached = await cache.get(cacheKey)
     if (cached) {
