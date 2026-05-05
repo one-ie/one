@@ -88,6 +88,14 @@ export const SchemaDisplayMethod = ({
   );
 };
 
+const escapeHtml = (str: string): string =>
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 export type SchemaDisplayPathProps = HTMLAttributes<HTMLSpanElement>;
 
 export const SchemaDisplayPath = ({
@@ -97,17 +105,28 @@ export const SchemaDisplayPath = ({
 }: SchemaDisplayPathProps) => {
   const { path } = useContext(SchemaDisplayContext);
 
-  // Highlight path parameters
-  const highlightedPath = path.replaceAll(
+  // Highlight path parameters — escape the raw path first so any
+  // `<>` in segment names becomes `&lt;&gt;` before we inject HTML.
+  const escapedPath = escapeHtml(path);
+  const highlightedPath = escapedPath.replaceAll(
     /\{([^}]+)\}/g,
-    '<span class="text-blue-600 dark:text-blue-400">{$1}</span>'
+    (_match, p1: string) =>
+      `<span class="text-blue-600 dark:text-blue-400">{${escapeHtml(p1)}}</span>`
   );
+
+  if (children) {
+    return (
+      <span className={cn("font-mono text-sm", className)} {...props}>
+        {children}
+      </span>
+    );
+  }
 
   return (
     <span
       className={cn("font-mono text-sm", className)}
       // oxlint-disable-next-line eslint-plugin-react(no-danger)
-      dangerouslySetInnerHTML={{ __html: (children ?? highlightedPath) as string }}
+      dangerouslySetInnerHTML={{ __html: highlightedPath }}
       {...props}
     />
   );

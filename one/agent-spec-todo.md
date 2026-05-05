@@ -8,7 +8,7 @@
 > This is the **ledger**, not the work. Each cycle below is its own classifiable unit and gets its own `/do` cycle when picked.
 
 ---
-
+use multiple agents in parallel do fast
 ## Overall classifier
 
 | Prior | Answer | Justification |
@@ -76,7 +76,7 @@ The whole system is one Worker. Slugs are R2 prefixes. Agents and skills are mar
 | [`agent-spec-prompt.md`](agent-spec-prompt.md) | Conversion + best practices for skill authors |
 | [`modify.md`](modify.md) | Chat-driven website mutation, provision/commit flow, owner controls |
 | [`adl-integration.md`](adl-integration.md) | `ui:*` receiver contract for tool-call observability |
-| [`rubrics.md`](rubrics.md) | fit / form / truth / taste scoring (gate 0.65) |
+| [`rubrics.md`](rubrics.md) | security / stability / simplicity / speed scoring (gate 0.65); code rubric + self-improvement loop |
 | [`dictionary.md`](dictionary.md) | Canonical names, six verbs, four outcomes |
 | [`patterns.md`](patterns.md) | Closed-loop, deterministic-sandwich, zero-returns |
 
@@ -92,6 +92,80 @@ The whole system is one Worker. Slugs are R2 prefixes. Agents and skills are mar
 | Root `CLAUDE.md` | Note new public surface (CLI verb, API route, SDK export) |
 | `dictionary.md` | Any term introduced (e.g. "activation envelope", "import refresh") |
 | `learnings.md` | One-line entry per cycle close (date · cycle N · sentence · rubric · source) |
+
+---
+
+## Status
+
+**Active cycle:** C2.5 — Skill creator
+
+### Cycle 1 ✓
+
+- [x] W0 baseline — tsc clean, no C1 files exist
+- [x] W1 recon — wrangler has KV only (no R2/D1), chat.ts has no tools/slug/persist, no passkey/SimpleWebAuthn installed
+- [x] W2 decide — cloudflare:workers pattern, AI SDK v6 inputSchema, no DOMPurify (Workers), nanoid slug
+- [x] W3 edit — 15 files created/modified; fixed imports, tool API, locals→cloudflare:workers
+- [x] W4 verify — tsc --noEmit passes clean; passkey registration works end-to-end locally (wrangler dev)
+
+**Notes:** Vite pinned to 7.3.2 (rolldown incompatibility with workerd). `RP_ID=localhost` + `ORIGIN=http://localhost:8787` in wrangler.toml for dev; remove before production deploy. SERVER_SECRET lives in `.dev.vars` only (not [vars]). D1 migration applied locally via `wrangler d1 execute one-owners --local --file=migrations/0001_owners.sql`.
+
+### Cycle 2 ✓
+
+- [x] W0 baseline — tsc --noEmit passes clean; all 6 C2 target files MISSING (expected)
+- [x] W1 recon — chat.ts has write tool/Groq/CONTENT; slug not forwarded to API; PreviewCard unconnected; eval lib absent
+- [x] W2 decide — 9 files: 4 lib/eval, eval.ts API, EvalCard, chat.ts+Chat.tsx+MessageList patch
+- [x] W3 edit — 9 agents all marked; W3.5 micro: wired onIterateEval→sendMessage (11 files total)
+- [x] W4 verify — tsc clean; rubric fit=0.78 form=0.82 truth=0.88 taste=0.80 composite=0.821 ≥ 0.65; Playwright browser tests 7/7 pass; EvalCard confirmed rendering in browser
+
+**Notes:** AI SDK v6 uses `maxOutputTokens` not `maxTokens`. Eval tool strips `skills/` prefix from model input (model tends to include it). Playwright `postData()` doesn't capture streaming POST bodies — use `page.route()` instead. Test cases loaded from `evals/evals.json` sidecar only (no inline YAML in Workers MVP).
+
+### Cycle 2.5
+
+- [x] W0 baseline — tsc clean; SKILL.md+LICENSE exist; 5 files missing (sub-agents, schemas, auto-import)
+- [x] W1 recon — SKILL.md+LICENSE exist; 3 sub-agents+references/schemas+auto-import+2 doc edits needed
+- [x] W2 decide — 9 ops: 4 new md files, auto-import.ts, astro.config.mjs fs.allow, provision.ts hook, agent-spec note, chat capabilities update
+- [x] W3 edit — 9 agents all marked; grader/analyzer/comparator/schemas created; auto-import.ts wired to provision; 2 doc edits
+- [x] W4 verify — tsc clean; rubric security=0.93 stability=0.88 simplicity=0.92 speed=0.90 composite=0.912 ≥ 0.65; micro-fix: schemas.md grading.json bare array shape
+
+### Cycle 3
+
+- [x] W0 baseline — tsc clean; all 5 C3 files missing (expected)
+- [x] W1 recon — chat.ts has no skill discovery; auto-import.ts exists; sdk/types.ts lacks agentmd fields (C5 scope); 5 target files all missing
+- [x] W2 decide — 5 new files: parser(28L), loader(38L), import(42L), emit(32L), refresh(22L); cloudflare:workers env pattern; pure-JS parser (no new dep)
+- [ ] W3 edit
+- [ ] W4 verify
+
+### Cycle 4
+
+- [ ] W0 baseline
+- [ ] W1 recon
+- [ ] W2 decide
+- [ ] W3 edit
+- [ ] W4 verify
+
+### Cycle 5
+
+- [ ] W0 baseline
+- [ ] W1 recon
+- [ ] W2 decide
+- [ ] W3 edit
+- [ ] W4 verify
+
+### Cycle 6
+
+- [ ] W0 baseline
+- [ ] W1 recon
+- [ ] W2 decide
+- [ ] W3 edit
+- [ ] W4 verify
+
+### Cycle 7
+
+- [ ] W0 baseline
+- [ ] W1 recon
+- [ ] W2 decide
+- [ ] W3 edit
+- [ ] W4 verify
 
 ---
 
@@ -154,7 +228,8 @@ Dependencies: **C1 blocks C2.** **C2 blocks C2.5 + C3.** **C4, C5, C6 are indepe
 
 **Exit scalar:** `oneie e2e` script — provisions a test slug, posts "write a page about X" via the chat API, signs the proposal, verifies R2 PUT happened with `customMetadata.sha` matching the content hash. **Pass = round-trip < 2s, content sha matches.**
 
-**Rubric target:** fit ≥ 0.85 / form ≥ 0.85 / truth ≥ 0.90 / taste ≥ 0.80.
+**Rubric target:** security ≥ 0.90 / stability ≥ 0.85 / simplicity ≥ 0.85 / speed ≥ 0.80.
+Token target: prompt cache hit ≥ 70%; no context stuffing in `/api/provision` or `/api/commit`.
 
 ---
 
@@ -193,7 +268,8 @@ Dependencies: **C1 blocks C2.** **C2 blocks C2.5 + C3.** **C4, C5, C6 are indepe
 
 **Exit scalar:** Reference skill `csv-analyzer` (shipped in `examples/`) starts at pass-rate 0.50 baseline. After 3 chat-driven iterations, pass-rate ≥ 0.85 on the validation set. **The skill is the canary.**
 
-**Rubric target:** fit ≥ 0.85 / form ≥ 0.80 / truth ≥ 0.90 / taste ≥ 0.75.
+**Rubric target:** security ≥ 0.90 / stability ≥ 0.85 / simplicity ≥ 0.85 / speed ≥ 0.80.
+Token target: `benchmark.json` delta includes `tokens` field; eval runner reports tokens consumed per run.
 
 ---
 
@@ -241,9 +317,10 @@ Everything else — interview flow, "lean prompt," "explain the why," "look for 
 | C25-T4 | med | S | Dry-run mode never bills owner during benchmark runs | safety |
 | C25-T5 | low | S | LICENSE-NOTICE.md committed | legal |
 
-**Exit scalar:** Reference run — owner provisions a fresh sandbox, types *"make me a skill that summarizes a CSV with citations"*. Skill-creator interviews, drafts, runs evals, iterates 3×, ships at pass-rate ≥ 0.85. The owner never leaves the chat. Total elapsed ≤ 10 minutes.
+**Exit scalar:** Reference run — owner provisions a fresh sandbox, types *"make me a skill that summarizes a CSV with citations"*. Skill-creator interviews, drafts, runs evals, iterates 3×, ships at pass-rate ≥ 0.85. The owner never leaves the chat. Total elapsed ≤ 10 minutes. Skill body ≤ 300 lines (token discipline: every activation pays the body size cost across all callers).
 
-**Rubric target:** fit ≥ 0.90 / form ≥ 0.85 / truth ≥ 0.95 / taste ≥ 0.85.
+**Rubric target:** security ≥ 0.90 / stability ≥ 0.90 / simplicity ≥ 0.90 / speed ≥ 0.85.
+Token target: SKILL.md body ≤ 300 lines; sub-agents ≤ 80 lines each; `benchmark.json` includes `tokens_per_run` baseline.
 
 **License posture:** Anthropic's skill-creator is Apache-2.0. We fork verbatim, document the deltas in `LICENSE-NOTICE.md`, and submit our adaptations upstream as a PR (the dry-run-for-paid-skills pattern is generally useful; the chat-card adaptation is ours). The skill body itself is Apache-2.0; our scripts are Apache-2.0 + MIT dual.
 
@@ -282,7 +359,8 @@ Everything else — interview flow, "lean prompt," "explain the why," "look for 
 
 **Exit scalar:** Round-trip test: take Anthropic's reference `pdf-processing` skill, import via chat → run end-to-end. Then `oneie skill emit` → install in fresh Claude Code → run there. **Both runs produce identical output for the same input.**
 
-**Rubric target:** fit ≥ 0.90 / form ≥ 0.85 / truth ≥ 0.95 / taste ≥ 0.80.
+**Rubric target:** security ≥ 0.90 / stability ≥ 0.88 / simplicity ≥ 0.88 / speed ≥ 0.80.
+Token target: lenient parser adds zero tokens to activation path (parse happens at import time, not per-call).
 
 ---
 
@@ -321,7 +399,8 @@ Everything else — interview flow, "lean prompt," "explain the why," "look for 
 
 **Exit scalar:** `curl https://one.ie/u/alice/.well-known/agent-card.json | a2a-validator` passes. **One artifact, validated by the standard's tool, on a real slug.**
 
-**Rubric target:** fit ≥ 0.85 / form ≥ 0.90 / truth ≥ 0.95 / taste ≥ 0.75.
+**Rubric target:** security ≥ 0.92 / stability ≥ 0.88 / simplicity ≥ 0.88 / speed ≥ 0.78.
+Token target: artifact emitters produce zero LLM calls — pure deterministic transforms.
 
 ---
 
@@ -365,7 +444,8 @@ Everything else — interview flow, "lean prompt," "explain the why," "look for 
 
 **Exit scalar:** Reference agent `examples/research-assistant` (with three skills) runs in all three runtimes (chat, MCP, uAgents Python) from the same source markdown. **Same prompt, same response (within model variance), three transports.**
 
-**Rubric target:** fit ≥ 0.85 / form ≥ 0.85 / truth ≥ 0.90 / taste ≥ 0.80.
+**Rubric target:** security ≥ 0.88 / stability ≥ 0.88 / simplicity ≥ 0.85 / speed ≥ 0.80.
+Token target: MCP `serve` adds prompt-cache headers to every tool response; Python runtime reports tokens_used per invocation.
 
 ---
 
@@ -420,7 +500,8 @@ Everything else — interview flow, "lean prompt," "explain the why," "look for 
 
 **Exit scalar:** All 14 verbs run on the reference agent and produce structured JSON when `--json` is passed. **Verb count × success = 14/14.**
 
-**Rubric target:** fit ≥ 0.85 / form ≥ 0.90 / truth ≥ 0.85 / taste ≥ 0.85.
+**Rubric target:** security ≥ 0.88 / stability ≥ 0.88 / simplicity ≥ 0.88 / speed ≥ 0.82.
+Token target: CLI startup ≤ 200ms (cold); every `--json` output ≤ 500 tokens of structured data.
 
 ---
 
@@ -456,7 +537,8 @@ Everything else — interview flow, "lean prompt," "explain the why," "look for 
 
 **Exit scalar:** `https://alice.one.ie` resolves to alice's site. Custom slug claim flow accepts payment and provisions the redirect. **One paid claim, one resolved subdomain, one image rendered in a post.**
 
-**Rubric target:** fit ≥ 0.80 / form ≥ 0.85 / truth ≥ 0.80 / taste ≥ 0.85.
+**Rubric target:** security ≥ 0.90 / stability ≥ 0.85 / simplicity ≥ 0.85 / speed ≥ 0.82.
+Token target: subdomain routing adds zero LLM calls; image upload tool body ≤ 40 lines.
 
 ---
 
@@ -503,24 +585,28 @@ The end-to-end test that proves the system as a whole. **All seven cycles must p
 ```
 
 **Pass = all 8 steps complete in one session, all writes signed, all payments verified, all artifacts resolve.**
+**Token pass = prompt cache hit ≥ 80% across the session; no skill body > 300 lines; total session tokens ≤ baseline × 1.1.**
 
 ---
 
 ## Rubric targets (overall)
 
-| Cycle | fit | form | truth | taste |
-|-------|-----|------|-------|-------|
-| C1 | 0.85 | 0.85 | 0.90 | 0.80 |
-| C2 | 0.85 | 0.80 | 0.90 | 0.75 |
-| C2.5 | 0.90 | 0.85 | 0.95 | 0.85 |
-| C3 | 0.90 | 0.85 | 0.95 | 0.80 |
-| C4 | 0.85 | 0.90 | 0.95 | 0.75 |
-| C5 | 0.85 | 0.85 | 0.90 | 0.80 |
-| C6 | 0.85 | 0.90 | 0.85 | 0.85 |
-| C7 | 0.80 | 0.85 | 0.80 | 0.85 |
-| **Min** | **0.80** | **0.80** | **0.80** | **0.75** |
+`composite = 0.35·security + 0.30·stability + 0.25·simplicity + 0.10·speed`
+
+| Cycle | security | stability | simplicity | speed | composite | token target |
+|-------|----------|-----------|------------|-------|-----------|--------------|
+| C1    | 0.90 | 0.85 | 0.85 | 0.80 | 0.86 | cache ≥ 70% |
+| C2    | 0.90 | 0.85 | 0.85 | 0.80 | 0.86 | tokens/run tracked |
+| C2.5  | 0.90 | 0.90 | 0.90 | 0.85 | 0.90 | skill ≤ 300 lines |
+| C3    | 0.90 | 0.88 | 0.88 | 0.80 | 0.88 | parse: 0 tokens/call |
+| C4    | 0.92 | 0.88 | 0.88 | 0.78 | 0.89 | emitters: 0 LLM calls |
+| C5    | 0.88 | 0.88 | 0.85 | 0.80 | 0.87 | cache headers on MCP |
+| C6    | 0.88 | 0.88 | 0.88 | 0.82 | 0.88 | CLI ≤ 200ms cold |
+| C7    | 0.90 | 0.85 | 0.85 | 0.82 | 0.87 | routing: 0 LLM calls |
+| **Min** | **0.88** | **0.85** | **0.85** | **0.78** | **0.86** | |
 
 **Gate:** any cycle below 0.65 on any dimension — escalate before merge. Cycle does not close.
+**Velocity:** each cycle should score higher than the previous. Flat for 2 consecutive → diagnostic in W1.
 
 ---
 

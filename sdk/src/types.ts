@@ -256,6 +256,23 @@ export interface ListAgentsResponse {
 
 export type StageOutcome = "result" | "timeout" | "dissolved" | "failure";
 
+/** Agent rubric scores (trade lifecycle VERIFY — LLM response quality). */
+export interface TaskRubric {
+  fit: number;
+  form: number;
+  truth: number;
+  taste: number;
+}
+
+/** Code rubric scores (/do W4 — composite = 0.35·sec + 0.30·sta + 0.25·sim + 0.10·spd). */
+export interface CodeRubric {
+  security: number;
+  stability: number;
+  simplicity: number;
+  speed: number;
+  composite: number;
+}
+
 export interface CloseLoopOpts {
   rubric?: number;
   reason?: string;

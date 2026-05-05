@@ -314,21 +314,57 @@ for the first unchecked `- [ ]` wave entry. Execute that wave:
 **W0 — Baseline (before first wave of any new cycle)**
 
 ```bash
+# 1. Verify the starting state is clean
 bun run verify   # biome check . && tsc --noEmit && vitest run
+
+# 2. Capture baseline metrics — W4 diffs against these
+bun run build 2>&1 | tee /tmp/w0-build.txt
+BUILD_MS=$(grep -oE '[0-9]+ms' /tmp/w0-build.txt | tail -1 | tr -d 'ms')
+
+# Bundle sizes (Astro + Worker)
+CLIENT_KB=$(du -sk dist/_astro/*.js 2>/dev/null | awk '{sum+=$1} END{print sum}')
+WORKER_KB=$(du -sk .wrangler/output/*.js 2>/dev/null | awk '{sum+=$1} END{print sum}')
+
+# Agent/skill body sizes — token proxy (lines × ~4 tokens/line)
+AGENT_LINES=$(find agents -name '*.md' 2>/dev/null | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')
+SKILL_LINES=$(find web/src -name '*.md' 2>/dev/null | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')
+
+# Write baseline — W4 reads this file
+cat > .w0-baseline.json <<EOF
+{
+  "cycle": $(grep -c '## [0-9]' docs/improvements.md 2>/dev/null || echo 0),
+  "buildMs": ${BUILD_MS:-0},
+  "bundleKB": { "client": ${CLIENT_KB:-0}, "worker": ${WORKER_KB:-0} },
+  "agentLines": ${AGENT_LINES:-0},
+  "skillLines": ${SKILL_LINES:-0},
+  "tests": { "passed": $(grep -oE '[0-9]+ passed' /tmp/w0-build.txt | tail -1 | grep -oE '[0-9]+' || echo 0) },
+  "lighthouse": "run-at-w4"
+}
+EOF
 ```
 
 Record: tests passed/total, any known failures. Fix before proceeding. Don't build on broken ground.
+`.w0-baseline.json` is the anchor — W4 compares every metric against it.
 
 ---
 
 **W1 — Recon (Haiku, parallel)**
 
-1. Read the TODO's Wave 1 section for the current cycle
-2. Spawn ALL recon agents **in a single message** using the Agent tool with `model: "haiku"`
-3. Each agent reads one file and reports findings verbatim with line numbers
-4. Hard rule for each agent: "Report verbatim. Do not propose changes. Under 300 words."
-5. Collect all reports
-6. Mark Wave 1 complete in the Status section: `- [ ]` → `- [x]`
+1. **Seed from prior W4** — read `.w4-improvements.json` if it exists. Every open improvement
+   from the last cycle becomes a mandatory recon target for this cycle. If an item has appeared
+   in 3+ consecutive cycles unfixed, flag it as a systemic gap in your W1 report.
+
+   ```bash
+   cat .w4-improvements.json 2>/dev/null || echo "no prior improvements"
+   ```
+
+2. Read the TODO's Wave 1 section for the current cycle
+3. Spawn ALL recon agents **in a single message** using the Agent tool with `model: "haiku"`
+   — include the open improvement files as mandatory reads alongside the TODO's recon targets
+4. Each agent reads one file and reports findings verbatim with line numbers
+5. Hard rule for each agent: "Report verbatim. Do not propose changes. Under 300 words."
+6. Collect all reports
+7. Mark Wave 1 complete in the Status section: `- [ ]` → `- [x]`
 
 Log: `W1: tasks_parallel=N  marked=N  warned=N  dissolved=N`
 CLOSE: `/close --todo <slug> --wave 1` — emit `do:close` [`cycle:N`, `wave:1`, `todo:<slug>`]; append to learnings.md (soft gate).
@@ -339,8 +375,17 @@ CLOSE: `/close --todo <slug> --wave 1` — emit `do:close` [`cycle:N`, `wave:1`,
 
 1. You ARE the decider. Do not delegate this wave.
 2. Read all W1 reports + the source-of-truth doc referenced in the TODO
-3. For each finding, decide: **Act** (produce anchor + new text) or **Keep** (it's an exception)
-4. Output diff specs:
+3. **Tag the TODO type** — add to the TODO header if absent:
+   `type: refactor | fix | feature | doc`
+   This controls the Simplicity benchmark in W4 (see `one/rubrics.md` Code Rubric §3).
+4. **Focus check** — for every file in the diff spec, state its current line count.
+   If the edit will make it noticeably large, ask: "is this file doing one thing?"
+   If two responsibilities are visible, split in the plan now — not in W3.
+   Reference: the entire substrate (schema + engine) is 200 lines total. A file
+   that needs more than that is almost certainly doing more than one thing.
+   This is a thinking prompt, not a line limit. Name splits here; W3 executes them.
+5. For each finding, decide: **Act** (produce anchor + new text) or **Keep** (it's an exception)
+6. Output diff specs:
    ```
    TARGET:    docs/foo.md
    ANCHOR:    "<exact old text>"
@@ -359,9 +404,12 @@ CLOSE: `/close --todo <slug> --wave 2` — emit `do:close` [`cycle:N`, `wave:2`,
 
 1. Read the diff specs from Wave 2
 2. Spawn ALL edit agents **in a single message** using the Agent tool with `model: "sonnet"`
-3. Each agent gets: file path, anchor (exact old_string), replacement, and the rule:
+3. Each agent gets: file path, anchor (exact old_string), replacement, and the rules:
    "Use Edit tool with exact anchor as old_string. Do not modify anything else.
-   If anchor doesn't match, report dissolved."
+   If anchor doesn't match, report dissolved.
+   If the edit makes the file noticeably large and you can see two responsibilities,
+   report dissolved with reason 'file needs splitting — W2 to name the two files'.
+   The goal is focused files, not a line count."
 4. Collect results — mark successful edits, warn on anchor mismatches
 5. Re-spawn dissolved agents once with corrected anchors (read the file first)
 6. Mark Wave 3 complete
@@ -381,11 +429,12 @@ CLOSE: `/close --todo <slug> --wave 3` — emit `do:close` [`cycle:N`, `wave:3`,
 
 2. Spawn ONE verification agent (`model: "sonnet"`) — reads all touched files and checks
    cross-consistency per the TODO's verify checklist
-3. Agent scores rubric: fit / form / truth / taste (each 0–1, gate at ≥ 0.65)
+3. Agent scores code rubric: security / stability / simplicity / speed (each 0–1, gate at ≥ 0.65)
+   — full checks defined in `one/rubrics.md` Code Rubric section
 4. If clean → mark Wave 4 `[x]` → mark cycle `[x]`
 5. If inconsistencies → spawn micro-edit agents (Wave 3.5) → re-verify (max 3 loops total)
 
-Log: `W4: rubric={fit, form, truth, taste}  delta_vs_W0={...}  verify=green|red`
+Log: `W4: rubric={security, stability, simplicity, speed}  composite=<N.NN>  velocity=<±N.NN>  lighthouse={perf,a11y,bp,seo}  tokens={cacheHit%,agentLinesDelta,skillLinesDelta}  verify=green|red`
 CLOSE: `/close --todo <slug> --wave 4` — emit `do:close` [`cycle:N`, `wave:4`, `todo:<slug>`]; append to learnings.md (soft gate).
 
 ---
@@ -441,9 +490,10 @@ loop:
   MARK:     POST http://localhost:4321/api/tasks/{id}/complete
 
   CLOSE:    POST http://localhost:4321/api/loop/close { score: rubric }
-            Score rubric: fit / form / truth / taste (each 0–1)
+            Score code rubric: security / stability / simplicity / speed (each 0–1)
+            Composite: 0.35·security + 0.30·stability + 0.25·simplicity + 0.10·speed
 
-  DIMS:     POST http://localhost:4321/api/loop/mark-dims { fit, form, truth, taste }
+  DIMS:     POST http://localhost:4321/api/loop/mark-dims { security, stability, simplicity, speed }
             Dims < 0.5 → warn on that dimension path
             Dims ≥ 0.5 → mark on that dimension path
 

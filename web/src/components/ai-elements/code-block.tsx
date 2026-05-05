@@ -25,6 +25,7 @@ import type {
   BundledLanguage,
   BundledTheme,
   HighlighterGeneric,
+  LanguageInput,
   ThemedToken,
 } from "shiki";
 
@@ -127,11 +128,53 @@ const CodeBlockContext = createContext<CodeBlockContextType>({
   code: "",
 });
 
-// Highlighter cache (singleton per language)
-const highlighterCache = new Map<
-  string,
-  Promise<HighlighterGeneric<BundledLanguage, BundledTheme>>
->();
+const SUPPORTED_LANGS = [
+  'typescript', 'tsx', 'javascript', 'jsx',
+  'python', 'bash', 'shell', 'json', 'html', 'css',
+  'markdown', 'yaml', 'sql', 'rust', 'go',
+  'diff', 'toml', 'graphql', 'dockerfile', 'ruby',
+] as const
+
+type SupportedLang = typeof SUPPORTED_LANGS[number]
+
+// Use shiki/core + per-language imports so only needed grammars are bundled.
+// createJavaScriptRegexEngine avoids the 600KB Oniguruma WASM.
+const highlighterPromise: Promise<HighlighterGeneric<BundledLanguage, BundledTheme>> =
+  Promise.all([
+    import('shiki/core').then(m => m.createHighlighterCore),
+    import('shiki/engine/javascript').then(m => m.createJavaScriptRegexEngine),
+    import('shiki/themes/github-light.mjs'),
+    import('shiki/themes/github-dark.mjs'),
+    import('shiki/langs/typescript.mjs'),
+    import('shiki/langs/tsx.mjs'),
+    import('shiki/langs/javascript.mjs'),
+    import('shiki/langs/jsx.mjs'),
+    import('shiki/langs/python.mjs'),
+    import('shiki/langs/bash.mjs'),
+    import('shiki/langs/shell.mjs'),
+    import('shiki/langs/json.mjs'),
+    import('shiki/langs/html.mjs'),
+    import('shiki/langs/css.mjs'),
+    import('shiki/langs/markdown.mjs'),
+    import('shiki/langs/yaml.mjs'),
+    import('shiki/langs/sql.mjs'),
+    import('shiki/langs/rust.mjs'),
+    import('shiki/langs/go.mjs'),
+    import('shiki/langs/diff.mjs'),
+    import('shiki/langs/toml.mjs'),
+    import('shiki/langs/graphql.mjs'),
+    import('shiki/langs/dockerfile.mjs'),
+    import('shiki/langs/ruby.mjs'),
+  ]).then(([createHighlighter, createJavaScriptRegexEngine, githubLight, githubDark, ...langModules]) =>
+    createHighlighter({
+      langs: langModules.map((m: { default: unknown }) => m.default) as LanguageInput[],
+      themes: [githubLight.default, githubDark.default],
+      engine: createJavaScriptRegexEngine(),
+    }),
+  ) as Promise<HighlighterGeneric<BundledLanguage, BundledTheme>>
+
+const safeLanguage = (lang: BundledLanguage): SupportedLang | null =>
+  (SUPPORTED_LANGS as readonly string[]).includes(lang) ? lang as SupportedLang : null
 
 // Token cache
 const tokensCache = new Map<string, TokenizedCode>();
@@ -143,25 +186,6 @@ const getTokensCacheKey = (code: string, language: BundledLanguage) => {
   const start = code.slice(0, 100);
   const end = code.length > 100 ? code.slice(-100) : "";
   return `${language}:${code.length}:${start}:${end}`;
-};
-
-const getHighlighter = (
-  language: BundledLanguage
-): Promise<HighlighterGeneric<BundledLanguage, BundledTheme>> => {
-  const cached = highlighterCache.get(language);
-  if (cached) {
-    return cached;
-  }
-
-  const highlighterPromise = import("shiki").then(({ createHighlighter }) =>
-    createHighlighter({
-      langs: [language],
-      themes: ["github-light", "github-dark"],
-    }),
-  );
-
-  highlighterCache.set(language, highlighterPromise);
-  return highlighterPromise;
 };
 
 const CODE_BG = "var(--color-background)";
@@ -207,15 +231,15 @@ export const highlightCode = (
     subscribers.get(tokensCacheKey)?.add(callback);
   }
 
+  const lang = safeLanguage(language)
+  if (!lang) return null
+
   // Start highlighting in background - fire-and-forget async pattern
-  getHighlighter(language)
+  highlighterPromise
     // oxlint-disable-next-line eslint-plugin-promise(prefer-await-to-then)
     .then((highlighter) => {
-      const availableLangs = highlighter.getLoadedLanguages();
-      const langToUse = availableLangs.includes(language) ? language : "text";
-
       const result = highlighter.codeToTokens(code, {
-        lang: langToUse,
+        lang,
         themes: { light: "github-light", dark: "github-dark" },
         defaultColor: false,
       });

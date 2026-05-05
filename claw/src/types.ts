@@ -24,6 +24,8 @@ export interface Env {
   API_KEY?: string
   /** Set to 'development' to enable AI SDK devtools middleware. */
   MODE?: string
+  /** Restrict CORS to this origin. Defaults to '*' if unset. */
+  ALLOWED_ORIGIN?: string
 }
 
 export interface Signal {

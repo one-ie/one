@@ -1,8 +1,8 @@
-import { lazy, Suspense } from 'react'
 import { Volume2, Wrench, AlertCircle } from 'lucide-react'
 import type { DynamicToolUIPart, FileUIPart, ToolUIPart, UIMessage } from 'ai'
 import { Message } from '@/components/ai-elements/message'
 import { Reasoning, ReasoningContent, ReasoningTrigger } from '@/components/ai-elements/reasoning'
+import { MarkdownView } from '@/components/ai-elements/markdown'
 import { Tool, ToolHeader } from '@/components/ai-elements/tool'
 import {
   Attachment,
@@ -28,10 +28,9 @@ import {
 } from '@/components/ai-elements/audio-player'
 import { Button } from '@/components/ui/button'
 import { emitClick } from '@/lib/ui-signal'
-
-const MarkdownView = lazy(() =>
-  import('@/components/ai-elements/markdown').then((m) => ({ default: m.MarkdownView })),
-)
+import { PreviewCard } from '@/components/chat/PreviewCard'
+import { EvalCard } from '@/components/chat/EvalCard'
+import type { BenchmarkResult } from '@/lib/eval/aggregate'
 
 function isToolPart(p: UIMessage['parts'][number]): p is ToolUIPart | DynamicToolUIPart {
   return p.type === 'dynamic-tool' || p.type.startsWith('tool-')
@@ -63,6 +62,8 @@ interface Props {
   status: 'submitted' | 'streaming' | 'ready' | 'error'
   speakFor: { id: string; url: string } | null
   ttsAvailable: boolean
+  slug?: string
+  onIterateEval?: (prompt: string) => void
   onSpeak: (msg: UIMessage) => void
   onApproval: (args: { id: string; approved: boolean }) => void
 }
@@ -72,6 +73,8 @@ export function MessageList({
   status,
   speakFor,
   ttsAvailable,
+  slug,
+  onIterateEval,
   onSpeak,
   onApproval,
 }: Props) {
@@ -137,18 +140,9 @@ export function MessageList({
                       {part.text}
                     </div>
                   ) : (
-                    <Suspense
-                      key={i}
-                      fallback={
-                        <div className="text-font break-words whitespace-pre-wrap">
-                          {part.text}
-                        </div>
-                      }
-                    >
-                      <MarkdownView className="text-font break-words space-y-2">
-                        {part.text}
-                      </MarkdownView>
-                    </Suspense>
+                    <MarkdownView key={i} className="text-font break-words space-y-2">
+                      {part.text}
+                    </MarkdownView>
                   )
                 }
                 if (part.type === 'reasoning') {
@@ -200,6 +194,41 @@ export function MessageList({
                       </div>
                     </Tool>
                   )
+                }
+                if (
+                  (part.type === 'dynamic-tool' || part.type.startsWith('tool-')) &&
+                  (part as { state?: string }).state === 'output-available'
+                ) {
+                  const output = (part as { output?: unknown }).output
+                  if (output && typeof output === 'object') {
+                    const o = output as Record<string, unknown>
+                    if (o.kind === 'pending') {
+                      return (
+                        <PreviewCard
+                          key={i}
+                          slug={slug ?? ''}
+                          file={String(o.file ?? '')}
+                          content={String(o.preview ?? '')}
+                          challenge={String(o.challenge ?? '')}
+                          token={String(o.token ?? '')}
+                          preview={String(o.preview ?? '')}
+                        />
+                      )
+                    }
+                    if (o.kind === 'eval-result' && o.benchmark) {
+                      return (
+                        <EvalCard
+                          key={i}
+                          benchmark={o.benchmark as BenchmarkResult}
+                          onIterate={
+                            o.iterationPrompt
+                              ? () => onIterateEval?.(String(o.iterationPrompt))
+                              : undefined
+                          }
+                        />
+                      )
+                    }
+                  }
                 }
                 return null
               })}

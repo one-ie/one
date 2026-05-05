@@ -93,23 +93,23 @@ export async function measureOutcome(
     .first()
     .catch(() => null)
 
-  if (!lastBot) return
+  if (!lastBot) { console.warn('[pipeline] measureOutcome: no prior bot message for group', groupId); return }
 
   const lastTags = await env.DB.prepare(`SELECT tags FROM turn_meta WHERE group_id = ? ORDER BY ts DESC LIMIT 1`)
     .bind(groupId)
     .first()
     .catch(() => null)
 
-  if (!lastTags?.tags) return
+  if (!lastTags?.tags) { console.warn('[pipeline] measureOutcome: no turn_meta tags for group', groupId); return }
 
   const tags = (lastTags.tags as string).split(',').filter(Boolean)
-  if (tags.length === 0) return
+  if (tags.length === 0) { console.warn('[pipeline] measureOutcome: empty tags after split for group', groupId); return }
 
   const valence = detectValence(newMessageContent)
 
   if (valence > 0.3) {
-    await Promise.all(tags.map((tag) => mark(env, actorUid, tag, valence).catch(() => {})))
+    await Promise.all(tags.map((tag) => mark(env, actorUid, tag, valence).catch((e) => console.warn('[pipeline] mark/warn failed:', e))))
   } else if (valence < -0.3) {
-    await Promise.all(tags.map((tag) => warn(env, actorUid, tag, Math.abs(valence)).catch(() => {})))
+    await Promise.all(tags.map((tag) => warn(env, actorUid, tag, Math.abs(valence)).catch((e) => console.warn('[pipeline] mark/warn failed:', e))))
   }
 }

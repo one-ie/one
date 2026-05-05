@@ -74,6 +74,7 @@ One Face ID = approve + sign + publish. The page is live before you finish smili
    │  ✏️  delete one (undo always works)     │
    │  📋  list everything you've written      │
    │  🔍  read a URL and summarize it for you│
+   │  🛠️  create and improve reusable skills  │
    └─────────────────────────────────────────┘
 ```
 

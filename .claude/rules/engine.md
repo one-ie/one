@@ -47,8 +47,7 @@ from outside the substrate.
 
 **Every loop reports verified numbers, not vibes.** Tests passed/total.
 Build time in ms. Deploy time per service. Health check latency. Rubric
-dimension scores (fit/form/truth/taste). These are the deterministic
-signals that calibrate pheromone.
+dimension scores. These are the deterministic signals that calibrate pheromone.
 
 ```typescript
 // Every loop ends like this — not "done", but "done with receipts"
@@ -58,7 +57,8 @@ signals that calibrate pheromone.
   buildMs: 22995,
   deployMs: { gateway: 13705, sync: 8249, nanoclaw: 9163, pages: 17391 },
   health: { gateway: 292, sync: 270, nanoclaw: 270 },
-  rubric: { fit: 0.92, form: 0.85, truth: 0.90, taste: 0.80 }
+  // /do code rubric — security/stability/simplicity/speed, gate ≥ 0.65
+  rubric: { security: 0.92, stability: 0.85, simplicity: 0.90, speed: 0.80 }
 }
 ```
 
@@ -72,7 +72,7 @@ sandwich applied to every automation skill.
 - `/wave` — reports dissolved/marked/warned agent counts per wave
 - `/sync` — reports tasks synced, hash-delta, KV writes
 - `/deploy` — reports W0 results, build ms, per-service deploy ms, health
-- `/done` — reports rubric score (fit + form + truth + taste)
+- `/done` — reports rubric score (security + stability + simplicity + speed, composite ≥ 0.65)
 - growth tick — reports per-loop timings (L1-L7 lastAtMs, nextAtMs)
 
 If you can't measure it, you can't route around it.

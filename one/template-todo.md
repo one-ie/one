@@ -35,6 +35,8 @@ tasks_picked: {N}
 tasks_verified_lifetime: {N}
 escape_alerts: {N}
 rubric_avg_7d: {0..1}
+rubric_velocity_7d: {±0.00}
+tokens_cache_hit_7d: {0..100}%
 capabilities_live: {N}
 revenue_7d: {$}
 ---
@@ -88,25 +90,30 @@ group ?s; count;
 
 ```tql
 match $t isa thing, has thing-type "task", has task-status "verified",
-  has verified-at ?at, has rubric-fit ?f, has rubric-form ?fm,
-  has rubric-truth ?tr, has rubric-taste ?ta;
+  has verified-at ?at,
+  has rubric-security ?sec, has rubric-stability ?sta,
+  has rubric-simplicity ?sim, has rubric-speed ?spd;
 where ?at >= now() - 7d;
-group by cycle; avg(?f, ?fm, ?tr, ?ta);
+group by cycle; avg(?sec, ?sta, ?sim, ?spd);
 ```
 
 ```
-cycle   fit   form  truth  taste  avg   Δ
-─────  ─────  ──── ───── ────── ────  ────
- C-6    0.72  0.81  0.88  0.76  0.79   —
- C-5    0.74  0.80  0.85  0.78  0.79  =
- C-4    0.78  0.82  0.89  0.80  0.82  +0.03
- C-3    0.82  0.84  0.91  0.81  0.85  +0.03
- C-2    0.84  0.85  0.90  0.83  0.86  +0.01
- C-1    0.85  0.85  0.89  0.84  0.86   —
-  C0    0.87  0.86  0.92  0.85  0.88  +0.02  ← now
+cycle   sec   sta   sim   spd   composite  Δ      cache%
+─────  ─────  ───── ───── ───── ─────────  ─────  ──────
+ C-6    0.72  0.81  0.70  0.75   0.75       —      42%
+ C-5    0.78  0.82  0.74  0.78   0.78      +0.03   51%
+ C-4    0.82  0.85  0.80  0.80   0.82      +0.04   63%
+ C-3    0.88  0.87  0.84  0.82   0.86      +0.04   72%
+ C-2    0.92  0.90  0.86  0.85   0.89      +0.03   79%
+ C-1    0.95  0.92  0.88  0.88   0.92      +0.03   83%
+  C0    0.97  0.95  0.90  0.90   0.94      +0.02   87%  ← now
 ```
 
-**Trend:** {improving | stable | degrading}. {≥ 0.65 for N cycles → capability promotion eligible.}
+`composite = 0.35·sec + 0.30·sta + 0.25·sim + 0.10·spd`
+`cache%` = prompt cache hit rate across all LLM calls this cycle.
+
+**Trend:** {improving | stable | degrading}. Velocity ≥ +0.02/cycle → compounding.
+{≥ 0.65 for N cycles → capability promotion eligible. Velocity flat for 3 cycles → diagnostic.}
 
 ---
 

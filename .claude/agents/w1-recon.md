@@ -47,11 +47,19 @@ Absolute paths only. Line numbers when citing code.
 
 ## Workflow
 
-1. Parse the scope: which files, which question, which dimension of `one.tql`.
-2. Load `/signal` and `/typedb` skills (frontmatter handles this). Consult `/typedb` only for schema questions — do not run queries unless the scope demands it.
-3. Use Grep for content search (never shell `grep`). Use Glob for filename search. Use Read with line offsets when a file is large.
-4. Build the findings list. Every entry gets a file path.
-5. End with the receipt line:
+1. **Seed from prior cycle** — read `.w4-improvements.json` if it exists. Every open
+   improvement item becomes a mandatory recon target alongside the TODO's scope.
+   ```bash
+   cat .w4-improvements.json 2>/dev/null | head -50
+   ```
+   If an item has appeared in 3+ consecutive cycles (check `docs/improvements.md`),
+   flag it as systemic in your findings. These files must be in your report.
+
+2. Parse the scope: which files, which question, which dimension of `one.tql`.
+3. Load `/signal` and `/typedb` skills (frontmatter handles this). Consult `/typedb` only for schema questions — do not run queries unless the scope demands it.
+4. Use Grep for content search (never shell `grep`). Use Glob for filename search. Use Read with line offsets when a file is large.
+5. Build the findings list. Every entry gets a file path.
+6. End with the receipt line:
 
 ```
 W1 receipt: files=<N> matches=<N> cross_refs=<N> open_questions=<N>

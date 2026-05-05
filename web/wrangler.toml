@@ -33,6 +33,8 @@ AGENT_ID = "one-demo"
 AGENT_NAME = "ONE Demo"
 AGENT_MODEL = "meta-llama/llama-4-maverick"
 ONE_API_URL = "https://dev.one.ie"
+RP_ID = "localhost"
+ORIGIN = "http://localhost:8787"
 
 # Custom domain
 [[routes]]
@@ -40,3 +42,13 @@ pattern = "demo.one.ie"
 custom_domain = true
 
 # Secrets: wrangler secret put OPENROUTER_API_KEY
+# Secrets: wrangler secret put SERVER_SECRET
+
+[[r2_buckets]]
+binding = "CONTENT"
+bucket_name = "one-content"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "one-owners"
+database_id = "0559422e-37de-4c27-9667-a43895578e6f"

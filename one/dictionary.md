@@ -680,6 +680,20 @@ Tasks get classified by pheromone too:
     ready      ── everything else (default)
 ```
 
+**Rubric attributes (set post-verify on `thing`):**
+
+| Attribute | Type | Set by | Meaning |
+|-----------|------|--------|---------|
+| `rubric-fit` | double | agent rubric (trade VERIFY) | Response fits the task spec |
+| `rubric-form` | double | agent rubric (trade VERIFY) | Response is well-formed |
+| `rubric-truth` | double | agent rubric (trade VERIFY) | Response is accurate |
+| `rubric-taste` | double | agent rubric (trade VERIFY) | Response is high-quality prose |
+| `rubric-security` | double | code rubric (/do W4) | Zero vulnerabilities, boundaries validated |
+| `rubric-stability` | double | code rubric (/do W4) | Tests pass, no type errors, loops closed |
+| `rubric-simplicity` | double | code rubric (/do W4) | Minimum code, every line earns its place |
+| `rubric-speed` | double | code rubric (/do W4) | 100% Lighthouse, lean tokens, fast build |
+| `rubric-composite` | double | code rubric (/do W4) | `0.35·sec + 0.30·sta + 0.25·sim + 0.10·spd` |
+
 **Relation:** `capability` — which unit offers which skill, at what price.
 **Relation:** `containment` — plan→cycle→task hierarchy (replaces `assignment`).
 **Relation:** `production` — task→skill when task reaches `verified`.

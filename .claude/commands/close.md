@@ -41,13 +41,14 @@ This is Rule 1 enforced at the human boundary.
 
 ### `<task-id>` — success
 
-1. Run W4 gate — score rubric (each dimension 0–1):
-   - **fit**: does it solve the stated problem?
-   - **form**: is code clean, tests passing, no regressions?
-   - **truth**: are claims accurate, no hallucinated APIs?
-   - **taste**: is style consistent with the codebase?
+1. Run W4 gate — score code rubric (each dimension 0–1, composite ≥ 0.65 to close):
+   - **security**:   no injections, no secrets, all API routes validated
+   - **stability**:  tests pass, zero type errors, every handler closes its loop
+   - **simplicity**: files focused, functions ≤ 20 lines, no ceremony beyond scope
+   - **speed**:      Lighthouse held, bundle ≤ W0, tokens lean, cache hit ≥ 80%
+   - composite: `0.35·security + 0.30·stability + 0.25·simplicity + 0.10·speed`
 2. POST `http://localhost:4321/api/tasks/{id}/complete`
-3. POST `http://localhost:4321/api/loop/mark-dims` with `{ fit, form, truth, taste }`:
+3. POST `http://localhost:4321/api/loop/mark-dims` with `{ security, stability, simplicity, speed }`:
    - Dim ≥ 0.5 → mark() on that dimension path (strength++)
    - Dim < 0.5 → warn() on that dimension path (resistance++)
 4. Self-checkoff: update task checkbox in the TODO file `[ ]` → `[x]`
@@ -57,23 +58,25 @@ This is Rule 1 enforced at the human boundary.
      "receiver": "loop:feedback",
      "data": {
        "tags": ["<task-tags>"],
-       "strength": "<rubric-avg 0–1>",
+       "strength": "<composite 0–1>",
        "content": {
          "task_id": "<id>",
-         "rubric": { "fit": X, "form": Y, "truth": Z, "taste": W },
+         "rubric": { "security": X, "stability": Y, "simplicity": Z, "speed": W },
+         "composite": N,
+         "velocity": "±N",
          "outcome": "result"
        }
      }
    }
    ```
    This is the return-path pheromone. Future agents with matching tags follow this trail.
-   `strength >= 0.65` → mark each tag path. `strength < 0.65` → warn(0.5) each tag path.
+   `composite >= 0.65` → mark each tag path. `composite < 0.65` → warn(0.5) each tag path.
 6. Report unlocked tasks (tasks where this was in their `blocks` list)
 7. Report:
    ```
    mark(+5) on <from>→<to>
-   Rubric: fit=X  form=Y  truth=Z  taste=W
-   Feedback: signal emitted → loop:feedback  tags=[<tags>]  strength=X
+   Rubric: security=X  stability=Y  simplicity=Z  speed=W  composite=N  velocity=±N
+   Feedback: signal emitted → loop:feedback  tags=[<tags>]  strength=N
    Unlocked: N tasks
    ```
 
@@ -116,7 +119,7 @@ This is Rule 1 enforced at the human boundary.
    ```
    Session:    N tasks completed  M tests  K commits
    Pheromone:  N marks  M warns this session
-   Rubric:     fit=X  form=Y  truth=Z  taste=W  (session averages)
+   Rubric:     security=X  stability=Y  simplicity=Z  speed=W  composite=N  velocity=±N  (session averages)
    Hardened:   N highways promoted to permanent (L6)
    Frontiers:  N new unexplored clusters (L7)
    Next:       1. <task>  priority=N  2. <task>  priority=M  3. <task>  priority=K

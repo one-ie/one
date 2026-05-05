@@ -57,7 +57,7 @@ EXECUTE
   read: relevant source code
   write: implement task (code + tests)
   test: vitest run (local pass before marking)
-  score: fit/form/truth/taste dimensions against rubric
+  score: security/stability/simplicity/speed (code rubric — W4 gate ≥ 0.65)
 
 READY TO MARK
   if W4 verify passes → call /close
@@ -68,7 +68,7 @@ READY TO MARK
 
 **Gates:**
 - **W0 (before):** bun run verify — baseline must be clean
-- **W4 (after):** rubric scoring (fit/form/truth/taste) + bun run verify
+- **W4 (after):** code rubric scoring (security/stability/simplicity/speed) + bun run verify
 
 ---
 
@@ -80,7 +80,7 @@ READY TO MARK
 ```
 W4 GATE (deterministic sandwich POST check)
   bun run verify (tsc --noEmit, vitest run)
-  rubric score: composite = 0.35·fit + 0.20·form + 0.30·truth + 0.15·taste
+  code rubric: composite = 0.35·security + 0.30·stability + 0.25·simplicity + 0.10·speed
   
   if violations: warn(edge, 1.0) — path weakened
   if any dim < 0.5: warn(edge, 1.0) — do not mark
@@ -95,7 +95,7 @@ MARK/WARN
 
 PHEROMONE UPDATE
   path "entry→task" gets strength [0-1]
-  four tagged dimensions: fit, form, truth, taste
+  four tagged dimensions: security, stability, simplicity, speed → rubric-* TypeDB attrs
   next /sync tick will weight routing by composite score
 ```
 
@@ -234,7 +234,8 @@ HUMAN (hour-day)     →  /do picks task → /close marks → /sync tick runs
 | **Loops** | 7 growth loops | loop.ts | L1-L3 (fast), L4-L7 (slow) |
 | **Flows** | Pheromone paths | routing.ts | weight = 1 + max(0, strength - resistance) × sensitivity |
 | **Naming** | Dictionary | docs/dictionary.md | canonical, alias[skin], nickname |
-| **Quality** | Rubric dimensions | rubric-score.ts | fit, form, truth, taste |
+| **Quality** | Agent rubric (trade VERIFY) | rubric-score.ts | fit, form, truth, taste |
+| **Quality** | Code rubric (/do W4) | rubric-score.ts | security, stability, simplicity, speed |
 | **Gates** | Sandwich | /sync, /close | W0 (before), W4 (after) |
 
 ---

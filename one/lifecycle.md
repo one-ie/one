@@ -274,7 +274,7 @@ The agent lifecycle above tracks a unit's **career** on the graph — weeks to m
 | 3 | OFFER     | memory         | `signal({ data.weight })`         | PRE-gates pass or dissolve (410/403) | Stage 3 SIGNAL (in)    |
 | 4 | ESCROW    | Sui            | `Escrow` shared object            | `Balance<SUI>` locked, deadline set  | — (trade-unique)       |
 | 5 | EXECUTE   | memory + LLM   | seller's `.on(skill)` handler     | `{result}` \| `{timeout}` \| ∅       | Stage 3 SIGNAL (out)   |
-| 6 | VERIFY    | rubric         | `markDims({fit,form,truth,taste})`| outcome classified vs rubric         | — (trade-unique)       |
+| 6 | VERIFY    | rubric         | `markDims({fit,form,truth,taste})` (agent rubric) or `markDims({security,stability,simplicity,speed})` (/do code rubric) | outcome classified vs rubric | — (trade-unique) |
 | 7 | SETTLE    | all three      | `mark(edge, weight)` atomic       | strength++, revenue++, coin moves    | Stage 4 MARK           |
 | 8 | RECEIPT   | Sui            | tx digest returned                | both sides see proof                 | — (implicit in MARK)   |
 | 9 | DISPUTE   | Sui + TypeDB   | escrow timeout \| `warn(1)`       | refund + path weakens                | Stage 5 ALARM          |
@@ -301,7 +301,7 @@ The agent doesn't graduate from SIGNAL to HIGHWAY as a ceremony. It's what TypeD
 
 **ESCROW** fires when the buyer-seller path has no pheromone history (first trade) or the bounty exceeds a trust threshold. Sui's `Escrow` shared object locks real tokens with a deadline. After ~5 successful escrowed trades, the path hardens and subsequent trades skip escrow — flowing as fast owned-object transfers instead. **Trust is purchased once, then compounds.**
 
-**VERIFY** is only explicit for outcome-priced trades (bounties) where the rubric gates payment release. For commodity skill calls, VERIFY collapses into EXECUTE — if the seller returned `{result}`, success is assumed and SETTLE fires immediately. The rubric is `{fit, form, truth, taste}` (see `.claude/rules/engine.md` Rule 3).
+**VERIFY** is only explicit for outcome-priced trades (bounties) where the rubric gates payment release. For commodity skill calls, VERIFY collapses into EXECUTE — if the seller returned `{result}`, success is assumed and SETTLE fires immediately. Two rubrics exist: agent rubric `{fit, form, truth, taste}` for LLM response quality in trades; code rubric `{security, stability, simplicity, speed}` for `/do` cycle W4 scoring (see `rubrics.md`).
 
 ### Trade-level × agent-level × revenue
 
@@ -322,7 +322,7 @@ The trade lifecycle adds **Marketplace** (Layer 4) revenue on top of what the ag
 
 ### Why this matters for /do and rubric routing
 
-A `/do` TODO cycle *is* a trade lifecycle with the developer as buyer and the agent-as-wave-worker as seller. W0 baseline = LIST + DISCOVER (which agent handles this tag cluster?). W1-W3 = OFFER + EXECUTE. W4 = VERIFY (rubric scoring). The mark at end-of-cycle = SETTLE. Every cycle deposits pheromone on the agent-tag edge, so the next cycle routes faster. Trade lifecycle and development loop are the same shape at different scales. (See `.claude/rules/engine.md` Rule 1 closed loop, Rule 3 deterministic results.)
+A `/do` TODO cycle *is* a trade lifecycle with the developer as buyer and the agent-as-wave-worker as seller. W0 baseline = LIST + DISCOVER (which agent handles this tag cluster?). W1-W3 = OFFER + EXECUTE. W4 = VERIFY (code rubric: security/stability/simplicity/speed, composite ≥ 0.65 stored as `rubric-security/stability/simplicity/speed/composite` on the `thing`). The mark at end-of-cycle = SETTLE. Every cycle deposits pheromone on the agent-tag edge, so the next cycle routes faster. Trade lifecycle and development loop are the same shape at different scales. (See `.claude/rules/engine.md` Rule 1 closed loop, Rule 3 deterministic results.)
 
 ### Rendered surface
 

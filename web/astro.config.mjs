@@ -28,6 +28,7 @@ export default defineConfig({
   integrations: [react()],
   build: { inlineStylesheets: 'always' },
   vite: {
+    server: { fs: { allow: ['..'] } },
     plugins: [tailwindcss()],
     resolve: {
       alias: {
@@ -45,6 +46,7 @@ export default defineConfig({
         'media-chrome/react',
         'motion',
       ],
+      noExternal: ['cookie'],
     },
     build: {
       rollupOptions: {

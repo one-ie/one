@@ -46,6 +46,7 @@ interface Props {
   currentMode?: ChatMode
   canSwitch?: boolean
   group?: string
+  slug?: string
 }
 
 const DEFAULT_STARTERS = [
@@ -92,7 +93,7 @@ function getMessageText(msg: UIMessage): string {
     .trim()
 }
 
-export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, currentMode, canSwitch, group = 'default' }: Props) {
+export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, currentMode, canSwitch, group = 'default', slug }: Props) {
   const [agentId, setAgentId] = useState<string | undefined>(undefined)
 
   useEffect(() => {
@@ -105,7 +106,7 @@ export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, curren
   const starters = agentMeta.starters.length > 0 ? agentMeta.starters : DEFAULT_STARTERS
 
   const { messages, sendMessage, addToolApprovalResponse, status, stop } = useChat({
-    transport: new DefaultChatTransport({ api: '/api/chat', body: { group, agentId } }),
+    transport: new DefaultChatTransport({ api: '/api/chat', body: { group, agentId, slug } }),
   })
 
   const [voice, setVoice] = useState<VoiceId>(DEFAULT_VOICE)
@@ -393,6 +394,8 @@ export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, curren
                     status={status}
                     speakFor={speakFor}
                     ttsAvailable={ttsAvailable}
+                    slug={slug}
+                    onIterateEval={(prompt) => sendMessage({ text: prompt })}
                     onSpeak={speak}
                     onApproval={addToolApprovalResponse}
                   />

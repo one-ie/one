@@ -1,0 +1,13 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { Chat } from '@/components/Chat'
+
+export const prerender = false
+
+const { slug } = Astro.params as { slug: string }
+const seed = Astro.url.searchParams.get('seed') ?? undefined
+---
+
+<Layout title={`Chat — @${slug}`} sidebar="mini" chat="none">
+  <Chat slug={slug} seed={seed} fullPage client:idle />
+</Layout>

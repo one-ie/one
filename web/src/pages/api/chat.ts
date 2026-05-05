@@ -1,8 +1,15 @@
 import type { APIRoute } from 'astro'
 import { createGroq } from '@ai-sdk/groq'
 import { createWorkersAI } from 'workers-ai-provider'
-import { convertToModelMessages, streamText, type UIMessage } from 'ai'
+import { convertToModelMessages, streamText, tool, type UIMessage } from 'ai'
+import { z } from 'zod'
 import { getCfCtx, getEnv } from '../../lib/cf-env'
+import { makeChallenge } from '../../lib/passkey'
+import { listFiles } from '../../lib/slug'
+import { runCase, type TestCase } from '../../lib/eval/runner'
+import { gradeCase } from '../../lib/eval/grader'
+import { aggregate } from '../../lib/eval/aggregate'
+import { buildIterationPrompt } from '../../lib/eval/iterate'
 
 export const prerender = false
 
@@ -42,6 +49,8 @@ export const POST: APIRoute = async ({ request }) => {
     GROQ_API_KEY?: string
     AI?: unknown
     CHAT_CACHE?: KVLike
+    SERVER_SECRET?: string
+    CONTENT?: R2Bucket
   }
   const groqApiKey = env.GROQ_API_KEY
   if (!groqApiKey) {
@@ -51,7 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
     })
   }
 
-  let body: { messages?: UIMessage[]; group?: string }
+  let body: { messages?: UIMessage[]; group?: string; slug?: string }
   try {
     body = await request.json()
   } catch {
@@ -81,9 +90,100 @@ export const POST: APIRoute = async ({ request }) => {
     }
   }
 
+  const slug = body.slug
+  let systemSuffix = ''
+  if (slug && env.CONTENT) {
+    const files = await listFiles(slug, env.CONTENT as R2Bucket)
+    if (files.length > 0) systemSuffix = `\n\nExisting files for @${slug}:\n${files.map(f => `- ${f}`).join('\n')}`
+  }
+
+  const writeSchema = z.object({
+    file: z.string().describe('Relative path like "page/about" or "agents/support"'),
+    content: z.string().describe('Full file content (markdown)'),
+  })
+
+  const writeTool = slug && env.SERVER_SECRET
+    ? {
+        write: tool({
+          description: "Write or update a file in the owner's space. Returns a pending challenge that must be approved.",
+          inputSchema: writeSchema,
+          execute: async (args: z.infer<typeof writeSchema>) => {
+            const { challenge, token } = await makeChallenge(env.SERVER_SECRET!)
+            return { kind: 'pending' as const, challenge, token, file: args.file, preview: args.content.slice(0, 300) }
+          },
+        }),
+      }
+    : undefined
+
+  const evalSchema = z.object({
+    skillPath: z.string().describe('Relative skill path like "process-refund"'),
+    iteration: z.number().optional().describe('Iteration number, defaults to 1'),
+  })
+
+  const evalTool = slug && env.CONTENT && groqApiKey
+    ? {
+        eval: tool({
+          description:
+            'Run eval suite on a skill: with-skill vs without-skill, write benchmark.json, return delta. skillPath is the skill name only, e.g. "csv-analyzer" — do not include "skills/" prefix.',
+          inputSchema: evalSchema,
+          execute: async (args: z.infer<typeof evalSchema>) => {
+            const skillPath = args.skillPath.replace(/^skills\//, '')
+            const iteration = args.iteration ?? 1
+            const [skillObj, evalsObj] = await Promise.all([
+              (env.CONTENT as R2Bucket).get(`${slug}/skills/${skillPath}.md`),
+              (env.CONTENT as R2Bucket).get(`${slug}/skills/${skillPath}/evals/evals.json`),
+            ])
+            if (!skillObj || !evalsObj)
+              return { kind: 'eval-error' as const, error: 'skill or evals.json not found' }
+            const [skillMd, evalsJson] = await Promise.all([skillObj.text(), evalsObj.text()])
+            let testCases: TestCase[]
+            try {
+              testCases = JSON.parse(evalsJson)
+            } catch {
+              return { kind: 'eval-error' as const, error: 'invalid evals.json' }
+            }
+            const skillName = skillPath.split('/').at(-1) ?? skillPath
+            const pairs = await Promise.all(
+              testCases.map(async tc => {
+                const [withRun, withoutRun] = await Promise.all([
+                  runCase(tc, skillMd, groqApiKey),
+                  runCase(tc, null, groqApiKey),
+                ])
+                const [withGrade, withoutGrade] = await Promise.all([
+                  gradeCase(tc, withRun, groqApiKey),
+                  gradeCase(tc, withoutRun, groqApiKey),
+                ])
+                return { tc, withRun, withGrade, withoutRun, withoutGrade }
+              }),
+            )
+            const benchmark = aggregate(
+              skillName,
+              iteration,
+              pairs.map(p => ({ run: p.withRun, grade: p.withGrade })),
+              pairs.map(p => ({ run: p.withoutRun, grade: p.withoutGrade })),
+            )
+            await (env.CONTENT as R2Bucket).put(
+              `${slug}/skills/_workspace/${skillName}/iteration-${iteration}/benchmark.json`,
+              JSON.stringify(benchmark, null, 2),
+            )
+            const failures = pairs
+              .filter(p => p.withGrade.passed < p.withGrade.total)
+              .map(p => ({ testCase: p.tc, run: p.withRun, grade: p.withGrade }))
+            return {
+              kind: 'eval-result' as const,
+              benchmark,
+              iterationPrompt: failures.length ? buildIterationPrompt(skillMd, failures) : null,
+            }
+          },
+        }),
+      }
+    : undefined
+
+  const tools = { ...(writeTool ?? {}), ...(evalTool ?? {}) }
   const opts = {
-    system: SYSTEM,
+    system: SYSTEM + systemSuffix,
     messages: await convertToModelMessages(messages),
+    ...(Object.keys(tools).length > 0 ? { tools } : {}),
   }
 
   let result

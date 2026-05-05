@@ -390,7 +390,7 @@ The fetcher follows the agentskills.io discovery convention (look for `SKILL.md`
 
 ### Trust gating for project-level skills
 
-Skills loaded from a freshly cloned, untrusted repo could inject hostile instructions. SDK runtimes gate project-level skill loading on a trust check — `oneie trust <path>` marks a project trusted and persists the decision. Chat-built sandboxes are always trusted (the owner *is* the project). Imports via URL/npm/github prompt for confirmation on first use and remember the answer.
+Skills loaded from a freshly cloned, untrusted repo could inject hostile instructions. SDK runtimes gate project-level skill loading on a trust check — `oneie trust <path>` marks a project trusted and persists the decision. Chat-built sandboxes are always trusted (the owner *is* the project). Imports via URL/npm/github prompt for confirmation on first use and remember the answer. `skill-creator` is auto-imported into every new sandbox at `<slug>/skills/skill-creator/` during provision — it's available in the owner's first conversation.
 
 ---
 

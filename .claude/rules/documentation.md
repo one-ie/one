@@ -96,7 +96,7 @@ These six docs are the **source of truth** and must stay in sync with code:
 | **one-ontology.md** | 6 dimensions, actor/group/thing/path/signal/hypothesis | Type system changes |
 | **routing.md** | L1-L7 loops, signal flow, priority formula | Loop/routing changes |
 | **lifecycle.md** | Agent journey stages, revenue flow | Lifecycle/economic changes |
-| **rubrics.md** | Quality dimensions (fit/form/truth/taste) and scoring | Rubric changes or new dimensions |
+| **rubrics.md** | Code rubric (security/stability/simplicity/speed) + agent rubric (fit/form/truth/taste) | Rubric changes or new dimensions |
 
 **Feature-specific docs** (rich-messages.md, webhooks.md, etc.) are updated per feature. Always link back to the six core docs.
 
@@ -176,7 +176,7 @@ When running `/do TODO-{name}.md`, the workflow enforces:
 1. **W2 must explicitly call out doc changes** — no surprise doc edits in W3
 2. **W3 spawns edit agents for both code AND docs** — parallel edits
 3. **W4 includes doc consistency check** — not just code tests
-4. **Every rubric score (fit/form/truth/taste) applies to docs too** — documentation quality matters
+4. **The code rubric (security/stability/simplicity/speed) applies to docs too** — simplicity means fewer words; stability means no broken links; security means no sensitive data exposed; speed means lean docs = fewer tokens to read
 
 ---
 
@@ -204,4 +204,4 @@ Every wave and cycle close triggers a propagate step — see [loop-close.md](../
 - YYYY-MM-DD · cycle N · wave N|gate · {one sentence} · rubric=0.NN · source=w1|w2|w3|w4|cycle
 ```
 
-W4 rubric applies to docs too: fit (solves stated problem), form (clean, no dead links), truth (accurate), taste (consistent style).
+W4 code rubric applies to docs too: security (no sensitive data), stability (no broken links, accurate references), simplicity (fewer words, no bloat), speed (lean = fewer tokens to read).

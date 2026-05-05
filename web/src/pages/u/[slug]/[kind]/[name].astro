@@ -1,0 +1,25 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { splitFrontmatter, renderMarkdown } from '@/lib/markdown'
+
+export const prerender = false
+
+const { slug, kind, name } = Astro.params as { slug: string; kind: string; name: string }
+const env = Astro.locals.runtime?.env
+if (!env) return new Response(null, { status: 503 })
+
+const obj = await env.CONTENT.get(`${slug}/${kind}/${name}`)
+if (!obj) return new Response(null, { status: 404 })
+
+const raw = await obj.text()
+const { frontmatter, body } = splitFrontmatter(raw)
+const html = renderMarkdown(body)
+const title = (frontmatter.title as string | undefined) ?? name
+---
+
+<Layout title={`${title} — @${slug}`} sidebar="mini" chat="none">
+  <article class="max-w-2xl mx-auto px-4 py-8 prose prose-invert">
+    <h1>{title}</h1>
+    <div set:html={html} />
+  </article>
+</Layout>

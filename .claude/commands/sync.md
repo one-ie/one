@@ -116,7 +116,7 @@ skips tasks that already exist.
 
 **Template format:** see `tasks/README.md`. Required fields: `id`, `name`.
 Optional: `description`, `tags`, `wave`, `value`, `effort`, `phase`, `persona`,
-`rubric: { fit, form, truth, taste }`, `price`, `currency`, `blocks`.
+`rubric: { security, stability, simplicity, speed }`, `price`, `currency`, `blocks`.
 
 **Example:**
 

@@ -35,11 +35,17 @@ ACTION:    replace | insert-after | delete
 NEW:       "<exact new_string>"
 RATIONALE: "<one sentence>"
 
-### Rubric targets (W4 gate)
-- fit:   >= 0.85   (<why this threshold>)
-- form:  >= 0.70
-- truth: >= 0.85
-- taste: >= 0.65
+### TODO type
+type: refactor | fix | feature | doc   (controls W4 simplicity benchmark)
+
+### Focus check (before W3)
+- <file> — <N> lines — <one thing | two things → split into X + Y>
+
+### Rubric targets (W4 gate — code rubric: security/stability/simplicity/speed)
+- security:   >= 0.90   (<why — boundary validation, no secrets, no injection vectors>)
+- stability:  >= 0.85   (<why — tests pass, no any, no silent returns>)
+- simplicity: >= 0.85   (<why — files focused, functions ≤ 20 lines, no ceremony>)
+- speed:      >= 0.80   (<why — Lighthouse held, bundle ≤ W0, tokens lean>)
 
 ### Docs to update in parallel (Rule: docs-first)
 - docs/<file>.md — <term/section affected>

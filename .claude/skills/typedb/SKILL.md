@@ -2072,11 +2072,17 @@ entity thing,
     owns goal,
     owns cycles-planned,
     owns escape-condition,
-    # Rubric (post-verify, any thing-type)
+    # Agent rubric (trade lifecycle VERIFY — LLM response quality)
     owns rubric-fit,
     owns rubric-form,
     owns rubric-truth,
     owns rubric-taste,
+    # Code rubric (/do W4 — security/stability/simplicity/speed)
+    owns rubric-security,
+    owns rubric-stability,
+    owns rubric-simplicity,
+    owns rubric-speed,
+    owns rubric-composite,
     plays capability:offered,
     plays blocks:blocker,
     plays blocks:blocked,
