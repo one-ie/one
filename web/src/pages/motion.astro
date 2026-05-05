@@ -1,7 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import Reveal from '@/components/motion/Reveal'
-import Stagger from '@/components/motion/Stagger'
+import Reveal from '@/components/motion/Reveal.astro'
+import Stagger from '@/components/motion/Stagger.astro'
 import HeroScene from '@/components/motion/demo/HeroScene'
 import ScrollCounter from '@/components/motion/demo/ScrollCounter'
 import FeatureTabs from '@/components/motion/FeatureTabs'
@@ -13,7 +13,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        1. HOOK — above the fold, immediate value, no fluff
   ════════════════════════════════════════════════════════════════════════ -->
   <section class="hero">
-    <Reveal client:visible dist="lg" speed="slow" className="hero-copy">
+    <Reveal dist="lg" speed="slow" class="hero-copy">
       <p class="eyebrow">Motion System · v1</p>
       <h1>Crisp.<br/>Purposeful.<br/>Fast.</h1>
       <p class="hero-sub">
@@ -41,7 +41,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        2. TENSION — name the problem before the solution
   ════════════════════════════════════════════════════════════════════════ -->
   <section class="tension-section">
-    <Reveal client:visible dist="md" className="tension-inner">
+    <Reveal dist="md" class="tension-inner">
       <blockquote>
         "Motion without discipline is noise.<br/>
         Motion with discipline is product polish."
@@ -58,7 +58,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        3. STATS BAR — social proof / credibility at a glance
   ════════════════════════════════════════════════════════════════════════ -->
   <div class="stats-bar-wrapper">
-    <Stagger client:visible className="stats-bar" stagger={0.08}>
+    <Stagger class="stats-bar" stagger={0.08}>
       <div class="stat">
         <span class="stat-n">4</span>
         <span class="stat-label">primitives</span>
@@ -90,7 +90,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        4. OVERVIEW — "what you get" before the deep dive
   ════════════════════════════════════════════════════════════════════════ -->
   <section class="section">
-    <Reveal client:visible className="section-head">
+    <Reveal class="section-head">
       <p class="eyebrow">Architecture</p>
       <h2>Three layers, top to bottom</h2>
       <p class="muted">
@@ -99,7 +99,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
       </p>
     </Reveal>
 
-    <Stagger client:visible className="arch-grid" stagger={0.09}>
+    <Stagger class="arch-grid" stagger={0.09}>
       <div class="arch-card arch-card--1">
         <div class="arch-num">1</div>
         <div class="arch-body">
@@ -131,7 +131,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        5. FEATURE DEEP-DIVE — vertical tabs with live interactive demos
   ════════════════════════════════════════════════════════════════════════ -->
   <section class="section section--wide">
-    <Reveal client:visible className="section-head">
+    <Reveal class="section-head">
       <p class="eyebrow">Capabilities</p>
       <h2>Every primitive, live</h2>
       <p class="muted">Click a tab. Try the demo. All six capabilities in one place.</p>
@@ -144,7 +144,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        6. SIGNATURE MOMENT — ScrollScene as a standalone experience
   ════════════════════════════════════════════════════════════════════════ -->
   <div class="scene-intro">
-    <Reveal client:visible className="scene-intro-text">
+    <Reveal class="scene-intro-text">
       <p class="eyebrow">ScrollScene in the wild</p>
       <h2>Scroll to advance the signal lifecycle</h2>
     </Reveal>
@@ -156,13 +156,13 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        7. PROOF — performance guardrails (handle objections)
   ════════════════════════════════════════════════════════════════════════ -->
   <section class="section">
-    <Reveal client:visible className="section-head">
+    <Reveal class="section-head">
       <p class="eyebrow">Performance</p>
       <h2>The guardrails</h2>
       <p class="muted">Built-in constraints so you can't accidentally ship slow animations.</p>
     </Reveal>
 
-    <Stagger client:visible className="guardrails" stagger={0.07}>
+    <Stagger class="guardrails" stagger={0.07}>
       <div class="guardrail">
         <span class="gr-icon gr-good">✓</span>
         <div>
@@ -205,12 +205,12 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        8. INSTALL — remove friction, show it's three lines
   ════════════════════════════════════════════════════════════════════════ -->
   <section class="section install-section">
-    <Reveal client:visible className="section-head">
+    <Reveal class="section-head">
       <p class="eyebrow">Integration</p>
       <h2>Three steps</h2>
     </Reveal>
 
-    <Stagger client:visible className="install-steps" stagger={0.1}>
+    <Stagger class="install-steps" stagger={0.1}>
       <div class="install-step">
         <div class="step-num">1</div>
         <div>
@@ -222,19 +222,19 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
         <div class="step-num">2</div>
         <div>
           <p class="step-label">Import a primitive</p>
-          <pre class="code-line"><code>import Reveal from '@/components/motion/Reveal'</code></pre>
+          <pre class="code-line"><code>import Reveal from '@/components/motion/Reveal.astro'</code></pre>
         </div>
       </div>
       <div class="install-step">
         <div class="step-num">3</div>
         <div>
           <p class="step-label">Drop it in your Astro file</p>
-          <pre class="code-line"><code>&lt;Reveal client:visible&gt;&lt;HeroHeadline /&gt;&lt;/Reveal&gt;</code></pre>
+          <pre class="code-line"><code>&lt;Reveal&gt;&lt;HeroHeadline /&gt;&lt;/Reveal&gt;</code></pre>
         </div>
       </div>
     </Stagger>
 
-    <Reveal client:visible delay={0.15} className="install-note">
+    <Reveal delay={0.15} class="install-note">
       <p>
         <strong>That's it.</strong> No provider setup, no global config.
         The motion tokens live in <code>src/lib/motion.ts</code> — edit the four numbers and
@@ -247,13 +247,13 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
        9. CTA — close the loop, single action
   ════════════════════════════════════════════════════════════════════════ -->
   <section class="cta-section">
-    <Reveal client:visible dist="lg" speed="slow" className="cta-inner">
+    <Reveal dist="lg" speed="slow" class="cta-inner">
       <h2>One system.<br/>Zero overhead.</h2>
       <p class="cta-sub">
         Unused primitives tree-shake to nothing.<br/>
         Islands defer until they're needed.
       </p>
-      <Stagger client:visible stagger={0.06} className="cta-pills">
+      <Stagger stagger={0.06} class="cta-pills">
         <span class="pill">motion 12</span>
         <span class="pill">Astro 6</span>
         <span class="pill">React 19</span>

@@ -1,10 +1,11 @@
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
-import { X } from 'lucide-react'
+import { EyeOff, LayoutPanelLeft, MessageCircle, PanelRightOpen, X } from 'lucide-react'
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Icon } from '@/components/ui/Icon'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { emitClick } from '@/lib/ui-signal'
+import { getAgentMeta, listAgentsMeta } from '@/lib/agents-meta'
 import {
   Conversation,
   ConversationContent,
@@ -33,19 +34,27 @@ const VoiceMenu = lazy(() =>
 const AddMenu = lazy(() =>
   import('@/components/chat/AddMenu').then((m) => ({ default: m.AddMenu })),
 )
+const PayPanel = lazy(() => import('@/components/pay/PayPanel').then(m => ({ default: m.PayPanel })))
+
+type ChatMode = 'wide' | 'rail' | 'icon' | 'none'
 
 interface Props {
   fullPage?: boolean
+  mode?: 'popover' | 'rail-25' | 'rail-45'
   onClose?: () => void
+  onModeChange?: (m: ChatMode) => void
+  currentMode?: ChatMode
+  canSwitch?: boolean
   group?: string
 }
 
-const STARTERS = [
+const DEFAULT_STARTERS = [
   'What is ONE?',
   'Show highways',
   'How do I sell a skill?',
   'How do I buy?',
-] as const
+  'Show pricing',
+]
 
 type VoiceId = 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer'
 const DEFAULT_VOICE: VoiceId = 'alloy'
@@ -83,9 +92,20 @@ function getMessageText(msg: UIMessage): string {
     .trim()
 }
 
-export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
+export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, currentMode, canSwitch, group = 'default' }: Props) {
+  const [agentId, setAgentId] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('agent') ?? undefined
+    setAgentId(id)
+  }, [])
+
+  const agentMeta = getAgentMeta(agentId)
+  const allAgents = listAgentsMeta()
+  const starters = agentMeta.starters.length > 0 ? agentMeta.starters : DEFAULT_STARTERS
+
   const { messages, sendMessage, addToolApprovalResponse, status, stop } = useChat({
-    transport: new DefaultChatTransport({ api: '/api/chat', body: { group } }),
+    transport: new DefaultChatTransport({ api: '/api/chat', body: { group, agentId } }),
   })
 
   const [voice, setVoice] = useState<VoiceId>(DEFAULT_VOICE)
@@ -94,6 +114,7 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
   const [ttsAvailable, setTtsAvailable] = useState(false)
   const [ttsProvider, setTtsProvider] = useState<'openai' | 'cf' | null>(null)
   const sendStartRef = useRef<number>(0)
+  const [showPay, setShowPay] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -131,6 +152,13 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
       sendStartRef.current = 0
     }
   }, [status])
+
+  useEffect(() => {
+    if (showPay) return
+    const last = messages[messages.length - 1]
+    if (last?.role !== 'user') return
+    if (/\b(buy|upgrade|pay|subscribe|pricing|plans?)\b/i.test(getMessageText(last))) setShowPay(true)
+  }, [messages, showPay])
 
   // Consume ?q= once after mount and submit it (suggestion-button progressive enhancement)
   useEffect(() => {
@@ -196,6 +224,10 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
 
   const containerClass = fullPage
     ? 'flex flex-col h-full max-w-3xl mx-auto text-base'
+    : mode === 'rail-45'
+    ? 'flex flex-col h-full text-base'
+    : mode === 'rail-25'
+    ? 'flex flex-col h-full text-sm'
     : 'flex flex-col h-[500px] w-[380px] text-base'
 
   const submit = (text: string, files?: FileUIPart[]) => {
@@ -218,22 +250,56 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
       <style>{`.chat-prompt [data-slot="input-group"]{border:none!important;box-shadow:none!important;outline:none!important}.chat-prompt textarea{border:none!important;box-shadow:none!important;outline:none!important}`}</style>
       <TooltipProvider>
         <div className={containerClass}>
-          {!fullPage && (
+          {!fullPage && (mode === 'popover' || canSwitch) && (
             <div
-              className="flex items-center justify-between px-4 py-3 bg-background border-b"
+              className="flex items-center justify-between px-3 py-2 bg-background border-b"
               style={{ borderColor: 'var(--color-border)' }}
             >
-              <span className="font-medium text-sm">Chat with ONE</span>
-              {onClose && (
-                <button
-                  type="button"
-                  onClick={onClose}
-                  aria-label="Close chat"
-                  className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-font/60 hover:text-font hover:bg-foreground transition"
-                >
-                  <Icon icon={X} size="md" />
-                </button>
-              )}
+              <span className="font-medium text-sm">Chat</span>
+              <div className="flex items-center gap-0.5">
+                {canSwitch && onModeChange && (
+                  <>
+                    <button
+                      onClick={() => { emitClick('ui:layout:mode-switch'); onModeChange('wide') }}
+                      className={`p-1.5 rounded-md transition-colors ${currentMode === 'wide' ? 'bg-primary text-on-primary' : 'text-font/60 hover:text-font'}`}
+                      title="Wide"
+                    >
+                      <LayoutPanelLeft size={14} strokeWidth={1.5} />
+                    </button>
+                    <button
+                      onClick={() => { emitClick('ui:layout:mode-switch'); onModeChange('rail') }}
+                      className={`p-1.5 rounded-md transition-colors ${currentMode === 'rail' ? 'bg-primary text-on-primary' : 'text-font/60 hover:text-font'}`}
+                      title="Rail"
+                    >
+                      <PanelRightOpen size={14} strokeWidth={1.5} />
+                    </button>
+                    <button
+                      onClick={() => { emitClick('ui:layout:mode-switch'); onModeChange('icon') }}
+                      className="p-1.5 rounded-md transition-colors text-font/60 hover:text-font"
+                      title="Minimize"
+                    >
+                      <MessageCircle size={14} strokeWidth={1.5} />
+                    </button>
+                    <button
+                      onClick={() => { emitClick('ui:layout:mode-switch'); onModeChange('none') }}
+                      className="p-1.5 rounded-md transition-colors text-font/60 hover:text-font"
+                      title="Dismiss"
+                    >
+                      <EyeOff size={14} strokeWidth={1.5} />
+                    </button>
+                  </>
+                )}
+                {mode === 'popover' && onClose && (
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Close chat"
+                    className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-font/60 hover:text-font hover:bg-foreground transition"
+                  >
+                    <Icon icon={X} size="md" />
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -251,8 +317,44 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                   />
                   <div className="text-center">
                     <p className="text-lg mb-1">Hello!</p>
-                    <p className="text-sm text-font/60">Ask me anything about ONE.</p>
+                    <p className="text-sm text-font/60">{agentMeta.description}</p>
                   </div>
+
+                  {allAgents.length > 1 && (
+                    <div className="w-full max-w-2xl px-6 overflow-x-auto">
+                      <div className="flex gap-3 pb-1 justify-center">
+                        {allAgents.map((a, i) => {
+                          const isActive = a.id === agentMeta.id
+                          const href = i === 0 ? '/chat' : `/chat?agent=${a.id}`
+                          const tones = ['primary', 'secondary', 'tertiary'] as const
+                          const tone = tones[i % tones.length]
+                          return (
+                            <a
+                              key={a.id}
+                              href={href}
+                              className="shrink-0 flex items-start gap-3 p-3 rounded-xl border w-44 transition-colors no-underline"
+                              style={{
+                                borderColor: isActive ? 'var(--color-primary)' : 'var(--color-border)',
+                                background: 'var(--color-foreground)',
+                              }}
+                              onClick={() => emitClick('ui:chat:agent-select', { agentId: a.id })}
+                            >
+                              <span
+                                className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold shrink-0 bg-${tone} text-on-${tone}`}
+                              >
+                                {a.name.slice(0, 1).toUpperCase()}
+                              </span>
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium truncate">{a.title}</p>
+                                <p className="text-xs text-font/50 leading-tight line-clamp-2 mt-0.5">{a.description}</p>
+                              </div>
+                            </a>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                   <form
                     method="get"
                     action="/chat"
@@ -268,7 +370,7 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                       submit(text)
                     }}
                   >
-                    {STARTERS.map((s) => (
+                    {starters.map((s) => (
                       <button
                         key={s}
                         type="submit"
@@ -318,6 +420,11 @@ export function Chat({ fullPage = false, onClose, group = 'default' }: Props) {
                     <div className="h-3 bg-foreground rounded w-1/2 animate-pulse" />
                   </div>
                 </div>
+              )}
+              {showPay && (
+                <Suspense fallback={null}>
+                  <PayPanel onComplete={(piId) => sendMessage({ text: `Payment ${piId} confirmed — plan activates shortly.` })} />
+                </Suspense>
               )}
             </ConversationContent>
             <ConversationScrollButton />

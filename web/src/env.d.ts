@@ -1,5 +1,10 @@
 /// <reference types="astro/client" />
 
+declare module '*.md?raw' {
+  const content: string
+  export default content
+}
+
 interface Runtime {
   env: {
     OPENROUTER_API_KEY: string

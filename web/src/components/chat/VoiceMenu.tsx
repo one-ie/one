@@ -1,16 +1,12 @@
 import { Volume2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { emitClick } from '@/lib/ui-signal'
 import {
-  VoiceSelector,
-  VoiceSelectorContent,
-  VoiceSelectorEmpty,
-  VoiceSelectorGroup,
-  VoiceSelectorInput,
-  VoiceSelectorItem,
-  VoiceSelectorList,
-  VoiceSelectorTrigger,
-} from '@/components/ai-elements/voice-selector'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { emitClick } from '@/lib/ui-signal'
 
 export const VOICES = [
   { id: 'alloy', label: 'Alloy', desc: 'Neutral, balanced' },
@@ -31,14 +27,10 @@ interface Props {
 }
 
 export function VoiceMenu({ open, onOpenChange, voice, onVoiceChange }: Props) {
+  const current = VOICES.find((v) => v.id === voice)
   return (
-    <VoiceSelector
-      open={open}
-      onOpenChange={onOpenChange}
-      value={voice}
-      onValueChange={(v) => v && onVoiceChange(v as VoiceId)}
-    >
-      <VoiceSelectorTrigger asChild>
+    <DropdownMenu open={open} onOpenChange={onOpenChange}>
+      <DropdownMenuTrigger asChild>
         <Button
           type="button"
           variant="ghost"
@@ -47,31 +39,34 @@ export function VoiceMenu({ open, onOpenChange, voice, onVoiceChange }: Props) {
           onClick={() => emitClick('ui:chat:voice-open')}
         >
           <Volume2 className="size-4" />
-          {VOICES.find((v) => v.id === voice)?.label ?? 'Voice'}
+          {current?.label ?? 'Voice'}
         </Button>
-      </VoiceSelectorTrigger>
-      <VoiceSelectorContent>
-        <VoiceSelectorInput placeholder="Search voices…" />
-        <VoiceSelectorList>
-          <VoiceSelectorEmpty>No voice found.</VoiceSelectorEmpty>
-          <VoiceSelectorGroup heading="OpenAI voices">
-            {VOICES.map((v) => (
-              <VoiceSelectorItem
-                key={v.id}
-                value={v.id}
-                onSelect={(value) => {
-                  emitClick('ui:chat:voice-pick', { voice: value })
-                  onVoiceChange(value as VoiceId)
-                  onOpenChange(false)
-                }}
-              >
-                <span className="font-medium">{v.label}</span>
-                <span className="text-font/60 text-xs ml-2">{v.desc}</span>
-              </VoiceSelectorItem>
-            ))}
-          </VoiceSelectorGroup>
-        </VoiceSelectorList>
-      </VoiceSelectorContent>
-    </VoiceSelector>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        sideOffset={4}
+        className="bg-foreground min-w-56 p-1"
+      >
+        {VOICES.map((v) => {
+          const active = v.id === voice
+          return (
+            <DropdownMenuItem
+              key={v.id}
+              data-active={active || undefined}
+              className="flex items-center justify-between gap-3 rounded-md px-3 py-2 focus:!bg-primary focus:!text-on-primary data-[active]:!bg-primary/15"
+              onSelect={(e) => {
+                e.preventDefault()
+                emitClick('ui:chat:voice-pick', { voice: v.id })
+                onVoiceChange(v.id)
+                onOpenChange(false)
+              }}
+            >
+              <span className="font-medium">{v.label}</span>
+              <span className="text-font/60 text-xs">{v.desc}</span>
+            </DropdownMenuItem>
+          )
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

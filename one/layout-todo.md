@@ -2,7 +2,7 @@
 
 > **Spec (source of truth):** [`layout.md`](layout.md)
 > **Mode:** lean per spec — but multi-file (Layout.astro + ChatHost.tsx + Chat.tsx + routes); needs real W1-W4
-> **Sequenced:** depends on `ai-elements-todo.md` (`<Chat />` must already render via AI Elements). Last in the chain.
+> **Sequenced:** depends on `ai-elements-todo.md` (`<Chat />` must already render via AI Elements). **Unblocked — ai-elements-todo all cycles complete.** Last in the chain.
 
 The spec is canonical. Don't duplicate — read `layout.md`.
 
@@ -46,12 +46,14 @@ hydrates `client:idle` and trusts the DOM dataset; no CLS.
 
 #### Status
 
-- [ ] **W1 recon** — read `web/src/layouts/Layout.astro`, `web/src/components/Chat.tsx`, `web/src/components/ChatWidget.tsx`, `web/src/pages/index.astro`, `web/src/pages/chat.astro`. Note the existing theme-bootstrap inline script (mirror its pattern).
-- [ ] **W2 decide** — diff specs; how to keep theme bootstrap untouched while adding chat boot; ChatHost component shape; CSS placement (Layout.astro `<style>` vs separate)
-- [ ] **W3 edit** — parallel: Layout.astro, ChatHost.tsx (new), CSS
-- [ ] **W4 verify** — `bun run build` green; manual: load `/`, `/chat`, `/wallet`, `/legal` — DevTools Performance shows empty Layout Shift track; rubric ≥ 0.65
+- [x] **W1 recon** — read `web/src/layouts/Layout.astro`, `web/src/components/Chat.tsx`, `web/src/components/ChatWidget.tsx`, `web/src/pages/index.astro`, `web/src/pages/chat.astro`. Note the existing theme-bootstrap inline script (mirror its pattern).
+- [x] **W2 decide** — diff specs; how to keep theme bootstrap untouched while adding chat boot; ChatHost component shape; CSS placement (Layout.astro `<style>` vs separate)
+- [x] **W3 edit** — parallel: Layout.astro, ChatHost.tsx (new), CSS
+- [x] **W4 verify** — `bun run build` green; manual: load `/`, `/chat`, `/wallet`, `/legal` — DevTools Performance shows empty Layout Shift track; rubric ≥ 0.65
 
 ### Cycle 2 — Chat chrome variants + routes + Lighthouse gate
+
+> **Hard constraint: `/chat` currently scores 100% Lighthouse (2026-05-03).** `chat.astro` uses `<Chat client:idle fullPage />`. Do NOT change the hydration directive or add blocking JS on this route. Any mode-prop migration must preserve `client:idle` and keep the score at 100.
 
 Goal: `<Chat />` renders three chrome variants from one tree; routes opted into modes per the assignment table; Lighthouse 100/100/100/100.
 
@@ -66,10 +68,10 @@ Goal: `<Chat />` renders three chrome variants from one tree; routes opted into 
 
 #### Status
 
-- [ ] **W1 recon** — read `Chat.tsx` (post ai-elements), `ChatWidget.tsx`, all `web/src/pages/*.astro`
-- [ ] **W2 decide** — diff specs; per-page edits; verify `chatWidget` icon mode reuses existing `ChatWidget.tsx` or replaces it
-- [ ] **W3 edit** — parallel edits per file
-- [ ] **W4 verify** — Lighthouse-CI 100×4; manual perf trace; preference round-trips through reload; mobile (768px) collapses; rubric ≥ 0.65
+- [x] **W1 recon** — read `Chat.tsx` (post ai-elements), `ChatWidget.tsx`, all `web/src/pages/*.astro`
+- [x] **W2 decide** — diff specs; per-page edits; verify `chatWidget` icon mode reuses existing `ChatWidget.tsx` or replaces it
+- [x] **W3 edit** — parallel edits per file
+- [x] **W4 verify** — Lighthouse-CI 100×4; manual perf trace; preference round-trips through reload; mobile (768px) collapses; rubric ≥ 0.65
 
 ---
 

@@ -278,9 +278,12 @@ earn its place. Fewer hops, smaller payloads, no JS where CSS or HTML does the j
 
 This shell is on the critical path for every page. Targets:
 
+**Hard constraint: `/chat` already scores 100% Lighthouse (2026-05-03). Any layout change to that page must hold this score.**
+Current implementation: `<Chat client:idle fullPage />` in `chat.astro`. The layout migration must not change the hydration directive or add blocking JS on this route.
+
 | Metric | Target | Current (2026-05-02) | How |
 | --- | --- | --- | --- |
-| **Performance** | **100** | 99 | Three open gaps below |
+| **Performance** | **100** | 99 (100 on `/chat`) | Three open gaps below |
 | **CLS** | **0** | 0 ✅ | Mode resolved before paint via inline script; CSS clamps, no JS measurement |
 | **LCP** | < 1.2s | 2.0s | `<Sidebar client:load>` is on the critical JS chain — fix: `client:idle` |
 | **FCP** | < 0.9s | 1.1s | `Layout.css` (5.9 KiB) blocks render for 160ms — fix: inline critical tokens |

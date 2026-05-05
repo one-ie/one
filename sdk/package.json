@@ -31,6 +31,10 @@
     "./testing": {
       "types": "./dist/testing/index.d.ts",
       "import": "./dist/testing/index.js"
+    },
+    "./compile": {
+      "types": "./dist/compile.d.ts",
+      "import": "./dist/compile.js"
     }
   },
   "peerDependencies": {

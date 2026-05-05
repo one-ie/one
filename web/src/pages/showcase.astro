@@ -7,8 +7,9 @@ import { Showcase } from '../components/Showcase'
 <Layout title="Showcase — ONE" sidebar="mini">
   <Fragment slot="head">
     <link rel="preload" href="/icon.svg" as="image" type="image/svg+xml" />
-    <link rel="preconnect" href="/api/chat" />
-    <link rel="dns-prefetch" href="/api/chat" />
+    <link rel="preconnect" href="/api/showcase-chat" />
+    <link rel="dns-prefetch" href="/api/showcase-chat" />
+    <link rel="prefetch" href="/api/openrouter-models" />
   </Fragment>
   <div class="h-[100dvh] overflow-hidden">
     <Showcase client:idle />

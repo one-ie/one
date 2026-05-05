@@ -22,7 +22,7 @@ function Row({ href, label, icon, active, open, indent }: RowProps) {
       className={cn(
         'group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm',
         'text-font/60 hover:bg-foreground/60 hover:text-font',
-        active && 'bg-foreground text-font font-medium',
+        active && 'bg-primary text-on-primary font-medium hover:bg-primary hover:text-on-primary',
         indent && 'pl-9',
         !open && 'justify-center px-0',
       )}
@@ -37,12 +37,6 @@ function Row({ href, label, icon, active, open, indent }: RowProps) {
       >
         {label}
       </span>
-      {active && (
-        <span
-          className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-r-full bg-primary"
-          aria-hidden
-        />
-      )}
     </a>
   )
 }
