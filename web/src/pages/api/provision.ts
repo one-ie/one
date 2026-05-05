@@ -39,6 +39,9 @@ export const POST: APIRoute = async ({ request, url }) => {
     slug?: string
   }
 
+  if (!body.challenge || !body.token || !body.registration) {
+    return new Response(JSON.stringify({ error: 'missing required fields' }), { status: 400 })
+  }
   if (!await checkToken(env.SERVER_SECRET, body.challenge, body.token)) {
     return new Response(JSON.stringify({ error: 'invalid or expired challenge' }), { status: 400 })
   }

@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware'
 
 export const onRequest = defineMiddleware(async (ctx, next) => {
+  if (ctx.isPrerendered) return next()
   const host = ctx.request.headers.get('host') ?? ''
   const isPrimary =
     host === 'one.ie' ||

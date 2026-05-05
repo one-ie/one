@@ -5,8 +5,8 @@ import { listFiles } from '@/lib/slug'
 export const prerender = false
 
 const { slug, kind } = Astro.params as { slug: string; kind: string }
-const env = Astro.locals.runtime?.env
-if (!env) return Astro.redirect('/')
+const env = (await import('cloudflare:workers' as string)).env as { CONTENT?: R2Bucket }
+if (!env.CONTENT) return Astro.redirect('/')
 
 const allFiles = await listFiles(slug, env.CONTENT)
 const items = allFiles

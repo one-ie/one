@@ -6,8 +6,8 @@ import { getSlugOwner, listFiles } from '@/lib/slug'
 export const prerender = false
 
 const { slug } = Astro.params as { slug: string }
-const env = Astro.locals.runtime?.env
-if (!env) return Astro.redirect('/')
+const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Database; CONTENT?: R2Bucket }
+if (!env.DB || !env.CONTENT) return Astro.redirect('/')
 
 const owner = await getSlugOwner(slug, env.DB)
 if (!owner) return new Response(null, { status: 404 })

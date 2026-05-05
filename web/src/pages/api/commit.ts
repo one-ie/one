@@ -23,6 +23,9 @@ export const POST: APIRoute = async ({ request, url }) => {
     expectedSha?: string
   }
 
+  if (!body.slug || !body.file || !body.challenge || !body.token || !body.assertion) {
+    return new Response(JSON.stringify({ error: 'missing required fields' }), { status: 400 })
+  }
   if (!await checkToken(env.SERVER_SECRET, body.challenge, body.token)) {
     return new Response(JSON.stringify({ error: 'invalid or expired challenge' }), { status: 400 })
   }
