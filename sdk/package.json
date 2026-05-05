@@ -56,6 +56,8 @@
   },
   "devDependencies": {
     "@types/node": "^22",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "typescript": "5.9.2"
   },
   "license": "SEE LICENSE IN https://one.ie/free-license",

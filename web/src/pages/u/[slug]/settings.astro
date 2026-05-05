@@ -1,0 +1,69 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { getSlugOwner } from '@/lib/slug'
+
+export const prerender = false
+
+const { slug } = Astro.params as { slug: string }
+const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Database }
+
+const owner = env.DB ? await getSlugOwner(slug, env.DB) : null
+if (!owner) return Astro.redirect(`/u/${slug}`)
+
+const row = owner as typeof owner & { wallet?: string; agentverse_key_enc?: string }
+---
+
+<Layout title={`@${slug} settings`}>
+  <div class="max-w-xl mx-auto px-4 py-12 flex flex-col gap-8">
+    <header>
+      <h1 class="text-2xl font-bold text-font">Settings</h1>
+      <p class="text-font/60 text-sm mt-1">@{slug}</p>
+    </header>
+
+    <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
+      <h2 class="font-semibold text-font">Identity</h2>
+      <div class="flex flex-col gap-1">
+        <span class="text-xs text-font/60">Slug</span>
+        <code class="text-sm bg-foreground px-3 py-2 rounded-lg text-font">{slug}</code>
+      </div>
+      <div class="flex flex-col gap-1">
+        <span class="text-xs text-font/60">Public key (first device)</span>
+        <code class="text-xs bg-foreground px-3 py-2 rounded-lg text-font break-all">{owner.pubkey}</code>
+      </div>
+    </section>
+
+    <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
+      <h2 class="font-semibold text-font">Wallet &amp; integrations</h2>
+      <form method="POST" action={`/api/settings`} class="flex flex-col gap-4">
+        <input type="hidden" name="slug" value={slug} />
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-medium text-font">Wallet address</label>
+          <input
+            name="wallet"
+            type="text"
+            value={row.wallet ?? ''}
+            placeholder="0x… or sui1…"
+            class="px-3.5 py-2.5 rounded-lg bg-foreground text-font border text-sm focus:outline-none"
+            style="border-color:var(--color-border)"
+          />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-medium text-font">Agentverse API key (encrypted)</label>
+          <input
+            name="agentverse_key"
+            type="password"
+            placeholder="Leave blank to keep existing"
+            class="px-3.5 py-2.5 rounded-lg bg-foreground text-font border text-sm focus:outline-none"
+            style="border-color:var(--color-border)"
+          />
+          <span class="text-xs text-font/40">Stored encrypted with your passkey. Never leaves your device unencrypted.</span>
+        </div>
+        <button type="submit" class="self-start px-4 py-2 rounded-lg bg-primary text-on-primary text-sm font-medium">
+          Save changes
+        </button>
+      </form>
+    </section>
+
+    <a href={`/u/${slug}`} class="text-sm text-font/60 hover:text-font">← Back to profile</a>
+  </div>
+</Layout>

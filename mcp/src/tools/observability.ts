@@ -150,8 +150,8 @@ export function observabilityTools(): McpTool[] {
         const nextTags = res.headers.get("X-Turn-Tags") ?? "";
         const content = raw
           .split("\n")
-          .filter((l) => l.startsWith("0:"))
-          .map((l) => { try { return JSON.parse(l.slice(2)); } catch { return ""; } })
+          .filter((l: string) => l.startsWith("0:"))
+          .map((l: string) => { try { return JSON.parse(l.slice(2)); } catch { return ""; } })
           .join("");
         return { content: content || raw, nextTags: nextTags ? nextTags.split(",") : [] };
       },

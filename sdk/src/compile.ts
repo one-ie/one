@@ -208,6 +208,12 @@ function parseFrontmatter(yaml: string): Record<string, unknown> {
 
 // ── Agent types ───────────────────────────────────────────────────────────────
 
+export type Accept = { scheme: 'exact' | 'max'; network: string; asset: string; max: string }
+
+export function priceToAccepts(price: number): Accept[] {
+  return [{ scheme: 'exact', network: 'eip155:8453', asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', max: price.toFixed(6) }]
+}
+
 export interface AgentSkillRef { ref: string }
 export interface AgentSkillInline {
   name: string; title?: string; description?: string
@@ -238,6 +244,10 @@ export interface AgentMeta {
   when_to_use?: string
   inputSchema?: Record<string, unknown>
   outputSchema?: Record<string, unknown>
+  agentmd?: string
+  summary?: string
+  accepts?: Array<{ scheme: 'exact' | 'max'; network: string; asset: string; max: string }>
+  evals?: unknown[]
 }
 
 export interface ParsedAgent { meta: AgentMeta; prompt: string }
@@ -322,6 +332,10 @@ function coerceAgentMeta(raw: Record<string, unknown>): AgentMeta {
     endpoints: coerceEndpoints(raw.endpoints),
     bureau: strList(raw.bureau),
     price: num(raw.price),
+    agentmd: str(raw.agentmd),
+    summary: str(raw.summary),
+    accepts: Array.isArray(raw.accepts) ? raw.accepts as Accept[] : raw.price ? priceToAccepts(num(raw.price) ?? 0) : undefined,
+    evals: Array.isArray(raw.evals) ? raw.evals : undefined,
     currency: str(raw.currency),
     tags: strList(raw.tags),
     when_to_use: str(raw.when_to_use),

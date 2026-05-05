@@ -2,6 +2,8 @@ import {
   verifyRegistrationResponse,
   verifyAuthenticationResponse,
 } from '@simplewebauthn/server'
+import type { AuthenticationResponseJSON } from '@simplewebauthn/server'
+import { getSlugOwner } from './slug'
 export { verifyRegistrationResponse, verifyAuthenticationResponse }
 export type { VerifiedRegistrationResponse, VerifiedAuthenticationResponse } from '@simplewebauthn/server'
 
@@ -17,6 +19,36 @@ export async function makeChallenge(secret: string): Promise<{ challenge: string
   const sigBytes = await crypto.subtle.sign('HMAC', k, enc(msg))
   const token = btoa(String.fromCharCode(...new Uint8Array(sigBytes))) + ':' + exp
   return { challenge, token }
+}
+
+export async function verifyCommitAssertion(opts: {
+  slug: string
+  file: string
+  content: string
+  challenge: string
+  assertion: unknown
+  env: { DB: D1Database; SERVER_SECRET?: string }
+}): Promise<boolean> {
+  const owner = await getSlugOwner(opts.slug, opts.env.DB)
+  if (!owner) return false
+  const pubkeyBytes = Uint8Array.from(Buffer.from(owner.pubkey, 'base64'))
+  try {
+    const result = await verifyAuthenticationResponse({
+      response: opts.assertion as AuthenticationResponseJSON,
+      expectedChallenge: opts.challenge,
+      expectedOrigin: globalThis.location?.origin ?? 'https://one.ie',
+      expectedRPID: globalThis.location?.hostname ?? 'one.ie',
+      credential: {
+        id: owner.credential_id,
+        publicKey: pubkeyBytes,
+        counter: 0,
+        transports: ['internal'],
+      },
+    })
+    return result.verified
+  } catch {
+    return false
+  }
 }
 
 export async function checkToken(secret: string, challenge: string, token: string): Promise<boolean> {

@@ -139,3 +139,38 @@ export const HealthSchema = z.object({
   uptime: z.number(),
   timestamp: z.string(),
 });
+
+// Agent definition schema (source frontmatter — not API response)
+export const AcceptSchema = z.object({
+  scheme: z.enum(['exact', 'max']),
+  network: z.string(),
+  asset: z.string(),
+  max: z.string(),
+})
+export type Accept = z.infer<typeof AcceptSchema>
+
+export const AgentDefinitionSchema = z.object({
+  agentmd: z.string().optional(),
+  name: z.string(),
+  title: z.string().optional(),
+  version: z.string().optional(),
+  model: z.string().optional(),
+  summary: z.string().optional(),
+  description: z.string().optional(),
+  skills: z.array(z.string()).optional(),
+  tools: z.array(z.string()).optional(),
+  price: z.number().optional(),
+  accepts: z.array(AcceptSchema).optional(),
+  mailbox: z.boolean().optional(),
+  agentverse: z.string().optional(),
+  evals: z.array(z.object({ id: z.string(), prompt: z.string() }).passthrough()).optional(),
+})
+export type AgentDefinition = z.infer<typeof AgentDefinitionSchema>
+
+export function priceToAccepts(
+  price: number,
+  network = 'eip155:8453',
+  asset = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+): Accept[] {
+  return [{ scheme: 'exact', network, asset, max: price.toFixed(6) }]
+}

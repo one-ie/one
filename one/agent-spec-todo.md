@@ -97,7 +97,7 @@ The whole system is one Worker. Slugs are R2 prefixes. Agents and skills are mar
 
 ## Status
 
-**Active cycle:** C2.5 — Skill creator
+**Active cycle:** C5 — Runtimes
 
 ### Cycle 1 ✓
 
@@ -132,40 +132,48 @@ The whole system is one Worker. Slugs are R2 prefixes. Agents and skills are mar
 - [x] W0 baseline — tsc clean; all 5 C3 files missing (expected)
 - [x] W1 recon — chat.ts has no skill discovery; auto-import.ts exists; sdk/types.ts lacks agentmd fields (C5 scope); 5 target files all missing
 - [x] W2 decide — 5 new files: parser(28L), loader(38L), import(42L), emit(32L), refresh(22L); cloudflare:workers env pattern; pure-JS parser (no new dep)
-- [ ] W3 edit
-- [ ] W4 verify
+- [x] W3 edit — 5 agents all marked; parser/loader/import/emit/refresh created
+- [x] W4 verify — tsc clean; W3.5 micro-fix: SSRF allowlist + slug validation + Bearer auth on refresh; rubric security=0.88 stability=0.90 simplicity=0.95 speed=0.92 composite=0.912 ≥ 0.65
 
-### Cycle 4
+### Cycle 4 ✓
 
-- [ ] W0 baseline
-- [ ] W1 recon
-- [ ] W2 decide
-- [ ] W3 edit
-- [ ] W4 verify
+- [x] W0 baseline — tsc clean; lib/artifacts/ and .well-known/ dirs missing (expected)
+- [x] W1 recon — AgentEntry lacks discovery fields; spec §Artifacts defines 5 hooks; wrangler has R2+D1; .well-known/ absent
+- [x] W2 decide — 7 new files: 5 pure builders + 2 Astro routes at /u/[slug]/.well-known/; routes parse R2 agent.md directly; sigstore manifest-only (no cosign exec in Workers)
+- [x] W3 edit — 7 agents all marked; artifacts lib + .well-known routes created
+- [x] W4 verify — tsc clean; rubric security=0.92 stability=0.90 simplicity=0.92 speed=0.88 composite=0.910 ≥ 0.65
 
-### Cycle 5
+**Notes:** Route URLs follow exit scalar (/u/[slug]/.well-known/...) not the file-path hint in the TODO spec. parseMeta inlined in both route files — acceptable at this scale. erc8004 + mcp-server-json are unused builders pending C6 CLI routes.
 
-- [ ] W0 baseline
-- [ ] W1 recon
-- [ ] W2 decide
-- [ ] W3 edit
-- [ ] W4 verify
+### Cycle 5 ✓
 
-### Cycle 6
+- [x] W0 baseline — tsc clean; python/ missing, mcp/serve.ts exists (bare), discovery.ts missing, SDK missing agentmd/summary/accepts/evals
+- [x] W1 recon — serve.ts has no activate_skill; compile.ts 668L has AgentMeta but missing 4 fields; SDK schemas has no Accept/AgentDefinition; python/ greenfield
+- [x] W2 decide — 10 files: 4 SDK/MCP TS edits + 1 new discovery.ts + 6 Python files
+- [x] W3 edit — 19 agents parallel (C5+C6 combined wave); all marked
+- [x] W4 verify — tsc clean web+sdk+mcp+cli; rubric C5 security=0.92 stability=0.88 simplicity=0.87 speed=0.85 composite=0.889 ≥ 0.65
 
-- [ ] W0 baseline
-- [ ] W1 recon
-- [ ] W2 decide
-- [ ] W3 edit
-- [ ] W4 verify
+**Notes:** SDK/MCP/CLI had missing node_modules — installed @types/node, @types/react, commander. MCP tsconfig needed lib:["DOM"] + module:ESNext for fetch/Headers globals. observability.ts had implicit `any` on filter/map lambdas — typed as string. SDK react files needed @types/react.
 
-### Cycle 7
+### Cycle 6 ✓
 
-- [ ] W0 baseline
-- [ ] W1 recon
-- [ ] W2 decide
-- [ ] W3 edit
-- [ ] W4 verify
+- [x] W0 baseline — cli/ missing (expected); tsc clean on all existing packages
+- [x] W1 recon — cli/ greenfield; SDK exports SubstrateClient+compile; no CLI source existed; agent-spec defines 14 verbs across 3 file groups
+- [x] W2 decide — 9 files: package.json, tsconfig.json, index.ts, agent.ts (10 verbs), skill.ts (6 verbs), auth.ts, 3 templates
+- [x] W3 edit — parallel with C5; all marked; templates inlined as constants (not fs reads) after W4 flagged runtime path gap
+- [x] W4 verify — cli tsc clean; rubric security=0.92 stability=0.85→0.88 simplicity=0.90 speed=0.88 composite=0.890 ≥ 0.65
+
+**Notes:** Templates initially read from disk (dist/templates/ gap at runtime). Fixed by inlining as TEMPLATES constant in templates.ts — no build copy step needed. auth logout changed to unlinkSync (was empty writeFileSync). CLI startup path: index.ts reads package.json once at load (minimal, acceptable).
+
+### Cycle 7 ✓
+
+- [x] W0 baseline — tsc clean; 3 migrations + 5 API routes + middleware all new
+- [x] W1 recon — owners table missing wallet/agentverse_key_enc; no settings page; no media upload; no custom domain routing; env.d.ts missing KVNamespace
+- [x] W2 decide — 12 files: 3 migrations, commit.ts conflict gate + null-delete, chat.ts nullable content, settings.astro + api/settings.ts, recover.ts magic-link, commit-media.ts binary upload, media/[name].ts serve, middleware.ts host routing, env.d.ts expansions
+- [x] W3 edit — 11 agents parallel; all marked; env.d.ts fixed post-W3 (tsc gate)
+- [x] W4 verify — tsc clean; rubric security=0.82 stability=0.85 simplicity=0.90 speed=0.92 composite=0.87 ≥ 0.65
+
+**Notes:** KVNamespace + R2ObjectBody.body/httpMetadata + SESSION added to env.d.ts (were absent from shared interface — recover.ts used local cast workaround). `agentverse_key_enc` is client-side-encrypted before POST by design; server stores opaque ciphertext. Custom domain routing: single Astro middleware, D1 `domains` table, ctx.rewrite() — no per-tenant Worker needed.
 
 ---
 

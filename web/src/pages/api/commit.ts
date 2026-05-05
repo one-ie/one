@@ -16,10 +16,11 @@ export const POST: APIRoute = async ({ request, url }) => {
   const body = await request.json() as {
     slug: string
     file: string
-    content: string
+    content: string | null
     challenge: string
     token: string
     assertion: Record<string, unknown>
+    expectedSha?: string
   }
 
   if (!await checkToken(env.SERVER_SECRET, body.challenge, body.token)) {
@@ -58,17 +59,28 @@ export const POST: APIRoute = async ({ request, url }) => {
   const key = `${body.slug}/${body.file}`
   const prev = await env.CONTENT.get(key)
   const prevSha = prev ? (prev.customMetadata?.sha ?? '') : ''
+
+  if (body.expectedSha !== undefined && prevSha !== body.expectedSha) {
+    return new Response(JSON.stringify({ ok: false, conflict: true, currentSha: prevSha }), { status: 409, headers: { 'content-type': 'application/json' } })
+  }
+
+  const kind = body.file.split('/')[0]
+  const name = body.file.split('/').slice(1).join('/')
+  const resourceUrl = `/u/${body.slug}/${kind}/${name}`
+
+  if (body.content === null) {
+    await env.CONTENT.delete(key)
+    return new Response(JSON.stringify({ ok: true, deleted: true, url: resourceUrl }), { headers: { 'content-type': 'application/json' } })
+  }
+
   const sha = await digestSha256(body.content)
 
   await env.CONTENT.put(key, body.content, {
     customMetadata: { sha, prevSha, ts: String(Date.now()), model: 'user' },
   })
 
-  const kind = body.file.split('/')[0]
-  const name = body.file.split('/').slice(1).join('/')
-
   return new Response(
-    JSON.stringify({ ok: true, sha, url: `/u/${body.slug}/${kind}/${name}` }),
+    JSON.stringify({ ok: true, sha, url: resourceUrl }),
     { headers: { 'Content-Type': 'application/json' } },
   )
 }

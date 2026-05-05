@@ -1,8 +1,15 @@
 import { parse } from './parser'
 import { toSkill, type Skill } from './loader'
 
+const ALLOWED_HOSTS = new Set(['agentskills.io', 'raw.githubusercontent.com', 'github.com'])
+const SLUG_RE = /^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/
+
 function resolveSkillUrl(ref: string): string {
-  if (ref.startsWith('http://') || ref.startsWith('https://')) return ref
+  if (ref.startsWith('http://') || ref.startsWith('https://')) {
+    const host = new URL(ref).hostname
+    if (!ALLOWED_HOSTS.has(host)) throw new Error(`host not allowed: ${host}`)
+    return ref
+  }
   if (ref.startsWith('github:')) {
     const path = ref.slice(7)
     const segments = path.split('/')
@@ -28,6 +35,7 @@ export async function importSkill(
   slug: string,
   r2: R2Bucket,
 ): Promise<{ skill: Skill; cacheKey: string } | null> {
+  if (!SLUG_RE.test(slug)) throw new Error(`invalid slug: ${slug}`)
   const url = resolveSkillUrl(ref)
   const res = await fetch(url)
   if (!res.ok) return null

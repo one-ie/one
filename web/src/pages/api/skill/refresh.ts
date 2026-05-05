@@ -15,6 +15,10 @@ export const POST: APIRoute = async ({ request }) => {
   if (!env.CONTENT || !env.SERVER_SECRET) {
     return new Response(JSON.stringify({ error: 'not configured' }), { status: 503 })
   }
+  const auth = request.headers.get('Authorization') ?? ''
+  if (auth !== `Bearer ${env.SERVER_SECRET}`) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401 })
+  }
   const body = (await request.json()) as { slug?: string; refs?: string[] }
   if (!body.slug || !Array.isArray(body.refs) || body.refs.length === 0) {
     return new Response(JSON.stringify({ error: 'slug and refs required' }), { status: 400 })

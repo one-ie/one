@@ -18,11 +18,7 @@ import {
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
-  usePromptInputAttachments,
 } from '@/components/ai-elements/prompt-input'
-import { Shimmer } from '@/components/ai-elements/shimmer'
-import { Attachment, Attachments, AttachmentPreview, AttachmentRemove } from '@/components/ai-elements/attachments'
-import { SpeechInput } from '@/components/ai-elements/speech-input'
 import type { FileUIPart, UIMessage } from 'ai'
 
 const MessageList = lazy(() =>
@@ -35,6 +31,15 @@ const AddMenu = lazy(() =>
   import('@/components/chat/AddMenu').then((m) => ({ default: m.AddMenu })),
 )
 const PayPanel = lazy(() => import('@/components/pay/PayPanel').then(m => ({ default: m.PayPanel })))
+const AttachmentsPreview = lazy(() =>
+  import('@/components/chat/AttachmentsPreview').then((m) => ({ default: m.AttachmentsPreview })),
+)
+const SpeechInput = lazy(() =>
+  import('@/components/ai-elements/speech-input').then((m) => ({ default: m.SpeechInput })),
+)
+const Shimmer = lazy(() =>
+  import('@/components/ai-elements/shimmer').then((m) => ({ default: m.Shimmer })),
+)
 
 type ChatMode = 'wide' | 'rail' | 'icon' | 'none'
 
@@ -68,22 +73,6 @@ const VALID_VOICES: ReadonlySet<VoiceId> = new Set([
   'shimmer',
 ])
 
-function AttachmentsPreview() {
-  const attachments = usePromptInputAttachments()
-  if (attachments.files.length === 0) return null
-  return (
-    <PromptInputHeader>
-      <Attachments variant="inline">
-        {attachments.files.map((a) => (
-          <Attachment data={a} key={a.id} onRemove={() => attachments.remove(a.id)}>
-            <AttachmentPreview />
-            <AttachmentRemove />
-          </Attachment>
-        ))}
-      </Attachments>
-    </PromptInputHeader>
-  )
-}
 
 function getMessageText(msg: UIMessage): string {
   return msg.parts
@@ -315,6 +304,8 @@ export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, curren
                     width={64}
                     height={64}
                     className="rounded-2xl"
+                    fetchPriority="high"
+                    decoding="async"
                   />
                   <div className="text-center">
                     <p className="text-lg mb-1">Hello!</p>
@@ -412,7 +403,9 @@ export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, curren
                     height={28}
                     className="rounded-md animate-pulse"
                   />
-                  <Shimmer>Thinking…</Shimmer>
+                  <Suspense fallback={<span className="text-font/60">Thinking…</span>}>
+                    <Shimmer>Thinking…</Shimmer>
+                  </Suspense>
                 </div>
               )}
               {status === 'submitted' && (
@@ -441,7 +434,9 @@ export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, curren
                 className="[&>div]:h-auto [&>div]:items-end [&>div]:border-0 [&>div]:shadow-none [&>div]:outline-none"
                 onSubmit={({ text, files }) => submit(text, files)}
               >
-                <AttachmentsPreview />
+                <Suspense fallback={null}>
+                  <AttachmentsPreview />
+                </Suspense>
                 <Suspense
                   fallback={
                     <div className="inline-flex self-end pb-2 pl-2" aria-hidden>
@@ -471,16 +466,18 @@ export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, curren
                       />
                     </Suspense>
                   )}
-                  <SpeechInput
-                    aria-label="Voice input"
-                    variant="ghost"
-                    size="icon-sm"
-                    className="!size-9 !rounded-full [&_svg]:!size-4"
-                    onTranscriptionChange={(text) => {
-                      emitClick('ui:chat:voice', { text })
-                      submit(text)
-                    }}
-                  />
+                  <Suspense fallback={<div className="size-9 rounded-full" />}>
+                    <SpeechInput
+                      aria-label="Voice input"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="!size-9 !rounded-full [&_svg]:!size-4"
+                      onTranscriptionChange={(text) => {
+                        emitClick('ui:chat:voice', { text })
+                        submit(text)
+                      }}
+                    />
+                  </Suspense>
                   <PromptInputSubmit
                     status={status}
                     onStop={stop}

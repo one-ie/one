@@ -99,7 +99,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const writeSchema = z.object({
     file: z.string().describe('Relative path like "page/about" or "agents/support"'),
-    content: z.string().describe('Full file content (markdown)'),
+    content: z.string().nullable().describe('Full file content (markdown). Set content to null to delete the file.'),
   })
 
   const writeTool = slug && env.SERVER_SECRET
@@ -109,7 +109,7 @@ export const POST: APIRoute = async ({ request }) => {
           inputSchema: writeSchema,
           execute: async (args: z.infer<typeof writeSchema>) => {
             const { challenge, token } = await makeChallenge(env.SERVER_SECRET!)
-            return { kind: 'pending' as const, challenge, token, file: args.file, preview: args.content.slice(0, 300) }
+            return { kind: 'pending' as const, challenge, token, file: args.file, preview: args.content?.slice(0, 300) ?? '' }
           },
         }),
       }

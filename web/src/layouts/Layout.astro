@@ -163,11 +163,18 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full',
     --ease: 120ms ease;
   }
 
-  /* Surface tokens flip with mode. Brand tokens don't. */
+  /* Surface tokens flip with mode. Brand tokens lighten for dark backgrounds. */
   html.dark {
     --color-background: hsl(0 0% 10%);
     --color-foreground: hsl(0 0% 13%);
     --color-font: hsl(0 0% 100%);
+    /* Brand tokens lighten to L≥65% in dark mode — on-* labels must flip to #000 for WCAG AA */
+    --color-primary: hsl(216 55% 65%);
+    --color-secondary: hsl(219 14% 65%);
+    --color-tertiary: hsl(105 22% 65%);
+    --color-on-primary: #000;
+    --color-on-secondary: #000;
+    --color-on-tertiary: #000;
   }
 
   body {

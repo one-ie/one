@@ -21,6 +21,7 @@
     "@modelcontextprotocol/sdk": "^1.0.0"
   },
   "devDependencies": {
+    "@types/node": "^25.6.0",
     "typescript": "5.9.2"
   },
   "license": "SEE LICENSE IN https://one.ie/free-license",
