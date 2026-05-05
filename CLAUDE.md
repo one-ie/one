@@ -63,10 +63,12 @@ without verification is superstition; with verification it's learning.
 |--------------|------|------------|
 | `agents/`    | Markdown agent definitions (templates in `agents/templates/`) | `agents/CLAUDE.md` |
 | `mcp/`       | `@oneie/mcp` — MCP server for Claude/Cursor | `mcp/CLAUDE.md` |
+| `cli/`       | `@oneie/cli` — 14 verbs: `agent` (new/validate/lint/compile/serve/publish/sign/verify/eval/diff), `skill` (new/emit/publish/refresh/import/eval), `auth` (login/logout); `--json` flag on all commands | `cli/src/index.ts` |
+| `python/`    | `oneie` Python package — `oneie run agent.md` loads markdown, builds uAgents Protocol, registers Almanac; `OpenRouterClient` for LLM; `oneie.agent.Agent` class | `python/oneie/__init__.py` |
 | `sdk/`       | `@oneie/sdk` — TypeScript SDK | `sdk/CLAUDE.md` |
 | `claw/`      | Edge-native AI agent worker — Telegram/Discord/HTTP → `ToolLoopAgent` → streaming SSE; approval-gated substrate tools; `substrateMiddleware` auto-wires pheromone (Hono on CF Workers, D1+KV, AI SDK v6) | `claw/README.md` |
 | `one/`       | Canonical docs — ontology, dictionary, patterns, rubrics | `one/dictionary.md` |
-| `web/`       | Astro 6 + React 19 + CF Workers substrate app (chat UI, pages, dashboards) | `web/README.md` |
+| `web/`       | Astro 6 + React 19 + CF Workers substrate app — chat UI, passkey provision/commit, eval loop, skill import/emit, A2A artifacts, media upload, custom-domain middleware, owner settings | `web/README.md` |
 | `.claude/`   | Claude Code harness — commands, skills, rules, subagents | `.claude/CLAUDE.md` |
 
 Each folder carries its own `CLAUDE.md` (or `README.md` where noted) with the local contract. Cd into a

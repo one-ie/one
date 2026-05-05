@@ -76,6 +76,16 @@ export const POST: APIRoute = async ({ request, url }) => {
     return new Response(JSON.stringify({ ok: true, deleted: true, url: resourceUrl }), { headers: { 'content-type': 'application/json' } })
   }
 
+  if (prev) {
+    const prevContent = await prev.text()
+    const prevTs = prev.customMetadata?.ts ?? String(Date.now())
+    await env.CONTENT.put(
+      `${body.slug}/_versions/${body.file}/${prevTs}.md`,
+      prevContent,
+      { customMetadata: prev.customMetadata ?? {} },
+    )
+  }
+
   const sha = await digestSha256(body.content)
 
   await env.CONTENT.put(key, body.content, {

@@ -39,6 +39,7 @@ export default defineConfig({
     ssr: {
       external: [
         'node:async_hooks',
+        'cookie',
         'cytoscape',
         '@xyflow/react',
         'shiki',
@@ -46,7 +47,6 @@ export default defineConfig({
         'media-chrome/react',
         'motion',
       ],
-      noExternal: ['cookie'],
     },
     build: {
       rollupOptions: {

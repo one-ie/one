@@ -5,6 +5,8 @@ import { emitClick } from '@/lib/ui-signal'
 export function GetYoursButton() {
   const [status, setStatus] = useState<'idle' | 'working' | 'done' | 'error'>('idle')
   const [error, setError] = useState('')
+  const [displayName, setDisplayName] = useState('')
+  const [tosAccepted, setTosAccepted] = useState(false)
 
   const register = async () => {
     emitClick('ui:get-yours:register')
@@ -28,12 +30,19 @@ export function GetYoursButton() {
       const res = await fetch('/api/provision', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ registration, userId: opts.userId, challenge: opts.challenge, token: opts.token }),
+        body: JSON.stringify({
+          registration, userId: opts.userId, challenge: opts.challenge, token: opts.token,
+          displayName: displayName.trim() || undefined,
+          tosTimestamp: Date.now(),
+        }),
       })
-      const data = await res.json() as { slug?: string; redirectTo?: string; error?: string; detail?: string }
-      if (data.redirectTo) {
+      const data = await res.json() as { slug?: string; recoveryWords?: string[]; redirectTo?: string; error?: string; detail?: string }
+      if (data.redirectTo && data.slug) {
+        if (data.recoveryWords?.length) {
+          sessionStorage.setItem('rc:words', JSON.stringify(data.recoveryWords))
+        }
         setStatus('done')
-        window.location.href = data.redirectTo
+        window.location.href = `/recovery-codes?slug=${encodeURIComponent(data.slug)}&next=${encodeURIComponent(data.redirectTo)}`
       } else {
         setError([data.error, data.detail].filter(Boolean).join(': ') || 'registration failed')
         setStatus('error')
@@ -45,11 +54,30 @@ export function GetYoursButton() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-4 w-full max-w-xs">
+      <input
+        type="text"
+        placeholder="Your name (optional)"
+        value={displayName}
+        onChange={e => setDisplayName(e.target.value)}
+        disabled={status !== 'idle'}
+        className="w-full px-3.5 py-2.5 rounded-lg bg-background text-font border text-sm focus:outline-none"
+        style={{ borderColor: 'var(--color-border)' }}
+      />
+      <label className="flex items-start gap-2 text-sm text-font/60 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={tosAccepted}
+          onChange={e => setTosAccepted(e.target.checked)}
+          disabled={status !== 'idle'}
+          className="mt-0.5 bg-background"
+        />
+        I agree to the terms of service
+      </label>
       <button
         onClick={register}
-        disabled={status === 'working' || status === 'done'}
-        className="px-6 py-3 rounded-xl text-base font-semibold bg-primary text-on-primary disabled:opacity-50 hover:brightness-110 transition-all"
+        disabled={!tosAccepted || status === 'working' || status === 'done'}
+        className="w-full px-6 py-3 rounded-xl text-base font-semibold bg-primary text-on-primary disabled:opacity-50 hover:brightness-110 transition-all"
       >
         {status === 'working' ? 'Setting up…' : status === 'done' ? 'Ready!' : 'Create your space'}
       </button>

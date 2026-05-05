@@ -1,4 +1,6 @@
 import type { APIRoute } from 'astro'
+import { generateMnemonic } from '@scure/bip39'
+import { wordlist } from '@scure/bip39/wordlists/english.js'
 import { makeChallenge, checkToken, verifyRegistrationResponse } from '../../lib/passkey'
 import { randomSlug, slugExists } from '../../lib/slug'
 import { autoImportSkillCreator } from '../../lib/skill/auto-import'
@@ -14,12 +16,7 @@ async function getEnv(): Promise<CfEnv> {
 
 export const GET: APIRoute = async ({ request, url }) => {
   const env = await getEnv()
-  const probe = url.searchParams.get('probe')
-  const slug = url.searchParams.get('slug')
-  if (probe && slug) {
-    const exists = await slugExists(slug, env.DB)
-    return new Response(JSON.stringify({ owner: exists }), { headers: { 'Content-Type': 'application/json' } })
-  }
+
   const { challenge, token } = await makeChallenge(env.SERVER_SECRET)
   const userId = crypto.randomUUID()
   const rp = env.RP_ID ?? url.hostname
@@ -37,6 +34,8 @@ export const POST: APIRoute = async ({ request, url }) => {
     challenge: string
     token: string
     slug?: string
+    displayName?: string
+    tosTimestamp?: number
   }
 
   if (!body.challenge || !body.token || !body.registration) {
@@ -70,14 +69,23 @@ export const POST: APIRoute = async ({ request, url }) => {
     while (await slugExists(slug, env.DB)) slug = randomSlug()
   }
 
+  const recoveryWords = generateMnemonic(wordlist, 128)
+  const enc = new TextEncoder()
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(recoveryWords), 'PBKDF2', false, ['deriveBits'])
+  const hashBits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt: enc.encode(slug), iterations: 100000, hash: 'SHA-256' },
+    keyMaterial, 256,
+  )
+  const recoveryHash = Buffer.from(hashBits).toString('base64')
+
   const pubkeyB64 = Buffer.from(credential.publicKey).toString('base64')
   await env.DB.prepare(
-    'INSERT INTO owners (slug, pubkey, credential_id, ts) VALUES (?, ?, ?, unixepoch())',
-  ).bind(slug, pubkeyB64, credential.id).run()
+    'INSERT INTO owners (slug, pubkey, credential_id, ts, recovery_hash, display_name, tos_hash, tos_signed_at) VALUES (?, ?, ?, unixepoch(), ?, ?, ?, ?)',
+  ).bind(slug, pubkeyB64, credential.id, recoveryHash, body.displayName?.trim() || null, 'v1', body.tosTimestamp ?? null).run()
 
   if (env.CONTENT) await autoImportSkillCreator(slug, env.CONTENT)
 
-  return new Response(JSON.stringify({ slug, redirectTo: `/u/${slug}/chat` }), {
+  return new Response(JSON.stringify({ slug, recoveryWords: recoveryWords.split(' '), redirectTo: `/u/${slug}/chat` }), {
     headers: { 'Content-Type': 'application/json' },
   })
 }

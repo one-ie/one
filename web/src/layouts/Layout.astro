@@ -10,9 +10,10 @@ interface Props {
   sidebar?: 'none' | 'mini' | 'full'
   chat?: ChatMode
   chatLock?: boolean
+  siteStyles?: string
 }
 
-const { title, description = 'AI agents on the ONE substrate', sidebar = 'full', chat = 'icon', chatLock = false } = Astro.props
+const { title, description = 'AI agents on the ONE substrate', sidebar = 'full', chat = 'icon', chatLock = false, siteStyles } = Astro.props
 ---
 
 <!doctype html>
@@ -23,6 +24,7 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full',
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {siteStyles && <style set:html={siteStyles} is:inline />}
     <!-- Critical tokens inlined — no network round-trip before first paint -->
     <style is:inline>
       :root {

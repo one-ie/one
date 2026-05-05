@@ -382,6 +382,9 @@ export function Chat({ fullPage, mode = 'popover', onClose, onModeChange, curren
                     onIterateEval={(prompt) => sendMessage({ text: prompt })}
                     onSpeak={speak}
                     onApproval={addToolApprovalResponse}
+                    onSubmitPayment={(receipt, skill, amount) =>
+                      sendMessage({ text: `Payment receipt: ${receipt} for skill "${skill}" amount ${amount}` })
+                    }
                   />
                 </Suspense>
               )}

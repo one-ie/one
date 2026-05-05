@@ -805,3 +805,92 @@ If you stumble on any blank, the agent isn't done. The numbers at the end are th
 ---
 
 *Sharp. Discoverable. Valuable. Honest. Composable. The best agents in the world are not the ones with the most fields filled — they're the ones where every field that's filled means something.*
+
+---
+
+## Patterns from building the system (C1–C7 retrospective)
+
+These patterns emerged from building the agent-spec implementation end-to-end. They apply when converting or refining agents.
+
+### On runtimes — don't compile, load
+
+The single most common mistake when porting existing agents is trying to "compile" markdown into Python or TypeScript. Don't.
+
+```
+BAD:  generate a Python class from my agent.md
+GOOD: run it directly — oneie run agent.md
+```
+
+Three of four runtimes (uAgents, MCP stdio, web) load the markdown file at runtime with no codegen step. The only emitted artifact is `SKILL.md` — because Claude Code expects files on disk. For every other runtime, if you find yourself generating `.py` or `.ts`, stop and use `oneie run` or `@oneie/mcp serve` instead.
+
+### On templates — don't read from disk at runtime
+
+If you scaffold templates in a CLI or tool, inline them as string constants. `tsc` does not copy `.md` files to `dist/`; a path that works in dev breaks silently in production.
+
+```ts
+// BAD — works in dev, breaks in prod (tsc doesn't copy .md)
+const template = readFileSync(resolve(__dirname, 'templates/core.md'), 'utf8')
+
+// GOOD — always works
+export const TEMPLATES: Record<string, string> = {
+  core: `---\nname: my-agent\n---\n...`,
+}
+```
+
+### On Cloudflare Workers types — extend env.d.ts first
+
+In Astro 6 on CF Workers, `Astro.locals.runtime.env` is removed. The only correct pattern is:
+
+```ts
+const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Database; CONTENT?: R2Bucket }
+```
+
+And `KVNamespace`, `R2ObjectBody.body`, `R2ObjectBody.httpMetadata`, `ArrayBufferView` in `R2Bucket.put` must be declared in `env.d.ts` — they are not automatically available. Declare them once in `src/env.d.ts`; all files then get the types without local casts.
+
+### On evals — the description field is the skill, not the body
+
+The body is the system prompt; the description is the router. A skill that doesn't trigger in evals almost always has a vague description, not a weak body.
+
+Build a 20-query eval set before writing the body:
+- 8–10 should-trigger queries (vary phrasing)
+- 4–6 should-not-trigger queries (adjacent but different)
+- 2–4 edge cases
+
+Run evals against description-only first. If trigger rate < 80%, rewrite the description. Only then write the body.
+
+### On conflict safety — optimistic SHA gating
+
+Any tool that writes to shared state should return the current SHA and accept `expectedSha` on the next write:
+
+```ts
+// write returns: { sha: "abc123" }
+// next write sends: { ..., expectedSha: "abc123" }
+// server: if actual sha ≠ expectedSha → 409 Conflict
+```
+
+This makes concurrent edits from multiple sessions detectable without locking. The client retries with a fresh read. One extra field, zero contention.
+
+### On auth residue — one logout pattern only
+
+When storing credentials in files (e.g. `~/.config/app/key`), delete the file on logout — don't zero-fill it. An empty file is harder to distinguish from a corrupt file than a missing file.
+
+```ts
+// BAD — leaves residue
+writeFileSync(KEY_FILE, '', { mode: 0o600 })
+
+// GOOD — clean state
+unlinkSync(KEY_FILE)
+```
+
+### On middleware — guard prerender
+
+Astro middleware runs during static prerendering as well as at request time. Any middleware that reads `request.headers` must guard against the prerender context:
+
+```ts
+export const onRequest = defineMiddleware(async (ctx, next) => {
+  if (ctx.isPrerendered) return next()
+  // ... safe to read ctx.request.headers
+})
+```
+
+Without this guard, the build emits warnings and static pages may behave incorrectly.

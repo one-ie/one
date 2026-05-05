@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import { getSlugOwner } from '@/lib/slug'
+import { AddDeviceButton } from '@/components/AddDeviceButton'
 
 export const prerender = false
 
@@ -10,7 +11,12 @@ const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Datab
 const owner = env.DB ? await getSlugOwner(slug, env.DB) : null
 if (!owner) return Astro.redirect(`/u/${slug}`)
 
-const row = owner as typeof owner & { wallet?: string; agentverse_key_enc?: string }
+const row = owner as typeof owner & { wallet?: string; agentverse_key_enc?: string; display_name?: string }
+const keys = env.DB
+  ? (await env.DB.prepare('SELECT pubkey, label, registered_at FROM owners_keys WHERE slug = ?')
+      .bind(slug).all<{ pubkey: string; label: string | null; registered_at: number }>()).results
+  : []
+const publicUrl = `https://one.ie/u/${slug}`
 ---
 
 <Layout title={`@${slug} settings`}>
@@ -23,18 +29,64 @@ const row = owner as typeof owner & { wallet?: string; agentverse_key_enc?: stri
     <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
       <h2 class="font-semibold text-font">Identity</h2>
       <div class="flex flex-col gap-1">
-        <span class="text-xs text-font/60">Slug</span>
-        <code class="text-sm bg-foreground px-3 py-2 rounded-lg text-font">{slug}</code>
+        <span class="text-xs text-font/60">Your site URL</span>
+        <div class="flex items-center gap-2">
+          <code class="text-sm bg-foreground px-3 py-2 rounded-lg text-font flex-1 truncate">{publicUrl}</code>
+          <button
+            onclick={`navigator.clipboard.writeText('${publicUrl}'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy',1500)`}
+            class="px-3 py-2 rounded-lg text-sm border text-font hover:text-font/80 shrink-0"
+            style="border-color:var(--color-border)"
+          >Copy</button>
+        </div>
       </div>
       <div class="flex flex-col gap-1">
-        <span class="text-xs text-font/60">Public key (first device)</span>
-        <code class="text-xs bg-foreground px-3 py-2 rounded-lg text-font break-all">{owner.pubkey}</code>
+        <span class="text-xs text-font/60">Handle</span>
+        <code class="text-sm bg-foreground px-3 py-2 rounded-lg text-font">@{slug}</code>
       </div>
     </section>
 
     <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
+      <h2 class="font-semibold text-font">Passkeys</h2>
+      <p class="text-xs text-font/60">Devices that can approve changes to your site.</p>
+      <ul class="divide-y" style="border-color:var(--color-border)">
+        <li class="flex items-center justify-between py-2">
+          <span class="text-sm text-font">Primary device</span>
+          <span class="text-xs text-font/40">registered</span>
+        </li>
+        {keys.map(k => (
+          <li class="flex items-center justify-between py-2">
+            <span class="text-sm text-font">{k.label ?? `Device ${k.pubkey.slice(0, 8)}`}</span>
+            <span class="text-xs text-font/40">{new Date(k.registered_at * 1000).toLocaleDateString()}</span>
+          </li>
+        ))}
+      </ul>
+      <AddDeviceButton slug={slug} client:load />
+    </section>
+
+    <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
+      <h2 class="font-semibold text-font">Recovery</h2>
+      <form method="POST" action="/api/settings" class="flex flex-col gap-3">
+        <input type="hidden" name="slug" value={slug} />
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-medium text-font">Recovery email</label>
+          <input
+            name="recovery_email"
+            type="email"
+            placeholder="backup@example.com"
+            class="px-3.5 py-2.5 rounded-lg bg-foreground text-font border text-sm focus:outline-none"
+            style="border-color:var(--color-border)"
+          />
+          <span class="text-xs text-font/40">Used only to contact you if you lose all devices.</span>
+        </div>
+        <button type="submit" class="self-start px-4 py-2 rounded-lg bg-primary text-on-primary text-sm font-medium">
+          Save email
+        </button>
+      </form>
+    </section>
+
+    <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
       <h2 class="font-semibold text-font">Wallet &amp; integrations</h2>
-      <form method="POST" action={`/api/settings`} class="flex flex-col gap-4">
+      <form method="POST" action="/api/settings" class="flex flex-col gap-4">
         <input type="hidden" name="slug" value={slug} />
         <div class="flex flex-col gap-1.5">
           <label class="text-sm font-medium text-font">Wallet address</label>
@@ -62,6 +114,29 @@ const row = owner as typeof owner & { wallet?: string; agentverse_key_enc?: stri
           Save changes
         </button>
       </form>
+    </section>
+
+    <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
+      <h2 class="font-semibold text-font">Custom domain</h2>
+      <p class="text-sm text-font/60">Connect your own domain to <code class="bg-foreground px-1.5 py-0.5 rounded text-xs">@{slug}</code>.</p>
+      <p class="text-xs text-font/40">Coming soon.</p>
+    </section>
+
+    <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
+      <h2 class="font-semibold text-font">Export &amp; delete</h2>
+      <p class="text-xs text-font/60">Your content is yours. Export everything as a ZIP at any time.</p>
+      <div class="flex gap-3">
+        <a
+          href={`/u/${slug}/export`}
+          class="px-4 py-2 rounded-lg text-sm border text-font hover:text-font/80"
+          style="border-color:var(--color-border)"
+        >Export .zip</a>
+        <button
+          class="px-4 py-2 rounded-lg text-sm text-destructive border opacity-50 cursor-not-allowed"
+          style="border-color:var(--color-border)"
+          disabled
+        >Delete site</button>
+      </div>
     </section>
 
     <a href={`/u/${slug}`} class="text-sm text-font/60 hover:text-font">← Back to profile</a>

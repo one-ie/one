@@ -6,6 +6,8 @@ import { z } from 'zod'
 import { getCfCtx, getEnv } from '../../lib/cf-env'
 import { makeChallenge } from '../../lib/passkey'
 import { listFiles } from '../../lib/slug'
+import { compile, type CompileTarget } from '../../lib/compile'
+import { verifyReceipt } from '../../lib/x402'
 import { runCase, type TestCase } from '../../lib/eval/runner'
 import { gradeCase } from '../../lib/eval/grader'
 import { aggregate } from '../../lib/eval/aggregate'
@@ -13,10 +15,11 @@ import { buildIterationPrompt } from '../../lib/eval/iterate'
 
 export const prerender = false
 
-const SYSTEM = `You are ONE — a helpful, concise assistant for the ONE substrate.
-Be direct. Use markdown. When a user asks about ONE, explain that it's a signal-based AI substrate where agents earn paths through verified outcomes.
-
-When tools are independent, call them in parallel.`
+function buildSystem(slug?: string, displayName?: string): string {
+  if (!slug) return `You are ONE — a helpful, concise assistant.\nBe direct. Use markdown.\nWhen tools are independent, call them in parallel.`
+  const name = displayName ? `${displayName} (@${slug})` : `@${slug}`
+  return `You are the AI assistant for ${name}'s site on ONE.\nHelp them build and manage their website, pages, blog posts, and AI agents. Be direct and practical.\nWhen tools are independent, call them in parallel.`
+}
 
 const SSE_HEADERS = {
   'X-Accel-Buffering': 'no',
@@ -42,7 +45,16 @@ type KVLike = {
   put(key: string, value: string, opts?: { expirationTtl?: number }): Promise<void>
 }
 
-export const GET: APIRoute = () => new Response(null, { status: 204 })
+export const GET: APIRoute = async ({ url }) => {
+  const slug = url.searchParams.get('slug')
+  if (!slug) return new Response(null, { status: 204 })
+  const env = (await getEnv()) as unknown as { CONTENT?: R2Bucket }
+  const files = env.CONTENT ? await listFiles(slug, env.CONTENT as R2Bucket) : []
+  const starters = files.length > 0
+    ? ['Update my homepage', 'Add a blog post', 'Improve my support agent', 'Check my settings']
+    : ['Create my homepage', 'Write an about page', 'Add a pricing page', 'Create an AI agent']
+  return new Response(JSON.stringify({ starters }), { headers: { 'Content-Type': 'application/json' } })
+}
 
 export const POST: APIRoute = async ({ request }) => {
   const env = (await getEnv()) as unknown as {
@@ -51,6 +63,7 @@ export const POST: APIRoute = async ({ request }) => {
     CHAT_CACHE?: KVLike
     SERVER_SECRET?: string
     CONTENT?: R2Bucket
+    DB?: D1Database
   }
   const groqApiKey = env.GROQ_API_KEY
   if (!groqApiKey) {
@@ -92,9 +105,14 @@ export const POST: APIRoute = async ({ request }) => {
 
   const slug = body.slug
   let systemSuffix = ''
+  let ownerDisplayName: string | undefined
   if (slug && env.CONTENT) {
     const files = await listFiles(slug, env.CONTENT as R2Bucket)
     if (files.length > 0) systemSuffix = `\n\nExisting files for @${slug}:\n${files.map(f => `- ${f}`).join('\n')}`
+  }
+  if (slug && env.DB) {
+    const row = await env.DB.prepare('SELECT display_name FROM owners WHERE slug = ?').bind(slug).first<{ display_name?: string | null }>()
+    ownerDisplayName = row?.display_name ?? undefined
   }
 
   const writeSchema = z.object({
@@ -179,9 +197,73 @@ export const POST: APIRoute = async ({ request }) => {
       }
     : undefined
 
-  const tools = { ...(writeTool ?? {}), ...(evalTool ?? {}) }
+  function parseSkillPrice(md: string): number {
+    const m = /^price:\s*([\d.]+)/m.exec(md)
+    return m ? parseFloat(m[1]) : 0
+  }
+
+  const skillTool = slug && env.CONTENT
+    ? {
+        skill: tool({
+          description: 'Execute a skill by name from this site. If the skill has a price, returns a payment request first.',
+          inputSchema: z.object({ name: z.string().describe('Skill name, e.g. "csv-analyzer"') }),
+          execute: async ({ name }: { name: string }) => {
+            const skillName = name.replace(/^skills\//, '')
+            const obj = await (env.CONTENT as R2Bucket).get(`${slug}/skills/${skillName}.md`)
+            if (!obj) return { kind: 'error' as const, error: 'skill not found' }
+            const md = await obj.text()
+            const price = parseSkillPrice(md)
+            if (price > 0) return { kind: 'pending-payment' as const, skill: skillName, price }
+            return { kind: 'skill-content' as const, content: md }
+          },
+        }),
+      }
+    : undefined
+
+  const paymentTool = slug && env.CONTENT && env.CHAT_CACHE
+    ? {
+        payment: tool({
+          description: 'Verify a payment receipt and unlock a paid skill.',
+          inputSchema: z.object({
+            skill: z.string().describe('Skill name, e.g. "csv-analyzer"'),
+            receipt: z.string().describe('Transaction hash from the payment'),
+            amount: z.number().describe('Amount paid'),
+          }),
+          execute: async ({ skill: skillName, receipt, amount }: { skill: string; receipt: string; amount: number }) => {
+            const name = skillName.replace(/^skills\//, '')
+            const obj = await (env.CONTENT as R2Bucket).get(`${slug}/skills/${name}.md`)
+            if (!obj) return { kind: 'payment-rejected' as const, reason: 'skill not found' }
+            const md = await obj.text()
+            const expectedAmount = parseSkillPrice(md)
+            const v = await verifyReceipt({ receipt, amount, expectedAmount, slug: slug!, kv: env.CHAT_CACHE })
+            if (!v.ok) return { kind: 'payment-rejected' as const, reason: v.reason }
+            return { kind: 'skill-result' as const, content: md }
+          },
+        }),
+      }
+    : undefined
+
+  const compileTool = slug && env.CONTENT
+    ? {
+        compile: tool({
+          description: 'Compile an agent to Python, MCP, or skill.md format. Read-only — no approval required.',
+          inputSchema: z.object({
+            agent: z.string().describe('Agent file name, e.g. "support"'),
+            target: z.enum(['python', 'mcp', 'skill']).describe('Output format'),
+          }),
+          execute: async ({ agent, target }: { agent: string; target: CompileTarget }) => {
+            const obj = await (env.CONTENT as R2Bucket).get(`${slug}/agents/${agent}.md`)
+            if (!obj) return { kind: 'error' as const, error: 'agent not found' }
+            const md = await obj.text()
+            return { kind: 'compiled' as const, target, content: compile(md, target) }
+          },
+        }),
+      }
+    : undefined
+
+  const tools = { ...(writeTool ?? {}), ...(evalTool ?? {}), ...(skillTool ?? {}), ...(compileTool ?? {}), ...(paymentTool ?? {}) }
   const opts = {
-    system: SYSTEM + systemSuffix,
+    system: buildSystem(slug, ownerDisplayName) + systemSuffix,
     messages: await convertToModelMessages(messages),
     ...(Object.keys(tools).length > 0 ? { tools } : {}),
   }

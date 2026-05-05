@@ -1,7 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import { OwnerControls } from '@/components/OwnerControls'
-import { getSlugOwner, listFiles } from '@/lib/slug'
+import { getSlugContext } from '@/lib/slug'
 
 export const prerender = false
 
@@ -9,35 +9,56 @@ const { slug } = Astro.params as { slug: string }
 const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Database; CONTENT?: R2Bucket }
 if (!env.DB || !env.CONTENT) return Astro.redirect('/')
 
-const owner = await getSlugOwner(slug, env.DB)
-if (!owner) return new Response(null, { status: 404 })
+const ctx = await getSlugContext(slug, env.DB, env.CONTENT)
+if (!ctx) return new Response(null, { status: 404 })
+const { owner, styleBlock } = ctx
 
-const files = await listFiles(slug, env.CONTENT)
-const grouped: Record<string, string[]> = {}
-for (const f of files) {
-  const [kind] = f.split('/')
-  ;(grouped[kind] ??= []).push(f)
+const listed = await env.CONTENT.list({ prefix: `${slug}/`, include: ['customMetadata'] })
+const items = listed.objects
+  .filter(o => !o.key.includes('/_workspace/') && !o.key.includes('/_recovery/'))
+  .map(o => {
+    const rest = o.key.slice(slug.length + 1)
+    const [kind, ...nameParts] = rest.split('/')
+    const rawName = nameParts.join('/')
+    const meta = o.customMetadata as Record<string, string> | undefined
+    const title = meta?.title ?? rawName.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())
+    return { kind, rawName, title, uploaded: o.uploaded }
+  })
+
+const grouped: Record<string, typeof items> = {}
+for (const item of items) {
+  ;(grouped[item.kind] ??= []).push(item)
 }
+const publicUrl = `https://one.ie/u/${slug}`
 ---
 
-<Layout title={`@${slug} — ONE`} sidebar="mini" chat="none">
+<Layout title={`@${slug} — ONE`} sidebar="mini" chat="none" siteStyles={styleBlock}>
   <div class="max-w-2xl mx-auto px-4 py-8">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">@{slug}</h1>
-      <OwnerControls slug={slug} client:load />
+      <div class="flex items-center gap-2">
+        <button
+          onclick={`navigator.clipboard.writeText('${publicUrl}'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Share',1500)`}
+          class="text-xs px-2.5 py-1.5 rounded-lg border text-font/60 hover:text-font"
+          style="border-color:var(--color-border)"
+        >Share</button>
+        <OwnerControls slug={slug} client:load />
+      </div>
     </div>
-    {Object.entries(grouped).map(([kind, items]) => (
+    {Object.entries(grouped).map(([kind, kindItems]) => (
       <section class="mb-6">
         <h2 class="text-sm font-medium text-font/60 mb-2 capitalize">{kind}s</h2>
         <ul class="space-y-1">
-          {items.map(f => {
-            const name = f.split('/').slice(1).join('/')
-            return <li><a href={`/u/${slug}/${kind}/${name}`} class="text-primary hover:underline">{name}</a></li>
-          })}
+          {kindItems.map(item => (
+            <li class="flex items-center justify-between py-1">
+              <a href={`/u/${slug}/${item.kind}/${item.rawName}`} class="text-primary hover:underline">{item.title}</a>
+              <span class="text-xs text-font/40">{item.uploaded.toLocaleDateString()}</span>
+            </li>
+          ))}
         </ul>
       </section>
     ))}
-    {files.length === 0 && (
+    {items.length === 0 && (
       <p class="text-font/40 text-sm">No content yet. Chat to create your first page.</p>
     )}
   </div>

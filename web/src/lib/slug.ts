@@ -1,4 +1,6 @@
 import { customAlphabet } from 'nanoid'
+import type { SiteConfig } from './site'
+import { parseSite } from './site'
 
 const alpha = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 8)
 
@@ -23,4 +25,20 @@ export async function listFiles(slug: string, content: R2Bucket): Promise<string
 export async function slugExists(slug: string, db: D1Database): Promise<boolean> {
   const row = await db.prepare('SELECT slug FROM owners WHERE slug = ?').bind(slug).first()
   return row !== null
+}
+
+interface SlugContext {
+  owner: Awaited<ReturnType<typeof getSlugOwner>>
+  site: SiteConfig | null
+  styleBlock: string
+}
+
+export async function getSlugContext(slug: string, db: D1Database, content: R2Bucket): Promise<SlugContext | null> {
+  const owner = await getSlugOwner(slug, db)
+  if (!owner) return null
+  const siteObj = await content.get(`${slug}/site.md`)
+  if (!siteObj) return { owner, site: null, styleBlock: '' }
+  const md = await siteObj.text()
+  const site = parseSite(md)
+  return { owner, site, styleBlock: site.styleBlock }
 }

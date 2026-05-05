@@ -768,6 +768,42 @@ npx oneie deploy
 
 ---
 
+## Status
+
+All eight build cycles complete as of 2026-05-05. The system shipped end-to-end.
+
+| Cycle | What shipped | Exit scalar | Rubric |
+|-------|-------------|-------------|--------|
+| C1 Foundation | Passkey provision/commit, R2 + D1, chat `write` tool, PreviewCard | Visitor signs, lands in `/u/<slug>/chat`, writes first page | 0.821 |
+| C2 Eval | Runner, grader, benchmark loop, EvalCard, iterate tool | Skill pass rate 0.50 → 0.85 over 3 iterations | 0.821 |
+| C2.5 Skill creator | Sub-agent grader/analyzer/comparator, `auto-import.ts`, `schemas.md` | Chat user runs end-to-end loop, ships skill ≥ 0.85 | 0.912 |
+| C3 Bidirectional | Lenient SKILL.md parser, dir-format loader, import, emit, `skill/refresh` | Claude Code skill imports + runs unchanged | 0.912 |
+| C4 Artifacts | A2A AgentCard v1.0, DID document, ERC-8004, MCP `server.json`, sigstore manifest | `agent-card.json` validates against A2A v1.0 schema | 0.910 |
+| C5 Runtimes | Python uAgents package (`oneie run`), MCP `serveMd()`, SDK `AgentDefinitionSchema` + `AcceptSchema` | `oneie run agent.md` registers Almanac protocol | 0.889 |
+| C6 CLI | `@oneie/cli` — 14 verbs across `agent`/`skill`/`auth` commands, templates inlined | 14 verbs all return numeric receipts in `--json` mode | 0.890 |
+| C7 Polish | Custom domains (D1 + Astro middleware), settings page, HMAC magic-link recovery, binary media upload, SHA conflict gate on commit | `<slug>.one.ie` resolves; image in markdown post | 0.870 |
+
+### What is live
+
+- **`/api/provision`** — passkey registration, random slug, D1 insert
+- **`/api/commit`** — HMAC + passkey assertion → R2 PUT; conflict gate (409 on SHA mismatch); `null` content = delete (R2 versioning preserves)
+- **`/api/commit-media`** — base64 → Uint8Array → R2 with `httpMetadata`; SHA-256 immutable key
+- **`/api/recover`** — HMAC-signed magic-link token, KV TTL 900s, one-time-use
+- **`/api/settings`** — owner wallet + agentverse key (client-side encrypted before POST)
+- **`/u/[slug]/.well-known/agent-card.json`** — A2A AgentCard v1.0 from `agent.md` frontmatter
+- **`/u/[slug]/.well-known/did.json`** — DID document if `did:` field present
+- **`/u/[slug]/media/[name]`** — immutable R2 serve, `cache-control: max-age=31536000`
+- **Custom domains** — Astro middleware reads D1 `domains` table, rewrites host → `/u/<slug>`
+
+### What is pending (integration tests, not code)
+
+- Agentverse Almanac registration requires a live `AGENT_SECRET` seed — test in prod
+- ERC-8004 on-chain tx requires a funded wallet — `oneie publish --erc8004` ready, tx not sent
+- Sigstore Rekor bundle — `oneie publish` wired; Fulcio cert needs OIDC flow in CI
+- Custom domain TXT verification — D1 schema and UI ready; CF API call for cert issuance not wired (v1 uses CF's automatic CNAME cert, owner adds CNAME only)
+
+---
+
 ## See Also
 
 - `dictionary.md` — canonical names and six verbs

@@ -10,11 +10,25 @@ export function OwnerControls({ slug }: Props) {
   const [isOwner, setIsOwner] = useState(false)
 
   useEffect(() => {
-    fetch(`/api/provision?probe=1&slug=${encodeURIComponent(slug)}`)
-      .then(r => r.json())
-      .then((d: { owner?: boolean }) => setIsOwner(!!d.owner))
-      .catch(() => {})
-  }, [slug])
+    let cancelled = false
+    ;(async () => {
+      try {
+        const cred = await navigator.credentials.get({
+          mediation: 'silent',
+          publicKey: {
+            challenge: crypto.getRandomValues(new Uint8Array(16)),
+            rpId: window.location.hostname,
+            userVerification: 'discouraged',
+            allowCredentials: [],
+          },
+        })
+        if (!cancelled) setIsOwner(!!cred)
+      } catch {
+        if (!cancelled) setIsOwner(false)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [])
 
   if (!isOwner) return null
 

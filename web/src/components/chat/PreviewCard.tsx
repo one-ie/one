@@ -17,6 +17,7 @@ interface Props {
 export function PreviewCard({ slug, file, content, challenge, token, preview, onCommitted, onDiscard }: Props) {
   const [status, setStatus] = useState<'idle' | 'signing' | 'done' | 'error'>('idle')
   const [error, setError] = useState('')
+  const [liveUrl, setLiveUrl] = useState('')
 
   const approve = async () => {
     emitClick('ui:chat:approve-write')
@@ -32,6 +33,7 @@ export function PreviewCard({ slug, file, content, challenge, token, preview, on
       })
       const data = await res.json() as { ok?: boolean; url?: string; error?: string }
       if (data.ok && data.url) {
+        setLiveUrl(data.url)
         setStatus('done')
         onCommitted?.(data.url)
       } else {
@@ -42,6 +44,36 @@ export function PreviewCard({ slug, file, content, challenge, token, preview, on
       setError(String(e))
       setStatus('error')
     }
+  }
+
+  if (status === 'done' && liveUrl) {
+    return (
+      <div className="bg-background border rounded-xl p-4 space-y-3" style={{ borderColor: 'var(--color-border)' }}>
+        <div className="flex items-center gap-2 text-sm font-medium">
+          <Check size={14} className="text-success" />
+          <span>Live</span>
+          <span className="text-font/40 text-xs truncate flex-1">{liveUrl}</span>
+        </div>
+        <div className="flex gap-2">
+          <a
+            href={liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => emitClick('ui:chat:open-live')}
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm bg-primary text-on-primary hover:brightness-110"
+          >
+            Open ↗
+          </a>
+          <button
+            onClick={() => { emitClick('ui:chat:copy-url'); navigator.clipboard.writeText(liveUrl) }}
+            className="px-3 py-2 rounded-lg text-sm border text-font"
+            style={{ borderColor: 'var(--color-border)' }}
+          >
+            Copy URL
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -65,7 +97,7 @@ export function PreviewCard({ slug, file, content, challenge, token, preview, on
           disabled={status === 'signing' || status === 'done'}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm bg-primary text-on-primary disabled:opacity-50"
         >
-          <Check size={14} /> {status === 'signing' ? 'Signing…' : status === 'done' ? 'Saved' : 'Approve'}
+          <Check size={14} /> {status === 'signing' ? 'Signing…' : 'Approve'}
         </button>
       </div>
     </div>

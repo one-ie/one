@@ -30,6 +30,7 @@ import { Button } from '@/components/ui/button'
 import { emitClick } from '@/lib/ui-signal'
 import { PreviewCard } from '@/components/chat/PreviewCard'
 import { EvalCard } from '@/components/chat/EvalCard'
+import { PaymentCard } from '@/components/chat/PaymentCard'
 import type { BenchmarkResult } from '@/lib/eval/aggregate'
 
 function isToolPart(p: UIMessage['parts'][number]): p is ToolUIPart | DynamicToolUIPart {
@@ -64,6 +65,7 @@ interface Props {
   ttsAvailable: boolean
   slug?: string
   onIterateEval?: (prompt: string) => void
+  onSubmitPayment?: (receipt: string, skill: string, amount: number) => void
   onSpeak: (msg: UIMessage) => void
   onApproval: (args: { id: string; approved: boolean }) => void
 }
@@ -75,6 +77,7 @@ export function MessageList({
   ttsAvailable,
   slug,
   onIterateEval,
+  onSubmitPayment,
   onSpeak,
   onApproval,
 }: Props) {
@@ -212,6 +215,17 @@ export function MessageList({
                           challenge={String(o.challenge ?? '')}
                           token={String(o.token ?? '')}
                           preview={String(o.preview ?? '')}
+                        />
+                      )
+                    }
+                    if (o.kind === 'pending-payment') {
+                      return (
+                        <PaymentCard
+                          key={i}
+                          skill={String(o.skill ?? '')}
+                          price={Number(o.price ?? 0)}
+                          wallet={o.wallet ? String(o.wallet) : undefined}
+                          onSubmit={onSubmitPayment ?? (() => {})}
                         />
                       )
                     }

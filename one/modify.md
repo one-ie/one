@@ -4,13 +4,13 @@ A visitor lands on `one.ie`, clicks **Get your site**, signs with passkey, and l
 
 **No CLI. No install. No rebuild. Browser-only.**
 
-> **Implementation scope.** This doc describes the full architecture. The first ship (Cycle 1 of [`agent-spec-todo.md`](agent-spec-todo.md)) is the MVP only:
-> - Single passkey per slug (`owners(slug PK, pubkey, credential_id, ts)`)
-> - Stateless HMAC challenges (registration + commit), no cookies
-> - Random slug; no settings page
-> - No recovery codes, no multi-key, no magic-link, no API keys
->
-> Recovery codes, multi-key (`owners_keys`), magic-link recovery, settings page, wallet column, agentverse-key encryption, and API-key minting are **Tier 2** — they ship in Cycle 7 (Polish), not C1. The sections below describing those features are architectural intent, not the C1 build list. If you're implementing C1, the scope is the file table in agent-spec-todo.md § Cycle 1.
+> **Implementation status: C1–C7 shipped; C11–C14, C8–C10 in progress.** See [`modify-todo.md`](modify-todo.md) for the full production-readiness plan.
+> **Shipped (C1):** Passkey provision/commit, stateless HMAC, random slug, R2 + D1, chat `write` tool, PreviewCard.
+> **Shipped (C7):** Settings page, `owners_keys` table, HMAC magic-link recovery (`/api/recover`), wallet + `agentverse_key_enc` columns, binary media upload (`/api/commit-media`), custom domain routing (Astro middleware + D1 `domains` table), SHA conflict gate on commit.
+> **Known blockers (C11):** `RP_ID=localhost` in wrangler.toml breaks passkeys in production; OwnerControls shows Edit to all visitors (slugExists probe, not passkey ownership check); chat system prompt is developer-facing not owner-facing; x402 payment gate absent from chat.ts (paid skills run free).
+> **C12 (queued):** Recovery codes at provision, TOS capture, display name, first-run interstitial.
+> **C13 (queued):** Post-commit live URL, index page titles, settings completeness (devices, domain, recovery).
+> **C8 (queued):** `site.ts`, theme injection, `compile` tool. **C9 (queued):** Sitemap, robots, history UI, export. **C14 (queued):** x402 revenue gate. **C10 (queued):** Notifications, report, storage cap, domain API.
 
 ---
 
@@ -142,7 +142,8 @@ Six kinds of file, one tool. Per-kind frontmatter validation runs at write time:
 | `/u/<slug>/media/<name>` | R2 `<slug>/media/<name>` | **Yes** (signed) |
 | Default agent | R2 `<slug>/agent.md` | **Yes** (signed) |
 | Site identity | R2 `<slug>/site.md` | **Yes** (signed) |
-| Owner registry | D1 `owners(slug, pubkey, wallet, ts)` | provision-only |
+| Owner registry | D1 `owners(slug, pubkey, credential_id, wallet, agentverse_key_enc, ts)` | provision-only |
+| Device keys | D1 `owners_keys(slug, pubkey, label, registered_at)` | settings — multi-key |
 | Domain registry | D1 `domains(host PK, slug, verified, ts)` | settings-only |
 | Edit history | R2 object versions | automatic |
 

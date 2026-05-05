@@ -1,0 +1,53 @@
+---
+import Layout from '@/layouts/Layout.astro'
+
+export const prerender = false
+
+const { slug, file } = Astro.params as { slug: string; file: string }
+const env = (await import('cloudflare:workers' as string)).env as { CONTENT?: R2Bucket }
+if (!env.CONTENT) return Astro.redirect(`/u/${slug}`)
+
+const decodedFile = decodeURIComponent(file)
+const prefix = `${slug}/_versions/${decodedFile}/`
+const listed = await env.CONTENT.list({ prefix, include: ['customMetadata'] })
+const versions = listed.objects
+  .sort((a, b) => b.uploaded.getTime() - a.uploaded.getTime())
+  .map(o => ({
+    key: o.key,
+    ts: o.customMetadata?.ts ? Number(o.customMetadata.ts) : o.uploaded.getTime(),
+    model: o.customMetadata?.model ?? 'user',
+    label: new Date(o.customMetadata?.ts ? Number(o.customMetadata.ts) : o.uploaded.getTime()).toLocaleString(),
+  }))
+---
+
+<Layout title={`History — ${decodedFile}`} sidebar="mini" chat="none">
+  <div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="flex items-center gap-3 mb-6">
+      <a href={`/u/${slug}`} class="text-font/60 hover:text-font text-sm">← @{slug}</a>
+      <span class="text-font/40">/</span>
+      <h1 class="text-lg font-semibold">{decodedFile}</h1>
+    </div>
+
+    {versions.length === 0 && (
+      <p class="text-font/40 text-sm">No version history yet. History is recorded after the first edit.</p>
+    )}
+
+    <ul class="space-y-3">
+      {versions.map((v, i) => (
+        <li class="bg-background border rounded-xl p-4 flex items-center justify-between" style="border-color:var(--color-border)">
+          <div>
+            <span class="text-sm font-medium text-font">{v.label}</span>
+            <span class="ml-2 text-xs text-font/40">{v.model}</span>
+          </div>
+          <a
+            href={`/u/${slug}/chat?restore=${encodeURIComponent(v.key)}`}
+            class="text-xs px-3 py-1.5 rounded-lg border text-font hover:text-font/80"
+            style="border-color:var(--color-border)"
+          >
+            {i === 0 ? 'Previous version' : `Version ${versions.length - i}`}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Layout>
