@@ -1,33 +1,34 @@
 import type { APIRoute } from 'astro'
 import { generateMnemonic } from '@scure/bip39'
 import { wordlist } from '@scure/bip39/wordlists/english.js'
-import { makeChallenge, checkToken, verifyRegistrationResponse } from '../../lib/passkey'
+import { makeChallenge, checkToken, verifyRegistrationResponse, rpFromRequest } from '../../lib/passkey'
 import { randomSlug, slugExists } from '../../lib/slug'
 import { autoImportSkillCreator } from '../../lib/skill/auto-import'
 
 export const prerender = false
 
-type CfEnv = { SERVER_SECRET: string; DB: D1Database; CONTENT?: R2Bucket; RP_ID?: string; ORIGIN?: string }
+type CfEnv = { SERVER_SECRET: string; DB: D1Database; CONTENT?: R2Bucket }
 
 async function getEnv(): Promise<CfEnv> {
   const mod = (await import('cloudflare:workers' as string)) as { env?: CfEnv }
   return mod.env as CfEnv
 }
 
-export const GET: APIRoute = async ({ request, url }) => {
+export const GET: APIRoute = async ({ request }) => {
   const env = await getEnv()
+  const { rpId } = rpFromRequest(request)
 
   const { challenge, token } = await makeChallenge(env.SERVER_SECRET)
   const userId = crypto.randomUUID()
-  const rp = env.RP_ID ?? url.hostname
   return new Response(
-    JSON.stringify({ challenge, token, userId, rpId: rp, rpName: 'ONE' }),
+    JSON.stringify({ challenge, token, userId, rpId, rpName: 'ONE' }),
     { headers: { 'Content-Type': 'application/json' } },
   )
 }
 
-export const POST: APIRoute = async ({ request, url }) => {
+export const POST: APIRoute = async ({ request }) => {
   const env = await getEnv()
+  const { rpId, origin } = rpFromRequest(request)
   const body = await request.json() as {
     registration: Record<string, unknown>
     userId: string
@@ -45,14 +46,13 @@ export const POST: APIRoute = async ({ request, url }) => {
     return new Response(JSON.stringify({ error: 'invalid or expired challenge' }), { status: 400 })
   }
 
-  const rp = env.RP_ID ?? url.hostname
   let verification
   try {
     verification = await verifyRegistrationResponse({
       response: body.registration as unknown as Parameters<typeof verifyRegistrationResponse>[0]['response'],
       expectedChallenge: body.challenge,
-      expectedOrigin: env.ORIGIN ?? url.origin,
-      expectedRPID: rp,
+      expectedOrigin: origin,
+      expectedRPID: rpId,
     })
   } catch (e) {
     return new Response(JSON.stringify({ error: 'registration failed', detail: String(e) }), { status: 400 })

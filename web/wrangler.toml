@@ -33,11 +33,12 @@ AGENT_ID = "one-demo"
 AGENT_NAME = "ONE Demo"
 AGENT_MODEL = "meta-llama/llama-4-maverick"
 ONE_API_URL = "https://dev.one.ie"
-# RP_ID and ORIGIN resolve from url.hostname / url.origin at runtime.
-# Override as Cloudflare secrets if needed: wrangler secret put RP_ID
+# Passkey RP ID always derives from the request's url.hostname.
+# localhost in dev → "localhost", prod custom domain → that hostname.
 
-# Custom domain
-[[routes]]
+# Custom domain — scoped to production only so `wrangler dev` runs as localhost.
+# Deploy prod with: wrangler deploy --env production
+[[env.production.routes]]
 pattern = "demo.one.ie"
 custom_domain = true
 

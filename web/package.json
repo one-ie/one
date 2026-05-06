@@ -5,6 +5,7 @@
   "description": "ONE demo - chatbot + landing page",
   "scripts": {
     "dev": "astro dev",
+    "dev:wrangler": "npm run build && wrangler dev --port 8787 --ip 127.0.0.1",
     "build": "NODE_ENV=production astro build",
     "preview": "astro preview",
     "deploy": "npm run build && wrangler deploy",

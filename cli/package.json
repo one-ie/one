@@ -4,7 +4,8 @@
   "description": "ONE agent CLI",
   "type": "module",
   "bin": {
-    "oneie": "./dist/src/index.js"
+    "oneie": "./dist/src/index.js",
+    "one": "./dist/src/index.js"
   },
   "scripts": {
     "build": "tsc",

@@ -63,7 +63,7 @@ without verification is superstition; with verification it's learning.
 |--------------|------|------------|
 | `agents/`    | Markdown agent definitions (templates in `agents/templates/`) | `agents/CLAUDE.md` |
 | `mcp/`       | `@oneie/mcp` — MCP server for Claude/Cursor | `mcp/CLAUDE.md` |
-| `cli/`       | `@oneie/cli` — 14 verbs: `agent` (new/validate/lint/compile/serve/publish/sign/verify/eval/diff), `skill` (new/emit/publish/refresh/import/eval), `auth` (login/logout); `--json` flag on all commands | `cli/src/index.ts` |
+| `cli/`       | `@oneie/cli` — 15 verbs: `agent` (new/validate/lint/compile/serve/publish/sign/verify/eval/diff), `skill` (new/emit/publish/refresh/import/eval), `auth` (login/logout), `dev` (full local CF stack via wrangler); installs both `one` and `oneie` bins; `--json` flag on all commands | `cli/src/index.ts` |
 | `python/`    | `oneie` Python package — `oneie run agent.md` loads markdown, builds uAgents Protocol, registers Almanac; `OpenRouterClient` for LLM; `oneie.agent.Agent` class | `python/oneie/__init__.py` |
 | `sdk/`       | `@oneie/sdk` — TypeScript SDK | `sdk/CLAUDE.md` |
 | `claw/`      | Edge-native AI agent worker — Telegram/Discord/HTTP → `ToolLoopAgent` → streaming SSE; approval-gated substrate tools; `substrateMiddleware` auto-wires pheromone (Hono on CF Workers, D1+KV, AI SDK v6) | `claw/README.md` |

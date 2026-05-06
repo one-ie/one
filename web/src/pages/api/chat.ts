@@ -127,7 +127,7 @@ export const POST: APIRoute = async ({ request }) => {
           inputSchema: writeSchema,
           execute: async (args: z.infer<typeof writeSchema>) => {
             const { challenge, token } = await makeChallenge(env.SERVER_SECRET!)
-            return { kind: 'pending' as const, challenge, token, file: args.file, preview: args.content?.slice(0, 300) ?? '' }
+            return { kind: 'pending' as const, challenge, token, file: args.file, content: args.content ?? '', preview: args.content?.slice(0, 300) ?? '' }
           },
         }),
       }

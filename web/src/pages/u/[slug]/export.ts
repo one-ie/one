@@ -1,14 +1,15 @@
 import type { APIRoute } from 'astro'
 import { zipSync, strToU8 } from 'fflate'
-import { verifyAuthenticationResponse } from '../../../lib/passkey'
+import { verifyAuthenticationResponse, rpFromRequest } from '../../../lib/passkey'
 import { getSlugOwner } from '../../../lib/slug'
 
 export const prerender = false
 
-export const GET: APIRoute = async ({ params, request, url }) => {
+export const GET: APIRoute = async ({ params, request }) => {
   const slug = params.slug!
-  const env = (await import('cloudflare:workers' as string)).env as { CONTENT?: R2Bucket; DB?: D1Database; RP_ID?: string; ORIGIN?: string }
+  const env = (await import('cloudflare:workers' as string)).env as { CONTENT?: R2Bucket; DB?: D1Database }
   if (!env.CONTENT || !env.DB) return new Response('not configured', { status: 503 })
+  const { rpId, origin } = rpFromRequest(request)
 
   const assertionHeader = request.headers.get('X-Assertion')
   if (!assertionHeader) {
@@ -30,8 +31,8 @@ export const GET: APIRoute = async ({ params, request, url }) => {
     verification = await verifyAuthenticationResponse({
       response: assertion as unknown as Parameters<typeof verifyAuthenticationResponse>[0]['response'],
       expectedChallenge: assertion['challenge'] as string,
-      expectedOrigin: env.ORIGIN ?? url.origin,
-      expectedRPID: env.RP_ID ?? url.hostname,
+      expectedOrigin: origin,
+      expectedRPID: rpId,
       credential: {
         id: owner.credential_id,
         publicKey: Uint8Array.from(Buffer.from(owner.pubkey, 'base64')),

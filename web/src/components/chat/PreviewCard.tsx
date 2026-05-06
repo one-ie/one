@@ -23,9 +23,19 @@ export function PreviewCard({ slug, file, content, challenge, token, preview, on
     emitClick('ui:chat:approve-write')
     setStatus('signing')
     try {
-      const optRes = await fetch('/api/provision?probe=0')
-      const opts = await optRes.json()
-      const assertion = await startAuthentication({ optionsJSON: opts })
+      const credRes = await fetch(`/api/commit?slug=${encodeURIComponent(slug)}`)
+      const credData = await credRes.json() as { credentialId?: string }
+      const assertion = await startAuthentication({
+        optionsJSON: {
+          challenge,
+          rpId: window.location.hostname,
+          userVerification: 'required' as const,
+          timeout: 60000,
+          allowCredentials: credData.credentialId
+            ? [{ type: 'public-key' as const, id: credData.credentialId }]
+            : [],
+        },
+      })
       const res = await fetch('/api/commit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

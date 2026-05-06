@@ -3,6 +3,7 @@ import { Command } from 'commander'
 import { agentCmd } from './agent.js'
 import { skillCmd } from './skill.js'
 import { authCmd } from './auth.js'
+import { devCmd } from './dev.js'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { resolve, dirname } from 'node:path'
@@ -21,6 +22,7 @@ const program = new Command()
 program.addCommand(agentCmd())
 program.addCommand(skillCmd())
 program.addCommand(authCmd())
+program.addCommand(devCmd())
 
 program.parseAsync(process.argv).catch((err: Error) => {
   const isJson = process.argv.includes('--json')

@@ -196,6 +196,14 @@ Listen carefully. Summarise the complaint back before proposing anything.
 | `applyTo` | string[] | glob filter when `trigger=glob`, e.g. `["**/*.tsx"]` |
 | `tags` | string[] | marketplace discovery tags |
 | `when_to_use` | string | SKILL.md compat alias for `description` |
+| `triggers` | string \| string[] | compat alias — appended to `description` for catalog injection (used by qodo-style skills) |
+| `homepage` | string | OpenClaw passthrough — surfaced in UI as "Website" |
+| `user-invocable` | boolean | OpenClaw passthrough — when `false`, skill is hidden from slash-command list (default `true`) |
+| `disable-model-invocation` | boolean | OpenClaw passthrough — excludes from agent prompt; explicit `/skill` invoke still works |
+| `command-dispatch` | enum | OpenClaw passthrough — `"tool"` bypasses the model and dispatches directly |
+| `command-tool` | string | OpenClaw passthrough — tool name to invoke when `command-dispatch=tool` |
+| `command-arg-mode` | enum | OpenClaw passthrough — `"raw"` forwards the raw argument string |
+| `metadata` | object | OpenClaw passthrough — single-line JSON for gating, requirements, configuration |
 | `inputSchema` | JSON Schema | MCP + uAgents compatible |
 | `outputSchema` | JSON Schema | MCP + uAgents compatible |
 | `version` | string | semver — changing schemas without bumping is rejected by `client.publish()` |
@@ -272,9 +280,13 @@ project/
 | Project | `<project>/skills/` | Native ONE location |
 | Project | `<project>/.agents/skills/` | Cross-client convention — your skills are visible to Claude Code, Cursor, etc. |
 | Project | `<project>/.claude/skills/` | Pragmatic compat — many existing skills live here |
+| Project | `<project>/.openclaw/skills/` | OpenClaw compat |
 | User | `~/.agents/skills/` | Cross-client user-level |
 | User | `~/.claude/skills/` | Compat |
+| User | `~/.openclaw/skills/` | OpenClaw user-level |
 | Bundled | `@oneie/sdk/built-in-skills/` | Skills shipped with the SDK |
+
+**Grouping.** A folder under any of the above may itself contain `<group>/<skill>/SKILL.md` (one nesting level — OpenClaw convention). Discovery walks recursively; pathStem is always the immediate parent of `SKILL.md`.
 
 **Chat-built sandboxes** (`/u/<slug>`) skip filesystem discovery — the only source is R2 at `<slug>/skills/`. Importing a third-party skill is a chat command:
 
@@ -296,7 +308,17 @@ Drop a file in the right folder. It's live on the next deploy.
 
 ## Bidirectional compatibility with agentskills.io
 
-We **emit** the agentskills.io directory format and we **read** it. Skills authored for Claude Code, Cursor, or any agentskills.io-compliant client work in our runtimes without conversion. Our skills work in theirs without conversion. One spec, two directions.
+We **emit** the agentskills.io directory format and we **read** it. Skills authored for Claude Code, Cursor, nanoclaw, or any agentskills.io-compliant client work in our runtimes without conversion. Our skills work in theirs without conversion. One spec, two directions.
+
+**Verified compatibility** (sampled corpora, `oneie skill validate`):
+
+| Source | Total | Strict pass | Recovered | Compatible |
+| --- | ---: | ---: | ---: | ---: |
+| nanoclaw — `qwibitai/nanoclaw/.claude/skills/` | 47 | 46 | 1 (no-frontmatter fallback) | 47/47 |
+| openclaw — `openclaw/openclaw/**/skills/` | 33 | 33 | 0 | 33/33 |
+| **Combined** | **80** | **79** | **1** | **80/80** |
+
+Non-spec frontmatter keys observed across both corpora: `triggers` (aliased into description), `version` (native), `allowed-tools` (native), `user-invocable`, `metadata` (OpenClaw passthrough — see field table). No proprietary key broke loading.
 
 ### Parse: lenient by default
 
@@ -307,7 +329,9 @@ Skills are authored across many clients with slightly different YAML interpretat
 | Unquoted `:` in description (`description: Use this skill when: ...`) | Auto-quote retry, then accept |
 | `name` doesn't match parent directory | Warn, load anyway |
 | `name` exceeds 64 chars | Warn, load anyway |
-| Missing `description` | Skip (no description = no routing trigger) |
+| Missing frontmatter entirely | Derive `name` from path stem and `description` from the first paragraph of the body; flag via `oneie skill validate` |
+| Missing `description` only | Use first paragraph of body if present, else skip with diagnostic |
+| `triggers` field present | Append to `description` for catalog injection |
 | Unparseable YAML | Skip, log diagnostic |
 | Unknown frontmatter fields | Pass through to `metadata` (preserve, don't fail) |
 

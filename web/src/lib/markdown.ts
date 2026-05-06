@@ -1,5 +1,3 @@
-import { marked } from 'marked'
-
 export interface FrontmatterResult {
   frontmatter: Record<string, unknown>
   body: string
@@ -20,6 +18,7 @@ export function splitFrontmatter(raw: string): FrontmatterResult {
   return { frontmatter: fm, body: match[2] }
 }
 
-export function renderMarkdown(body: string): string {
+export async function renderMarkdown(body: string): Promise<string> {
+  const { marked } = await import('marked')
   return String(marked(body, { gfm: true, breaks: true }))
 }

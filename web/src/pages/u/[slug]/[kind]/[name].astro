@@ -13,7 +13,7 @@ if (!obj) return new Response(null, { status: 404 })
 
 const raw = await obj.text()
 const { frontmatter, body } = splitFrontmatter(raw)
-const html = renderMarkdown(body)
+const html = await renderMarkdown(body)
 const title = (frontmatter.title as string | undefined) ?? name
 ---
 

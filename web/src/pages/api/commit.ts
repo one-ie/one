@@ -1,18 +1,30 @@
 import type { APIRoute } from 'astro'
-import { checkToken, verifyAuthenticationResponse } from '../../lib/passkey'
+import { checkToken, verifyAuthenticationResponse, rpFromRequest } from '../../lib/passkey'
 import { getSlugOwner } from '../../lib/slug'
 
 export const prerender = false
 
-type CfEnv = { SERVER_SECRET: string; DB: D1Database; CONTENT: R2Bucket; RP_ID?: string; ORIGIN?: string }
+type CfEnv = { SERVER_SECRET: string; DB: D1Database; CONTENT: R2Bucket }
 
 async function getEnv(): Promise<CfEnv> {
   const mod = (await import('cloudflare:workers' as string)) as { env?: CfEnv }
   return mod.env as CfEnv
 }
 
-export const POST: APIRoute = async ({ request, url }) => {
+export const GET: APIRoute = async ({ url }) => {
+  const slug = url.searchParams.get('slug')
+  if (!slug) return new Response(JSON.stringify({ error: 'missing slug' }), { status: 400 })
   const env = await getEnv()
+  const owner = await getSlugOwner(slug, env.DB)
+  if (!owner) return new Response(JSON.stringify({ error: 'not found' }), { status: 404 })
+  return new Response(JSON.stringify({ credentialId: owner.credential_id }), {
+    headers: { 'Content-Type': 'application/json' },
+  })
+}
+
+export const POST: APIRoute = async ({ request }) => {
+  const env = await getEnv()
+  const { rpId, origin } = rpFromRequest(request)
   const body = await request.json() as {
     slug: string
     file: string
@@ -42,8 +54,8 @@ export const POST: APIRoute = async ({ request, url }) => {
     verification = await verifyAuthenticationResponse({
       response: body.assertion as unknown as Parameters<typeof verifyAuthenticationResponse>[0]['response'],
       expectedChallenge: body.challenge,
-      expectedOrigin: env.ORIGIN ?? url.origin,
-      expectedRPID: env.RP_ID ?? url.hostname,
+      expectedOrigin: origin,
+      expectedRPID: rpId,
       credential: {
         id: owner.credential_id,
         publicKey: pubkeyBytes,

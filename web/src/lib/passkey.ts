@@ -10,6 +10,13 @@ export type { VerifiedRegistrationResponse, VerifiedAuthenticationResponse } fro
 const used = new Set<string>()
 const enc = (s: string) => new TextEncoder().encode(s)
 
+export function rpFromRequest(request: Request): { rpId: string; origin: string } {
+  const host = request.headers.get('host') ?? new URL(request.url).host
+  const rpId = host.split(':')[0]
+  const proto = rpId === 'localhost' || rpId === '127.0.0.1' ? 'http' : 'https'
+  return { rpId, origin: `${proto}://${host}` }
+}
+
 export async function makeChallenge(secret: string): Promise<{ challenge: string; token: string }> {
   const bytes = crypto.getRandomValues(new Uint8Array(32))
   const challenge = btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
@@ -27,6 +34,8 @@ export async function verifyCommitAssertion(opts: {
   content: string
   challenge: string
   assertion: unknown
+  origin: string
+  rpId: string
   env: { DB: D1Database; SERVER_SECRET?: string }
 }): Promise<boolean> {
   const owner = await getSlugOwner(opts.slug, opts.env.DB)
@@ -36,8 +45,8 @@ export async function verifyCommitAssertion(opts: {
     const result = await verifyAuthenticationResponse({
       response: opts.assertion as AuthenticationResponseJSON,
       expectedChallenge: opts.challenge,
-      expectedOrigin: globalThis.location?.origin ?? 'https://one.ie',
-      expectedRPID: globalThis.location?.hostname ?? 'one.ie',
+      expectedOrigin: opts.origin,
+      expectedRPID: opts.rpId,
       credential: {
         id: owner.credential_id,
         publicKey: pubkeyBytes,

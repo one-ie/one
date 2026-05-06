@@ -1,3 +1,6 @@
+// Mirror of web/src/lib/skill/parser.ts — keep in sync.
+// TODO: dedupe via @oneie/sdk export once SDK ships skill helpers.
+
 export interface Diagnostic {
   level: 'warn' | 'info'
   code: string
@@ -65,17 +68,9 @@ export function parse(md: string, opts: ParseOptions = {}): ParsedSkill {
     body = md.trim()
     if (opts.pathStem) {
       meta.name = opts.pathStem
-      diagnostics.push({
-        level: 'warn',
-        code: 'no-frontmatter',
-        message: `No frontmatter; deriving name='${opts.pathStem}' from path`,
-      })
+      diagnostics.push({ level: 'warn', code: 'no-frontmatter', message: `No frontmatter; deriving name='${opts.pathStem}' from path` })
     } else {
-      diagnostics.push({
-        level: 'warn',
-        code: 'no-frontmatter',
-        message: 'No frontmatter and no pathStem provided',
-      })
+      diagnostics.push({ level: 'warn', code: 'no-frontmatter', message: 'No frontmatter and no pathStem provided' })
     }
   } else {
     const yaml = parts[1]
@@ -83,55 +78,29 @@ export function parse(md: string, opts: ParseOptions = {}): ParsedSkill {
     try {
       meta = parseFrontmatter(yaml)
     } catch {
-      const cleaned = yaml.split('\n')
-        .filter(l => !l.match(/^[^:#][^:]*:[^:]*:[^:]*/))
-        .join('\n')
+      const cleaned = yaml.split('\n').filter(l => !l.match(/^[^:#][^:]*:[^:]*:[^:]*/)).join('\n')
       meta = parseFrontmatter(cleaned)
-      diagnostics.push({
-        level: 'warn',
-        code: 'lenient-yaml',
-        message: 'Frontmatter required lenient retry (unquoted colons)',
-      })
+      diagnostics.push({ level: 'warn', code: 'lenient-yaml', message: 'Frontmatter required lenient retry (unquoted colons)' })
     }
   }
 
   if (!meta.name && opts.pathStem) {
     meta.name = opts.pathStem
-    diagnostics.push({
-      level: 'warn',
-      code: 'missing-name',
-      message: `Missing name; using path stem '${opts.pathStem}'`,
-    })
+    diagnostics.push({ level: 'warn', code: 'missing-name', message: `Missing name; using path stem '${opts.pathStem}'` })
   }
-
   if (opts.pathStem && meta.name && meta.name !== opts.pathStem) {
-    diagnostics.push({
-      level: 'warn',
-      code: 'name-mismatch',
-      message: `name='${String(meta.name)}' does not match path stem '${opts.pathStem}'`,
-    })
+    diagnostics.push({ level: 'warn', code: 'name-mismatch', message: `name='${String(meta.name)}' does not match path stem '${opts.pathStem}'` })
   }
-
   if (typeof meta.name === 'string' && meta.name.length > 64) {
-    diagnostics.push({
-      level: 'warn',
-      code: 'name-too-long',
-      message: `name length ${meta.name.length} exceeds 64 chars`,
-    })
+    diagnostics.push({ level: 'warn', code: 'name-too-long', message: `name length ${meta.name.length} exceeds 64 chars` })
   }
-
   if (!meta.description) {
     const para = firstParagraph(body)
     if (para) {
       meta.description = para
-      diagnostics.push({
-        level: 'info',
-        code: 'description-from-body',
-        message: 'Derived description from first body paragraph',
-      })
+      diagnostics.push({ level: 'info', code: 'description-from-body', message: 'Derived description from first body paragraph' })
     }
   }
-
   const triggersStr = typeof meta.triggers === 'string'
     ? meta.triggers
     : Array.isArray(meta.triggers)
@@ -140,11 +109,7 @@ export function parse(md: string, opts: ParseOptions = {}): ParsedSkill {
   if (triggersStr) {
     const base = typeof meta.description === 'string' ? meta.description : ''
     meta.description = base ? `${base} Triggers: ${triggersStr}` : `Triggers: ${triggersStr}`
-    diagnostics.push({
-      level: 'info',
-      code: 'triggers-merged',
-      message: "'triggers' field merged into description",
-    })
+    diagnostics.push({ level: 'info', code: 'triggers-merged', message: "'triggers' field merged into description" })
   }
 
   return { meta, body, diagnostics }

@@ -52,5 +52,6 @@ export async function importSkill(
     : {}
   index[ref] = cacheKey
   await r2.put(indexKey, JSON.stringify(index))
-  return { skill: toSkill(parse(text)), cacheKey }
+  const stem = ref.includes('/') ? (ref.split('/').pop() ?? ref).split('@')[0] : ref.split('@')[0]
+  return { skill: toSkill(parse(text, { pathStem: stem })), cacheKey }
 }

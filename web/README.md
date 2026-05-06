@@ -11,8 +11,13 @@ npm install
 # Set your OpenRouter key
 wrangler secret put OPENROUTER_API_KEY
 
-# Run locally
+# Run locally — Vite dev server (port 4321, no CF bindings)
 npm run dev
+
+# Run locally — full CF stack (D1 + KV + R2 + Workers, port 8787)
+one dev                # build + wrangler dev with local bindings
+one dev --skip-build   # skip rebuild
+one dev --remote       # real D1/KV/R2 instead of local
 
 # Deploy to Cloudflare Workers
 npm run deploy

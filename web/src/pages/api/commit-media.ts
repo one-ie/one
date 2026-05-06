@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro'
-import { verifyCommitAssertion } from '@/lib/passkey'
+import { verifyCommitAssertion, rpFromRequest } from '@/lib/passkey'
 
 export const prerender = false
 
@@ -13,6 +13,7 @@ const ALLOWED_TYPES: Record<string, string> = {
 }
 
 export const POST: APIRoute = async ({ request }) => {
+  const { rpId, origin } = rpFromRequest(request)
   const _env = (await import('cloudflare:workers' as string)).env as {
     CONTENT?: R2Bucket
     DB?: D1Database
@@ -43,14 +44,14 @@ export const POST: APIRoute = async ({ request }) => {
   const hashBuf = await crypto.subtle.digest('SHA-256', bytes)
   const sha = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('')
 
-  const ok = await verifyCommitAssertion({ slug, file: `media/${sha}.${ext}`, content: sha, challenge, assertion, env })
+  const ok = await verifyCommitAssertion({ slug, file: `media/${sha}.${ext}`, content: sha, challenge, assertion, origin, rpId, env })
   if (!ok) return new Response('unauthorized', { status: 401 })
 
   const key = `${slug}/media/${sha}.${ext}`
   await env.CONTENT.put(key, bytes, { httpMetadata: { contentType }, customMetadata: { sha, filename, ts: String(Date.now()) } })
 
-  const url = `/u/${slug}/media/${sha}.${ext}`
-  return new Response(JSON.stringify({ ok: true, sha, url, contentType }), {
+  const mediaUrl = `/u/${slug}/media/${sha}.${ext}`
+  return new Response(JSON.stringify({ ok: true, sha, url: mediaUrl, contentType }), {
     headers: { 'content-type': 'application/json' },
   })
 }

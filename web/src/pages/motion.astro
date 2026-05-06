@@ -29,7 +29,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
       </div>
     </Reveal>
 
-    <HeroScene client:visible />
+    <HeroScene client:only="react" />
 
     <div class="scroll-cue">
       <span>Scroll</span>
@@ -137,7 +137,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
       <p class="muted">Click a tab. Try the demo. All six capabilities in one place.</p>
     </Reveal>
 
-    <FeatureTabs client:load />
+    <FeatureTabs client:only="react" />
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
@@ -150,7 +150,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
     </Reveal>
   </div>
 
-  <ScrollCounter client:visible height="260vh" className="scene-stage" />
+  <ScrollCounter client:only="react" height="260vh" className="scene-stage" />
 
   <!-- ═══════════════════════════════════════════════════════════════════════
        7. PROOF — performance guardrails (handle objections)

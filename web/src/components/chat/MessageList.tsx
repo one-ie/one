@@ -211,7 +211,7 @@ export function MessageList({
                           key={i}
                           slug={slug ?? ''}
                           file={String(o.file ?? '')}
-                          content={String(o.preview ?? '')}
+                          content={String(o.content ?? o.preview ?? '')}
                           challenge={String(o.challenge ?? '')}
                           token={String(o.token ?? '')}
                           preview={String(o.preview ?? '')}

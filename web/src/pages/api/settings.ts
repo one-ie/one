@@ -1,10 +1,10 @@
 import type { APIRoute } from 'astro'
-import { checkToken, verifyRegistrationResponse } from '../../lib/passkey'
+import { checkToken, verifyRegistrationResponse, rpFromRequest } from '../../lib/passkey'
 
 export const prerender = false
 
 export const POST: APIRoute = async ({ request, url }) => {
-  const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Database; SERVER_SECRET?: string; RP_ID?: string; ORIGIN?: string }
+  const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Database; SERVER_SECRET?: string }
   if (!env.DB) return new Response('DB not configured', { status: 503 })
 
   const action = url.searchParams.get('action')
@@ -16,14 +16,14 @@ export const POST: APIRoute = async ({ request, url }) => {
       return new Response(JSON.stringify({ error: 'missing fields' }), { status: 400, headers: { 'Content-Type': 'application/json' } })
     if (!await checkToken(env.SERVER_SECRET, body.challenge, body.token))
       return new Response(JSON.stringify({ error: 'invalid token' }), { status: 400, headers: { 'Content-Type': 'application/json' } })
-    const reqUrl = new URL(request.url)
+    const { rpId, origin } = rpFromRequest(request)
     let verification
     try {
       verification = await verifyRegistrationResponse({
         response: body.registration as unknown as Parameters<typeof verifyRegistrationResponse>[0]['response'],
         expectedChallenge: body.challenge,
-        expectedOrigin: env.ORIGIN ?? reqUrl.origin,
-        expectedRPID: env.RP_ID ?? reqUrl.hostname,
+        expectedOrigin: origin,
+        expectedRPID: rpId,
       })
     } catch (e) {
       return new Response(JSON.stringify({ error: String(e) }), { status: 400, headers: { 'Content-Type': 'application/json' } })

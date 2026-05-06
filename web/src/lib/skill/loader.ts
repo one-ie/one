@@ -1,4 +1,4 @@
-import { parse } from './parser'
+import { parse, type Diagnostic } from './parser'
 
 export interface Skill {
   name: string
@@ -20,11 +20,12 @@ export interface Skill {
   references?: string[]
   assets?: string[]
   evals?: unknown[]
+  diagnostics: Diagnostic[]
   meta: Record<string, unknown>
   body: string
 }
 
-export function toSkill(parsed: { meta: Record<string, unknown>; body: string }): Skill {
+export function toSkill(parsed: { meta: Record<string, unknown>; body: string; diagnostics?: Diagnostic[] }): Skill {
   const { meta, body } = parsed
   return {
     name: String(meta.name ?? ''),
@@ -46,17 +47,24 @@ export function toSkill(parsed: { meta: Record<string, unknown>; body: string })
     references: Array.isArray(meta.references) ? meta.references.map(String) : undefined,
     assets: Array.isArray(meta.assets) ? meta.assets.map(String) : undefined,
     evals: Array.isArray(meta.evals) ? meta.evals : undefined,
+    diagnostics: parsed.diagnostics ?? [],
     meta,
     body,
   }
 }
 
+function pathStem(key: string): string {
+  const stripped = key.replace(/\.md$/, '').replace(/\/SKILL$/i, '')
+  const segs = stripped.split('/')
+  return segs[segs.length - 1] ?? ''
+}
+
 // Loads a skill from R2. Accepts flat key (skills/name.md) or directory key (skills/name).
 export async function loadSkill(key: string, r2: R2Bucket): Promise<Skill | null> {
   const flat = await r2.get(key.endsWith('.md') ? key : `${key}.md`)
-  if (flat) return toSkill(parse(await flat.text()))
+  if (flat) return toSkill(parse(await flat.text(), { pathStem: pathStem(key) }))
   const dir = key.replace(/\.md$/, '')
   const dirObj = await r2.get(`${dir}/SKILL.md`)
-  if (dirObj) return toSkill(parse(await dirObj.text()))
+  if (dirObj) return toSkill(parse(await dirObj.text(), { pathStem: pathStem(dir) }))
   return null
 }

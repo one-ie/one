@@ -132,7 +132,7 @@ const SUPPORTED_LANGS = [
   'typescript', 'tsx', 'javascript', 'jsx',
   'python', 'bash', 'shell', 'json', 'html', 'css',
   'markdown', 'yaml', 'sql', 'rust', 'go',
-  'diff', 'toml', 'graphql', 'dockerfile', 'ruby',
+  'diff', 'toml', 'graphql', 'dockerfile',
 ] as const
 
 type SupportedLang = typeof SUPPORTED_LANGS[number]
@@ -164,7 +164,6 @@ const highlighterPromise: Promise<HighlighterGeneric<BundledLanguage, BundledThe
     import('shiki/langs/toml.mjs'),
     import('shiki/langs/graphql.mjs'),
     import('shiki/langs/dockerfile.mjs'),
-    import('shiki/langs/ruby.mjs'),
   ]).then(([createHighlighter, createJavaScriptRegexEngine, githubLight, githubDark, ...langModules]) =>
     createHighlighter({
       langs: langModules.map((m: { default: unknown }) => m.default) as LanguageInput[],

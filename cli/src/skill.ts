@@ -1,6 +1,7 @@
 import { Command } from 'commander'
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
-import { resolve, basename } from 'node:path'
+import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync, readdirSync } from 'node:fs'
+import { resolve, basename, join } from 'node:path'
+import { parse as parseSkill, type Diagnostic } from './skill-parser.js'
 
 export function skillCmd(): Command {
   const cmd = new Command('skill').description('Skill management')
@@ -60,6 +61,54 @@ export function skillCmd(): Command {
     .option('--slug <slug>', 'Owner slug to import into', 'local')
     .action((url: string, opts: { slug: string }) => {
       out(cmd, { ok: false, url, slug: opts.slug, reason: 'requires substrate API access — run oneie auth login' })
+    })
+
+  cmd.command('validate <path>')
+    .description('Validate a skill file or directory; reports diagnostics')
+    .action((path: string) => {
+      if (!existsSync(path)) { out(cmd, { ok: false, error: `not found: ${path}` }); return }
+      const targets: { file: string; stem: string }[] = []
+      const walk = (dir: string, depth: number): void => {
+        if (depth > 4) return
+        const skillMd = join(dir, 'SKILL.md')
+        if (existsSync(skillMd) && statSync(skillMd).isFile()) {
+          targets.push({ file: skillMd, stem: basename(dir) })
+          return
+        }
+        for (const entry of readdirSync(dir)) {
+          if (entry.startsWith('.') || entry === 'node_modules') continue
+          const full = join(dir, entry)
+          const sub = statSync(full)
+          if (sub.isFile() && entry.endsWith('.md') && entry !== 'SKILL.md') {
+            targets.push({ file: full, stem: basename(entry, '.md') })
+          } else if (sub.isDirectory()) {
+            walk(full, depth + 1)
+          }
+        }
+      }
+      const st = statSync(path)
+      if (st.isDirectory()) {
+        walk(path, 0)
+      } else {
+        const stem = path.endsWith('/SKILL.md')
+          ? basename(resolve(path, '..'))
+          : basename(path, '.md')
+        targets.push({ file: path, stem })
+      }
+      const results = targets.map(t => {
+        const text = readFileSync(t.file, 'utf8')
+        const parsed = parseSkill(text, { pathStem: t.stem })
+        const warns = parsed.diagnostics.filter((d: Diagnostic) => d.level === 'warn')
+        return {
+          file: t.file,
+          name: parsed.meta.name ?? null,
+          ok: typeof parsed.meta.name === 'string' && !!parsed.meta.description,
+          diagnostics: parsed.diagnostics,
+          warnCount: warns.length,
+        }
+      })
+      const okCount = results.filter(r => r.ok).length
+      out(cmd, { ok: okCount === results.length, total: results.length, passed: okCount, results })
     })
 
   cmd.command('eval <path>')

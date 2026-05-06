@@ -313,9 +313,22 @@ else                one.warn(edge, 1);    // failed — full penalty
 
 | Package | Purpose | Install |
 |---------|---------|---------|
-| [`oneie`](https://npmjs.com/package/oneie) | CLI — scaffold, deploy, manage | `npx oneie` |
+| [`oneie`](https://npmjs.com/package/oneie) | CLI — scaffold, deploy, manage. Installs both `one` and `oneie` bins. | `npx oneie` |
 | [`@oneie/sdk`](https://npmjs.com/package/@oneie/sdk) | TypeScript SDK — full API access | `npm i @oneie/sdk` |
 | [`@oneie/mcp`](https://npmjs.com/package/@oneie/mcp) | MCP server — AI IDE integration | `npm i -g @oneie/mcp` |
+
+### Local development
+
+Run the full Cloudflare stack locally (D1 + KV + R2 + Workers) from any directory containing a `wrangler.toml`:
+
+```bash
+one dev                # build + wrangler dev on http://127.0.0.1:8787 (local bindings)
+one dev --skip-build   # skip rebuild for fast iteration
+one dev --remote       # use real Cloudflare D1/KV/R2
+one dev -p 8788        # different port
+```
+
+WebAuthn passkeys work on `localhost` without HTTPS — RP ID derives from `url.hostname`, so dev = `localhost`, prod = your domain.
 
 ---
 
