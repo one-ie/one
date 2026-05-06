@@ -1,5 +1,6 @@
 import { accept as payAccept, request as payRequest, status as payStatus } from "./pay.js";
 import type { PayAcceptOpts, PayAcceptResult, PayRequestOpts, PayRequestResult, PayStatusResult } from "./pay.js";
+import { skillsImport, type SkillsImportOpts, type SkillsImportResult } from "./skills.js";
 import type {
   AgentActionResponse,
   AgentStatusResponse,
@@ -117,6 +118,11 @@ export class SubstrateClient {
     status: (ref: string) => Promise<PayStatusResult>;
   };
 
+  /** Skills module — import a skill by ref or content. */
+  readonly skills: {
+    import: (opts: SkillsImportOpts) => Promise<SkillsImportResult>;
+  };
+
   constructor(cfg: SdkConfig = {}) {
     this.baseUrl = resolveBaseUrl(cfg.baseUrl);
     this.apiKey = resolveApiKey(cfg.apiKey);
@@ -127,6 +133,11 @@ export class SubstrateClient {
       accept: (opts: PayAcceptOpts) => payAccept(opts, cfg),
       request: (opts: PayRequestOpts) => payRequest(opts, cfg),
       status: (ref: string) => payStatus(ref, cfg),
+    };
+    // Bind skills module methods to this client's resolved baseUrl + apiKey
+    this.skills = {
+      import: (opts: SkillsImportOpts) =>
+        skillsImport({ baseUrl: this.baseUrl, apiKey: this.apiKey ?? "" }, opts),
     };
   }
 

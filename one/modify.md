@@ -4,13 +4,14 @@ A visitor lands on `one.ie`, clicks **Get your site**, signs with passkey, and l
 
 **No CLI. No install. No rebuild. Browser-only.**
 
-> **Implementation status: C1–C7 shipped; C11–C14, C8–C10 in progress.** See [`modify-todo.md`](modify-todo.md) for the full production-readiness plan.
-> **Shipped (C1):** Passkey provision/commit, stateless HMAC, random slug, R2 + D1, chat `write` tool, PreviewCard.
-> **Shipped (C7):** Settings page, `owners_keys` table, HMAC magic-link recovery (`/api/recover`), wallet + `agentverse_key_enc` columns, binary media upload (`/api/commit-media`), custom domain routing (Astro middleware + D1 `domains` table), SHA conflict gate on commit.
-> **Known blockers (C11):** `RP_ID=localhost` in wrangler.toml breaks passkeys in production; OwnerControls shows Edit to all visitors (slugExists probe, not passkey ownership check); chat system prompt is developer-facing not owner-facing; x402 payment gate absent from chat.ts (paid skills run free).
-> **C12 (queued):** Recovery codes at provision, TOS capture, display name, first-run interstitial.
-> **C13 (queued):** Post-commit live URL, index page titles, settings completeness (devices, domain, recovery).
-> **C8 (queued):** `site.ts`, theme injection, `compile` tool. **C9 (queued):** Sitemap, robots, history UI, export. **C14 (queued):** x402 revenue gate. **C10 (queued):** Notifications, report, storage cap, domain API.
+> **Implementation status: C1–C14 shipped.** See [`modify-todo.md`](modify-todo.md) for the cycle ledger.
+> **C1–C7 (foundation):** Passkey provision/commit, stateless HMAC, random slug, R2 + D1, chat `write` tool, PreviewCard, settings page, `owners_keys` multi-key, HMAC magic-link recovery (`/api/recover`), wallet + `agentverse_key_enc`, binary media upload (`/api/commit-media`), custom domain routing (Astro middleware + D1 `domains`), SHA conflict gate on commit.
+> **C8 (site identity + compile):** `lib/site.ts` 6-token theme injection, `site.md` singleton, `lib/compile.ts` + chat `compile` tool (uAgents / MCP / SKILL.md emitters).
+> **C9 (discoverability):** `/u/<slug>/sitemap.xml`, `/u/<slug>/robots.txt`, `history/[entry].astro` versions UI, `/u/<slug>/export` zip stream.
+> **C10 (platform trust):** `/api/notifications` + InboxBell, `/api/report` + ReportButton, `lib/storage-cap.ts` 50MB/200-file/10k-req cap, `/api/domain` TXT-verify + CF Custom Domain.
+> **C11 (production launch):** RP ID now derives from `url.hostname` (no localhost hardcode); OwnerControls uses `mediation:'silent'` passkey probe; chat system prompt rewritten owner-facing; x402 payment gate live in `chat.ts` (`skill` + `payment` tools, `verifyReceipt`).
+> **C12–C13 (onboarding + UX):** Recovery codes at provision, TOS capture, display name, first-run interstitial, post-commit live URL, index titles, settings completeness (devices, domain, recovery).
+> **C14 (revenue):** Skill price parsing, `pending-payment` envelope, x402 receipt verification before skill execution.
 
 ---
 

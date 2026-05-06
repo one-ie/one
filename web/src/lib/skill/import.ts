@@ -30,11 +30,26 @@ async function sha16(text: string): Promise<string> {
     .slice(0, 16)
 }
 
+export function withPrice(yaml: string, price: number): string {
+  const tag = `price: ${String(price)}`
+  const fmRe = /^---\n([\s\S]*?)\n---\n/
+  const m = fmRe.exec(yaml)
+  if (m) {
+    const priceLineRe = /^price:\s*[\d.]+\s*$/m
+    const body = priceLineRe.test(m[1])
+      ? m[1].replace(priceLineRe, tag)
+      : `${tag}\n${m[1]}`
+    return `---\n${body}\n---\n${yaml.slice(m[0].length)}`
+  }
+  return `---\n${tag}\n---\n${yaml}`
+}
+
 export async function importSkill(
   ref: string,
   slug: string,
   r2: R2Bucket,
-): Promise<{ skill: Skill; cacheKey: string } | null> {
+  opts?: { price?: number; chosenName?: string },
+): Promise<{ skill: Skill; cacheKey: string; namedKey: string } | null> {
   if (!SLUG_RE.test(slug)) throw new Error(`invalid slug: ${slug}`)
   const url = resolveSkillUrl(ref)
   const res = await fetch(url)
@@ -53,5 +68,12 @@ export async function importSkill(
   index[ref] = cacheKey
   await r2.put(indexKey, JSON.stringify(index))
   const stem = ref.includes('/') ? (ref.split('/').pop() ?? ref).split('@')[0] : ref.split('@')[0]
-  return { skill: toSkill(parse(text, { pathStem: stem })), cacheKey }
+  const parsed = parse(text, { pathStem: stem })
+  const finalName = opts?.chosenName ?? String(parsed.meta.name ?? stem)
+  const finalPrice = opts?.price ?? (parsed.meta.price !== undefined ? Number(parsed.meta.price) : 0)
+  const namedKey = `${slug}/skills/${finalName}/SKILL.md`
+  await r2.put(namedKey, withPrice(text, finalPrice), {
+    customMetadata: { sourceUrl: url, importedAt: new Date().toISOString(), cacheKey },
+  })
+  return { skill: toSkill(parsed), cacheKey, namedKey }
 }

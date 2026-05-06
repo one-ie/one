@@ -1,6 +1,7 @@
 import { Command } from 'commander'
 import { readFileSync, writeFileSync, existsSync, mkdirSync, statSync, readdirSync } from 'node:fs'
 import { resolve, basename, join } from 'node:path'
+import { homedir } from 'node:os'
 import { parse as parseSkill, type Diagnostic } from './skill-parser.js'
 
 export function skillCmd(): Command {
@@ -56,11 +57,37 @@ export function skillCmd(): Command {
       out(cmd, { ok: true, slug, refreshed: 0, failed: 0, total: refs.length })
     })
 
-  cmd.command('import <url>')
+  cmd.command('import <ref>')
     .description('Import a skill from URL, npm, or github shorthand')
-    .option('--slug <slug>', 'Owner slug to import into', 'local')
-    .action((url: string, opts: { slug: string }) => {
-      out(cmd, { ok: false, url, slug: opts.slug, reason: 'requires substrate API access — run oneie auth login' })
+    .option('--slug <slug>', 'Owner slug', process.env.ONEIE_SLUG ?? 'local')
+    .option('--price <usd>', 'Price USD', '0.02')
+    .option('--name <name>', 'Override skill name')
+    .option('--yes', 'Skip approval prompt (CI-friendly)')
+    .action(async (ref: string, opts: { slug: string; price: string; name?: string; yes?: boolean }) => {
+      const keyFile = resolve(homedir(), '.config', 'oneie', 'key')
+      const token = process.env.ONEIE_API_KEY ?? (existsSync(keyFile) ? readFileSync(keyFile, 'utf8').trim() : '')
+      if (!token) { out(cmd, { ok: false, error: 'not authenticated — run `oneie auth login`' }); return }
+      const baseUrl = process.env.ONEIE_BASE_URL ?? 'https://one.ie'
+      try {
+        const res = await fetch(`${baseUrl}/api/skill/import`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ ref, slug: opts.slug, price: Number(opts.price), name: opts.name }),
+        })
+        const data: any = await res.json().catch(() => ({}))
+        if (!res.ok) { out(cmd, { ok: false, status: res.status, ...data }); return }
+        out(cmd, {
+          ok: true,
+          ref,
+          slug: opts.slug,
+          name: data?.skill?.name,
+          price: data?.skill?.price,
+          key: data?.key,
+          diagnostics: data?.diagnostics ?? [],
+        })
+      } catch (err) {
+        out(cmd, { ok: false, error: (err as Error).message, hint: 'try `oneie skill validate <path>` for offline validation' })
+      }
     })
 
   cmd.command('validate <path>')

@@ -58,3 +58,5 @@ Each TODO gets its own `## <slug>` section. On each close, append to the matchin
 - 2026-05-05 · C9 · cycle · sitemap.xml + robots.txt per slug, commit.ts versions to _versions/ before overwrite, history/[file].astro version browser, passkey-gated zip export via fflate · rubric=0.848 · source=w4
 - 2026-05-05 · C14 · cycle · x402.ts verifyReceipt with KV idempotency (90d TTL), payment tool in chat.ts reads actual skill price then gates, PaymentCard.tsx renders amount+wallet+receipt input, MessageList renders pending-payment branch · rubric=0.877 · source=w4
 - 2026-05-05 · C10 · cycle · 0006_table_stakes notifications+reports tables, storage-cap.ts with 100MB/1000-file cap, report.ts with 5/hr IP rate-limit, notifications.ts + domain.ts owner-gated via checkToken, ReportButton+InboxBell components; env.d.ts extended with D1PreparedStatement.all() + R2Object.size · rubric=0.866 · source=w4
+
+- 2026-05-06 · C1 · cycle · skills-implementation: importSkill(opts), withPrice(), POST /api/skill/import, client.skills.import(), oneie skill import — 4 surfaces wired, 6 non-overlapping files · rubric=0.86 · source=w4

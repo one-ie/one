@@ -4,6 +4,9 @@ import { createWorkersAI } from 'workers-ai-provider'
 import { convertToModelMessages, streamText, tool, type UIMessage } from 'ai'
 import { z } from 'zod'
 import { getCfCtx, getEnv } from '../../lib/cf-env'
+import { loadSkill } from '../../lib/skill/loader'
+import { withPrice } from '../../lib/skill/import'
+import { parse } from '../../lib/skill/parser'
 import { makeChallenge } from '../../lib/passkey'
 import { listFiles } from '../../lib/slug'
 import { compile, type CompileTarget } from '../../lib/compile'
@@ -18,7 +21,7 @@ export const prerender = false
 function buildSystem(slug?: string, displayName?: string): string {
   if (!slug) return `You are ONE — a helpful, concise assistant.\nBe direct. Use markdown.\nWhen tools are independent, call them in parallel.`
   const name = displayName ? `${displayName} (@${slug})` : `@${slug}`
-  return `You are the AI assistant for ${name}'s site on ONE.\nHelp them build and manage their website, pages, blog posts, and AI agents. Be direct and practical.\nWhen tools are independent, call them in parallel.`
+  return `You are the AI assistant for ${name}'s site on ONE.\nHelp them build and manage their website, pages, blog posts, and AI agents. Be direct and practical.\nWhen tools are independent, call them in parallel.\nWhen the user pastes a skill URL, github ref (github:owner/repo/...), or markdown beginning with YAML frontmatter, call import_skill with the appropriate argument. Confirm price first if not specified.`
 }
 
 const SSE_HEADERS = {
@@ -197,11 +200,6 @@ export const POST: APIRoute = async ({ request }) => {
       }
     : undefined
 
-  function parseSkillPrice(md: string): number {
-    const m = /^price:\s*([\d.]+)/m.exec(md)
-    return m ? parseFloat(m[1]) : 0
-  }
-
   const skillTool = slug && env.CONTENT
     ? {
         skill: tool({
@@ -209,11 +207,11 @@ export const POST: APIRoute = async ({ request }) => {
           inputSchema: z.object({ name: z.string().describe('Skill name, e.g. "csv-analyzer"') }),
           execute: async ({ name }: { name: string }) => {
             const skillName = name.replace(/^skills\//, '')
-            const obj = await (env.CONTENT as R2Bucket).get(`${slug}/skills/${skillName}.md`)
-            if (!obj) return { kind: 'error' as const, error: 'skill not found' }
-            const md = await obj.text()
-            const price = parseSkillPrice(md)
+            const skill = await loadSkill(`${slug}/skills/${skillName}`, env.CONTENT as R2Bucket)
+            if (!skill) return { kind: 'error' as const, error: 'skill not found' }
+            const price = skill.price ?? 0
             if (price > 0) return { kind: 'pending-payment' as const, skill: skillName, price }
+            const md = `---\nprice: ${price}\n---\n${skill.body}`
             return { kind: 'skill-content' as const, content: md }
           },
         }),
@@ -231,13 +229,68 @@ export const POST: APIRoute = async ({ request }) => {
           }),
           execute: async ({ skill: skillName, receipt, amount }: { skill: string; receipt: string; amount: number }) => {
             const name = skillName.replace(/^skills\//, '')
-            const obj = await (env.CONTENT as R2Bucket).get(`${slug}/skills/${name}.md`)
-            if (!obj) return { kind: 'payment-rejected' as const, reason: 'skill not found' }
-            const md = await obj.text()
-            const expectedAmount = parseSkillPrice(md)
+            const skill = await loadSkill(`${slug}/skills/${name}`, env.CONTENT as R2Bucket)
+            if (!skill) return { kind: 'payment-rejected' as const, reason: 'skill not found' }
+            const expectedAmount = skill.price ?? 0
             const v = await verifyReceipt({ receipt, amount, expectedAmount, slug: slug!, kv: env.CHAT_CACHE })
             if (!v.ok) return { kind: 'payment-rejected' as const, reason: v.reason }
+            const md = `---\nprice: ${expectedAmount}\n---\n${skill.body}`
             return { kind: 'skill-result' as const, content: md }
+          },
+        }),
+      }
+    : undefined
+
+  const importSkillTool = slug && env.CONTENT
+    ? {
+        import_skill: tool({
+          description: 'Import a third-party skill from a URL/github ref or pasted SKILL.md content. Use when the user pastes a skill link, a SKILL.md body starting with frontmatter, or asks to "add"/"install"/"import" a skill. Always confirm price before calling.',
+          inputSchema: z.object({
+            ref: z.string().optional().describe('URL or github:owner/repo/path ref'),
+            content: z.string().optional().describe('Raw SKILL.md text if user pasted it'),
+            name: z.string().optional().describe('Override name; defaults to frontmatter name or path stem'),
+            price: z.number().min(0).default(0.02).describe('USD price the owner sets for this skill'),
+          }),
+          execute: async ({ ref, content, name, price }: { ref?: string; content?: string; name?: string; price: number }) => {
+            if (!slug) return { kind: 'error' as const, error: 'no slug context' }
+            let text = content ?? null
+            if (!text && ref) {
+              const ALLOWED_HOSTS = new Set(['agentskills.io', 'raw.githubusercontent.com', 'github.com'])
+              let url: string
+              if (ref.startsWith('http://') || ref.startsWith('https://')) {
+                const host = new URL(ref).hostname
+                if (!ALLOWED_HOSTS.has(host)) return { kind: 'error' as const, error: `host not allowed: ${host}` }
+                url = ref
+              } else if (ref.startsWith('github:')) {
+                const path = ref.slice(7)
+                const segments = path.split('/')
+                const nameAtVer = segments.pop() ?? ''
+                const [skillName, ver = 'main'] = nameAtVer.split('@')
+                const repo = segments.slice(0, 2).join('/')
+                const rest = segments.slice(2).join('/')
+                url = `https://raw.githubusercontent.com/${repo}/refs/heads/${ver}/${rest ? rest + '/' : ''}${skillName}/SKILL.md`
+              } else {
+                url = `https://agentskills.io/skill/${ref}/SKILL.md`
+              }
+              const fetched = await fetch(url)
+              if (!fetched.ok) return { kind: 'error' as const, error: `fetch failed: ${fetched.status}` }
+              text = await fetched.text()
+            }
+            if (!text) return { kind: 'error' as const, error: 'need ref or content' }
+            const stem = ref ? (ref.includes('/') ? (ref.split('/').pop() ?? ref).split('@')[0] : ref.split('@')[0]) : (name ?? 'skill')
+            const parsed = parse(text, { pathStem: name ?? stem })
+            if (parsed.diagnostics.some(d => d.level === 'warn')) {
+              return { kind: 'preview' as const, diagnostics: parsed.diagnostics, meta: parsed.meta, requiresApproval: true }
+            }
+            const finalName = name ?? String(parsed.meta.name ?? stem)
+            const namedKey = `${slug}/skills/${finalName}/SKILL.md`
+            const finalContent = withPrice(text, price)
+            return {
+              kind: 'pending-write' as const,
+              key: namedKey,
+              content: finalContent,
+              preview: { name: finalName, price, body: parsed.body.slice(0, 280) },
+            }
           },
         }),
       }
@@ -261,7 +314,7 @@ export const POST: APIRoute = async ({ request }) => {
       }
     : undefined
 
-  const tools = { ...(writeTool ?? {}), ...(evalTool ?? {}), ...(skillTool ?? {}), ...(compileTool ?? {}), ...(paymentTool ?? {}) }
+  const tools = { ...(writeTool ?? {}), ...(evalTool ?? {}), ...(skillTool ?? {}), ...(importSkillTool ?? {}), ...(compileTool ?? {}), ...(paymentTool ?? {}) }
   const opts = {
     system: buildSystem(slug, ownerDisplayName) + systemSuffix,
     messages: await convertToModelMessages(messages),
