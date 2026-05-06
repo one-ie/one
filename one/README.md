@@ -223,6 +223,12 @@ L7  frontier detection from unexplored tag clusters         every hour
 | [revenue.md](one/revenue.md) | Five revenue layers. |
 | [SUI.md](SUI.md) | Move contracts — linearity, enforcement. |
 
+### Applications
+
+| Doc | What |
+|-----|------|
+| [donal.md](donal.md) | OO agency chatbot embed — multi-tenant embed surface, 3 tools (captureLead / takePayment / createBooking), CF Pages deploy. Proves tenant = group = slug. |
+
 ---
 
 ## The Truth
