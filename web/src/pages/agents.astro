@@ -1,13 +1,17 @@
 ---
-export const prerender = true
 import Layout from '../layouts/Layout.astro'
 import { listAgentsMeta } from '../lib/agents-meta'
+import { ChatDock } from '../components/chat/ChatDock'
+import { AgentPageClient } from '../components/AgentPageClient'
 
 const agents = listAgentsMeta()
 const tones = ['primary', 'secondary', 'tertiary'] as const
+
+// Deep-link: if ?drawer=<id> is set, pass the id to the client island
+const openDrawerId = Astro.url.searchParams.get('drawer') ?? undefined
 ---
 
-<Layout title="Agents" description="Choose an agent to chat with.">
+<Layout title="Agents" description="Choose an agent to chat with." sidebar="mini">
   <main class="max-w-5xl mx-auto px-6 py-16">
     <div class="mb-12">
       <h1 class="text-3xl font-bold tracking-tight mb-2">Agents</h1>
@@ -17,7 +21,6 @@ const tones = ['primary', 'secondary', 'tertiary'] as const
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {agents.map((agent, i) => {
         const tone = tones[i % tones.length]
-        const href = agent.id === agents[0].id ? '/chat' : `/chat?agent=${agent.id}`
         return (
           <article
             class="bg-background border rounded-2xl flex flex-col"
@@ -58,11 +61,20 @@ const tones = ['primary', 'secondary', 'tertiary'] as const
             </div>
 
             <footer
-              class="flex items-center justify-end px-5 py-4 mt-2 border-t"
+              class="flex items-center justify-end gap-2 px-5 py-4 mt-2 border-t"
               style="border-color: var(--color-border)"
             >
+              {/* Drawer trigger — client-side URL update, no full navigation */}
+              <button
+                type="button"
+                data-drawer-trigger={agent.id}
+                class="px-3 py-2 rounded-lg text-sm text-font/60 hover:text-font hover:bg-foreground transition-[color,background-color]"
+                style="transition-duration: 120ms"
+              >
+                Details
+              </button>
               <a
-                href={href}
+                href={agent.id === agents[0].id ? '/chat' : `/chat?agent=${agent.id}`}
                 class={`px-4 py-2 rounded-lg text-sm font-medium bg-${tone} text-on-${tone} hover:brightness-110 transition-[filter]`}
                 style="transition-duration: 120ms"
               >
@@ -74,4 +86,27 @@ const tones = ['primary', 'secondary', 'tertiary'] as const
       })}
     </div>
   </main>
+
+  {/* Drawer island — client:load so it can self-open from ?drawer= on first paint */}
+  <AgentPageClient client:load agents={agents} />
+
+  {/* ChatDock — deferred until idle, preserves Lighthouse score */}
+  <ChatDock surface="agents" client:idle />
 </Layout>
+
+{/* Wire the static "Details" buttons to open their drawer via URL param */}
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-drawer-trigger]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.drawerTrigger
+      if (!id) return
+      const url = new URL(window.location.href)
+      url.searchParams.set('drawer', id)
+      history.pushState(null, '', url.toString())
+      // Dispatch a storage event so the Drawer's internal state can react,
+      // or rely on the Drawer's own popstate listener if present.
+      // Simplest approach: dispatch a custom event the Drawer island listens to.
+      window.dispatchEvent(new CustomEvent('drawer:open', { detail: { id } }))
+    })
+  })
+</script>

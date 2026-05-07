@@ -47,8 +47,17 @@ interface Runtime {
   }
 }
 
+interface WorkspaceContext {
+  workspace: string | undefined
+  agent: string | undefined
+  viewer: 'creator' | 'developer' | 'end_user'
+  brand: string | undefined
+}
+
 declare namespace App {
   interface Locals {
     runtime?: Runtime
+    workspaceContext?: WorkspaceContext
+    slug?: string
   }
 }

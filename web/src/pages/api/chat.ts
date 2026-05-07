@@ -15,6 +15,7 @@ import { runCase, type TestCase } from '../../lib/eval/runner'
 import { gradeCase } from '../../lib/eval/grader'
 import { aggregate } from '../../lib/eval/aggregate'
 import { buildIterationPrompt } from '../../lib/eval/iterate'
+import { TRAILING_CHIPS_RULE } from '../../lib/chips'
 
 export const prerender = false
 
@@ -314,9 +315,87 @@ export const POST: APIRoute = async ({ request }) => {
       }
     : undefined
 
-  const tools = { ...(writeTool ?? {}), ...(evalTool ?? {}), ...(skillTool ?? {}), ...(importSkillTool ?? {}), ...(compileTool ?? {}), ...(paymentTool ?? {}) }
+  const patchAgentTool = slug && env.SERVER_SECRET
+    ? {
+        patch_agent: tool({
+          description: "Update an agent's name, description, or system prompt via its frontmatter. Use when user asks to rename or edit an agent.",
+          inputSchema: z.object({
+            agent_id: z.string(),
+            frontmatter: z.string().describe('YAML frontmatter key:value lines to update'),
+          }),
+          execute: async ({ agent_id, frontmatter }: { agent_id: string; frontmatter: string }) => {
+            const baseUrl = new URL(request.url).origin
+            const res = await fetch(`${baseUrl}/api/agents/${agent_id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${env.SERVER_SECRET!}` },
+              body: JSON.stringify({ frontmatter }),
+            })
+            return res.ok
+              ? { kind: 'result' as const, title: 'Agent updated', ok: true }
+              : { kind: 'result' as const, title: 'Update failed', ok: false }
+          },
+        }),
+      }
+    : undefined
+
+  const patchThemeTool = slug && env.SERVER_SECRET
+    ? {
+        patch_theme: tool({
+          description: 'Update workspace theme colors. Use when user asks to change colors, make it warmer, etc.',
+          inputSchema: z.object({
+            theme_id: z.string(),
+            tokens: z.string().describe('JSON string of {primary, secondary, tertiary} colors'),
+          }),
+          execute: async ({ theme_id, tokens }: { theme_id: string; tokens: string }) => {
+            const baseUrl = new URL(request.url).origin
+            const res = await fetch(`${baseUrl}/api/themes/${theme_id}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${env.SERVER_SECRET!}` },
+              body: JSON.stringify({ tokens }),
+            })
+            return res.ok
+              ? { kind: 'result' as const, title: 'Theme updated', ok: true }
+              : { kind: 'result' as const, title: 'Update failed', ok: false }
+          },
+        }),
+      }
+    : undefined
+
+  const emitCardTool = {
+    emit_card: tool({
+      description: 'Emit a card in the chat stream. Choose the kind that best matches what you want to show.',
+      inputSchema: z.discriminatedUnion('kind', [
+        z.object({ kind: z.literal('agent-preview'), id: z.string(), name: z.string(), tagline: z.string().optional(), status: z.enum(['draft', 'live', 'paused', 'evolving']) }),
+        z.object({ kind: z.literal('deploy-status'), service: z.string(), state: z.enum(['queued', 'building', 'live', 'failed']), ms: z.number().optional(), url: z.string().optional() }),
+        z.object({ kind: z.literal('result'), title: z.string(), ok: z.boolean(), detail: z.string().optional(), href: z.string().optional() }),
+        z.object({ kind: z.literal('choice-chips'), prompt: z.string(), options: z.array(z.object({ id: z.string(), label: z.string() })) }),
+        z.object({ kind: z.literal('verify'), subject: z.string(), checks: z.array(z.object({ label: z.string(), pass: z.boolean() })) }),
+        z.object({ kind: z.literal('price'), label: z.string(), amount: z.string(), currency: z.enum(['USD', 'SUI', 'ETH', 'BTC']), cta: z.string().optional() }),
+        z.object({ kind: z.literal('brand-palette'), primary: z.string(), secondary: z.string(), tertiary: z.string() }),
+        z.object({ kind: z.literal('skill-toggle'), id: z.string(), name: z.string(), enabled: z.boolean(), description: z.string().optional() }),
+        z.object({ kind: z.literal('marketplace-mini'), agentId: z.string(), name: z.string(), price: z.string(), rating: z.number().optional() }),
+        z.object({ kind: z.literal('trace-mini'), signal: z.string(), depth: z.number(), outcome: z.enum(['mark', 'warn', 'dissolve', 'timeout']) }),
+        z.object({ kind: z.literal('compare'), a: z.object({ label: z.string(), value: z.string() }), b: z.object({ label: z.string(), value: z.string() }) }),
+        z.object({ kind: z.literal('onboarding-checklist'), steps: z.array(z.object({ id: z.string(), label: z.string(), done: z.boolean() })) }),
+        z.object({ kind: z.literal('empty-state'), title: z.string(), hint: z.string().optional(), cta: z.object({ label: z.string(), action: z.string() }).optional() }),
+      ]),
+      execute: async (card) => card,
+    }),
+  }
+
+  const emitChipsTool = {
+    emit_chips: tool({
+      description: 'Emit action chips for the user to click. Use after any significant response.',
+      inputSchema: z.object({
+        chips: z.array(z.object({ id: z.string(), label: z.string() })).max(4),
+      }),
+      execute: async ({ chips }: { chips: { id: string; label: string }[] }) => ({ kind: 'chips' as const, placement: 'trailing', chips }),
+    }),
+  }
+
+  const tools = { ...(writeTool ?? {}), ...(evalTool ?? {}), ...(skillTool ?? {}), ...(importSkillTool ?? {}), ...(compileTool ?? {}), ...(paymentTool ?? {}), ...(patchAgentTool ?? {}), ...(patchThemeTool ?? {}), ...emitCardTool, ...emitChipsTool }
   const opts = {
-    system: buildSystem(slug, ownerDisplayName) + systemSuffix,
+    system: buildSystem(slug, ownerDisplayName) + systemSuffix + '\n\n' + TRAILING_CHIPS_RULE,
     messages: await convertToModelMessages(messages),
     ...(Object.keys(tools).length > 0 ? { tools } : {}),
   }

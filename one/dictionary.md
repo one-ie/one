@@ -1465,6 +1465,39 @@ path means the URL changes only when the content changes. Uploaded via
 
 ---
 
+## UI Vocabulary — Component Names
+
+Built in the web cycle (C8), these components are the surfaces for agent, skill, and trade interactions:
+
+| Component | Role | Where |
+|-----------|------|-------|
+| `AgentPreviewCard` | Agent summary grid; shows name, description, status | `/marketplace` |
+| `DeployStatusCard` | Deployment state (pending, live, paused, error) | `/deploy`, `/settings` |
+| `ResultCard` | Trade result display, rubric dimensions, receipt | `/marketplace` |
+| `ChoiceChips` | Interactive filter or selection buttons | `/marketplace`, `/chat` |
+| `VerifyCard` | W4 rubric verification UI with scoring | `/verify`, `/dashboard` |
+| `PriceCard` | Capability pricing, escrow amount display | `/marketplace`, offer panels |
+| `BrandPalette` | Design token showcase (6 editable + 5 invariant) | `/design` |
+| `SkillToggleRow` | Enable/disable skill, shows price and status | `/settings/skills`, `/deploy` |
+| `MarketplaceMini` | Compact marketplace widget, inline discovery | `/chat`, `/dashboard` |
+| `TraceMini` | Collapsed trace/pheromone visualization | `/trace`, agent profiles |
+| `CompareCard` | Side-by-side capability/agent comparison | `/marketplace/compare` |
+| `OnboardingChecklist` | Multi-stage setup progress (stages 0-5) | `/onboard` |
+| `EmptyStateCard` | Placeholder when list is empty, call-to-action | All list views |
+
+**UI-level patterns:**
+
+| Term | What | Status |
+|------|------|--------|
+| `Drawer` | Right-slide modal panel, keyed by `?drawer=<id>` deep-link | Navigation component |
+| `ChatDock` | Bottom-right chat widget, triggered by cmd-K | Persistent UI island |
+| `ChatFrame` | Message frame type: `{kind:'text'\|'card'\|'chips'}` union | AI SDK streaming |
+| `computeStarters` | Adaptive function that generates starter chip suggestions based on context | Chat logic |
+| `trailing_chips` | Post-reply chip suggestions declared by model in response | AI SDK feature |
+| `viewer` | Session role derived from auth + workspace ownership: `creator \| developer \| end_user` | Auth context |
+
+---
+
 ## Dead Names (Never Use)
 
 These were renamed or removed. Using them causes schema/query drift.
@@ -1488,6 +1521,60 @@ These were renamed or removed. Using them causes schema/query drift.
 | `scent` | `strength` | pre-v1 |
 | `alarm` | `resistance` | pre-v1 |
 | `trail` | `path` | pre-v1 |
+
+---
+
+## UI Cards — Component Vocabulary
+
+Surfaces delivered in the web cycle render dynamic data via a discriminated card union. Each `CardData` type maps to a React component that displays domain state.
+
+**The 13 card kinds (from `/web` ChatFrame streaming):**
+
+| Kind | Purpose | Context | Primary action |
+|------|---------|---------|-----------------|
+| `agent-preview` | Agent summary with status badge | marketplace listing, agent grid | "Chat →" or "View" |
+| `deploy-status` | Deployment phase and log tail | settings, deploy view | "Pause" / "Resume" / "Logs" |
+| `result` | Tool output or rubric result | chat reply, dashboard | "Copy" / "Share" |
+| `verify` | W4 rubric pass/fail rows with score | verification view, task done | "Accept" / "Revise" |
+| `price` | Pricing plan with currency selector | marketplace, offer panel | "Pay" / "Escrow" |
+| `brand-palette` | 6-token design editor with preview | `/design` showcase | "Apply" / "Save" |
+| `skill-toggle` | Enable/disable skill, shows status | settings, deploy config | "Enable" / "Disable" |
+| `marketplace-mini` | Compact skill card in discover zone | `/chat` recommendations | "Browse" / "Add" |
+| `trace-mini` | Substrate path visualization (from→to, strength) | agent profile, dashboard | "Expand" / "Trace" |
+| `compare` | Side-by-side before/after comparison | `/marketplace/compare` | "Choose A" / "Choose B" |
+| `onboarding-checklist` | Step-by-step setup guide (stages 0–5) | `/onboard` entry | "Next" / "Skip" |
+| `empty-state` | Empty zone placeholder with hint | list views when 0 items | "Create" / "Browse" / "Import" |
+| `choice-chips` | Inline quick-select buttons (filter or action) | `/chat` queries, facets | individual chip actions |
+
+All cards inherit the dark theme tokens (6 editable + 5 invariant colors from `design.md`) and emit `ui:<surface>:<action>` signals on interactive clicks (per `/.claude/rules/ui.md`).
+
+---
+
+## UI Primitives — Framework Components
+
+Composable building blocks used in pages and islands:
+
+| Primitive | Type | Where | Behavior |
+|-----------|------|-------|----------|
+| `Drawer` | Navigation | Right-slide panel modal | Triggered by `?drawer=<id>` query param; closes on backdrop click or explicit dismiss |
+| `ChatDock` | Persistent island | Bottom-right floating widget | Cmd-K toggle; emits `ui:chat:open` on spawn with `ctx` (surface, viewer, lifecycle) |
+| `ChatFrame` | Union type | AI SDK stream | `{kind:'text'\|'card'\|'chips'}` — text = markdown, card = CardData, chips = quick-replies |
+| `computeStarters` | Function | Chat logic | `(viewer, surface, lifecycle) → string[]` — derives 5 contextual starter prompts from lookup table |
+| `trailing_chips` | Array | AI response | `<chips>[...]</chips>` block appended to assistant reply; parsed client-side as post-reply suggestions |
+
+---
+
+## Viewer Mask — Role-Based Display
+
+The `viewer` field on every AuthContext determines which surfaces and surfaces this session sees:
+
+| Viewer type | Access | Uses |
+|------------|--------|------|
+| `creator` | Staff-level; all surfaces + settings | agents, deploy, marketplace admin |
+| `developer` | Workspace owner; all surfaces | agents, deploy, marketplace, settings |
+| `end_user` | Visitor; only Chat + public Agents | chat, browse agents, view profiles |
+
+Derived from `user.role` (chairman/board/ceo/operator) and `group.group-type` (personal/team/org). Set at auth time; used in every route guard.
 
 ---
 

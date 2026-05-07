@@ -4,16 +4,21 @@ import { Icon } from '@/components/ui/Icon'
 import { emitClick } from '@/lib/ui-signal'
 import { getMenu, isActive, type MenuGroup } from '@/lib/menu'
 import { MenuItemNode } from './MenuItem'
+import { AuthButton } from '@/components/auth/AuthButton'
 
 interface Props {
   pathname: string
+  groups?: MenuGroup[]
+  profileLogo?: string
+  profileName?: string
+  profileSlug?: string
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
 }
 
-export function SheetMenu({ pathname, isOpen, onOpen, onClose }: Props) {
-  const groups: MenuGroup[] = getMenu()
+export function SheetMenu({ pathname, groups: groupsProp, profileLogo, profileName, profileSlug, isOpen, onOpen, onClose }: Props) {
+  const groups: MenuGroup[] = groupsProp ?? getMenu()
 
   useEffect(() => {
     if (!isOpen) return
@@ -65,7 +70,12 @@ export function SheetMenu({ pathname, isOpen, onOpen, onClose }: Props) {
         }}
       >
         <header className="flex items-center justify-between px-4 py-4" style={{ borderBottom: '1px solid var(--color-border)' }}>
-          <a href="/" className="text-lg font-bold tracking-tight">ONE</a>
+          <a href={profileSlug ? `/u/${profileSlug}` : '/'} className="flex items-center gap-2 text-lg font-bold tracking-tight min-w-0">
+            {profileLogo && (
+              <img src={profileLogo} alt="" aria-hidden width={28} height={28} className="rounded-md shrink-0 object-contain" />
+            )}
+            <span className="truncate" data-brand-label data-brand-default={profileSlug ? `@${profileSlug}` : 'ONE'}>{profileName ?? (profileSlug ? `@${profileSlug}` : 'ONE')}</span>
+          </a>
           <button
             type="button"
             onClick={() => {
@@ -100,6 +110,9 @@ export function SheetMenu({ pathname, isOpen, onOpen, onClose }: Props) {
             </div>
           ))}
         </nav>
+        <footer className="px-3 pb-4 pt-2" style={{ borderTop: '1px solid var(--color-border)' }}>
+          <AuthButton open={true} />
+        </footer>
       </aside>
     </>
   )

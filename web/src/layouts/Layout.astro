@@ -11,9 +11,12 @@ interface Props {
   chat?: ChatMode
   chatLock?: boolean
   siteStyles?: string
+  profileSlug?: string
+  profileName?: string
 }
 
-const { title, description = 'AI agents on the ONE substrate', sidebar = 'full', chat = 'icon', chatLock = false, siteStyles } = Astro.props
+const { title, description = 'AI agents on the ONE substrate', sidebar = 'full', chat = 'icon', chatLock = false, siteStyles, profileSlug, profileName } = Astro.props
+const profileLogo = profileSlug ? `/api/logo/${profileSlug}` : undefined
 ---
 
 <!doctype html>
@@ -24,7 +27,6 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full',
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    {siteStyles && <style set:html={siteStyles} is:inline />}
     <!-- Critical tokens inlined — no network round-trip before first paint -->
     <style is:inline>
       :root {
@@ -50,6 +52,7 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full',
       .page-shell__content { flex: 1; min-width: 0; }
       @media (max-width: 767px) { .page-shell { display: block; } }
     </style>
+    {siteStyles && <style set:html={siteStyles} is:inline />}
     <script is:inline>
       try {
         const t = JSON.parse(localStorage.getItem('one:theme') || 'null')
@@ -101,7 +104,7 @@ const { title, description = 'AI agents on the ONE substrate', sidebar = 'full',
           <slot />
         ) : (
           <div class="page-shell">
-            <Sidebar client:idle initial={sidebar} />
+            <Sidebar client:idle initial={sidebar} viewer={Astro.locals.workspaceContext?.viewer ?? 'developer'} slug={Astro.locals.slug} profileSlug={profileSlug} profileLogo={profileLogo} profileName={profileName} />
             <div class="page-shell__content"><slot /></div>
           </div>
         )}

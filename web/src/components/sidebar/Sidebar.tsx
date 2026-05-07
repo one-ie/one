@@ -4,20 +4,33 @@ import { Icon } from '@/components/ui/Icon'
 import { cn } from '@/lib/cn'
 import { emitClick } from '@/lib/ui-signal'
 import { useSidebar, usePathname } from '@/hooks/use-sidebar'
-import { getMenu } from '@/lib/menu'
+import { getMenu, getUserMenu } from '@/lib/menu'
 import { MenuItemNode } from './MenuItem'
 import { SheetMenu } from './SheetMenu'
 import { ThemeToggle } from './ThemeToggle'
+import { AuthButton } from '@/components/auth/AuthButton'
 
 interface Props {
   initial: 'mini' | 'full'
+  viewer?: 'creator' | 'developer' | 'end_user'
+  slug?: string
+  profileSlug?: string
+  profileLogo?: string
+  profileName?: string
 }
 
-export function Sidebar({ initial }: Props) {
+export function Sidebar({ initial, viewer, slug, profileSlug, profileLogo, profileName }: Props) {
   const { open, toggle, set } = useSidebar(initial === 'full')
   const pathname = usePathname()
   const [sheetOpen, setSheetOpen] = useState(false)
-  const groups = getMenu()
+  const [logoError, setLogoError] = useState(false)
+  const effectiveViewer = viewer ?? 'end_user'
+  const groups = profileSlug
+    ? getUserMenu(profileSlug)
+    : getMenu().map(g => ({
+        ...g,
+        items: g.items.filter(item => !item.viewer || item.viewer.includes(effectiveViewer)),
+      }))
 
   useEffect(() => {
     document.body.dataset.sidebarOpen = String(open)
@@ -30,6 +43,10 @@ export function Sidebar({ initial }: Props) {
       <div className="md:hidden">
         <SheetMenu
           pathname={pathname}
+          groups={groups}
+          profileLogo={profileLogo && !logoError ? profileLogo : undefined}
+          profileName={profileName}
+          profileSlug={profileSlug}
           isOpen={sheetOpen}
           onOpen={() => setSheetOpen(true)}
           onClose={() => setSheetOpen(false)}
@@ -47,15 +64,39 @@ export function Sidebar({ initial }: Props) {
       }}
     >
       <header className={cn('flex items-center px-4 py-5', !open && 'justify-center px-0')}>
-        <a
-          href="/"
-          aria-label="ONE — home"
-          onClick={() => emitClick('ui:sidebar:nav', { href: '/', source: 'brand' })}
-          className="flex items-center gap-2 text-lg font-bold tracking-tight"
-        >
-          <img src="/icon.svg" alt="" aria-hidden width={40} height={40} className="rounded-lg" fetchPriority="high" decoding="async" />
-          {open && <span aria-hidden>ONE</span>}
-        </a>
+        {profileSlug ? (
+          <a
+            href={`/u/${profileSlug}`}
+            aria-label={profileName ?? `@${profileSlug}`}
+            onClick={() => emitClick('ui:sidebar:nav', { href: `/u/${profileSlug}`, source: 'brand' })}
+            className="flex items-center gap-2 text-lg font-bold tracking-tight min-w-0"
+          >
+            {profileLogo && !logoError ? (
+              <img
+                src={profileLogo}
+                alt=""
+                aria-hidden
+                width={40}
+                height={40}
+                className="rounded-lg shrink-0 object-contain"
+                onError={() => setLogoError(true)}
+              />
+            ) : (
+              <img src="/icon.svg" alt="" aria-hidden width={40} height={40} className="rounded-lg shrink-0" fetchPriority="high" decoding="async" />
+            )}
+            {open && <span aria-hidden className="truncate" data-brand-label data-brand-default={`@${profileSlug}`}>{profileName ?? `@${profileSlug}`}</span>}
+          </a>
+        ) : (
+          <a
+            href="/"
+            aria-label="ONE — home"
+            onClick={() => emitClick('ui:sidebar:nav', { href: '/', source: 'brand' })}
+            className="flex items-center gap-2 text-lg font-bold tracking-tight"
+          >
+            <img src="/icon.svg" alt="" aria-hidden width={40} height={40} className="rounded-lg" fetchPriority="high" decoding="async" />
+            {open && <span aria-hidden>ONE</span>}
+          </a>
+        )}
       </header>
 
       <nav className="flex-1 overflow-y-auto px-3 pb-4">
@@ -89,9 +130,10 @@ export function Sidebar({ initial }: Props) {
       </nav>
 
       <footer
-        className="px-3 pb-4 pt-2"
+        className="px-3 pb-4 pt-2 flex flex-col gap-1"
         style={{ borderTop: '1px solid var(--color-border)' }}
       >
+        <AuthButton open={open} slug={slug} />
         <ThemeToggle open={open} />
       </footer>
 

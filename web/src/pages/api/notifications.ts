@@ -15,9 +15,19 @@ export const GET: APIRoute = async ({ url }) => {
   const slug = url.searchParams.get('slug')
   const challenge = url.searchParams.get('challenge')
   const token = url.searchParams.get('token')
+  const type = url.searchParams.get('type')
   if (!slug || !challenge || !token) return new Response('missing params', { status: 400 })
   if (!await checkToken(env.SERVER_SECRET, challenge, token))
     return new Response('unauthorized', { status: 401 })
+
+  // W3E6: high-salience substrate events (mark/warn filtered by salience)
+  if (type === 'substrate') {
+    // TODO: wire SubstrateClient.highways() for real events
+    return new Response(
+      JSON.stringify({ notifications: [], source: 'substrate' }),
+      { headers: { 'Content-Type': 'application/json' } }
+    )
+  }
 
   const rows = await env.DB
     .prepare('SELECT id, kind, payload, ts, read FROM notifications WHERE slug = ? ORDER BY ts DESC LIMIT 50')

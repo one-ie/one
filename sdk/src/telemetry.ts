@@ -67,3 +67,23 @@ export function emit(
 export function isDisabled(): boolean {
   return !isEnabled();
 }
+
+/**
+ * Emit an L5 evolution event when an agent's system-prompt is rewritten.
+ * Fires with receiver `'loop:evolution'` so `/api/agents/[id]/generations.ts`
+ * can subscribe and persist to the `agent_generations` D1 table.
+ *
+ * Called by the L5 loop (every 10 min) when success-rate < 0.50 and
+ * sample-count >= 20. Not a scheduler — just the typed emit surface.
+ */
+export function emitEvolution(
+  agentId: string,
+  generation: number,
+  reason: string,
+): void {
+  emit(
+    "loop:evolution",
+    ["l5", "evolution", agentId],
+    { agent_id: agentId, generation, reason, fired_at: Date.now() },
+  );
+}

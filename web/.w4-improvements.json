@@ -1,0 +1,43 @@
+{
+  "cycle": 1,
+  "timestamp": "2026-05-06T18:35:00Z",
+  "composite": 0.84,
+  "velocity": null,
+  "open": [
+    {
+      "dim": "security",
+      "score": 0.90,
+      "file": "src/pages/api/agents/index.ts",
+      "line": 45,
+      "action": "Replace (await request.json()) as {...} with Zod parse: z.object({slug:z.string(),name:z.string(),frontmatter:z.string().optional(),body:z.string().optional()}).parse(body)"
+    },
+    {
+      "dim": "simplicity",
+      "score": 0.82,
+      "file": "src/lib/starters.ts",
+      "line": 271,
+      "action": "Split: move TRAILING_CHIPS_RULE + extractChips() into src/lib/chips.ts (extraction concern). starters.ts keeps only the cold-start table + computeStarters()."
+    },
+    {
+      "dim": "simplicity",
+      "score": 0.82,
+      "file": "src/components/chat/ChatDock.tsx",
+      "line": 64,
+      "action": "Replace unicode ✕ glyph with <XIcon /> from lucide-react (design rule: no unicode glyphs)"
+    },
+    {
+      "dim": "simplicity",
+      "score": 0.82,
+      "file": "src/components/cards/CompareCard.tsx",
+      "line": 1,
+      "action": "Remove unused emitClick import (card has no interactive elements)"
+    },
+    {
+      "dim": "speed",
+      "score": 0.80,
+      "audit": "client:load on page-level view islands",
+      "component": "SettingsView, ToolsView, PaymentsView, SkillsView at src/pages/*.astro",
+      "action": "Evaluate whether client:idle suffices for settings/tools/payments/skills — none are above-fold interactive on first paint. Switch if Lighthouse Perf improves."
+    }
+  ]
+}

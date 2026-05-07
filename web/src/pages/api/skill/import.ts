@@ -14,17 +14,20 @@ async function getEnv(): Promise<CfEnv> {
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]{1,30}[a-z0-9]$/
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   const env = await getEnv()
   if (!env.CONTENT || !env.SERVER_SECRET) {
     return new Response(JSON.stringify({ error: 'not configured' }), { status: 503 })
   }
-  // TODO: also accept passkey cookie auth — for now Bearer only
+  const body = (await request.json()) as { ref?: string; content?: string; slug?: string; name?: string; price?: number }
+
   const auth = request.headers.get('Authorization') ?? ''
-  if (auth !== `Bearer ${env.SERVER_SECRET}`) {
+  const bearerOk = auth === `Bearer ${env.SERVER_SECRET}`
+  const sessionOk = !!locals.slug && locals.slug === body.slug
+  console.log('[skill/import] auth check', { localSlug: locals.slug, bodySlug: body.slug, bearerOk, sessionOk })
+  if (!bearerOk && !sessionOk) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401 })
   }
-  const body = (await request.json()) as { ref?: string; content?: string; slug?: string; name?: string; price?: number }
   if (!body.slug || !SLUG_RE.test(body.slug)) {
     return new Response(JSON.stringify({ error: 'valid slug required' }), { status: 400 })
   }

@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro'
 import { IconBadge } from '../components/ui/IconBadge'
 import { Icon } from '../components/ui/Icon'
 import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, ArrowRight, X } from 'lucide-react'
+import { CardShowcase } from '../components/showcase/CardShowcase'
+import { ChatDock } from '../components/chat/ChatDock'
 ---
 
 <Layout title="ONE Design System">
@@ -413,6 +415,18 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         </article>
       </div>
     </section>
+
+    <!-- ============== CARD VOCABULARY ============== -->
+    <section class="block mt-20 mb-16">
+      <div class="block-head">
+        <h2>Card Vocabulary</h2>
+        <p>13 card types. Every surface in the product derives from one of these shapes.</p>
+      </div>
+      <div id="card-showcase-root"></div>
+      <CardShowcase client:idle />
+    </section>
+
+    <ChatDock surface="design" client:idle />
 
     <footer class="footer muted">
       6 tokens · 3 depths · 1 card · 1 input · 6 button variants · one palette per workspace

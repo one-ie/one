@@ -1,6 +1,6 @@
 const FONT_ALLOWLIST = ['system-ui', 'Inter', 'Georgia', 'serif', 'sans-serif', 'monospace', 'Lato', 'Merriweather', 'Roboto']
-const COLOR_KEYS = ['primary', 'secondary', 'tertiary', 'background', 'foreground', 'font'] as const
-type SiteToken = (typeof COLOR_KEYS)[number]
+export const COLOR_KEYS = ['primary', 'secondary', 'tertiary', 'background', 'foreground', 'font'] as const
+export type SiteToken = (typeof COLOR_KEYS)[number]
 
 export interface SiteConfig {
   name?: string
@@ -22,6 +22,27 @@ function parseFrontmatter(md: string): Record<string, string> {
   return result
 }
 
+export function updateSiteTokens(md: string, newTokens: Record<string, string>): string {
+  const fmMatch = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/.exec(md)
+  const existingFm = fmMatch ? fmMatch[1] : ''
+  const body = fmMatch ? fmMatch[2] : ''
+  const keys: string[] = []
+  const fm: Record<string, string> = {}
+  for (const line of existingFm.split('\n')) {
+    const colon = line.indexOf(':')
+    if (colon < 1) continue
+    const key = line.slice(0, colon).trim()
+    fm[key] = line.slice(colon + 1).trim()
+    keys.push(key)
+  }
+  for (const [k, v] of Object.entries(newTokens)) {
+    if (!v) continue
+    if (!keys.includes(k)) keys.push(k)
+    fm[k] = v
+  }
+  return `---\n${keys.map(k => `${k}: ${fm[k]}`).join('\n')}\n---\n${body}`
+}
+
 export function parseSite(md: string): SiteConfig {
   const fm = parseFrontmatter(md)
   const tokens: Partial<Record<SiteToken, string>> = {}
@@ -33,7 +54,7 @@ export function parseSite(md: string): SiteConfig {
   const font = rawFont && FONT_ALLOWLIST.includes(rawFont) ? rawFont : undefined
   const styleLines = (Object.entries(tokens) as [SiteToken, string][]).map(([k, v]) => `  --color-${k}: ${v};`)
   if (font) styleLines.push(`  --font-sans: '${font}', system-ui, sans-serif;`)
-  const styleBlock = styleLines.length ? `:root {\n${styleLines.join('\n')}\n}` : ''
+  const styleBlock = styleLines.length ? `html:root {\n${styleLines.join('\n')}\n}` : ''
   return {
     name: fm['name'] || undefined,
     tagline: fm['tagline'] || undefined,

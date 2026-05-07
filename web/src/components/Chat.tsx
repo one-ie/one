@@ -52,6 +52,8 @@ interface Props {
   canSwitch?: boolean
   group?: string
   slug?: string
+  workspace?: string
+  agent?: string
 }
 
 const DEFAULT_STARTERS = [

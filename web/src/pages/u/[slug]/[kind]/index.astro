@@ -14,7 +14,7 @@ const items = allFiles
   .map(f => f.slice(kind.length + 1))
 ---
 
-<Layout title={`${kind}s — @${slug}`} sidebar="mini" chat="none">
+<Layout title={`${kind}s — @${slug}`} sidebar="mini" chat="none" profileSlug={slug}>
   <div class="max-w-2xl mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold mb-6 capitalize">{kind}s</h1>
     {items.length > 0 ? (

@@ -20,28 +20,41 @@ export function devCmd(): Command {
         process.exit(1)
       }
 
-      if (!opts.skipBuild) {
-        const built = await run('npm', ['run', 'build'], cwd)
-        if (built !== 0) process.exit(built)
-      }
+      if (opts.remote) {
+        // Remote mode: full build → migrate → wrangler dev --remote
+        if (!opts.skipBuild) {
+          const built = await run('npm', ['run', 'build'], cwd)
+          if (built !== 0) process.exit(built)
+        }
 
-      if (!opts.skipMigrate) {
-        for (const binding of d1Bindings(wranglerToml)) {
-          const target = opts.remote ? '--remote' : '--local'
-          const code = await run('npx', ['wrangler', 'd1', 'migrations', 'apply', binding, target], cwd)
-          if (code !== 0) {
-            process.stderr.write(`d1 migrations failed for ${binding}\n`)
-            process.exit(code)
+        if (!opts.skipMigrate) {
+          for (const binding of d1Bindings(wranglerToml)) {
+            const code = await run('npx', ['wrangler', 'd1', 'migrations', 'apply', binding, '--remote'], cwd)
+            if (code !== 0) {
+              process.stderr.write(`d1 migrations failed for ${binding}\n`)
+              process.exit(code)
+            }
           }
         }
+
+        const args = ['dev', '--port', opts.port, '--ip', opts.ip, '--remote']
+        const code = await run('npx', ['wrangler', ...args], cwd)
+        process.exit(code)
+      } else {
+        // Local mode: astro dev with Vite HMR
+        if (!opts.skipMigrate) {
+          for (const binding of d1Bindings(wranglerToml)) {
+            const code = await run('npx', ['wrangler', 'd1', 'migrations', 'apply', binding, '--local'], cwd)
+            if (code !== 0) {
+              process.stderr.write(`d1 migrations failed for ${binding}\n`)
+              process.exit(code)
+            }
+          }
+        }
+
+        const code = await run('npm', ['run', 'dev'], cwd)
+        process.exit(code)
       }
-
-      const args = ['dev', '--port', opts.port, '--ip', opts.ip]
-      if (opts.remote) args.push('--remote')
-      else args.push('--local')
-
-      const code = await run('npx', ['wrangler', ...args], cwd)
-      process.exit(code)
     })
 
   return cmd

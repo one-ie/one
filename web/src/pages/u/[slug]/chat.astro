@@ -8,6 +8,6 @@ const { slug } = Astro.params as { slug: string }
 const seed = Astro.url.searchParams.get('seed') ?? undefined
 ---
 
-<Layout title={`Chat — @${slug}`} sidebar="mini" chat="none">
+<Layout title={`Chat — @${slug}`} sidebar="mini" chat="none" profileSlug={slug}>
   <Chat slug={slug} seed={seed} fullPage client:idle />
 </Layout>

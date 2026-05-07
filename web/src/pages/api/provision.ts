@@ -7,7 +7,9 @@ import { autoImportSkillCreator } from '../../lib/skill/auto-import'
 
 export const prerender = false
 
-type CfEnv = { SERVER_SECRET: string; DB: D1Database; CONTENT?: R2Bucket }
+type CfEnv = { SERVER_SECRET: string; DB: D1Database; CONTENT?: R2Bucket; SESSION?: KVNamespace }
+
+const SESSION_TTL = 60 * 60 * 24 * 7
 
 async function getEnv(): Promise<CfEnv> {
   const mod = (await import('cloudflare:workers' as string)) as { env?: CfEnv }
@@ -26,7 +28,7 @@ export const GET: APIRoute = async ({ request }) => {
   )
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   const env = await getEnv()
   const { rpId, origin } = rpFromRequest(request)
   const body = await request.json() as {
@@ -84,6 +86,19 @@ export const POST: APIRoute = async ({ request }) => {
   ).bind(slug, pubkeyB64, credential.id, recoveryHash, body.displayName?.trim() || null, 'v1', body.tosTimestamp ?? null).run()
 
   if (env.CONTENT) await autoImportSkillCreator(slug, env.CONTENT)
+
+  const sessionId = crypto.randomUUID()
+  if (env.SESSION) {
+    await env.SESSION.put(`session:${sessionId}`, slug, { expirationTtl: SESSION_TTL })
+  }
+
+  cookies.set('session', sessionId, {
+    httpOnly: true,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: SESSION_TTL,
+    secure: rpId !== 'localhost' && rpId !== '127.0.0.1',
+  })
 
   return new Response(JSON.stringify({ slug, recoveryWords: recoveryWords.split(' '), redirectTo: `/u/${slug}/chat` }), {
     headers: { 'Content-Type': 'application/json' },

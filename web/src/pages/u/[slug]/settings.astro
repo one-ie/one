@@ -2,14 +2,20 @@
 import Layout from '@/layouts/Layout.astro'
 import { getSlugOwner } from '@/lib/slug'
 import { AddDeviceButton } from '@/components/AddDeviceButton'
+import { DomainSettings } from '@/components/settings/DomainSettings'
+import { parseSite, COLOR_KEYS } from '@/lib/site'
 
 export const prerender = false
 
 const { slug } = Astro.params as { slug: string }
-const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Database }
+const env = (await import('cloudflare:workers' as string)).env as { DB?: D1Database; CONTENT?: R2Bucket }
 
 const owner = env.DB ? await getSlugOwner(slug, env.DB) : null
 if (!owner) return Astro.redirect(`/u/${slug}`)
+
+const siteObj = env.CONTENT ? await env.CONTENT.get(`${slug}/site.md`) : null
+const site = siteObj ? parseSite(await siteObj.text()) : null
+const tokens = site?.tokens ?? {}
 
 const row = owner as typeof owner & { wallet?: string; agentverse_key_enc?: string; display_name?: string }
 const keys = env.DB
@@ -19,12 +25,89 @@ const keys = env.DB
 const publicUrl = `https://one.ie/u/${slug}`
 ---
 
-<Layout title={`@${slug} settings`}>
+<Layout title={`@${slug} settings`} profileSlug={slug} profileName={site?.name} siteStyles={site?.styleBlock}>
   <div class="max-w-xl mx-auto px-4 py-12 flex flex-col gap-8">
     <header>
       <h1 class="text-2xl font-bold text-font">Settings</h1>
       <p class="text-font/60 text-sm mt-1">@{slug}</p>
     </header>
+
+    <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
+      <h2 class="font-semibold text-font">Branding</h2>
+      <p class="text-xs text-font/60">Logo and colors shown on your profile page.</p>
+      <form method="POST" action="/api/branding" enctype="multipart/form-data" class="flex flex-col gap-5">
+        <input type="hidden" name="slug" value={slug} />
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-sm font-medium text-font" for="branding-name">Site name</label>
+          <input
+            id="branding-name"
+            name="name"
+            type="text"
+            value={site?.name ?? ''}
+            placeholder={`@${slug}`}
+            maxlength="80"
+            class="px-3.5 py-2.5 rounded-lg bg-foreground text-font border text-sm focus:outline-none"
+            style="border-color:var(--color-border)"
+          />
+          <span class="text-xs text-font/40">Shown in the sidebar and browser tab. Defaults to @{slug}.</span>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-medium text-font">Logo</span>
+          <div class="flex items-center gap-4">
+            <img
+              src={`/api/logo/${slug}`}
+              alt=""
+              id="logo-preview"
+              class="w-14 h-14 rounded-xl object-contain bg-foreground"
+              style={`border:1px solid var(--color-border)`}
+              onerror="this.style.display='none'"
+            />
+            <label class="cursor-pointer px-4 py-2 rounded-lg text-sm border text-font hover:text-font/80" style="border-color:var(--color-border)">
+              Upload image
+              <input
+                name="logo"
+                type="file"
+                accept="image/*"
+                class="sr-only"
+                onchange="const p=document.getElementById('logo-preview');if(this.files[0]){const u=URL.createObjectURL(this.files[0]);p.src=u;p.style.display='block'}"
+              />
+            </label>
+          </div>
+          <span class="text-xs text-font/40">PNG, JPG or SVG. Shown at 56×56 px on your profile.</span>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <span class="text-sm font-medium text-font">Colors</span>
+          <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {COLOR_KEYS.map(key => {
+              const current = tokens[key]
+              const hexVal = current?.startsWith('#') ? current : ''
+              return (
+                <div class="flex flex-col gap-1">
+                  <label class="text-xs text-font/60 capitalize">{key}</label>
+                  <div class="flex items-center gap-2">
+                    <input
+                      type="color"
+                      name={hexVal ? key : undefined}
+                      value={hexVal || '#6366f1'}
+                      data-key={key}
+                      class={`w-8 h-8 rounded cursor-pointer border-0 bg-transparent p-0${!hexVal ? ' opacity-40' : ''}`}
+                    />
+                    <code class="text-xs text-font/60">{current || 'default'}</code>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <button type="submit" class="self-start px-4 py-2 rounded-lg bg-primary text-on-primary text-sm font-medium">
+          Save branding
+        </button>
+      </form>
+    </section>
 
     <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
       <h2 class="font-semibold text-font">Identity</h2>
@@ -164,7 +247,7 @@ const publicUrl = `https://one.ie/u/${slug}`
     <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
       <h2 class="font-semibold text-font">Custom domain</h2>
       <p class="text-sm text-font/60">Connect your own domain to <code class="bg-foreground px-1.5 py-0.5 rounded text-xs">@{slug}</code>.</p>
-      <p class="text-xs text-font/40">Coming soon.</p>
+      <DomainSettings slug={slug} client:load />
     </section>
 
     <section class="bg-background rounded-2xl p-6 flex flex-col gap-4" style="border:1px solid var(--color-border)">
@@ -220,5 +303,38 @@ const publicUrl = `https://one.ie/u/${slug}`
       resultEl.textContent = `Error: ${err instanceof Error ? err.message : String(err)}`
       resultEl.style.display = 'block'
     }
+  })
+</script>
+
+<script>
+  // Live-preview: update CSS vars and sidebar name/logo as the user edits branding
+  const root = document.documentElement
+
+  // Hex → HSL lightness (0–100) for on-* contrast label
+  function hexToL(hex: string): number {
+    const r = parseInt(hex.slice(1, 3), 16) / 255
+    const g = parseInt(hex.slice(3, 5), 16) / 255
+    const b = parseInt(hex.slice(5, 7), 16) / 255
+    return ((Math.max(r, g, b) + Math.min(r, g, b)) / 2) * 100
+  }
+
+  // Color pickers — set name on first change so the value is included in the form POST
+  document.querySelectorAll<HTMLInputElement>('input[type="color"][data-key]').forEach(picker => {
+    picker.addEventListener('input', () => {
+      picker.name = picker.dataset.key!
+      picker.classList.remove('opacity-40')
+      const key = picker.dataset.key!
+      root.style.setProperty(`--color-${key}`, picker.value)
+      if (key === 'primary' || key === 'secondary' || key === 'tertiary') {
+        root.style.setProperty(`--color-on-${key}`, hexToL(picker.value) < 60 ? '#fff' : '#000')
+      }
+    })
+  })
+
+  // Site name → sidebar brand label (live)
+  const nameInput = document.getElementById('branding-name') as HTMLInputElement | null
+  const brandLabels = document.querySelectorAll<HTMLElement>('[data-brand-label]')
+  nameInput?.addEventListener('input', () => {
+    brandLabels.forEach(el => { el.textContent = nameInput.value || el.dataset.brandDefault || '' })
   })
 </script>

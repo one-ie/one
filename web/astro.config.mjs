@@ -19,10 +19,13 @@ export default defineConfig({
     resolve: {
       alias: {
         '@': new URL('./src', import.meta.url).pathname,
-        'react-dom/server': 'react-dom/server.edge',
+        ...(process.env.NODE_ENV === 'production' && {
+          'react-dom/server': 'react-dom/server.edge',
+        }),
       },
     },
     ssr: {
+      noExternal: ['react', 'react-dom', '@astrojs/react'],
       external: [
         'node:async_hooks',
         'cookie',

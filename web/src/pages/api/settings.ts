@@ -42,6 +42,7 @@ export const POST: APIRoute = async ({ request, url }) => {
   const wallet = formData.get('wallet') as string | null
   const agentverseKey = formData.get('agentverse_key') as string | null
   const recoveryEmail = formData.get('recovery_email') as string | null
+  const displayName = formData.get('display_name') as string | null
 
   if (!slug) return new Response('missing slug', { status: 400 })
 
@@ -51,6 +52,10 @@ export const POST: APIRoute = async ({ request, url }) => {
   if (wallet !== null) { updates.push('wallet = ?'); values.push(wallet || null) }
   if (agentverseKey) { updates.push('agentverse_key_enc = ?'); values.push(agentverseKey) }
   if (recoveryEmail !== null) { updates.push('recovery_email = ?'); values.push(recoveryEmail || null) }
+
+  if (slug && displayName) {
+    await env.DB.prepare('UPDATE owners SET display_name = ? WHERE slug = ?').bind(displayName, slug).run()
+  }
 
   if (updates.length > 0) {
     values.push(slug)

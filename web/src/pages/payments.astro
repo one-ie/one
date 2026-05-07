@@ -1,0 +1,9 @@
+---
+export const prerender = false
+import Layout from '../layouts/Layout.astro'
+import { PaymentsView } from '../components/payments/PaymentsView'
+---
+
+<Layout title="Payments — ONE" sidebar="mini">
+  <PaymentsView client:idle />
+</Layout>

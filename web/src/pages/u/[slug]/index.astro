@@ -11,11 +11,13 @@ if (!env.DB || !env.CONTENT) return Astro.redirect('/')
 
 const ctx = await getSlugContext(slug, env.DB, env.CONTENT)
 if (!ctx) return new Response(null, { status: 404 })
-const { owner, styleBlock } = ctx
+const { owner, styleBlock, site } = ctx
 
 const listed = await env.CONTENT.list({ prefix: `${slug}/`, include: ['customMetadata'] })
+const RESERVED = new Set(['site.md', 'logo'])
 const items = listed.objects
   .filter(o => !o.key.includes('/_workspace/') && !o.key.includes('/_recovery/'))
+  .filter(o => { const rest = o.key.slice(slug.length + 1); return !RESERVED.has(rest) })
   .map(o => {
     const rest = o.key.slice(slug.length + 1)
     const [kind, ...nameParts] = rest.split('/')
@@ -32,10 +34,18 @@ for (const item of items) {
 const publicUrl = `https://one.ie/u/${slug}`
 ---
 
-<Layout title={`@${slug} — ONE`} sidebar="mini" chat="none" siteStyles={styleBlock}>
+<Layout title={`@${slug} — ONE`} sidebar="mini" chat="none" siteStyles={styleBlock} profileSlug={slug} profileName={site?.name}>
   <div class="max-w-2xl mx-auto px-4 py-8">
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold">@{slug}</h1>
+      <div class="flex items-center gap-3">
+        <img
+          src={`/api/logo/${slug}`}
+          alt=""
+          class="w-10 h-10 rounded-lg object-contain"
+          onerror="this.style.display='none'"
+        />
+        <h1 class="text-2xl font-bold">@{slug}</h1>
+      </div>
       <div class="flex items-center gap-2">
         <button
           onclick={`navigator.clipboard.writeText('${publicUrl}'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Share',1500)`}

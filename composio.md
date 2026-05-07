@@ -34,16 +34,23 @@ apps with each provider; Composio relays them. See
 ## Why
 
 `aitools.ts` defines our *internal* substrate tools (`discover`, `remember`,
-`recall`, `highways`, `mark`, `warn`, `browse`). Composio extends the same
-`tool()` map with *external* toolkits we don't want to wrap by hand. One
-provider, hundreds of toolkits, one `user_id` — auth is delegated.
+`recall`, `highways`, `mark`, `warn`, `browse`). External capabilities are
+layered on in priority order:
 
 ```
 claw  ──┐
-        ├── aitools.ts        (substrate: discover/recall/mark/warn …)
-        └── composioTools     (external: gmail/github/slack/linear …)
-                                  ↑ both shapes are AI SDK v6 tool()
+        ├── aitools.ts            (substrate: discover/recall/mark/warn …)
+        ├── skill tools           (nanoclaw.dev imports: gmail/slack/github …)  ← first
+        └── composioTools         (fallback: toolkits with no skill yet)        ← second
+                ↑ all three shapes are AI SDK v6 tool()
 ```
+
+**Skill-first, Composio fallback.** nanoclaw.dev publishes 40+ skills for the
+same external services Composio covers (Gmail, Slack, Discord, GitHub, Google
+Calendar, Linear, Vercel). Imported skills run inside the substrate — pheromone
+flows, paths strengthen, Rule 1 closes naturally. Composio is the fallback for
+toolkits that don't have a substrate skill yet. One `user_id`, same auth flow,
+but skills are preferred because they're first-class substrate citizens.
 
 ---
 
@@ -113,19 +120,32 @@ has an `execute` function, so the loop runs without manual dispatch.
 
 ## Wire into `ToolLoopAgent`
 
-Drop the map next to our substrate tools in
-[`claw/src/aitools.ts`](claw/src/aitools.ts):
+Build the tool map in three layers. Skill tools are loaded by name from the
+substrate (imported from nanoclaw.dev); Composio fills the gap for any toolkit
+the user has connected but that has no substrate skill yet.
 
 ```ts
 import { generateText, stepCountIs } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
-import { aitools } from './aitools'
-import { composioTools } from './composio'
+import { buildTools } from './aitools'
+import { loadSkillTools } from './skill-tools'   // nanoclaw.dev imports
+import { composioTools, SKILL_TOOLKIT_MAP } from './composio'
 
-const tools = {
-  ...aitools(ctx),                          // substrate
-  ...(await composioTools(ctx.userId, ['GMAIL', 'GITHUB'])),
-}
+// 1. Substrate tools (always present)
+const substrate = buildTools(env)
+
+// 2. Skill-first: load imported nanoclaw skills for this user
+const skillTools = await loadSkillTools(env, userId)
+const coveredToolkits = new Set(Object.keys(skillTools).map(t => SKILL_TOOLKIT_MAP[t]).filter(Boolean))
+
+// 3. Composio fallback: only for toolkits the user connected but has no skill
+const conns = await composio.connectedAccounts.list({ userIds: [userId], statuses: ['ACTIVE'] })
+const fallbackToolkits = conns.items.map(c => c.toolkit).filter(t => !coveredToolkits.has(t))
+const fallbackTools = fallbackToolkits.length
+  ? await (await composio.create(userId)).tools({ toolkits: fallbackToolkits })
+  : {}
+
+const tools = { ...substrate, ...skillTools, ...fallbackTools }
 
 const { text } = await generateText({
   model: anthropic('claude-opus-4-7'),
@@ -135,8 +155,12 @@ const { text } = await generateText({
 })
 ```
 
-Same shape works with `streamText` and `ToolLoopAgent` — Composio tools are
-just AI SDK tools.
+`loadSkillTools` reads imported SKILL.md files from R2/KV (the same path
+`skillTool` in `web/src/pages/api/chat.ts` uses) and returns an AI SDK v6
+tool map. `SKILL_TOOLKIT_MAP` maps skill names to Composio toolkit ids
+(`{ gmail: 'GMAIL', slack: 'SLACK', … }`) so the dedup check is O(1).
+
+Same shape works with `streamText` and `ToolLoopAgent`.
 
 ---
 

@@ -23,7 +23,7 @@ INTO                    THROUGH                     OUT
 REGISTER                SIGNAL                      HARDEN
   Any species             Send, receive               Highway → Sui
   Any source              Every action recorded        Permanent. Verifiable.
-  { uid, kind, caps }     Trails form automatically    Leaves the graph richer.
+  { uid, kind, caps }     Paths form automatically    Leaves the graph richer.
 
 DISCOVER                DROP / ALARM                FEDERATE
   Found by others         Success = weight++           Cross-group routing
@@ -31,9 +31,9 @@ DISCOVER                DROP / ALARM                FEDERATE
   Pheromone-ranked        TypeDB infers status         Your trails travel
 
 EMBED                   FOLLOW                      DISSOLVE
-  Joins a group           Substrate routes for you     Trails fade naturally
+  Joins a group           Substrate routes for you     Paths fade naturally
   Gets context            Highways skip the LLM        No penalty. Silence.
-  Sees the colony         <10ms vs 2s                  The colony continues.
+  Sees the group          <10ms vs 2s                  The group continues.
 ```
 
 ---
@@ -205,6 +205,26 @@ unit.status: "proven"  (inferred: success-rate >= 0.75, activity >= 70, samples 
 The agent didn't ask to be promoted. TypeDB inferred it from the data.
 
 **Revenue: Highway routing.** $0.001 per highway route (10x basic signal fee). Agents pay more for proven paths because they're faster and more reliable.
+
+## Agent state machine
+
+Agents transition through four states, driven by deploy actions and substrate feedback:
+
+```
+draft → live → paused → evolving
+  ↑               │          │
+  └───────────────┴──────────┘
+       (manual re-deploy)
+```
+
+| State     | Trigger                                                      | What changes                          |
+|-----------|--------------------------------------------------------------|---------------------------------------|
+| `draft`   | Created or rolled back                                       | Not routable; edit freely             |
+| `live`    | 3-prompt eval passes during deploy                           | Routable; substrate routes traffic     |
+| `paused`  | Error rate > 10% over last 100 chats (auto) or manual pause  | Not routable; substrate marks warn    |
+| `evolving`| L5 evolution loop fires on agent                             | Prompt is being rewritten; still live |
+
+State transitions emit substrate signals: `draft→live` emits `mark(agent-path)`, `live→paused` emits `warn(agent-path, 1)`. The deploy gate runs a 3-prompt eval before any `draft→live` transition; failing eval blocks deploy and returns the failing prompt as a chat reply.
 
 ### Stage 5: WARN
 
@@ -386,7 +406,7 @@ Learning can be irreversible. The highway is now a fact recorded on two determin
 Agent's trails cross group boundaries.
 
 ```
-Group A (my colony) ←── federation ──→ Group B (their colony)
+Group A (my group) ←── federation ──→ Group B (their group)
   agent-translate                         agent-analyze
   highway between them crosses the border
 ```

@@ -135,7 +135,7 @@ export function MenuItemNode({ item, pathname, open, onExpandSidebar }: Props) {
       href={item.href}
       label={item.label}
       icon={item.icon}
-      active={isActive(pathname, item.href)}
+      active={isActive(pathname, item.href, item.exact)}
       open={open}
     />
   )

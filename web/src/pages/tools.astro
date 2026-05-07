@@ -1,0 +1,9 @@
+---
+export const prerender = false
+import Layout from '../layouts/Layout.astro'
+import { ToolsView } from '../components/tools/ToolsView'
+---
+
+<Layout title="Tools — ONE" sidebar="mini">
+  <ToolsView client:idle />
+</Layout>

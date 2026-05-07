@@ -355,6 +355,14 @@ Parallelizable starts: W1, W2, W4. W3 unblocks when W2 lands. W5 + W6 are the as
 
 These belong in W1 recon (each one is a 5-minute file read).
 
+### Answers (Cycle 0 recon — 2026-05-06)
+
+1. **Skill registry:** R2 object storage. `web/src/pages/api/skill/import.ts` writes to `env.CONTENT` (R2 bucket) at path `${slug}/skills/${name}/SKILL.md`. `GET /api/skills` must read from R2, not D1/TypeDB.
+2. **Conversation storage:** No D1 messages table exists. Chat is stateless — messages are streamed via SSE and not persisted. `/api/agents/[id]/chats` cannot query D1 history; either skip the tab or add a messages migration in W2.
+3. **x402 revenue source:** No `/api/agents/[id]/revenue` route. x402 receipts stored in KV (`x402:${slug}:${receipt}`) for replay-prevention only — no payment amount/timestamp queryable. Revenue tab needs a new D1 `payments` table or to query substrate marks tagged `x402`.
+4. **Composio:** Spec exists (`composio.md` + `composio-todo.md`) but SDK not installed. Composio is **in scope** as the BYO-accounts layer — W3E3 tools routes should leave a provider adapter hook for Composio. Q4F2 (opus) resolves the integration shape.
+5. **L5 evolution events:** Not emitted. No `loop.ts` exists. `sdk/src/telemetry.ts` has a generic `emit()` but no L5 hook. W6 generations tab needs Q5F to add the hook first.
+
 ---
 
 *6 waves. Heavy reuse. The drawer + cards + chat protocol are the load-bearing greenfield. Everything else is glue.*

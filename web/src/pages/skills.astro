@@ -1,0 +1,9 @@
+---
+export const prerender = false
+import Layout from '../layouts/Layout.astro'
+import { SkillsView } from '../components/skills/SkillsView'
+---
+
+<Layout title="Skills — ONE" sidebar="mini">
+  <SkillsView client:idle />
+</Layout>

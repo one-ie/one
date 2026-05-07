@@ -1,16 +1,20 @@
 ---
-export const prerender = true
 import Layout from '../layouts/Layout.astro'
 import { Chat } from '../components/Chat'
+
+const { workspaceContext } = Astro.locals
+const workspace = workspaceContext?.workspace
+const agent = workspaceContext?.agent
+const title = `${workspace ? workspace + ' · ' : ''}Chat — ONE`
 ---
 
-<Layout title="Chat — ONE" sidebar="mini" chat="none" chatLock>
+<Layout title={title} sidebar="mini" chat="none" chatLock>
   <Fragment slot="head">
     <link rel="preconnect" href="/api/chat" />
     <link rel="dns-prefetch" href="/api/chat" />
     <link rel="preload" as="image" href="/icon.svg" />
   </Fragment>
-  <div class="h-[100dvh] overflow-hidden">
-    <Chat client:idle fullPage />
+  <div class="h-[100dvh] overflow-hidden" data-workspace={workspace}>
+    <Chat client:idle fullPage workspace={workspace} agent={agent} />
   </div>
 </Layout>
