@@ -21,7 +21,7 @@
     "@astrojs/cloudflare": "^13.3.1",
     "@astrojs/node": "^10.0.6",
     "@astrojs/react": "^5.0.4",
-    "@cloudflare/vite-plugin": "^1.35.0",
+    "@cloudflare/vite-plugin": "^1.39.0",
     "@fontsource-variable/geist": "^5.2.8",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
     "@rive-app/react-webgl2": "^4.28.3",
@@ -68,6 +68,6 @@
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "typescript": "^5.8.3",
-    "wrangler": "^4.14.0"
+    "wrangler": "^4.95.0"
   }
 }
