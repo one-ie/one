@@ -1,51 +1,109 @@
-# ONE Frontend
+# ONE Starter
 
-Open-source Astro starter wired to the ONE backend — chat, tracking, auth, and data from line one.
+> Astro 6 · React 19 · shadcn/ui · Cloudflare Workers
 
-## Quick start
+Build an AI-connected site in minutes. Chat, tracking, auth, and data are served from [one.ie](https://one.ie) — zero bundle cost, no source in your repo.
 
 ```bash
 npm create one-app@latest my-app
-cd my-app
-echo "ONE_API_KEY=your_key_here" >> .env
-bun run dev
+cd my-app && bun run dev
 ```
 
-## What you get
+Set `ONE_API_KEY` in `.env` to connect to the ONE backend. Without it the site runs in standalone mode (local auth + D1).
 
-- **Astro 6** + **React 19** + **Tailwind 4** + **shadcn/ui** — fast by default
-- **Chat + tracking** served from one.ie — no source in your repo, zero bundle cost
-- **Auth** (better-auth) pointed at ONE's backend — server never ships
-- **Data** via `@oneie/sdk` — the same client your agents use
-- **6-token design system** — branding is config, not code edits
-- **Agent-ready** — `.claude/` teaches your AI to build on ONE correctly
+---
 
-## How it works
+## Structure
+
+```
+apps/web/           ← your Astro site (start here)
+packages/
+  frontend/         ← defineOne() + OnePlugin contract
+  design/           ← 6-token Tailwind 4 preset
+  plugin-auth/      ← better-auth client
+  plugin-backend/   ← @oneie/sdk + React 19 hooks
+  plugin-chat/      ← served chat widget
+  plugin-track/     ← served tracking pixel
+  plugin-premium/   ← entitlement gate for paid plugins
+  plugin-admin/     ← Admin Console (paid, served)
+create/             ← npm create one-app scaffolder
+```
+
+---
+
+## Config
+
+Everything wires through `apps/web/one.config.ts`:
 
 ```ts
-// apps/web/one.config.ts
+import { defineOne } from '@oneie/frontend'
+import { auth } from '@oneie/plugin-auth'
+import { track } from '@oneie/plugin-track'
+import { chat } from '@oneie/plugin-chat'
+
 export default defineOne({
-  backend: { baseUrl: process.env.ONE_BASE_URL, apiKey: process.env.ONE_API_KEY },
-  brand: { tokens: { primary: 'hsl(216 55% 25%)', secondary: 'hsl(219 14% 28%)' } },
-  plugins: [auth(), track({ ws: 'my-workspace' }), chat({ agent: 'my-bot' })],
+  backend: {
+    baseUrl: 'https://one.ie',
+    // apiKey loaded from CF binding at runtime
+  },
+  brand: {
+    tokens: {
+      primary:    'hsl(216 55% 25%)',
+      secondary:  'hsl(219 14% 28%)',
+      tertiary:   'hsl(105 22% 25%)',
+      background: 'hsl(0 0% 93%)',
+      foreground: 'hsl(0 0% 100%)',
+      font:       'hsl(0 0% 13%)',
+    },
+  },
+  plugins: [
+    auth(),
+    track({ ws: 'your-workspace' }),
+    chat({ agent: 'your-agent' }),
+  ],
 })
 ```
 
-The moat is served, never shipped. `grep apps/web/src` returns 0 chat/CRM/substrate lines.
+---
 
-## Packages
+## Plugins
 
-| Package | Purpose |
-|---|---|
-| `@oneie/frontend` | `defineOne()` + `OnePlugin` contract |
-| `@oneie/design` | 6-token Tailwind preset |
-| `plugin-chat` | `<OneChat>` — emits the served chat tag |
-| `plugin-track` | `<OneTrack>` — emits the served tracking tag |
-| `plugin-auth` | better-auth client, server stays on ONE |
-| `plugin-backend` | `@oneie/sdk` client + `@oneie/react` hooks |
-| `plugin-premium` | Served-widget loader + entitlement gate |
-| `plugin-admin` | Admin Console — first paid plugin (served, gated by `admin` entitlement) |
+| Package | Tier | What |
+|---|---|---|
+| `@oneie/plugin-auth` | free | better-auth client — auth server stays on ONE |
+| `@oneie/plugin-backend` | free | `@oneie/sdk` client + React 19 hooks |
+| `@oneie/plugin-chat` | free | Served chat widget — zero bundle |
+| `@oneie/plugin-track` | free | Served tracking pixel — zero bundle |
+| `@oneie/plugin-premium` | free | Entitlement gate (base for paid plugins) |
+| `@oneie/plugin-admin` | **paid** | Admin Console — served via x402, gated by `admin` entitlement |
+
+Paid plugins ship as stubs in this repo. Source is private and served from `one.ie/x/<plugin>.js` after payment.
+
+---
+
+## Design system
+
+Six tokens in `one.config.ts` brand the entire site: `primary`, `secondary`, `tertiary`, `background`, `foreground`, `font`. No CSS edits needed — swap all six and everything rebrands.
+
+---
+
+## Development
+
+```bash
+bun install                    # install all workspaces
+cd apps/web && bun run dev     # dev server
+bun test                       # vitest suite
+bun run typecheck              # astro check
+```
+
+---
+
+## AI-ready
+
+`.claude/` teaches your AI assistant to build on ONE correctly — file conventions, plugin patterns, design rules, hard constraints. Works with Claude Code, Cursor, and any editor that reads `CLAUDE.md`.
+
+---
 
 ## License
 
-MIT — `apps/web` and all packages. The ONE backend itself is not open-source.
+MIT — `apps/web` and all packages. The ONE backend is not open-source.

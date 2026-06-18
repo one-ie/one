@@ -1,5 +1,7 @@
 {
   "name": "web",
+  "version": "0.1.0",
+  "description": "ONE starter — Astro 6 + React 19 + shadcn/ui on Cloudflare Workers",
   "type": "module",
   "private": true,
   "scripts": {

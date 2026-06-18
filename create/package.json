@@ -1,6 +1,7 @@
 {
   "name": "create-one-app",
   "version": "0.1.0",
+  "description": "Scaffold a ONE-connected Astro site — npm create one-app",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -8,7 +9,7 @@
   },
   "files": ["dist", "template"],
   "scripts": {
-    "prebuild": "rm -rf template && rsync -a --exclude=node_modules --exclude=dist --exclude=.astro ../apps/web/ template/",
+    "prebuild": "rm -rf template && rsync -a --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.wrangler ../apps/web/ template/",
     "build": "bun build ./src/index.ts --outdir dist --target node"
   },
   "dependencies": {

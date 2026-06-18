@@ -42,6 +42,8 @@ rsync -a --delete \
   --exclude=.git \
   --exclude=node_modules \
   --exclude=dist \
+  --exclude=.astro \
+  --exclude=.wrangler \
   --exclude=.do-worktrees \
   --exclude=.do-trust.json \
   --exclude=.do-digest.md \
@@ -49,9 +51,13 @@ rsync -a --delete \
   --exclude=.w2-spec.json \
   --exclude=.w3-receipts.json \
   --exclude=.w4-improvements.json \
+  --exclude=.w2-doc-plan.json \
   --exclude=.bun \
   "$TEMPLATE_DIR/" "$TARGET_DIR/" \
   $( $DRY_RUN && echo "--dry-run" )
+
+# Remove stray artifacts from prior repo structure (excluded files leave empty dirs behind)
+$DRY_RUN || rm -rf "$TARGET_DIR/web"
 
 # ── 1.5. Build create/template/ (scaffolder bundles apps/web as its template) ─
 if $DRY_RUN; then
@@ -59,7 +65,7 @@ if $DRY_RUN; then
 else
   echo "[release] building create/template/..."
   rsync -a --delete \
-    --exclude=node_modules --exclude=dist --exclude=.astro \
+    --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.wrangler \
     "$TARGET_DIR/apps/web/" "$TARGET_DIR/create/template/"
   if command -v bun &>/dev/null; then
     (cd "$TARGET_DIR/create" && bun install --frozen-lockfile 2>/dev/null || bun install && bun run build)

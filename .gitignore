@@ -2,6 +2,8 @@ node_modules/
 dist/
 .astro/
 .wrangler/
+create/template/
+create/dist/
 coverage/
 *.tsbuildinfo
 .turbo/

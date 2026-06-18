@@ -1,6 +1,7 @@
 {
   "name": "one-frontend",
   "version": "0.1.0",
+  "description": "ONE Astro+React19+shadcn frontend starter — AI-connected sites with zero bundle cost",
   "private": true,
   "license": "MIT",
   "workspaces": ["apps/*", "packages/*", "create"],

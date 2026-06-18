@@ -1,6 +1,7 @@
 {
   "name": "@oneie/design",
   "version": "0.1.0",
+  "description": "6-token Tailwind 4 design preset — brand ONE sites with config, not CSS",
   "license": "MIT",
   "type": "module",
   "main": "src/index.ts",
