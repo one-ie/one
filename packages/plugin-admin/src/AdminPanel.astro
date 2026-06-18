@@ -1,0 +1,15 @@
+---
+// AdminPanel — re-exports plugin-premium's <OnePanel> with plugin fixed to 'admin'.
+// The Admin Console UI is served from https://one.ie/x/admin.js (no source here).
+import OnePanel from '@oneie/plugin-premium/OnePanel.astro'
+
+export interface Props {
+  entitlementKey?: string
+  ws?: string
+  primary?: string
+}
+
+const { entitlementKey, ws, primary } = Astro.props
+---
+
+<OnePanel plugin="admin" entitlementKey={entitlementKey} ws={ws} primary={primary} />

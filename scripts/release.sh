@@ -28,13 +28,15 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Paid plugins: source is stripped, replaced with a serve-only stub
-# Add plugin dir names here as they become x402-gated
-PAID_PLUGINS=(plugin-admin)
+# Paid plugins whose SOURCE is secret — stripped and replaced with a serve-only stub.
+# plugin-admin is intentionally NOT listed here: its source is a thin public loader.
+# The secret is the served UI at one.ie/x/admin.js, which lives in pay/backend/ (private).
+# Only add a plugin here if its package/src/ contains proprietary logic that must not ship.
+PAID_PLUGINS=()
 
 echo "[release] source: $TEMPLATE_DIR"
 echo "[release] target: $TARGET_DIR"
-echo "[release] paid plugins (stubbed): ${PAID_PLUGINS[*]}"
+echo "[release] paid plugins (stubbed): ${PAID_PLUGINS[*]:-none}"
 $DRY_RUN && echo "[release] DRY RUN — no writes"
 
 # ── 1. Sync everything except node_modules, .do-* state files, and dist ──────
@@ -76,36 +78,48 @@ else
 fi
 
 # ── 2. Stub paid plugin source ────────────────────────────────────────────────
-for plugin in "${PAID_PLUGINS[@]}"; do
-  pkg_dir="$TARGET_DIR/packages/$plugin"
-  [[ -d "$pkg_dir/src" ]] || continue
+# Clean up any directory names that changed between releases (rsync --delete misses these
+# when they contain excluded files that prevent deletion)
+$DRY_RUN || rm -rf "$TARGET_DIR/packages/config"
 
-  if $DRY_RUN; then
-    echo "[release] would stub $plugin/src/"
-    continue
-  fi
+if (( ${#PAID_PLUGINS[@]} > 0 )); then
+  for plugin in "${PAID_PLUGINS[@]}"; do
+    pkg_dir="$TARGET_DIR/packages/$plugin"
+    [[ -d "$pkg_dir/src" ]] || continue
 
-  # Derive the serves URL: extract string literal if present, else use the standard pattern
-  serves_url=$(grep -m1 'serves:.*"https://' "$TEMPLATE_DIR/packages/$plugin/src/index.ts" \
-    | grep -o '"https://[^"]*"' | tr -d '"' || true)
-  [[ -z "$serves_url" ]] && serves_url="https://one.ie/x/${plugin#plugin-}.js"
+    if $DRY_RUN; then
+      echo "[release] would stub $plugin/src/"
+      continue
+    fi
 
-  # Replace src/ with a single stub
-  rm -rf "$pkg_dir/src"
-  mkdir -p "$pkg_dir/src"
-  cat > "$pkg_dir/src/index.ts" <<STUB
+    # Derive the serves URL: extract string literal if present, else use the standard pattern
+    serves_url=$(grep -m1 'serves:.*"https://' "$TEMPLATE_DIR/packages/$plugin/src/index.ts" \
+      | grep -o '"https://[^"]*"' | tr -d '"' || true)
+    [[ -z "$serves_url" ]] && serves_url="https://one.ie/x/${plugin#plugin-}.js"
+
+    # Derive camelCase function name: plugin-foo-bar → fooBarPanel
+    fn_name=$(echo "${plugin#plugin-}" | sed 's/-\([a-z]\)/\U\1/g')Panel
+
+    # Replace src/ with a single stub
+    rm -rf "$pkg_dir/src"
+    mkdir -p "$pkg_dir/src"
+    cat > "$pkg_dir/src/index.ts" <<STUB
 // This plugin is served via x402 — source is not included in this repo.
 // It loads at runtime from the ONE platform.
 import type { OnePlugin } from "@oneie/frontend";
 
-export const ${plugin//-/}: () => OnePlugin = () => ({
-  name: "${plugin#plugin-}",
-  tier: "paid",
-  serves: "${serves_url}",
-});
+export function ${fn_name}(): OnePlugin {
+  return {
+    name: "${plugin}",
+    tier: "paid",
+    serves: "${serves_url}",
+    entitlement: "${plugin#plugin-}",
+  };
+}
 STUB
-  echo "[release] stubbed $plugin → serves: $serves_url"
-done
+    echo "[release] stubbed $plugin → serves: $serves_url"
+  done
+fi
 
 # ── 3. Commit + push ──────────────────────────────────────────────────────────
 if $DRY_RUN; then
