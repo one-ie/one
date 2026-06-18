@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node", "vitest/globals"],
+    "lib": ["ES2022"]
+  },
+  "include": ["tests/**/*.ts", "vitest.config.ts"]
+}

@@ -1,0 +1,17 @@
+{
+  "renames": [],
+  "touched_docs": [
+    "text/frontend-how-to.md",
+    "text/frontend-reference.md",
+    "text/frontend.md",
+    "text/frontend-docs.md",
+    "text/frontend-plan.md",
+    "text/frontend-todo.md",
+    "README.md"
+  ],
+  "contract_dirs": [
+    "/Users/toc/Server/frontend",
+    "/Users/toc/Server/frontend/packages/plugin-admin",
+    "/Users/toc/Server/frontend/create"
+  ]
+}

@@ -1,0 +1,51 @@
+---
+interface Props {
+  stagger?: number
+  dist?: 'sm' | 'md' | 'lg'
+  class?: string
+}
+
+const { stagger = 0.08, dist = 'sm', class: className } = Astro.props
+
+const distMap = { sm: '12px', md: '24px', lg: '48px' } as const
+---
+
+<div
+  class:list={['stagger', className]}
+  style={`--stagger-y:${distMap[dist]};--stagger-step:${stagger}s`}
+>
+  <slot />
+</div>
+
+<style>
+  .stagger > * {
+    animation: stagger-in 0.48s cubic-bezier(0.22, 1, 0.36, 1)
+               calc(var(--stagger-step) * var(--i, 0)) both;
+  }
+  .stagger > *:nth-child(1)  { --i: 0; }
+  .stagger > *:nth-child(2)  { --i: 1; }
+  .stagger > *:nth-child(3)  { --i: 2; }
+  .stagger > *:nth-child(4)  { --i: 3; }
+  .stagger > *:nth-child(5)  { --i: 4; }
+  .stagger > *:nth-child(6)  { --i: 5; }
+  .stagger > *:nth-child(7)  { --i: 6; }
+  .stagger > *:nth-child(8)  { --i: 7; }
+  .stagger > *:nth-child(9)  { --i: 8; }
+  .stagger > *:nth-child(10) { --i: 9; }
+  .stagger > *:nth-child(11) { --i: 10; }
+  .stagger > *:nth-child(12) { --i: 11; }
+
+  @supports (animation-timeline: view()) {
+    .stagger > * {
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+  @keyframes stagger-in {
+    from { opacity: 0; transform: translateY(var(--stagger-y)); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stagger > * { animation: none; opacity: 1; transform: none; }
+  }
+</style>

@@ -1,0 +1,39 @@
+---
+interface Props {
+  dist?: 'sm' | 'md' | 'lg'
+  speed?: 'fast' | 'base' | 'slow'
+  delay?: number
+  class?: string
+}
+
+const { dist = 'md', speed = 'base', delay = 0, class: className } = Astro.props
+
+const distMap = { sm: '12px', md: '24px', lg: '48px' } as const
+const durMap  = { fast: '0.32s', base: '0.48s', slow: '0.72s' } as const
+---
+
+<div
+  class:list={['reveal', className]}
+  style={`--reveal-y:${distMap[dist]};--reveal-d:${durMap[speed]};--reveal-delay:${delay}s`}
+>
+  <slot />
+</div>
+
+<style>
+  .reveal {
+    animation: reveal var(--reveal-d) cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay) both;
+  }
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(var(--reveal-y)); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { animation: none; opacity: 1; transform: none; }
+  }
+</style>

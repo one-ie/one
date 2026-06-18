@@ -1,0 +1,23 @@
+{
+  "name": "create-one-app",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-one-app": "./dist/index.js"
+  },
+  "files": ["dist", "template"],
+  "scripts": {
+    "prebuild": "rm -rf template && rsync -a --exclude=node_modules --exclude=dist --exclude=.astro ../apps/web/ template/",
+    "build": "bun build ./src/index.ts --outdir dist --target node"
+  },
+  "dependencies": {
+    "prompts": "^2.4.2",
+    "kleur": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/prompts": "^2.4.9",
+    "typescript": "^5.7.3"
+  }
+}

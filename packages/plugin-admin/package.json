@@ -1,0 +1,20 @@
+{
+  "name": "@oneie/plugin-admin",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./AdminPanel.astro": "./src/AdminPanel.astro"
+  },
+  "peerDependencies": {
+    "astro": ">=6.0.0",
+    "@oneie/frontend": "workspace:*",
+    "@oneie/plugin-premium": "workspace:*"
+  },
+  "devDependencies": {
+    "astro": "^6.2.2",
+    "typescript": "^5.7.3"
+  }
+}

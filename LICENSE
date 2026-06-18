@@ -1,18 +1,21 @@
-Copyright (c) 2024-2026 Tony O'Connell. All rights reserved.
+MIT License
 
-This software and associated documentation files (the "Software") are the
-private and confidential property of Tony O'Connell.
+Copyright (c) 2026 one.ie
 
-No part of the Software may be reproduced, distributed, transmitted,
-displayed, published, or broadcast in any form or by any means, without
-the prior written permission of Tony O'Connell.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-You may not copy, modify, sublicense, or distribute the Software.
-You may not use the Software for any commercial or non-commercial purpose
-without explicit written authorization from Tony O'Connell.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-
-For licensing inquiries, contact Tony O'Connell.
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

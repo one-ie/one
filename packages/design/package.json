@@ -1,0 +1,19 @@
+{
+  "name": "@oneie/design",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens": "./src/tokens.ts",
+    "./preset": "./src/preset.ts"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=4.0.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.3"
+  }
+}

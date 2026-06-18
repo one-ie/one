@@ -1,0 +1,13 @@
+---
+import Layout from '@/layouts/Layout.astro'
+export const prerender = true
+---
+
+<Layout title="Server error">
+  <main class="min-h-screen flex flex-col items-center justify-center gap-6 px-4 text-center">
+    <p class="text-6xl font-bold text-font/20">500</p>
+    <h1 class="text-2xl font-bold">Something went wrong</h1>
+    <p class="text-font/60">An unexpected error occurred. Please try again.</p>
+    <a href="/" class="px-4 py-2 rounded-lg bg-primary text-on-primary text-sm">Go home</a>
+  </main>
+</Layout>

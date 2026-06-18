@@ -1,0 +1,18 @@
+{
+  "name": "one-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "workspaces": ["apps/*", "packages/*", "create"],
+  "scripts": {
+    "build": "cd apps/web && bun run build",
+    "typecheck": "cd apps/web && bun run typecheck",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@oneie/design": "workspace:*",
+    "@oneie/frontend": "workspace:*",
+    "@types/node": "^22.0.0",
+    "vitest": "^3.0.0"
+  }
+}

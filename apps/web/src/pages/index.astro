@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="ONE App" description="Built with ONE">
+  <main style="max-width: var(--content); margin: 0 auto; padding: 4rem 1.5rem; text-align: center;">
+    <h1 style="font-size: 3rem; font-weight: 700; color: var(--color-primary); margin-bottom: 1rem;">
+      ONE App
+    </h1>
+    <p style="font-size: 1.25rem; color: var(--color-font); opacity: 0.7; margin-bottom: 2rem;">
+      Your ONE-connected site is ready. Edit <code>src/pages/index.astro</code> to get started.
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a
+        href="https://one.ie/docs"
+        style="padding: 0.75rem 1.5rem; background: var(--color-primary); color: var(--color-on-primary); border-radius: var(--radius-md); text-decoration: none; font-weight: 600;"
+      >
+        Read the docs →
+      </a>
+      <a
+        href="/design"
+        style="padding: 0.75rem 1.5rem; background: var(--color-foreground); color: var(--color-font); border-radius: var(--radius-md); text-decoration: none; font-weight: 600;"
+      >
+        Design system
+      </a>
+    </div>
+  </main>
+</Layout>

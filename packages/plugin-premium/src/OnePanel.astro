@@ -1,0 +1,19 @@
+---
+export interface Props {
+  plugin: string
+  entitlementKey?: string
+  ws?: string
+  primary?: string
+}
+
+const { plugin, entitlementKey, ws, primary } = Astro.props
+---
+
+<script
+  async
+  src={`https://one.ie/x/${plugin}.js`}
+  data-plugin={plugin}
+  data-entitlement-key={entitlementKey}
+  data-ws={ws}
+  data-primary={primary}
+></script>

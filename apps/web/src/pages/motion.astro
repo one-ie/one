@@ -1,0 +1,688 @@
+export const prerender = true
+---
+import Layout from '@/layouts/Layout.astro'
+import Reveal from '@/components/motion/Reveal.astro'
+import Stagger from '@/components/motion/Stagger.astro'
+import FeatureTabs from '@/components/motion/FeatureTabs'
+---
+
+<Layout title="ONE Motion System">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       1. HOOK — above the fold, immediate value, no fluff
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="hero">
+    <Reveal dist="lg" speed="slow" class="hero-copy">
+      <p class="eyebrow">Motion System · v1</p>
+      <h1>Crisp.<br/>Purposeful.<br/>Fast.</h1>
+      <p class="hero-sub">
+        Four primitives. One mental model. Ships near-zero JS
+        until each island enters the viewport.
+      </p>
+      <div class="hero-meta">
+        <span class="meta-chip">motion 12</span>
+        <span class="meta-dot">·</span>
+        <span class="meta-chip">Astro 6 islands</span>
+        <span class="meta-dot">·</span>
+        <span class="meta-chip">WCAG AA</span>
+      </div>
+    </Reveal>
+
+
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       2. TENSION — name the problem before the solution
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="tension-section">
+    <Reveal dist="md" class="tension-inner">
+      <blockquote>
+        "Motion without discipline is noise.<br/>
+        Motion with discipline is product polish."
+      </blockquote>
+      <p class="tension-sub">
+        Most teams reach for a full animation library, ship 80 kb of JS, and get
+        janky layout animations in return. This system is different — one dependency,
+        four thin wrappers, no layout thrashing.
+      </p>
+    </Reveal>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       3. STATS BAR — social proof / credibility at a glance
+  ════════════════════════════════════════════════════════════════════════ -->
+  <div class="stats-bar-wrapper">
+    <Stagger class="stats-bar" stagger={0.08}>
+      <div class="stat">
+        <span class="stat-n">4</span>
+        <span class="stat-label">primitives</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <span class="stat-n">~30</span>
+        <span class="stat-label">lines each</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <span class="stat-n">0</span>
+        <span class="stat-label">extra deps</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <span class="stat-n">3</span>
+        <span class="stat-label">layers</span>
+      </div>
+      <div class="stat-div"></div>
+      <div class="stat">
+        <span class="stat-n">AA</span>
+        <span class="stat-label">reduced motion</span>
+      </div>
+    </Stagger>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       4. OVERVIEW — "what you get" before the deep dive
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <Reveal class="section-head">
+      <p class="eyebrow">Architecture</p>
+      <h2>Three layers, top to bottom</h2>
+      <p class="muted">
+        Start with Primitives — they cover 95% of the site.<br/>
+        Tokens and reduced-motion handling come for free.
+      </p>
+    </Reveal>
+
+    <Stagger class="arch-grid" stagger={0.09}>
+      <div class="arch-card arch-card--1">
+        <div class="arch-num">1</div>
+        <div class="arch-body">
+          <strong>Primitives</strong>
+          <p>Reveal · Stagger · Parallax · ScrollScene</p>
+          <p class="muted small">Drop into <code>.astro</code> files as <code>client:visible</code> islands.</p>
+        </div>
+      </div>
+      <div class="arch-card arch-card--2">
+        <div class="arch-num">2</div>
+        <div class="arch-body">
+          <strong>Tokens</strong>
+          <p>ease · duration · distance</p>
+          <p class="muted small">One source of truth. Change a number, everything feels the same.</p>
+        </div>
+      </div>
+      <div class="arch-card arch-card--3">
+        <div class="arch-num">3</div>
+        <div class="arch-body">
+          <strong>Reduced motion</strong>
+          <p>usePrefersReducedMotion()</p>
+          <p class="muted small">Every primitive consults this. Choreography survives, movement doesn't.</p>
+        </div>
+      </div>
+    </Stagger>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       5. FEATURE DEEP-DIVE — vertical tabs with live interactive demos
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="section section--wide">
+    <Reveal class="section-head">
+      <p class="eyebrow">Capabilities</p>
+      <h2>Every primitive, live</h2>
+      <p class="muted">Click a tab. Try the demo. All six capabilities in one place.</p>
+    </Reveal>
+
+    <FeatureTabs client:only="react" />
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       6. SIGNATURE MOMENT — ScrollScene as a standalone experience
+  ════════════════════════════════════════════════════════════════════════ -->
+  <div class="scene-intro">
+    <Reveal class="scene-intro-text">
+      <p class="eyebrow">ScrollScene in the wild</p>
+      <h2>Scroll to advance the signal lifecycle</h2>
+    </Reveal>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       7. PROOF — performance guardrails (handle objections)
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="section">
+    <Reveal class="section-head">
+      <p class="eyebrow">Performance</p>
+      <h2>The guardrails</h2>
+      <p class="muted">Built-in constraints so you can't accidentally ship slow animations.</p>
+    </Reveal>
+
+    <Stagger class="guardrails" stagger={0.07}>
+      <div class="guardrail">
+        <span class="gr-icon gr-good">✓</span>
+        <div>
+          <strong>transform + opacity only</strong>
+          <p class="muted small">Never top/left/width/height. Composited by the GPU.</p>
+        </div>
+      </div>
+      <div class="guardrail">
+        <span class="gr-icon gr-good">✓</span>
+        <div>
+          <strong>will-change: transform on parallax only</strong>
+          <p class="muted small">Applied per-element, not globally. Never promoted layers you don't need.</p>
+        </div>
+      </div>
+      <div class="guardrail">
+        <span class="gr-icon gr-good">✓</span>
+        <div>
+          <strong>contain: layout paint on ScrollScene</strong>
+          <p class="muted small">Prevents sticky sections triggering layout work elsewhere on the page.</p>
+        </div>
+      </div>
+      <div class="guardrail">
+        <span class="gr-icon gr-good">✓</span>
+        <div>
+          <strong>client:visible deferred hydration</strong>
+          <p class="muted small">Islands don't hydrate until they enter the viewport. First paint is pure HTML.</p>
+        </div>
+      </div>
+      <div class="guardrail">
+        <span class="gr-icon gr-warn">○</span>
+        <div>
+          <strong>Tree-shaking</strong>
+          <p class="muted small">Motion ships ESM. Unused primitives never reach the bundle.</p>
+        </div>
+      </div>
+    </Stagger>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       8. INSTALL — remove friction, show it's three lines
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="section install-section">
+    <Reveal class="section-head">
+      <p class="eyebrow">Integration</p>
+      <h2>Three steps</h2>
+    </Reveal>
+
+    <Stagger class="install-steps" stagger={0.1}>
+      <div class="install-step">
+        <div class="step-num">1</div>
+        <div>
+          <p class="step-label">Install</p>
+          <pre class="code-line"><code>bun add motion</code></pre>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">2</div>
+        <div>
+          <p class="step-label">Import a primitive</p>
+          <pre class="code-line"><code>import Reveal from '@/components/motion/Reveal.astro'</code></pre>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">3</div>
+        <div>
+          <p class="step-label">Drop it in your Astro file</p>
+          <pre class="code-line"><code>&lt;Reveal&gt;&lt;HeroHeadline /&gt;&lt;/Reveal&gt;</code></pre>
+        </div>
+      </div>
+    </Stagger>
+
+    <Reveal delay={0.15} class="install-note">
+      <p>
+        <strong>That's it.</strong> No provider setup, no global config.
+        The motion tokens live in <code>src/lib/motion.ts</code> — edit the four numbers and
+        the whole site recalibrates.
+      </p>
+    </Reveal>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       9. CTA — close the loop, single action
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="cta-section">
+    <Reveal dist="lg" speed="slow" class="cta-inner">
+      <h2>One system.<br/>Zero overhead.</h2>
+      <p class="cta-sub">
+        Unused primitives tree-shake to nothing.<br/>
+        Islands defer until they're needed.
+      </p>
+      <Stagger stagger={0.06} class="cta-pills">
+        <span class="pill">motion 12</span>
+        <span class="pill">Astro 6</span>
+        <span class="pill">React 19</span>
+        <span class="pill">client:visible</span>
+        <span class="pill">4 primitives</span>
+        <span class="pill">WCAG AA</span>
+      </Stagger>
+    </Reveal>
+  </section>
+
+</Layout>
+
+<style>
+/* ── reset / base ──────────────────────────────────────────────────────── */
+:global(body) {
+  background: var(--color-page);
+  color: var(--color-font);
+}
+
+* { box-sizing: border-box; }
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0 0 0.6rem;
+}
+
+.muted { color: var(--color-muted); }
+.small { font-size: 0.82rem; line-height: 1.5; }
+
+code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.82em;
+  color: var(--color-tertiary);
+}
+
+/* ── 1. Hero ───────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 5rem clamp(2rem, 7vw, 9rem);
+  overflow: hidden;
+}
+
+:global(.hero-copy) {
+  position: relative;
+  z-index: 2;
+  max-width: 580px;
+}
+
+.hero h1 {
+  font-size: clamp(3.5rem, 9vw, 6.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin: 0.5rem 0 1.25rem;
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+  max-width: 400px;
+  margin: 0 0 1.5rem;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  padding: 0.25rem 0;
+}
+
+.meta-dot { color: var(--color-border); font-size: 1.1rem; }
+
+.scroll-cue {
+  position: absolute;
+  bottom: 2.5rem;
+  left: clamp(2rem, 7vw, 9rem);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.scroll-line {
+  width: 44px;
+  height: 1px;
+  background: color-mix(in srgb, var(--color-muted) 40%, transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+  transform: translateX(-100%);
+  animation: scan 2s ease-in-out infinite;
+}
+
+@keyframes scan { to { transform: translateX(100%); } }
+
+/* ── 2. Tension ────────────────────────────────────────────────────────── */
+.tension-section {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-foreground);
+  padding: 5rem clamp(2rem, 7vw, 9rem);
+}
+
+:global(.tension-inner) {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+blockquote {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+  color: var(--color-font);
+}
+
+.tension-sub {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+/* ── 3. Stats bar ──────────────────────────────────────────────────────── */
+.stats-bar-wrapper {
+  border-bottom: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+:global(.stats-bar) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 1.75rem clamp(2rem, 7vw, 9rem);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0 2.5rem;
+}
+
+.stat-n {
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--color-font);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.stat-div {
+  width: 1px;
+  height: 32px;
+  background: var(--color-border);
+}
+
+/* ── 4. Architecture overview ──────────────────────────────────────────── */
+.section {
+  padding: 6rem clamp(2rem, 7vw, 9rem);
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.section--wide {
+  max-width: 1200px;
+}
+
+:global(.section-head) {
+  margin-bottom: 2.5rem;
+}
+
+.section h2 {
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0.4rem 0 0.75rem;
+  line-height: 1.1;
+}
+
+:global(.arch-grid) {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 680px) {
+  :global(.arch-grid) { grid-template-columns: 1fr; }
+}
+
+.arch-card {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  box-shadow: var(--shadow-card);
+}
+
+.arch-card--1 { border-left: 3px solid var(--color-primary); }
+.arch-card--2 { border-left: 3px solid var(--color-secondary); }
+.arch-card--3 { border-left: 3px solid var(--color-tertiary); }
+
+.arch-num {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-border);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.arch-body strong { display: block; font-size: 0.92rem; margin-bottom: 0.25rem; }
+.arch-body p { font-size: 0.82rem; margin: 0 0 0.25rem; color: var(--color-muted); }
+
+/* ── 6. Scene intro ────────────────────────────────────────────────────── */
+.scene-intro {
+  padding: 4rem clamp(2rem, 7vw, 9rem) 0;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+:global(.scene-intro-text) {}
+.scene-intro h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0.4rem 0 0;
+}
+
+:global(.scene-stage) {
+  background: var(--color-foreground);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  margin-top: 2rem;
+}
+
+/* ── 7. Guardrails ─────────────────────────────────────────────────────── */
+:global(.guardrails) {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.guardrail {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.guardrail:last-child { border-bottom: none; }
+
+.gr-icon {
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.gr-good {
+  background: color-mix(in srgb, var(--color-tertiary) 15%, var(--color-foreground));
+  color: var(--color-tertiary);
+}
+
+.gr-warn {
+  background: color-mix(in srgb, var(--color-secondary) 15%, var(--color-foreground));
+  color: var(--color-secondary);
+}
+
+.guardrail strong { font-size: 0.9rem; display: block; margin-bottom: 0.2rem; }
+
+/* ── 8. Install ────────────────────────────────────────────────────────── */
+.install-section { border-top: 1px solid var(--color-border); }
+
+:global(.install-steps) {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.install-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-foreground));
+  border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.step-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin: 0 0 0.4rem;
+}
+
+.code-line {
+  background: var(--color-foreground);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 1rem;
+  margin: 0;
+  font-size: 0.8rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--color-tertiary);
+  overflow-x: auto;
+}
+
+:global(.install-note) {
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-foreground));
+  border: 1px solid color-mix(in srgb, var(--color-primary) 15%, transparent);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.4rem;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+}
+
+:global(.install-note) strong { color: var(--color-font); }
+
+/* ── 9. CTA ────────────────────────────────────────────────────────────── */
+.cta-section {
+  border-top: 1px solid var(--color-border);
+  padding: 9rem clamp(2rem, 7vw, 9rem);
+}
+
+:global(.cta-inner) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.cta-section h2 {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.cta-sub {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+:global(.cta-pills) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.pill {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: var(--color-background);
+  color: var(--color-muted);
+}
+</style>

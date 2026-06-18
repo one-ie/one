@@ -1,0 +1,151 @@
+---
+interface Props {
+  title: string
+  description?: string
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: string
+  ogUrl?: string
+}
+
+const {
+  title,
+  description = 'Built with ONE',
+  ogTitle,
+  ogDescription,
+  ogImage,
+  ogUrl,
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    {ogTitle && <meta property="og:title" content={ogTitle} />}
+    {ogDescription && <meta property="og:description" content={ogDescription} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogUrl && <meta property="og:url" content={ogUrl} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Critical tokens inlined — no network round-trip before first paint -->
+    <style is:inline>
+      :root {
+        --color-background: hsl(0 0% 93%);
+        --color-foreground: hsl(0 0% 100%);
+        --color-font: hsl(0 0% 13%);
+        --color-primary: hsl(216 55% 25%);
+        --color-secondary: hsl(219 14% 28%);
+        --color-tertiary: hsl(105 22% 25%);
+        --color-on-primary: #fff;
+        --color-on-secondary: #fff;
+        --color-on-tertiary: #fff;
+        --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
+        --color-page: color-mix(in oklab, var(--color-background) 96%, var(--color-font));
+      }
+      html.dark {
+        --color-background: hsl(0 0% 10%);
+        --color-foreground: hsl(0 0% 13%);
+        --color-font: hsl(0 0% 100%);
+        --color-primary: hsl(216 55% 65%);
+        --color-secondary: hsl(219 14% 65%);
+        --color-tertiary: hsl(105 22% 65%);
+        --color-on-primary: #000;
+        --color-on-secondary: #000;
+        --color-on-tertiary: #000;
+      }
+      body { background: var(--color-page); color: var(--color-font); margin: 0; }
+    </style>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    <slot name="footer" />
+  </body>
+</html>
+
+<style>
+  /*
+   * ONE Design System — 6 extractable tokens + 5 invariants + derived helpers.
+   * Spec: text/design.md. Editor: /design.
+   *
+   * --color-*: initial wipes Tailwind's default palette so bg-zinc-*, bg-indigo-*
+   * etc. literally produce no CSS. The system enforces itself.
+   */
+  @theme {
+    --color-*: initial;
+
+    /* Invariants — never editable */
+    --color-white: #fff;
+    --color-black: #000;
+    --color-transparent: transparent;
+    --color-current: currentColor;
+    --color-destructive: hsl(0 70% 50%);
+    --color-success: hsl(140 60% 40%);
+
+    /* The 6 extractable tokens — override via one.config.ts brand.tokens */
+    --color-background: hsl(0 0% 93%);
+    --color-foreground: hsl(0 0% 100%);
+    --color-font: hsl(0 0% 13%);
+    --color-primary: hsl(216 55% 25%);
+    --color-secondary: hsl(219 14% 28%);
+    --color-tertiary: hsl(105 22% 25%);
+
+    /* Derived — auto-contrast labels for brand fills */
+    --color-on-primary: #fff;
+    --color-on-secondary: #fff;
+    --color-on-tertiary: #fff;
+
+    /* shadcn/ui aliases — map shadcn naming to ONE surfaces */
+    --color-popover: var(--color-background);
+    --color-popover-foreground: var(--color-font);
+    --color-card: var(--color-background);
+    --color-card-foreground: var(--color-font);
+    --color-muted: var(--color-foreground);
+    --color-muted-foreground: color-mix(in oklab, var(--color-font) 60%, transparent);
+    --color-accent: var(--color-foreground);
+    --color-accent-foreground: var(--color-font);
+    --color-input: var(--color-background);
+  }
+
+  :root {
+    --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
+    --color-border-strong: color-mix(in oklab, var(--color-font) 20%, transparent);
+    --color-muted: color-mix(in oklab, var(--color-font) 60%, transparent);
+    --color-faint: color-mix(in oklab, var(--color-font) 40%, transparent);
+    --color-ring: var(--color-primary);
+    --color-page: color-mix(in oklab, var(--color-background) 96%, var(--color-font));
+
+    --content-narrow: 42rem;
+    --content: 56rem;
+    --content-wide: 64rem;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --shadow-card: 0 1px 2px color-mix(in oklab, var(--color-font) 6%, transparent);
+    --shadow-pop: 0 4px 16px color-mix(in oklab, var(--color-font) 10%, transparent);
+    --ease: 120ms ease;
+  }
+
+  html.dark {
+    --color-background: hsl(0 0% 10%);
+    --color-foreground: hsl(0 0% 13%);
+    --color-font: hsl(0 0% 100%);
+    --color-primary: hsl(216 55% 65%);
+    --color-secondary: hsl(219 14% 65%);
+    --color-tertiary: hsl(105 22% 65%);
+    --color-on-primary: #000;
+    --color-on-secondary: #000;
+    --color-on-tertiary: #000;
+  }
+
+  body {
+    background: var(--color-page);
+    color: var(--color-font);
+    font-family: system-ui, sans-serif;
+    margin: 0;
+  }
+</style>

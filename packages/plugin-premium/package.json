@@ -1,0 +1,19 @@
+{
+  "name": "@oneie/plugin-premium",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./bridge": "./src/bridge.ts",
+    "./OnePanel.astro": "./src/OnePanel.astro"
+  },
+  "peerDependencies": {
+    "astro": ">=6.0.0"
+  },
+  "devDependencies": {
+    "astro": "^6.2.2",
+    "typescript": "^5.7.3"
+  }
+}
