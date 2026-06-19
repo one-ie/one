@@ -18,6 +18,7 @@
         "@astrojs/cloudflare": "^13.3.1",
         "@astrojs/react": "^5.0.4",
         "@oneie/frontend": "workspace:*",
+        "@oneie/plugin-chat": "workspace:*",
         "@tailwindcss/vite": "^4.0.0",
         "astro": "^6.2.2",
         "better-auth": "^1.6.11",

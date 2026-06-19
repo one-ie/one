@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@oneie/frontend": "workspace:*",
+    "@oneie/plugin-chat": "workspace:*",
     "@astrojs/cloudflare": "^13.3.1",
     "@astrojs/react": "^5.0.4",
     "@tailwindcss/vite": "^4.0.0",

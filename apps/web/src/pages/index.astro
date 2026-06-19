@@ -1,28 +1,708 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Reveal from '../components/motion/Reveal.astro'
 ---
 
-<Layout title="ONE App" description="Built with ONE">
-  <main style="max-width: var(--content); margin: 0 auto; padding: 4rem 1.5rem; text-align: center;">
-    <h1 style="font-size: 3rem; font-weight: 700; color: var(--color-primary); margin-bottom: 1rem;">
-      ONE App
-    </h1>
-    <p style="font-size: 1.25rem; color: var(--color-font); opacity: 0.7; margin-bottom: 2rem;">
-      Your ONE-connected site is ready. Edit <code>src/pages/index.astro</code> to get started.
-    </p>
-    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-      <a
-        href="https://one.ie/docs"
-        style="padding: 0.75rem 1.5rem; background: var(--color-primary); color: var(--color-on-primary); border-radius: var(--radius-md); text-decoration: none; font-weight: 600;"
-      >
-        Read the docs →
-      </a>
-      <a
-        href="/design"
-        style="padding: 0.75rem 1.5rem; background: var(--color-foreground); color: var(--color-font); border-radius: var(--radius-md); text-decoration: none; font-weight: 600;"
-      >
-        Design system
-      </a>
+<Layout
+  title="ONE — Astro starter with AI, payments & plugins"
+  description="Astro 6 + React 19 + Cloudflare Workers starter. Design system, motion library, AI chat, payments, and auth — all wired from one.config.ts."
+>
+
+  <!-- ── Hero ──────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <Reveal>
+        <div class="badge">Astro 6 · React 19 · Cloudflare Workers</div>
+      </Reveal>
+
+      <Reveal delay={0.08}>
+        <h1 class="headline">Build sites<br />that think</h1>
+      </Reveal>
+
+      <Reveal delay={0.16}>
+        <p class="sub">
+          ONE gives you a design system, motion library, AI chat, payments,
+          and analytics — wired from a single config file. Clone once. Ship forever.
+        </p>
+      </Reveal>
+
+      <Reveal delay={0.22}>
+        <div class="install">
+          <code class="install-cmd">npm create one-app@latest my-site</code>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText('npm create one-app@latest my-site')">
+            Copy
+          </button>
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.28}>
+        <div class="hero-actions">
+          <a href="https://one.ie/docs" class="btn-primary">Read the docs →</a>
+          <a href="/design" class="btn-secondary">Design system</a>
+          <a href="/motion" class="btn-ghost">Motion library</a>
+        </div>
+      </Reveal>
     </div>
-  </main>
+  </section>
+
+  <!-- ── Feature grid ──────────────────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">Everything included</h2>
+        <p class="section-sub">Six capabilities, zero boilerplate.</p>
+      </Reveal>
+
+      <div class="grid-3">
+        <Reveal delay={0}>
+          <div class="card">
+            <div class="card-icon" style="color:var(--color-primary)">◆</div>
+            <h3 class="card-title">6 design tokens</h3>
+            <p class="card-body">
+              <code>primary · secondary · tertiary · background · foreground · font</code> —
+              change all six from <code>one.config.ts</code>. Every component inherits automatically.
+            </p>
+            <a href="/design" class="card-link">Explore the system →</a>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.06}>
+          <div class="card">
+            <div class="card-icon" style="color:var(--color-secondary)">◈</div>
+            <h3 class="card-title">Motion library</h3>
+            <p class="card-body">
+              Reveal, Parallax, ScrollScene, and Springs — built on Motion/React.
+              Shared ease + duration tokens so every animation feels like the same product.
+            </p>
+            <a href="/motion" class="card-link">See it live →</a>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.12}>
+          <div class="card">
+            <div class="card-icon" style="color:var(--color-tertiary)">◉</div>
+            <h3 class="card-title">AI chat</h3>
+            <p class="card-body">
+              Drop a chat widget onto any page with <code>plugin-chat</code>.
+              Agent definitions live in markdown. No backend code required.
+            </p>
+            <div class="card-badge">plugin-chat · connected</div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.04}>
+          <div class="card">
+            <div class="card-icon" style="color:var(--color-primary)">◎</div>
+            <h3 class="card-title">Payments</h3>
+            <p class="card-body">
+              x402 payment flows, quote/claim, and multi-chain crypto — via
+              <code>plugin-backend</code>. Accept a payment in under 60 seconds.
+            </p>
+            <div class="card-badge">plugin-backend · connected</div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.10}>
+          <div class="card">
+            <div class="card-icon" style="color:var(--color-secondary)">◐</div>
+            <h3 class="card-title">Auth</h3>
+            <p class="card-body">
+              Passkey + better-auth, zero config. <code>plugin-auth</code> ships as a
+              free plugin — local session, social providers, email magic link.
+            </p>
+            <div class="card-badge">plugin-auth · free</div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.16}>
+          <div class="card">
+            <div class="card-icon" style="color:var(--color-tertiary)">◑</div>
+            <h3 class="card-title">Tracking</h3>
+            <p class="card-body">
+              Privacy-first analytics. <code>plugin-track</code> injects a served pixel —
+              your data stays in your workspace, not a third party.
+            </p>
+            <div class="card-badge">plugin-track · connected</div>
+          </div>
+        </Reveal>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Config snippet ────────────────────────────────────────── -->
+  <section class="section section-alt">
+    <div class="container container-split">
+      <div class="split-text">
+        <Reveal>
+          <h2 class="section-title">One file.<br />Total control.</h2>
+          <p class="section-sub">
+            Every token, plugin, and backend endpoint configured in
+            <code>one.config.ts</code>. Change your brand colour — every component
+            updates. Add a plugin — the feature wires itself.
+          </p>
+          <div class="feature-list">
+            <div class="feature-row">
+              <span class="feature-dot"></span>
+              Brand tokens — primary, secondary, tertiary, backgrounds, font
+            </div>
+            <div class="feature-row">
+              <span class="feature-dot"></span>
+              Backend baseUrl — point at one.ie or your own deployment
+            </div>
+            <div class="feature-row">
+              <span class="feature-dot"></span>
+              Plugin array — install with npm, wire with one line
+            </div>
+          </div>
+        </Reveal>
+      </div>
+
+      <Reveal delay={0.1} class="split-code">
+        <pre class="code-block"><code><span class="tok-kw">import</span> <span class="tok-b">&#123;</span> defineOne <span class="tok-b">&#125;</span> <span class="tok-kw">from</span> <span class="tok-str">'@oneie/frontend'</span>
+<span class="tok-kw">import</span> <span class="tok-b">&#123;</span> auth, track, chat <span class="tok-b">&#125;</span> <span class="tok-kw">from</span> <span class="tok-str">'@oneie/frontend/plugins'</span>
+
+<span class="tok-kw">export default</span> defineOne(<span class="tok-b">&#123;</span>
+  backend: <span class="tok-b">&#123;</span>
+    baseUrl: <span class="tok-str">'https://one.ie'</span>,
+  <span class="tok-b">&#125;</span>,
+  brand: <span class="tok-b">&#123;</span>
+    tokens: <span class="tok-b">&#123;</span>
+      primary:    <span class="tok-str">'hsl(216 55% 25%)'</span>,
+      secondary:  <span class="tok-str">'hsl(219 14% 28%)'</span>,
+      tertiary:   <span class="tok-str">'hsl(105 22% 25%)'</span>,
+      background: <span class="tok-str">'hsl(0 0% 93%)'</span>,
+      foreground: <span class="tok-str">'hsl(0 0% 100%)'</span>,
+      font:       <span class="tok-str">'hsl(0 0% 13%)'</span>,
+    <span class="tok-b">&#125;</span>,
+  <span class="tok-b">&#125;</span>,
+  plugins: <span class="tok-b">[</span>
+    auth(),
+    track(<span class="tok-b">&#123;</span> ws: <span class="tok-str">'my-workspace'</span> <span class="tok-b">&#125;</span>),
+    chat(<span class="tok-b">&#123;</span> agent: <span class="tok-str">'my-agent'</span> <span class="tok-b">&#125;</span>),
+  <span class="tok-b">]</span>,
+<span class="tok-b">&#125;</span>)</code></pre>
+      </Reveal>
+    </div>
+  </section>
+
+  <!-- ── Plugin tiers ───────────────────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">Plugin tiers</h2>
+        <p class="section-sub">
+          Free plugins ship full source. Connected plugins are served from one.ie —
+          no backend code to maintain. Paid plugins unlock advanced capabilities.
+        </p>
+      </Reveal>
+
+      <Reveal delay={0.08}>
+        <div class="table-wrap">
+          <table class="plugin-table">
+            <thead>
+              <tr>
+                <th>Plugin</th>
+                <th>Package</th>
+                <th>Tier</th>
+                <th>What you get</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>auth()</code></td>
+                <td><code>plugin-auth</code></td>
+                <td><span class="tier tier-free">free</span></td>
+                <td>better-auth client — passkey, social, magic link</td>
+              </tr>
+              <tr>
+                <td><code>track()</code></td>
+                <td><code>plugin-track</code></td>
+                <td><span class="tier tier-connected">connected</span></td>
+                <td>Served analytics pixel — your workspace, your data</td>
+              </tr>
+              <tr>
+                <td><code>chat()</code></td>
+                <td><code>plugin-chat</code></td>
+                <td><span class="tier tier-connected">connected</span></td>
+                <td>Served AI chat widget — attach any agent</td>
+              </tr>
+              <tr>
+                <td><code>backend()</code></td>
+                <td><code>plugin-backend</code></td>
+                <td><span class="tier tier-connected">connected</span></td>
+                <td>ONE API bindings — signals, payments, agent calls</td>
+              </tr>
+              <tr>
+                <td><code>premium()</code></td>
+                <td><code>plugin-premium</code></td>
+                <td><span class="tier tier-paid">paid</span></td>
+                <td>x402 checkout flows, entitlement gating</td>
+              </tr>
+              <tr>
+                <td><code>admin()</code></td>
+                <td><code>plugin-admin</code></td>
+                <td><span class="tier tier-paid">paid</span></td>
+                <td>Hosted admin console — workspace management</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  <!-- ── Stack ─────────────────────────────────────────────────── -->
+  <section class="section section-alt">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">The stack</h2>
+        <p class="section-sub">Chosen for speed to production and zero ops.</p>
+      </Reveal>
+
+      <div class="stack-grid">
+        {[
+          { name: 'Astro 6',     role: 'Framework — SSR on CF Workers' },
+          { name: 'React 19',    role: 'Islands — Actions, use(), Transitions' },
+          { name: 'Tailwind 4',  role: 'Utility CSS — ONE 6-token preset' },
+          { name: 'shadcn/ui',   role: 'Components — 30+ accessible primitives' },
+          { name: 'Motion',      role: 'Animation — physics-based, accessible' },
+          { name: 'Cloudflare',  role: 'Runtime — Workers, D1, KV, R2' },
+          { name: 'TypeScript',  role: 'End to end — no implicit any' },
+          { name: 'Bun',         role: 'Runtime + package manager' },
+        ].map((item, i) => (
+          <Reveal delay={i * 0.04}>
+            <div class="stack-item">
+              <div class="stack-name">{item.name}</div>
+              <div class="stack-role">{item.role}</div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────────── -->
+  <section class="section cta-section">
+    <div class="container cta-container">
+      <Reveal>
+        <h2 class="cta-title">Start building</h2>
+        <p class="cta-sub">One command. Production-ready in minutes.</p>
+        <div class="install install-cta">
+          <code class="install-cmd">npm create one-app@latest my-site</code>
+          <button class="copy-btn" onclick="navigator.clipboard.writeText('npm create one-app@latest my-site')">
+            Copy
+          </button>
+        </div>
+        <div class="hero-actions">
+          <a href="https://github.com/one-ie/one" class="btn-primary">View on GitHub →</a>
+          <a href="https://one.ie/docs" class="btn-secondary">Documentation</a>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
 </Layout>
+
+<style>
+  /* ── Layout shells ───────────────────────────────────────────── */
+  .container {
+    max-width: var(--content);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .section { padding: 6rem 0; }
+  .section-alt { background: var(--color-foreground); }
+
+  /* ── Hero ────────────────────────────────────────────────────── */
+  .hero {
+    padding: 7rem 0 6rem;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    background: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-primary) 20%, transparent);
+    border-radius: 9999px;
+    padding: 0.3rem 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  .headline {
+    font-size: clamp(2.6rem, 8vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--color-font);
+    margin: 0 0 1.5rem;
+  }
+
+  .sub {
+    font-size: 1.15rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+    max-width: 42rem;
+    margin: 0 auto 2.5rem;
+  }
+
+  /* ── Install bar ─────────────────────────────────────────────── */
+  .install {
+    display: inline-flex;
+    align-items: center;
+    background: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin: 0 auto 2rem;
+    max-width: 100%;
+  }
+
+  .install-cta { margin: 0 auto 2.5rem; }
+
+  .install-cmd {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    padding: 0.7rem 1.1rem;
+    color: var(--color-tertiary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .copy-btn {
+    flex-shrink: 0;
+    border: none;
+    border-left: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    transition: background var(--ease), color var(--ease);
+  }
+  .copy-btn:hover {
+    background: color-mix(in oklab, var(--color-primary) 8%, var(--color-background));
+    color: var(--color-primary);
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────────── */
+  .hero-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.65rem 1.4rem;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: opacity var(--ease);
+  }
+  .btn-primary:hover { opacity: 0.88; }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.65rem 1.4rem;
+    background: var(--color-foreground);
+    color: var(--color-font);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: border-color var(--ease), background var(--ease);
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-background);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.65rem 1.4rem;
+    color: var(--color-muted);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.88rem;
+    transition: color var(--ease);
+  }
+  .btn-ghost:hover { color: var(--color-font); }
+
+  /* ── Section headers ─────────────────────────────────────────── */
+  .section-title {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-font);
+    margin: 0 0 0.75rem;
+    line-height: 1.15;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+    max-width: 38rem;
+    margin: 0 0 3rem;
+  }
+
+  /* ── Feature cards ───────────────────────────────────────────── */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } }
+  @media (min-width: 769px) and (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+
+  .card {
+    background: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color var(--ease), box-shadow var(--ease);
+  }
+  .card:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-pop);
+  }
+
+  .card-icon { font-size: 1.25rem; margin-bottom: 0.25rem; }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-font);
+    margin: 0;
+  }
+
+  .card-body {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin: 0;
+    flex: 1;
+  }
+
+  .card-body code, .section-sub code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.8rem;
+    color: var(--color-tertiary);
+  }
+
+  .card-link {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    margin-top: 0.25rem;
+  }
+  .card-link:hover { text-decoration: underline; }
+
+  .card-badge {
+    display: inline-flex;
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-secondary);
+    background: color-mix(in oklab, var(--color-secondary) 10%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-secondary) 20%, transparent);
+    border-radius: 9999px;
+    padding: 0.2rem 0.6rem;
+    margin-top: 0.25rem;
+  }
+
+  /* ── Config split ────────────────────────────────────────────── */
+  .container-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .container-split { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  .split-code { min-width: 0; }
+
+  .code-block {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.4rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.78rem;
+    line-height: 1.75;
+    overflow-x: auto;
+    margin: 0;
+    color: var(--color-font);
+  }
+
+  .tok-kw  { color: var(--color-primary); font-weight: 600; }
+  .tok-str { color: var(--color-tertiary); }
+  .tok-b   { color: var(--color-muted); }
+
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .feature-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    color: var(--color-muted);
+    line-height: 1.5;
+  }
+
+  .feature-dot {
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    margin-top: 0.45rem;
+  }
+
+  /* ── Plugin table ────────────────────────────────────────────── */
+  .table-wrap { overflow-x: auto; }
+
+  .plugin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.87rem;
+  }
+
+  .plugin-table th {
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .plugin-table td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-font);
+    vertical-align: middle;
+  }
+
+  .plugin-table tbody tr:last-child td { border-bottom: none; }
+  .plugin-table tbody tr:hover td {
+    background: color-mix(in oklab, var(--color-primary) 3%, transparent);
+  }
+
+  .plugin-table code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.8rem;
+    color: var(--color-tertiary);
+  }
+
+  .tier {
+    display: inline-flex;
+    padding: 0.15rem 0.55rem;
+    border-radius: 9999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .tier-free {
+    background: color-mix(in oklab, var(--color-tertiary) 12%, transparent);
+    color: var(--color-tertiary);
+    border: 1px solid color-mix(in oklab, var(--color-tertiary) 25%, transparent);
+  }
+
+  .tier-connected {
+    background: color-mix(in oklab, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    border: 1px solid color-mix(in oklab, var(--color-primary) 25%, transparent);
+  }
+
+  .tier-paid {
+    background: color-mix(in oklab, var(--color-secondary) 12%, transparent);
+    color: var(--color-secondary);
+    border: 1px solid color-mix(in oklab, var(--color-secondary) 25%, transparent);
+  }
+
+  /* ── Stack grid ──────────────────────────────────────────────── */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) { .stack-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .stack-item {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.1rem;
+    transition: border-color var(--ease);
+  }
+  .stack-item:hover { border-color: var(--color-border-strong); }
+
+  .stack-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-font);
+    margin-bottom: 0.25rem;
+  }
+
+  .stack-role {
+    font-size: 0.77rem;
+    color: var(--color-muted);
+    line-height: 1.5;
+  }
+
+  /* ── CTA ─────────────────────────────────────────────────────── */
+  .cta-section { border-top: 1px solid var(--color-border); }
+  .cta-container { text-align: center; }
+
+  .cta-title {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-font);
+    margin: 0 0 0.75rem;
+  }
+
+  .cta-sub {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    margin: 0 0 2rem;
+  }
+</style>

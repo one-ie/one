@@ -135,5 +135,7 @@ if git diff --cached --quiet; then
 fi
 
 git commit -m "$MESSAGE"
+# Ensure HTTPS remote (SSH may fail without agent; HTTPS uses stored credentials)
+git remote set-url origin https://github.com/one-ie/one.git
 git push origin main
 echo "[release] pushed to github.com/one-ie/one"

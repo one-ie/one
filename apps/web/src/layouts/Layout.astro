@@ -1,4 +1,6 @@
 ---
+import OneChat from '@oneie/plugin-chat/OneChat.astro'
+
 interface Props {
   title: string
   description?: string
@@ -30,7 +32,8 @@ const {
     {ogImage && <meta property="og:image" content={ogImage} />}
     {ogUrl && <meta property="og:url" content={ogUrl} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Critical tokens inlined — no network round-trip before first paint -->
+
+    <!-- Critical tokens — inlined to prevent FOUC on first paint -->
     <style is:inline>
       :root {
         --color-background: hsl(0 0% 93%);
@@ -58,26 +61,136 @@ const {
       }
       body { background: var(--color-page); color: var(--color-font); margin: 0; }
     </style>
+
+    <!--
+      Anti-FOUC: runs synchronously before first paint.
+      Reads localStorage, applies dark class + theme CSS vars immediately.
+    -->
+    <script is:inline>
+      (function () {
+        /* Six preset themes — light/dark token pairs + swatch color */
+        window.__T = {
+          navy:   { l:['hsl(216 55% 25%)','hsl(219 14% 28%)','hsl(105 22% 25%)'], d:['hsl(216 55% 65%)','hsl(219 14% 65%)','hsl(105 22% 65%)'], s:'hsl(216 55% 35%)', name:'Navy'   },
+          ocean:  { l:['hsl(198 70% 28%)','hsl(175 55% 28%)','hsl(210 80% 30%)'], d:['hsl(198 70% 62%)','hsl(175 55% 62%)','hsl(210 80% 65%)'], s:'hsl(198 60% 38%)', name:'Ocean'  },
+          forest: { l:['hsl(140 45% 22%)','hsl(160 35% 26%)','hsl(90  40% 24%)'], d:['hsl(140 45% 60%)','hsl(160 35% 62%)','hsl(90  40% 60%)'], s:'hsl(140 42% 30%)', name:'Forest' },
+          sunset: { l:['hsl(24  75% 35%)','hsl(35  65% 38%)','hsl(4   60% 35%)'], d:['hsl(24  75% 65%)','hsl(35  65% 65%)','hsl(4   60% 65%)'], s:'hsl(24  70% 42%)', name:'Sunset' },
+          violet: { l:['hsl(268 55% 30%)','hsl(248 50% 35%)','hsl(288 45% 30%)'], d:['hsl(268 55% 68%)','hsl(248 50% 68%)','hsl(288 45% 68%)'], s:'hsl(268 50% 40%)', name:'Violet' },
+          rose:   { l:['hsl(342 65% 35%)','hsl(320 50% 38%)','hsl(14  60% 36%)'], d:['hsl(342 65% 68%)','hsl(320 50% 68%)','hsl(14  60% 65%)'], s:'hsl(342 60% 43%)', name:'Rose'   },
+        }
+
+        window.__applyTheme = function (name, dark) {
+          var t = window.__T[name]; if (!t) return
+          var c = dark ? t.d : t.l, on = dark ? '#000' : '#fff'
+          var el = document.documentElement
+          el.style.setProperty('--color-primary',      c[0])
+          el.style.setProperty('--color-secondary',    c[1])
+          el.style.setProperty('--color-tertiary',     c[2])
+          el.style.setProperty('--color-on-primary',   on)
+          el.style.setProperty('--color-on-secondary', on)
+          el.style.setProperty('--color-on-tertiary',  on)
+        }
+
+        var saved = localStorage.getItem('one-theme') || 'navy'
+        var rawDark = localStorage.getItem('one-dark')
+        var dark = rawDark !== null
+          ? rawDark === 'true'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (dark) document.documentElement.classList.add('dark')
+        window.__applyTheme(saved, dark)
+      })()
+    </script>
+
     <slot name="head" />
   </head>
+
   <body>
+
+    <!-- ── Nav ──────────────────────────────────────────────────── -->
+    <header id="one-nav">
+      <a href="/" class="one-logo">ONE</a>
+      <div class="one-controls">
+        <div id="one-swatches" class="one-swatches" role="group" aria-label="Color theme"></div>
+        <div class="one-divider"></div>
+        <button id="one-mode" class="one-mode" type="button" aria-label="Toggle dark mode"></button>
+      </div>
+    </header>
+
+    <!-- ── Page content ─────────────────────────────────────────── -->
     <slot />
     <slot name="footer" />
+
+    <!-- ── Chat widget ───────────────────────────────────────────── -->
+    <OneChat
+      agent="one"
+      view="icon"
+      position="right"
+      greeting="Hi! Ask me anything about the ONE platform."
+    />
+
+    <!-- ── Theme wiring — runs after DOM is ready ───────────────── -->
+    <script is:inline>
+      (function () {
+        var T = window.__T
+        var names = Object.keys(T)
+        var theme = localStorage.getItem('one-theme') || 'navy'
+        var dark  = document.documentElement.classList.contains('dark')
+
+        function apply(name, d) {
+          theme = name; dark = d
+          d ? document.documentElement.classList.add('dark')
+            : document.documentElement.classList.remove('dark')
+          window.__applyTheme(name, d)
+          localStorage.setItem('one-theme', name)
+          localStorage.setItem('one-dark', String(d))
+          sync()
+        }
+
+        function sync() {
+          document.querySelectorAll('.one-sw').forEach(function (b) {
+            var on = b.dataset.t === theme
+            b.style.outline      = on ? '2px solid ' + T[theme].s : 'none'
+            b.style.outlineOffset = '2px'
+            b.style.transform    = on ? 'scale(1.15)' : 'scale(1)'
+          })
+          var mb = document.getElementById('one-mode')
+          if (mb) mb.innerHTML = dark
+            ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
+            : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
+        }
+
+        /* Build swatch buttons */
+        var sc = document.getElementById('one-swatches')
+        names.forEach(function (name) {
+          var b = document.createElement('button')
+          b.className = 'one-sw'
+          b.title = T[name].name
+          b.dataset.t = name
+          b.type = 'button'
+          b.style.background = T[name].s
+          b.setAttribute('aria-label', T[name].name + ' theme')
+          b.onclick = function () { apply(name, dark) }
+          sc.appendChild(b)
+        })
+
+        /* Mode toggle */
+        var mb = document.getElementById('one-mode')
+        if (mb) mb.onclick = function () { apply(theme, !dark) }
+
+        sync()
+      })()
+    </script>
+
   </body>
 </html>
 
 <style>
   /*
    * ONE Design System — 6 extractable tokens + 5 invariants + derived helpers.
-   * Spec: text/design.md. Editor: /design.
-   *
-   * --color-*: initial wipes Tailwind's default palette so bg-zinc-*, bg-indigo-*
-   * etc. literally produce no CSS. The system enforces itself.
    */
   @theme {
     --color-*: initial;
 
-    /* Invariants — never editable */
+    /* Invariants */
     --color-white: #fff;
     --color-black: #000;
     --color-transparent: transparent;
@@ -85,7 +198,7 @@ const {
     --color-destructive: hsl(0 70% 50%);
     --color-success: hsl(140 60% 40%);
 
-    /* The 6 extractable tokens — override via one.config.ts brand.tokens */
+    /* 6 extractable tokens */
     --color-background: hsl(0 0% 93%);
     --color-foreground: hsl(0 0% 100%);
     --color-font: hsl(0 0% 13%);
@@ -93,12 +206,12 @@ const {
     --color-secondary: hsl(219 14% 28%);
     --color-tertiary: hsl(105 22% 25%);
 
-    /* Derived — auto-contrast labels for brand fills */
+    /* Auto-contrast labels */
     --color-on-primary: #fff;
     --color-on-secondary: #fff;
     --color-on-tertiary: #fff;
 
-    /* shadcn/ui aliases — map shadcn naming to ONE surfaces */
+    /* shadcn/ui aliases */
     --color-popover: var(--color-background);
     --color-popover-foreground: var(--color-font);
     --color-card: var(--color-background);
@@ -111,41 +224,121 @@ const {
   }
 
   :root {
-    --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
+    --color-border:        color-mix(in oklab, var(--color-font) 10%, transparent);
     --color-border-strong: color-mix(in oklab, var(--color-font) 20%, transparent);
-    --color-muted: color-mix(in oklab, var(--color-font) 60%, transparent);
-    --color-faint: color-mix(in oklab, var(--color-font) 40%, transparent);
-    --color-ring: var(--color-primary);
-    --color-page: color-mix(in oklab, var(--color-background) 96%, var(--color-font));
+    --color-muted:         color-mix(in oklab, var(--color-font) 60%, transparent);
+    --color-faint:         color-mix(in oklab, var(--color-font) 40%, transparent);
+    --color-ring:          var(--color-primary);
+    --color-page:          color-mix(in oklab, var(--color-background) 96%, var(--color-font));
 
     --content-narrow: 42rem;
-    --content: 56rem;
-    --content-wide: 64rem;
+    --content:        56rem;
+    --content-wide:   64rem;
 
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
+
     --shadow-card: 0 1px 2px color-mix(in oklab, var(--color-font) 6%, transparent);
-    --shadow-pop: 0 4px 16px color-mix(in oklab, var(--color-font) 10%, transparent);
+    --shadow-pop:  0 4px 16px color-mix(in oklab, var(--color-font) 10%, transparent);
     --ease: 120ms ease;
   }
 
   html.dark {
     --color-background: hsl(0 0% 10%);
     --color-foreground: hsl(0 0% 13%);
-    --color-font: hsl(0 0% 100%);
-    --color-primary: hsl(216 55% 65%);
-    --color-secondary: hsl(219 14% 65%);
-    --color-tertiary: hsl(105 22% 65%);
+    --color-font:       hsl(0 0% 100%);
+    --color-primary:    hsl(216 55% 65%);
+    --color-secondary:  hsl(219 14% 65%);
+    --color-tertiary:   hsl(105 22% 65%);
     --color-on-primary: #000;
     --color-on-secondary: #000;
     --color-on-tertiary: #000;
   }
 
   body {
-    background: var(--color-page);
-    color: var(--color-font);
+    background:  var(--color-page);
+    color:       var(--color-font);
     font-family: system-ui, sans-serif;
-    margin: 0;
+    margin:      0;
   }
+
+  /* ── Nav ───────────────────────────────────────────────────────── */
+  #one-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    height: 52px;
+    background: color-mix(in oklab, var(--color-foreground) 90%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .one-logo {
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: opacity var(--ease);
+  }
+  .one-logo:hover { opacity: 0.75; }
+
+  .one-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .one-swatches {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .one-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--color-border);
+  }
+
+  .one-mode {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-font);
+    cursor: pointer;
+    transition: background var(--ease), border-color var(--ease), color var(--ease);
+    flex-shrink: 0;
+  }
+  .one-mode:hover {
+    background: color-mix(in oklab, var(--color-primary) 8%, var(--color-background));
+    border-color: color-mix(in oklab, var(--color-primary) 40%, transparent);
+    color: var(--color-primary);
+  }
+</style>
+
+<!-- Swatch styles must be global — buttons are created by JS and don't get the Astro scope attribute -->
+<style is:global>
+  .one-sw {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: transform 120ms ease, outline 80ms ease;
+  }
+  .one-sw:hover { transform: scale(1.25) !important; }
 </style>
