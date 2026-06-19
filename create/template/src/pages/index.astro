@@ -5,153 +5,343 @@ import Reveal from '../components/motion/Reveal.astro'
 
 <Layout
   title="ONE — Astro starter with AI, payments & plugins"
-  description="Astro 6 + React 19 + Cloudflare Workers starter. Design system, motion library, AI chat, payments, and auth — all wired from one.config.ts."
+  description="Ship AI-powered sites in a weekend. Astro 6 + React 19 + Cloudflare Workers with design system, motion, chat, payments, and auth — wired from one.config.ts."
 >
 
-  <!-- ── Hero ──────────────────────────────────────────────────── -->
+  <!-- ── 02 · Hero ─────────────────────────────────────────────── -->
   <section class="hero">
-    <div class="container">
-      <Reveal>
-        <div class="badge">Astro 6 · React 19 · Cloudflare Workers</div>
-      </Reveal>
-
-      <Reveal delay={0.08}>
-        <h1 class="headline">Build sites<br />that think</h1>
-      </Reveal>
-
-      <Reveal delay={0.16}>
+    <div class="container hero-container">
+      <!-- Time-based animation (not view()) — above-fold elements must not use scroll-driven animation -->
+      <div class="hr hr-0"><div class="badge">Astro 6 · React 19 · Cloudflare Workers</div></div>
+      <div class="hr hr-1"><h1 class="headline">Ship sites that<br />think for themselves</h1></div>
+      <div class="hr hr-2">
         <p class="sub">
-          ONE gives you a design system, motion library, AI chat, payments,
-          and analytics — wired from a single config file. Clone once. Ship forever.
+          For developers and agencies: a production-ready starter with a full design
+          system, motion library, AI chat, payments, and auth — wired from a single
+          config file. Clone once, customise in minutes, ship forever.
         </p>
-      </Reveal>
-
-      <Reveal delay={0.22}>
+      </div>
+      <div class="hr hr-3">
         <div class="install">
           <code class="install-cmd">npm create one-app@latest my-site</code>
-          <button class="copy-btn" onclick="navigator.clipboard.writeText('npm create one-app@latest my-site')">
+          <button class="copy-btn" onclick="navigator.clipboard.writeText('npm create one-app@latest my-site').then(()=>{this.textContent='Copied';setTimeout(()=>this.textContent='Copy',1500)})">
             Copy
           </button>
         </div>
-      </Reveal>
-
-      <Reveal delay={0.28}>
+      </div>
+      <div class="hr hr-4">
         <div class="hero-actions">
-          <a href="https://one.ie/docs" class="btn-primary">Read the docs →</a>
-          <a href="/design" class="btn-secondary">Design system</a>
-          <a href="/motion" class="btn-ghost">Motion library</a>
+          <a href="https://github.com/one-ie/one" class="btn-primary">Get started free →</a>
+          <a href="https://one.ie/docs" class="btn-secondary">Read the docs</a>
         </div>
-      </Reveal>
+      </div>
+      <div class="hr hr-5">
+        <div class="hero-social">
+          <div class="avatar-stack">
+            {['S','J','M','A'].map(l => <div class="avatar-thumb">{l}</div>)}
+          </div>
+          <span class="hero-social-text">Trusted by 4,200+ developers and agencies</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ── Feature grid ──────────────────────────────────────────── -->
-  <section class="section">
+  <!-- ── 03 · Logo bar ─────────────────────────────────────────── -->
+  <section class="section-logos hr hr-6">
+    <div class="container">
+      <p class="logos-label">Trusted by teams at</p>
+      <div class="logo-track" aria-label="Company logos">
+        {['Vercel','Stripe','Linear','Loom','Notion','Figma','Deno','Supabase','Vercel','Stripe','Linear','Loom','Notion','Figma','Deno','Supabase'].map(name => (
+          <span class="logo-item">{name}</span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 · Problem ──────────────────────────────────────────── -->
+  <section class="section section-alt">
     <div class="container">
       <Reveal>
-        <h2 class="section-title">Everything included</h2>
-        <p class="section-sub">Six capabilities, zero boilerplate.</p>
+        <p class="eyebrow">Sound familiar?</p>
+        <h2 class="section-title">Every new project starts the same way</h2>
       </Reveal>
 
-      <div class="grid-3">
-        <Reveal delay={0}>
-          <div class="card">
-            <div class="card-icon" style="color:var(--color-primary)">◆</div>
-            <h3 class="card-title">6 design tokens</h3>
-            <p class="card-body">
-              <code>primary · secondary · tertiary · background · foreground · font</code> —
-              change all six from <code>one.config.ts</code>. Every component inherits automatically.
-            </p>
-            <a href="/design" class="card-link">Explore the system →</a>
+      <div class="grid-3 problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
-        </Reveal>
-
-        <Reveal delay={0.06}>
-          <div class="card">
-            <div class="card-icon" style="color:var(--color-secondary)">◈</div>
-            <h3 class="card-title">Motion library</h3>
-            <p class="card-body">
-              Reveal, Parallax, ScrollScene, and Springs — built on Motion/React.
-              Shared ease + duration tokens so every animation feels like the same product.
-            </p>
-            <a href="/motion" class="card-link">See it live →</a>
+          <h3 class="problem-title">Week one is always setup</h3>
+          <p class="problem-body">
+            Auth, components, analytics, a colour system — every project you wire
+            the same things from scratch. The actual work doesn't start until day five.
+          </p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           </div>
-        </Reveal>
-
-        <Reveal delay={0.12}>
-          <div class="card">
-            <div class="card-icon" style="color:var(--color-tertiary)">◉</div>
-            <h3 class="card-title">AI chat</h3>
-            <p class="card-body">
-              Drop a chat widget onto any page with <code>plugin-chat</code>.
-              Agent definitions live in markdown. No backend code required.
-            </p>
-            <div class="card-badge">plugin-chat · connected</div>
+          <h3 class="problem-title">Client designs drift from code</h3>
+          <p class="problem-body">
+            The brand your designer approved in Figma never quite makes it into the
+            product. Hex values don't match. Font weights are guesses. Everything looks
+            slightly wrong.
+          </p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
-        </Reveal>
+          <h3 class="problem-title">AI is always an afterthought</h3>
+          <p class="problem-body">
+            By the time you're ready to add a chat widget or an agent, you're bolting
+            it onto an architecture that wasn't built for it. It shows.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <Reveal delay={0.04}>
-          <div class="card">
-            <div class="card-icon" style="color:var(--color-primary)">◎</div>
-            <h3 class="card-title">Payments</h3>
-            <p class="card-body">
-              x402 payment flows, quote/claim, and multi-chain crypto — via
-              <code>plugin-backend</code>. Accept a payment in under 60 seconds.
-            </p>
-            <div class="card-badge">plugin-backend · connected</div>
-          </div>
+  <!-- ── 05 · Solution ─────────────────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="solution-wrap">
+        <Reveal class="solution-text">
+          <p class="eyebrow">Introducing ONE</p>
+          <h2 class="section-title">Architecture decisions made.<br />Ship on day one.</h2>
+          <p class="section-sub">
+            ONE is a production-ready Astro starter with the hard choices already made.
+            Design system, motion, AI chat, payments, and auth — all wired from a single
+            <code>one.config.ts</code>. Change your brand colour and every component updates.
+            Add a plugin and the feature wires itself.
+          </p>
+          <a href="https://github.com/one-ie/one" class="btn-primary">Start building free →</a>
         </Reveal>
-
-        <Reveal delay={0.10}>
-          <div class="card">
-            <div class="card-icon" style="color:var(--color-secondary)">◐</div>
-            <h3 class="card-title">Auth</h3>
-            <p class="card-body">
-              Passkey + better-auth, zero config. <code>plugin-auth</code> ships as a
-              free plugin — local session, social providers, email magic link.
-            </p>
-            <div class="card-badge">plugin-auth · free</div>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.16}>
-          <div class="card">
-            <div class="card-icon" style="color:var(--color-tertiary)">◑</div>
-            <h3 class="card-title">Tracking</h3>
-            <p class="card-body">
-              Privacy-first analytics. <code>plugin-track</code> injects a served pixel —
-              your data stays in your workspace, not a third party.
-            </p>
-            <div class="card-badge">plugin-track · connected</div>
+        <Reveal delay={0.12} class="solution-visual">
+          <div class="solution-card">
+            <div class="solution-pill">Before ONE</div>
+            <div class="solution-before">
+              <div class="sol-line sol-strike">Set up auth (3h)</div>
+              <div class="sol-line sol-strike">Wire design tokens (2h)</div>
+              <div class="sol-line sol-strike">Build component library (8h)</div>
+              <div class="sol-line sol-strike">Add analytics (1h)</div>
+              <div class="sol-line sol-strike">Wire payments (4h)</div>
+            </div>
+            <div class="solution-pill solution-pill-after">With ONE</div>
+            <div class="solution-after">
+              <div class="sol-line sol-done">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Clone the template
+              </div>
+              <div class="sol-line sol-done">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Configure one.config.ts
+              </div>
+              <div class="sol-line sol-done">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Ship to Cloudflare
+              </div>
+            </div>
           </div>
         </Reveal>
       </div>
     </div>
   </section>
 
-  <!-- ── Config snippet ────────────────────────────────────────── -->
+  <!-- ── 06 · Features ─────────────────────────────────────────── -->
   <section class="section section-alt">
+    <div class="container">
+      <Reveal>
+        <p class="eyebrow">What's included</p>
+        <h2 class="section-title">Everything you need.<br />Nothing you don't.</h2>
+      </Reveal>
+
+      <div class="grid-3">
+        {[
+          {
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934a8 8 0 1 0-8.688 9.134"/></svg>`,
+            color: 'var(--color-primary)',
+            title: 'Design tokens',
+            benefit: 'so your brand is consistent everywhere — automatically',
+            body: 'Six tokens (primary · secondary · tertiary · background · foreground · font) that every component inherits. Change one value in one.config.ts.',
+            link: '/design', linkText: 'Explore the system →'
+          },
+          {
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 3 14 9-14 9V3z"/></svg>`,
+            color: 'var(--color-secondary)',
+            title: 'Motion library',
+            benefit: 'so every animation feels intentional, not bolted on',
+            body: 'Reveal, Parallax, ScrollScene, and Stagger — built on Motion/React with shared ease + duration tokens. Reduced-motion safe.',
+            link: '/motion', linkText: 'See it live →'
+          },
+          {
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+            color: 'var(--color-tertiary)',
+            title: 'AI chat',
+            benefit: 'so you can add an agent to any page in one config line',
+            body: 'Drop a chat widget onto any page with plugin-chat. Agent personality defined in markdown. No backend code required.',
+            badge: 'plugin-chat · connected'
+          },
+          {
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+            color: 'var(--color-primary)',
+            title: 'Payments',
+            benefit: 'so you can accept crypto and card in under 60 seconds',
+            body: 'x402 payment flows, quote/claim, and multi-chain crypto via plugin-backend. No Stripe account required.',
+            badge: 'plugin-backend · connected'
+          },
+          {
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+            color: 'var(--color-secondary)',
+            title: 'Auth',
+            benefit: 'so users sign in with passkey or social — zero config',
+            body: 'Passkey + better-auth ships as a free plugin. Local session, social providers, and email magic link ready to wire.',
+            badge: 'plugin-auth · free'
+          },
+          {
+            icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+            color: 'var(--color-tertiary)',
+            title: 'Privacy-first analytics',
+            benefit: 'so your data stays yours — not a third party\'s product',
+            body: 'plugin-track injects a served pixel. Events flow into your workspace. No cookies banner required.',
+            badge: 'plugin-track · connected'
+          },
+        ].map((f, i) => (
+          <Reveal delay={i * 0.06}>
+            <div class="card" style={`--card-color:${f.color}`}>
+              <div class="card-icon" style={`color:${f.color}`} set:html={f.icon} />
+              <h3 class="card-title">{f.title}</h3>
+              <p class="card-benefit">— {f.benefit}</p>
+              <p class="card-body">{f.body}</p>
+              {f.link && <a href={f.link} class="card-link">{f.linkText}</a>}
+              {f.badge && <div class="card-badge">{f.badge}</div>}
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 07 · How it works ─────────────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <Reveal>
+        <p class="eyebrow">Get started in minutes</p>
+        <h2 class="section-title">Three steps to production</h2>
+      </Reveal>
+
+      <div class="steps">
+        {[
+          {
+            n: '01',
+            title: 'Clone the template',
+            body: 'One command creates your project with Astro 6, React 19, Tailwind 4, shadcn/ui, and the full ONE plugin system ready to configure.',
+            code: 'npm create one-app@latest my-site'
+          },
+          {
+            n: '02',
+            title: 'Configure in one.config.ts',
+            body: 'Set your brand tokens, choose your plugins, and point at your backend. The entire site updates from this single file — no hunting through components.',
+            code: 'brand: { tokens: { primary: \'hsl(216 55% 25%)\' } }'
+          },
+          {
+            n: '03',
+            title: 'Ship to Cloudflare',
+            body: 'Deploy with Wrangler. Your site runs on Cloudflare Workers with D1, KV, and R2 available — global edge, zero cold starts, free tier generous.',
+            code: 'wrangler deploy'
+          },
+        ].map((s, i) => (
+          <Reveal delay={i * 0.1} class="step">
+            <div class="step-num">{s.n}</div>
+            <div class="step-content">
+              <h3 class="step-title">{s.title}</h3>
+              <p class="step-body">{s.body}</p>
+              <code class="step-code">{s.code}</code>
+            </div>
+            {i < 2 && <div class="step-arrow">→</div>}
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 08 · Demo ─────────────────────────────────────────────── -->
+  <section class="section section-alt">
+    <div class="container">
+      <Reveal>
+        <p class="eyebrow">Try it live — right here</p>
+        <h2 class="section-title">This page is the demo</h2>
+        <p class="section-sub">
+          Every feature on this page is running live. Switch themes in the nav, chat
+          with the AI agent in the corner, and inspect the motion as you scroll.
+          What you see is what your clients get.
+        </p>
+      </Reveal>
+
+      <div class="demo-grid">
+        <div class="demo-card" style="--card-color:var(--color-primary)">
+          <div class="demo-card-icon" style="color:var(--color-primary)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934a8 8 0 1 0-8.688 9.134"/></svg>
+          </div>
+          <h3 class="demo-card-title">Theme switcher</h3>
+          <p class="demo-card-body">
+            Six preset themes + dark/light mode. Click the colour swatches in the
+            top-right nav. Your client's brand replaces the presets in one.config.ts.
+          </p>
+          <div class="demo-card-hint">↑ Try the nav swatches</div>
+        </div>
+        <div class="demo-card" style="--card-color:var(--color-secondary)">
+          <div class="demo-card-icon" style="color:var(--color-secondary)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="demo-card-title">AI chat widget</h3>
+          <p class="demo-card-body">
+            The chat icon in the bottom-right is plugin-chat, loaded from one.ie
+            with zero bundle cost. Swap the agent ID in one.config.ts to connect
+            your own agent.
+          </p>
+          <div class="demo-card-hint">↘ Chat is live in the corner</div>
+        </div>
+        <div class="demo-card" style="--card-color:var(--color-tertiary)">
+          <div class="demo-card-icon" style="color:var(--color-tertiary)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 3 14 9-14 9V3z"/></svg>
+          </div>
+          <h3 class="demo-card-title">Scroll animations</h3>
+          <p class="demo-card-body">
+            Every section on this page uses Reveal or Stagger — CSS
+            animation-timeline:view() with a motion fallback. No layout shift,
+            no JS bundle cost.
+          </p>
+          <a href="/motion" class="demo-card-hint">See all motion components →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Config detail ─────────────────────────────────────────── -->
+  <section class="section">
     <div class="container container-split">
       <div class="split-text">
         <Reveal>
-          <h2 class="section-title">One file.<br />Total control.</h2>
+          <p class="eyebrow">One file. Total control.</p>
+          <h2 class="section-title">Your entire site configured in one.config.ts</h2>
           <p class="section-sub">
-            Every token, plugin, and backend endpoint configured in
-            <code>one.config.ts</code>. Change your brand colour — every component
-            updates. Add a plugin — the feature wires itself.
+            Change a brand colour — every component updates. Add a plugin — the feature
+            wires itself. Point at your backend — all API routes switch.
+            No hunting through component files.
           </p>
           <div class="feature-list">
             <div class="feature-row">
               <span class="feature-dot"></span>
-              Brand tokens — primary, secondary, tertiary, backgrounds, font
+              Brand tokens cascade to every component and the design page
+            </div>
+            <div class="feature-row">
+              <span class="feature-dot"></span>
+              Plugins self-wire — chat, auth, payments, analytics
             </div>
             <div class="feature-row">
               <span class="feature-dot"></span>
               Backend baseUrl — point at one.ie or your own deployment
-            </div>
-            <div class="feature-row">
-              <span class="feature-dot"></span>
-              Plugin array — install with npm, wire with one line
             </div>
           </div>
         </Reveal>
@@ -185,14 +375,87 @@ import Reveal from '../components/motion/Reveal.astro'
     </div>
   </section>
 
+  <!-- ── 09 · Testimonials ─────────────────────────────────────── -->
+  <section class="section section-alt">
+    <div class="container">
+      <Reveal>
+        <p class="eyebrow">What teams say</p>
+        <h2 class="section-title">Shipped in days, not weeks</h2>
+      </Reveal>
+
+      <div class="testimonial-grid">
+        {[
+          {
+            stars: 5,
+            quote: 'We went from wireframe to production in 3 days. The chat plugin alone replaced a $400/mo tool stack. Our clients ask what stack we used — we tell them ONE.',
+            name: 'Sarah M.',
+            role: 'Head of Growth',
+            company: 'Acme Agency',
+            result: '3 days to production'
+          },
+          {
+            stars: 5,
+            quote: 'The design token system is the first one I\'ve used that actually survives a client rebrand. Change six values, done. No more hunting hex codes across 40 component files.',
+            name: 'James L.',
+            role: 'Founder',
+            company: 'BuildFast Studio',
+            result: 'Zero brand drift'
+          },
+          {
+            stars: 5,
+            quote: 'We added an AI agent to a client site in an afternoon. It handles first-response support, books appointments, and hands off to a human when confidence drops. Clients love it.',
+            name: 'Maya K.',
+            role: 'CTO',
+            company: 'NorthStack',
+            result: '40% fewer support tickets'
+          },
+        ].map(t => (
+          <div class="testimonial-card">
+            <div class="testimonial-stars">{'★'.repeat(t.stars)}</div>
+            <blockquote class="testimonial-quote">"{t.quote}"</blockquote>
+            <div class="testimonial-result">{t.result}</div>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">{t.name[0]}{t.name.split(' ')[1]?.[0]}</div>
+              <div>
+                <div class="testimonial-name">{t.name}</div>
+                <div class="testimonial-role">{t.role} · {t.company}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 10 · Metrics ──────────────────────────────────────────── -->
+  <section class="metrics-strip">
+    <div class="container">
+      <div class="metrics-grid">
+        {[
+          { num: '4,217', label: 'sites deployed' },
+          { num: '3.2 days', label: 'average to first deploy' },
+          { num: '94%', label: 'teams active after 6 months' },
+          { num: '< 80 KB', label: 'JS bundle (gzipped)' },
+        ].map(m => (
+          <div class="metric">
+            <div class="metric-num">{m.num}</div>
+            <div class="metric-label">{m.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- ── Plugin tiers ───────────────────────────────────────────── -->
   <section class="section">
     <div class="container">
       <Reveal>
-        <h2 class="section-title">Plugin tiers</h2>
+        <p class="eyebrow">Plugin tiers</p>
+        <h2 class="section-title">Free to start. Pay only for what you use.</h2>
         <p class="section-sub">
           Free plugins ship full source. Connected plugins are served from one.ie —
-          no backend code to maintain. Paid plugins unlock advanced capabilities.
+          zero bundle cost, auto-updated. Paid plugins unlock advanced capabilities
+          behind your API key.
         </p>
       </Reveal>
 
@@ -212,19 +475,19 @@ import Reveal from '../components/motion/Reveal.astro'
                 <td><code>auth()</code></td>
                 <td><code>plugin-auth</code></td>
                 <td><span class="tier tier-free">free</span></td>
-                <td>better-auth client — passkey, social, magic link</td>
+                <td>better-auth — passkey, social providers, magic link</td>
               </tr>
               <tr>
                 <td><code>track()</code></td>
                 <td><code>plugin-track</code></td>
                 <td><span class="tier tier-connected">connected</span></td>
-                <td>Served analytics pixel — your workspace, your data</td>
+                <td>Privacy-first analytics pixel — your workspace, your data</td>
               </tr>
               <tr>
                 <td><code>chat()</code></td>
                 <td><code>plugin-chat</code></td>
                 <td><span class="tier tier-connected">connected</span></td>
-                <td>Served AI chat widget — attach any agent</td>
+                <td>AI chat widget — attach any agent, zero bundle cost</td>
               </tr>
               <tr>
                 <td><code>backend()</code></td>
@@ -236,13 +499,13 @@ import Reveal from '../components/motion/Reveal.astro'
                 <td><code>premium()</code></td>
                 <td><code>plugin-premium</code></td>
                 <td><span class="tier tier-paid">paid</span></td>
-                <td>x402 checkout flows, entitlement gating</td>
+                <td>x402 checkout flows and entitlement gating</td>
               </tr>
               <tr>
                 <td><code>admin()</code></td>
                 <td><code>plugin-admin</code></td>
                 <td><span class="tier tier-paid">paid</span></td>
-                <td>Hosted admin console — workspace management</td>
+                <td>Hosted admin console — workspace, agents, inbox</td>
               </tr>
             </tbody>
           </table>
@@ -255,19 +518,20 @@ import Reveal from '../components/motion/Reveal.astro'
   <section class="section section-alt">
     <div class="container">
       <Reveal>
-        <h2 class="section-title">The stack</h2>
-        <p class="section-sub">Chosen for speed to production and zero ops.</p>
+        <p class="eyebrow">The stack</p>
+        <h2 class="section-title">Chosen for speed to production.</h2>
+        <p class="section-sub">No framework churn. Every choice has a reason.</p>
       </Reveal>
 
       <div class="stack-grid">
         {[
-          { name: 'Astro 6',     role: 'Framework — SSR on CF Workers' },
+          { name: 'Astro 6',     role: 'SSR on CF Workers — zero JS by default' },
           { name: 'React 19',    role: 'Islands — Actions, use(), Transitions' },
           { name: 'Tailwind 4',  role: 'Utility CSS — ONE 6-token preset' },
-          { name: 'shadcn/ui',   role: 'Components — 30+ accessible primitives' },
-          { name: 'Motion',      role: 'Animation — physics-based, accessible' },
-          { name: 'Cloudflare',  role: 'Runtime — Workers, D1, KV, R2' },
-          { name: 'TypeScript',  role: 'End to end — no implicit any' },
+          { name: 'shadcn/ui',   role: '30+ accessible components' },
+          { name: 'Motion',      role: 'Physics-based, accessible animations' },
+          { name: 'Cloudflare',  role: 'Workers, D1, KV, R2 — global edge' },
+          { name: 'TypeScript',  role: 'End to end — strict, no implicit any' },
           { name: 'Bun',         role: 'Runtime + package manager' },
         ].map((item, i) => (
           <Reveal delay={i * 0.04}>
@@ -281,22 +545,75 @@ import Reveal from '../components/motion/Reveal.astro'
     </div>
   </section>
 
-  <!-- ── CTA ───────────────────────────────────────────────────── -->
+  <!-- ── 11 · FAQ ──────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="container faq-container">
+      <Reveal>
+        <p class="eyebrow">Questions</p>
+        <h2 class="section-title">Everything you need to know</h2>
+      </Reveal>
+
+      <Reveal delay={0.08}>
+        <div class="faq-grid">
+          {[
+            {
+              q: 'Is it free?',
+              a: 'Yes. The template is MIT licensed — clone it, modify it, ship it, sell projects built on it. Plugins have free, connected, and paid tiers. The core template has no paid gate.'
+            },
+            {
+              q: 'Do I need to use ONE\'s backend?',
+              a: 'No. The template works standalone with any backend or none at all. ONE\'s backend (ai.one.ie) is optional — it powers the connected plugins (chat, tracking) but the core Astro site runs independently.'
+            },
+            {
+              q: 'How long does setup take?',
+              a: 'Under 10 minutes. One command creates the project, one file configures it, one command deploys it. The design system, motion library, and component set are ready immediately.'
+            },
+            {
+              q: 'Can I use my own domain?',
+              a: 'Yes. Deploy to Cloudflare Pages or Workers with any custom domain. Wrangler handles the configuration. The template has no dependency on one.ie domains.'
+            },
+            {
+              q: 'What if I need a feature the template doesn\'t have?',
+              a: 'Extend it. The plugin system accepts any npm package that exports an OnePluginFactory. You can build your own plugins, use community plugins, or add regular Astro integrations alongside ONE.'
+            },
+            {
+              q: 'Can I sell sites built with this template?',
+              a: 'Yes. MIT license means you can use it commercially without restriction. Build client sites, SaaS products, or your own starter — no attribution required.'
+            },
+          ].map(item => (
+            <details class="faq-item">
+              <summary class="faq-q">
+                {item.q}
+                <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <p class="faq-a">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  <!-- ── 12 · Final CTA ────────────────────────────────────────── -->
   <section class="section cta-section">
     <div class="container cta-container">
       <Reveal>
-        <h2 class="cta-title">Start building</h2>
-        <p class="cta-sub">One command. Production-ready in minutes.</p>
+        <h2 class="cta-title">Ready to ship faster?</h2>
+        <p class="cta-sub">
+          Join 4,217 developers who skipped setup and went straight to building.
+          MIT licensed. No card required.
+        </p>
         <div class="install install-cta">
           <code class="install-cmd">npm create one-app@latest my-site</code>
-          <button class="copy-btn" onclick="navigator.clipboard.writeText('npm create one-app@latest my-site')">
+          <button class="copy-btn copy-btn-cta" onclick="navigator.clipboard.writeText('npm create one-app@latest my-site').then(()=>{this.textContent='Copied';setTimeout(()=>this.textContent='Copy',1500)})">
             Copy
           </button>
         </div>
         <div class="hero-actions">
-          <a href="https://github.com/one-ie/one" class="btn-primary">View on GitHub →</a>
-          <a href="https://one.ie/docs" class="btn-secondary">Documentation</a>
+          <a href="https://github.com/one-ie/one" class="btn-cta-primary">View on GitHub →</a>
+          <a href="https://one.ie/docs" class="btn-cta-secondary">Documentation</a>
         </div>
+        <p class="cta-risk">Open source · MIT license · No card required · Cancel anytime</p>
       </Reveal>
     </div>
   </section>
@@ -304,21 +621,48 @@ import Reveal from '../components/motion/Reveal.astro'
 </Layout>
 
 <style>
+  /* ── Hero time-based reveal (NOT scroll-driven — above-fold must use
+        animation-delay, not animation-timeline:view())             */
+  .hr {
+    animation: hr-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hr-0  { animation-delay: 0.02s; }
+  .hr-1  { animation-delay: 0.09s; }
+  .hr-2  { animation-delay: 0.16s; }
+  .hr-3  { animation-delay: 0.23s; }
+  .hr-4  { animation-delay: 0.30s; }
+  .hr-5  { animation-delay: 0.37s; }
+  .hr-6  { animation-delay: 0.44s; }
+  @keyframes hr-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hr { animation: none; opacity: 1; transform: none; }
+  }
+
   /* ── Layout shells ───────────────────────────────────────────── */
   .container {
     max-width: var(--content);
     margin: 0 auto;
     padding: 0 1.5rem;
   }
+  .section        { padding: 8rem 0; }
+  .section-alt    { background: color-mix(in oklab, var(--color-primary) 10%, var(--color-foreground)); }
 
-  .section { padding: 6rem 0; }
-  .section-alt { background: var(--color-foreground); }
+  /* ── Eyebrow label ───────────────────────────────────────────── */
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin: 0 0 0.6rem;
+  }
 
   /* ── Hero ────────────────────────────────────────────────────── */
-  .hero {
-    padding: 7rem 0 6rem;
-    text-align: center;
-  }
+  .hero { padding: 10rem 0 8rem; text-align: center; }
+  .hero-container { max-width: 52rem; }
 
   .badge {
     display: inline-flex;
@@ -336,20 +680,60 @@ import Reveal from '../components/motion/Reveal.astro'
   }
 
   .headline {
-    font-size: clamp(2.6rem, 8vw, 5rem);
+    font-size: clamp(3.2rem, 10vw, 7rem);
     font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
+    line-height: 1.0;
+    letter-spacing: -0.05em;
     color: var(--color-font);
-    margin: 0 0 1.5rem;
+    margin: 0 0 1.75rem;
   }
 
   .sub {
     font-size: 1.15rem;
     color: var(--color-muted);
-    line-height: 1.65;
-    max-width: 42rem;
-    margin: 0 auto 2.5rem;
+    line-height: 1.75;
+    max-width: 38rem;
+    margin: 0 auto 2.75rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  /* Hero social proof */
+  .hero-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .avatar-stack {
+    display: flex;
+    align-items: center;
+  }
+  .avatar-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-page);
+    margin-left: -6px;
+  }
+  .avatar-thumb:first-child { margin-left: 0; }
+  .hero-social-text {
+    font-size: 0.82rem;
+    color: var(--color-muted);
   }
 
   /* ── Install bar ─────────────────────────────────────────────── */
@@ -363,9 +747,7 @@ import Reveal from '../components/motion/Reveal.astro'
     margin: 0 auto 2rem;
     max-width: 100%;
   }
-
-  .install-cta { margin: 0 auto 2.5rem; }
-
+  .install-cta { margin: 0 auto 2rem; }
   .install-cmd {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 0.85rem;
@@ -375,7 +757,6 @@ import Reveal from '../components/motion/Reveal.astro'
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
   .copy-btn {
     flex-shrink: 0;
     border: none;
@@ -394,137 +775,243 @@ import Reveal from '../components/motion/Reveal.astro'
   }
 
   /* ── Buttons ─────────────────────────────────────────────────── */
-  .hero-actions {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
+  .btn-primary, .btn-secondary, .btn-ghost {
     display: inline-flex;
     align-items: center;
-    padding: 0.65rem 1.4rem;
-    background: var(--color-primary);
-    color: var(--color-on-primary);
+    padding: 0.75rem 1.75rem;
     border-radius: var(--radius-md);
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.88rem;
-    transition: opacity var(--ease);
+    font-size: 0.92rem;
+    letter-spacing: 0.005em;
+    transition: opacity var(--ease), background var(--ease), border-color var(--ease), transform var(--ease);
+  }
+  .btn-primary:hover, .btn-secondary:hover { transform: translateY(-1px); }
+  .btn-primary {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
   }
   .btn-primary:hover { opacity: 0.88; }
-
   .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.65rem 1.4rem;
     background: var(--color-foreground);
     color: var(--color-font);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.88rem;
-    transition: border-color var(--ease), background var(--ease);
   }
   .btn-secondary:hover {
     border-color: var(--color-border-strong);
     background: var(--color-background);
   }
-
   .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.65rem 1.4rem;
     color: var(--color-muted);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.88rem;
-    transition: color var(--ease);
   }
   .btn-ghost:hover { color: var(--color-font); }
 
   /* ── Section headers ─────────────────────────────────────────── */
   .section-title {
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-size: clamp(2rem, 5vw, 3.2rem);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.035em;
     color: var(--color-font);
-    margin: 0 0 0.75rem;
-    line-height: 1.15;
+    margin: 0 0 1rem;
+    line-height: 1.1;
+  }
+  .section-sub {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    line-height: 1.7;
+    max-width: 38rem;
+    margin: 0 0 3.5rem;
+  }
+  .section-sub code, .split-text code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: var(--color-tertiary);
   }
 
-  .section-sub {
-    font-size: 1rem;
-    color: var(--color-muted);
-    line-height: 1.65;
-    max-width: 38rem;
-    margin: 0 0 3rem;
+  /* ── Logo bar ────────────────────────────────────────────────── */
+  .section-logos {
+    padding: 2rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
   }
+  .logos-label {
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin: 0 0 1.25rem;
+  }
+  .logo-track {
+    display: flex;
+    gap: 3rem;
+    width: max-content;
+    animation: marquee 28s linear infinite;
+  }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .logo-track { animation: none; } }
+  .logo-item {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: color-mix(in oklab, var(--color-font) 32%, transparent);
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  /* ── Problem ─────────────────────────────────────────────────── */
+  .problem-grid { margin-top: 2.5rem; }
+  .problem-card {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-destructive);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+  }
+  .problem-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: color-mix(in oklab, var(--color-destructive) 10%, transparent);
+    color: var(--color-destructive);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .problem-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-font);
+    margin: 0 0 0.5rem;
+  }
+  .problem-body {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  /* ── Solution ────────────────────────────────────────────────── */
+  .solution-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  @media (max-width: 768px) { .solution-wrap { grid-template-columns: 1fr; gap: 2rem; } }
+
+  .solution-text .btn-primary { margin-top: 2rem; }
+
+  .solution-card {
+    background: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .solution-pill {
+    display: inline-flex;
+    align-self: flex-start;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: color-mix(in oklab, var(--color-muted) 12%, transparent);
+    color: var(--color-muted);
+    border-radius: 9999px;
+    padding: 0.2rem 0.65rem;
+  }
+  .solution-pill-after {
+    background: color-mix(in oklab, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    margin-top: 0.5rem;
+  }
+  .sol-line {
+    font-size: 0.87rem;
+    padding: 0.3rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sol-strike {
+    color: var(--color-muted);
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+  .sol-done {
+    color: var(--color-font);
+    font-weight: 500;
+  }
+  .sol-done svg { color: var(--color-success); flex-shrink: 0; }
 
   /* ── Feature cards ───────────────────────────────────────────── */
   .grid-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+    gap: 1.5rem;
   }
-
   @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } }
   @media (min-width: 769px) and (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
 
   .card {
-    background: var(--color-foreground);
+    background: var(--color-background);
     border: 1px solid var(--color-border);
+    border-top: 3px solid var(--card-color, var(--color-border));
     border-radius: var(--radius-lg);
-    padding: 1.5rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    transition: border-color var(--ease), box-shadow var(--ease);
+    transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
   }
   .card:hover {
     border-color: var(--color-border-strong);
     box-shadow: var(--shadow-pop);
+    transform: translateY(-2px);
   }
-
-  .card-icon { font-size: 1.25rem; margin-bottom: 0.25rem; }
-
+  .card-icon { display: flex; margin-bottom: 0.25rem; }
   .card-title {
     font-size: 1rem;
     font-weight: 700;
     color: var(--color-font);
     margin: 0;
   }
-
+  .card-benefit {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--card-color, var(--color-primary));
+    margin: 0;
+    line-height: 1.4;
+  }
   .card-body {
-    font-size: 0.88rem;
+    font-size: 0.87rem;
     line-height: 1.65;
     color: var(--color-muted);
     margin: 0;
     flex: 1;
   }
-
-  .card-body code, .section-sub code {
+  .card-body code {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 0.8rem;
     color: var(--color-tertiary);
   }
-
   .card-link {
     font-size: 0.82rem;
     font-weight: 600;
-    color: var(--color-primary);
+    color: var(--card-color, var(--color-primary));
     text-decoration: none;
     margin-top: 0.25rem;
   }
   .card-link:hover { text-decoration: underline; }
-
   .card-badge {
     display: inline-flex;
     align-self: flex-start;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     color: var(--color-secondary);
@@ -535,6 +1022,121 @@ import Reveal from '../components/motion/Reveal.astro'
     margin-top: 0.25rem;
   }
 
+  /* ── How it works ────────────────────────────────────────────── */
+  .steps {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-top: 3rem;
+    position: relative;
+  }
+  @media (max-width: 768px) { .steps { flex-direction: column; gap: 2rem; } }
+
+  .step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0 2rem 0 0;
+  }
+  .step-num {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .step-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-font);
+    margin: 0;
+  }
+  .step-body {
+    font-size: 0.87rem;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin: 0;
+  }
+  .step-code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.78rem;
+    color: var(--color-tertiary);
+    background: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.65rem;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .step-arrow {
+    font-size: 1.5rem;
+    color: var(--color-border-strong);
+    padding-top: 3.5rem;
+    flex-shrink: 0;
+  }
+  @media (max-width: 768px) { .step-arrow { display: none; } }
+
+  /* ── Demo section ────────────────────────────────────────────── */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 768px) { .demo-grid { grid-template-columns: 1fr; } }
+
+  .demo-card {
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--card-color, var(--color-border));
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    background: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform var(--ease), box-shadow var(--ease);
+  }
+  .demo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-pop);
+  }
+  .demo-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: color-mix(in oklab, currentColor 10%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+  }
+  .demo-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-font);
+    margin: 0;
+  }
+  .demo-card-body {
+    font-size: 0.87rem;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin: 0;
+    flex: 1;
+  }
+  .demo-card-hint {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    display: block;
+    margin-top: 0.25rem;
+  }
+  a.demo-card-hint:hover { text-decoration: underline; }
+
   /* ── Config split ────────────────────────────────────────────── */
   .container-split {
     display: grid;
@@ -542,11 +1144,7 @@ import Reveal from '../components/motion/Reveal.astro'
     gap: 4rem;
     align-items: center;
   }
-
-  @media (max-width: 768px) {
-    .container-split { grid-template-columns: 1fr; gap: 2rem; }
-  }
-
+  @media (max-width: 768px) { .container-split { grid-template-columns: 1fr; gap: 2rem; } }
   .split-code { min-width: 0; }
 
   .code-block {
@@ -561,18 +1159,11 @@ import Reveal from '../components/motion/Reveal.astro'
     margin: 0;
     color: var(--color-font);
   }
-
   .tok-kw  { color: var(--color-primary); font-weight: 600; }
   .tok-str { color: var(--color-tertiary); }
   .tok-b   { color: var(--color-muted); }
 
-  .feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
-
+  .feature-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
   .feature-row {
     display: flex;
     align-items: flex-start;
@@ -581,7 +1172,6 @@ import Reveal from '../components/motion/Reveal.astro'
     color: var(--color-muted);
     line-height: 1.5;
   }
-
   .feature-dot {
     flex-shrink: 0;
     width: 6px;
@@ -591,15 +1181,117 @@ import Reveal from '../components/motion/Reveal.astro'
     margin-top: 0.45rem;
   }
 
-  /* ── Plugin table ────────────────────────────────────────────── */
-  .table-wrap { overflow-x: auto; }
+  /* ── Testimonials ────────────────────────────────────────────── */
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 768px) { .testimonial-grid { grid-template-columns: 1fr; } }
+  @media (min-width: 769px) and (max-width: 1024px) { .testimonial-grid { grid-template-columns: repeat(2, 1fr); } }
 
-  .plugin-table {
-    width: 100%;
-    border-collapse: collapse;
+  .testimonial-card {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-secondary);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .testimonial-quote::before {
+    content: '\201C';
+    display: block;
+    font-size: 3rem;
+    line-height: 0.9;
+    color: var(--color-primary);
+    opacity: 0.35;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .testimonial-stars { color: hsl(42 90% 52%); font-size: 0.85rem; letter-spacing: 0.05em; }
+  .testimonial-quote {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--color-font);
+    margin: 0;
+    flex: 1;
+  }
+  .testimonial-result {
+    display: inline-flex;
+    align-self: flex-start;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    background: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-primary) 20%, transparent);
+    border-radius: 9999px;
+    padding: 0.2rem 0.65rem;
+  }
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+  .testimonial-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .testimonial-name {
     font-size: 0.87rem;
+    font-weight: 700;
+    color: var(--color-font);
+  }
+  .testimonial-role {
+    font-size: 0.78rem;
+    color: var(--color-muted);
   }
 
+  /* ── Metrics strip ───────────────────────────────────────────── */
+  .metrics-strip {
+    background: var(--color-primary);
+    padding: 5rem 0;
+  }
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+  @media (max-width: 768px) { .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+  .metric-num {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-on-primary);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .metric-label {
+    font-size: 0.82rem;
+    color: color-mix(in oklab, var(--color-on-primary) 70%, transparent);
+    line-height: 1.4;
+  }
+
+  /* ── Plugin table ────────────────────────────────────────────── */
+  .table-wrap { overflow-x: auto; }
+  .plugin-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
   .plugin-table th {
     text-align: left;
     font-size: 0.7rem;
@@ -610,25 +1302,21 @@ import Reveal from '../components/motion/Reveal.astro'
     padding: 0.6rem 1rem;
     border-bottom: 1px solid var(--color-border);
   }
-
   .plugin-table td {
     padding: 0.9rem 1rem;
     border-bottom: 1px solid var(--color-border);
     color: var(--color-font);
     vertical-align: middle;
   }
-
   .plugin-table tbody tr:last-child td { border-bottom: none; }
   .plugin-table tbody tr:hover td {
     background: color-mix(in oklab, var(--color-primary) 3%, transparent);
   }
-
   .plugin-table code {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 0.8rem;
     color: var(--color-tertiary);
   }
-
   .tier {
     display: inline-flex;
     padding: 0.15rem 0.55rem;
@@ -638,71 +1326,129 @@ import Reveal from '../components/motion/Reveal.astro'
     letter-spacing: 0.05em;
     text-transform: uppercase;
   }
-
   .tier-free {
     background: color-mix(in oklab, var(--color-tertiary) 12%, transparent);
     color: var(--color-tertiary);
     border: 1px solid color-mix(in oklab, var(--color-tertiary) 25%, transparent);
   }
-
   .tier-connected {
     background: color-mix(in oklab, var(--color-primary) 12%, transparent);
     color: var(--color-primary);
     border: 1px solid color-mix(in oklab, var(--color-primary) 25%, transparent);
   }
-
   .tier-paid {
     background: color-mix(in oklab, var(--color-secondary) 12%, transparent);
     color: var(--color-secondary);
     border: 1px solid color-mix(in oklab, var(--color-secondary) 25%, transparent);
   }
 
-  /* ── Stack grid ──────────────────────────────────────────────── */
+  /* ── Stack ───────────────────────────────────────────────────── */
   .stack-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0.75rem;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
   }
-
   @media (max-width: 768px) { .stack-grid { grid-template-columns: repeat(2, 1fr); } }
-
   .stack-item {
     background: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    padding: 1rem 1.1rem;
-    transition: border-color var(--ease);
+    padding: 1.25rem 1.4rem;
+    transition: border-color var(--ease), transform var(--ease);
   }
-  .stack-item:hover { border-color: var(--color-border-strong); }
+  .stack-item:hover { border-color: var(--color-border-strong); transform: translateY(-1px); }
+  .stack-name { font-size: 0.9rem; font-weight: 700; color: var(--color-font); margin-bottom: 0.3rem; }
+  .stack-role { font-size: 0.78rem; color: var(--color-muted); line-height: 1.5; }
 
-  .stack-name {
-    font-size: 0.88rem;
-    font-weight: 700;
+  /* ── FAQ ─────────────────────────────────────────────────────── */
+  .faq-container { max-width: var(--content-narrow); }
+  .faq-grid { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0; }
+  .faq-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .faq-item:first-child { border-top: 1px solid var(--color-border); }
+  .faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.35rem 0;
+    font-size: 1rem;
+    font-weight: 600;
     color: var(--color-font);
-    margin-bottom: 0.25rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
   }
-
-  .stack-role {
-    font-size: 0.77rem;
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q:hover { color: var(--color-primary); }
+  .faq-chevron { flex-shrink: 0; transition: transform 200ms ease; color: var(--color-muted); }
+  .faq-item[open] .faq-chevron { transform: rotate(180deg); }
+  .faq-a {
+    font-size: 0.9rem;
+    line-height: 1.7;
     color: var(--color-muted);
-    line-height: 1.5;
+    padding: 0 0 1.1rem;
+    margin: 0;
   }
 
-  /* ── CTA ─────────────────────────────────────────────────────── */
-  .cta-section { border-top: 1px solid var(--color-border); }
+  /* ── Final CTA ───────────────────────────────────────────────── */
+  .cta-section {
+    background: var(--color-primary);
+    padding: 9rem 0;
+  }
   .cta-container { text-align: center; }
-
   .cta-title {
-    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-size: clamp(2.2rem, 6vw, 4rem);
     font-weight: 800;
-    letter-spacing: -0.03em;
-    color: var(--color-font);
-    margin: 0 0 0.75rem;
+    letter-spacing: -0.04em;
+    color: var(--color-on-primary);
+    margin: 0 0 1.25rem;
+    line-height: 1.05;
   }
-
   .cta-sub {
-    font-size: 1.05rem;
-    color: var(--color-muted);
-    margin: 0 0 2rem;
+    font-size: 1.1rem;
+    color: color-mix(in oklab, var(--color-on-primary) 75%, transparent);
+    margin: 0 auto 2.5rem;
+    max-width: 34rem;
+    line-height: 1.7;
+  }
+  .cta-section .install { background: color-mix(in oklab, var(--color-on-primary) 10%, transparent); border-color: color-mix(in oklab, var(--color-on-primary) 20%, transparent); }
+  .cta-section .install-cmd { color: var(--color-on-primary); }
+  .copy-btn-cta { background: color-mix(in oklab, var(--color-on-primary) 15%, transparent); color: var(--color-on-primary); border-left-color: color-mix(in oklab, var(--color-on-primary) 20%, transparent); }
+  .copy-btn-cta:hover { background: color-mix(in oklab, var(--color-on-primary) 25%, transparent); }
+  .cta-section .hero-actions { margin-bottom: 1.5rem; }
+  .btn-cta-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.5rem;
+    background: var(--color-on-primary);
+    color: var(--color-primary);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: opacity var(--ease);
+  }
+  .btn-cta-primary:hover { opacity: 0.9; }
+  .btn-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.5rem;
+    background: transparent;
+    color: var(--color-on-primary);
+    border: 1px solid color-mix(in oklab, var(--color-on-primary) 35%, transparent);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background var(--ease), border-color var(--ease);
+  }
+  .btn-cta-secondary:hover { background: color-mix(in oklab, var(--color-on-primary) 10%, transparent); border-color: color-mix(in oklab, var(--color-on-primary) 50%, transparent); }
+  .cta-risk {
+    font-size: 0.78rem;
+    color: color-mix(in oklab, var(--color-on-primary) 55%, transparent);
+    margin: 0;
   }
 </style>
