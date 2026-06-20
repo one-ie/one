@@ -1,21 +1,88 @@
-MIT License
+# ONE License (Version 1.0)
 
-Copyright (c) 2026 one.ie
+Copyright (c) 2024-2026 one.ie
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+## Maximum Freedom, One Obligation
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This license empowers you with complete commercial freedom to use, reuse, modify, sell and resell the software, AI and data, at any price you wish.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+No usage limits. No royalty fees. Just pure, unrestricted ability to innovate and profit from the software.
+
+You are free to run ONE locally, on your own servers, in the cloud and at the edge.
+
+## You Receive
+
+### Unlimited Rights
+
+You have unrestricted rights to use, modify, license, sublicense, distribute, sell, resell and monetize the Software without restrictions, subject only to the Brand Requirement below.
+
+### Permitted Actions
+
+Including, but not limited to:
+
+- Commercial use and integration into any systems
+- Creation and sale of derivative works
+- Providing software as a service
+- AI training and content generation
+- Patenting innovations based on the Software
+- Open source applications and integrations
+
+### License Compatibility
+
+This license is compatible with all major open-source licenses, including:
+
+- MIT License
+- Apache License
+- GNU General Public License (GPL)
+- BSD Licenses
+- Mozilla Public License
+
+### Perpetual Rights
+
+These rights are granted in perpetuity and are irrevocable, provided the Brand Requirement is maintained.
+
+## Intellectual Property
+
+- We retain ownership of the original Software and data.
+- You own any modifications you make.
+- You never have to share your code or data.
+
+## Brand Requirement
+
+The only obligation is:
+
+- Don't remove the ONE brand, logo, and link to https://one.ie/ from the deployed product.
+
+To remove the Brand Requirement — white-label, no visible ONE branding — obtain the
+**ONE Enterprise License** (see `LICENSE-ENTERPRISE.md` or contact agent@one.ie).
+
+## Liability and Warranty
+
+The Software and data is provided "AS IS". We bear no liability for its use.
+
+## Termination
+
+This license terminates if you remove or hide the ONE brand, logo, or link without
+holding a current ONE Enterprise License.
+
+## Dispute Resolution
+
+- Resolved through good faith negotiation
+- Mediation if needed
+- Binding arbitration as last resort
+
+---
+
+This license is designed to maximize freedom to innovate and profit. There is no copyleft requirement to share any code, making it suitable for enterprise use.
+
+## Enterprise Solutions
+
+Building something big? We're here to help:
+
+- **Free** — use every feature with the ONE brand link in the footer
+- **White-label** — remove the brand requirement (ONE Enterprise License)
+- **Custom** — white-label solutions tailored to your needs
+- **Enterprise** — full support and deployment assistance
+- **Training** — help getting your team started
+
+Contact agent@one.ie to share your needs · Learn at https://one.ie/learn · Agents: https://one.ie/llms.txt
