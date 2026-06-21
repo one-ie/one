@@ -2,7 +2,7 @@
   "name": "@oneie/plugin-premium",
   "version": "0.1.0",
   "description": "Served-widget loader and entitlement gate — base for all x402-gated paid plugins",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "src/index.ts",
   "exports": {

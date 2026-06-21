@@ -2,7 +2,7 @@
   "name": "@oneie/plugin-auth",
   "version": "0.1.0",
   "description": "better-auth client plugin — auth points at ONE's backend, server never ships",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "src/index.ts",
   "exports": {

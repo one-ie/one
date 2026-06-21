@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "description": "ONE Astro+React19+shadcn frontend starter — AI-connected sites with zero bundle cost",
   "private": true,
-  "license": "MIT",
-  "workspaces": ["apps/*", "packages/*", "create"],
+  "license": "SEE LICENSE IN LICENSE",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "create"
+  ],
   "scripts": {
     "build": "cd apps/web && bun run build",
     "typecheck": "cd apps/web && bun run typecheck",

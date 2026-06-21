@@ -2,7 +2,7 @@
   "name": "@oneie/frontend",
   "version": "0.1.0",
   "description": "defineOne() + OnePlugin contract — the single config surface for ONE-connected Astro sites",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "src/index.ts",
   "exports": {

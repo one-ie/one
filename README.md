@@ -106,4 +106,4 @@ bun run typecheck              # astro check
 
 ## License
 
-MIT — `apps/web` and all packages. The ONE backend is not open-source.
+[ONE License v1.0](LICENSE) — `apps/web` and all packages. Free, maximum freedom, one string: keep the "Powered by ONE" link in the deployed product. White-label removes it ([Enterprise License](LICENSE-ENTERPRISE.md)). Source-available, not OSI open source. The ONE backend is not distributed.

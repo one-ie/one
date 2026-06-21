@@ -2,7 +2,7 @@
   "name": "@oneie/plugin-admin",
   "version": "0.1.0",
   "description": "Admin Console — paid plugin served from one.ie, gated by the admin entitlement",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "src/index.ts",
   "exports": {

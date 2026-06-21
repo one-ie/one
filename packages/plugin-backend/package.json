@@ -2,7 +2,7 @@
   "name": "@oneie/plugin-backend",
   "version": "0.1.0",
   "description": "@oneie/sdk client + React 19 hooks wired through the plugin contract",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "src/index.ts",
   "exports": {
