@@ -1,0 +1,30 @@
+# An individual mover — a fractal client node on ONE.
+# Same three-folder shape as the agency (ai / data / site), overriding the
+# agency by filename. The substrate walk takes the first answer going down.
+#
+# This is the GENERIC mover vertical template. Clone it per real operator:
+#   cp -r clients/mover clients/<their-slug>
+#   # edit _node.toml + ai/context.md with their USDOT/MC, city, name
+#   one push clients/<their-slug>
+#
+# Roofer equivalent is the knowledge pack at
+# ../agency-operator/templates/_niches/roofer; this node is the working
+# mover counterpart, sourced from _niches/mover.
+
+name        = "Mover (template)"
+slug        = "mover"
+owner       = "owner@example-movers.com"   # the operator who takes the leads
+plan        = "studio"
+markup_pct  = 20               # agency margin on this client's credit burn
+monthly_cap = 50000            # spend ceiling in credits
+brand_lock  = false            # white-label to your brand (true) or theirs (false)
+credits     = 0                # initial grant
+agents      = ["mover--marketing", "mover--sales", "mover--service", "mover--education", "mover--brain"]
+
+# Fill these per real operator before `one push`:
+# usdot       = ""             # FMCSA USDOT number (interstate)
+# mc          = ""             # MC-HHG operating authority (interstate)
+# state_license = ""           # intrastate license (CA Cal-T / FL IM / TX TxDMV / NY T-number …)
+# metro       = ""             # primary metro served
+# service_cities = []          # 5–12 named primary cities
+# founded     = ""             # year — feeds trust signals

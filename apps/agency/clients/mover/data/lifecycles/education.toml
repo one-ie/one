@@ -1,0 +1,27 @@
+id          = "education"
+label       = "Education / Retention"
+description = "Completed → review → referral → repeat. A move is one-shot, so the compounding asset is the Google review and the referral. Runs only for happy (CSAT ≥ 4) customers."
+
+[[stages]]
+id    = "review_requested"
+label = "Review requested"
+tags  = ["lifecycle:education:review_requested"]
+description = "Within 24h of a happy close, the direct Google-review ask is sent. One nudge at day 3, then stop."
+
+[[stages]]
+id    = "reviewed"
+label = "Reviewed"
+tags  = ["lifecycle:education:reviewed"]
+description = "Review landed or customer replied happy. Trigger the referral ask."
+
+[[stages]]
+id    = "referral"
+label = "Referral"
+tags  = ["lifecycle:education:referral"]
+description = "Referral asked. A named referral becomes a new move-lead handed to sales (lifecycle:sales:quote_requested)."
+
+[[stages]]
+id    = "repeat"
+label = "Repeat"
+tags  = ["lifecycle:education:repeat"]
+description = "Tagged for the next move (renters move every 1–2 years). Light check-in at the next-likely-move window beats a cold ad."

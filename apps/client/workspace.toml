@@ -1,0 +1,5 @@
+# Your business — the identity `one setup` provisions.
+name = "My Business"
+slug = "my-business"
+plan = "free"   # free · starter · pro — upgrade to "agency" only if you start
+                # reselling to other businesses (see README.md § Outgrew a single business?)

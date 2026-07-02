@@ -1,0 +1,139 @@
+---
+/**
+ * QuoteDemo.astro — standalone showcase for the Quote block.
+ *
+ * Drop into any page to preview all three variants:
+ *   import QuoteDemo from '@/components/blocks/demos/QuoteDemo.astro'
+ *   <QuoteDemo />
+ *
+ * Self-contained: brings its own section chrome (eyebrow + title) and grid.
+ */
+
+import Quote from '../Quote.astro'
+
+const compactQuotes = [
+  {
+    quote:
+      'The design tokens survived a full client rebrand. Six values, done — no hunting hex codes across forty files.',
+    author: 'James L.',
+    role: 'Founder, BuildFast',
+    avatarInitials: 'JL',
+    rating: 5,
+  },
+  {
+    quote:
+      'We added an AI agent to a client site in an afternoon. It handles first-response support and hands off cleanly.',
+    author: 'Maya K.',
+    role: 'CTO, NorthStack',
+    avatarInitials: 'MK',
+    rating: 5,
+  },
+  {
+    quote:
+      'Wireframe to production in three days. The chat plugin alone replaced a $400/mo tool stack.',
+    author: 'Sarah M.',
+    role: 'Head of Growth, Acme',
+    avatarInitials: 'SM',
+    rating: 5,
+  },
+]
+---
+
+<section class="quote-demo">
+  <div class="quote-demo__container">
+    <header class="quote-demo__head">
+      <p class="quote-demo__eyebrow">In their words</p>
+      <h2 class="quote-demo__title">Pull-quotes, three ways</h2>
+    </header>
+
+    <!-- Featured -->
+    <Quote
+      variant="featured"
+      quote="ONE is the first starter where the design system actually survives contact with a real client. We stopped rebuilding the same week-one scaffolding and started shipping on day one."
+      author="Priya N."
+      role="Principal Engineer, Loom Studio"
+      avatarInitials="PN"
+      rating={5}
+    />
+
+    <!-- Inline -->
+    <div class="quote-demo__inline">
+      <Quote
+        variant="inline"
+        quote="Change a brand colour and every component updates. Add a plugin and the feature wires itself. It feels less like a template and more like a head start."
+        author="Daniel R."
+        role="Lead Designer, Figma-adjacent"
+        avatarInitials="DR"
+      />
+    </div>
+
+    <!-- Compact grid -->
+    <div class="quote-demo__grid">
+      {
+        compactQuotes.map((q) => (
+          <Quote
+            variant="compact"
+            quote={q.quote}
+            author={q.author}
+            role={q.role}
+            avatarInitials={q.avatarInitials}
+            rating={q.rating}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .quote-demo {
+    padding: 5rem 0;
+  }
+  .quote-demo__container {
+    max-width: var(--content-wide);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .quote-demo__head {
+    max-width: 40rem;
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+  .quote-demo__eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin: 0 0 0.75rem;
+  }
+  .quote-demo__title {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    color: var(--color-font);
+    margin: 0;
+  }
+
+  /* Inline quote sits in a comfortable reading column. */
+  .quote-demo__inline {
+    max-width: var(--content-narrow);
+    margin: 4rem auto 0;
+  }
+
+  /* Compact grid — 3-up, collapsing gracefully. */
+  .quote-demo__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+  @media (max-width: 1024px) {
+    .quote-demo__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .quote-demo__grid { grid-template-columns: 1fr; }
+  }
+</style>

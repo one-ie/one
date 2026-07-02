@@ -1,0 +1,22 @@
+{
+  "name": "@oneie/plugin-dashboard",
+  "version": "0.1.0",
+  "description": "ONE dashboard — analytics, entity tables, and revenue charts served via x402",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./OneDashboard.astro": "./src/OneDashboard.astro",
+    "./OneStats.astro": "./src/OneStats.astro",
+    "./OneChart.astro": "./src/OneChart.astro"
+  },
+  "peerDependencies": {
+    "astro": ">=6.0.0",
+    "@oneie/frontend": "workspace:*"
+  },
+  "devDependencies": {
+    "astro": "^6.2.2",
+    "typescript": "^5.7.3"
+  }
+}

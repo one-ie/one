@@ -1,0 +1,28 @@
+---
+/**
+ * OneCheckout — mounts the checkout widget.
+ * Place on your /shop/checkout page. Handles order summary, payment form
+ * (Stripe or x402), and post-purchase confirmation via the served bundle.
+ */
+export interface Props {
+  ws: string
+  provider?: 'stripe' | 'x402' | 'both'
+  endpoint?: string
+  /** SRI hash — set when pinning a specific version URL, e.g. /x/shop@1.2.3.js */
+  integrity?: string
+}
+
+const { ws, provider, endpoint, integrity } = Astro.props
+---
+
+<div id="one-checkout"></div>
+<script
+  async
+  src="https://one.ie/x/shop.js"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-mount="checkout"
+  data-ws={ws}
+  data-provider={provider}
+  data-endpoint={endpoint}
+></script>

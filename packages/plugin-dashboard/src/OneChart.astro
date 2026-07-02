@@ -1,0 +1,33 @@
+---
+/**
+ * OneChart — single chart widget for embedding in cards or sidebars.
+ * Loads from one.ie/x/dashboard.js and mounts a single 'chart' sub-view.
+ */
+export interface Props {
+  /** Workspace slug — all queries scope to this workspace. */
+  ws: string
+  /** Which chart to render. */
+  chart: 'revenue' | 'traffic' | 'conversions' | 'activity'
+  /** Date window for the chart. Default '30d'. */
+  dateRange?: '7d' | '30d' | '90d' | '1y'
+  /** Chart height in pixels. Default 300. */
+  height?: number
+  /** SRI hash — set when pinning a specific version URL, e.g. /x/dashboard@1.2.3.js */
+  integrity?: string
+}
+
+const { ws, chart, dateRange, height = 300, integrity } = Astro.props
+---
+
+<div id={`one-chart-${chart}`} style={`height:${height}px`}></div>
+<script
+  async
+  src="https://one.ie/x/dashboard.js"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-mount="chart"
+  data-ws={ws}
+  data-chart={chart}
+  data-date-range={dateRange}
+  data-height={height}
+></script>

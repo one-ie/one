@@ -1,0 +1,33 @@
+id          = "sales"
+label       = "Sales"
+description = "Quote request → booked move. The mover's sales is turning a quote request into a booked move via an in-home/video estimate and a binding/not-to-exceed quote in writing."
+
+[[stages]]
+id    = "quote_requested"
+label = "Quote requested"
+tags  = ["lifecycle:sales:quote_requested"]
+description = "Lead asked for a number. Push the in-home or video estimate fast — the biggest conversion lever."
+
+[[stages]]
+id    = "estimate_booked"
+label = "Estimate booked"
+tags  = ["lifecycle:sales:estimate_booked"]
+description = "In-home or video estimate scheduled. Short form captured (name, phone, date, from/to zip, home size)."
+
+[[stages]]
+id    = "quoted"
+label = "Quoted"
+tags  = ["lifecycle:sales:quoted"]
+description = "Written estimate sent. Estimate type named (binding / not-to-exceed / non-binding), valuation stated."
+
+[[stages]]
+id    = "booked"
+label = "Booked"
+tags  = ["lifecycle:sales:booked"]
+description = "Move confirmed and dated. Fires move-day-service. mark('move:booked')."
+
+[[stages]]
+id    = "lost"
+label = "Lost"
+tags  = ["lifecycle:sales:lost"]
+description = "Did not book. Tag reason: price | timing | competitor | not_qualified. Re-nurture in 30 days."

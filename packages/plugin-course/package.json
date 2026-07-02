@@ -1,0 +1,22 @@
+{
+  "name": "@oneie/plugin-course",
+  "version": "0.1.0",
+  "description": "ONE course — LMS with enrollment, lesson gating, and progress tracking, served via x402",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./OneCourse.astro": "./src/OneCourse.astro",
+    "./OneLesson.astro": "./src/OneLesson.astro",
+    "./OneEnroll.astro": "./src/OneEnroll.astro"
+  },
+  "peerDependencies": {
+    "astro": ">=6.0.0",
+    "@oneie/frontend": "workspace:*"
+  },
+  "devDependencies": {
+    "astro": "^6.2.2",
+    "typescript": "^5.7.3"
+  }
+}

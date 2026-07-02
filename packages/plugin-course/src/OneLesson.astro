@@ -1,0 +1,35 @@
+---
+/**
+ * OneLesson — individual lesson player mount.
+ * Handles video/text content gated by enrollment, progress marking,
+ * next/prev navigation, and the notes sidebar — all served from the
+ * one.ie/x/course.js bundle. Unenrolled visitors see a teaser only.
+ */
+export interface Props {
+  /** Workspace slug (required) */
+  ws: string
+  /** Course the lesson belongs to (required) */
+  courseId: string
+  /** Lesson identifier (required) */
+  lessonId: string
+  /** Override the default API endpoint */
+  endpoint?: string
+  /** SRI hash — set when pinning a specific version URL, e.g. /x/course@1.2.3.js */
+  integrity?: string
+}
+
+const { ws, courseId, lessonId, endpoint, integrity } = Astro.props
+---
+
+<div id="one-lesson"></div>
+<script
+  async
+  src="https://one.ie/x/course.js"
+  data-mount="lesson"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-ws={ws}
+  data-course-id={courseId}
+  data-lesson-id={lessonId}
+  data-endpoint={endpoint}
+></script>

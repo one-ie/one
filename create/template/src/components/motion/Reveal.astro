@@ -20,20 +20,51 @@ const durMap  = { fast: '0.32s', base: '0.48s', slow: '0.72s' } as const
 </div>
 
 <style>
+  /* Scroll reveal driven by IntersectionObserver (the <script> below) so it
+     works in EVERY browser — `animation-timeline: view()` is Chrome-only and
+     left Firefox/Safari with no scroll animation. JS only ever HIDES an element
+     it is also about to reveal, so with no JS the content is simply visible. */
   .reveal {
-    animation: reveal var(--reveal-d) cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay) both;
+    transition:
+      opacity var(--reveal-d) cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay),
+      transform var(--reveal-d) cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay);
   }
-  @supports (animation-timeline: view()) {
-    .reveal {
-      animation-timeline: view();
-      animation-range: entry 0% entry 60%;
-    }
-  }
-  @keyframes reveal {
-    from { opacity: 0; transform: translateY(var(--reveal-y)); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .reveal.reveal--armed { opacity: 0; transform: translateY(var(--reveal-y)); }
+  .reveal.reveal--in    { opacity: 1; transform: none; }
+
   @media (prefers-reduced-motion: reduce) {
-    .reveal { animation: none; opacity: 1; transform: none; }
+    .reveal { transition: none; }
+    .reveal.reveal--armed { opacity: 1; transform: none; }
   }
 </style>
+
+<script>
+  function armReveals() {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const els = document.querySelectorAll<HTMLElement>('.reveal:not([data-reveal-bound])')
+    if (!els.length) return
+    if (reduce) {
+      els.forEach((el) => { el.dataset.revealBound = '1' })
+      return
+    }
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            ;(e.target as HTMLElement).classList.add('reveal--in')
+            obs.unobserve(e.target)
+          }
+        }
+      },
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.08 },
+    )
+    els.forEach((el) => {
+      el.dataset.revealBound = '1'
+      el.classList.add('reveal--armed')
+      io.observe(el)
+    })
+  }
+
+  armReveals()
+  document.addEventListener('astro:page-load', armReveals)
+</script>

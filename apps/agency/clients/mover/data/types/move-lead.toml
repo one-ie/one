@@ -1,0 +1,64 @@
+id          = "move-lead"
+label       = "Move lead"
+description = "An inbound lead from someone who needs to move — the unit the lead-gen funnel captures and converts."
+
+[[fields]]
+name  = "name"
+type  = "string"
+label = "Name"
+
+[[fields]]
+name  = "phone"
+type  = "string"
+label = "Phone"
+
+[[fields]]
+name  = "email"
+type  = "string"
+label = "Email"
+
+[[fields]]
+name  = "move_date"
+type  = "string"
+label = "Move date"
+description = "Target date or window; urgency driver."
+
+[[fields]]
+name  = "from_zip"
+type  = "string"
+label = "Origin zip"
+
+[[fields]]
+name  = "to_zip"
+type  = "string"
+label = "Destination zip"
+
+[[fields]]
+name  = "home_size"
+type  = "string"
+label = "Home size"
+description = "studio | 1-BR | 2-BR | 3-BR | 4-BR+ | office"
+
+[[fields]]
+name  = "move_type"
+type  = "string"
+label = "Move type"
+description = "local | long-distance | intrastate-long-distance"
+
+[[fields]]
+name  = "add_ons"
+type  = "string"
+label = "Add-ons"
+description = "packing | unpacking | storage | specialty | junk-removal"
+
+[[fields]]
+name  = "source"
+type  = "string"
+label = "Lead source"
+description = "gmb | google_organic | google_ads | referral | nextdoor | yelp | inbound_call"
+
+[[fields]]
+name  = "city_page"
+type  = "string"
+label = "City page"
+description = "Which service×city page captured the lead — feeds per-page conversion attribution."

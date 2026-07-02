@@ -1,0 +1,118 @@
+---
+import type { CollectionEntry, MarkdownHeading } from 'astro:content'
+import { SidebarDocs } from './SidebarDocs.tsx'
+import { DocSearch } from './DocSearch.tsx'
+
+export interface Props {
+  entry: CollectionEntry<'docs'>
+  entries: CollectionEntry<'docs'>[]
+  headings?: MarkdownHeading[]
+  editBaseUrl?: string
+  sidebar?: Array<{ folder: string; label: string; icon?: string }>
+}
+
+const { entry, entries, headings = [], editBaseUrl, sidebar } = Astro.props
+
+const searchQuery = Astro.url.searchParams.get('search') ?? ''
+
+// Flatten entries for the sidebar component
+const sidebarEntries = entries.map((e) => ({
+  slug: e.id,
+  data: { title: e.data.title, order: (e.data as { order?: number }).order },
+}))
+
+const editUrl = editBaseUrl ? `${editBaseUrl.replace(/\/$/, '')}/${entry.id}` : null
+
+// Filter headings to h2/h3 for TOC
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3)
+---
+
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{entry.data.title}</title>
+    {entry.data.description && <meta name="description" content={entry.data.description} />}
+    <slot name="head" />
+  </head>
+  <body class="h-full bg-background text-foreground antialiased">
+    <!-- Top bar -->
+    <header class="sticky top-0 z-40 flex h-14 items-center gap-4 border-b border-border bg-background/95 px-6 backdrop-blur">
+      <a href="/docs" class="mr-4 text-sm font-semibold text-foreground hover:text-primary">
+        Docs
+      </a>
+      <div class="flex-1">
+        <DocSearch client:load value={searchQuery} />
+      </div>
+      <slot name="header-actions" />
+    </header>
+
+    <!-- Two-column layout -->
+    <div class="mx-auto flex max-w-screen-xl">
+      <!-- Sidebar: 280px fixed width -->
+      <aside class="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-[280px] shrink-0 overflow-hidden border-r border-border lg:block">
+        <SidebarDocs
+          client:load
+          entries={sidebarEntries}
+          currentSlug={entry.id}
+          sidebar={sidebar}
+        />
+      </aside>
+
+      <!-- Main content -->
+      <main class="min-w-0 flex-1 px-8 py-10">
+        <div class="flex gap-8">
+          <!-- Prose area -->
+          <article class="min-w-0 flex-1">
+            <h1 class="mb-2 text-3xl font-bold tracking-tight">{entry.data.title}</h1>
+            {entry.data.description && (
+              <p class="mb-8 text-lg text-muted-foreground">{entry.data.description}</p>
+            )}
+            <div class="prose prose-slate dark:prose-invert max-w-none">
+              <slot />
+            </div>
+
+            <!-- Edit this page -->
+            {editUrl && (
+              <div class="mt-12 border-t border-border pt-6">
+                <a
+                  href={editUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-sm text-muted-foreground hover:text-foreground"
+                >
+                  Edit this page on GitHub →
+                </a>
+              </div>
+            )}
+          </article>
+
+          <!-- TOC: right panel, hidden on mobile -->
+          {tocHeadings.length > 0 && (
+            <nav
+              aria-label="On this page"
+              class="sticky top-20 hidden h-fit w-52 shrink-0 xl:block"
+            >
+              <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                On this page
+              </p>
+              <ul class="space-y-1 text-sm">
+                {tocHeadings.map((h) => (
+                  <li class={h.depth === 3 ? 'pl-3' : ''}>
+                    <a
+                      href={`#${h.slug}`}
+                      class="block text-muted-foreground hover:text-foreground transition-colors py-0.5"
+                    >
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

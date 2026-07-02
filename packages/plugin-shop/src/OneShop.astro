@@ -1,0 +1,33 @@
+---
+/**
+ * OneShop — mounts the storefront widget.
+ * Place on your /shop index page. The widget renders the full product
+ * grid, collection nav, search, and cart drawer via the served bundle.
+ */
+export interface Props {
+  ws: string
+  currency?: string
+  provider?: 'stripe' | 'x402' | 'both'
+  cart?: 'drawer' | 'page'
+  primary?: string
+  endpoint?: string
+  /** SRI hash — set when pinning a specific version URL, e.g. /x/shop@1.2.3.js */
+  integrity?: string
+}
+
+const { ws, currency, provider, cart, primary, endpoint, integrity } = Astro.props
+---
+
+<div id="one-shop"></div>
+<script
+  async
+  src="https://one.ie/x/shop.js"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-ws={ws}
+  data-currency={currency}
+  data-provider={provider}
+  data-cart={cart}
+  data-primary={primary}
+  data-endpoint={endpoint}
+></script>

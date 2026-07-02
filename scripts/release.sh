@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
-# Release template to github.com/one-ie/one (the public OSS repo).
+# Release: one-ie/template → apps/one (github.com/one-ie/one) + npm + oo/site
 #
-# Paid plugins (tier: "paid") ship as stubs — source stays private.
-# Free plugins and core packages ship in full.
+# What it does:
+#   1. rsync template/ → apps/one/ (excluding private state files)
+#   2. Stub any paid plugin source
+#   3. Build create/ scaffolder (bundles apps/web as its template)
+#   4. git commit + push → github.com/one-ie/one
+#   5. npm publish all packages (frontend, design, plugins, create-one-app)
+#   6. rsync apps/one/apps/web/ → apps/oo/site/ (keeps the agency node's site current)
 #
 # Usage:
-#   ./scripts/release.sh [--dry-run] [--message "release note"]
+#   ./scripts/release.sh [--dry-run] [--message "release note"] [--skip-npm] [--no-push]
+#   --no-push commits locally in apps/one but does not push or publish to npm
+#   (npm publish still runs unless --skip-npm is also passed — pass both to
+#   fully stage a release without any public-facing effect)
 #
-# Requires apps/one to be cloned at ../../apps/one (relative to one-ie/template).
+# Requires:
+#   - apps/one cloned at ../../apps/one (relative to one-ie/template)
+#   - apps/oo cloned at ../../apps/oo
+#   - npm logged in with @oneie publish rights (npm whoami)
 
 set -euo pipefail
 
@@ -19,14 +30,31 @@ TARGET_DIR="$(cd "$TEMPLATE_DIR/../../apps/one" 2>/dev/null && pwd)" || {
 }
 
 DRY_RUN=false
+SKIP_NPM=false
+NO_PUSH=false
+BUMP=""
 MESSAGE="release: sync from one-ie/template"
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --dry-run) DRY_RUN=true; shift ;;
-    --message) MESSAGE="$2"; shift 2 ;;
+    --dry-run)          DRY_RUN=true; shift ;;
+    --skip-npm)         SKIP_NPM=true; shift ;;
+    --no-push)          NO_PUSH=true; shift ;;
+    --bump)             BUMP="${2:-patch}"; shift 2 ;;
+    --bump=*)           BUMP="${1#--bump=}"; shift ;;
+    --message)          MESSAGE="$2"; shift 2 ;;
     *) echo "Unknown flag: $1" >&2; exit 1 ;;
   esac
 done
+
+# Validate bump value if provided
+if [[ -n "$BUMP" ]] && [[ "$BUMP" != "patch" && "$BUMP" != "minor" && "$BUMP" != "major" ]]; then
+  echo "ERROR: --bump must be patch|minor|major (got: $BUMP)" >&2; exit 1
+fi
+
+OO_DIR="$(cd "$TEMPLATE_DIR/../../apps/oo" 2>/dev/null && pwd)" || {
+  echo "WARN: apps/oo not found — will skip oo/site sync" >&2
+  OO_DIR=""
+}
 
 # Paid plugins whose SOURCE is secret — stripped and replaced with a serve-only stub.
 # plugin-admin is intentionally NOT listed here: its source is a thin public loader.
@@ -131,11 +159,76 @@ cd "$TARGET_DIR"
 git add -A
 if git diff --cached --quiet; then
   echo "[release] nothing changed — already up to date"
-  exit 0
+else
+  git commit -m "$MESSAGE"
+  if $NO_PUSH; then
+    echo "[release] --no-push: committed locally in $TARGET_DIR, not pushed"
+  else
+    # Ensure HTTPS remote (SSH may fail without agent; HTTPS uses stored credentials)
+    git remote set-url origin https://github.com/one-ie/one.git
+    git push origin main
+    echo "[release] pushed to github.com/one-ie/one"
+  fi
 fi
 
-git commit -m "$MESSAGE"
-# Ensure HTTPS remote (SSH may fail without agent; HTTPS uses stored credentials)
-git remote set-url origin https://github.com/one-ie/one.git
-git push origin main
-echo "[release] pushed to github.com/one-ie/one"
+# ── 4. Publish npm packages ───────────────────────────────────────────────────
+# create-one-app is omitted — superseded by `npx oneie create site`
+NPM_PACKAGES=(
+  packages/design
+  packages/frontend
+  packages/plugin-auth
+  packages/plugin-backend
+  packages/plugin-chat
+  packages/plugin-track
+  packages/plugin-premium
+  packages/plugin-admin
+)
+
+if $SKIP_NPM; then
+  echo "[release] --skip-npm: skipping npm publish"
+elif $DRY_RUN; then
+  echo "[release] would publish (bump=${BUMP:-none}): ${NPM_PACKAGES[*]}"
+else
+  # Auth check before doing any work
+  npm_user=$(npm whoami 2>/dev/null) || {
+    echo "ERROR: not logged in to npm. Run: npm login" >&2; exit 1
+  }
+  echo "[release] publishing as: $npm_user"
+
+  for pkg in "${NPM_PACKAGES[@]}"; do
+    pkg_dir="$TARGET_DIR/$pkg"
+    pkg_name=$(node -p "require('$pkg_dir/package.json').name" 2>/dev/null || echo "$pkg")
+    echo "  publishing $pkg_name..."
+    if [[ -n "$BUMP" ]]; then
+      (cd "$pkg_dir" && npm version "$BUMP" --no-git-tag-version --no-commit-hooks 2>/dev/null) \
+        || echo "    WARN: version bump failed for $pkg_name"
+    fi
+    (cd "$pkg_dir" && npm publish --access public) \
+      && echo "  ✓ $pkg_name" \
+      || { echo "  ERROR: $pkg_name publish failed" >&2; exit 1; }
+  done
+  echo "[release] npm publish complete"
+fi
+
+# ── 5. Sync apps/web → apps/oo/site/ ─────────────────────────────────────────
+if [[ -n "$OO_DIR" ]]; then
+  if $DRY_RUN; then
+    echo "[release] would sync apps/web → $OO_DIR/site/"
+  else
+    echo "[release] syncing apps/web → oo/site/..."
+    rsync -a --delete \
+      --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.wrangler \
+      "$TARGET_DIR/apps/web/" "$OO_DIR/site/"
+    cd "$OO_DIR"
+    git add site/
+    if ! git diff --cached --quiet; then
+      git commit -m "chore(site): sync from one-ie/template apps/web"
+      git push origin main
+      echo "[release] oo/site synced + pushed"
+    else
+      echo "[release] oo/site already in sync"
+    fi
+  fi
+fi
+
+echo "[release] done"

@@ -1,0 +1,32 @@
+---
+/**
+ * OneStats — lightweight stats cards widget.
+ * Embeddable anywhere without the full dashboard chrome.
+ * Loads from one.ie/x/dashboard.js and mounts the 'stats' sub-view.
+ */
+export interface Props {
+  /** Workspace slug — all queries scope to this workspace. */
+  ws: string
+  /** Which metrics to show, e.g. ['users','revenue','conversions'].
+   *  Omit to show the workspace default set. */
+  metrics?: string[]
+  /** Date window for the stats cards. Default '30d'. */
+  dateRange?: '7d' | '30d' | '90d' | '1y'
+  /** SRI hash — set when pinning a specific version URL, e.g. /x/dashboard@1.2.3.js */
+  integrity?: string
+}
+
+const { ws, metrics, dateRange, integrity } = Astro.props
+---
+
+<div id="one-stats"></div>
+<script
+  async
+  src="https://one.ie/x/dashboard.js"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-mount="stats"
+  data-ws={ws}
+  data-metrics={metrics?.join(',')}
+  data-date-range={dateRange}
+></script>

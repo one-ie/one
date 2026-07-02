@@ -1,0 +1,48 @@
+---
+/**
+ * OneEnroll — enrollment and pricing widget.
+ * Renders a sticky buy bar and pricing table. Unenrolled visitors see the
+ * price and a CTA; enrolled students see their progress instead.
+ * Payment is handled server-side via Stripe, x402, or both — no credentials
+ * touch the browser.
+ */
+export interface Props {
+  /** Workspace slug (required) */
+  ws: string
+  /** Course to enroll in (required) */
+  courseId: string
+  /** Enrollment price (required) */
+  price: number
+  /** ISO 4217 currency code (default: 'USD') */
+  currency?: string
+  /** Payment provider for enrollment */
+  provider?: 'stripe' | 'x402' | 'both'
+  /** Total available spots — omit for unlimited */
+  spotsTotal?: number
+  /** Remaining spots — display urgency cue when low */
+  spotsRemaining?: number
+  /** SRI hash — set when pinning a specific version URL, e.g. /x/course@1.2.3.js */
+  integrity?: string
+}
+
+const {
+  ws, courseId, price, currency, provider,
+  spotsTotal, spotsRemaining, integrity
+} = Astro.props
+---
+
+<div id="one-enroll"></div>
+<script
+  async
+  src="https://one.ie/x/course.js"
+  data-mount="enroll"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-ws={ws}
+  data-course-id={courseId}
+  data-price={price}
+  data-currency={currency}
+  data-provider={provider}
+  data-spots-total={spotsTotal}
+  data-spots-remaining={spotsRemaining}
+></script>

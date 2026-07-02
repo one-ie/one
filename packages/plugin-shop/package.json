@@ -1,0 +1,22 @@
+{
+  "name": "@oneie/plugin-shop",
+  "version": "0.1.0",
+  "description": "ONE shop — ecommerce storefront served from one.ie, zero bundle cost",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./OneShop.astro": "./src/OneShop.astro",
+    "./OneCart.astro": "./src/OneCart.astro",
+    "./OneCheckout.astro": "./src/OneCheckout.astro"
+  },
+  "peerDependencies": {
+    "astro": ">=6.0.0",
+    "@oneie/frontend": "workspace:*"
+  },
+  "devDependencies": {
+    "astro": "^6.2.2",
+    "typescript": "^5.7.3"
+  }
+}

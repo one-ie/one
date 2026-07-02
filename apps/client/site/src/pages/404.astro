@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro'
+---
+
+<Layout title="404 — Page not found">
+  <main style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; padding: 1rem; text-align: center;">
+    <h1 style="font-size: 6rem; font-weight: 700; line-height: 1; color: var(--color-primary); margin: 0;">
+      404
+    </h1>
+    <p style="font-size: 1.25rem; color: var(--color-font); opacity: 0.7; margin: 0;">
+      Page not found
+    </p>
+    <a
+      href="/"
+      style="padding: 0.625rem 1.25rem; background: var(--color-primary); color: var(--color-on-primary); border-radius: var(--radius-md); text-decoration: none; font-weight: 500;"
+    >
+      Go home
+    </a>
+  </main>
+</Layout>

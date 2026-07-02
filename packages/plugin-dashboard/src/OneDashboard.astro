@@ -1,0 +1,38 @@
+---
+/**
+ * OneDashboard — full analytics dashboard mount.
+ * Renders: stats grid, revenue chart, activity feed, and entity table.
+ * The widget loads from one.ie/x/dashboard.js (served via x402, gated by
+ * the 'dashboard' entitlement). Nothing renders without a valid entitlement.
+ */
+export interface Props {
+  /** Workspace slug — all queries scope to this workspace. */
+  ws: string
+  /** Which panels to show. Omit to show all five. */
+  sections?: Array<'stats' | 'revenue' | 'activity' | 'entities' | 'traffic'>
+  /** Date window for charts and metrics. Default '30d'. */
+  dateRange?: '7d' | '30d' | '90d' | '1y'
+  /** Colour scheme. Default 'system'. */
+  theme?: 'light' | 'dark' | 'system'
+  /** Override the ONE API endpoint (useful for self-hosted). */
+  endpoint?: string
+  /** SRI hash — set when pinning a specific version URL, e.g. /x/dashboard@1.2.3.js */
+  integrity?: string
+}
+
+const { ws, sections, dateRange, theme, endpoint, integrity } = Astro.props
+---
+
+<div id="one-dashboard" style="min-height:600px"></div>
+<script
+  async
+  src="https://one.ie/x/dashboard.js"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-mount="dashboard"
+  data-ws={ws}
+  data-sections={sections?.join(',')}
+  data-date-range={dateRange}
+  data-theme={theme}
+  data-endpoint={endpoint}
+></script>

@@ -1,0 +1,7 @@
+# Copy this file to ai/tools/<toolkit>.toml and fill it in.
+# one push will connect the tool to your workspace.
+# prefix the filename with _ to skip it.
+
+toolkit = "slack"             # Composio toolkit name (see: one catalog --goal tools)
+mode    = "api_key"           # "api_key" → reads env_var below; "oauth" → one ask tools:connect
+env_var = "SLACK_API_KEY"     # env variable holding the API key / bot token

@@ -122,8 +122,96 @@
         "@oneie/sdk": ">=0.13.0",
       },
     },
+    "packages/plugin-blog": {
+      "name": "@oneie/plugin-blog",
+      "version": "0.1.0",
+      "devDependencies": {
+        "astro": "^6.2.2",
+        "react": "^19.0.0",
+        "typescript": "^5.7.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": "workspace:*",
+        "astro": ">=6.0.0",
+        "react": ">=19.0.0",
+      },
+    },
+    "packages/plugin-booking": {
+      "name": "@oneie/plugin-booking",
+      "version": "0.1.0",
+      "devDependencies": {
+        "astro": "^6.2.2",
+        "typescript": "^5.7.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": "workspace:*",
+        "astro": ">=6.0.0",
+      },
+    },
     "packages/plugin-chat": {
       "name": "@oneie/plugin-chat",
+      "version": "0.1.0",
+      "devDependencies": {
+        "astro": "^6.2.2",
+        "typescript": "^5.7.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": "workspace:*",
+        "astro": ">=6.0.0",
+      },
+    },
+    "packages/plugin-course": {
+      "name": "@oneie/plugin-course",
+      "version": "0.1.0",
+      "devDependencies": {
+        "astro": "^6.2.2",
+        "typescript": "^5.7.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": "workspace:*",
+        "astro": ">=6.0.0",
+      },
+    },
+    "packages/plugin-dashboard": {
+      "name": "@oneie/plugin-dashboard",
+      "version": "0.1.0",
+      "devDependencies": {
+        "astro": "^6.2.2",
+        "typescript": "^5.7.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": "workspace:*",
+        "astro": ">=6.0.0",
+      },
+    },
+    "packages/plugin-docs": {
+      "name": "@oneie/plugin-docs",
+      "version": "0.1.0",
+      "devDependencies": {
+        "astro": "^6.2.2",
+        "react": "^19.0.0",
+        "typescript": "^5.7.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": "workspace:*",
+        "astro": ">=6.0.0",
+        "react": ">=19.0.0",
+      },
+    },
+    "packages/plugin-mail": {
+      "name": "@oneie/plugin-mail",
+      "version": "0.1.0",
+      "devDependencies": {
+        "astro": "^6.2.2",
+        "typescript": "^5.7.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": "workspace:*",
+        "astro": ">=6.0.0",
+      },
+    },
+    "packages/plugin-media": {
+      "name": "@oneie/plugin-media",
       "version": "0.1.0",
       "devDependencies": {
         "astro": "^6.2.2",
@@ -142,6 +230,18 @@
         "typescript": "^5.7.3",
       },
       "peerDependencies": {
+        "astro": ">=6.0.0",
+      },
+    },
+    "packages/plugin-shop": {
+      "name": "@oneie/plugin-shop",
+      "version": "0.1.0",
+      "devDependencies": {
+        "astro": "^6.2.2",
+        "typescript": "^5.7.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": "workspace:*",
         "astro": ">=6.0.0",
       },
     },
@@ -411,9 +511,25 @@
 
     "@oneie/plugin-backend": ["@oneie/plugin-backend@workspace:packages/plugin-backend"],
 
+    "@oneie/plugin-blog": ["@oneie/plugin-blog@workspace:packages/plugin-blog"],
+
+    "@oneie/plugin-booking": ["@oneie/plugin-booking@workspace:packages/plugin-booking"],
+
     "@oneie/plugin-chat": ["@oneie/plugin-chat@workspace:packages/plugin-chat"],
 
+    "@oneie/plugin-course": ["@oneie/plugin-course@workspace:packages/plugin-course"],
+
+    "@oneie/plugin-dashboard": ["@oneie/plugin-dashboard@workspace:packages/plugin-dashboard"],
+
+    "@oneie/plugin-docs": ["@oneie/plugin-docs@workspace:packages/plugin-docs"],
+
+    "@oneie/plugin-mail": ["@oneie/plugin-mail@workspace:packages/plugin-mail"],
+
+    "@oneie/plugin-media": ["@oneie/plugin-media@workspace:packages/plugin-media"],
+
     "@oneie/plugin-premium": ["@oneie/plugin-premium@workspace:packages/plugin-premium"],
+
+    "@oneie/plugin-shop": ["@oneie/plugin-shop@workspace:packages/plugin-shop"],
 
     "@oneie/plugin-track": ["@oneie/plugin-track@workspace:packages/plugin-track"],
 

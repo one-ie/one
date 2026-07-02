@@ -1,6 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Reveal from '../components/motion/Reveal.astro'
+import Stagger from '../components/motion/Stagger.astro'
+import Parallax from '../components/motion/Parallax'
+import LifecycleScene from '../components/home/LifecycleScene'
+import CountUp from '../components/home/CountUp'
+import Button from '../components/blocks/Button.astro'
+import Card from '../components/blocks/Card.astro'
+import Quote from '../components/blocks/Quote.astro'
+import Tabs from '../components/blocks/Tabs.astro'
+import Footer from '../components/blocks/Footer.astro'
 ---
 
 <Layout
@@ -13,7 +22,10 @@ import Reveal from '../components/motion/Reveal.astro'
     <div class="container hero-container">
       <!-- Time-based animation (not view()) — above-fold elements must not use scroll-driven animation -->
       <div class="hr hr-0"><div class="badge">Astro 6 · React 19 · Cloudflare Workers</div></div>
-      <div class="hr hr-1"><h1 class="headline">Ship sites that<br />think for themselves</h1></div>
+      <h1 class="headline">
+        <span class="headline-line">Ship sites that</span>
+        <span class="headline-line">think for themselves</span>
+      </h1>
       <div class="hr hr-2">
         <p class="sub">
           For developers and agencies: a production-ready starter with a full design
@@ -31,8 +43,8 @@ import Reveal from '../components/motion/Reveal.astro'
       </div>
       <div class="hr hr-4">
         <div class="hero-actions">
-          <a href="https://github.com/one-ie/one" class="btn-primary">Get started free →</a>
-          <a href="https://one.ie/docs" class="btn-secondary">Read the docs</a>
+          <Button href="https://github.com/one-ie/one" variant="primary" size="lg">Get started free <Fragment slot="icon-right">→</Fragment></Button>
+          <Button href="https://one.ie/docs" variant="secondary" size="lg">Read the docs</Button>
         </div>
       </div>
       <div class="hr hr-5">
@@ -61,12 +73,12 @@ import Reveal from '../components/motion/Reveal.astro'
   <!-- ── 04 · Problem ──────────────────────────────────────────── -->
   <section class="section section-alt">
     <div class="container">
-      <Reveal>
+      <Reveal class="section-head" dist="lg">
         <p class="eyebrow">Sound familiar?</p>
         <h2 class="section-title">Every new project starts the same way</h2>
       </Reveal>
 
-      <div class="grid-3 problem-grid">
+      <Stagger class="grid-3 problem-grid" stagger={0.08} dist="md">
         <div class="problem-card">
           <div class="problem-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -98,7 +110,7 @@ import Reveal from '../components/motion/Reveal.astro'
             it onto an architecture that wasn't built for it. It shows.
           </p>
         </div>
-      </div>
+      </Stagger>
     </div>
   </section>
 
@@ -106,7 +118,7 @@ import Reveal from '../components/motion/Reveal.astro'
   <section class="section">
     <div class="container">
       <div class="solution-wrap">
-        <Reveal class="solution-text">
+        <Stagger class="solution-text" stagger={0.09} dist="md">
           <p class="eyebrow">Introducing ONE</p>
           <h2 class="section-title">Architecture decisions made.<br />Ship on day one.</h2>
           <p class="section-sub">
@@ -115,20 +127,22 @@ import Reveal from '../components/motion/Reveal.astro'
             <code>one.config.ts</code>. Change your brand colour and every component updates.
             Add a plugin and the feature wires itself.
           </p>
-          <a href="https://github.com/one-ie/one" class="btn-primary">Start building free →</a>
-        </Reveal>
-        <Reveal delay={0.12} class="solution-visual">
+          <div class="solution-cta">
+            <Button href="https://github.com/one-ie/one" variant="primary">Start building free <Fragment slot="icon-right">→</Fragment></Button>
+          </div>
+        </Stagger>
+        <Parallax client:visible speed={48} className="solution-visual">
           <div class="solution-card">
             <div class="solution-pill">Before ONE</div>
-            <div class="solution-before">
+            <Stagger class="solution-before" stagger={0.07}>
               <div class="sol-line sol-strike">Set up auth (3h)</div>
               <div class="sol-line sol-strike">Wire design tokens (2h)</div>
               <div class="sol-line sol-strike">Build component library (8h)</div>
               <div class="sol-line sol-strike">Add analytics (1h)</div>
               <div class="sol-line sol-strike">Wire payments (4h)</div>
-            </div>
+            </Stagger>
             <div class="solution-pill solution-pill-after">With ONE</div>
-            <div class="solution-after">
+            <Stagger class="solution-after" stagger={0.1}>
               <div class="sol-line sol-done">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 Clone the template
@@ -141,9 +155,9 @@ import Reveal from '../components/motion/Reveal.astro'
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 Ship to Cloudflare
               </div>
-            </div>
+            </Stagger>
           </div>
-        </Reveal>
+        </Parallax>
       </div>
     </div>
   </section>
@@ -151,12 +165,12 @@ import Reveal from '../components/motion/Reveal.astro'
   <!-- ── 06 · Features ─────────────────────────────────────────── -->
   <section class="section section-alt">
     <div class="container">
-      <Reveal>
+      <Reveal class="section-head" dist="lg">
         <p class="eyebrow">What's included</p>
         <h2 class="section-title">Everything you need.<br />Nothing you don't.</h2>
       </Reveal>
 
-      <div class="grid-3">
+      <Stagger class="grid-3" stagger={0.06} dist="md">
         {[
           {
             icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934a8 8 0 1 0-8.688 9.134"/></svg>`,
@@ -206,69 +220,31 @@ import Reveal from '../components/motion/Reveal.astro'
             body: 'plugin-track injects a served pixel. Events flow into your workspace. No cookies banner required.',
             badge: 'plugin-track · connected'
           },
-        ].map((f, i) => (
-          <Reveal delay={i * 0.06}>
-            <div class="card" style={`--card-color:${f.color}`}>
-              <div class="card-icon" style={`color:${f.color}`} set:html={f.icon} />
-              <h3 class="card-title">{f.title}</h3>
-              <p class="card-benefit">— {f.benefit}</p>
-              <p class="card-body">{f.body}</p>
-              {f.link && <a href={f.link} class="card-link">{f.linkText}</a>}
-              {f.badge && <div class="card-badge">{f.badge}</div>}
-            </div>
-          </Reveal>
+        ].map((f) => (
+          <div class="card">
+            <div class="card-icon" style={`color:${f.color}`} set:html={f.icon} />
+            <h3 class="card-title">{f.title}</h3>
+            <p class="card-benefit">— {f.benefit}</p>
+            <p class="card-body">{f.body}</p>
+            {f.link && <a href={f.link} class="card-link">{f.linkText}</a>}
+            {f.badge && <div class="card-badge">{f.badge}</div>}
+          </div>
         ))}
-      </div>
+      </Stagger>
     </div>
   </section>
 
-  <!-- ── 07 · How it works ─────────────────────────────────────── -->
-  <section class="section">
-    <div class="container">
-      <Reveal>
-        <p class="eyebrow">Get started in minutes</p>
-        <h2 class="section-title">Three steps to production</h2>
-      </Reveal>
-
-      <div class="steps">
-        {[
-          {
-            n: '01',
-            title: 'Clone the template',
-            body: 'One command creates your project with Astro 6, React 19, Tailwind 4, shadcn/ui, and the full ONE plugin system ready to configure.',
-            code: 'npm create one-app@latest my-site'
-          },
-          {
-            n: '02',
-            title: 'Configure in one.config.ts',
-            body: 'Set your brand tokens, choose your plugins, and point at your backend. The entire site updates from this single file — no hunting through components.',
-            code: 'brand: { tokens: { primary: \'hsl(216 55% 25%)\' } }'
-          },
-          {
-            n: '03',
-            title: 'Ship to Cloudflare',
-            body: 'Deploy with Wrangler. Your site runs on Cloudflare Workers with D1, KV, and R2 available — global edge, zero cold starts, free tier generous.',
-            code: 'wrangler deploy'
-          },
-        ].map((s, i) => (
-          <Reveal delay={i * 0.1} class="step">
-            <div class="step-num">{s.n}</div>
-            <div class="step-content">
-              <h3 class="step-title">{s.title}</h3>
-              <p class="step-body">{s.body}</p>
-              <code class="step-code">{s.code}</code>
-            </div>
-            {i < 2 && <div class="step-arrow">→</div>}
-          </Reveal>
-        ))}
-      </div>
-    </div>
+  <!-- ── 07 · How it works — ScrollScene lifecycle ─────────────────
+        A sticky, scroll-scrubbed signature moment. The three phases light
+        up as you scroll; every value is driven by scroll progress.        -->
+  <section class="scene-section">
+    <LifecycleScene client:visible />
   </section>
 
   <!-- ── 08 · Demo ─────────────────────────────────────────────── -->
   <section class="section section-alt">
     <div class="container">
-      <Reveal>
+      <Reveal class="section-head" dist="lg">
         <p class="eyebrow">Try it live — right here</p>
         <h2 class="section-title">This page is the demo</h2>
         <p class="section-sub">
@@ -278,8 +254,8 @@ import Reveal from '../components/motion/Reveal.astro'
         </p>
       </Reveal>
 
-      <div class="demo-grid">
-        <div class="demo-card" style="--card-color:var(--color-primary)">
+      <Stagger class="demo-grid" stagger={0.08} dist="md">
+        <div class="demo-card">
           <div class="demo-card-icon" style="color:var(--color-primary)">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934a8 8 0 1 0-8.688 9.134"/></svg>
           </div>
@@ -290,7 +266,7 @@ import Reveal from '../components/motion/Reveal.astro'
           </p>
           <div class="demo-card-hint">↑ Try the nav swatches</div>
         </div>
-        <div class="demo-card" style="--card-color:var(--color-secondary)">
+        <div class="demo-card">
           <div class="demo-card-icon" style="color:var(--color-secondary)">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
@@ -302,7 +278,7 @@ import Reveal from '../components/motion/Reveal.astro'
           </p>
           <div class="demo-card-hint">↘ Chat is live in the corner</div>
         </div>
-        <div class="demo-card" style="--card-color:var(--color-tertiary)">
+        <div class="demo-card">
           <div class="demo-card-icon" style="color:var(--color-tertiary)">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 3 14 9-14 9V3z"/></svg>
           </div>
@@ -314,7 +290,7 @@ import Reveal from '../components/motion/Reveal.astro'
           </p>
           <a href="/motion" class="demo-card-hint">See all motion components →</a>
         </div>
-      </div>
+      </Stagger>
     </div>
   </section>
 
@@ -330,107 +306,104 @@ import Reveal from '../components/motion/Reveal.astro'
             wires itself. Point at your backend — all API routes switch.
             No hunting through component files.
           </p>
-          <div class="feature-list">
-            <div class="feature-row">
-              <span class="feature-dot"></span>
-              Brand tokens cascade to every component and the design page
-            </div>
-            <div class="feature-row">
-              <span class="feature-dot"></span>
-              Plugins self-wire — chat, auth, payments, analytics
-            </div>
-            <div class="feature-row">
-              <span class="feature-dot"></span>
-              Backend baseUrl — point at one.ie or your own deployment
-            </div>
-          </div>
         </Reveal>
+        <Stagger class="feature-list" stagger={0.12} dist="md">
+          <div class="feature-row">
+            <span class="feature-dot"></span>
+            Brand tokens cascade to every component and the design page
+          </div>
+          <div class="feature-row">
+            <span class="feature-dot"></span>
+            Plugins self-wire — chat, auth, payments, analytics
+          </div>
+          <div class="feature-row">
+            <span class="feature-dot"></span>
+            Backend baseUrl — point at one.ie or your own deployment
+          </div>
+        </Stagger>
       </div>
 
-      <Reveal delay={0.1} class="split-code">
-        <pre class="code-block"><code><span class="tok-kw">import</span> <span class="tok-b">&#123;</span> defineOne <span class="tok-b">&#125;</span> <span class="tok-kw">from</span> <span class="tok-str">'@oneie/frontend'</span>
-<span class="tok-kw">import</span> <span class="tok-b">&#123;</span> auth, track, chat <span class="tok-b">&#125;</span> <span class="tok-kw">from</span> <span class="tok-str">'@oneie/frontend/plugins'</span>
+      <div class="split-code">
+        <Tabs
+          ariaLabel="one.config.ts examples"
+          items={[
+            { id: 'brand', label: 'Brand', icon: 'star' },
+            { id: 'plugins', label: 'Plugins', icon: 'grid' },
+            { id: 'backend', label: 'Backend', icon: 'bolt' },
+          ]}
+        >
+          <Fragment slot="panel-brand">
+            <pre class="code-block"><code>brand: <span class="tok-b">&#123;</span>
+  tokens: <span class="tok-b">&#123;</span>
+    primary:    <span class="tok-str">'hsl(216 55% 25%)'</span>,
+    secondary:  <span class="tok-str">'hsl(219 14% 28%)'</span>,
+    tertiary:   <span class="tok-str">'hsl(105 22% 25%)'</span>,
+    background: <span class="tok-str">'hsl(0 0% 93%)'</span>,
+    foreground: <span class="tok-str">'hsl(0 0% 100%)'</span>,
+    font:       <span class="tok-str">'hsl(0 0% 13%)'</span>,
+  <span class="tok-b">&#125;</span>,
+<span class="tok-b">&#125;</span></code></pre>
+          </Fragment>
+          <Fragment slot="panel-plugins">
+            <pre class="code-block"><code><span class="tok-kw">import</span> <span class="tok-b">&#123;</span> auth, track, chat <span class="tok-b">&#125;</span> <span class="tok-kw">from</span> <span class="tok-str">'@oneie/frontend/plugins'</span>
 
-<span class="tok-kw">export default</span> defineOne(<span class="tok-b">&#123;</span>
-  backend: <span class="tok-b">&#123;</span>
-    baseUrl: <span class="tok-str">'https://one.ie'</span>,
-  <span class="tok-b">&#125;</span>,
-  brand: <span class="tok-b">&#123;</span>
-    tokens: <span class="tok-b">&#123;</span>
-      primary:    <span class="tok-str">'hsl(216 55% 25%)'</span>,
-      secondary:  <span class="tok-str">'hsl(219 14% 28%)'</span>,
-      tertiary:   <span class="tok-str">'hsl(105 22% 25%)'</span>,
-      background: <span class="tok-str">'hsl(0 0% 93%)'</span>,
-      foreground: <span class="tok-str">'hsl(0 0% 100%)'</span>,
-      font:       <span class="tok-str">'hsl(0 0% 13%)'</span>,
-    <span class="tok-b">&#125;</span>,
-  <span class="tok-b">&#125;</span>,
-  plugins: <span class="tok-b">[</span>
-    auth(),
-    track(<span class="tok-b">&#123;</span> ws: <span class="tok-str">'my-workspace'</span> <span class="tok-b">&#125;</span>),
-    chat(<span class="tok-b">&#123;</span> agent: <span class="tok-str">'my-agent'</span> <span class="tok-b">&#125;</span>),
-  <span class="tok-b">]</span>,
-<span class="tok-b">&#125;</span>)</code></pre>
-      </Reveal>
+plugins: <span class="tok-b">[</span>
+  auth(),
+  track(<span class="tok-b">&#123;</span> ws: <span class="tok-str">'my-workspace'</span> <span class="tok-b">&#125;</span>),
+  chat(<span class="tok-b">&#123;</span> agent: <span class="tok-str">'my-agent'</span> <span class="tok-b">&#125;</span>),
+<span class="tok-b">]</span></code></pre>
+          </Fragment>
+          <Fragment slot="panel-backend">
+            <pre class="code-block"><code>backend: <span class="tok-b">&#123;</span>
+  baseUrl: <span class="tok-str">'https://one.ie'</span>,
+<span class="tok-b">&#125;</span></code></pre>
+          </Fragment>
+        </Tabs>
+      </div>
     </div>
   </section>
 
   <!-- ── 09 · Testimonials ─────────────────────────────────────── -->
   <section class="section section-alt">
     <div class="container">
-      <Reveal>
+      <Reveal class="section-head" dist="lg">
         <p class="eyebrow">What teams say</p>
         <h2 class="section-title">Shipped in days, not weeks</h2>
       </Reveal>
 
-      <div class="testimonial-grid">
-        {[
-          {
-            stars: 5,
-            quote: 'We went from wireframe to production in 3 days. The chat plugin alone replaced a $400/mo tool stack. Our clients ask what stack we used — we tell them ONE.',
-            name: 'Sarah M.',
-            role: 'Head of Growth',
-            company: 'Acme Agency',
-            result: '3 days to production'
-          },
-          {
-            stars: 5,
-            quote: 'The design token system is the first one I\'ve used that actually survives a client rebrand. Change six values, done. No more hunting hex codes across 40 component files.',
-            name: 'James L.',
-            role: 'Founder',
-            company: 'BuildFast Studio',
-            result: 'Zero brand drift'
-          },
-          {
-            stars: 5,
-            quote: 'We added an AI agent to a client site in an afternoon. It handles first-response support, books appointments, and hands off to a human when confidence drops. Clients love it.',
-            name: 'Maya K.',
-            role: 'CTO',
-            company: 'NorthStack',
-            result: '40% fewer support tickets'
-          },
-        ].map(t => (
-          <div class="testimonial-card">
-            <div class="testimonial-stars">{'★'.repeat(t.stars)}</div>
-            <blockquote class="testimonial-quote">"{t.quote}"</blockquote>
-            <div class="testimonial-result">{t.result}</div>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">{t.name[0]}{t.name.split(' ')[1]?.[0]}</div>
-              <div>
-                <div class="testimonial-name">{t.name}</div>
-                <div class="testimonial-role">{t.role} · {t.company}</div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <Stagger class="quote-grid" stagger={0.08} dist="md">
+        <Quote
+          variant="compact"
+          rating={5}
+          quote="We went from wireframe to production in 3 days. The chat plugin alone replaced a $400/mo tool stack. Our clients ask what stack we used — we tell them ONE."
+          author="Sarah M."
+          role="Head of Growth · Acme Agency"
+          avatarInitials="SM"
+        />
+        <Quote
+          variant="compact"
+          rating={5}
+          quote="The design token system is the first one I've used that actually survives a client rebrand. Change six values, done. No more hunting hex codes across 40 component files."
+          author="James L."
+          role="Founder · BuildFast Studio"
+          avatarInitials="JL"
+        />
+        <Quote
+          variant="compact"
+          rating={5}
+          quote="We added an AI agent to a client site in an afternoon. It handles first-response support, books appointments, and hands off to a human when confidence drops. Clients love it."
+          author="Maya K."
+          role="CTO · NorthStack"
+          avatarInitials="MK"
+        />
+      </Stagger>
     </div>
   </section>
 
   <!-- ── 10 · Metrics ──────────────────────────────────────────── -->
   <section class="metrics-strip">
     <div class="container">
-      <div class="metrics-grid">
+      <Stagger class="metrics-grid" stagger={0.07} dist="md">
         {[
           { num: '4,217', label: 'sites deployed' },
           { num: '3.2 days', label: 'average to first deploy' },
@@ -438,18 +411,18 @@ import Reveal from '../components/motion/Reveal.astro'
           { num: '< 80 KB', label: 'JS bundle (gzipped)' },
         ].map(m => (
           <div class="metric">
-            <div class="metric-num">{m.num}</div>
+            <div class="metric-num"><CountUp client:visible value={m.num} /></div>
             <div class="metric-label">{m.label}</div>
           </div>
         ))}
-      </div>
+      </Stagger>
     </div>
   </section>
 
   <!-- ── Plugin tiers ───────────────────────────────────────────── -->
   <section class="section">
     <div class="container">
-      <Reveal>
+      <Reveal class="section-head" dist="lg">
         <p class="eyebrow">Plugin tiers</p>
         <h2 class="section-title">Free to start. Pay only for what you use.</h2>
         <p class="section-sub">
@@ -459,71 +432,52 @@ import Reveal from '../components/motion/Reveal.astro'
         </p>
       </Reveal>
 
-      <Reveal delay={0.08}>
-        <div class="table-wrap">
-          <table class="plugin-table">
-            <thead>
-              <tr>
-                <th>Plugin</th>
-                <th>Package</th>
-                <th>Tier</th>
-                <th>What you get</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>auth()</code></td>
-                <td><code>plugin-auth</code></td>
-                <td><span class="tier tier-free">free</span></td>
-                <td>better-auth — passkey, social providers, magic link</td>
-              </tr>
-              <tr>
-                <td><code>track()</code></td>
-                <td><code>plugin-track</code></td>
-                <td><span class="tier tier-connected">connected</span></td>
-                <td>Privacy-first analytics pixel — your workspace, your data</td>
-              </tr>
-              <tr>
-                <td><code>chat()</code></td>
-                <td><code>plugin-chat</code></td>
-                <td><span class="tier tier-connected">connected</span></td>
-                <td>AI chat widget — attach any agent, zero bundle cost</td>
-              </tr>
-              <tr>
-                <td><code>backend()</code></td>
-                <td><code>plugin-backend</code></td>
-                <td><span class="tier tier-connected">connected</span></td>
-                <td>ONE API bindings — signals, payments, agent calls</td>
-              </tr>
-              <tr>
-                <td><code>premium()</code></td>
-                <td><code>plugin-premium</code></td>
-                <td><span class="tier tier-paid">paid</span></td>
-                <td>x402 checkout flows and entitlement gating</td>
-              </tr>
-              <tr>
-                <td><code>admin()</code></td>
-                <td><code>plugin-admin</code></td>
-                <td><span class="tier tier-paid">paid</span></td>
-                <td>Hosted admin console — workspace, agents, inbox</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Reveal>
+      <Stagger class="pricing-row" stagger={0.1} dist="md">
+        <Card
+          variant="pricing"
+          accent="tertiary"
+          tier="Free"
+          price="Free"
+          period="· full source"
+          features={['auth() — passkey, social, magic link', 'Ships full source, MIT licensed', 'No account required']}
+          ctaLabel="Start free"
+          ctaHref="https://github.com/one-ie/one"
+        />
+        <Card
+          variant="pricing"
+          featured
+          accent="primary"
+          tier="Connected"
+          price="Served"
+          period="· zero bundle"
+          features={['track() — privacy-first analytics', 'chat() — AI widget, attach any agent', 'backend() — signals, payments, agents', 'Auto-updated from one.ie']}
+          ctaLabel="Connect a workspace"
+          ctaHref="https://one.ie"
+        />
+        <Card
+          variant="pricing"
+          accent="secondary"
+          tier="Paid"
+          price="Metered"
+          period="· your API key"
+          features={['premium() — x402 checkout + gating', 'admin() — hosted console', 'Unlocked by your API key']}
+          ctaLabel="See pricing"
+          ctaHref="https://one.ie/docs"
+        />
+      </Stagger>
     </div>
   </section>
 
   <!-- ── Stack ─────────────────────────────────────────────────── -->
   <section class="section section-alt">
     <div class="container">
-      <Reveal>
+      <Reveal class="section-head" dist="lg">
         <p class="eyebrow">The stack</p>
         <h2 class="section-title">Chosen for speed to production.</h2>
         <p class="section-sub">No framework churn. Every choice has a reason.</p>
       </Reveal>
 
-      <div class="stack-grid">
+      <Stagger class="stack-grid" stagger={0.05}>
         {[
           { name: 'Astro 6',     role: 'SSR on CF Workers — zero JS by default' },
           { name: 'React 19',    role: 'Islands — Actions, use(), Transitions' },
@@ -533,31 +487,28 @@ import Reveal from '../components/motion/Reveal.astro'
           { name: 'Cloudflare',  role: 'Workers, D1, KV, R2 — global edge' },
           { name: 'TypeScript',  role: 'End to end — strict, no implicit any' },
           { name: 'Bun',         role: 'Runtime + package manager' },
-        ].map((item, i) => (
-          <Reveal delay={i * 0.04}>
-            <div class="stack-item">
-              <div class="stack-name">{item.name}</div>
-              <div class="stack-role">{item.role}</div>
-            </div>
-          </Reveal>
+        ].map((item) => (
+          <div class="stack-item">
+            <div class="stack-name">{item.name}</div>
+            <div class="stack-role">{item.role}</div>
+          </div>
         ))}
-      </div>
+      </Stagger>
     </div>
   </section>
 
   <!-- ── 11 · FAQ ──────────────────────────────────────────────── -->
   <section class="section">
     <div class="container faq-container">
-      <Reveal>
+      <Reveal class="section-head" dist="lg">
         <p class="eyebrow">Questions</p>
         <h2 class="section-title">Everything you need to know</h2>
       </Reveal>
 
-      <Reveal delay={0.08}>
-        <div class="faq-grid">
-          {[
-            {
-              q: 'Is it free?',
+      <Stagger class="faq-grid" stagger={0.05}>
+        {[
+          {
+            q: 'Is it free?',
               a: 'Yes. The template is MIT licensed — clone it, modify it, ship it, sell projects built on it. Plugins have free, connected, and paid tiers. The core template has no paid gate.'
             },
             {
@@ -589,15 +540,14 @@ import Reveal from '../components/motion/Reveal.astro'
               <p class="faq-a">{item.a}</p>
             </details>
           ))}
-        </div>
-      </Reveal>
+      </Stagger>
     </div>
   </section>
 
   <!-- ── 12 · Final CTA ────────────────────────────────────────── -->
   <section class="section cta-section">
     <div class="container cta-container">
-      <Reveal>
+      <Stagger dist="lg" stagger={0.1}>
         <h2 class="cta-title">Ready to ship faster?</h2>
         <p class="cta-sub">
           Join 4,217 developers who skipped setup and went straight to building.
@@ -614,9 +564,38 @@ import Reveal from '../components/motion/Reveal.astro'
           <a href="https://one.ie/docs" class="btn-cta-secondary">Documentation</a>
         </div>
         <p class="cta-risk">Open source · MIT license · No card required · Cancel anytime</p>
-      </Reveal>
+      </Stagger>
     </div>
   </section>
+
+  <!-- ── Footer ────────────────────────────────────────────────── -->
+  <Footer
+    tagline="The Astro starter that ships AI, payments, and plugins on day one — wired from one.config.ts."
+    columns={[
+      { heading: 'Product', links: [
+        { label: 'Design system', href: '/design' },
+        { label: 'Motion', href: '/motion' },
+        { label: 'Components', href: '/components' },
+        { label: 'Plugins', href: 'https://one.ie/docs' },
+      ] },
+      { heading: 'Resources', links: [
+        { label: 'Documentation', href: 'https://one.ie/docs' },
+        { label: 'GitHub', href: 'https://github.com/one-ie/one', external: true },
+        { label: 'Changelog', href: 'https://one.ie/docs' },
+      ] },
+      { heading: 'Company', links: [
+        { label: 'About', href: 'https://one.ie' },
+        { label: 'Blog', href: 'https://one.ie' },
+        { label: 'Contact', href: 'https://one.ie' },
+      ] },
+      { heading: 'Legal', links: [
+        { label: 'License (MIT)', href: 'https://github.com/one-ie/one' },
+        { label: 'Privacy', href: 'https://one.ie' },
+        { label: 'Terms', href: 'https://one.ie' },
+      ] },
+    ]}
+    note="MIT licensed · Built on the open web."
+  />
 
 </Layout>
 
@@ -648,16 +627,30 @@ import Reveal from '../components/motion/Reveal.astro'
     padding: 0 1.5rem;
   }
   .section        { padding: 8rem 0; }
-  .section-alt    { background: color-mix(in oklab, var(--color-primary) 10%, var(--color-foreground)); }
+  .section-alt    { background: color-mix(in oklab, var(--color-primary) 7%, var(--color-foreground)); }
+
+  /* ── Section header — centered, one rhythm ──────────────────────
+        Grid sections get a centered head; the head owns the gap to
+        the content below (no per-grid margins). The two split
+        sections (solution · config) opt out and stay left-aligned —
+        that asymmetry is intentional, not an accident.               */
+  /* :global — this class rides on the <Reveal> child root, which doesn't
+     carry this page's scope hash, so a scoped selector would never match. */
+  :global(.section-head) {
+    max-width: 40rem;
+    margin: 0 auto 3.5rem;
+    text-align: center;
+  }
+  :global(.section-head) .section-sub { margin-left: auto; margin-right: auto; }
 
   /* ── Eyebrow label ───────────────────────────────────────────── */
   .eyebrow {
     font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-primary);
-    margin: 0 0 0.6rem;
+    margin: 0 0 0.75rem;
   }
 
   /* ── Hero ────────────────────────────────────────────────────── */
@@ -680,12 +673,22 @@ import Reveal from '../components/motion/Reveal.astro'
   }
 
   .headline {
-    font-size: clamp(3.2rem, 10vw, 7rem);
+    font-size: clamp(2.9rem, 8vw, 5.5rem);
     font-weight: 800;
-    line-height: 1.0;
-    letter-spacing: -0.05em;
+    line-height: 1.03;
+    letter-spacing: -0.045em;
     color: var(--color-font);
     margin: 0 0 1.75rem;
+  }
+  /* Headline rises line-by-line (time-based — above the fold, never scroll). */
+  .headline-line {
+    display: block;
+    animation: hr-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .headline-line:nth-child(1) { animation-delay: 0.08s; }
+  .headline-line:nth-child(2) { animation-delay: 0.18s; }
+  @media (prefers-reduced-motion: reduce) {
+    .headline-line { animation: none; }
   }
 
   .sub {
@@ -808,19 +811,19 @@ import Reveal from '../components/motion/Reveal.astro'
 
   /* ── Section headers ─────────────────────────────────────────── */
   .section-title {
-    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-size: clamp(2rem, 4.5vw, 3rem);
     font-weight: 700;
     letter-spacing: -0.035em;
     color: var(--color-font);
     margin: 0 0 1rem;
-    line-height: 1.1;
+    line-height: 1.12;
   }
   .section-sub {
     font-size: 1.05rem;
     color: var(--color-muted);
     line-height: 1.7;
     max-width: 38rem;
-    margin: 0 0 3.5rem;
+    margin: 0;
   }
   .section-sub code, .split-text code {
     font-family: 'SF Mono', 'Fira Code', monospace;
@@ -862,24 +865,25 @@ import Reveal from '../components/motion/Reveal.astro'
   }
 
   /* ── Problem ─────────────────────────────────────────────────── */
-  .problem-grid { margin-top: 2.5rem; }
+  :global(.problem-grid) { margin-top: 0; }
   .problem-card {
     background: var(--color-background);
     border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-destructive);
     border-radius: var(--radius-lg);
     padding: 2rem;
+    transition: border-color var(--ease), transform var(--ease);
   }
+  .problem-card:hover { border-color: var(--color-border-strong); transform: translateY(-2px); }
   .problem-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
     background: color-mix(in oklab, var(--color-destructive) 10%, transparent);
     color: var(--color-destructive);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
   }
   .problem-title {
     font-size: 1rem;
@@ -903,7 +907,7 @@ import Reveal from '../components/motion/Reveal.astro'
   }
   @media (max-width: 768px) { .solution-wrap { grid-template-columns: 1fr; gap: 2rem; } }
 
-  .solution-text .btn-primary { margin-top: 2rem; }
+  :global(.solution-text) .solution-cta { margin-top: 2rem; }
 
   .solution-card {
     background: var(--color-foreground);
@@ -950,23 +954,24 @@ import Reveal from '../components/motion/Reveal.astro'
   .sol-done svg { color: var(--color-success); flex-shrink: 0; }
 
   /* ── Feature cards ───────────────────────────────────────────── */
-  .grid-3 {
+  /* :global — grid containers now ride on the <Stagger> child root, which
+     doesn't carry this page's scope hash (same reason as .section-head). */
+  :global(.grid-3) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
   }
-  @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } }
-  @media (min-width: 769px) and (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { :global(.grid-3) { grid-template-columns: 1fr; } }
+  @media (min-width: 769px) and (max-width: 1024px) { :global(.grid-3) { grid-template-columns: repeat(2, 1fr); } }
 
   .card {
     background: var(--color-background);
     border: 1px solid var(--color-border);
-    border-top: 3px solid var(--card-color, var(--color-border));
     border-radius: var(--radius-lg);
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
     transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
   }
   .card:hover {
@@ -974,7 +979,16 @@ import Reveal from '../components/motion/Reveal.astro'
     box-shadow: var(--shadow-pop);
     transform: translateY(-2px);
   }
-  .card-icon { display: flex; margin-bottom: 0.25rem; }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, currentColor 10%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
   .card-title {
     font-size: 1rem;
     font-weight: 700;
@@ -984,9 +998,9 @@ import Reveal from '../components/motion/Reveal.astro'
   .card-benefit {
     font-size: 0.82rem;
     font-weight: 500;
-    color: var(--card-color, var(--color-primary));
+    color: color-mix(in oklab, var(--color-font) 55%, transparent);
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.45;
   }
   .card-body {
     font-size: 0.87rem;
@@ -1003,7 +1017,7 @@ import Reveal from '../components/motion/Reveal.astro'
   .card-link {
     font-size: 0.82rem;
     font-weight: 600;
-    color: var(--card-color, var(--color-primary));
+    color: var(--color-primary);
     text-decoration: none;
     margin-top: 0.25rem;
   }
@@ -1022,76 +1036,26 @@ import Reveal from '../components/motion/Reveal.astro'
     margin-top: 0.25rem;
   }
 
-  /* ── How it works ────────────────────────────────────────────── */
-  .steps {
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
-    margin-top: 3rem;
-    position: relative;
-  }
-  @media (max-width: 768px) { .steps { flex-direction: column; gap: 2rem; } }
-
-  .step {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 0 2rem 0 0;
-  }
-  .step-num {
-    font-size: 3.5rem;
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    color: var(--color-primary);
-    line-height: 1;
-    margin-bottom: 0.25rem;
-  }
-  .step-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--color-font);
-    margin: 0;
-  }
-  .step-body {
-    font-size: 0.87rem;
-    line-height: 1.65;
-    color: var(--color-muted);
-    margin: 0;
-  }
-  .step-code {
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 0.78rem;
-    color: var(--color-tertiary);
+  /* ── How it works — ScrollScene lifecycle ────────────────────────
+        The sticky scrub section. Foreground band + hairline rules set it
+        apart as a signature moment; the scene itself is LifecycleScene.   */
+  .scene-section {
     background: var(--color-foreground);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    padding: 0.4rem 0.65rem;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
   }
-  .step-arrow {
-    font-size: 1.5rem;
-    color: var(--color-border-strong);
-    padding-top: 3.5rem;
-    flex-shrink: 0;
-  }
-  @media (max-width: 768px) { .step-arrow { display: none; } }
 
   /* ── Demo section ────────────────────────────────────────────── */
-  .demo-grid {
+  :global(.demo-grid) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    margin-top: 2.5rem;
+    margin-top: 0;
   }
-  @media (max-width: 768px) { .demo-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 768px) { :global(.demo-grid) { grid-template-columns: 1fr; } }
 
   .demo-card {
     border: 1px solid var(--color-border);
-    border-top: 3px solid var(--card-color, var(--color-border));
     border-radius: var(--radius-lg);
     padding: 2rem;
     background: var(--color-background);
@@ -1145,7 +1109,7 @@ import Reveal from '../components/motion/Reveal.astro'
     align-items: center;
   }
   @media (max-width: 768px) { .container-split { grid-template-columns: 1fr; gap: 2rem; } }
-  .split-code { min-width: 0; }
+  :global(.split-code) { min-width: 0; }
 
   .code-block {
     background: var(--color-background);
@@ -1163,7 +1127,7 @@ import Reveal from '../components/motion/Reveal.astro'
   .tok-str { color: var(--color-tertiary); }
   .tok-b   { color: var(--color-muted); }
 
-  .feature-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+  :global(.feature-list) { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
   .feature-row {
     display: flex;
     align-items: flex-start;
@@ -1182,19 +1146,18 @@ import Reveal from '../components/motion/Reveal.astro'
   }
 
   /* ── Testimonials ────────────────────────────────────────────── */
-  .testimonial-grid {
+  :global(.testimonial-grid) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    margin-top: 2.5rem;
+    margin-top: 0;
   }
-  @media (max-width: 768px) { .testimonial-grid { grid-template-columns: 1fr; } }
-  @media (min-width: 769px) and (max-width: 1024px) { .testimonial-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { :global(.testimonial-grid) { grid-template-columns: 1fr; } }
+  @media (min-width: 769px) and (max-width: 1024px) { :global(.testimonial-grid) { grid-template-columns: repeat(2, 1fr); } }
 
   .testimonial-card {
     background: var(--color-background);
     border: 1px solid var(--color-border);
-    border-top: 3px solid var(--color-secondary);
     border-radius: var(--radius-lg);
     padding: 2rem;
     display: flex;
@@ -1268,13 +1231,13 @@ import Reveal from '../components/motion/Reveal.astro'
     background: var(--color-primary);
     padding: 5rem 0;
   }
-  .metrics-grid {
+  :global(.metrics-grid) {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
     text-align: center;
   }
-  @media (max-width: 768px) { .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { :global(.metrics-grid) { grid-template-columns: repeat(2, 1fr); } }
   .metric-num {
     font-size: clamp(1.8rem, 4vw, 2.8rem);
     font-weight: 800;
@@ -1290,6 +1253,25 @@ import Reveal from '../components/motion/Reveal.astro'
   }
 
   /* ── Plugin table ────────────────────────────────────────────── */
+  /* Testimonials — compact quote grid */
+  :global(.quote-grid) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+  @media (max-width: 768px) { :global(.quote-grid) { grid-template-columns: 1fr; } }
+  @media (min-width: 769px) and (max-width: 1024px) { :global(.quote-grid) { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Plugin tiers — pricing card row */
+  :global(.pricing-row) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 900px) { :global(.pricing-row) { grid-template-columns: 1fr; max-width: 26rem; margin: 0 auto; } }
+
   .table-wrap { overflow-x: auto; }
   .plugin-table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
   .plugin-table th {
@@ -1311,6 +1293,26 @@ import Reveal from '../components/motion/Reveal.astro'
   .plugin-table tbody tr:last-child td { border-bottom: none; }
   .plugin-table tbody tr:hover td {
     background: color-mix(in oklab, var(--color-primary) 3%, transparent);
+  }
+  /* Rows reveal one by one as the table scrolls into view (mirrors Stagger). */
+  .plugin-table tbody td {
+    animation: row-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @supports (animation-timeline: view()) {
+    .plugin-table tbody td { animation-timeline: view(); animation-range: entry 0% entry 45%; }
+  }
+  .plugin-table tbody tr:nth-child(1) td { animation-delay: 0.04s; }
+  .plugin-table tbody tr:nth-child(2) td { animation-delay: 0.10s; }
+  .plugin-table tbody tr:nth-child(3) td { animation-delay: 0.16s; }
+  .plugin-table tbody tr:nth-child(4) td { animation-delay: 0.22s; }
+  .plugin-table tbody tr:nth-child(5) td { animation-delay: 0.28s; }
+  .plugin-table tbody tr:nth-child(6) td { animation-delay: 0.34s; }
+  @keyframes row-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .plugin-table tbody td { animation: none; opacity: 1; transform: none; }
   }
   .plugin-table code {
     font-family: 'SF Mono', 'Fira Code', monospace;
@@ -1343,13 +1345,13 @@ import Reveal from '../components/motion/Reveal.astro'
   }
 
   /* ── Stack ───────────────────────────────────────────────────── */
-  .stack-grid {
+  :global(.stack-grid) {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.25rem;
-    margin-top: 2.5rem;
+    margin-top: 0;
   }
-  @media (max-width: 768px) { .stack-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { :global(.stack-grid) { grid-template-columns: repeat(2, 1fr); } }
   .stack-item {
     background: var(--color-background);
     border: 1px solid var(--color-border);
@@ -1363,7 +1365,7 @@ import Reveal from '../components/motion/Reveal.astro'
 
   /* ── FAQ ─────────────────────────────────────────────────────── */
   .faq-container { max-width: var(--content-narrow); }
-  .faq-grid { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0; }
+  :global(.faq-grid) { margin-top: 0; display: flex; flex-direction: column; gap: 0; }
   .faq-item {
     border-bottom: 1px solid var(--color-border);
   }

@@ -1,0 +1,119 @@
+---
+import { getCollection } from 'astro:content'
+
+export interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'Documentation',
+  description = 'Everything you need to get started.',
+} = Astro.props
+
+// Fetch all docs and group by folder
+const allDocs = await getCollection('docs')
+
+// Sort by order then title within each folder
+allDocs.sort((a, b) => {
+  const ao = (a.data as { order?: number }).order ?? 999
+  const bo = (b.data as { order?: number }).order ?? 999
+  if (ao !== bo) return ao - bo
+  return a.data.title.localeCompare(b.data.title)
+})
+
+// Group by first path segment
+const groups: Record<string, typeof allDocs> = {}
+for (const doc of allDocs) {
+  const folder = doc.id.includes('/') ? doc.id.split('/')[0] : '_root'
+  if (!groups[folder]) groups[folder] = []
+  groups[folder].push(doc)
+}
+
+const folderOrder = Object.keys(groups).filter((f) => f !== '_root')
+const rootDocs = groups['_root'] ?? []
+
+function folderLabel(key: string): string {
+  return key.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <slot name="head" />
+  </head>
+  <body class="bg-background text-foreground antialiased">
+    <slot name="header" />
+
+    <!-- Hero -->
+    <section class="border-b border-border bg-muted/30 px-6 py-16 text-center">
+      <h1 class="text-4xl font-bold tracking-tight">{title}</h1>
+      {description && (
+        <p class="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">{description}</p>
+      )}
+    </section>
+
+    <!-- Doc groups grid -->
+    <main class="mx-auto max-w-screen-xl px-6 py-12">
+      <!-- Root-level docs (no folder) -->
+      {rootDocs.length > 0 && (
+        <div class="mb-10">
+          <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {rootDocs.map((doc) => (
+              <li>
+                <a
+                  href={`/docs/${doc.id}`}
+                  class="block rounded-lg border border-border bg-card p-4 text-sm hover:border-primary hover:bg-accent transition-colors"
+                >
+                  <span class="font-medium text-foreground">{doc.data.title}</span>
+                  {doc.data.description && (
+                    <span class="mt-1 block text-xs text-muted-foreground line-clamp-2">
+                      {doc.data.description}
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <!-- Folder sections -->
+      <div class="space-y-12">
+        {folderOrder.map((folder) => {
+          const folderDocs = groups[folder]
+          if (!folderDocs?.length) return null
+          return (
+            <section>
+              <h2 class="mb-4 text-xl font-semibold text-foreground">{folderLabel(folder)}</h2>
+              <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {folderDocs.map((doc) => (
+                  <li>
+                    <a
+                      href={`/docs/${doc.id}`}
+                      class="block rounded-lg border border-border bg-card p-4 text-sm hover:border-primary hover:bg-accent transition-colors"
+                    >
+                      <span class="font-medium text-foreground">{doc.data.title}</span>
+                      {doc.data.description && (
+                        <span class="mt-1 block text-xs text-muted-foreground line-clamp-2">
+                          {doc.data.description}
+                        </span>
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        })}
+      </div>
+    </main>
+
+    <slot name="footer" />
+  </body>
+</html>

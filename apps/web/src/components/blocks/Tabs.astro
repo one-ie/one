@@ -1,0 +1,424 @@
+---
+/**
+ * Tabs.astro — animated, accessible tabs with a gliding active indicator.
+ *
+ * Pure Astro + one scoped vanilla <script>. No React island.
+ *
+ * USAGE
+ * ─────
+ *   import Tabs from '@/components/blocks/Tabs.astro'
+ *
+ *   <Tabs
+ *     ariaLabel="Account settings"
+ *     items={[
+ *       { id: 'profile',  label: 'Profile' },
+ *       { id: 'billing',  label: 'Billing', icon: 'card' },
+ *       { id: 'security', label: 'Security' },
+ *     ]}
+ *   >
+ *     <Fragment slot="panel-profile">…profile content…</Fragment>
+ *     <Fragment slot="panel-billing">…billing content…</Fragment>
+ *     <Fragment slot="panel-security">…security content…</Fragment>
+ *   </Tabs>
+ *
+ * API
+ * ───
+ *   • items     — Array<{ id, label, icon? }>. `id` keys the matching panel slot.
+ *   • Panels    — NAMED SLOTS, one per item: slot="panel-<id>".
+ *   • icon      — optional key into the built-in inline icon set (see ICONS below);
+ *                 unknown keys render no icon. Want your own? Pass via the slot/label.
+ *   • ariaLabel — accessible name for the tablist (required for screen readers).
+ *   • active    — id of the initially-selected tab (defaults to first item).
+ *   • variant   — 'underline' (default) | 'pill' indicator style.
+ *
+ * Slotted panel content carries the PARENT's scope hash, not this file's — so the
+ * panel wrappers here are styled via :global() (see <style is:global> at the end).
+ *
+ * ACCESSIBILITY
+ * ─────────────
+ *   role=tablist / role=tab / role=tabpanel, aria-selected, aria-controls,
+ *   aria-labelledby, roving tabindex. Keyboard: ←/→ move+activate, Home/End jump,
+ *   click activates. Crossfade respects prefers-reduced-motion.
+ */
+
+interface TabItem {
+  id: string
+  label: string
+  icon?: string
+}
+
+interface Props {
+  items: TabItem[]
+  ariaLabel: string
+  active?: string
+  variant?: 'underline' | 'pill'
+  class?: string
+}
+
+const {
+  items,
+  ariaLabel,
+  active,
+  variant = 'underline',
+  class: className,
+} = Astro.props
+
+const activeId = active && items.some((i) => i.id === active) ? active : items[0]?.id
+
+// Astro requires <slot name="..."> to be a STATIC string, so dynamic panel
+// slots (panel-<id>) are resolved at build time via the Astro.slots API and
+// injected with set:html below.
+const panelHtml: Record<string, string> = {}
+for (const item of items) {
+  const name = `panel-${item.id}`
+  panelHtml[item.id] = Astro.slots.has(name) ? await Astro.slots.render(name) : ''
+}
+
+// Stable per-instance prefix so multiple <Tabs> on one page never collide ids.
+const uid = `tabs-${Math.random().toString(36).slice(2, 8)}`
+
+// Small inline icon set — stroke-based, inherits currentColor.
+const ICONS: Record<string, string> = {
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>',
+  star: '<path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.9 1-5.8L3.5 10l5.9-.9L12 3z"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+}
+---
+
+<div class:list={['one-tabs', `one-tabs--${variant}`, className]} data-one-tabs data-uid={uid}>
+  <div class="one-tabs__rail" role="tablist" aria-label={ariaLabel}>
+    {
+      items.map((item) => {
+        const selected = item.id === activeId
+        return (
+          <button
+            type="button"
+            role="tab"
+            id={`${uid}-tab-${item.id}`}
+            class="one-tabs__tab"
+            data-tab={item.id}
+            aria-selected={selected ? 'true' : 'false'}
+            aria-controls={`${uid}-panel-${item.id}`}
+            tabindex={selected ? 0 : -1}
+          >
+            {item.icon && ICONS[item.icon] && (
+              <svg
+                class="one-tabs__icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                set:html={ICONS[item.icon]}
+              />
+            )}
+            <span class="one-tabs__label">{item.label}</span>
+          </button>
+        )
+      })
+    }
+    <span class="one-tabs__indicator" aria-hidden="true"></span>
+  </div>
+
+  <div class="one-tabs__panels">
+    {
+      items.map((item) => {
+        const selected = item.id === activeId
+        return (
+          <div
+            role="tabpanel"
+            id={`${uid}-panel-${item.id}`}
+            class="one-tabs__panel"
+            data-panel={item.id}
+            aria-labelledby={`${uid}-tab-${item.id}`}
+            tabindex="0"
+            hidden={!selected}
+          >
+            <Fragment set:html={panelHtml[item.id]} />
+          </div>
+        )
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .one-tabs {
+    width: 100%;
+  }
+
+  /* ── Rail (tablist) ─────────────────────────────────────────────── */
+  .one-tabs__rail {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .one-tabs--underline .one-tabs__rail {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .one-tabs--pill .one-tabs__rail {
+    gap: 0.15rem;
+    padding: 0.3rem;
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    background: var(--color-foreground);
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  /* ── Tab button ─────────────────────────────────────────────────── */
+  .one-tabs__tab {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.7rem 0.95rem;
+    margin: 0;
+    border: none;
+    background: transparent;
+    color: var(--color-muted);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition:
+      color var(--ease),
+      background var(--ease);
+  }
+
+  .one-tabs--pill .one-tabs__tab {
+    padding: 0.55rem 1.1rem;
+    border-radius: 9999px;
+  }
+
+  .one-tabs__tab:hover {
+    color: var(--color-font);
+  }
+
+  .one-tabs__tab[aria-selected='true'] {
+    color: var(--color-primary);
+  }
+
+  .one-tabs--pill .one-tabs__tab[aria-selected='true'] {
+    color: var(--color-on-primary);
+  }
+
+  /* Keyboard focus only — crisp ring, no mouse halo. */
+  .one-tabs__tab:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+  .one-tabs--underline .one-tabs__tab:focus-visible {
+    outline-offset: -2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .one-tabs__icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .one-tabs__label {
+    display: inline-block;
+  }
+
+  /* ── Gliding indicator ──────────────────────────────────────────── */
+  .one-tabs__indicator {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    /* JS sets --x (translateX) and --w (width). */
+    transform: translateX(var(--x, 0));
+    width: var(--w, 0);
+    opacity: 0;
+    transition:
+      transform 280ms cubic-bezier(0.4, 0, 0.2, 1),
+      width 280ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 160ms ease;
+  }
+
+  /* Reveal only once JS has measured (avoids a flash at x=0). */
+  [data-one-tabs][data-ready] .one-tabs__indicator {
+    opacity: 1;
+  }
+
+  .one-tabs--underline .one-tabs__indicator {
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px 2px 0 0;
+  }
+
+  .one-tabs--pill .one-tabs__indicator {
+    top: 0.3rem;
+    bottom: 0.3rem;
+    left: 0;
+    height: auto;
+    background: var(--color-primary);
+    border-radius: 9999px;
+    box-shadow: var(--shadow-card);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .one-tabs__indicator {
+      transition: opacity 120ms ease;
+    }
+  }
+</style>
+
+<!--
+  Panel wrappers hold SLOTTED content (parent's scope hash, not ours),
+  so their crossfade/layout rules live in :global(). Scoped by [data-one-tabs].
+-->
+<style is:global>
+  [data-one-tabs] .one-tabs__panels {
+    position: relative;
+    margin-top: 1.5rem;
+  }
+
+  [data-one-tabs] .one-tabs__panel {
+    outline: none;
+  }
+
+  [data-one-tabs] .one-tabs__panel[hidden] {
+    display: none;
+  }
+
+  [data-one-tabs] .one-tabs__panel:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 4px;
+    border-radius: var(--radius-md);
+  }
+
+  /* Crossfade: panel enters with a slight rise. */
+  [data-one-tabs] .one-tabs__panel[data-enter] {
+    animation: one-tabs-fade 240ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  @keyframes one-tabs-fade {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-one-tabs] .one-tabs__panel[data-enter] {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // Per-instance tab controller. Scoped to each [data-one-tabs] block.
+  function initTabs(root: HTMLElement) {
+    if (root.dataset.bound) return
+    root.dataset.bound = 'true'
+
+    const rail = root.querySelector<HTMLElement>('.one-tabs__rail')
+    const indicator = root.querySelector<HTMLElement>('.one-tabs__indicator')
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('.one-tabs__tab'))
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('.one-tabs__panel'))
+    if (!rail || !indicator || tabs.length === 0) return
+
+    const indexOfSelected = () =>
+      Math.max(0, tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true'))
+
+    function moveIndicator(tab: HTMLButtonElement) {
+      // Position relative to the rail, robust to wrapping and scroll.
+      const railBox = rail!.getBoundingClientRect()
+      const tabBox = tab.getBoundingClientRect()
+      indicator!.style.setProperty('--x', `${tabBox.left - railBox.left}px`)
+      indicator!.style.setProperty('--w', `${tabBox.width}px`)
+    }
+
+    function select(next: number, { focus = true, animate = true } = {}) {
+      const clamped = (next + tabs.length) % tabs.length
+      tabs.forEach((tab, i) => {
+        const on = i === clamped
+        tab.setAttribute('aria-selected', on ? 'true' : 'false')
+        tab.tabIndex = on ? 0 : -1
+      })
+      panels.forEach((panel, i) => {
+        const on = i === clamped
+        panel.hidden = !on
+        panel.removeAttribute('data-enter')
+        if (on && animate) {
+          // Force reflow so the animation restarts on re-selection.
+          void panel.offsetWidth
+          panel.setAttribute('data-enter', '')
+        }
+      })
+      moveIndicator(tabs[clamped])
+      if (focus) tabs[clamped].focus()
+    }
+
+    rail.addEventListener('keydown', (e: KeyboardEvent) => {
+      const current = indexOfSelected()
+      let handled = true
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          select(current + 1)
+          break
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          select(current - 1)
+          break
+        case 'Home':
+          select(0)
+          break
+        case 'End':
+          select(tabs.length - 1)
+          break
+        default:
+          handled = false
+      }
+      if (handled) e.preventDefault()
+    })
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i, { focus: false }))
+    })
+
+    // Initial paint: position indicator under the pre-selected tab, no animation.
+    requestAnimationFrame(() => {
+      moveIndicator(tabs[indexOfSelected()])
+      root.setAttribute('data-ready', '')
+    })
+
+    // Keep the indicator glued to the active tab as the layout reflows.
+    const ro = new ResizeObserver(() => moveIndicator(tabs[indexOfSelected()]))
+    ro.observe(rail)
+    window.addEventListener('resize', () => moveIndicator(tabs[indexOfSelected()]))
+  }
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>('[data-one-tabs]').forEach(initTabs)
+  }
+
+  boot()
+  // Astro view transitions / client navigation re-fire the DOM swap.
+  document.addEventListener('astro:page-load', boot)
+</script>

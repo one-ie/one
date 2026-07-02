@@ -1,0 +1,14 @@
+# Copy this file to ai/tools/<toolkit>.toml and fill it in.
+# `one push` connects the tool to this workspace.
+# Prefix the filename with _ to skip it.
+#
+# Tools a lead-gen mover typically connects:
+#   googlebusiness — post GMB updates + read reviews (the #1 trust signal)
+#   gmail / outlook — send written estimates + confirmations
+#   calendar (googlecalendar / cal) — book in-home / video estimates
+#   twilio — SMS the customer (move reminders, arrival windows)
+#   stripe — collect a deposit / balance (card; a roofer/mover pays in euros — no crypto)
+
+toolkit = "googlebusiness"      # Composio toolkit name (see: one catalog --goal tools)
+mode    = "oauth"               # "api_key" → reads env_var below; "oauth" → one ask tools:connect
+env_var = ""                    # env variable holding the API key / token (api_key mode only)

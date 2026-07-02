@@ -1,0 +1,111 @@
+{
+  "niche": "mover",
+  "required_pages": [
+    "home",
+    "services",
+    "services/local-move",
+    "services/long-distance",
+    "services/packing",
+    "services/storage",
+    "about",
+    "contact",
+    "service-areas"
+  ],
+  "recommended_pages": [
+    "quote",
+    "gallery",
+    "reviews",
+    "blog",
+    "commercial",
+    "junk-removal",
+    "piano-moving",
+    "apartment-moves",
+    "faq"
+  ],
+  "required_schema_types": [
+    "MovingCompany",
+    "LocalBusiness"
+  ],
+  "required_schema_fields": [
+    "name",
+    "address",
+    "telephone",
+    "areaServed",
+    "serviceType",
+    "priceRange"
+  ],
+  "recommended_schema_fields": [
+    "aggregateRating",
+    "identifier_usdot",
+    "identifier_mc",
+    "identifier_state_license"
+  ],
+  "required_form_fields": [
+    "name",
+    "phone",
+    "email",
+    "move_date",
+    "from_zip",
+    "to_zip",
+    "home_size"
+  ],
+  "required_trust_signals": [
+    "usdot_number",
+    "mc_number",
+    "license_number_state",
+    "insurance_status",
+    "years_in_business",
+    "promover_cert"
+  ],
+  "required_legal_disclaimers": [
+    "binding_estimate_type",
+    "deposit_terms",
+    "released_value_vs_full_value_protection",
+    "delivery_window_disclosure"
+  ],
+  "service_area_required": true,
+  "phone_required_in_header": true,
+  "phone_required_sticky_mobile": true,
+  "review_widget_recommended": true,
+  "before_after_recommended": false,
+  "financing_page_recommended": false,
+  "emergency_cta_required": false,
+  "video_estimate_cta_recommended": true,
+  "in_home_estimate_cta_recommended": true,
+  "coi_mention_recommended": true,
+  "usdot_footer_required_if_interstate": true,
+  "state_license_footer_required_if_intrastate": true,
+  "banned_phrases": [
+    "guaranteed pickup date",
+    "guaranteed delivery date",
+    "lowest price guaranteed",
+    "no hidden fees",
+    "100% damage-free",
+    "100% satisfaction guaranteed",
+    "FREE move",
+    "FREE first hour",
+    "we move anywhere",
+    "AMSA certified",
+    "USDOT approved",
+    "FMCSA endorsed",
+    "fully insured",
+    "licensed and bonded",
+    "cash only",
+    "leverage",
+    "synergy",
+    "seamless transition",
+    "world-class",
+    "premier moving experience",
+    "trusted moving partner",
+    "moving solutions",
+    "elevate your move",
+    "transform your moving journey"
+  ],
+  "banned_phrase_check": "fail-on-match",
+  "required_disclaimer_strings": {
+    "binding_estimate_type": "Estimate type must be stated: binding, non-binding, or binding not-to-exceed",
+    "released_value_vs_full_value_protection": "Default liability is $0.60/lb released value. Full Value Protection offered as alternative.",
+    "deposit_terms": "Deposit policy and refundability must be disclosed on estimate.",
+    "delivery_window_disclosure": "Long-distance deliveries operate on a spread (typically 1-21 days). Disclose in writing."
+  }
+}

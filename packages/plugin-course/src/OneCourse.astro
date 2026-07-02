@@ -1,0 +1,37 @@
+---
+/**
+ * OneCourse — course catalog or single-course overview mount.
+ * Shows curriculum, module list, and enrollment CTA.
+ * Omit courseId to render the full course catalog.
+ */
+export interface Props {
+  ws: string
+  courseId?: string
+  provider?: 'stripe' | 'x402' | 'both'
+  completionCertificate?: boolean
+  progressTracking?: boolean
+  endpoint?: string
+  /** SRI hash — set when pinning a specific version URL */
+  integrity?: string
+}
+
+const {
+  ws, courseId, provider, completionCertificate,
+  progressTracking, endpoint, integrity
+} = Astro.props
+---
+
+<div id="one-course"></div>
+<script
+  async
+  src="https://one.ie/x/course.js"
+  data-mount="course"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-ws={ws}
+  data-course-id={courseId}
+  data-provider={provider}
+  data-completion-certificate={completionCertificate}
+  data-progress-tracking={progressTracking}
+  data-endpoint={endpoint}
+></script>

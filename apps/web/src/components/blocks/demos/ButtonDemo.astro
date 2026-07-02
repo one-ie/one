@@ -1,0 +1,269 @@
+---
+/**
+ * ButtonDemo — a self-contained showcase for <Button>.
+ *
+ * Drop into any page to see every variant across all three sizes, plus the
+ * with-icon, icon-only, loading, disabled, and full-width states. Scoped
+ * styles — no page dependencies. Beautiful standalone.
+ *
+ * Usage:
+ *   import ButtonDemo from '@/components/blocks/demos/ButtonDemo.astro'
+ *   <ButtonDemo />
+ */
+import Button from '../Button.astro'
+
+const variants = [
+  { key: 'primary', name: 'Primary' },
+  { key: 'secondary', name: 'Secondary' },
+  { key: 'tertiary', name: 'Tertiary' },
+  { key: 'ghost', name: 'Ghost' },
+  { key: 'destructive', name: 'Destructive' },
+] as const
+
+const sizes = ['sm', 'md', 'lg'] as const
+---
+
+<section class="bd">
+  <div class="bd__container">
+    <header class="bd__head">
+      <p class="bd__eyebrow">Design system</p>
+      <h2 class="bd__title">Buttons</h2>
+      <p class="bd__sub">
+        One primitive, five variants, three sizes. Hairline borders, token-driven
+        colour, and crisp keyboard focus — every state accounted for.
+      </p>
+    </header>
+
+    <!-- ── Variants × sizes ──────────────────────────────────────── -->
+    <div class="bd__block">
+      <div class="bd__matrix" role="table" aria-label="Button variants across sizes">
+        <div class="bd__matrix-head" role="row">
+          <span role="columnheader"></span>
+          <span role="columnheader">Small</span>
+          <span role="columnheader">Medium</span>
+          <span role="columnheader">Large</span>
+        </div>
+        {
+          variants.map((v) => (
+            <div class="bd__matrix-row" role="row">
+              <span class="bd__rowlabel" role="rowheader">{v.name}</span>
+              {sizes.map((s) => (
+                <span class="bd__cell" role="cell">
+                  <Button variant={v.key} size={s}>{v.name}</Button>
+                </span>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- ── States ────────────────────────────────────────────────── -->
+    <div class="bd__grid">
+      <div class="bd__group">
+        <p class="bd__caption">With icons</p>
+        <div class="bd__row">
+          <Button variant="primary">
+            <svg slot="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            Continue
+          </Button>
+          <Button variant="secondary">
+            Get the docs
+            <svg slot="icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          </Button>
+          <Button variant="ghost">
+            <svg slot="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>
+            Filter
+          </Button>
+        </div>
+      </div>
+
+      <div class="bd__group">
+        <p class="bd__caption">Icon only</p>
+        <div class="bd__row">
+          <Button variant="primary" size="sm" iconOnly label="Search">
+            <svg slot="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </Button>
+          <Button variant="secondary" size="md" iconOnly label="Settings">
+            <svg slot="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </Button>
+          <Button variant="ghost" size="lg" iconOnly label="More options">
+            <svg slot="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+          </Button>
+          <Button variant="destructive" size="md" iconOnly label="Delete">
+            <svg slot="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </Button>
+        </div>
+      </div>
+
+      <div class="bd__group">
+        <p class="bd__caption">Loading</p>
+        <div class="bd__row">
+          <Button variant="primary" loading>Saving…</Button>
+          <Button variant="secondary" loading>Syncing</Button>
+          <Button variant="destructive" loading>Deleting</Button>
+        </div>
+      </div>
+
+      <div class="bd__group">
+        <p class="bd__caption">Disabled</p>
+        <div class="bd__row">
+          <Button variant="primary" disabled>Primary</Button>
+          <Button variant="secondary" disabled>Secondary</Button>
+          <Button variant="ghost" disabled>Ghost</Button>
+        </div>
+      </div>
+
+      <div class="bd__group">
+        <p class="bd__caption">As link</p>
+        <div class="bd__row">
+          <Button variant="primary" href="#" rel="noopener">
+            View on GitHub
+            <svg slot="icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </Button>
+          <Button variant="ghost" href="#">Documentation</Button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Full width ────────────────────────────────────────────── -->
+    <div class="bd__group bd__group--full">
+      <p class="bd__caption">Full width</p>
+      <div class="bd__stack">
+        <Button variant="primary" size="lg" fullWidth>Start building free</Button>
+        <Button variant="secondary" size="lg" fullWidth>Read the documentation</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bd {
+    padding: 5rem 0;
+    background: var(--color-page);
+    color: var(--color-font);
+  }
+  .bd__container {
+    max-width: var(--content);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ── Header ─────────────────────────────────────────────────────── */
+  .bd__head {
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto 3.5rem;
+  }
+  .bd__eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin: 0 0 0.75rem;
+  }
+  .bd__title {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    margin: 0 0 1rem;
+  }
+  .bd__sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-muted);
+    margin: 0 auto;
+    max-width: 38rem;
+  }
+
+  /* ── Variant × size matrix ──────────────────────────────────────── */
+  .bd__block {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-background);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+  }
+  .bd__matrix {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 30rem;
+  }
+  .bd__matrix-head,
+  .bd__matrix-row {
+    display: grid;
+    grid-template-columns: 7rem repeat(3, 1fr);
+    align-items: center;
+    gap: 1rem;
+  }
+  .bd__matrix-head {
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.25rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .bd__matrix-head span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .bd__rowlabel {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-font);
+  }
+  .bd__cell {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  /* ── State groups ───────────────────────────────────────────────── */
+  .bd__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .bd__group {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-background);
+    padding: 1.5rem;
+  }
+  .bd__group--full {
+    grid-column: 1 / -1;
+    margin-top: 1.5rem;
+  }
+  .bd__caption {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin: 0 0 1.1rem;
+  }
+  .bd__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .bd__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 22rem;
+  }
+
+  @media (max-width: 720px) {
+    .bd__grid {
+      grid-template-columns: 1fr;
+    }
+    .bd__block {
+      padding: 1.25rem;
+    }
+  }
+</style>

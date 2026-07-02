@@ -1,0 +1,26 @@
+---
+/**
+ * OneCart — mounts the cart drawer / cart page widget.
+ * Use on a dedicated /shop/cart page when cart:'page' is configured,
+ * or drop anywhere to render an inline cart summary.
+ */
+export interface Props {
+  ws: string
+  endpoint?: string
+  /** SRI hash — set when pinning a specific version URL, e.g. /x/shop@1.2.3.js */
+  integrity?: string
+}
+
+const { ws, endpoint, integrity } = Astro.props
+---
+
+<div id="one-cart"></div>
+<script
+  async
+  src="https://one.ie/x/shop.js"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-mount="cart"
+  data-ws={ws}
+  data-endpoint={endpoint}
+></script>

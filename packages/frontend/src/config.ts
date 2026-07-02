@@ -19,16 +19,24 @@ export interface OneConfig {
   brand?: {
     tokens?: BrandTokens
   }
-  plugins?: OnePlugin[]
+  // OnePlugin<any> — a plugins array is heterogeneous; each plugin carries its
+  // own config type (C appears contravariantly in `integration`), so a concrete
+  // OnePlugin<FooConfig> is not assignable to OnePlugin<unknown>. `any` lets the
+  // array hold differently-typed plugins without widening the plugin contract.
+  plugins?: OnePlugin<any>[]
 }
 
 /**
  * defineOne — the single control surface for a ONE-connected Astro site.
  *
  * Returns a composed Astro integration that:
- *   - Merges each plugin's AstroIntegration into the build
+ *   - Merges each plugin's AstroIntegration into the build (build-time wiring only)
  *   - Exposes resolved config to islands via the `one:config` virtual module
  *   - Validates each plugin's config slice at startup
+ *
+ * NOTE: declaring a `paid` plugin here registers its build-time integration but
+ * does NOT grant backend access. The product API returns 402 until the workspace
+ * has an entitlement row (purchased via `one plugin add <name>`).
  *
  * Usage in astro.config.mjs:
  *   import oneIntegration from './one.config.ts'

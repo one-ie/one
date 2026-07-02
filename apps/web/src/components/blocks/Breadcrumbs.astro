@@ -1,0 +1,578 @@
+---
+/**
+ * Breadcrumbs.astro — an elegant, accessible breadcrumb trail.
+ *
+ * Pure Astro. One tiny scoped <script> only when the trail collapses its
+ * middle into an accessible '…' menu (maxItems). No React island.
+ *
+ * USAGE
+ * ─────
+ *   import Breadcrumbs from '@/components/blocks/Breadcrumbs.astro'
+ *
+ *   <Breadcrumbs
+ *     homeIcon
+ *     items={[
+ *       { label: 'Home',     href: '/' },
+ *       { label: 'Docs',     href: '/docs' },
+ *       { label: 'Plugins',  href: '/docs/plugins' },
+ *       { label: 'plugin-chat' },               // last item = current page
+ *     ]}
+ *   />
+ *
+ * API
+ * ───
+ *   • items      — Array<{ label, href?, icon? }>. The LAST item is the current
+ *                  page: rendered as plain text with aria-current="page", never
+ *                  a link (even if you pass an href). Items before the last with
+ *                  an href become links; without one they render as muted text.
+ *   • separator  — 'chevron' (default) | 'slash'. Inline SVG / glyph, faint.
+ *   • homeIcon   — when true, the FIRST item gets a small house icon. If its
+ *                  label is non-empty the label shows beside the icon; if the
+ *                  label is empty the icon stands alone with an aria-label.
+ *   • maxItems   — when items.length exceeds this, the middle collapses into a
+ *                  single '…' trigger that opens an accessible menu listing the
+ *                  hidden crumbs. First and last (current) are always shown.
+ *                  Omit (or set ≤ 0) to never collapse. Needs ≥ 4 to take effect.
+ *   • icon       — optional key into the built-in inline icon set (see ICONS);
+ *                  unknown keys render no icon.
+ *   • ariaLabel  — accessible name for the <nav> (default "Breadcrumb").
+ *
+ * ACCESSIBILITY
+ * ─────────────
+ *   <nav aria-label="Breadcrumb"> › <ol> › <li>. Separators are decorative
+ *   (aria-hidden). The current/last crumb is plain text with aria-current="page".
+ *   Focus rings via outline var(--color-ring). The collapse menu is a real
+ *   button with aria-expanded/aria-haspopup; Esc closes, click-outside closes,
+ *   arrow/Home/End move focus, links are reachable by Tab.
+ *
+ * RESPONSIVE
+ * ──────────
+ *   The trail scrolls horizontally on narrow screens with a soft right-edge
+ *   fade hinting at more, while the current crumb truncates with an ellipsis.
+ *   No wrapping — the trail stays one clean line. Motion respects
+ *   prefers-reduced-motion.
+ */
+
+interface Crumb {
+  label: string
+  href?: string
+  icon?: string
+}
+
+interface Props {
+  items: Crumb[]
+  separator?: 'chevron' | 'slash'
+  homeIcon?: boolean
+  maxItems?: number
+  ariaLabel?: string
+  class?: string
+}
+
+const {
+  items,
+  separator = 'chevron',
+  homeIcon = false,
+  maxItems = 0,
+  ariaLabel = 'Breadcrumb',
+  class: className,
+} = Astro.props
+
+// Stable per-instance prefix so multiple trails on one page never collide ids.
+const uid = `crumb-${Math.random().toString(36).slice(2, 8)}`
+
+// Small inline icon set — stroke-based, inherits currentColor.
+const ICONS: Record<string, string> = {
+  home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/>',
+  folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/>',
+  tag: '<path d="M3 7v5l9 9 5-5-9-9H3z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+}
+
+// ── Collapse logic ──────────────────────────────────────────────────────────
+// Decide which items render inline and which hide behind the '…' menu.
+// Keep the first item and the last (current) always; collapse the middle.
+const n = items.length
+const willCollapse = maxItems > 0 && maxItems >= 4 && n > maxItems
+
+// Number of trailing items (before the current) to keep visible. We always
+// keep first + last; fill the remaining budget with the tail for clearer context.
+const tailKeep = willCollapse ? Math.max(1, maxItems - 2) : 0
+
+type Slot =
+  | { kind: 'crumb'; item: Crumb; index: number; current: boolean }
+  | { kind: 'ellipsis'; hidden: Array<{ item: Crumb; index: number }> }
+
+const slots: Slot[] = []
+if (!willCollapse) {
+  items.forEach((item, index) =>
+    slots.push({ kind: 'crumb', item, index, current: index === n - 1 }),
+  )
+} else {
+  // [ first ] … [ tailKeep items including current ]
+  const tailStart = n - tailKeep
+  const hidden = items
+    .slice(1, tailStart)
+    .map((item, i) => ({ item, index: i + 1 }))
+
+  slots.push({ kind: 'crumb', item: items[0], index: 0, current: false })
+  slots.push({ kind: 'ellipsis', hidden })
+  for (let i = tailStart; i < n; i++) {
+    slots.push({ kind: 'crumb', item: items[i], index: i, current: i === n - 1 })
+  }
+}
+
+const sepChar = separator === 'slash' ? '/' : ''
+---
+
+<nav
+  class:list={['one-crumbs', `one-crumbs--${separator}`, className]}
+  aria-label={ariaLabel}
+  data-one-crumbs={willCollapse ? '' : undefined}
+  data-uid={uid}
+>
+  <ol class="one-crumbs__list">
+    {
+      slots.map((slot, slotIndex) => {
+        const isFirst = slotIndex === 0
+        const sep = !isFirst && (
+          <span class="one-crumbs__sep" aria-hidden="true">
+            {separator === 'chevron' ? (
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="one-crumbs__chevron"
+              >
+                <path d="m9 6 6 6-6 6" />
+              </svg>
+            ) : (
+              <span class="one-crumbs__slash">{sepChar}</span>
+            )}
+          </span>
+        )
+
+        if (slot.kind === 'ellipsis') {
+          const menuId = `${uid}-menu`
+          return (
+            <li class="one-crumbs__item">
+              {sep}
+              <div class="one-crumbs__more">
+                <button
+                  type="button"
+                  class="one-crumbs__ellipsis"
+                  aria-label="Show hidden breadcrumbs"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  aria-controls={menuId}
+                  data-crumbs-trigger
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    class="one-crumbs__dots"
+                  >
+                    <circle cx="5" cy="12" r="1.6" />
+                    <circle cx="12" cy="12" r="1.6" />
+                    <circle cx="19" cy="12" r="1.6" />
+                  </svg>
+                </button>
+                <ul class="one-crumbs__menu" id={menuId} role="menu" hidden data-crumbs-menu>
+                  {slot.hidden.map(({ item }) => (
+                    <li role="none" class="one-crumbs__menu-item">
+                      <a
+                        href={item.href ?? '#'}
+                        role="menuitem"
+                        class="one-crumbs__menu-link"
+                        tabindex="-1"
+                      >
+                        {item.icon && ICONS[item.icon] && (
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                            class="one-crumbs__menu-icon"
+                            set:html={ICONS[item.icon]}
+                          />
+                        )}
+                        <span>{item.label}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          )
+        }
+
+        const { item, index, current } = slot
+        const showHomeIcon = homeIcon && index === 0
+        const iconKey = item.icon ?? (showHomeIcon ? 'home' : undefined)
+        const hasIconMarkup = iconKey && ICONS[iconKey]
+        const labelEmpty = item.label.trim() === ''
+        const iconOnly = hasIconMarkup && labelEmpty
+
+        const iconSvg = hasIconMarkup && (
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="one-crumbs__icon"
+            set:html={ICONS[iconKey!]}
+          />
+        )
+
+        const inner = (
+          <>
+            {iconSvg}
+            {!labelEmpty && <span class="one-crumbs__label">{item.label}</span>}
+          </>
+        )
+
+        // Aria label fallback when the crumb is icon-only.
+        const ariaName = iconOnly ? item.label || (showHomeIcon ? 'Home' : undefined) : undefined
+
+        return (
+          <li class="one-crumbs__item">
+            {sep}
+            {current ? (
+              <span class="one-crumbs__crumb one-crumbs__current" aria-current="page" aria-label={ariaName}>
+                {inner}
+              </span>
+            ) : item.href ? (
+              <a class="one-crumbs__crumb one-crumbs__link" href={item.href} aria-label={ariaName}>
+                {inner}
+              </a>
+            ) : (
+              <span class="one-crumbs__crumb one-crumbs__muted" aria-label={ariaName}>
+                {inner}
+              </span>
+            )}
+          </li>
+        )
+      })
+    }
+  </ol>
+</nav>
+
+<style>
+  .one-crumbs {
+    /* Horizontal scroll on narrow screens with a soft right-edge fade. */
+    position: relative;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    /* Fade the right edge to hint at more crumbs off-screen. The fade only
+       shows when content actually overflows (mask is cheap + non-intrusive). */
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
+  }
+  .one-crumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .one-crumbs__list {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0;
+    margin: 0;
+    padding: 0.1rem 1.5rem 0.1rem 0; /* right pad pairs with the edge fade */
+    list-style: none;
+    width: max-content;
+  }
+
+  .one-crumbs__item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  /* ── Separator ──────────────────────────────────────────────────── */
+  .one-crumbs__sep {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-faint);
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .one-crumbs--chevron .one-crumbs__sep {
+    padding: 0 0.15rem;
+  }
+  .one-crumbs--slash .one-crumbs__sep {
+    padding: 0 0.4rem;
+  }
+  .one-crumbs__chevron {
+    width: 0.7em;
+    height: 0.7em;
+  }
+  .one-crumbs__slash {
+    font-size: 0.95em;
+    line-height: 1;
+    transform: translateY(-0.02em);
+  }
+
+  /* ── Crumb (link / muted / current) ─────────────────────────────── */
+  .one-crumbs__crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.45rem;
+    margin: 0 -0.05rem; /* keep optical gap even while padding grows hit-area */
+    border-radius: var(--radius-sm);
+    font-size: 0.825rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      color var(--ease),
+      background var(--ease);
+  }
+
+  .one-crumbs__link {
+    color: var(--color-muted);
+  }
+  .one-crumbs__link:hover {
+    color: var(--color-font);
+    background: color-mix(in oklab, var(--color-font) 5%, transparent);
+  }
+
+  .one-crumbs__muted {
+    color: var(--color-muted);
+  }
+
+  .one-crumbs__current {
+    color: var(--color-font);
+    font-weight: 600;
+    /* The current crumb is the one that can run long — truncate gracefully. */
+    max-width: 18rem;
+  }
+  .one-crumbs__current .one-crumbs__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .one-crumbs__icon {
+    width: 0.95em;
+    height: 0.95em;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
+
+  /* Keyboard focus only — crisp ring, no mouse halo. */
+  .one-crumbs__link:focus-visible,
+  .one-crumbs__ellipsis:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /* ── Collapse '…' trigger + menu ─────────────────────────────────── */
+  .one-crumbs__more {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .one-crumbs__ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.55rem;
+    height: 1.4rem;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition:
+      color var(--ease),
+      background var(--ease);
+  }
+  .one-crumbs__ellipsis:hover,
+  .one-crumbs__ellipsis[aria-expanded='true'] {
+    color: var(--color-font);
+    background: color-mix(in oklab, var(--color-font) 6%, transparent);
+  }
+  .one-crumbs__dots {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  .one-crumbs__menu {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    z-index: 30;
+    min-width: 11rem;
+    max-width: 18rem;
+    margin: 0;
+    padding: 0.3rem;
+    list-style: none;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-pop);
+    /* Open animation — gentle rise + fade. */
+    transform-origin: top left;
+    animation: one-crumbs-pop 140ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .one-crumbs__menu[hidden] {
+    display: none;
+  }
+
+  .one-crumbs__menu-item {
+    margin: 0;
+  }
+  .one-crumbs__menu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition:
+      color var(--ease),
+      background var(--ease);
+  }
+  .one-crumbs__menu-link:hover,
+  .one-crumbs__menu-link:focus-visible {
+    color: var(--color-font);
+    background: color-mix(in oklab, var(--color-primary) 8%, transparent);
+    outline: none;
+  }
+  .one-crumbs__menu-icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  @keyframes one-crumbs-pop {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .one-crumbs__menu {
+      animation: none;
+    }
+    .one-crumbs__crumb,
+    .one-crumbs__ellipsis,
+    .one-crumbs__menu-link {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Per-instance collapse-menu controller. Only present on trails that collapse.
+  function initCrumbs(root: HTMLElement) {
+    if (root.dataset.bound) return
+    root.dataset.bound = 'true'
+
+    const trigger = root.querySelector<HTMLButtonElement>('[data-crumbs-trigger]')
+    const menu = root.querySelector<HTMLElement>('[data-crumbs-menu]')
+    if (!trigger || !menu) return
+
+    const links = () => Array.from(menu.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]'))
+
+    function open() {
+      menu!.hidden = false
+      trigger!.setAttribute('aria-expanded', 'true')
+      const items = links()
+      items.forEach((a) => (a.tabIndex = 0))
+      items[0]?.focus()
+      document.addEventListener('keydown', onKey, true)
+      document.addEventListener('pointerdown', onOutside, true)
+    }
+
+    function close(focusTrigger = false) {
+      menu!.hidden = true
+      trigger!.setAttribute('aria-expanded', 'false')
+      links().forEach((a) => (a.tabIndex = -1))
+      document.removeEventListener('keydown', onKey, true)
+      document.removeEventListener('pointerdown', onOutside, true)
+      if (focusTrigger) trigger!.focus()
+    }
+
+    function toggle() {
+      menu!.hidden ? open() : close()
+    }
+
+    function onOutside(e: PointerEvent) {
+      if (!root.contains(e.target as Node)) close()
+    }
+
+    function onKey(e: KeyboardEvent) {
+      const items = links()
+      const idx = items.indexOf(document.activeElement as HTMLAnchorElement)
+      switch (e.key) {
+        case 'Escape':
+          e.preventDefault()
+          close(true)
+          break
+        case 'ArrowDown':
+          e.preventDefault()
+          items[(idx + 1 + items.length) % items.length]?.focus()
+          break
+        case 'ArrowUp':
+          e.preventDefault()
+          items[(idx - 1 + items.length) % items.length]?.focus()
+          break
+        case 'Home':
+          e.preventDefault()
+          items[0]?.focus()
+          break
+        case 'End':
+          e.preventDefault()
+          items[items.length - 1]?.focus()
+          break
+        case 'Tab':
+          // Let focus leave the menu naturally, but close it behind us.
+          close()
+          break
+      }
+    }
+
+    trigger.addEventListener('click', toggle)
+  }
+
+  function boot() {
+    document.querySelectorAll<HTMLElement>('[data-one-crumbs]').forEach(initCrumbs)
+  }
+
+  boot()
+  // Astro view transitions / client navigation re-fire the DOM swap.
+  document.addEventListener('astro:page-load', boot)
+</script>

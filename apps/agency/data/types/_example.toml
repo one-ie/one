@@ -1,0 +1,22 @@
+# Copy this file to data/types/<name>.toml and fill it in.
+# one push sends it to world:declare-types so your workspace has typed entities.
+# prefix the filename with _ to skip it.
+
+id          = "booking"
+label       = "Booking"
+description = "A service booking for a client"
+
+[[fields]]
+name  = "date"
+type  = "date"
+label = "Date"
+
+[[fields]]
+name  = "service"
+type  = "string"
+label = "Service"
+
+[[fields]]
+name  = "contact_email"
+type  = "email"
+label = "Contact email"

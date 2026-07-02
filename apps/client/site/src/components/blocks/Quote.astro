@@ -1,0 +1,306 @@
+---
+/**
+ * Quote.astro — pull-quote / testimonial blocks in three flavours.
+ *
+ * Usage:
+ *   <Quote
+ *     variant="featured"
+ *     quote="We shipped in three days."
+ *     author="Sarah M."
+ *     role="Head of Growth, Acme Agency"
+ *     avatarInitials="SM"
+ *     rating={5}
+ *   />
+ *
+ *   <!-- quote can also come from the default slot -->
+ *   <Quote variant="inline" author="James L." role="Founder, BuildFast">
+ *     The token system survives a client rebrand. Change six values, done.
+ *   </Quote>
+ *
+ * Variants:
+ *   featured — large centered pull-quote, oversized decorative mark, author row + stars
+ *   inline   — blockquote with a left primary accent bar + tinted background
+ *   compact  — small bordered card quote for grids
+ *
+ * Tokens only — no hardcoded colours. Auto-flips for dark mode.
+ */
+
+interface Props {
+  /** Quote text. Optional — may instead be supplied via the default <slot>. */
+  quote?: string
+  /** Attribution name, e.g. "Sarah M." */
+  author?: string
+  /** Role / company line, e.g. "Head of Growth, Acme Agency" */
+  role?: string
+  /** Avatar initials, e.g. "SM". Falls back to the first letter of `author`. */
+  avatarInitials?: string
+  /** Star rating 1–5. Omit for no stars. */
+  rating?: number
+  /** Visual treatment. */
+  variant?: 'featured' | 'inline' | 'compact'
+  /** Optional extra class on the root. */
+  class?: string
+}
+
+const {
+  quote,
+  author,
+  role,
+  avatarInitials,
+  rating,
+  variant = 'featured',
+  class: className,
+} = Astro.props
+
+const initials =
+  avatarInitials ??
+  (author
+    ? author
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((w) => w[0])
+        .join('')
+        .toUpperCase()
+    : '')
+
+const stars =
+  typeof rating === 'number' ? Math.max(0, Math.min(5, Math.round(rating))) : 0
+---
+
+<figure class:list={['quote', `quote--${variant}`, className]}>
+  {
+    variant === 'featured' && (
+      <span class="quote__mark" aria-hidden="true">&ldquo;</span>
+    )
+  }
+
+  {
+    stars > 0 && (
+      <div class="quote__stars" role="img" aria-label={`Rated ${stars} out of 5`}>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <svg
+            class:list={['quote__star', { 'quote__star--on': i < stars }]}
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
+          </svg>
+        ))}
+      </div>
+    )
+  }
+
+  <blockquote class="quote__body">
+    {quote ? <p class="quote__text">{quote}</p> : <slot />}
+  </blockquote>
+
+  {
+    (author || role) && (
+      <figcaption class="quote__caption">
+        {initials && (
+          <span class="quote__avatar" aria-hidden="true">
+            {initials}
+          </span>
+        )}
+        <span class="quote__who">
+          {author && <cite class="quote__author">{author}</cite>}
+          {role && <span class="quote__role">{role}</span>}
+        </span>
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  /* ── Shared ─────────────────────────────────────────────────────── */
+  .quote {
+    margin: 0;
+    color: var(--color-font);
+  }
+  .quote__body { margin: 0; }
+  .quote__text { margin: 0; }
+
+  /* The <slot> path inherits the same typographic rules as .quote__text
+     via the variant scopes below (styling the blockquote, not the slotted
+     <p> directly, so the parent-scope-hash caveat never bites). */
+
+  .quote__caption {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .quote__avatar {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+  .quote__who {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+  .quote__author {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--color-font);
+    letter-spacing: -0.01em;
+  }
+  .quote__role {
+    color: var(--color-muted);
+    line-height: 1.45;
+  }
+
+  /* Stars */
+  .quote__stars {
+    display: inline-flex;
+    gap: 0.1rem;
+    color: var(--color-faint);
+  }
+  .quote__star { display: block; }
+  .quote__star--on { color: hsl(42 90% 52%); }
+
+  /* ── Featured ───────────────────────────────────────────────────── */
+  .quote--featured {
+    position: relative;
+    max-width: var(--content-narrow);
+    margin-inline: auto;
+    text-align: center;
+    padding-top: 2.5rem;
+  }
+  .quote--featured .quote__mark {
+    position: absolute;
+    top: -0.35em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    font-size: clamp(6rem, 16vw, 9rem);
+    line-height: 1;
+    color: var(--color-primary);
+    opacity: 0.15;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+  .quote--featured .quote__stars {
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+  }
+  .quote--featured .quote__body {
+    position: relative;
+    z-index: 1;
+  }
+  .quote--featured .quote__text,
+  .quote--featured .quote__body :global(p) {
+    font-size: clamp(1.4rem, 3.2vw, 2rem);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    color: var(--color-font);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .quote--featured .quote__caption {
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .quote--featured .quote__avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 0.85rem;
+  }
+  .quote--featured .quote__author { font-size: 0.95rem; }
+  .quote--featured .quote__role { font-size: 0.85rem; }
+  .quote--featured .quote__who { text-align: left; }
+
+  /* ── Inline ─────────────────────────────────────────────────────── */
+  .quote--inline {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-left: 3px solid var(--color-primary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    background: color-mix(in oklab, var(--color-primary) 5%, transparent);
+    padding: 1.5rem 1.75rem;
+  }
+  .quote--inline .quote__stars { margin-bottom: -0.25rem; }
+  .quote--inline .quote__text,
+  .quote--inline .quote__body :global(p) {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    color: var(--color-font);
+    margin: 0;
+  }
+  .quote--inline .quote__caption { gap: 0.6rem; }
+  .quote--inline .quote__avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.7rem;
+  }
+  .quote--inline .quote__who {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .quote--inline .quote__author { font-size: 0.88rem; }
+  .quote--inline .quote__role { font-size: 0.82rem; }
+
+  /* ── Compact ────────────────────────────────────────────────────── */
+  .quote--compact {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-background);
+    padding: 1.6rem;
+    transition:
+      border-color var(--ease),
+      transform var(--ease),
+      box-shadow var(--ease);
+  }
+  .quote--compact:hover {
+    border-color: var(--color-border-strong);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-pop);
+  }
+  .quote--compact .quote__text,
+  .quote--compact .quote__body :global(p) {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-font);
+    margin: 0;
+    flex: 1;
+  }
+  .quote--compact .quote__caption { gap: 0.6rem; }
+  .quote--compact .quote__avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.7rem;
+  }
+  .quote--compact .quote__author { font-size: 0.82rem; }
+  .quote--compact .quote__role { font-size: 0.76rem; }
+
+  /* ── Motion / a11y ──────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .quote--compact { transition: none; }
+    .quote--compact:hover { transform: none; }
+  }
+</style>

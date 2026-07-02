@@ -1,0 +1,27 @@
+id          = "marketing"
+label       = "Marketing"
+description = "Awareness → intent pipeline for a mover's own customers. Entry is a 'movers near me' search / GMB / ad / referral; exit is a quote request handed to sales."
+
+[[stages]]
+id    = "awareness"
+label = "Awareness"
+tags  = ["lifecycle:marketing:awareness"]
+description = "Landed on a city / service-area page from search, GMB, ad, or referral. No action yet."
+
+[[stages]]
+id    = "interest"
+label = "Interest"
+tags  = ["lifecycle:marketing:interest"]
+description = "Took an action — clicked the estimate CTA, called, or started the short quote form. Fires lead-capture."
+
+[[stages]]
+id    = "consideration"
+label = "Consideration"
+tags  = ["lifecycle:marketing:consideration"]
+description = "Comparing movers. Vetting reviews, USDOT/MC, pricing. Re-nurture target if they go quiet."
+
+[[stages]]
+id    = "intent"
+label = "Intent"
+tags  = ["lifecycle:marketing:intent"]
+description = "Ready to get a real number. Hand to sales as a quote request."

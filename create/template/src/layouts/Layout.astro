@@ -107,7 +107,14 @@ const {
 
     <!-- ── Nav ──────────────────────────────────────────────────── -->
     <header id="one-nav">
-      <a href="/" class="one-logo">ONE</a>
+      <div class="one-nav-left">
+        <a href="/" class="one-logo">ONE</a>
+        <nav class="one-nav-links" aria-label="Primary">
+          <a href="/design">Design</a>
+          <a href="/motion">Motion</a>
+          <a href="/components">Components</a>
+        </nav>
+      </div>
       <div class="one-controls">
         <div id="one-swatches" class="one-swatches" role="group" aria-label="Color theme"></div>
         <div class="one-divider"></div>
@@ -288,6 +295,18 @@ const {
     transition: opacity var(--ease);
   }
   .one-logo:hover { opacity: 0.75; }
+
+  .one-nav-left { display: flex; align-items: center; gap: 1.5rem; }
+  .one-nav-links { display: flex; align-items: center; gap: 1.25rem; }
+  .one-nav-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color var(--ease);
+  }
+  .one-nav-links a:hover { color: var(--color-font); }
+  @media (max-width: 640px) { .one-nav-links { display: none; } }
 
   .one-controls {
     display: flex;

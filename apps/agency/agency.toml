@@ -1,0 +1,7 @@
+# Your agency — the business identity `one setup` provisions.
+name       = "My Agency"
+slug       = "my-agency"
+plan       = "agency"   # unlocks credit reselling
+markup_pct = 20         # your margin on every client burn (0–100)
+brand      = true       # white-label client workspaces to your brand
+pool       = 0          # fund your credit pool via one.ie after `one setup`

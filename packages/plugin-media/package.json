@@ -1,0 +1,21 @@
+{
+  "name": "@oneie/plugin-media",
+  "version": "0.1.0",
+  "description": "ONE media — video gallery and player served from one.ie, supports Mux and YouTube",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./OneMedia.astro": "./src/OneMedia.astro",
+    "./OneVideoPlayer.astro": "./src/OneVideoPlayer.astro"
+  },
+  "peerDependencies": {
+    "astro": ">=6.0.0",
+    "@oneie/frontend": "workspace:*"
+  },
+  "devDependencies": {
+    "astro": "^6.2.2",
+    "typescript": "^5.7.3"
+  }
+}

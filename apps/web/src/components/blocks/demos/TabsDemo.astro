@@ -1,0 +1,246 @@
+---
+/**
+ * TabsDemo.astro — standalone showcase section for Tabs.astro.
+ *
+ * Drop into any page to demonstrate the animated, accessible tabs:
+ *   import TabsDemo from '@/components/blocks/demos/TabsDemo.astro'
+ *   <TabsDemo />
+ *
+ * Self-contained: eyebrow + title + a 4-tab example with rich panel content.
+ */
+import Tabs from '@/components/blocks/Tabs.astro'
+
+const items = [
+  { id: 'overview', label: 'Overview', icon: 'grid' },
+  { id: 'build', label: 'Build', icon: 'bolt' },
+  { id: 'ship', label: 'Ship', icon: 'star' },
+  { id: 'secure', label: 'Secure', icon: 'lock' },
+]
+---
+
+<section class="tabs-demo">
+  <div class="tabs-demo__inner">
+    <header class="tabs-demo__head">
+      <p class="tabs-demo__eyebrow">Component</p>
+      <h2 class="tabs-demo__title">Tabs that glide</h2>
+      <p class="tabs-demo__lede">
+        A sliding indicator tracks the active tab. Full keyboard support, ARIA roles,
+        and a crossfade that yields to reduced-motion. Zero React.
+      </p>
+    </header>
+
+    <Tabs ariaLabel="Product capabilities" items={items} active="overview">
+      <Fragment slot="panel-overview">
+        <h3 class="tabs-demo__h3">One mental model</h3>
+        <p class="tabs-demo__p">
+          Every surface in the template derives from six editable tokens. Pick a
+          color, and the whole system — cards, inputs, focus rings, these tabs —
+          recalibrates in one motion. No theme files to chase.
+        </p>
+        <ul class="tabs-demo__list">
+          <li><span class="tabs-demo__dot tabs-demo__dot--1"></span>Six tokens, three depth levels</li>
+          <li><span class="tabs-demo__dot tabs-demo__dot--1"></span>Auto dark-mode flip, WCAG AA</li>
+          <li><span class="tabs-demo__dot tabs-demo__dot--1"></span>Hairline borders, generous space</li>
+        </ul>
+      </Fragment>
+
+      <Fragment slot="panel-build">
+        <h3 class="tabs-demo__h3">Composable by default</h3>
+        <p class="tabs-demo__p">
+          Components are plain Astro with a scoped script where interaction
+          demands it — no runtime to boot, no provider to wrap. Reach for a
+          React island only when state genuinely lives on the client.
+        </p>
+        <pre class="tabs-demo__code"><code>import Tabs from '@/components/blocks/Tabs.astro'</code></pre>
+      </Fragment>
+
+      <Fragment slot="panel-ship">
+        <h3 class="tabs-demo__h3">Fast on arrival</h3>
+        <p class="tabs-demo__p">
+          The page is HTML first. Islands defer until they enter the viewport,
+          and unused primitives tree-shake to nothing. First paint stays lean,
+          so the template scores well before you write a line.
+        </p>
+        <div class="tabs-demo__metrics">
+          <div class="tabs-demo__metric">
+            <span class="tabs-demo__metric-n">0</span>
+            <span class="tabs-demo__metric-l">React for tabs</span>
+          </div>
+          <div class="tabs-demo__metric">
+            <span class="tabs-demo__metric-n">100</span>
+            <span class="tabs-demo__metric-l">Lighthouse target</span>
+          </div>
+          <div class="tabs-demo__metric">
+            <span class="tabs-demo__metric-n">AA</span>
+            <span class="tabs-demo__metric-l">Contrast floor</span>
+          </div>
+        </div>
+      </Fragment>
+
+      <Fragment slot="panel-secure">
+        <h3 class="tabs-demo__h3">Accessible, not optional</h3>
+        <p class="tabs-demo__p">
+          The tablist ships the full ARIA contract: roving tabindex, arrow-key
+          navigation, Home / End jumps, and a focus ring that only appears for
+          keyboards. The crossfade honors <code>prefers-reduced-motion</code>.
+        </p>
+        <ul class="tabs-demo__list">
+          <li><span class="tabs-demo__dot tabs-demo__dot--2"></span>role=tablist / tab / tabpanel</li>
+          <li><span class="tabs-demo__dot tabs-demo__dot--2"></span>aria-selected · aria-controls</li>
+          <li><span class="tabs-demo__dot tabs-demo__dot--2"></span>Keyboard-first, screen-reader sound</li>
+        </ul>
+      </Fragment>
+    </Tabs>
+  </div>
+</section>
+
+<style>
+  .tabs-demo {
+    padding: 5rem clamp(1.5rem, 6vw, 4rem);
+  }
+
+  .tabs-demo__inner {
+    max-width: var(--content);
+    margin: 0 auto;
+  }
+
+  .tabs-demo__head {
+    margin-bottom: 2.5rem;
+  }
+
+  .tabs-demo__eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin: 0 0 0.6rem;
+  }
+
+  .tabs-demo__title {
+    font-size: clamp(1.85rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0 0 0.85rem;
+    color: var(--color-font);
+  }
+
+  .tabs-demo__lede {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-muted);
+    max-width: 38rem;
+    margin: 0;
+  }
+
+  /* ── Panel content ──────────────────────────────────────────────── */
+  .tabs-demo__h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.6rem;
+    color: var(--color-font);
+  }
+
+  .tabs-demo__p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-muted);
+    max-width: 42rem;
+    margin: 0 0 1.25rem;
+  }
+
+  .tabs-demo__p code,
+  .tabs-demo__code code {
+    font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+    font-size: 0.85em;
+    color: var(--color-tertiary);
+  }
+
+  .tabs-demo__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .tabs-demo__list li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.92rem;
+    color: var(--color-font);
+  }
+
+  .tabs-demo__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tabs-demo__dot--1 {
+    background: var(--color-primary);
+  }
+  .tabs-demo__dot--2 {
+    background: var(--color-tertiary);
+  }
+
+  .tabs-demo__code {
+    background: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    margin: 0;
+    overflow-x: auto;
+    font-size: 0.82rem;
+  }
+
+  /* ── Metrics row ────────────────────────────────────────────────── */
+  .tabs-demo__metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    width: fit-content;
+    max-width: 100%;
+    background: var(--color-foreground);
+  }
+
+  .tabs-demo__metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.1rem 1.75rem;
+    border-right: 1px solid var(--color-border);
+  }
+  .tabs-demo__metric:last-child {
+    border-right: none;
+  }
+
+  .tabs-demo__metric-n {
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--color-font);
+  }
+
+  .tabs-demo__metric-l {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 30rem) {
+    .tabs-demo__metric {
+      padding: 0.9rem 1.25rem;
+    }
+  }
+</style>

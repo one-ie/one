@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro'
+import ButtonDemo from '../components/blocks/demos/ButtonDemo.astro'
+import CardDemo from '../components/blocks/demos/CardDemo.astro'
+import CarouselDemo from '../components/blocks/demos/CarouselDemo.astro'
+import TabsDemo from '../components/blocks/demos/TabsDemo.astro'
+import QuoteDemo from '../components/blocks/demos/QuoteDemo.astro'
+import FormDemo from '../components/blocks/demos/FormDemo.astro'
+import BreadcrumbsDemo from '../components/blocks/demos/BreadcrumbsDemo.astro'
+import FooterDemo from '../components/blocks/demos/FooterDemo.astro'
+---
+
+<Layout
+  title="Components — ONE"
+  description="A library of beautiful, accessible, token-driven UI blocks — buttons, cards, carousels, tabs, quotes, forms, breadcrumbs and footer. Every component inherits your brand from one.config.ts."
+>
+  <!-- ── Hero ─────────────────────────────────────────────────────── -->
+  <section class="cx-hero">
+    <div class="cx-hero-inner">
+      <p class="cx-eyebrow">Component library</p>
+      <h1 class="cx-title">Beautiful blocks,<br />wired to your brand</h1>
+      <p class="cx-sub">
+        Every component below is built on the same six design tokens as the rest
+        of the template — change one value in <code>one.config.ts</code> and they
+        all re-skin. Accessible, responsive, dark-mode ready, zero config.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Blocks — alternating tint for rhythm ─────────────────────── -->
+  <div class="cx-block"><ButtonDemo /></div>
+  <div class="cx-block cx-alt"><CardDemo /></div>
+  <div class="cx-block"><CarouselDemo /></div>
+  <div class="cx-block cx-alt"><TabsDemo /></div>
+  <div class="cx-block"><QuoteDemo /></div>
+  <div class="cx-block cx-alt"><FormDemo /></div>
+  <div class="cx-block"><BreadcrumbsDemo /></div>
+  <FooterDemo />
+</Layout>
+
+<style>
+  .cx-hero {
+    padding: 7rem 1.5rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .cx-hero-inner { max-width: 46rem; margin: 0 auto; }
+  .cx-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin: 0 0 0.9rem;
+  }
+  .cx-title {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--color-font);
+    margin: 0 0 1.25rem;
+  }
+  .cx-sub {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--color-muted);
+    max-width: 36rem;
+    margin: 0 auto;
+  }
+  .cx-sub code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.86em;
+    color: var(--color-tertiary);
+  }
+
+  /* Alternating band tint — matches the landing page's section-alt. */
+  .cx-alt {
+    background: color-mix(in oklab, var(--color-primary) 6%, var(--color-foreground));
+  }
+</style>

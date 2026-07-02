@@ -1,0 +1,26 @@
+---
+export interface Props {
+  /** Workspace slug (required) */
+  ws: string
+  /** Maximum number of messages to show */
+  limit?: number
+  /** Channels worker URL override — defaults to ONE backend */
+  channelsUrl?: string
+  /** SRI hash — set when pinning a specific version URL, e.g. /ml/mail@1.2.3.js */
+  integrity?: string
+}
+
+const { ws, limit = 10, channelsUrl, integrity } = Astro.props
+---
+
+<div id="one-inbox"></div>
+<script
+  async
+  src="https://one.ie/ml/mail.js"
+  crossorigin="anonymous"
+  integrity={integrity}
+  data-mount="inbox"
+  data-ws={ws}
+  data-limit={limit}
+  data-channels-url={channelsUrl}
+></script>
