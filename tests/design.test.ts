@@ -48,12 +48,12 @@ describe('.claude is conventions-only — 0 /do-engine files', () => {
     readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
       e.isDirectory() ? walk(join(dir, e.name)) : [e.name],
     )
-  it('apps/web/.claude exists', () => {
-    expect(existsSync(join(WEB, '.claude'))).toBe(true)
+  it('.claude exists at repo root', () => {
+    expect(existsSync(join(ROOT, '.claude'))).toBe(true)
   })
   it('contains no /do-engine command/agent files', () => {
     const forbidden = ['do.md', 'do-auto.sh', 'w1-recon.md', 'w2-decide.md', 'w3-edit.md', 'w4-verify.md']
-    const files = walk(join(WEB, '.claude'))
+    const files = walk(join(ROOT, '.claude'))
     for (const f of forbidden) {
       expect(files, `.claude must not ship ${f}`).not.toContain(f)
     }

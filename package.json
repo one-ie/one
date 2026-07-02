@@ -10,11 +10,13 @@
     "create"
   ],
   "scripts": {
+    "setup": "cd apps/web && bun run setup",
     "build": "cd apps/web && bun run build",
     "typecheck": "cd apps/web && bun run typecheck",
     "test": "vitest run"
   },
   "devDependencies": {
+    "@oneie/cli": "^0.6.0",
     "@oneie/design": "workspace:*",
     "@oneie/frontend": "workspace:*",
     "@types/node": "^22.0.0",

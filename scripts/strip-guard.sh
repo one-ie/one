@@ -34,16 +34,16 @@ if [ -n "$TYPEDB_CODE" ]; then
   exit 1
 fi
 
-echo "Checking apps/web/.claude/ for /do-engine files..."
+echo "Checking .claude/ for /do-engine files..."
 
 DO_ENGINE_VIOLATIONS=$(grep -rn \
   "w1-recon\|w2-decide\|w3-edit\|w4-verify\|do-auto\|do-reconcile\|do-tier\|gate-guard\|sync-todo-docs\|task-complete-verify" \
-  apps/web/.claude/ 2>/dev/null || true)
+  .claude/ 2>/dev/null || true)
 
 if [ -n "$DO_ENGINE_VIOLATIONS" ]; then
-  echo "FAIL: /do-engine files found in apps/web/.claude/"
+  echo "FAIL: /do-engine files found in .claude/"
   echo "$DO_ENGINE_VIOLATIONS"
   exit 1
 fi
 
-echo "STRIP guard: PASS — 0 moat/do-engine source in apps/web"
+echo "STRIP guard: PASS — 0 moat/do-engine source in apps/web + .claude/"

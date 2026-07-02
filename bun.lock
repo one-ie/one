@@ -5,6 +5,7 @@
     "": {
       "name": "one-frontend",
       "devDependencies": {
+        "@oneie/cli": "^0.6.0",
         "@oneie/design": "workspace:*",
         "@oneie/frontend": "workspace:*",
         "@types/node": "^22.0.0",
@@ -38,7 +39,7 @@
       },
       "devDependencies": {
         "@astrojs/check": "^0.9.9",
-        "@oneie/cli": "^0.5.7",
+        "@oneie/cli": "^0.6.0",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "typescript": "^5.7.3",
@@ -502,7 +503,7 @@
 
     "@noble/hashes": ["@noble/hashes@2.2.0", "", {}, "sha512-IYqDGiTXab6FniAgnSdZwgWbomxpy9FtYvLKs7wCUs2a8RkITG+DFGO1DM9cr+E3/RgADRpFjrKVaJ1z6sjtEg=="],
 
-    "@oneie/cli": ["@oneie/cli@0.5.7", "", { "dependencies": { "@oneie/sdk": "^0.14.4", "commander": "^12.0.0" }, "bin": { "one": "dist/src/index.js", "oneie": "dist/src/index.js" } }, "sha512-+a2SyX0wOdPwJEWXQ6b6Nm7I77kynQ+b/dspYVIfttbR+ODtEz3B+w2iXfd5nMimsgbgjNIH/PKQIlMjFngPng=="],
+    "@oneie/cli": ["@oneie/cli@0.6.0", "", { "dependencies": { "@oneie/sdk": "^0.14.4", "commander": "^12.0.0" }, "bin": { "oneie": "dist/src/index.js", "one": "dist/src/index.js" } }, "sha512-pxog2kk07uHKtCqjKp/Kuok9bN5qRIi8TgsZ3C3reBgxlp2WPAabrYWvEkrMdFfeR0LbYN77uKExoEh+h7v/7A=="],
 
     "@oneie/design": ["@oneie/design@workspace:packages/design"],
 
