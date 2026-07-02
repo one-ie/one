@@ -105,6 +105,15 @@ else
   fi
 fi
 
+# ── 1.6. Sync per-package LICENSE files against the source's root LICENSE ─────
+# Fixed at the source (TEMPLATE_DIR), not just the release output, so drift
+# doesn't reappear on the next run.
+if $DRY_RUN; then
+  echo "[release] would sync per-package LICENSE files"
+else
+  ( cd "$TEMPLATE_DIR" && ./scripts/sync-licenses.sh )
+fi
+
 # ── 2. Stub paid plugin source ────────────────────────────────────────────────
 # Clean up any directory names that changed between releases (rsync --delete misses these
 # when they contain excluded files that prevent deletion)
