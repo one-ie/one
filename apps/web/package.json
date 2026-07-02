@@ -5,6 +5,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "setup": "oneie init --write-env --name web",
     "dev": "astro dev",
     "build": "astro build",
     "typecheck": "astro check",
@@ -33,6 +34,7 @@
     "zod": "^4.4.2"
   },
   "devDependencies": {
+    "@oneie/cli": "^0.5.7",
     "@astrojs/check": "^0.9.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",
