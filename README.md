@@ -28,17 +28,13 @@ ai/              ← knows  → agents · skills · tools · workflows · contex
 data/            ← grows  → types · content · lifecycles
 site/            ← shows  → Astro + shadcn + ONE plugins (one.config.ts)
 workspace.toml   ← who you are
-packages/
-  frontend/      ← defineOne() + OnePlugin contract
-  design/        ← 6-token Tailwind 4 preset
-  plugin-auth/   ← better-auth client
-  plugin-backend/← @oneie/sdk + React 19 hooks
-  plugin-chat/   ← served chat widget
-  plugin-track/  ← served tracking pixel
-  plugin-premium/← entitlement gate for paid plugins
-  plugin-admin/  ← Admin Console (paid, served)
-  plugin-*/      ← blog, docs, booking, course, dashboard, mail, media, shop
+packages/        ← paid plugin stubs only — admin, course, dashboard,
+                    premium, shop (thin loaders; see Plugins below)
 ```
+
+`@oneie/frontend`, `@oneie/design`, and the 9 free plugins (`auth`, `backend`,
+`blog`, `booking`, `chat`, `docs`, `mail`, `media`, `track`) install from npm
+— `site/` depends on them via real semver, no local source required.
 
 Every file compiles to one typed call on the ONE substrate. Every command calls a **receiver** — a named, typed action. That's the whole model. `CLAUDE.md` and `AGENTS.md` are the operating manual and the agent briefing.
 
@@ -108,7 +104,7 @@ Six tokens brand the entire site — swap all six and everything rebrands.
 | `@oneie/plugin-premium` | free | Entitlement gate (base for paid plugins) |
 | `@oneie/plugin-admin` | **paid** | Admin Console — served via x402, gated by `admin` entitlement |
 
-Paid plugins ship as stubs in this repo. Source is private and served from `one.ie/x/<plugin>.js` after payment.
+Free plugins install from npm (`bun add @oneie/plugin-chat`, etc.) — no monorepo checkout needed. Paid plugins (`admin`, `course`, `dashboard`, `premium`, `shop`) ship as thin stubs in `packages/` — never published — that load the real UI from `one.ie/x/<plugin>.js` after payment.
 
 ---
 

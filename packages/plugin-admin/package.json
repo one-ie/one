@@ -11,7 +11,7 @@
   },
   "peerDependencies": {
     "astro": ">=6.0.0",
-    "@oneie/frontend": "workspace:*",
+    "@oneie/frontend": ">=0.1.0",
     "@oneie/plugin-premium": "workspace:*"
   },
   "devDependencies": {

@@ -12,8 +12,8 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@oneie/frontend": "workspace:*",
-    "@oneie/plugin-chat": "workspace:*",
+    "@oneie/frontend": "^0.1.0",
+    "@oneie/plugin-chat": "^0.1.0",
     "@astrojs/cloudflare": "^13.3.1",
     "@astrojs/react": "^5.0.4",
     "@tailwindcss/vite": "^4.0.0",
