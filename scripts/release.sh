@@ -97,6 +97,11 @@ else
   rsync -a --delete \
     --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.wrangler \
     "$TARGET_DIR/apps/web/" "$TARGET_DIR/create/template/"
+  # .claude/ + .mcp.json live at repo root, not under apps/web/ — compose them
+  # into the scaffolder's bundle the same way create.ts's rootClaudeCopies()
+  # does for `oneie create`, so `npm create one-app` ships connected too.
+  rsync -a --delete "$TARGET_DIR/.claude/" "$TARGET_DIR/create/template/.claude/"
+  cp "$TARGET_DIR/.mcp.json" "$TARGET_DIR/create/template/.mcp.json"
   if command -v bun &>/dev/null; then
     (cd "$TARGET_DIR/create" && bun install --frozen-lockfile 2>/dev/null || bun install && bun run build)
     echo "[release] create/ built ✓"
