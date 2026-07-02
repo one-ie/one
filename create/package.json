@@ -12,7 +12,7 @@
     "template"
   ],
   "scripts": {
-    "prebuild": "rm -rf template && rsync -a --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.wrangler ../apps/web/ template/ && rsync -a ../.claude/ template/.claude/ && cp ../.mcp.json template/.mcp.json",
+    "prebuild": "rm -rf template && rsync -a --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.wrangler ../site/ template/ && rsync -a ../.claude/ template/.claude/ && cp ../.mcp.json template/.mcp.json",
     "build": "bun build ./src/index.ts --outdir dist --target node"
   },
   "dependencies": {

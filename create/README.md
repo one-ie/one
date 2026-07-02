@@ -8,7 +8,7 @@ npm create one-app@latest my-app
 bunx create-one-app my-app
 ```
 
-Copies `apps/web` as a starting point, prompts for a project name and optional `ONE_API_KEY`, then sets up the workspace.
+Copies `site/` as a starting point, prompts for a project name and optional `ONE_API_KEY`, then sets up the workspace.
 
 ## What gets scaffolded
 

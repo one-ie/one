@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import { createPreset, generateThemeCSS, defaultTokens } from '@oneie/design'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
-const WEB = join(ROOT, 'apps', 'web')
+const WEB = join(ROOT, 'site')
 const TOKENS = ['background', 'foreground', 'font', 'primary', 'secondary', 'tertiary'] as const
 
 describe('design tokens drive --color-* (no hex in components)', () => {

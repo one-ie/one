@@ -4,7 +4,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "paths": {
-      "@/*": ["../../apps/web/src/*"]
+      "@/*": ["../../site/src/*"]
     }
   },
   "include": ["src"]

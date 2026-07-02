@@ -116,9 +116,9 @@ export default defineOne({
 ## What you cannot do from here
 
 - Edit the ONE schema or write TypeDB — that's the monorepo.
-- Provision another business's workspace — that's the **agency** plan (`clients/`, markup, reselling). See README.md § "Outgrew a single business?"
+- Provision another business's workspace — reselling and managing multiple client workspaces is a different plan; not this repo's shape.
 
 ## See also
 
 - `AGENTS.md` — agent entry point
-- `README.md` — the build recipe + the agency upgrade path
+- `README.md` — the build recipe

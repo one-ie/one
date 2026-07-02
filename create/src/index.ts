@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-// create-one-app — scaffolds a ONE-connected Astro site from the apps/web template.
+// create-one-app — scaffolds a ONE-connected Astro site.
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join, dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import prompts from 'prompts'
 import kleur from 'kleur'
 
-// The apps/web template ships inside this package under template/ (see package.json `files`).
+// The repo's site/ ships inside this package under template/ (see package.json `files`).
 const HERE = dirname(fileURLToPath(import.meta.url))
 const TEMPLATE = resolve(HERE, '..', 'template')
 

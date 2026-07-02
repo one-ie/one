@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# strip-guard.sh — CI gate: 0 moat/do-engine source in apps/web
+# strip-guard.sh — CI gate: 0 moat/do-engine source in site
 # Run: bash scripts/strip-guard.sh
 # Exit 1 on violation.
 #
@@ -7,21 +7,21 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-echo "STRIP guard — checking apps/web/src/ for moat source..."
+echo "STRIP guard — checking site/src/ for moat source..."
 
 # Check for client-side substrate classes/globals (never allowed, even in comments)
 VIOLATIONS=$(grep -rn \
   "SubstrateClient\|suiWallet\|workspaceContext\|ChatDock\|ChatHost\|GATEWAY_API_KEY\|SUI_WALLET" \
-  apps/web/src/ 2>/dev/null || true)
+  site/src/ 2>/dev/null || true)
 
 if [ -n "$VIOLATIONS" ]; then
-  echo "FAIL: moat source found in apps/web/src/"
+  echo "FAIL: moat source found in site/src/"
   echo "$VIOLATIONS"
   exit 1
 fi
 
 # Check TypeDB in non-comment code lines only
-TYPEDB_CODE=$(grep -rn "TypeDB" apps/web/src/ 2>/dev/null \
+TYPEDB_CODE=$(grep -rn "TypeDB" site/src/ 2>/dev/null \
   | grep -v "^\s*//" \
   | grep -v ":[[:space:]]*//" \
   | grep -v ":[[:space:]]*\*" \
@@ -46,4 +46,4 @@ if [ -n "$DO_ENGINE_VIOLATIONS" ]; then
   exit 1
 fi
 
-echo "STRIP guard: PASS — 0 moat/do-engine source in apps/web + .claude/"
+echo "STRIP guard: PASS — 0 moat/do-engine source in site + .claude/"

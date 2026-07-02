@@ -4,10 +4,10 @@
 # What it does:
 #   1. rsync template/ → apps/one/ (excluding private state files)
 #   2. Stub any paid plugin source
-#   3. Build create/ scaffolder (bundles apps/web as its template)
+#   3. Build create/ scaffolder (bundles site/ as its template)
 #   4. git commit + push → github.com/one-ie/one
 #   5. npm publish all packages (frontend, design, plugins, create-one-app)
-#   6. rsync apps/one/apps/web/ → apps/oo/site/ (keeps the agency node's site current)
+#   6. rsync apps/one/site/ → apps/oo/site/ (keeps the agency node's site current)
 #
 # Usage:
 #   ./scripts/release.sh [--dry-run] [--message "release note"] [--skip-npm] [--no-push]
@@ -89,9 +89,9 @@ rsync -a --delete \
 # Remove stray artifacts from prior repo structure (excluded files leave empty dirs behind)
 $DRY_RUN || rm -rf "$TARGET_DIR/web"
 
-# ── 1.5. Build create/template/ (scaffolder bundles apps/web as its template) ─
+# ── 1.5. Build create/template/ (scaffolder bundles site/ as its template) ────
 if $DRY_RUN; then
-  echo "[release] would build create/template/ from apps/web"
+  echo "[release] would build create/template/ from site/"
 else
   echo "[release] building create/template/..."
   # create/package.json's own `prebuild` script does the actual rsync (it
@@ -219,19 +219,19 @@ else
   echo "[release] npm publish complete"
 fi
 
-# ── 5. Sync apps/web → apps/oo/site/ ─────────────────────────────────────────
+# ── 5. Sync site/ → apps/oo/site/ ─────────────────────────────────────────────
 if [[ -n "$OO_DIR" ]]; then
   if $DRY_RUN; then
-    echo "[release] would sync apps/web → $OO_DIR/site/"
+    echo "[release] would sync site/ → $OO_DIR/site/"
   else
-    echo "[release] syncing apps/web → oo/site/..."
+    echo "[release] syncing site/ → oo/site/..."
     rsync -a --delete \
       --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.wrangler \
-      "$TARGET_DIR/apps/web/" "$OO_DIR/site/"
+      "$TARGET_DIR/site/" "$OO_DIR/site/"
     cd "$OO_DIR"
     git add site/
     if ! git diff --cached --quiet; then
-      git commit -m "chore(site): sync from one-ie/template apps/web"
+      git commit -m "chore(site): sync from one-ie/template site/"
       git push origin main
       echo "[release] oo/site synced + pushed"
     else

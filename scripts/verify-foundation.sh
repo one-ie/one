@@ -12,7 +12,7 @@ echo "=== ONE Frontend — verify-foundation.sh ==="
 # 1. Build (BaaS mode — default)
 echo ""
 echo "[1/4] Build (BaaS mode)..."
-cd apps/web
+cd site
 bun run build
 echo "  PASS"
 
@@ -28,7 +28,7 @@ echo ""
 echo "[2b/4] Standalone mode build (no API key)..."
 ONE_API_KEY="" bun run build
 echo "  PASS"
-cd ../..
+cd ..
 
 # 3. STRIP guard
 echo ""

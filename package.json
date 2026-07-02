@@ -5,14 +5,14 @@
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "workspaces": [
-    "apps/*",
+    "site",
     "packages/*",
     "create"
   ],
   "scripts": {
-    "setup": "cd apps/web && bun run setup",
-    "build": "cd apps/web && bun run build",
-    "typecheck": "cd apps/web && bun run typecheck",
+    "setup": "cd site && bun run setup",
+    "build": "cd site && bun run build",
+    "typecheck": "cd site && bun run typecheck",
     "test": "vitest run"
   },
   "devDependencies": {
