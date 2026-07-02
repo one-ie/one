@@ -1,5 +1,5 @@
 # Your business — the identity `one setup` provisions.
 name = "My Business"
 slug = "my-business"
-plan = "free"   # free · starter · pro — upgrade to "agency" only if you start
-                # reselling to other businesses (see README.md § Outgrew a single business?)
+plan = "free"   # free · starter · pro — reselling to other businesses is a
+                # different plan, not this repo's shape
