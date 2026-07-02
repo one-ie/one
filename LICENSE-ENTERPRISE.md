@@ -1,9 +1,5 @@
 # ONE Enterprise License (Version 1.0)
 
-Copyright (c) 2024-2026 one.ie
-
-> Draft — not legal advice.
-
 The ONE Enterprise License includes all rights granted by the ONE License (Version 1.0) and removes the Brand Requirement. It is the paid, white-label tier.
 
 ## What Changes
