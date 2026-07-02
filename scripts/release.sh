@@ -87,7 +87,7 @@ rsync -a --delete \
   $( $DRY_RUN && echo "--dry-run" )
 
 # Remove stray artifacts from prior repo structure (excluded files leave empty dirs behind)
-$DRY_RUN || rm -rf "$TARGET_DIR/web"
+$DRY_RUN || rm -rf "$TARGET_DIR/web" "$TARGET_DIR/apps"
 
 # ── 1.5. Build create/template/ (scaffolder bundles site/ as its template) ────
 if $DRY_RUN; then
