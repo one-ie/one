@@ -94,14 +94,9 @@ if $DRY_RUN; then
   echo "[release] would build create/template/ from apps/web"
 else
   echo "[release] building create/template/..."
-  rsync -a --delete \
-    --exclude=node_modules --exclude=dist --exclude=.astro --exclude=.wrangler \
-    "$TARGET_DIR/apps/web/" "$TARGET_DIR/create/template/"
-  # .claude/ + .mcp.json live at repo root, not under apps/web/ — compose them
-  # into the scaffolder's bundle the same way create.ts's rootClaudeCopies()
-  # does for `oneie create`, so `npm create one-app` ships connected too.
-  rsync -a --delete "$TARGET_DIR/.claude/" "$TARGET_DIR/create/template/.claude/"
-  cp "$TARGET_DIR/.mcp.json" "$TARGET_DIR/create/template/.mcp.json"
+  # create/package.json's own `prebuild` script does the actual rsync (it
+  # also fires from a bare `bun run build`, e.g. in CI) — this call just
+  # triggers it via the normal lifecycle so both paths stay in sync.
   if command -v bun &>/dev/null; then
     (cd "$TARGET_DIR/create" && bun install --frozen-lockfile 2>/dev/null || bun install && bun run build)
     echo "[release] create/ built ✓"
