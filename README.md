@@ -38,7 +38,6 @@ packages/
   plugin-premium/← entitlement gate for paid plugins
   plugin-admin/  ← Admin Console (paid, served)
   plugin-*/      ← blog, docs, booking, course, dashboard, mail, media, shop
-create/          ← npm create one-app scaffolder
 ```
 
 Every file compiles to one typed call on the ONE substrate. Every command calls a **receiver** — a named, typed action. That's the whole model. `CLAUDE.md` and `AGENTS.md` are the operating manual and the agent briefing.
@@ -119,7 +118,6 @@ Paid plugins ship as stubs in this repo. Source is private and served from `one.
 bun install     # install all workspaces
 bun run setup   # once — mints ONE_API_KEY into site/.env.local
 cd site && bun run dev   # dev server
-bun run test        # vitest suite (root)
 bun run typecheck   # astro check (root)
 ```
 

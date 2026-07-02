@@ -6,20 +6,14 @@
   "license": "SEE LICENSE IN LICENSE",
   "workspaces": [
     "site",
-    "packages/*",
-    "create"
+    "packages/*"
   ],
   "scripts": {
     "setup": "cd site && bun run setup",
     "build": "cd site && bun run build",
-    "typecheck": "cd site && bun run typecheck",
-    "test": "vitest run"
+    "typecheck": "cd site && bun run typecheck"
   },
   "devDependencies": {
-    "@oneie/cli": "^0.6.0",
-    "@oneie/design": "workspace:*",
-    "@oneie/frontend": "workspace:*",
-    "@types/node": "^22.0.0",
-    "vitest": "^3.0.0"
+    "@oneie/cli": "^0.7.0"
   }
 }
