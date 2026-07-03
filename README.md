@@ -44,6 +44,7 @@ Every file compiles to one typed call on the ONE substrate. Every command calls 
 
 ```bash
 one setup                       # stand up your workspace (idempotent)
+one onboard [--name N]          # walk register→bootstrap deterministically, then show where you are in the agent lifecycle and what's next
 one push [path] [--dry-run]     # upsert agents + skills, then close the loop
 one status                      # your usage — credits, meters, plan
 one deploy                      # wrangler pages deploy site/

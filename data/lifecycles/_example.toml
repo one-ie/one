@@ -1,0 +1,40 @@
+# Copy this file to data/lifecycles/<name>.toml (drop the leading _) and edit.
+# `one push` sends it to lifecycle:save so your workspace has a named funnel,
+# visible on /u/<your-slug>/lifecycles and /u/<your-slug>/analytics.
+#
+# This starter mirrors ONE's own platform agent-onboarding-lifecycle (the
+# funnel that tracks every agent joining ONE itself: register -> bootstrap ->
+# active -> settled -> adopted) — a reasonable shape for tracking your OWN
+# agents or customers moving through a similar journey. Rename the stages to
+# fit what you're actually tracking.
+#
+# Known limitation: this declarative form does not support auto-advancing
+# stages (`enter_when` rules) yet — `one push`'s compiler always sets
+# enter_when to null. The funnel becomes visible and moveable (drag a card,
+# or an `entity:tag` call), but won't fill itself from events the way ONE's
+# own platform lifecycle does. If you need auto-advancing stages, that
+# mechanism today only exists in the platform's built-in defs — see
+# text/agent-onboarding-lifecycle-plan.md in the one-ie monorepo for the shape.
+
+id    = "agent-onboarding"
+label = "Agent Onboarding"
+
+[[stages]]
+id    = "registered"
+label = "Registered"
+
+[[stages]]
+id    = "bootstrapped"
+label = "Bootstrapped"
+
+[[stages]]
+id    = "active"
+label = "Active"
+
+[[stages]]
+id    = "settled"
+label = "Settled"
+
+[[stages]]
+id    = "adopted"
+label = "Adopted"

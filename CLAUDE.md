@@ -54,11 +54,14 @@ Your workspace slug is the `slug` in `workspace.toml`. Your Claude Code actor id
 
 ```bash
 one setup                      # once — stand up your workspace (idempotent)
+one onboard [--name N]         # deterministically walk register→bootstrap, then show your position in the agent lifecycle + what unlocks each remaining stage
 one push [path] [--dry-run]    # ship your agents + skills
 one deploy                     # wrangler pages deploy site/
 one status                     # your usage — credits, meters, plan
 one ship "<message>"           # git add + commit + push in one step
 ```
+
+`one onboard` is idempotent — re-run it any time to see your current stage. It reuses the same zero-to-live path as `one setup`'s underlying provisioning, so it never creates a second identity. `data/lifecycles/_example.toml` mirrors the same 5 stages (`registered → bootstrapped → active → settled → adopted`) as a template — copy it (drop the `_`) and `one push` to declare a visible funnel for your own agents/customers on `/u/<slug>/lifecycles`.
 
 **The rest of ONE** — discover, then reach anything:
 
