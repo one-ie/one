@@ -60,8 +60,12 @@ function Phase({
   // treats each input range as keyframe offsets — they MUST stay within [0,1]
   // and strictly increase. Keep every boundary clamped; never go negative or
   // past 1, and never chain a scroll transform into another.
-  // Cumulative light — ramps up as you reach the phase, then stays lit.
-  const opacity = useTransform(progress, [a, a + 0.08], [0.5, 1])
+  // Cumulative light — ramps up as you reach the phase, then stays lit. Floor
+  // is 0.85, not 0.5 — a Lighthouse audit runs at rest (unscrolled, progress=0),
+  // and 0.5 opacity roughly halves every text/code contrast ratio inside this
+  // panel below WCAG AA. 0.85 keeps the reveal effect while staying compliant
+  // at every point along the scroll.
+  const opacity = useTransform(progress, [a, a + 0.08], [0.85, 1])
   const y = useTransform(progress, [a, a + 0.08], [18, 0])
   // Active window — peaks while this phase is the current step (derived
   // straight from progress, not from another motion value).

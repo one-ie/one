@@ -18,7 +18,7 @@
  *     socials={[{ label: 'GitHub', href: '…', icon: 'github' }]}
  *     legalLinks={[{ label: 'Privacy', href: '/privacy' }]}
  *     newsletter={{ heading: 'Stay in the loop', placeholder: 'you@studio.com' }}
- *     note="MIT licensed · Built on the open web."
+ *     note="Free forever, one license · Built on the open web."
  *   />
  *
  *   <!-- Suppress the newsletter block -->
@@ -108,7 +108,7 @@ const DEFAULT_COLUMNS: FooterColumn[] = [
     links: [
       { label: 'Privacy', href: '/privacy' },
       { label: 'Terms', href: '/terms' },
-      { label: 'License (MIT)', href: '/license' },
+      { label: 'License', href: '/license' },
       { label: 'Security', href: '/security' },
     ],
   },
@@ -141,7 +141,7 @@ const {
   socials = DEFAULT_SOCIALS,
   legalLinks = DEFAULT_LEGAL,
   newsletter,
-  note = 'Built with ONE · MIT licensed · Open source on the edge.',
+  note = 'Built with ONE · Free forever, one license · Deployed on the edge.',
   class: className,
 } = Astro.props
 
@@ -420,7 +420,7 @@ const targetFor = (link: FooterLink | SocialLink) =>
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-faint);
+    color: var(--color-muted);
     margin: 0 0 1.1rem;
   }
   .footer__list {
@@ -556,7 +556,7 @@ const targetFor = (link: FooterLink | SocialLink) =>
     margin: 0;
   }
   .footer__sep { color: var(--color-faint); }
-  .footer__note { color: var(--color-faint); }
+  .footer__note { color: var(--color-muted); }
 
   .footer__legal {
     display: flex;

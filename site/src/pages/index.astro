@@ -439,7 +439,7 @@ plugins: <span class="tok-b">[</span>
           tier="Free"
           price="Free"
           period="· full source"
-          features={['auth() — passkey, social, magic link', 'Ships full source, MIT licensed', 'No account required']}
+          features={['auth() — passkey, social, magic link', 'Ships full source, free forever', 'No account required']}
           ctaLabel="Start free"
           ctaHref="https://github.com/one-ie/one"
         />
@@ -509,7 +509,7 @@ plugins: <span class="tok-b">[</span>
         {[
           {
             q: 'Is it free?',
-              a: 'Yes. The template is MIT licensed — clone it, modify it, ship it, sell projects built on it. Plugins have free, connected, and paid tiers. The core template has no paid gate.'
+              a: 'Yes. Free forever under the ONE License — clone it, modify it, ship it, sell projects built on it. One string attached: keep the "Powered by ONE" link, or remove it with the white-label license. Plugins have free, connected, and paid tiers. The core template has no paid gate.'
             },
             {
               q: 'Do I need to use ONE\'s backend?',
@@ -529,7 +529,7 @@ plugins: <span class="tok-b">[</span>
             },
             {
               q: 'Can I sell sites built with this template?',
-              a: 'Yes. MIT license means you can use it commercially without restriction. Build client sites, SaaS products, or your own starter — no attribution required.'
+              a: 'Yes. Build client sites, SaaS products, or your own starter, and sell them. One condition: keep the "Powered by ONE" link in the deployed product, or remove it with the white-label license.'
             },
           ].map(item => (
             <details class="faq-item">
@@ -550,8 +550,8 @@ plugins: <span class="tok-b">[</span>
       <Stagger dist="lg" stagger={0.1}>
         <h2 class="cta-title">Ready to ship faster?</h2>
         <p class="cta-sub">
-          Join 4,217 developers who skipped setup and went straight to building.
-          MIT licensed. No card required.
+          Clone it, configure it, ship it.
+          Free forever. No card required.
         </p>
         <div class="install install-cta">
           <code class="install-cmd">npm create one-app@latest my-site</code>
@@ -563,7 +563,7 @@ plugins: <span class="tok-b">[</span>
           <a href="https://github.com/one-ie/one" class="btn-cta-primary">View on GitHub →</a>
           <a href="https://one.ie/docs" class="btn-cta-secondary">Documentation</a>
         </div>
-        <p class="cta-risk">Open source · MIT license · No card required · Cancel anytime</p>
+        <p class="cta-risk">Source-available · Free forever · No card required · Cancel anytime</p>
       </Stagger>
     </div>
   </section>
@@ -589,12 +589,12 @@ plugins: <span class="tok-b">[</span>
         { label: 'Contact', href: 'https://one.ie' },
       ] },
       { heading: 'Legal', links: [
-        { label: 'License (MIT)', href: 'https://github.com/one-ie/one' },
+        { label: 'License', href: 'https://github.com/one-ie/one/blob/main/LICENSE' },
         { label: 'Privacy', href: 'https://one.ie' },
         { label: 'Terms', href: 'https://one.ie' },
       ] },
     ]}
-    note="MIT licensed · Built on the open web."
+    note="Free forever, one license · Built on the open web."
   />
 
 </Layout>
@@ -858,7 +858,7 @@ plugins: <span class="tok-b">[</span>
   .logo-item {
     font-size: 0.95rem;
     font-weight: 700;
-    color: color-mix(in oklab, var(--color-font) 32%, transparent);
+    color: var(--color-muted);
     letter-spacing: -0.02em;
     white-space: nowrap;
     user-select: none;
@@ -945,7 +945,6 @@ plugins: <span class="tok-b">[</span>
   .sol-strike {
     color: var(--color-muted);
     text-decoration: line-through;
-    opacity: 0.6;
   }
   .sol-done {
     color: var(--color-font);
