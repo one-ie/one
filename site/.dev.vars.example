@@ -19,3 +19,10 @@ WALLET_SUI_ADDRESS=
 WALLET_EVM_ADDRESS=
 WALLET_SOL_ADDRESS=
 WALLET_BTC_ADDRESS=
+
+# Card rail — Stripe Elements on /payments goes live when BOTH keys are set
+# (use test-mode keys from dashboard.stripe.com; the API stays 503 without them).
+# STRIPE_WEBHOOK_SECRET enables signature-verified webhooks at /api/pay/webhook.
+PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_…
+STRIPE_SECRET_KEY=sk_test_…
+STRIPE_WEBHOOK_SECRET=whsec_…

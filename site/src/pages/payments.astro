@@ -1,0 +1,658 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Reveal from '../components/motion/Reveal.astro'
+import Stagger from '../components/motion/Stagger.astro'
+import Card from '../components/blocks/Card.astro'
+import Tabs from '../components/blocks/Tabs.astro'
+import Button from '../components/blocks/Button.astro'
+import Footer from '../components/blocks/Footer.astro'
+import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
+import CardCheckoutPreview from '../components/payments/CardCheckoutPreview'
+import StripeCheckout from '../components/payments/StripeCheckout'
+import { getEnv } from '../lib/cf-env'
+
+export const prerender = false
+
+// Stripe Elements goes live the moment both keys exist — same switch the
+// shop plugin's provider:'stripe' checkout uses. No keys → honest preview.
+const env = await getEnv()
+const stripePublishableKey =
+  (env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string | undefined) ??
+  (env.STRIPE_PUBLIC_KEY as string | undefined)
+const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
+---
+
+<Layout
+  title="Payments — ONE"
+  description="Two rails to get paid: crypto payment links live today via pay.one.ie, and a Stripe scaffold ready for your own key."
+>
+
+  <!-- ── Hero ──────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <!-- Time-based animation — above-fold elements must not use scroll-driven animation -->
+        <div class="hr hr-0"><div class="badge">Two rails · one starter</div></div>
+        <h1 class="headline">
+          <span class="headline-line">Get paid in crypto today.</span>
+          <span class="headline-line headline-gradient">Bring your own card rail.</span>
+        </h1>
+        <div class="hr hr-2">
+          <p class="sub">
+            Every clone ships a working payment-link generator — Sui, Ethereum,
+            Solana, Bitcoin, signed and verified server-side, live against
+            <code>pay.one.ie</code>. Card payments ship as a Stripe scaffold:
+            wire your own key and it's yours.
+          </p>
+        </div>
+        <div class="hr hr-3">
+          <div class="hero-actions">
+            <Button href="#try-it" variant="primary" size="lg">Try it live <Fragment slot="icon-right">→</Fragment></Button>
+            <Button href="https://github.com/one-ie/one" variant="secondary" size="lg">Read the source</Button>
+          </div>
+        </div>
+        <div class="hr hr-4">
+          <ul class="trust-row" aria-label="Guarantees">
+            <li>✓ No custody, ever</li>
+            <li>✓ Links signed server-side</li>
+            <li>✓ Zero config to start</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Terminal-card hero visual — a stylised view of one real link's payload -->
+      <div class="hr hr-3 hero-visual" aria-hidden="true">
+        <div class="terminal-glow"></div>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+            <span class="terminal-title">pay.one.ie · payment_link_create</span>
+          </div>
+          <div class="rail-row"><span class="rail-label"><i class="rail-dot" style="background: var(--color-primary)"></i><code>SUI · testnet</code></span><span class="rail-amt">$25.00</span></div>
+          <div class="rail-row"><span class="rail-label"><i class="rail-dot" style="background: var(--color-secondary, var(--color-tertiary))"></i><code>ETH · sepolia</code></span><span class="rail-amt">$25.00</span></div>
+          <div class="rail-row"><span class="rail-label"><i class="rail-dot" style="background: var(--color-tertiary)"></i><code>SOL · devnet</code></span><span class="rail-amt">$25.00</span></div>
+          <div class="rail-row"><span class="rail-label"><i class="rail-dot" style="background: var(--color-muted)"></i><code>BTC · testnet</code></span><span class="rail-amt">$25.00</span></div>
+          <div class="terminal-foot">
+            <span>Ed25519 signature</span>
+            <span class="verified">verified ✓</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Stats strip ───────────────────────────────────────────── -->
+  <section class="stats">
+    <div class="container">
+      <Stagger stagger={0.08}>
+        <div class="stats-grid">
+          <div class="stat"><div class="stat-v">4</div><div class="stat-l">chains per link</div></div>
+          <div class="stat"><div class="stat-v">1</div><div class="stat-l">POST to create</div></div>
+          <div class="stat"><div class="stat-v">0</div><div class="stat-l">custody, ever</div></div>
+          <div class="stat"><div class="stat-v">$0</div><div class="stat-l">monthly fees</div></div>
+        </div>
+      </Stagger>
+    </div>
+  </section>
+
+  <!-- ── Two rails ─────────────────────────────────────────────── -->
+  <section class="rails">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">Two rails, your call</h2>
+      </Reveal>
+      <Stagger stagger={0.1}>
+        <div class="rails-grid">
+          <Card variant="feature" accent="primary">
+            <svg slot="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 9.5c0-1.4 1.6-2.5 3.5-2.5s3.5 1 3.5 2.2c0 3-7 1.6-7 4.6 0 1.4 1.6 2.5 3.5 2.5s3.5-1 3.5-2.2"/></svg>
+            <Fragment slot="header">Crypto — live today</Fragment>
+            Signed payment links across four chains. Every link is Ed25519-signed
+            server-side and verified before it ever renders — no custody, no
+            chargebacks, settlement is the transaction itself.
+            <a slot="footer" href="#try-it" class="card__link">Try it below →</a>
+          </Card>
+
+          <Card variant="feature" accent="tertiary">
+            <svg slot="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><path d="M2.5 9.5h19"/></svg>
+            <Fragment slot="header">Card — bring your own key</Fragment>
+            Stripe Elements, fully wired: <code>/api/pay/create-intent</code> mints real
+            PaymentIntents and <code>/api/pay/webhook</code> verifies signatures — both
+            fail-closed until you add <code>STRIPE_SECRET_KEY</code> and
+            <code>PUBLIC_STRIPE_PUBLISHABLE_KEY</code>. Two env vars and it's live.
+            <a slot="footer" href="#try-it" class="card__link">{stripeLive ? 'Try it below →' : 'See the preview →'}</a>
+          </Card>
+        </div>
+      </Stagger>
+    </div>
+  </section>
+
+  <!-- ── Try it live ───────────────────────────────────────────── -->
+  <section class="try-it" id="try-it">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">Try it live</h2>
+        <p class="try-it-sub">
+          {stripeLive
+            ? 'Both are real. Left calls pay.one.ie the moment you click. Right is live Stripe Elements in test mode — use the 4242 test card.'
+            : 'Left is real — it calls pay.one.ie the moment you click. Right is an honest preview of what card checkout looks like once you add your own Stripe key.'}
+        </p>
+      </Reveal>
+      <Stagger stagger={0.12}>
+        <div class="try-it-grid">
+          <PaymentLinkGenerator client:visible />
+          {stripeLive && stripePublishableKey
+            ? <StripeCheckout client:visible publishableKey={stripePublishableKey} />
+            : <CardCheckoutPreview client:visible />}
+        </div>
+      </Stagger>
+    </div>
+  </section>
+
+  <!-- ── How it works ──────────────────────────────────────────── -->
+  <section class="how">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">Three steps, start to settled</h2>
+      </Reveal>
+      <Stagger stagger={0.1}>
+        <div class="how-grid">
+          <div class="how-card">
+            <div class="how-head"><span class="how-n">01</span><span class="how-chip">✎</span></div>
+            <h3>Create</h3>
+            <p>One POST — or the form above. The link carries the amount, the chains, and your wallet addresses, signed so nothing can be swapped in transit.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-head"><span class="how-n">02</span><span class="how-chip">↗</span></div>
+            <h3>Share</h3>
+            <p>It's just a URL and a QR code. Put it in an invoice, a chat message, a checkout page — anywhere a buyer can tap.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-head"><span class="how-n">03</span><span class="how-chip">✓</span></div>
+            <h3>Settle</h3>
+            <p>The payer picks a chain and signs. Funds land directly in your wallet — no middle account, nothing to withdraw.</p>
+          </div>
+        </div>
+      </Stagger>
+    </div>
+  </section>
+
+  <!-- ── Code ──────────────────────────────────────────────────── -->
+  <section class="code-section">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">See it in code</h2>
+      </Reveal>
+      <Reveal delay={0.08}>
+        <Tabs
+          ariaLabel="Payment rail code examples"
+          items={[
+            { id: 'crypto', label: 'Crypto' },
+            { id: 'card', label: 'Card' },
+          ]}
+        >
+          <Fragment slot="panel-crypto">
+            <pre class="code-block"><code>{`curl -X POST https://pay.one.ie/ \\
+  -H 'Content-Type: application/json' \\
+  -d '{
+    "protocol": "payment_link_create",
+    "data": {
+      "amount": 25,
+      "unit": "usd",
+      "product": "Pro plan",
+      "merchantSlug": "your-workspace",
+      "chains": ["SUI", "ETH", "SOL", "BTC"],
+      "treasuries": { "SUI": "0x...", "ETH": "0x..." }
+    }
+  }'
+
+# → { "success": true, "data": { "url": "https://pay.one.ie/l/...", "qr": "..." } }
+# The link is signed server-side. Visiting it verifies the signature
+# before rendering — an unsigned or tampered link never reaches a payer.`}</code></pre>
+          </Fragment>
+          <Fragment slot="panel-card">
+            <pre class="code-block"><code>{`// src/pages/api/pay/create-intent.ts — real, ships in the starter
+const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
+  httpClient: Stripe.createFetchHttpClient(),  // runs on Cloudflare Workers
+})
+const intent = await stripe.paymentIntents.create({
+  amount, currency: 'usd',
+  automatic_payment_methods: { enabled: true },
+})
+return Response.json({ clientSecret: intent.client_secret })
+
+// <StripeCheckout /> mounts live Stripe Elements against that clientSecret.
+// The webhook verifies every event's signature before trusting it
+// (constructEventAsync — Workers' SubtleCrypto is async).
+//
+// Fail-closed: without STRIPE_SECRET_KEY + PUBLIC_STRIPE_PUBLISHABLE_KEY
+// in .dev.vars, the API returns 503 and the page shows an honest preview.
+// Add the two keys and this exact form goes live on your own account.`}</code></pre>
+          </Fragment>
+        </Tabs>
+      </Reveal>
+    </div>
+  </section>
+
+  <!-- ── Compare ───────────────────────────────────────────────── -->
+  <section class="compare">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">Two different trades</h2>
+      </Reveal>
+      <Reveal delay={0.08}>
+        <div class="compare-table" role="table" aria-label="Crypto vs card payment comparison">
+          <div class="compare-row compare-head" role="row">
+            <div role="columnheader"></div>
+            <div role="columnheader">Crypto</div>
+            <div role="columnheader">Card</div>
+          </div>
+          <div class="compare-row" role="row">
+            <div role="rowheader">Setup</div>
+            <div role="cell">Zero — works out of the box</div>
+            <div role="cell">Your own Stripe key</div>
+          </div>
+          <div class="compare-row" role="row">
+            <div role="rowheader">Custody</div>
+            <div role="cell">Never — peer to peer</div>
+            <div role="cell">Held by Stripe until payout</div>
+          </div>
+          <div class="compare-row" role="row">
+            <div role="rowheader">Chargebacks</div>
+            <div role="cell">None — the transaction is final</div>
+            <div role="cell">Possible, per Stripe's terms</div>
+          </div>
+          <div class="compare-row" role="row">
+            <div role="rowheader">Fees</div>
+            <div role="cell">Network gas only</div>
+            <div role="cell">Stripe's standard processing rate</div>
+          </div>
+          <div class="compare-row" role="row">
+            <div role="rowheader">Best for</div>
+            <div role="cell">Agents, global buyers, instant settlement</div>
+            <div role="cell">Familiar checkout, existing card customers</div>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  <!-- ── Final CTA ─────────────────────────────────────────────── -->
+  <section class="final-cta">
+    <div class="container">
+      <Reveal>
+        <div class="cta-panel">
+          <h2 class="cta-title">Get paid on every chain<br /><span class="headline-gradient">from one link.</span></h2>
+          <p class="cta-sub">Clone the starter, run <code>one wallet keygen</code>, share a link. That's the whole setup.</p>
+          <div class="cta-actions">
+            <Button href="#try-it" variant="primary" size="lg">Create a link <Fragment slot="icon-right">→</Fragment></Button>
+            <Button href="https://github.com/one-ie/one" variant="secondary" size="lg">Clone on GitHub</Button>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  <Footer
+    tagline="The Astro starter that ships AI, payments, and plugins on day one — wired from one.config.ts."
+    columns={[
+      { heading: 'Product', links: [
+        { label: 'Design system', href: '/design' },
+        { label: 'Motion', href: '/motion' },
+        { label: 'Components', href: '/components' },
+        { label: 'Lifecycle', href: '/lifecycle' },
+        { label: 'Payments', href: '/payments' },
+        { label: 'Wallet', href: '/wallet' },
+      ] },
+      { heading: 'Resources', links: [
+        { label: 'Documentation', href: 'https://one.ie/docs' },
+        { label: 'GitHub', href: 'https://github.com/one-ie/one', external: true },
+        { label: 'Changelog', href: 'https://one.ie/docs' },
+      ] },
+      { heading: 'Company', links: [
+        { label: 'About', href: 'https://one.ie' },
+        { label: 'Blog', href: 'https://one.ie' },
+        { label: 'Contact', href: 'https://one.ie' },
+      ] },
+      { heading: 'Legal', links: [
+        { label: 'License', href: 'https://github.com/one-ie/one/blob/main/LICENSE' },
+        { label: 'Privacy', href: 'https://one.ie' },
+        { label: 'Terms', href: 'https://one.ie' },
+      ] },
+    ]}
+    note="Free forever, one license · Built on the open web."
+  />
+
+</Layout>
+
+<style>
+  .hero {
+    padding: clamp(4rem, 10vw, 6.5rem) 0 clamp(2rem, 6vw, 3.5rem);
+  }
+  .container {
+    max-width: var(--content, 72rem);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+    border-radius: 9999px;
+    padding: 0.35rem 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+  .headline {
+    font-size: clamp(2.2rem, 5vw, 3.3rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+    color: var(--color-font);
+    margin: 0 0 1.5rem;
+  }
+  .headline-line { display: block; }
+  .headline-gradient {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-tertiary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub {
+    font-size: clamp(1.02rem, 1.5vw, 1.15rem);
+    line-height: 1.6;
+    color: var(--color-muted);
+    margin: 0 0 2rem;
+    max-width: 40rem;
+  }
+  .sub code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9em;
+    background: var(--color-fg, var(--color-foreground));
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; }
+  .trust-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  /* Terminal-card hero visual */
+  .hero-visual { position: relative; }
+  .terminal-glow {
+    position: absolute;
+    inset: -1.5rem;
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--color-primary) 18%, transparent),
+      color-mix(in srgb, var(--color-tertiary) 18%, transparent));
+    filter: blur(40px);
+    border-radius: 24px;
+  }
+  .terminal {
+    position: relative;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--color-background) 88%, transparent);
+    backdrop-filter: blur(8px);
+    padding: 1.1rem 1.25rem;
+  }
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 9999px; display: inline-block; }
+  .dot-r { background: #e5484d; }
+  .dot-y { background: #f5a524; }
+  .dot-g { background: #30a46c; }
+  .terminal-title {
+    margin-left: 0.5rem;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .rail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    font-size: 0.82rem;
+  }
+  .rail-label { display: flex; align-items: center; gap: 0.55rem; }
+  .rail-label code { font-family: 'SF Mono', 'Fira Code', monospace; color: var(--color-font); font-size: 0.78rem; }
+  .rail-dot { width: 8px; height: 8px; border-radius: 9999px; display: inline-block; }
+  .rail-amt { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.75rem; color: var(--color-muted); }
+  .terminal-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.8rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.72rem;
+    color: var(--color-muted);
+  }
+  .verified { color: var(--color-primary); font-family: 'SF Mono', 'Fira Code', monospace; }
+
+  /* Time-based hero reveal — same pattern as index.astro's .hr classes */
+  .hr { animation: hr-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .hr-0 { animation-delay: 0.02s; }
+  .hr-2 { animation-delay: 0.16s; }
+  .hr-3 { animation-delay: 0.23s; }
+  .hr-4 { animation-delay: 0.3s; }
+  @keyframes hr-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hr { animation: none; opacity: 1; transform: none; }
+  }
+
+  /* Stats strip */
+  .stats { border-block: 1px solid var(--color-border); padding: clamp(1.5rem, 4vw, 2.5rem) 0; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-v {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-font);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-l {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-top: 0.25rem;
+  }
+
+  .rails { padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(1.5rem, 4vw, 2.5rem); }
+  .rails-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .rails-grid :global(code) {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.88em;
+    color: var(--color-tertiary);
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-font);
+    margin: 0 0 1.5rem;
+    text-align: center;
+  }
+
+  .try-it { padding: clamp(1.5rem, 5vw, 2.5rem) 0 clamp(3rem, 7vw, 4rem); scroll-margin-top: 5rem; }
+  .try-it-sub {
+    text-align: center;
+    max-width: 34rem;
+    margin: -0.75rem auto 2rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+  .try-it-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  /* How it works */
+  .how { padding: clamp(2rem, 6vw, 3.5rem) 0; border-top: 1px solid var(--color-border); }
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+  .how-card {
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    background: color-mix(in srgb, var(--color-fg, var(--color-foreground)) 45%, transparent);
+  }
+  .how-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.9rem; }
+  .how-n {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .how-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 0.9rem;
+  }
+  .how-card h3 { font-size: 1.05rem; font-weight: 600; color: var(--color-font); margin: 0 0 0.4rem; }
+  .how-card p { font-size: 0.86rem; line-height: 1.6; color: var(--color-muted); margin: 0; }
+
+  .code-section { padding: clamp(3rem, 8vw, 4.5rem) 0; }
+  .code-block {
+    background: var(--color-fg, var(--color-foreground));
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 0;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: var(--color-font);
+  }
+  .code-block code { font-family: 'SF Mono', 'Fira Code', monospace; }
+
+  .compare { padding: clamp(2rem, 6vw, 3.5rem) 0; }
+  .compare-table {
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1.4fr;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row > div {
+    padding: 0.9rem 1.1rem;
+    font-size: 0.88rem;
+    color: var(--color-muted);
+  }
+  .compare-row > [role='rowheader'] {
+    font-weight: 600;
+    color: var(--color-font);
+  }
+  .compare-head { background: var(--color-fg, var(--color-foreground)); }
+  .compare-head > div {
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+  @media (max-width: 640px) {
+    .compare-row { grid-template-columns: 1fr; }
+    .compare-row > [role='rowheader'] { border-bottom: 1px dashed var(--color-border); }
+  }
+
+  /* Final CTA */
+  .final-cta { padding: clamp(2rem, 6vw, 3.5rem) 0 clamp(4rem, 8vw, 6rem); }
+  .cta-panel {
+    position: relative;
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    overflow: hidden;
+    padding: clamp(3rem, 8vw, 5rem) 1.5rem;
+    text-align: center;
+    background:
+      linear-gradient(135deg,
+        color-mix(in srgb, var(--color-primary) 10%, transparent),
+        transparent 45%,
+        color-mix(in srgb, var(--color-tertiary) 10%, transparent));
+  }
+  .cta-title {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    color: var(--color-font);
+    margin: 0 0 1rem;
+  }
+  .cta-sub {
+    font-size: 1rem;
+    color: var(--color-muted);
+    max-width: 30rem;
+    margin: 0 auto 2rem;
+  }
+  .cta-sub code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9em;
+    background: var(--color-fg, var(--color-foreground));
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; justify-content: center; }
+</style>
