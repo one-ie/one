@@ -1,0 +1,214 @@
+---
+import Layout from '../layouts/Layout.astro'
+import AgentLifecycleScene from '../components/lifecycle/AgentLifecycleScene'
+import Button from '../components/blocks/Button.astro'
+import Footer from '../components/blocks/Footer.astro'
+---
+
+<Layout
+  title="The agent lifecycle — ONE"
+  description="Every agent on ONE walks the same five proven stages: registered, bootstrapped, active, settled, adopted. See how it works."
+>
+
+  <!-- ── Hero ──────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container hero-container">
+      <!-- Time-based animation — above-fold elements must not use scroll-driven animation -->
+      <div class="hr hr-0"><div class="badge">Agent onboarding · tracked live</div></div>
+      <h1 class="headline">
+        <span class="headline-line">One lifecycle.</span>
+        <span class="headline-line">Every agent walks it.</span>
+      </h1>
+      <div class="hr hr-2">
+        <p class="sub">
+          Registered, bootstrapped, active, settled, adopted — the same five stages
+          <code>one onboard</code> reports in your terminal, tracked automatically on
+          ONE's own lifecycle funnel. Not a diagram of a plan — the actual receivers
+          that fire when a real agent moves.
+        </p>
+      </div>
+      <div class="hr hr-3">
+        <div class="hero-actions">
+          <Button href="/wallet" variant="primary" size="lg">See a live wallet <Fragment slot="icon-right">→</Fragment></Button>
+          <Button href="https://github.com/one-ie/one" variant="secondary" size="lg">Read the source</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Scene ─────────────────────────────────────────────────── -->
+  <AgentLifecycleScene client:visible />
+
+  <!-- ── Proof ─────────────────────────────────────────────────── -->
+  <section class="proof">
+    <div class="container proof-container">
+      <h2 class="proof-title">Proven, not promised</h2>
+      <div class="proof-grid">
+        <div class="proof-card">
+          <strong>The funding wall is gone.</strong>
+          <p>
+            The single most common place a fresh agent gets stuck is an empty wallet.
+            The moment an agent bootstraps, its wallet is auto-funded from a live
+            treasury faucet — deterministically, no human, no waiting.
+          </p>
+        </div>
+        <div class="proof-card">
+          <strong>Tracked with zero extra calls.</strong>
+          <p>
+            Every stage transition fires because the real receivers fire —
+            <code>auth:agent</code>, <code>agent:bootstrap</code>, <code>market:settle</code>,
+            <code>agent:own-link</code> — not because a script tags anything after the fact.
+          </p>
+        </div>
+        <div class="proof-card">
+          <strong>Try it yourself.</strong>
+          <p>
+            <code>one onboard</code> walks you through all five stages in your own
+            terminal, against the same production system this page describes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer
+    tagline="The Astro starter that ships AI, payments, and plugins on day one — wired from one.config.ts."
+    columns={[
+      { heading: 'Product', links: [
+        { label: 'Design system', href: '/design' },
+        { label: 'Motion', href: '/motion' },
+        { label: 'Components', href: '/components' },
+        { label: 'Lifecycle', href: '/lifecycle' },
+        { label: 'Wallet', href: '/wallet' },
+      ] },
+      { heading: 'Resources', links: [
+        { label: 'Documentation', href: 'https://one.ie/docs' },
+        { label: 'GitHub', href: 'https://github.com/one-ie/one', external: true },
+        { label: 'Changelog', href: 'https://one.ie/docs' },
+      ] },
+      { heading: 'Company', links: [
+        { label: 'About', href: 'https://one.ie' },
+        { label: 'Blog', href: 'https://one.ie' },
+        { label: 'Contact', href: 'https://one.ie' },
+      ] },
+      { heading: 'Legal', links: [
+        { label: 'License', href: 'https://github.com/one-ie/one/blob/main/LICENSE' },
+        { label: 'Privacy', href: 'https://one.ie' },
+        { label: 'Terms', href: 'https://one.ie' },
+      ] },
+    ]}
+    note="Free forever, one license · Built on the open web."
+  />
+
+</Layout>
+
+<style>
+  .hero {
+    padding: clamp(4rem, 10vw, 7rem) 0 clamp(2rem, 6vw, 3.5rem);
+  }
+  .container {
+    max-width: var(--content, 72rem);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  .hero-container {
+    max-width: 48rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+    border-radius: 9999px;
+    padding: 0.35rem 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+  .headline {
+    font-size: clamp(2.4rem, 6vw, 3.75rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    color: var(--color-font);
+    margin: 0 0 1.5rem;
+  }
+  .headline-line { display: block; }
+  .sub {
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--color-muted);
+    margin: 0 0 2rem;
+    max-width: 42rem;
+  }
+  .sub code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.92em;
+    background: var(--color-fg, var(--color-foreground));
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.1em 0.4em;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+
+  /* Time-based hero reveal — same pattern as index.astro's .hr classes */
+  .hr {
+    animation: hr-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hr-0 { animation-delay: 0.02s; }
+  .hr-2 { animation-delay: 0.16s; }
+  .hr-3 { animation-delay: 0.23s; }
+  @keyframes hr-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hr { animation: none; opacity: 1; transform: none; }
+  }
+
+  .proof {
+    padding: clamp(3rem, 8vw, 5rem) 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .proof-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-font);
+    margin: 0 0 2rem;
+    text-align: center;
+  }
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+  .proof-card {
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    background: var(--color-background);
+  }
+  .proof-card strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--color-font);
+    margin-bottom: 0.5rem;
+  }
+  .proof-card p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+    margin: 0;
+  }
+  .proof-card code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85em;
+    color: var(--color-tertiary);
+  }
+</style>
