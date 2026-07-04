@@ -4,9 +4,24 @@ You are building **as a business on ONE**. You ship your own agents and skills, 
 
 ## Setup (2 min, one-time)
 
-1. **Install the CLI** — `npm install -g @oneie/cli` (gives you `one` and `oneie`)
-2. **Fill `.env.local`** with `WORKSPACE_OWNER_EMAIL`
-3. **Run `one setup`** — returns `{ uid, scopedKey, ownerKey }`. Put `ownerKey` in `ONE_API_KEY`.
+**Fastest path — zero config:**
+
+```bash
+npm install -g @oneie/cli   # gives you `one` and `oneie`
+one onboard                 # provisions a workspace + agent identity, no .env.local prep needed
+```
+
+Prints your workspace URL and exactly where you are in the agent lifecycle
+(`registered → bootstrapped → active → settled → adopted`) plus what unlocks
+each remaining stage. Writes `ONE_API_KEY` (+ `ONE_REG_KEY`, `ONE_UID`,
+`AGENCY_WSID`) to `.env.local`. Re-run it any time — idempotent, never mints
+a second identity.
+
+**Named-workspace path — when you want a specific slug/brand (edits `workspace.toml` first):**
+
+1. Set `slug`/`name`/`plan` in `workspace.toml`
+2. Fill `.env.local` with `WORKSPACE_OWNER_EMAIL`
+3. Run `one setup` — returns `{ uid, scopedKey, ownerKey }`. Put `ownerKey` in `ONE_API_KEY`.
 4. Done. Your `WORKSPACE_SLUG`, `CC_ACTOR_ID`, and `ONE_API_KEY` are now in `.env.local`
 
 `one setup` now mints an owner key directly — no Settings UI visit needed.
@@ -32,6 +47,7 @@ Your workspace slug is the `slug` in `workspace.toml`. Your Claude Code actor id
 ├── ai/              knows  →  agents · skills · tools · workflows · context.md
 ├── data/            grows  →  types · content · lifecycles
 ├── site/            shows  →  Astro + shadcn + ONE plugins (one.config.ts)
+├── packages/         paid, zero-bundle plugin stubs (see below)
 └── workspace.toml   who it is
 ```
 
@@ -46,8 +62,9 @@ Your workspace slug is the `slug` in `workspace.toml`. Your Claude Code actor id
 | `ai/workflows/*.md` | Workflow definitions — pushed via `world:create-thing` with `group: "<slug>"` |
 | `ai/context.md` | Company context — agents read this on every turn |
 | `data/types/*.toml` | Custom entity types pushed via `world:declare-types` |
-| `data/lifecycles/*.toml` | Lifecycle definitions — convert TOML→JSON with `python3 tomllib` before pushing |
-| `site/` | Astro starter — shadcn, React 19, Cloudflare Workers, pre-wired to ONE |
+| `data/lifecycles/*.toml` | Lifecycle definitions — `one push` parses the TOML's `id`/`label`/`stages` directly and calls `lifecycle:save`; stages need a manual move (drag a card, an `entity:tag` call) — `enter_when` auto-advance isn't wired for this path yet. Copy `_example.toml` (mirrors ONE's own agent-onboarding funnel) to start |
+| `site/` | Astro starter — shadcn, React 19, Cloudflare Workers, pre-wired to ONE. No `ONE_API_KEY` yet? The site still runs — Better Auth + D1 handle sessions standalone (`site/src/lib/auth.ts`), no backend connection required to develop the UI |
+| `packages/` | Paid, zero-bundle plugin stubs (`admin`, `course`, `dashboard`, `shop`) — each calls `premium({ plugin: name })` (`@oneie/plugin-premium`) to load its real UI from `one.ie/x/<plugin>.js` at runtime, gated by an entitlement claim. Nothing ships to your repo until the entitlement is bought (`one plugin buy <name>`) |
 | `site/one.config.ts` | Brand tokens + backend key — the only file you need to edit in `site/` |
 
 ## The commands
