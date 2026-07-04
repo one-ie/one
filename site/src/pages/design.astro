@@ -42,7 +42,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <section class="block">
       <div class="block-head">
         <h2>The 6 editable tokens</h2>
-        <p>Click any swatch to recolor live. Picks persist to <code>localStorage</code>.</p>
+        <p>Click any swatch to recolor live. Picks apply to the whole site and persist — the same engine behind the nav's preset swatches.</p>
       </div>
 
       <p class="picker-hint muted small">
@@ -54,7 +54,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         <li data-token-row="background">
           <label class="swatch-pick" data-token="background" data-mode="surface">
             <span class="swatch" data-swatch="background"></span>
-            <input type="color" value="#1a1a1a" />
+            <input type="color" aria-label="Pick background color" value="#1a1a1a" />
           </label>
           <div class="meta">
             <strong>background</strong>
@@ -65,7 +65,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         <li data-token-row="foreground">
           <label class="swatch-pick" data-token="foreground" data-mode="surface">
             <span class="swatch" data-swatch="foreground"></span>
-            <input type="color" value="#212121" />
+            <input type="color" aria-label="Pick foreground color" value="#212121" />
           </label>
           <div class="meta">
             <strong>foreground</strong>
@@ -76,7 +76,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         <li data-token-row="font">
           <label class="swatch-pick" data-token="font" data-mode="surface">
             <span class="swatch swatch-font" data-swatch="font">Aa</span>
-            <input type="color" value="#ffffff" />
+            <input type="color" aria-label="Pick font color" value="#ffffff" />
           </label>
           <div class="meta">
             <strong>font</strong>
@@ -87,7 +87,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         <li data-token-row="primary">
           <label class="swatch-pick" data-token="primary" data-mode="both">
             <span class="swatch" data-swatch="primary"></span>
-            <input type="color" value="#1d3a66" />
+            <input type="color" aria-label="Pick primary color" value="#1d3a66" />
           </label>
           <div class="meta">
             <strong>primary</strong>
@@ -98,7 +98,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         <li data-token-row="secondary">
           <label class="swatch-pick" data-token="secondary" data-mode="both">
             <span class="swatch" data-swatch="secondary"></span>
-            <input type="color" value="#3d4451" />
+            <input type="color" aria-label="Pick secondary color" value="#3d4451" />
           </label>
           <div class="meta">
             <strong>secondary</strong>
@@ -109,7 +109,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         <li data-token-row="tertiary">
           <label class="swatch-pick" data-token="tertiary" data-mode="both">
             <span class="swatch" data-swatch="tertiary"></span>
-            <input type="color" value="#324e32" />
+            <input type="color" aria-label="Pick tertiary color" value="#324e32" />
           </label>
           <div class="meta">
             <strong>tertiary</strong>
@@ -295,7 +295,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
           <button class="btn inverse">Inverse</button>
 
           <button class="btn primary" disabled>Disabled</button>
-          <button class="btn primary loading">Loading…</button>
+          <button class="btn primary loading" disabled aria-busy="true">Loading…</button>
           <button class="btn destructive">Delete</button>
         </div>
 
@@ -431,15 +431,28 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   </main>
 
   <script is:inline>
+    /* The /design editor is a VIEW over the site-wide theme engine defined in
+       Layout.astro — same storage keys ('one-theme' preset, 'one-dark' mode,
+       'one-custom' edits), same inline-style application via
+       window.__syncTheme(). Edits here persist and re-color every page;
+       nav swatch/mode clicks re-seed the pickers below via the 'one:theme'
+       event. No injected stylesheets — one engine, one specificity level. */
     const html = document.documentElement
-    const STORAGE = 'one:theme'
+    const STORAGE = 'one-custom'
     const TOKENS = ['background', 'foreground', 'font', 'primary', 'secondary', 'tertiary']
-    const DEFAULT = {
-      mode: 'dark',
-      light: { background: '0 0% 93%', foreground: '0 0% 100%', font: '0 0% 13%',
-               primary: '216 55% 25%', secondary: '219 14% 28%', tertiary: '105 22% 25%' },
-      dark:  { background: '0 0% 10%', foreground: '0 0% 13%', font: '0 0% 100%',
-               primary: '216 55% 25%', secondary: '219 14% 28%', tertiary: '105 22% 25%' },
+    localStorage.removeItem('one:theme') // migrate away the old page-local key
+
+    const SURFACE = {
+      light: { background: '0 0% 93%', foreground: '0 0% 100%', font: '0 0% 13%' },
+      dark:  { background: '0 0% 10%', foreground: '0 0% 13%', font: '0 0% 100%' },
+    }
+    const strip = (s) => s.trim().replace(/^hsl\(/, '').replace(/\)$/, '')
+
+    /* The active preset's full token set for a mode — the editor's baseline */
+    const presetSet = (mode) => {
+      const t = window.__T[localStorage.getItem('one-theme') || 'navy'] || window.__T.navy
+      const brand = (mode === 'dark' ? t.d : t.l).map(strip)
+      return { ...SURFACE[mode], primary: brand[0], secondary: brand[1], tertiary: brand[2] }
     }
 
     const load = () => {
@@ -447,25 +460,10 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         const t = JSON.parse(localStorage.getItem(STORAGE) || 'null')
         if (t && t.light && t.dark) return t
       } catch {}
-      return JSON.parse(JSON.stringify(DEFAULT))
+      return { light: presetSet('light'), dark: presetSet('dark') }
     }
 
     const save = (t) => localStorage.setItem(STORAGE, JSON.stringify(t))
-
-    const onLabel = (hsl) => (parseFloat(hsl.split(/\s+/)[2]) < 60 ? '#fff' : '#000')
-
-    const apply = (t) => {
-      const rule = (sel, set) => {
-        const decls = TOKENS.map((k) => '--color-' + k + ':hsl(' + set[k] + ')')
-        ;['primary', 'secondary', 'tertiary'].forEach((b) =>
-          decls.push('--color-on-' + b + ':' + onLabel(set[b])),
-        )
-        return sel + '{' + decls.join(';') + '}'
-      }
-      let s = document.getElementById('theme-overrides')
-      if (!s) { s = document.createElement('style'); s.id = 'theme-overrides'; document.head.appendChild(s) }
-      s.textContent = rule(':root', t.light) + rule('html.dark', t.dark)
-    }
 
     const hexToHsl = (hex) => {
       const r = parseInt(hex.slice(1, 3), 16) / 255
@@ -528,17 +526,13 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     }
 
     let theme = load()
-    apply(theme)
 
     const buttons = document.querySelectorAll('.mode-toggle button')
 
-    const applyMode = (mode) => {
-      html.classList.toggle('dark', mode === 'dark')
+    const syncModeButtons = () => {
+      const mode = currentMode()
       buttons.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.mode === mode)))
-      syncUI(theme)
     }
-
-    applyMode(theme.mode || 'dark')
 
     document.querySelectorAll('.swatch-pick').forEach((label) => {
       const input = label.querySelector('input[type=color]')
@@ -552,30 +546,39 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         } else {
           theme[currentMode()][token] = hsl
         }
-        apply(theme)
         save(theme)
-        syncUI(theme)
+        window.__syncTheme()  // applies site-wide + notifies the nav
       }
       // Fire on both — Safari only fires `change` for color picker close.
       input.addEventListener('input', handler)
       input.addEventListener('change', handler)
     })
 
+    /* Reset = back to the ACTIVE preset (nav swatch), not a hardcoded default */
     document.getElementById('theme-reset').addEventListener('click', () => {
       localStorage.removeItem(STORAGE)
-      const s = document.getElementById('theme-overrides')
-      if (s) s.remove()
-      theme = JSON.parse(JSON.stringify(DEFAULT))
-      applyMode(theme.mode)
+      window.__syncTheme()
     })
 
+    /* Mode buttons drive the same 'one-dark' state the nav moon button uses */
     buttons.forEach((b) => {
       b.addEventListener('click', () => {
-        theme.mode = b.dataset.mode
-        applyMode(theme.mode)
-        save(theme)
+        html.classList.toggle('dark', b.dataset.mode === 'dark')
+        localStorage.setItem('one-dark', String(b.dataset.mode === 'dark'))
+        window.__syncTheme()
       })
     })
+
+    /* Any theme change — ours, a nav swatch, the nav mode button — lands
+       here via the engine's event: re-seed the model and repaint the UI. */
+    window.addEventListener('one:theme', () => {
+      theme = load()
+      syncModeButtons()
+      syncUI(theme)
+    })
+
+    syncModeButtons()
+    syncUI(theme)
   </script>
 </Layout>
 
@@ -1019,7 +1022,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page .btn.primary    { background: var(--color-primary);    color: var(--color-on-primary); }
   .design-page .btn.secondary  { background: var(--color-secondary);  color: var(--color-on-secondary); }
   .design-page .btn.tertiary   { background: var(--color-tertiary);   color: var(--color-on-tertiary); }
-  .design-page .btn.destructive{ background: var(--color-destructive); color: #fff; }
+  .design-page .btn.destructive{ background: var(--color-destructive); color: var(--color-on-destructive); }
 
   .design-page .btn.outline {
     background: transparent;

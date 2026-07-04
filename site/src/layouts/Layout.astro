@@ -47,6 +47,14 @@ const {
         --color-on-tertiary: #fff;
         --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
         --color-page: color-mix(in oklab, var(--color-background) 96%, var(--color-font));
+        /* Invariants — never themed, never flipped. Declared here (not only in
+           Tailwind's @theme) so var() references resolve at runtime everywhere. */
+        --color-white: #fff;
+        --color-black: #000;
+        --color-destructive: hsl(0 70% 50%);
+        --color-success: hsl(140 60% 40%);
+        --color-on-destructive: #fff;
+        --color-on-success: #fff;
       }
       html.dark {
         --color-background: hsl(0 0% 10%);
@@ -58,6 +66,12 @@ const {
         --color-on-primary: #000;
         --color-on-secondary: #000;
         --color-on-tertiary: #000;
+        /* Status invariants lighten in dark mode so small text on dark
+           surfaces keeps WCAG AA contrast (the light values sit ~3.3:1). */
+        --color-destructive: hsl(0 75% 64%);
+        --color-success: hsl(140 55% 55%);
+        --color-on-destructive: #000;
+        --color-on-success: #000;
       }
       body { background: var(--color-page); color: var(--color-font); margin: 0; }
     </style>
@@ -90,13 +104,45 @@ const {
           el.style.setProperty('--color-on-tertiary',  on)
         }
 
-        var saved = localStorage.getItem('one-theme') || 'navy'
+        /* Custom token overrides — written by /design's editor ('one-custom'),
+           applied on EVERY page so picks survive navigation. Same inline-style
+           mechanism as presets, so there is exactly one specificity level. */
+        var TOKENS = ['background', 'foreground', 'font', 'primary', 'secondary', 'tertiary']
+        window.__applyCustom = function (custom, dark) {
+          var set = dark ? custom.dark : custom.light
+          if (!set) return
+          var el = document.documentElement
+          TOKENS.forEach(function (k) {
+            if (set[k]) el.style.setProperty('--color-' + k, 'hsl(' + set[k] + ')')
+          })
+          ;['primary', 'secondary', 'tertiary'].forEach(function (k) {
+            if (set[k]) el.style.setProperty('--color-on-' + k,
+              parseFloat(set[k].split(/\s+/)[2]) < 60 ? '#fff' : '#000')
+          })
+        }
+
+        /* The one entry point: preset first, custom on top, then announce.
+           Every control (nav swatches, nav mode button, /design's editor)
+           routes through this — single source of truth. */
+        window.__syncTheme = function () {
+          var el = document.documentElement
+          var dark = el.classList.contains('dark')
+          TOKENS.forEach(function (k) {
+            el.style.removeProperty('--color-' + k)
+            el.style.removeProperty('--color-on-' + k)
+          })
+          window.__applyTheme(localStorage.getItem('one-theme') || 'navy', dark)
+          var raw = localStorage.getItem('one-custom')
+          if (raw) { try { window.__applyCustom(JSON.parse(raw), dark) } catch (e) {} }
+          window.dispatchEvent(new CustomEvent('one:theme'))
+        }
+
         var rawDark = localStorage.getItem('one-dark')
         var dark = rawDark !== null
           ? rawDark === 'true'
           : window.matchMedia('(prefers-color-scheme: dark)').matches
         if (dark) document.documentElement.classList.add('dark')
-        window.__applyTheme(saved, dark)
+        window.__syncTheme()
       })()
     </script>
 
@@ -141,33 +187,40 @@ const {
       (function () {
         var T = window.__T
         var names = Object.keys(T)
-        var theme = localStorage.getItem('one-theme') || 'navy'
-        var dark  = document.documentElement.classList.contains('dark')
+
+        function state() {
+          return {
+            theme: localStorage.getItem('one-theme') || 'navy',
+            dark: document.documentElement.classList.contains('dark'),
+            custom: localStorage.getItem('one-custom') !== null,
+          }
+        }
 
         function apply(name, d) {
-          theme = name; dark = d
           d ? document.documentElement.classList.add('dark')
             : document.documentElement.classList.remove('dark')
-          window.__applyTheme(name, d)
           localStorage.setItem('one-theme', name)
           localStorage.setItem('one-dark', String(d))
-          sync()
+          window.__syncTheme()
         }
 
         function sync() {
+          var s = state()
           document.querySelectorAll('.one-sw').forEach(function (b) {
-            var on = b.dataset.t === theme
-            b.style.outline      = on ? '2px solid ' + T[theme].s : 'none'
+            /* A custom edit (from /design) means no preset is "the" theme —
+               drop the active ring until a preset is picked again. */
+            var on = !s.custom && b.dataset.t === s.theme
+            b.style.outline      = on ? '2px solid ' + T[s.theme].s : 'none'
             b.style.outlineOffset = '2px'
             b.style.transform    = on ? 'scale(1.15)' : 'scale(1)'
           })
           var mb = document.getElementById('one-mode')
-          if (mb) mb.innerHTML = dark
+          if (mb) mb.innerHTML = s.dark
             ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
             : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
         }
 
-        /* Build swatch buttons */
+        /* Build swatch buttons — picking a preset leaves custom-edit mode */
         var sc = document.getElementById('one-swatches')
         names.forEach(function (name) {
           var b = document.createElement('button')
@@ -177,14 +230,23 @@ const {
           b.type = 'button'
           b.style.background = T[name].s
           b.setAttribute('aria-label', T[name].name + ' theme')
-          b.onclick = function () { apply(name, dark) }
+          b.onclick = function () {
+            localStorage.removeItem('one-custom')
+            apply(name, state().dark)
+          }
           sc.appendChild(b)
         })
 
-        /* Mode toggle */
+        /* Mode toggle — keeps custom edits, flips their mode set */
         var mb = document.getElementById('one-mode')
-        if (mb) mb.onclick = function () { apply(theme, !dark) }
+        if (mb) mb.onclick = function () {
+          var s = state()
+          apply(s.theme, !s.dark)
+        }
 
+        /* Stay honest when another surface (e.g. /design's editor) changes
+           the theme — __syncTheme dispatches this after every apply. */
+        window.addEventListener('one:theme', sync)
         sync()
       })()
     </script>
