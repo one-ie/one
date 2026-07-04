@@ -2,7 +2,13 @@
 
 > Astro 6 · React 19 · shadcn/ui · Cloudflare Workers
 
-Your business, on ONE. This repo is one node — three folders that declare everything your business knows, grows, and shows. One CLI (`npx oneie`) operates it. No servers to run, no database to manage, no substrate code to write.
+The source-available framework for building AI-powered applications. A design
+system and a website, free forever, under one license.
+
+Three folders — **knows**, **grows**, **shows.** `ai/` is what your
+business knows. `data/` is what it grows. `site/` is what it shows. One
+CLI (`npx oneie`) operates all three. No servers to run, no database to
+manage, no substrate code to write.
 
 Free plan. No credit card. One business, one workspace.
 
@@ -13,13 +19,13 @@ bun run setup    # no account needed — mints a key, writes site/.env.local
 cd site && bun run dev
 ```
 
-`bun run setup` provisions a workspace and writes `ONE_API_KEY` to `site/.env.local` in one step — no dashboard visit, no manual key copy. Skip it and the site runs in standalone mode (local auth + D1) with no backend connection.
+`bun run setup` provisions a workspace and writes `ONE_API_KEY` to `site/.env.local` in one step — no dashboard visit, no manual key copy. Skip it and the site still runs, standalone (local auth + D1), with no backend connection at all. Connect later, whenever you're ready.
 
 Prefer a single scaffold instead of the whole repo? `npx oneie create <name>` downloads this exact shape.
 
 ---
 
-## Structure
+## Knows, grows, shows
 
 ```
 .claude/         ← Claude Code setup — hooks, rules, skills, commands
@@ -31,6 +37,12 @@ workspace.toml   ← who you are
 packages/        ← paid plugin stubs only — admin, course, dashboard,
                     premium, shop (thin loaders; see Plugins below)
 ```
+
+**Knows.** Your agents, skills, tools, and workflows — plain Markdown and TOML. An agent reads `ai/context.md` on every turn, so it always knows your business.
+
+**Grows.** Your data model and your lifecycles — the stages a contact, deal, or agent moves through. Declare a type once; it's typed everywhere.
+
+**Shows.** The site people see. Astro 6, React 19, shadcn/ui, deployed to Cloudflare's edge. Static-first by default — most of the page ships zero JavaScript, which is the actual reason it's fast, not a marketing line.
 
 `@oneie/frontend`, `@oneie/design`, and the 9 free plugins (`auth`, `backend`,
 `blog`, `booking`, `chat`, `docs`, `mail`, `media`, `track`) install from npm
@@ -136,4 +148,6 @@ export ONE_API_KEY=$(grep '^ONE_API_KEY=' site/.env.local | cut -d= -f2)
 
 ## License
 
-[ONE License v1.0](LICENSE) — `site/` and all packages. Free, maximum freedom, one string: keep the "Powered by ONE" link in the deployed product. White-label removes it ([Enterprise License](LICENSE-ENTERPRISE.md)). Source-available, not OSI open source. The ONE backend is not distributed.
+Free forever. [The ONE License v1.0](LICENSE) covers `site/` and every package here — full commercial rights, no usage limits, no royalty fees, one obligation: keep the "Powered by ONE" link in your deployed product. White-label removes it ([Enterprise License](LICENSE-ENTERPRISE.md)).
+
+Source-available, not OSI open source — the difference is real and we say it plainly. Read the [full license](LICENSE) before you rely on it. The ONE backend itself is not distributed; this repo is the client.
