@@ -1,0 +1,221 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { getEnv } from '../lib/cf-env'
+import { readSelfHostedWallet, fetchSelfHostedBalances, type ChainBalance } from '../lib/chain-balances'
+
+export const prerender = false
+
+interface WalletTx {
+  ts: number
+  rail: string
+  direction: 'in' | 'out'
+  counterparty: string
+  amountCents: number
+  currency: string
+  ref: string
+  status: string
+}
+
+const env = await getEnv()
+const apiKey = env.ONE_API_KEY as string | undefined
+// one.config.ts's convention is ONE_BASE_URL; `one onboard`/`one init` write
+// ONE_API_URL instead (a real naming mismatch between the CLI and this
+// template — accept both rather than silently falling back to the default).
+const baseUrl = (env.ONE_BASE_URL as string | undefined) ?? (env.ONE_API_URL as string | undefined) ?? 'https://one.ie'
+
+// Self-hosted wallet — `one wallet keygen`'s addresses, stored in .dev.vars.
+// Works with NO backend connection at all: these are public RPC reads, not
+// substrate calls. This is the wallet's real, always-on identity; the
+// substrate's own wallet:get (below) only adds credits + settlement history
+// on top when a backend is connected.
+const selfHosted = readSelfHostedWallet(env)
+const balances: ChainBalance[] = await fetchSelfHostedBalances(selfHosted)
+
+let credits = 0
+let transactions: WalletTx[] = []
+let fetchError: string | null = null
+
+// one.ie/web only answers the long form (/api/ask/<receiver>) — the short form
+// (/ask/<receiver>) is the api.one.ie gateway's own path, a different host.
+// ONE_BASE_URL defaults to https://one.ie, so this is the correct form here.
+async function ask(receiver: string, data: Record<string, unknown> = {}): Promise<Record<string, unknown>> {
+  const res = await fetch(`${baseUrl}/api/ask/${encodeURIComponent(receiver)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+    body: JSON.stringify({ data }),
+  })
+  const json = (await res.json().catch(() => ({}))) as { outcome?: string; result?: Record<string, unknown>; error?: string }
+  if (!res.ok || (json.outcome && json.outcome !== 'result')) {
+    throw new Error(json.error ?? json.outcome ?? `${receiver} → ${res.status}`)
+  }
+  return json.result ?? (json as Record<string, unknown>)
+}
+
+if (apiKey) {
+  try {
+    const wallet = await ask('wallet:get')
+    credits = Number(wallet.credits ?? 0)
+    const tx = await ask('wallet:transactions', { limit: 20 })
+    transactions = (tx.transactions as WalletTx[] | undefined) ?? []
+  } catch (e) {
+    fetchError = e instanceof Error ? e.message : String(e)
+  }
+}
+
+function fmtMoney(cents: number, currency: string): string {
+  return `${(cents / 100).toFixed(2)} ${currency}`
+}
+function fmtDate(ts: number): string {
+  return new Date(ts * (ts < 10_000_000_000 ? 1000 : 1)).toLocaleString()
+}
+---
+
+<Layout title="Wallet & payments" description="Your ONE workspace wallet — balances, transactions, and payment links.">
+  <main style="max-width: 720px; margin: 0 auto; padding: 4rem 1.5rem 6rem;">
+    <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem;">Wallet &amp; payments</h1>
+    <p style="color: var(--color-muted); margin-bottom: 2.5rem;">
+      Your workspace's wallet — live balances, transaction history, and payment links you can share to get paid.
+    </p>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">Balances</h2>
+      <p style="color: var(--color-muted); margin-bottom: 1rem; font-size: 0.9rem;">
+        {balances.length} on-chain address{balances.length === 1 ? '' : 'es'} — self-hosted, generated fully offline
+        {apiKey && !fetchError && <> · {credits} credits (ONE backend)</>}
+      </p>
+      {balances.length === 0 && (
+        <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem; background: var(--color-background);">
+          <strong>No wallet configured yet.</strong>
+          <p style="margin: 0.5rem 0 1rem; color: var(--color-muted);">
+            Generate one — fully offline, your keys never leave your machine — then copy the addresses into <code>.dev.vars</code>.
+          </p>
+          <code style="display: block; background: var(--color-fg, var(--color-foreground)); padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem;">one wallet keygen</code>
+          <p style="margin: 0.75rem 0 0; color: var(--color-muted); font-size: 0.9rem;">
+            See <code>.dev.vars.example</code> for the 4 variable names, then restart the dev server.
+          </p>
+        </div>
+      )}
+      <div style="display: grid; gap: 0.75rem;">
+        {balances.map((b) => (
+          <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+            <div style="min-width: 0;">
+              <div style="font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; color: var(--color-muted);">{b.chain}</div>
+              <div style="font-family: monospace; font-size: 0.85rem; overflow-wrap: anywhere;">{b.address}</div>
+            </div>
+            <div style="font-weight: 600; white-space: nowrap;">{b.balance ?? '—'}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+      <h2 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">Get paid — create a payment link</h2>
+      <p style="color: var(--color-muted); margin-bottom: 1rem; font-size: 0.9rem;">
+        Generates a real, shareable link (and QR code) addressed to your own wallet above, via pay.one.ie. No signing required to create one — only the payer signs. Works with no ONE backend connected — it only needs the addresses above.
+      </p>
+      <form id="link-form" style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end;">
+        <div>
+          <label for="amount" style="display: block; margin-bottom: 0.35rem; font-size: 0.85rem; font-weight: 500;">Amount (USD)</label>
+          <input id="amount" name="amount" type="number" min="1" step="0.01" required
+            style="padding: 0.6rem 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-foreground); color: var(--color-font); width: 8rem;" />
+        </div>
+        <div style="flex: 1; min-width: 10rem;">
+          <label for="product" style="display: block; margin-bottom: 0.35rem; font-size: 0.85rem; font-weight: 500;">For</label>
+          <input id="product" name="product" type="text" placeholder="Invoice, service, product…" required
+            style="width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-foreground); color: var(--color-font); box-sizing: border-box;" />
+        </div>
+        <button type="submit"
+          style="padding: 0.65rem 1.25rem; background: var(--color-primary); color: var(--color-on-primary); border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;">
+          Create link
+        </button>
+      </form>
+      <div id="link-result" style="margin-top: 1.25rem; display: none;">
+        <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1rem; display: flex; gap: 1rem; align-items: center;">
+          <img id="link-qr" alt="Payment link QR code" style="width: 96px; height: 96px; border-radius: var(--radius-sm); flex-shrink: 0; display: none;" />
+          <div style="min-width: 0;">
+            <a id="link-url" href="#" target="_blank" rel="noopener" style="color: var(--color-primary); word-break: break-all;"></a>
+            <div id="link-status" style="margin-top: 0.35rem; font-size: 0.85rem; color: var(--color-muted);"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">Recent transactions</h2>
+      {!apiKey && (
+        <p style="color: var(--color-muted);">
+          No backend connected — this section reads the ONE settlement ledger, not the chains above. Run <code>one onboard</code> to see it.
+        </p>
+      )}
+      {apiKey && fetchError && (
+        <p style="color: var(--color-muted);">Couldn't load: {fetchError}</p>
+      )}
+      {apiKey && !fetchError && transactions.length === 0 && <p style="color: var(--color-muted);">No transactions yet.</p>}
+      {apiKey && !fetchError && transactions.length > 0 && (
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+          <thead>
+            <tr style="text-align: left; border-bottom: 1px solid var(--color-border);">
+              <th style="padding: 0.5rem 0.5rem 0.5rem 0; font-weight: 600;">Date</th>
+              <th style="padding: 0.5rem 0.5rem;">Rail</th>
+              <th style="padding: 0.5rem 0.5rem;">Counterparty</th>
+              <th style="padding: 0.5rem 0.5rem; text-align: right;">Amount</th>
+              <th style="padding: 0.5rem 0 0.5rem 0.5rem;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((t) => (
+              <tr style="border-bottom: 1px solid var(--color-border);">
+                <td style="padding: 0.6rem 0.5rem 0.6rem 0; color: var(--color-muted); white-space: nowrap;">{fmtDate(t.ts)}</td>
+                <td style="padding: 0.6rem 0.5rem;">{t.rail}</td>
+                <td style="padding: 0.6rem 0.5rem; font-family: monospace; font-size: 0.8rem; overflow-wrap: anywhere;">{t.counterparty}</td>
+                <td style="padding: 0.6rem 0.5rem; text-align: right; font-weight: 600; white-space: nowrap;">
+                  {t.direction === 'in' ? '+' : '−'}{fmtMoney(t.amountCents, t.currency)}
+                </td>
+                <td style="padding: 0.6rem 0 0.6rem 0.5rem; color: var(--color-muted); white-space: nowrap;">{t.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </section>
+  </main>
+</Layout>
+
+<script>
+  const form = document.getElementById('link-form') as HTMLFormElement | null
+  const resultBox = document.getElementById('link-result') as HTMLDivElement | null
+  const qrImg = document.getElementById('link-qr') as HTMLImageElement | null
+  const urlLink = document.getElementById('link-url') as HTMLAnchorElement | null
+  const statusEl = document.getElementById('link-status') as HTMLDivElement | null
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const data = new FormData(form)
+    const amount = Number(data.get('amount'))
+    const product = String(data.get('product') ?? '')
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Creating…' }
+    if (statusEl) statusEl.textContent = ''
+    try {
+      const res = await fetch('/api/pay/link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amountCents: Math.round(amount * 100), product }),
+      })
+      const json = await res.json() as { url?: string; qr?: string; error?: string }
+      if (!res.ok || !json.url) throw new Error(json.error ?? `create-link → ${res.status}`)
+      if (resultBox) resultBox.style.display = 'flex'
+      if (urlLink) { urlLink.href = json.url; urlLink.textContent = json.url }
+      if (qrImg) {
+        if (json.qr) { qrImg.src = json.qr; qrImg.style.display = 'block' }
+        else qrImg.style.display = 'none'
+      }
+      if (statusEl) statusEl.textContent = 'Share this link — it settles straight to your wallet above.'
+    } catch (err) {
+      if (statusEl) statusEl.textContent = err instanceof Error ? err.message : String(err)
+      if (resultBox) resultBox.style.display = 'flex'
+    } finally {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Create link' }
+    }
+  })
+</script>

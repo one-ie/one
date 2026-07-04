@@ -1,0 +1,21 @@
+# Local Cloudflare Workers secrets. Copy to .dev.vars (gitignored) and fill in.
+#
+# ONE_API_KEY / ONE_API_URL / ONE_REG_KEY / ONE_UID / AGENCY_WSID are written
+# here automatically by `one onboard` — you don't need to fill these by hand.
+ONE_API_KEY=one_…
+ONE_API_URL=https://one.ie
+ONE_REG_KEY=one_…
+ONE_UID=…
+AGENCY_WSID=…
+
+# Your workspace's own on-chain wallet — self-hosted, generated fully offline
+# by `one wallet keygen` (never touches the network, never crosses this repo's
+# boundary as anything but a public address). Only the ADDRESSES go here; the
+# mnemonic and private keys must never be written to any file in this repo.
+# Powers /wallet's balance display and the "create payment link" treasury.
+#   one wallet keygen           # prints once — copy the 4 addresses below
+#   one wallet keygen --recover # rebuilds the same wallet from the mnemonic
+WALLET_SUI_ADDRESS=
+WALLET_EVM_ADDRESS=
+WALLET_SOL_ADDRESS=
+WALLET_BTC_ADDRESS=
