@@ -1,4 +1,11 @@
-# ONE
+```
+ ██████╗ ███╗   ██╗███████╗
+██╔═══██╗████╗  ██║██╔════╝
+██║   ██║██╔██╗ ██║█████╗
+██║   ██║██║╚██╗██║██╔══╝
+╚██████╔╝██║ ╚████║███████╗
+ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+```
 
 > Astro 6 · React 19 · shadcn/ui · Cloudflare Workers
 
@@ -33,6 +40,11 @@ Skip `bun run setup` and nothing changes about the site. It's up to you.
 ## Knows, grows, shows
 
 ```
+  ai/ ─────────► data/ ─────────► site/
+ knows           grows            shows
+```
+
+```
 .claude/         ← Claude Code setup — hooks, rules, skills, commands
 .mcp.json        ← MCP server — every ONE verb as a native tool
 ai/              ← knows  → agents · skills · tools · workflows · context.md
@@ -53,6 +65,11 @@ Every file compiles to one typed call on the ONE substrate. Every command calls 
 ---
 
 ## Free plugins
+
+```
+[✓] auth   [✓] backend   [✓] chat   [✓] track
+[✓] blog   [✓] booking   [✓] docs   [✓] mail   [✓] media
+```
 
 | Package | What |
 |---|---|
@@ -81,6 +98,11 @@ You can build a whole business on this without ever connecting to ONE's backend.
 ---
 
 ## Switch on the backend — if you want it
+
+```
+  [ site only ]  ────────►  [ site + backend ]
+    (default)                 AI chat · analytics · CRM
+```
 
 Want AI chat, analytics, a CRM, or the full ONE backend behind your site? Switch it on in `site/one.config.ts`.
 
@@ -120,6 +142,10 @@ If you don't want the backend, don't add the plugins. Nothing here requires it. 
 ---
 
 ## Paid plugins
+
+```
+[$] admin only — everything else on this page is [✓] free
+```
 
 Everything above is free. This is the one section that isn't.
 
@@ -163,13 +189,23 @@ bun run typecheck   # astro check (root)
 
 Measured against a production build (`astro build` + `astro preview`), not dev mode, with Chrome's Lighthouse and performance-trace tooling:
 
-| Metric | Result |
-|---|---|
-| Accessibility | 100 |
-| Best Practices | 100 |
-| SEO | 100 |
-| LCP (Largest Contentful Paint) | 137ms |
-| CLS (Cumulative Layout Shift) | 0.00 |
+```
+        ▲
+       ╱░╲
+      ╱░░░╲
+     │ ▓▓▓ │
+     │▔▔▔▔▔│
+     │     │
+     └─────┘
+
+ Lighthouse — production build
+ ──────────────────────────────
+ Accessibility   ██████████ 100
+ Best Practices  ██████████ 100
+ SEO             ██████████ 100
+ ──────────────────────────────
+ LCP  137ms        CLS  0.00
+```
 
 Static-first Astro, zero JavaScript by default, deployed to Cloudflare's edge — that's the actual mechanism, not a marketing line. Check it yourself: `cd site && bun run build && bun run preview`, then run Lighthouse against `localhost:4322`.
 
