@@ -1,13 +1,75 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Reveal from '../components/motion/Reveal.astro'
+import Stagger from '../components/motion/Stagger.astro'
 import AgentLifecycleScene from '../components/lifecycle/AgentLifecycleScene'
+import ProofTerminal from '../components/lifecycle/ProofTerminal'
+import CountUp from '../components/home/CountUp'
 import Button from '../components/blocks/Button.astro'
 import Footer from '../components/blocks/Footer.astro'
+
+// ── Real proof data ──────────────────────────────────────────────────────
+// Captured from an actual run of pay/tools/agent-onboarding-lifecycle-demo.ts
+// against https://one.ie on 2026-07-04. The timestamps are measured, not
+// invented; ProofTerminal replays them time-compressed. Update by re-running
+// the command below and pasting the new numbers.
+const PROOF_COMMAND =
+  'bun pay/tools/agent-onboarding-lifecycle-demo.ts --assert-tracked --api-url https://one.ie'
+const PROOF_STEPS = [
+  {
+    t: 6.3,
+    ok: true,
+    label: 'register',
+    detail: 'POST /api/auth/agent — no key, no human. uid + apiKey minted, wallet bound at signup.',
+  },
+  {
+    t: 16.1,
+    ok: true,
+    label: 'bootstrap',
+    detail: 'agent:bootstrap — own workspace, gid + aid + scopedKey minted.',
+  },
+  {
+    t: 17.2,
+    ok: true,
+    label: 'tracked',
+    detail: 'lifecycle:mine — registered→bootstrapped, 2 rows written by rules; the script tagged nothing.',
+  },
+]
+const PROOF_VERDICT = 'PASS — the funnel filled itself'
+
+// Real on-chain transactions (Sui testnet) — every digest below is a genuine,
+// independently-verifiable transfer. Explorer: suiscan.xyz/testnet.
+const TXS = [
+  {
+    digest: 'Bf7V7F6baz5pD9c3KH5vnCR41tUgoebiW3puuBfQRCsh',
+    label: 'Signed transfer',
+    amount: '0.995 SUI',
+    detail: 'A real payer keypair signed and sent funds to this starter\'s wallet — the settle step, live.',
+  },
+  {
+    digest: 'B6XqzCQEw39xxeMqHCX6WUnBma8KAZdZ9iK5GC7fV9DU',
+    label: 'Faucet drop',
+    amount: '1 SUI',
+    detail: 'Public testnet faucet funding the same wallet /wallet displays.',
+  },
+  {
+    digest: 'AdEFmNNB5dDNsFHTdmXfYkSeTBkzTnZveQi4gn75CHBP',
+    label: 'Auto-fund at bootstrap',
+    amount: '0.05 SUI',
+    detail: 'The treasury faucet dispensing to a freshly bootstrapped agent — the funding wall, removed.',
+  },
+  {
+    digest: '3rTxWzgh7313MW357q3caSPaQ9aeB1jUXkQprP2EQgaq',
+    label: 'Dispense, repeated',
+    amount: '0.05 SUI',
+    detail: 'Second treasury dispense — and the 24h per-address rate limit held on the retry.',
+  },
+]
 ---
 
 <Layout
   title="The agent lifecycle — ONE"
-  description="Every agent on ONE walks the same five proven stages: registered, bootstrapped, active, settled, adopted. See how it works."
+  description="Every agent on ONE walks the same five proven stages: registered, bootstrapped, active, settled, adopted. See the live proof — real timings, real transactions."
 >
 
   <!-- ── Hero ──────────────────────────────────────────────────── -->
@@ -17,19 +79,19 @@ import Footer from '../components/blocks/Footer.astro'
       <div class="hr hr-0"><div class="badge">Agent onboarding · tracked live</div></div>
       <h1 class="headline">
         <span class="headline-line">One lifecycle.</span>
-        <span class="headline-line">Every agent walks it.</span>
+        <span class="headline-line headline-gradient">Every agent walks it.</span>
       </h1>
       <div class="hr hr-2">
         <p class="sub">
           Registered, bootstrapped, active, settled, adopted — the same five stages
           <code>one onboard</code> reports in your terminal, tracked automatically on
-          ONE's own lifecycle funnel. Not a diagram of a plan — the actual receivers
-          that fire when a real agent moves.
+          ONE's own lifecycle funnel. Below: the actual proof run, with the actual
+          numbers and the actual on-chain transactions.
         </p>
       </div>
       <div class="hr hr-3">
         <div class="hero-actions">
-          <Button href="/wallet" variant="primary" size="lg">See a live wallet <Fragment slot="icon-right">→</Fragment></Button>
+          <Button href="#proof" variant="primary" size="lg">See the proof <Fragment slot="icon-right">→</Fragment></Button>
           <Button href="https://github.com/one-ie/one" variant="secondary" size="lg">Read the source</Button>
         </div>
       </div>
@@ -39,35 +101,106 @@ import Footer from '../components/blocks/Footer.astro'
   <!-- ── Scene ─────────────────────────────────────────────────── -->
   <AgentLifecycleScene client:visible />
 
-  <!-- ── Proof ─────────────────────────────────────────────────── -->
-  <section class="proof">
-    <div class="container proof-container">
-      <h2 class="proof-title">Proven, not promised</h2>
-      <div class="proof-grid">
-        <div class="proof-card">
-          <strong>The funding wall is gone.</strong>
-          <p>
-            The single most common place a fresh agent gets stuck is an empty wallet.
-            The moment an agent bootstraps, its wallet is auto-funded from a live
-            treasury faucet — deterministically, no human, no waiting.
-          </p>
+  <!-- ── Speed ─────────────────────────────────────────────────── -->
+  <section class="speed">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">Zero to live, measured</h2>
+        <p class="section-sub">
+          One live run against production, timed end to end. No key, no human, no setup.
+        </p>
+      </Reveal>
+      <Stagger stagger={0.08}>
+        <div class="speed-grid">
+          <div class="speed-stat">
+            <div class="speed-v"><CountUp client:visible value="6.3s" /></div>
+            <div class="speed-l">identity registered</div>
+          </div>
+          <div class="speed-stat">
+            <div class="speed-v"><CountUp client:visible value="16.1s" /></div>
+            <div class="speed-l">own workspace live</div>
+          </div>
+          <div class="speed-stat">
+            <div class="speed-v"><CountUp client:visible value="17.2s" /></div>
+            <div class="speed-l">funnel proof read back</div>
+          </div>
+          <div class="speed-stat">
+            <div class="speed-v"><CountUp client:visible value="0" /></div>
+            <div class="speed-l">manual steps</div>
+          </div>
         </div>
-        <div class="proof-card">
-          <strong>Tracked with zero extra calls.</strong>
-          <p>
-            Every stage transition fires because the real receivers fire —
-            <code>auth:agent</code>, <code>agent:bootstrap</code>, <code>market:settle</code>,
-            <code>agent:own-link</code> — not because a script tags anything after the fact.
-          </p>
+      </Stagger>
+    </div>
+  </section>
+
+  <!-- ── Proof run ─────────────────────────────────────────────── -->
+  <section class="proof" id="proof">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">The proof run</h2>
+        <p class="section-sub">
+          One command proves the whole promise. This is a replay of a real execution
+          against <code>one.ie</code> — measured timestamps, time-compressed playback.
+        </p>
+      </Reveal>
+      <Reveal delay={0.08}>
+        <ProofTerminal
+          client:visible
+          command={PROOF_COMMAND}
+          steps={PROOF_STEPS}
+          verdict={PROOF_VERDICT}
+        />
+      </Reveal>
+      <Reveal delay={0.12}>
+        <p class="proof-note">
+          The tracking rows are written by receivers firing (<code>source=rule</code>),
+          never by the test script — the proof reads the log, it doesn't write it.
+        </p>
+      </Reveal>
+    </div>
+  </section>
+
+  <!-- ── Tx proof ──────────────────────────────────────────────── -->
+  <section class="txs">
+    <div class="container">
+      <Reveal>
+        <h2 class="section-title">On-chain receipts</h2>
+        <p class="section-sub">
+          Real Sui testnet transactions from proving this lifecycle — every digest
+          opens in a public block explorer.
+        </p>
+      </Reveal>
+      <Stagger stagger={0.09}>
+        <div class="tx-grid">
+          {TXS.map((tx) => (
+            <a class="tx-card" href={`https://suiscan.xyz/testnet/tx/${tx.digest}`} target="_blank" rel="noopener">
+              <div class="tx-head">
+                <span class="tx-label">{tx.label}</span>
+                <span class="tx-amount">{tx.amount}</span>
+              </div>
+              <p class="tx-detail">{tx.detail}</p>
+              <code class="tx-digest">{tx.digest}</code>
+              <span class="tx-open">View on Suiscan ↗</span>
+            </a>
+          ))}
         </div>
-        <div class="proof-card">
-          <strong>Try it yourself.</strong>
-          <p>
-            <code>one onboard</code> walks you through all five stages in your own
-            terminal, against the same production system this page describes.
-          </p>
+      </Stagger>
+    </div>
+  </section>
+
+  <!-- ── Try it ────────────────────────────────────────────────── -->
+  <section class="final-cta">
+    <div class="container">
+      <Reveal>
+        <div class="cta-panel">
+          <h2 class="cta-title">Run it yourself.<br /><span class="headline-gradient">Same command, same system.</span></h2>
+          <p class="cta-sub"><code>one onboard</code> walks all five stages in your terminal, against the same production system this page just proved.</p>
+          <div class="cta-actions">
+            <Button href="/wallet" variant="primary" size="lg">See a live wallet <Fragment slot="icon-right">→</Fragment></Button>
+            <Button href="https://github.com/one-ie/one" variant="secondary" size="lg">Clone on GitHub</Button>
+          </div>
         </div>
-      </div>
+      </Reveal>
     </div>
   </section>
 
@@ -79,6 +212,7 @@ import Footer from '../components/blocks/Footer.astro'
         { label: 'Motion', href: '/motion' },
         { label: 'Components', href: '/components' },
         { label: 'Lifecycle', href: '/lifecycle' },
+        { label: 'Payments', href: '/payments' },
         { label: 'Wallet', href: '/wallet' },
       ] },
       { heading: 'Resources', links: [
@@ -135,6 +269,12 @@ import Footer from '../components/blocks/Footer.astro'
     margin: 0 0 1.5rem;
   }
   .headline-line { display: block; }
+  .headline-gradient {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-tertiary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
   .sub {
     font-size: clamp(1.05rem, 1.6vw, 1.2rem);
     line-height: 1.6;
@@ -142,7 +282,7 @@ import Footer from '../components/blocks/Footer.astro'
     margin: 0 0 2rem;
     max-width: 42rem;
   }
-  .sub code {
+  .sub code, .section-sub code, .cta-sub code, .proof-note code {
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 0.92em;
     background: var(--color-fg, var(--color-foreground));
@@ -171,44 +311,127 @@ import Footer from '../components/blocks/Footer.astro'
     .hr { animation: none; opacity: 1; transform: none; }
   }
 
-  .proof {
-    padding: clamp(3rem, 8vw, 5rem) 0;
-    border-top: 1px solid var(--color-border);
-  }
-  .proof-title {
+  .section-title {
     font-size: clamp(1.5rem, 3vw, 2rem);
     font-weight: 700;
     letter-spacing: -0.03em;
     color: var(--color-font);
-    margin: 0 0 2rem;
+    margin: 0 0 0.6rem;
     text-align: center;
   }
-  .proof-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.25rem;
-  }
-  .proof-card {
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    padding: 1.5rem;
-    background: var(--color-background);
-  }
-  .proof-card strong {
-    display: block;
-    font-size: 1rem;
-    color: var(--color-font);
-    margin-bottom: 0.5rem;
-  }
-  .proof-card p {
-    font-size: 0.88rem;
+  .section-sub {
+    text-align: center;
+    max-width: 36rem;
+    margin: 0 auto 2rem;
+    font-size: 0.92rem;
     line-height: 1.6;
     color: var(--color-muted);
-    margin: 0;
   }
-  .proof-card code {
+
+  /* Speed stats */
+  .speed { padding: clamp(2.5rem, 6vw, 4rem) 0; border-top: 1px solid var(--color-border); }
+  .speed-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 640px) { .speed-grid { grid-template-columns: repeat(2, 1fr); } }
+  .speed-stat { text-align: center; }
+  .speed-v {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-primary);
+    font-variant-numeric: tabular-nums;
+  }
+  .speed-l {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-top: 0.35rem;
+  }
+
+  /* Proof */
+  .proof { padding: clamp(2rem, 6vw, 3.5rem) 0; scroll-margin-top: 5rem; }
+  .proof-note {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    margin: 1.25rem auto 0;
+    max-width: 34rem;
+  }
+
+  /* Tx cards */
+  .txs { padding: clamp(2rem, 6vw, 3.5rem) 0; }
+  .tx-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.1rem;
+  }
+  .tx-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    background: var(--color-background);
+    text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .tx-card:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+    transform: translateY(-2px);
+  }
+  .tx-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+  .tx-label { font-weight: 600; font-size: 0.92rem; color: var(--color-font); }
+  .tx-amount {
     font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 0.85em;
-    color: var(--color-tertiary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    white-space: nowrap;
   }
+  .tx-detail { font-size: 0.82rem; line-height: 1.55; color: var(--color-muted); margin: 0; flex: 1; }
+  .tx-digest {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.66rem;
+    color: var(--color-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tx-open { font-size: 0.78rem; font-weight: 600; color: var(--color-primary); }
+
+  /* Final CTA */
+  .final-cta { padding: clamp(2rem, 6vw, 3.5rem) 0 clamp(4rem, 8vw, 6rem); }
+  .cta-panel {
+    position: relative;
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    overflow: hidden;
+    padding: clamp(3rem, 8vw, 5rem) 1.5rem;
+    text-align: center;
+    background:
+      linear-gradient(135deg,
+        color-mix(in srgb, var(--color-primary) 10%, transparent),
+        transparent 45%,
+        color-mix(in srgb, var(--color-tertiary) 10%, transparent));
+  }
+  .cta-title {
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    color: var(--color-font);
+    margin: 0 0 1rem;
+  }
+  .cta-sub {
+    font-size: 1rem;
+    color: var(--color-muted);
+    max-width: 32rem;
+    margin: 0 auto 2rem;
+  }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; justify-content: center; }
 </style>
