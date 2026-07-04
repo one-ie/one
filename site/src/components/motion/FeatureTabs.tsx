@@ -701,9 +701,10 @@ export default function FeatureTabs() {
                 <span style={{
                   fontSize: '0.63rem', fontWeight: 500,
                   letterSpacing: '0.07em', textTransform: 'uppercase',
-                  color: isActive
-                    ? `color-mix(in srgb, ${C.primary} 65%, transparent)`
-                    : C.muted,
+                  // Full primary, no alpha — any transparency drops this 10px
+                  // tag below 4.5:1 on dark surfaces (65% → 3.2, 85% → 4.4,
+                  // both verified via Lighthouse). Size carries the hierarchy.
+                  color: isActive ? C.primary : C.muted,
                   transition: 'color 120ms',
                 }}>
                   {t.tag}

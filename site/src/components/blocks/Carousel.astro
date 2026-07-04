@@ -263,27 +263,10 @@ const uid = `carousel-${Math.random().toString(36).slice(2, 9)}`
     align-items: center;
     gap: 0.4rem;
   }
-  .one-carousel-dot {
-    width: 7px;
-    height: 7px;
-    padding: 0;
-    border: none;
-    border-radius: 9999px;
-    background: var(--color-faint);
-    cursor: pointer;
-    transition: width var(--ease), background var(--ease), transform var(--ease);
-  }
-  .one-carousel-dot:hover {
-    background: color-mix(in oklab, var(--color-primary) 55%, var(--color-faint));
-  }
-  .one-carousel-dot[aria-selected='true'] {
-    width: 22px;
-    background: var(--color-primary);
-  }
-  .one-carousel-dot:focus-visible {
-    outline: 2px solid var(--color-ring);
-    outline-offset: 3px;
-  }
+  /* Dot rules live in the is:global block below — the dots are created by
+     the init script, so they never receive Astro's scope attribute and any
+     scoped rule for them is dead code (verified live: they rendered as
+     unstyled default buttons). */
 
   /* Visually-hidden polite announcer. */
   .one-carousel-live {
@@ -310,6 +293,34 @@ const uid = `carousel-${Math.random().toString(36).slice(2, 9)}`
 <style is:global>
   .one-carousel-track > * {
     scroll-snap-align: start;
+  }
+  /* Script-created dots — global on purpose (no Astro scope attribute).
+     Visual is a 7px bar; padding + content-box clip grow the tap target
+     to 25px (WCAG 2.5.8 needs ≥24) without changing the look. */
+  .one-carousel-dot {
+    box-sizing: content-box;
+    width: 7px;
+    height: 7px;
+    padding: 9px;
+    border: none;
+    border-radius: 9999px;
+    /* background-COLOR (not the shorthand) everywhere below — the shorthand
+       resets background-clip and paints the full 25px hit area. */
+    background-color: var(--color-faint);
+    background-clip: content-box;
+    cursor: pointer;
+    transition: width var(--ease), background var(--ease), transform var(--ease);
+  }
+  .one-carousel-dot:hover {
+    background-color: color-mix(in oklab, var(--color-primary) 55%, var(--color-faint));
+  }
+  .one-carousel-dot[aria-selected='true'] {
+    width: 22px;
+    background-color: var(--color-primary);
+  }
+  .one-carousel-dot:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 3px;
   }
   .one-carousel-slide-wrap {
     position: relative;
@@ -364,7 +375,11 @@ const uid = `carousel-${Math.random().toString(36).slice(2, 9)}`
       }
       slide.setAttribute('aria-roledescription', 'slide')
       slide.setAttribute('aria-label', `${i + 1} of ${total}`)
-      slide.setAttribute('role', 'group')
+      // Sectioning elements (article/section) keep their implicit role —
+      // overriding them with role="group" mis-shapes the accessibility tree.
+      if (slide.tagName !== 'ARTICLE' && slide.tagName !== 'SECTION') {
+        slide.setAttribute('role', 'group')
+      }
       // Mirror the computed slide width onto wrapped slotted children so the
       // peek geometry matches the data-driven path.
       if (slide.classList.contains('one-carousel-slide-wrap')) {

@@ -270,7 +270,9 @@ const shared = {
        Filled danger. Label is always near-white for contrast on red. */
   .one-btn--destructive {
     background: var(--color-destructive);
-    color: color-mix(in oklab, var(--color-white) 96%, var(--color-destructive));
+    /* System contrast label — #fff in light mode, #000 in dark (the dark
+       destructive is lightened for small-text AA, so white fails on it). */
+    color: var(--color-on-destructive);
   }
   .one-btn--destructive:hover {
     background: color-mix(in oklab, var(--color-destructive) 88%, var(--color-black));
