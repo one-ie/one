@@ -328,7 +328,7 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
 
                   {/* field group: number, then name · expiry · cvc — nothing hidden */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <div className="pc-anim" aria-label="Card number" style={well('number')} onClick={() => focusField('number')}>
+                    <div className="pc-anim" style={well('number')} onClick={() => focusField('number')}>
                       <CardNumberElement
                         options={{ style: elementStyle, showIcon: false, placeholder: '1234  5678  9012  3456' }}
                         onFocus={() => setFocus('number')}
@@ -358,7 +358,7 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
                         style={{ width: '100%', border: 'none', background: 'transparent', color: '#fff', fontFamily: "'SF Mono', ui-monospace, monospace", fontSize: '0.85rem', fontWeight: 500, letterSpacing: '0.02em', padding: 0, outline: 'none' }}
                       />
                     </div>
-                    <div className="pc-anim" aria-label="Expiry date" style={{ ...well('expiry'), width: '4.4rem', flexShrink: 0 }} onClick={() => focusField('expiry')}>
+                    <div className="pc-anim" style={{ ...well('expiry'), width: '4.4rem', flexShrink: 0 }} onClick={() => focusField('expiry')}>
                       <CardExpiryElement
                         options={{ style: elementStyle }}
                         onFocus={() => setFocus('expiry')}
@@ -366,7 +366,7 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
                         onChange={(ev) => setDone((d) => ({ ...d, expiry: ev.complete }))}
                       />
                     </div>
-                    <div className="pc-anim" aria-label="Security code" style={{ ...well('cvc'), width: '3.4rem', flexShrink: 0 }} onClick={() => focusField('cvc')}>
+                    <div className="pc-anim" style={{ ...well('cvc'), width: '3.4rem', flexShrink: 0 }} onClick={() => focusField('cvc')}>
                       <CardCvcElement
                         options={{ style: elementStyle, placeholder: 'CVC' }}
                         onFocus={() => setFocus('cvc')}
