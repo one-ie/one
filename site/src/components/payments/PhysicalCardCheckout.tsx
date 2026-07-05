@@ -293,7 +293,7 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
           style={{ perspective: '1400px', filter: 'drop-shadow(0 22px 40px rgba(0,0,0,0.32))', animation: reducedMotion ? undefined : 'pc-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both' }}
         >
           <div ref={tiltRef} style={{ transformStyle: 'preserve-3d', transition: 'transform 0.4s ease-out', willChange: 'transform' }}>
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '1.55 / 1', minHeight: 264 }}>
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '1.6 / 1', minHeight: 236 }}>
               <div style={cardFace}>
                 <FaceSheen />
                 <div style={{ position: 'relative', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', padding: 'clamp(0.85rem, 3.6%, 1.15rem)', color: '#fff' }}>
@@ -322,9 +322,9 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
                     <div style={{ marginTop: '0.5rem' }}><Chip /></div>
                   </div>
 
-                  {/* spacers lift the fields to the middle of the card (top:bottom
-                      weighting places them just above centre, not pinned to the edge) */}
-                  <div style={{ flex: 1 }} />
+                  {/* weighted spacers seat the fields in the lower third — near the
+                      bottom (where it reads best) but off the very edge */}
+                  <div style={{ flex: 2.6 }} />
 
                   {/* field group: number, then name · expiry · cvc — nothing hidden */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -377,8 +377,8 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
                   </div>
                   </div>
 
-                  {/* larger bottom spacer → fields rest just above centre */}
-                  <div style={{ flex: 1.6 }} />
+                  {/* small bottom spacer → keeps a slim margin below the fields */}
+                  <div style={{ flex: 1 }} />
                 </div>
               </div>
             </div>
