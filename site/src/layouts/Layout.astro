@@ -12,12 +12,21 @@ interface Props {
 
 const {
   title,
-  description = 'Built with ONE',
+  description = 'The open-source Astro starter that ships payments, AI, and plugins on day one.',
   ogTitle,
   ogDescription,
   ogImage,
   ogUrl,
 } = Astro.props
+
+// Canonical + social defaults are derived so every page gets them for free —
+// no page has to remember to pass og props. Canonical reflects the serving
+// origin (the real host in production SSR).
+const siteName = 'ONE'
+const canonicalURL = new URL(Astro.url.pathname, Astro.url.origin).href
+const ogT = ogTitle ?? title
+const ogD = ogDescription ?? description
+const ogU = ogUrl ?? canonicalURL
 ---
 
 <!doctype html>
@@ -27,11 +36,26 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title}</title>
-    {ogTitle && <meta property="og:title" content={ogTitle} />}
-    {ogDescription && <meta property="og:description" content={ogDescription} />}
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eeeeee" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a" />
+
+    <!-- Open Graph — always emitted, defaulted from title/description/URL -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={ogT} />
+    <meta property="og:description" content={ogD} />
+    <meta property="og:url" content={ogU} />
     {ogImage && <meta property="og:image" content={ogImage} />}
-    {ogUrl && <meta property="og:url" content={ogUrl} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={ogT} />
+    <meta name="twitter:description" content={ogD} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
 
     <!-- Critical tokens — inlined to prevent FOUC on first paint -->
     <style is:inline>
@@ -169,8 +193,29 @@ const {
         <div id="one-swatches" class="one-swatches" role="group" aria-label="Color theme"></div>
         <div class="one-divider"></div>
         <button id="one-mode" class="one-mode" type="button" aria-label="Toggle dark mode"></button>
+        <button
+          id="one-menu-btn"
+          class="one-menu-btn"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="one-mobile-menu"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+        </button>
       </div>
     </header>
+
+    <!-- Mobile menu — the primary links are display:none under 640px; this
+         drawer restores them (opened by the hamburger above). -->
+    <nav id="one-mobile-menu" class="one-mobile-menu" aria-label="Primary (mobile)">
+      <a href="/payments">Payments</a>
+      <a href="/wallet">Wallet</a>
+      <a href="/lifecycle">Lifecycle</a>
+      <a href="/design">Design</a>
+      <a href="/motion">Motion</a>
+      <a href="/components">Components</a>
+    </nav>
 
     <!-- ── Page content ─────────────────────────────────────────── -->
     <main>
@@ -246,6 +291,24 @@ const {
         if (mb) mb.onclick = function () {
           var s = state()
           apply(s.theme, !s.dark)
+        }
+
+        /* Mobile menu — hamburger toggles the drawer of primary links that
+           are display:none under 640px. Closes on link click and Escape. */
+        var menuBtn = document.getElementById('one-menu-btn')
+        var menu = document.getElementById('one-mobile-menu')
+        if (menuBtn && menu) {
+          function setMenu(open) {
+            menu.classList.toggle('open', open)
+            menuBtn.setAttribute('aria-expanded', String(open))
+          }
+          menuBtn.onclick = function () { setMenu(!menu.classList.contains('open')) }
+          menu.querySelectorAll('a').forEach(function (a) {
+            a.addEventListener('click', function () { setMenu(false) })
+          })
+          window.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') setMenu(false)
+          })
         }
 
         /* Stay honest when another surface (e.g. /design's editor) changes
@@ -374,7 +437,56 @@ const {
     transition: color var(--ease);
   }
   .one-nav-links a:hover { color: var(--color-font); }
-  @media (max-width: 640px) { .one-nav-links { display: none; } }
+
+  /* ── Mobile menu ───────────────────────────────────────────────── */
+  .one-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-font);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background var(--ease), border-color var(--ease), color var(--ease);
+  }
+  .one-menu-btn:hover {
+    background: color-mix(in oklab, var(--color-primary) 8%, var(--color-background));
+    border-color: color-mix(in oklab, var(--color-primary) 40%, transparent);
+    color: var(--color-primary);
+  }
+  .one-mobile-menu {
+    display: none;
+    position: sticky;
+    top: 52px;
+    z-index: 99;
+    flex-direction: column;
+    padding: 0.25rem 1.5rem 0.75rem;
+    background: color-mix(in oklab, var(--color-foreground) 92%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .one-mobile-menu.open { display: flex; }
+  .one-mobile-menu a {
+    padding: 0.75rem 0.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-font);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .one-mobile-menu a:last-child { border-bottom: none; }
+
+  @media (max-width: 640px) {
+    .one-nav-links { display: none; }
+    .one-menu-btn { display: flex; }
+  }
+  /* Never leave the drawer open past the breakpoint where the button vanishes. */
+  @media (min-width: 641px) { .one-mobile-menu.open { display: none; } }
 
   .one-controls {
     display: flex;

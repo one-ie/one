@@ -42,7 +42,7 @@ const C = {
   primary: 'var(--color-primary)',
 }
 
-const DANGER = '#e5484d'
+const DANGER = 'var(--color-destructive)'
 const OK = '#34d17d'
 
 let stripePromise: Promise<StripeJs | null> | null = null
@@ -439,7 +439,7 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
       )}
 
       {err && (
-        <p style={{ fontSize: '0.78rem', color: DANGER, background: 'color-mix(in srgb, #e5484d 10%, transparent)', borderRadius: 8, padding: '0.5rem 0.7rem', margin: 0 }}>{err}</p>
+        <p style={{ fontSize: '0.78rem', color: DANGER, background: 'color-mix(in srgb, var(--color-destructive) 12%, transparent)', borderRadius: 8, padding: '0.5rem 0.7rem', margin: 0 }}>{err}</p>
       )}
 
       {!paidId && (
@@ -550,7 +550,7 @@ export default function PhysicalCardCheckout({
 
       <div style={{ padding: '1rem 1.4rem 1.4rem' }}>
         {err ? (
-          <p style={{ fontSize: '0.78rem', color: DANGER, background: 'color-mix(in srgb, #e5484d 10%, transparent)', borderRadius: 8, padding: '0.5rem 0.7rem', margin: 0 }}>{err}</p>
+          <p style={{ fontSize: '0.78rem', color: DANGER, background: 'color-mix(in srgb, var(--color-destructive) 12%, transparent)', borderRadius: 8, padding: '0.5rem 0.7rem', margin: 0 }}>{err}</p>
         ) : stripe && clientSecret ? (
           <Elements stripe={stripe} options={options}>
             <CardForm clientSecret={clientSecret} amountCents={amountCents} />

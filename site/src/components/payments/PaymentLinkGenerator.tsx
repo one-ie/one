@@ -221,8 +221,8 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
                 <p
                   style={{
                     fontSize: '0.78rem',
-                    color: '#e5484d',
-                    background: 'color-mix(in srgb, #e5484d 10%, transparent)',
+                    color: 'var(--color-destructive)',
+                    background: 'color-mix(in srgb, var(--color-destructive) 12%, transparent)',
                     borderRadius: 8,
                     padding: '0.5rem 0.7rem',
                     margin: 0,
@@ -272,9 +272,9 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
                     gap: '0.4rem',
                     fontSize: '0.82rem',
                     fontWeight: 600,
-                    color: '#34d17d',
-                    background: 'color-mix(in srgb, #34d17d 12%, transparent)',
-                    border: '1px solid color-mix(in srgb, #34d17d 30%, transparent)',
+                    color: 'var(--color-success)',
+                    background: 'color-mix(in srgb, var(--color-success) 14%, transparent)',
+                    border: '1px solid color-mix(in srgb, var(--color-success) 32%, transparent)',
                     borderRadius: 8,
                     padding: '0.5rem 0.7rem',
                   }}

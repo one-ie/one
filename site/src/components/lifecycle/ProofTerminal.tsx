@@ -87,7 +87,7 @@ export default function ProofTerminal({ command, steps, verdict, cadenceS = 0.55
           background: C.fg,
         }}
       >
-        <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#e5484d' }} />
+        <span style={{ width: 8, height: 8, borderRadius: 9999, background: 'var(--color-destructive)' }} />
         <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#f5a524' }} />
         <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#30a46c' }} />
         <span
@@ -125,7 +125,7 @@ export default function ProofTerminal({ command, steps, verdict, cadenceS = 0.55
             <span style={{ color: C.muted, fontSize: '0.68rem', minWidth: '3.6rem', textAlign: 'right', flexShrink: 0 }}>
               {s.t.toFixed(1)}s
             </span>
-            <span style={{ color: s.ok ? C.primary : '#e5484d', flexShrink: 0 }}>{s.ok ? '✓' : '✗'}</span>
+            <span style={{ color: s.ok ? C.primary : 'var(--color-destructive)', flexShrink: 0 }}>{s.ok ? '✓' : '✗'}</span>
             <span style={{ minWidth: 0 }}>
               <span style={{ color: C.font }}>{s.label}</span>
               <span style={{ color: C.muted }}> — {s.detail}</span>
