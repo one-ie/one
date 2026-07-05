@@ -1,6 +1,7 @@
 export const prerender = true
 ---
 import Layout from '../layouts/Layout.astro'
+import Card from '../components/blocks/Card.astro'
 import { IconBadge } from '../components/ui/IconBadge'
 import { Icon } from '../components/ui/Icon'
 import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, ArrowRight, X } from 'lucide-react'
@@ -42,7 +43,12 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <section class="block">
       <div class="block-head">
         <h2>The 6 editable tokens</h2>
-        <p>Click any swatch to recolor live. Picks apply to the whole site and persist — the same engine behind the nav's preset swatches.</p>
+        <p>
+          Click any swatch to recolor live. Picks apply to the whole site and persist — the same
+          engine behind the nav's preset swatches. Everything else on this page — borders, focus
+          rings, destructive/success, <code>on-*</code> label colors — derives from these 6 automatically;
+          see the invariants and derived tokens below.
+        </p>
       </div>
 
       <p class="picker-hint muted small">
@@ -419,10 +425,61 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <!-- ============== CARD VOCABULARY ============== -->
     <section class="block mt-20 mb-16">
       <div class="block-head">
-        <h2>Card Vocabulary</h2>
-        <p>13 card types. Every surface in the product derives from one of these shapes.</p>
+        <h2>Card vocabulary — 5 variants</h2>
+        <p>
+          One composable component, <code>Card.astro</code>. Feature grids, dashboards,
+          team pages, and pricing tables all derive from one of these five shapes —
+          rendered live below, not mocked.
+        </p>
       </div>
-      <div id="card-showcase-root"></div>
+
+      <div class="vocab-grid">
+        <div class="vocab-cell">
+          <Card variant="default" accent="primary">
+            <svg slot="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+            <Fragment slot="header">Default</Fragment>
+            Bare card surface — compose freely with icon, header, body, and footer slots. Every other variant below is this shape, specialized.
+            <a slot="footer" class="card__link" href="/components">See composition →</a>
+          </Card>
+          <code class="vocab-tag">variant="default"</code>
+        </div>
+
+        <div class="vocab-cell">
+          <Card variant="feature" accent="tertiary">
+            <svg slot="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 3 14 9-14 9V3z"/></svg>
+            <Fragment slot="header">Feature</Fragment>
+            Icon chip, title, body copy, footer link — the shape behind the homepage's "what's in the box" grid.
+            <a slot="footer" class="card__link" href="/">See it on the homepage →</a>
+          </Card>
+          <code class="vocab-tag">variant="feature"</code>
+        </div>
+
+        <div class="vocab-cell">
+          <Card variant="stat" accent="primary" stat="99.98%" label="uptime, last 90 days" trend="up" trendLabel="+0.02%" />
+          <code class="vocab-tag">variant="stat" trend="up"</code>
+        </div>
+
+        <div class="vocab-cell">
+          <Card variant="profile" name="Ada Lovelace" role="Founding engineer" socials={[{ label: 'GitHub', href: '#', icon: 'github' }, { label: 'X', href: '#', icon: 'twitter' }]}>
+            Wrote the first algorithm intended for a machine. Reviews every PR before it merges.
+          </Card>
+          <code class="vocab-tag">variant="profile"</code>
+        </div>
+
+        <div class="vocab-cell">
+          <Card variant="pricing" accent="secondary" tier="Free" price="$0" period="/mo"
+            features={['Full source, free forever', 'No account required', 'Community support']}
+            ctaLabel="Start free" ctaHref="https://github.com/one-ie/one" />
+          <code class="vocab-tag">variant="pricing"</code>
+        </div>
+
+        <div class="vocab-cell">
+          <Card variant="pricing" featured accent="primary" tier="Pro" price="$29" period="/mo"
+            features={['Everything in Free', 'AI chat', 'Priority support']}
+            ctaLabel="Start trial" ctaHref="https://one.ie" />
+          <code class="vocab-tag">variant="pricing" featured</code>
+        </div>
+      </div>
     </section>
 
 
@@ -593,7 +650,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 64px 32px 96px;
+    padding: clamp(3rem, 8vw, 4rem) clamp(1.25rem, 4vw, 2rem) clamp(4rem, 8vw, 6rem);
     color: var(--color-font);
     font-size: 15px;
     line-height: 1.55;
@@ -601,9 +658,9 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page * { box-sizing: border-box; }
 
   /* ---------- Hero ---------- */
-  .design-page .hero { text-align: center; margin-bottom: 64px; }
+  .design-page .hero { text-align: center; margin-bottom: clamp(3rem, 6vw, 4rem); }
   .design-page .hero h1 {
-    font-size: 48px; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 12px;
+    font-size: clamp(2rem, 6vw, 3rem); font-weight: 800; letter-spacing: -0.03em; margin: 0 0 12px;
   }
   .design-page .hero p {
     max-width: 620px; margin: 0 auto;
@@ -638,7 +695,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page .reset-btn:hover { color: var(--color-font); border-color: var(--color-border-strong); }
 
   /* ---------- Block (section) ---------- */
-  .design-page .block { margin-bottom: 48px; }
+  .design-page .block { margin-bottom: clamp(2.5rem, 6vw, 3rem); }
   .design-page .block-head { margin-bottom: 16px; }
   .design-page h2 { font-size: 22px; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.01em; }
   .design-page .block-head p { margin: 0; color: var(--color-muted); font-size: 14px; }
@@ -884,6 +941,17 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   }
   .design-page .shell-row.short { width: 60%; }
 
+  /* Below ~480px a 140px fixed sidebar leaves too little room for the main
+     column (page padding + card padding already eat ~90px). Stack instead. */
+  @media (max-width: 480px) {
+    .design-page .shell .shell-frame { grid-template-columns: 1fr; min-height: 0; }
+    .design-page .shell-side {
+      flex-direction: row; align-items: center; flex-wrap: wrap;
+      border-right: 0; border-bottom: 1px solid var(--color-border);
+    }
+    .design-page .shell-nav { flex-direction: row; flex-wrap: wrap; }
+  }
+
   /* ---------- Forms ---------- */
   .design-page .card-body.form { gap: 16px; }
   .design-page .field { display: flex; flex-direction: column; gap: 6px; }
@@ -1008,6 +1076,9 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page .buttons-grid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
   }
+  @media (max-width: 480px) {
+    .design-page .buttons-grid { grid-template-columns: repeat(2, 1fr); }
+  }
   .design-page .btn {
     padding: 10px 14px;
     border-radius: var(--radius-md);
@@ -1073,6 +1144,10 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     display: grid; grid-template-columns: 40px auto 1fr;
     align-items: center; gap: 12px;
   }
+  @media (max-width: 380px) {
+    .design-page .scale-row { grid-template-columns: 40px 1fr; }
+    .design-page .scale-row .muted { grid-column: 2 / -1; }
+  }
   .design-page .rad {
     width: 36px; height: 36px;
     background: var(--color-primary);
@@ -1099,6 +1174,18 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     background: var(--color-primary);
     border-radius: 2px;
     opacity: 0.9;
+  }
+
+  /* ---------- Card vocabulary ---------- */
+  .design-page .vocab-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  @media (max-width: 900px) { .design-page .vocab-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .design-page .vocab-grid { grid-template-columns: 1fr; } }
+  .design-page .vocab-cell { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .design-page .vocab-tag {
+    align-self: flex-start; color: var(--color-muted);
+    background: var(--color-background); border: 1px solid var(--color-border);
   }
 
   /* ---------- Footer ---------- */

@@ -3,18 +3,73 @@ import Layout from '../layouts/Layout.astro'
 ---
 
 <Layout title="404 — Page not found">
-  <main style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; padding: 1rem; text-align: center;">
-    <h1 style="font-size: 6rem; font-weight: 700; line-height: 1; color: var(--color-primary); margin: 0;">
-      404
-    </h1>
-    <p style="font-size: 1.25rem; color: var(--color-font); opacity: 0.7; margin: 0;">
-      Page not found
-    </p>
-    <a
-      href="/"
-      style="padding: 0.625rem 1.25rem; background: var(--color-primary); color: var(--color-on-primary); border-radius: var(--radius-md); text-decoration: none; font-weight: 500;"
-    >
-      Go home
-    </a>
+  <main class="error-page">
+    <h1 class="error-number">404</h1>
+    <p class="error-message">Page not found</p>
+    <div class="error-actions">
+      <a href="/" class="error-btn error-btn--primary">Go home</a>
+    </div>
   </main>
 </Layout>
+
+<style>
+  .error-page {
+    min-height: calc(100vh - 52px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    text-align: center;
+  }
+  .error-number {
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary);
+    margin: 0;
+  }
+  .error-message {
+    font-size: 1.25rem;
+    color: var(--color-muted);
+    margin: 0;
+  }
+  .error-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .error-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 1.6rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+    transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+  }
+  .error-btn--primary {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+  .error-btn--primary:hover {
+    background: color-mix(in oklab, var(--color-primary) 90%, var(--color-font));
+  }
+  .error-btn--secondary {
+    background: var(--color-foreground);
+    color: var(--color-font);
+    border-color: var(--color-border);
+  }
+  .error-btn--secondary:hover {
+    background: var(--color-background);
+    border-color: var(--color-border-strong);
+  }
+</style>

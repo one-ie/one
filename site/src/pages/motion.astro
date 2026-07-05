@@ -3,7 +3,7 @@ export const prerender = true
 import Layout from '@/layouts/Layout.astro'
 import Reveal from '@/components/motion/Reveal.astro'
 import Stagger from '@/components/motion/Stagger.astro'
-import FeatureTabs from '@/components/motion/FeatureTabs'
+import FeatureTabs, { LifecycleScrollScene } from '@/components/motion/FeatureTabs'
 ---
 
 <Layout title="ONE Motion System">
@@ -132,7 +132,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
     <Reveal class="section-head">
       <p class="eyebrow">Capabilities</p>
       <h2>Every primitive, live</h2>
-      <p class="muted">Click a tab. Try the demo. All six capabilities in one place.</p>
+      <p class="muted">Click a tab. Four primitives, plus the physics and tokens that tune them — six demos, one tab bar.</p>
     </Reveal>
 
     <FeatureTabs client:only="react" />
@@ -145,9 +145,17 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
     <Reveal class="scene-intro-text">
       <p class="eyebrow">ScrollScene in the wild</p>
       <h2>Scroll to advance the signal lifecycle</h2>
+      <p class="muted scene-intro-sub">
+        Real scroll, not a loop — the sticky pin below exposes progress 0→1
+        straight from <code>useScroll</code>, the same primitive the "ScrollScene" tab
+        above only simulates on a timer.
+      </p>
     </Reveal>
   </div>
 
+  <div class="scene-stage">
+    <LifecycleScrollScene client:visible />
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
        7. PROOF — performance guardrails (handle objections)
@@ -189,7 +197,7 @@ import FeatureTabs from '@/components/motion/FeatureTabs'
         </div>
       </div>
       <div class="guardrail">
-        <span class="gr-icon gr-warn">○</span>
+        <span class="gr-icon gr-good">✓</span>
         <div>
           <strong>Tree-shaking</strong>
           <p class="muted small">Motion ships ESM. Unused primitives never reach the bundle.</p>
@@ -379,7 +387,7 @@ code {
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-foreground);
-  padding: 5rem clamp(2rem, 7vw, 9rem);
+  padding: clamp(3.5rem, 8vw, 6rem) 1.5rem;
 }
 
 :global(.tension-inner) {
@@ -416,7 +424,7 @@ blockquote {
   justify-content: center;
   flex-wrap: wrap;
   gap: 0;
-  padding: 1.75rem clamp(2rem, 7vw, 9rem);
+  padding: clamp(1.5rem, 4vw, 2.25rem) 1.5rem;
   max-width: 900px;
   margin: 0 auto;
 }
@@ -453,14 +461,14 @@ blockquote {
 
 /* ── 4. Architecture overview ──────────────────────────────────────────── */
 .section {
-  padding: 6rem clamp(2rem, 7vw, 9rem);
-  max-width: 1100px;
+  padding: clamp(3.5rem, 8vw, 6rem) 1.5rem;
+  max-width: var(--content);
   margin: 0 auto;
   width: 100%;
 }
 
 .section--wide {
-  max-width: 1200px;
+  max-width: var(--content-wide);
 }
 
 :global(.section-head) {
@@ -512,8 +520,8 @@ blockquote {
 
 /* ── 6. Scene intro ────────────────────────────────────────────────────── */
 .scene-intro {
-  padding: 4rem clamp(2rem, 7vw, 9rem) 0;
-  max-width: 1100px;
+  padding: clamp(3rem, 7vw, 5rem) 1.5rem 0;
+  max-width: var(--content);
   margin: 0 auto;
   width: 100%;
 }
@@ -524,6 +532,13 @@ blockquote {
   font-weight: 800;
   letter-spacing: -0.025em;
   margin: 0.4rem 0 0;
+}
+
+.scene-intro-sub {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  max-width: 34rem;
+  margin: 0.85rem 0 0;
 }
 
 :global(.scene-stage) {

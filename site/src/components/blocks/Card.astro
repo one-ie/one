@@ -350,7 +350,6 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
     padding: 1.85rem;
     color: var(--color-font);
     text-decoration: none;
-    height: 100%;
     box-shadow: var(--shadow-card);
     transition:
       border-color var(--ease),
@@ -647,13 +646,14 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
   }
   .card__footer--cta {
     margin-top: auto;
+    text-align: center;
   }
   .card__cta {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    padding: 0.7rem 1.25rem;
+    width: auto;
+    padding: 0.7rem 1.75rem;
     border-radius: var(--radius-md);
     font-size: 0.88rem;
     font-weight: 600;

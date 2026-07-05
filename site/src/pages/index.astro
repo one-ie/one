@@ -325,10 +325,10 @@ plugins: <span class="tok-b">[</span>
           ctaLabel="Start free" ctaHref="https://github.com/one-ie/one" />
         <Card variant="pricing" featured accent="primary" tier="Connected" price="Served" period="· zero bundle"
           features={['track() — privacy-first analytics', 'chat() — AI widget, attach any agent', 'backend() — signals, payments, agents', 'Auto-updated from one.ie']}
-          ctaLabel="Connect a workspace" ctaHref="https://one.ie" />
+          ctaLabel="Connect a workspace" ctaHref="/signup" />
         <Card variant="pricing" accent="secondary" tier="Paid" price="Metered" period="· your API key"
           features={['premium() — x402 checkout + gating', 'admin() — hosted console', 'Unlocked by your API key']}
-          ctaLabel="See pricing" ctaHref="https://one.ie/docs" />
+          ctaLabel="See it live" ctaHref="/payments" />
       </Stagger>
     </div>
   </section>
@@ -653,7 +653,7 @@ plugins: <span class="tok-b">[</span>
   .metric-label { font-size: 0.82rem; color: color-mix(in oklab, var(--color-on-primary) 70%, transparent); line-height: 1.4; }
 
   /* ── Pricing ────────────────────────────────────────────────────── */
-  :global(.pricing-row) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; }
+  :global(.pricing-row) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
   @media (max-width: 900px) { :global(.pricing-row) { grid-template-columns: 1fr; max-width: 26rem; margin: 0 auto; } }
 
   /* ── FAQ ────────────────────────────────────────────────────────── */

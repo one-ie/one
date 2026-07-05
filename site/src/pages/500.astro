@@ -4,10 +4,74 @@ export const prerender = true
 ---
 
 <Layout title="Server error">
-  <main class="min-h-screen flex flex-col items-center justify-center gap-6 px-4 text-center">
-    <p class="text-6xl font-bold text-font/20">500</p>
-    <h1 class="text-2xl font-bold">Something went wrong</h1>
-    <p class="text-font/60">An unexpected error occurred. Please try again.</p>
-    <a href="/" class="px-4 py-2 rounded-lg bg-primary text-on-primary text-sm">Go home</a>
+  <main class="error-page">
+    <h1 class="error-number">500</h1>
+    <p class="error-message">Something broke on our end — try again in a moment.</p>
+    <div class="error-actions">
+      <a href="/" class="error-btn error-btn--primary">Go home</a>
+      <button type="button" class="error-btn error-btn--secondary" onclick="location.reload()">Try again</button>
+    </div>
   </main>
 </Layout>
+
+<style>
+  .error-page {
+    min-height: calc(100vh - 52px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    text-align: center;
+  }
+  .error-number {
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary);
+    margin: 0;
+  }
+  .error-message {
+    font-size: 1.25rem;
+    color: var(--color-muted);
+    margin: 0;
+  }
+  .error-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .error-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 1.6rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+    transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+  }
+  .error-btn--primary {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+  .error-btn--primary:hover {
+    background: color-mix(in oklab, var(--color-primary) 90%, var(--color-font));
+  }
+  .error-btn--secondary {
+    background: var(--color-foreground);
+    color: var(--color-font);
+    border-color: var(--color-border);
+  }
+  .error-btn--secondary:hover {
+    background: var(--color-background);
+    border-color: var(--color-border-strong);
+  }
+</style>

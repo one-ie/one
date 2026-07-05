@@ -181,7 +181,7 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
                     style={inputStyle}
                   />
                 </div>
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <label htmlFor="pl-product" style={labelStyle}>
                     For
                   </label>

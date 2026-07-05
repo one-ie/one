@@ -1,5 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Reveal from '../components/motion/Reveal.astro'
+import Button from '../components/blocks/Button.astro'
+import Footer from '../components/blocks/Footer.astro'
 import ButtonDemo from '../components/blocks/demos/ButtonDemo.astro'
 import CardDemo from '../components/blocks/demos/CardDemo.astro'
 import CarouselDemo from '../components/blocks/demos/CarouselDemo.astro'
@@ -8,6 +11,52 @@ import QuoteDemo from '../components/blocks/demos/QuoteDemo.astro'
 import FormDemo from '../components/blocks/demos/FormDemo.astro'
 import BreadcrumbsDemo from '../components/blocks/demos/BreadcrumbsDemo.astro'
 import FooterDemo from '../components/blocks/demos/FooterDemo.astro'
+
+// Each entry frames the demo below it: which file it comes from, and the
+// prop surface worth knowing before you reach for it. The demo itself shows
+// the component in context; this strip is the spec.
+const BLOCKS = [
+  {
+    name: 'Button',
+    src: 'Button.astro',
+    desc: "Five variants — primary, secondary, tertiary, ghost, destructive — across three sizes. Icon slots, loading and disabled states, and an href prop that renders a real anchor instead of a button.",
+  },
+  {
+    name: 'Card',
+    src: 'Card.astro',
+    desc: 'One composable primitive, five layouts: feature (icon + link), stat (oversized number + trend), profile (avatar + socials), pricing (tier + feature list + CTA), and a bare default — switched with a single variant prop.',
+  },
+  {
+    name: 'Carousel',
+    src: 'Carousel.astro',
+    desc: 'A native CSS scroll-snap carousel — no JS animation loop. Feed it items or slot children directly; perView and peek control how much of the next slide shows. Arrows, dots, and arrow-key navigation wired in.',
+  },
+  {
+    name: 'Tabs',
+    src: 'Tabs.astro',
+    desc: 'Accessible tabs with a gliding active-tab indicator — pure Astro plus one scoped script, zero React. Panels are named slots (panel-<id>); full keyboard support (arrow keys, Home/End) baked in.',
+  },
+  {
+    name: 'Quote',
+    src: 'Quote.astro',
+    desc: 'Pull-quotes in three variants — featured (large, centered), inline (accent bar), and compact (grid card) — each with an optional 1–5 star rating and an avatar-initials fallback.',
+  },
+  {
+    name: 'Form',
+    src: 'ContactForm.astro',
+    desc: 'A complete contact form built from one reusable field shape — label, hairline border, helper text, per-field error and valid states — with inline validation on blur and a simulated (offline) submit.',
+  },
+  {
+    name: 'Breadcrumbs',
+    src: 'Breadcrumbs.astro',
+    desc: "An accessible breadcrumb trail — chevron or slash separators, an optional home icon, and a maxItems prop that collapses deep trails into an accessible '…' menu.",
+  },
+  {
+    name: 'Footer',
+    src: 'Footer.astro',
+    desc: 'The site\'s full marketing footer — brand column, socials, four link columns, newsletter signup, and a legal bottom bar — shown here with zero props. The real one closes this page below.',
+  },
+] as const
 ---
 
 <Layout
@@ -17,28 +66,151 @@ import FooterDemo from '../components/blocks/demos/FooterDemo.astro'
   <!-- ── Hero ─────────────────────────────────────────────────────── -->
   <section class="cx-hero">
     <div class="cx-hero-inner">
-      <p class="cx-eyebrow">Component library</p>
-      <h1 class="cx-title">Beautiful blocks,<br />wired to your brand</h1>
-      <p class="cx-sub">
-        Every component below is built on the same six design tokens as the rest
-        of the template — change one value in <code>one.config.ts</code> and they
-        all re-skin. Accessible, responsive, dark-mode ready, zero config.
-      </p>
+      <div class="hr hr-0"><p class="cx-eyebrow">Component library</p></div>
+      <h1 class="hr hr-1 cx-title">Beautiful blocks,<br />wired to your brand</h1>
+      <div class="hr hr-2">
+        <p class="cx-sub">
+          Every component below is built on the same six design tokens as the rest
+          of the template — change one value in <code>one.config.ts</code> and they
+          all re-skin. Accessible, responsive, dark-mode ready, zero config.
+        </p>
+      </div>
+      <div class="hr hr-3 cx-actions">
+        <Button href="https://github.com/one-ie/one" variant="primary" size="lg">Clone the template <Fragment slot="icon-right">→</Fragment></Button>
+        <Button href="/design" variant="secondary" size="lg">See the tokens</Button>
+      </div>
     </div>
   </section>
 
-  <!-- ── Blocks — alternating tint for rhythm ─────────────────────── -->
-  <div class="cx-block"><ButtonDemo /></div>
-  <div class="cx-block cx-alt"><CardDemo /></div>
-  <div class="cx-block"><CarouselDemo /></div>
-  <div class="cx-block cx-alt"><TabsDemo /></div>
-  <div class="cx-block"><QuoteDemo /></div>
-  <div class="cx-block cx-alt"><FormDemo /></div>
-  <div class="cx-block"><BreadcrumbsDemo /></div>
-  <FooterDemo />
+  <!-- ── Blocks — framed spec + live demo, alternating tint ─────────── -->
+  <div class="cx-block">
+    <div class="cx-frame">
+      <Reveal>
+        <p class="cx-tag">Block <code>{BLOCKS[0].src}</code></p>
+        <p class="cx-desc">{BLOCKS[0].desc}</p>
+      </Reveal>
+    </div>
+    <ButtonDemo />
+  </div>
+
+  <div class="cx-block cx-alt">
+    <div class="cx-frame">
+      <Reveal>
+        <p class="cx-tag">Block <code>{BLOCKS[1].src}</code></p>
+        <p class="cx-desc">{BLOCKS[1].desc}</p>
+      </Reveal>
+    </div>
+    <CardDemo />
+  </div>
+
+  <div class="cx-block">
+    <div class="cx-frame">
+      <Reveal>
+        <p class="cx-tag">Block <code>{BLOCKS[2].src}</code></p>
+        <p class="cx-desc">{BLOCKS[2].desc}</p>
+      </Reveal>
+    </div>
+    <CarouselDemo />
+  </div>
+
+  <div class="cx-block cx-alt">
+    <div class="cx-frame">
+      <Reveal>
+        <p class="cx-tag">Block <code>{BLOCKS[3].src}</code></p>
+        <p class="cx-desc">{BLOCKS[3].desc}</p>
+      </Reveal>
+    </div>
+    <TabsDemo />
+  </div>
+
+  <div class="cx-block">
+    <div class="cx-frame">
+      <Reveal>
+        <p class="cx-tag">Block <code>{BLOCKS[4].src}</code></p>
+        <p class="cx-desc">{BLOCKS[4].desc}</p>
+      </Reveal>
+    </div>
+    <QuoteDemo />
+  </div>
+
+  <div class="cx-block cx-alt">
+    <div class="cx-frame">
+      <Reveal>
+        <p class="cx-tag">Block <code>{BLOCKS[5].src}</code></p>
+        <p class="cx-desc">{BLOCKS[5].desc}</p>
+      </Reveal>
+    </div>
+    <FormDemo />
+  </div>
+
+  <div class="cx-block">
+    <div class="cx-frame">
+      <Reveal>
+        <p class="cx-tag">Block <code>{BLOCKS[6].src}</code></p>
+        <p class="cx-desc">{BLOCKS[6].desc}</p>
+      </Reveal>
+    </div>
+    <BreadcrumbsDemo />
+  </div>
+
+  <div class="cx-block cx-alt">
+    <div class="cx-frame">
+      <Reveal>
+        <p class="cx-tag">Block <code>{BLOCKS[7].src}</code></p>
+        <p class="cx-desc">{BLOCKS[7].desc}</p>
+      </Reveal>
+    </div>
+    <FooterDemo />
+  </div>
+
+  <!-- ── The real footer — this page's own, not a demo ──────────────── -->
+  <Footer
+    tagline="The open-source Astro starter that ships payments, AI, and plugins on day one — wired from one.config.ts."
+    columns={[
+      { heading: 'Product', links: [
+        { label: 'Payments', href: '/payments' },
+        { label: 'Wallet', href: '/wallet' },
+        { label: 'Lifecycle', href: '/lifecycle' },
+        { label: 'Design system', href: '/design' },
+        { label: 'Motion', href: '/motion' },
+        { label: 'Components', href: '/components' },
+      ] },
+      { heading: 'Resources', links: [
+        { label: 'Documentation', href: 'https://one.ie/docs' },
+        { label: 'GitHub', href: 'https://github.com/one-ie/one', external: true },
+        { label: 'Changelog', href: 'https://one.ie/docs' },
+      ] },
+      { heading: 'Company', links: [
+        { label: 'About', href: 'https://one.ie' },
+        { label: 'Blog', href: 'https://one.ie' },
+        { label: 'Contact', href: 'https://one.ie' },
+      ] },
+      { heading: 'Legal', links: [
+        { label: 'License', href: 'https://github.com/one-ie/one/blob/main/LICENSE' },
+        { label: 'Privacy', href: 'https://one.ie' },
+        { label: 'Terms', href: 'https://one.ie' },
+      ] },
+    ]}
+    note="Free forever, one license · Built on the open web."
+  />
 </Layout>
 
 <style>
+  /* ── Time-based hero reveal (NOT scroll-driven — above the fold uses
+        animation-delay, matching index.astro / payments.astro). ─────── */
+  .hr { animation: hr-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .hr-0 { animation-delay: 0.02s; }
+  .hr-1 { animation-delay: 0.10s; }
+  .hr-2 { animation-delay: 0.18s; }
+  .hr-3 { animation-delay: 0.26s; }
+  @keyframes hr-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hr { animation: none; opacity: 1; transform: none; }
+  }
+
   .cx-hero {
     padding: 7rem 1.5rem 4rem;
     text-align: center;
@@ -73,9 +245,59 @@ import FooterDemo from '../components/blocks/demos/FooterDemo.astro'
     font-size: 0.86em;
     color: var(--color-tertiary);
   }
+  .cx-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
 
   /* Alternating band tint — matches the landing page's section-alt. */
   .cx-alt {
     background: color-mix(in oklab, var(--color-primary) 6%, var(--color-foreground));
+  }
+
+  /* ── Per-block spec strip — what the demo below is, before it shows off. */
+  .cx-frame {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 0;
+    text-align: center;
+  }
+  .cx-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin: 0 0 0.65rem;
+  }
+  .cx-tag code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.82em;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--color-tertiary);
+  }
+  .cx-desc {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .cx-hero { padding: 5rem 1.25rem 3rem; }
+    .cx-frame { padding: 2.25rem 1.25rem 0; }
+  }
+  @media (max-width: 480px) {
+    .cx-actions { flex-direction: column; align-items: stretch; }
+    .cx-actions :global(a),
+    .cx-actions :global(button) { width: 100%; }
   }
 </style>

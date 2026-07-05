@@ -89,7 +89,7 @@ export default function ProofTerminal({ command, steps, verdict, cadenceS = 0.55
       >
         <span style={{ width: 8, height: 8, borderRadius: 9999, background: 'var(--color-destructive)' }} />
         <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#f5a524' }} />
-        <span style={{ width: 8, height: 8, borderRadius: 9999, background: '#30a46c' }} />
+        <span style={{ width: 8, height: 8, borderRadius: 9999, background: 'var(--color-success)' }} />
         <span
           style={{
             marginLeft: '0.5rem',

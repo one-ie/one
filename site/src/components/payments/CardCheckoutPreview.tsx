@@ -106,7 +106,7 @@ export default function CardCheckoutPreview() {
             <input type="text" inputMode="numeric" placeholder="4242 4242 4242 4242" disabled style={inputStyle} />
           </div>
           <div style={{ display: 'flex', gap: '0.75rem' }}>
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <label style={labelStyle}>Expiry</label>
               <input type="text" placeholder="MM / YY" disabled style={inputStyle} />
             </div>

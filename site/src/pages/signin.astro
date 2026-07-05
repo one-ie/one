@@ -2,41 +2,215 @@
 import Layout from '../layouts/Layout.astro'
 ---
 
-<Layout title="Sign in" description="Sign in to your account">
-  <main style="max-width: 400px; margin: 0 auto; padding: 4rem 1.5rem;">
-    <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 2rem;">Sign in</h1>
-    <form method="POST" action="/api/auth/sign-in">
-      <div style="margin-bottom: 1rem;">
-        <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          autocomplete="email"
-          style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-foreground); color: var(--color-font); box-sizing: border-box;"
-        />
+<Layout
+  title="Sign in — ONE"
+  description="Sign in to your ONE workspace — payments, wallet, and every plugin still wired the way you left them."
+>
+  <section class="auth">
+    <div class="container auth-container">
+      <div class="hr hr-0"><a href="/" class="auth-logo">ONE</a></div>
+
+      <div class="hr hr-1 auth-head">
+        <p class="eyebrow">Welcome back</p>
+        <h1 class="headline">Sign in to your workspace.</h1>
+        <p class="sub">Pick up where you left off — payments, wallet, and every plugin still wired the way you left them.</p>
       </div>
-      <div style="margin-bottom: 1.5rem;">
-        <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          autocomplete="current-password"
-          style="width: 100%; padding: 0.625rem 0.75rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-foreground); color: var(--color-font); box-sizing: border-box;"
-        />
+
+      <div class="hr hr-2 auth-card">
+        <!--
+          Homepage (index.astro ~line 213) advertises "passkey or social, zero
+          config" — but src/lib/auth.ts only enables emailAndPassword; no
+          passkey plugin or socialProviders are wired yet. The buttons below
+          are honestly disabled ("coming soon") rather than faked live. This
+          gap needs reconciling: either wire passkey/social for real, or
+          soften the homepage claim to match what ships today.
+        -->
+        <div class="auth-oauth">
+          <button type="button" class="oauth-btn" disabled title="Coming soon — not wired yet">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a5 5 0 0 0-5 5v2a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V7a5 5 0 0 0-5-5Z"/><path d="M9 11v3M12 11v5M15 11v3"/></svg>
+            Continue with Passkey
+            <span class="oauth-soon">Soon</span>
+          </button>
+          <button type="button" class="oauth-btn" disabled title="Coming soon — not wired yet">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8" stroke-linecap="round"/></svg>
+            Continue with Google
+            <span class="oauth-soon">Soon</span>
+          </button>
+        </div>
+
+        <div class="auth-divider"><span>or continue with email</span></div>
+
+        <div id="signin-error" class="auth-error" role="alert" aria-live="polite" hidden></div>
+
+        <form id="signin-form" method="POST" action="/api/auth/sign-in/email" novalidate>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required autocomplete="current-password" />
+          </div>
+          <button id="signin-submit" type="submit" class="submit-btn">
+            <span class="btn-label">Sign in</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+        </form>
       </div>
-      <button
-        type="submit"
-        style="width: 100%; padding: 0.75rem; background: var(--color-primary); color: var(--color-on-primary); border: none; border-radius: var(--radius-md); font-size: 1rem; font-weight: 600; cursor: pointer;"
-      >
-        Sign in
-      </button>
-    </form>
-    <p style="text-align: center; margin-top: 1.5rem; color: var(--color-font); opacity: 0.7;">
-      No account? <a href="/signup" style="color: var(--color-primary);">Sign up</a>
-    </p>
-  </main>
+
+      <p class="auth-foot">No account? <a href="/signup">Sign up</a></p>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('signin-form')
+    const errorBox = document.getElementById('signin-error')
+    const submitBtn = document.getElementById('signin-submit')
+    const btnLabel = submitBtn?.querySelector('.btn-label')
+
+    function setBusy(busy) {
+      if (!submitBtn) return
+      submitBtn.disabled = busy
+      submitBtn.classList.toggle('is-busy', busy)
+      if (btnLabel) btnLabel.textContent = busy ? 'Signing in…' : 'Sign in'
+    }
+
+    function showError(message) {
+      if (!errorBox) return
+      errorBox.textContent = message
+      errorBox.hidden = false
+    }
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      if (errorBox) errorBox.hidden = true
+      setBusy(true)
+
+      const data = new FormData(form)
+      try {
+        const res = await fetch('/api/auth/sign-in/email', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: data.get('email'),
+            password: data.get('password'),
+          }),
+        })
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}))
+          showError(body.message || 'Sign in failed. Check your email and password.')
+          setBusy(false)
+          return
+        }
+        window.location.href = '/'
+      } catch {
+        showError('Network error — check your connection and try again.')
+        setBusy(false)
+      }
+    })
+  </script>
+
+  <style>
+    .hr { animation: hr-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+    .hr-0 { animation-delay: 0.02s; }
+    .hr-1 { animation-delay: 0.08s; }
+    .hr-2 { animation-delay: 0.16s; }
+    @keyframes hr-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) { .hr { animation: none; } }
+
+    .container { max-width: var(--content, 72rem); margin: 0 auto; padding: 0 1.5rem; }
+    .auth { padding: clamp(3.5rem, 9vw, 6rem) 0 clamp(3rem, 7vw, 5rem); }
+    .auth-container { max-width: 26rem; margin: 0 auto; }
+
+    .auth-logo {
+      display: block; text-align: center; font-size: 1rem; font-weight: 800;
+      letter-spacing: -0.03em; color: var(--color-primary); text-decoration: none;
+      margin-bottom: 2rem; transition: opacity var(--ease);
+    }
+    .auth-logo:hover { opacity: 0.75; }
+
+    .auth-head { text-align: center; margin-bottom: 2rem; }
+    .eyebrow {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--color-primary); margin: 0 0 0.6rem;
+    }
+    .headline {
+      font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 800; letter-spacing: -0.035em;
+      line-height: 1.15; color: var(--color-font); margin: 0 0 0.75rem;
+    }
+    .sub { font-size: 0.95rem; line-height: 1.6; color: var(--color-muted); margin: 0; }
+
+    .auth-card {
+      background: var(--color-foreground); border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 18px); padding: clamp(1.5rem, 4vw, 2.25rem);
+    }
+
+    .auth-oauth { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+    .oauth-btn {
+      display: flex; align-items: center; gap: 0.6rem; width: 100%;
+      padding: 0.65rem 0.9rem; border: 1px solid var(--color-border); border-radius: var(--radius-md);
+      background: var(--color-background); color: var(--color-font);
+      font-size: 0.88rem; font-weight: 600; cursor: not-allowed; opacity: 0.6;
+    }
+    .oauth-soon {
+      margin-left: auto; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--color-muted);
+      background: color-mix(in oklab, var(--color-muted) 14%, transparent);
+      border-radius: 9999px; padding: 0.15rem 0.5rem;
+    }
+
+    .auth-divider {
+      display: flex; align-items: center; gap: 0.75rem; margin: 0 0 1.25rem;
+      font-size: 0.75rem; color: var(--color-muted);
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--color-border);
+    }
+
+    .auth-error {
+      display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.1rem;
+      padding: 0.7rem 0.9rem; border-radius: var(--radius-md); font-size: 0.85rem; line-height: 1.5;
+      color: var(--color-destructive);
+      background: color-mix(in oklab, var(--color-destructive) 10%, transparent);
+      border: 1px solid color-mix(in oklab, var(--color-destructive) 30%, transparent);
+    }
+    .auth-error[hidden] { display: none; }
+
+    .field { margin-bottom: 1.1rem; }
+    .field label {
+      display: block; margin-bottom: 0.45rem; font-size: 0.85rem; font-weight: 600; color: var(--color-font);
+    }
+    .field input {
+      width: 100%; padding: 0.625rem 0.75rem; border: 1px solid var(--color-border);
+      border-radius: var(--radius-md); background: var(--color-background); color: var(--color-font);
+      font-size: 0.95rem; box-sizing: border-box; transition: border-color var(--ease);
+    }
+    .field input:focus { outline: none; border-color: var(--color-ring, var(--color-primary)); }
+
+    .submit-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      width: 100%; padding: 0.75rem; margin-top: 0.4rem;
+      background: var(--color-primary); color: var(--color-on-primary); border: none;
+      border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 700; cursor: pointer;
+      transition: opacity var(--ease);
+    }
+    .submit-btn:hover:not(:disabled) { opacity: 0.92; }
+    .submit-btn:disabled { cursor: default; opacity: 0.75; }
+    .btn-spinner {
+      display: none; width: 15px; height: 15px; border-radius: 50%;
+      border: 2px solid color-mix(in oklab, var(--color-on-primary) 35%, transparent);
+      border-top-color: var(--color-on-primary); animation: spin 0.7s linear infinite;
+    }
+    .submit-btn.is-busy .btn-spinner { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .btn-spinner { animation-duration: 1.4s; } }
+
+    .auth-foot { text-align: center; margin-top: 1.75rem; font-size: 0.9rem; color: var(--color-muted); }
+    .auth-foot a { color: var(--color-primary); font-weight: 600; text-decoration: none; }
+    .auth-foot a:hover { text-decoration: underline; }
+  </style>
 </Layout>

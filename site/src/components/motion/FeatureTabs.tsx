@@ -3,7 +3,9 @@ import {
   motion, AnimatePresence,
   useMotionValue, useSpring, useTransform,
 } from 'motion/react'
+import type { MotionValue } from 'motion/react'
 import { ease, duration as dur } from '@/lib/motion'
+import ScrollScene from './ScrollScene'
 
 // ─── design tokens (CSS vars) ─────────────────────────────────────────────
 const C = {
@@ -412,6 +414,84 @@ function ScrollScenePanel() {
 
       <CodeBlock code={`<ScrollScene client:visible height="250vh">\n  {(p) => <Scene progress={p} />}\n</ScrollScene>`} />
     </div>
+  )
+}
+
+// ─── standalone — the real ScrollScene, scrubbed by actual page scroll ────
+// (The panel above fakes progress with a timer so it can loop inside a tab.
+// This mounts the same SCENE_STEPS driven by useScroll — genuine, not simulated.)
+
+function LifecycleSceneBody({ progress }: { progress: MotionValue<number> }) {
+  const [active, setActive] = useState(0)
+
+  useEffect(() => {
+    return progress.on('change', (v) => {
+      setActive(Math.min(SCENE_STEPS.length - 1, Math.floor(v * SCENE_STEPS.length)))
+    })
+  }, [progress])
+
+  const barWidth = useTransform(progress, [0, 1], ['0%', '100%'])
+
+  return (
+    <div style={{
+      height: '100%', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', gap: '2.25rem',
+      padding: '0 clamp(1.5rem, 6vw, 4rem)',
+    }}>
+      <p style={{
+        margin: 0, fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.1em',
+        textTransform: 'uppercase', color: C.primary,
+      }}>
+        Scroll to advance
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', width: '100%', maxWidth: 560 }}>
+        {SCENE_STEPS.map((label, i) => {
+          const isActive = i === active
+          const isDone = i < active
+          return (
+            <div
+              key={label}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '1rem',
+                padding: '1.15rem 1.4rem', borderRadius: C.r.lg,
+                border: `1px solid ${isActive ? C.primary : C.border}`,
+                background: isActive ? `color-mix(in srgb, ${C.primary} 8%, ${C.bg})` : C.bg,
+                opacity: isDone || isActive ? 1 : 0.32,
+                transform: isActive ? 'scale(1.02)' : 'scale(1)',
+                transition: 'opacity 220ms ease, transform 220ms ease, border-color 220ms ease, background 220ms ease',
+              }}
+            >
+              <div style={{
+                width: 10, height: 10, borderRadius: '50%', flexShrink: 0,
+                background: isDone || isActive ? C.primary : C.border,
+                boxShadow: isActive ? `0 0 10px ${C.primary}` : 'none',
+              }} />
+              <span style={{ fontSize: '1.05rem', fontWeight: isActive ? 700 : 500, color: C.font }}>{label}</span>
+              {isActive && (
+                <span style={{ marginLeft: 'auto', fontSize: '0.7rem', fontWeight: 700, color: C.primary }}>
+                  active
+                </span>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      <div style={{ width: '100%', maxWidth: 560 }}>
+        <div style={{ height: 2, background: C.fg, borderRadius: 1, overflow: 'hidden' }}>
+          <motion.div style={{ height: '100%', background: C.primary, borderRadius: 1, width: barWidth }} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function LifecycleScrollScene() {
+  return (
+    <ScrollScene height="240vh">
+      {(progress) => <LifecycleSceneBody progress={progress} />}
+    </ScrollScene>
   )
 }
 

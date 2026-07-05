@@ -105,6 +105,7 @@ const TXS = [
   <section class="speed">
     <div class="container">
       <Reveal>
+        <p class="eyebrow">Timed, not claimed</p>
         <h2 class="section-title">Zero to live, measured</h2>
         <p class="section-sub">
           One live run against production, timed end to end. No key, no human, no setup.
@@ -137,6 +138,7 @@ const TXS = [
   <section class="proof" id="proof">
     <div class="container">
       <Reveal>
+        <p class="eyebrow">Verification &gt; presence</p>
         <h2 class="section-title">The proof run</h2>
         <p class="section-sub">
           One command proves the whole promise. This is a replay of a real execution
@@ -164,6 +166,7 @@ const TXS = [
   <section class="txs">
     <div class="container">
       <Reveal>
+        <p class="eyebrow">Real, on-chain, checkable</p>
         <h2 class="section-title">On-chain receipts</h2>
         <p class="section-sub">
           Real Sui testnet transactions from proving this lifecycle — every digest
@@ -311,6 +314,15 @@ const TXS = [
     .hr { animation: none; opacity: 1; transform: none; }
   }
 
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    text-align: center;
+    margin: 0 0 0.6rem;
+  }
   .section-title {
     font-size: clamp(1.5rem, 3vw, 2rem);
     font-weight: 700;

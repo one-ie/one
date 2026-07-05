@@ -73,13 +73,19 @@ function fmtDate(ts: number): string {
 
 <Layout title="Wallet & payments" description="Your ONE workspace wallet — balances, transactions, and payment links.">
   <main style="max-width: 720px; margin: 0 auto; padding: 4rem 1.5rem 6rem;">
-    <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem;">Wallet &amp; payments</h1>
-    <p style="color: var(--color-muted); margin-bottom: 2.5rem;">
-      Your workspace's wallet — live balances, transaction history, and payment links you can share to get paid.
-    </p>
+    <div class="hero">
+      <div class="hr hr-0"><span class="eyebrow">Your workspace</span></div>
+      <h1 class="hr hr-1 headline">
+        Balances, transactions,<br /><span class="grad">and payment links.</span>
+      </h1>
+      <p class="hr hr-2 sub">
+        Your workspace's wallet — live on-chain balances, settlement history, and payment links you can share to get paid.
+      </p>
+    </div>
 
     <section style="margin-bottom: 3rem;">
-      <h2 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">Balances</h2>
+      <p class="section-eyebrow">Self-hosted, on-chain</p>
+      <h2 style="font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem;">Balances</h2>
       <p style="color: var(--color-muted); margin-bottom: 1rem; font-size: 0.9rem;">
         {balances.length} on-chain address{balances.length === 1 ? '' : 'es'} — self-hosted, generated fully offline
         {apiKey && !fetchError && <> · {credits} credits (ONE backend)</>}
@@ -110,7 +116,8 @@ function fmtDate(ts: number): string {
     </section>
 
     <section style="margin-bottom: 3rem;">
-      <h2 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">Get paid — create a payment link</h2>
+      <p class="section-eyebrow">Get paid</p>
+      <h2 style="font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem;">Create a payment link</h2>
       <p style="color: var(--color-muted); margin-bottom: 1rem; font-size: 0.9rem;">
         Generates a real, shareable link (and QR code) addressed to your own wallet above, via pay.one.ie. No signing required to create one — only the payer signs. Works with no ONE backend connected — it only needs the addresses above.
       </p>
@@ -121,7 +128,8 @@ function fmtDate(ts: number): string {
     </section>
 
     <section>
-      <h2 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem;">Recent transactions</h2>
+      <p class="section-eyebrow">Settlement history</p>
+      <h2 style="font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem;">Recent transactions</h2>
       {!apiKey && (
         <p style="color: var(--color-muted);">
           No backend connected — this section reads the ONE settlement ledger, not the chains above. Run <code>one onboard</code> to see it.
@@ -132,31 +140,71 @@ function fmtDate(ts: number): string {
       )}
       {apiKey && !fetchError && transactions.length === 0 && <p style="color: var(--color-muted);">No transactions yet.</p>}
       {apiKey && !fetchError && transactions.length > 0 && (
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
-          <thead>
-            <tr style="text-align: left; border-bottom: 1px solid var(--color-border);">
-              <th style="padding: 0.5rem 0.5rem 0.5rem 0; font-weight: 600;">Date</th>
-              <th style="padding: 0.5rem 0.5rem;">Rail</th>
-              <th style="padding: 0.5rem 0.5rem;">Counterparty</th>
-              <th style="padding: 0.5rem 0.5rem; text-align: right;">Amount</th>
-              <th style="padding: 0.5rem 0 0.5rem 0.5rem;">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((t) => (
-              <tr style="border-bottom: 1px solid var(--color-border);">
-                <td style="padding: 0.6rem 0.5rem 0.6rem 0; color: var(--color-muted); white-space: nowrap;">{fmtDate(t.ts)}</td>
-                <td style="padding: 0.6rem 0.5rem;">{t.rail}</td>
-                <td style="padding: 0.6rem 0.5rem; font-family: monospace; font-size: 0.8rem; overflow-wrap: anywhere;">{t.counterparty}</td>
-                <td style="padding: 0.6rem 0.5rem; text-align: right; font-weight: 600; white-space: nowrap;">
-                  {t.direction === 'in' ? '+' : '−'}{fmtMoney(t.amountCents, t.currency)}
-                </td>
-                <td style="padding: 0.6rem 0 0.6rem 0.5rem; color: var(--color-muted); white-space: nowrap;">{t.status}</td>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+          <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.9rem;">
+            <thead>
+              <tr style="text-align: left; border-bottom: 1px solid var(--color-border);">
+                <th style="padding: 0.5rem 0.5rem 0.5rem 0; font-weight: 600;">Date</th>
+                <th style="padding: 0.5rem 0.5rem;">Rail</th>
+                <th style="padding: 0.5rem 0.5rem;">Counterparty</th>
+                <th style="padding: 0.5rem 0.5rem; text-align: right;">Amount</th>
+                <th style="padding: 0.5rem 0 0.5rem 0.5rem;">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {transactions.map((t) => (
+                <tr style="border-bottom: 1px solid var(--color-border);">
+                  <td style="padding: 0.6rem 0.5rem 0.6rem 0; color: var(--color-muted); white-space: nowrap;">{fmtDate(t.ts)}</td>
+                  <td style="padding: 0.6rem 0.5rem;">{t.rail}</td>
+                  <td style="padding: 0.6rem 0.5rem; font-family: monospace; font-size: 0.8rem; overflow-wrap: anywhere;">{t.counterparty}</td>
+                  <td style="padding: 0.6rem 0.5rem; text-align: right; font-weight: 600; white-space: nowrap;">
+                    {t.direction === 'in' ? '+' : '−'}{fmtMoney(t.amountCents, t.currency)}
+                  </td>
+                  <td style="padding: 0.6rem 0 0.6rem 0.5rem; color: var(--color-muted); white-space: nowrap;">{t.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </section>
   </main>
 </Layout>
+
+<style>
+  /* ── Time-based hero reveal — matches index.astro / payments.astro's
+        above-the-fold pattern (never scroll-driven). ───────────────── */
+  .hr { animation: hr-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .hr-0 { animation-delay: 0.02s; }
+  .hr-1 { animation-delay: 0.10s; }
+  .hr-2 { animation-delay: 0.18s; }
+  @keyframes hr-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hr { animation: none; opacity: 1; transform: none; }
+  }
+
+  .hero { margin-bottom: 3rem; }
+  .eyebrow {
+    display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--color-primary); margin: 0 0 1rem;
+  }
+  .headline {
+    font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; line-height: 1.08;
+    letter-spacing: -0.04em; color: var(--color-font); margin: 0 0 1rem;
+  }
+  .grad {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-tertiary));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub {
+    font-size: 1.05rem; line-height: 1.6; color: var(--color-muted); max-width: 34rem; margin: 0;
+  }
+
+  .section-eyebrow {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--color-primary); margin: 0 0 0.5rem;
+  }
+</style>
