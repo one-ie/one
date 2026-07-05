@@ -296,7 +296,7 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
             <div style={{ position: 'relative', width: '100%', aspectRatio: '1.55 / 1', minHeight: 264 }}>
               <div style={cardFace}>
                 <FaceSheen />
-                <div style={{ position: 'relative', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: 'clamp(0.85rem, 3.6%, 1.15rem)', color: '#fff' }}>
+                <div style={{ position: 'relative', height: '100%', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', padding: 'clamp(0.85rem, 3.6%, 1.15rem)', color: '#fff' }}>
                   {/* top group: brand + chip */}
                   <div>
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
@@ -322,7 +322,11 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
                     <div style={{ marginTop: '0.5rem' }}><Chip /></div>
                   </div>
 
-                  {/* bottom group: number, then name · expiry · cvc — nothing hidden */}
+                  {/* spacers lift the fields to the middle of the card (top:bottom
+                      weighting places them just above centre, not pinned to the edge) */}
+                  <div style={{ flex: 1 }} />
+
+                  {/* field group: number, then name · expiry · cvc — nothing hidden */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     <div className="pc-anim" aria-label="Card number" style={well('number')} onClick={() => focusField('number')}>
                       <CardNumberElement
@@ -372,6 +376,9 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
                     </div>
                   </div>
                   </div>
+
+                  {/* larger bottom spacer → fields rest just above centre */}
+                  <div style={{ flex: 1.6 }} />
                 </div>
               </div>
             </div>
