@@ -2,6 +2,7 @@ export const prerender = true
 ---
 import Layout from '../layouts/Layout.astro'
 import Card from '../components/blocks/Card.astro'
+import Pattern from '../components/blocks/Pattern.astro'
 import { IconBadge } from '../components/ui/IconBadge'
 import { Icon } from '../components/ui/Icon'
 import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, ArrowRight, X } from 'lucide-react'
@@ -419,6 +420,63 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
           </div>
           <p class="muted small">4 · 8 · 12 · 16 · 20 · 24 · 32 — every padding/gap lands here.</p>
         </article>
+      </div>
+    </section>
+
+    <!-- ============== BACKGROUND PATTERNS ============== -->
+    <section class="block">
+      <div class="block-head">
+        <h2>Background patterns</h2>
+        <p>
+          <code>Pattern.astro</code> — five subtle, tileable textures, all pure CSS/SVG
+          with zero downloaded assets. Every one recolors with <code>currentColor</code>,
+          so it re-themes across every swatch above automatically — switch a preset in
+          the nav and watch these repaint too.
+        </p>
+      </div>
+
+      <div class="pattern-grid">
+        <div class="pattern-cell">
+          <div class="pattern-demo">
+            <Pattern pattern="dots" opacity={0.14} />
+          </div>
+          <code class="vocab-tag">pattern="dots"</code>
+        </div>
+
+        <div class="pattern-cell">
+          <div class="pattern-demo">
+            <Pattern pattern="grid" opacity={0.14} />
+          </div>
+          <code class="vocab-tag">pattern="grid"</code>
+        </div>
+
+        <div class="pattern-cell">
+          <div class="pattern-demo">
+            <Pattern pattern="diagonal" opacity={0.14} />
+          </div>
+          <code class="vocab-tag">pattern="diagonal"</code>
+        </div>
+
+        <div class="pattern-cell">
+          <div class="pattern-demo">
+            <Pattern pattern="crosshatch" opacity={0.14} />
+          </div>
+          <code class="vocab-tag">pattern="crosshatch"</code>
+        </div>
+
+        <div class="pattern-cell">
+          <div class="pattern-demo">
+            <Pattern pattern="noise" opacity={0.22} />
+          </div>
+          <code class="vocab-tag">pattern="noise"</code>
+        </div>
+
+        <div class="pattern-cell">
+          <div class="pattern-demo">
+            <Pattern pattern="dots" opacity={0.35} fade />
+          </div>
+          <code class="vocab-tag">pattern="dots" fade</code>
+        </div>
       </div>
     </section>
 
@@ -1174,6 +1232,23 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     background: var(--color-primary);
     border-radius: 2px;
     opacity: 0.9;
+  }
+
+  /* ---------- Background patterns ---------- */
+  .design-page .pattern-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  @media (max-width: 900px) { .design-page .pattern-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .design-page .pattern-grid { grid-template-columns: 1fr; } }
+  .design-page .pattern-cell { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .design-page .pattern-demo {
+    position: relative;
+    overflow: hidden;
+    height: 140px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-primary);
   }
 
   /* ---------- Card vocabulary ---------- */

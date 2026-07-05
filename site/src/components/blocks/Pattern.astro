@@ -1,0 +1,121 @@
+---
+/**
+ * Pattern — a subtle, token-reactive background texture.
+ *
+ * Five pure-CSS/SVG patterns (dots, grid, diagonal, crosshatch, noise) —
+ * no downloaded image assets, so every pattern re-colors automatically
+ * across all six theme swatches and both light/dark, the same way every
+ * other block in this system does. `noise` uses an SVG feTurbulence
+ * filter as a `mask-image` (the SVG supplies only the alpha shape; the
+ * element's own `color` renders through it), so even grain texture stays
+ * fully theme-reactive rather than a baked bitmap.
+ *
+ * Usage — drop inside any `position: relative` container, before the
+ * real content:
+ *   <div style="position: relative">
+ *     <Pattern pattern="dots" />
+ *     <div style="position: relative">...real content...</div>
+ *   </div>
+ *
+ * Decorative only: aria-hidden, pointer-events: none, absolutely
+ * positioned to `inset: 0` — it never affects layout or a11y.
+ */
+
+interface Props {
+  pattern?: 'dots' | 'grid' | 'diagonal' | 'crosshatch' | 'noise'
+  /** 0–1. Default is deliberately subtle — this is texture, not decoration. */
+  opacity?: number
+  /** Tile size in px. Ignored by `noise` (fixed-size grain tile). */
+  size?: number
+  /** Any CSS color. Defaults to currentColor so it inherits the surface's own font color. */
+  color?: string
+  /** Fade the pattern out toward the edges via a radial mask, instead of a hard rectangle. */
+  fade?: boolean
+  class?: string
+}
+
+const {
+  pattern = 'dots',
+  opacity = 0.06,
+  size,
+  color = 'currentColor',
+  fade = false,
+  class: className,
+} = Astro.props
+
+const sizePx = size ? `${size}px` : undefined
+---
+
+<div
+  class:list={['pattern', `pattern--${pattern}`, { 'pattern--fade': fade }, className]}
+  style={{ '--pattern-opacity': opacity, '--pattern-color': color, ...(sizePx ? { '--pattern-size': sizePx } : {}) }}
+  aria-hidden="true"
+></div>
+
+<style>
+  .pattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--pattern-opacity, 0.06);
+    color: var(--pattern-color, currentColor);
+  }
+
+  .pattern--dots {
+    background-image: radial-gradient(currentColor 1px, transparent 1.5px);
+    background-size: var(--pattern-size, 18px) var(--pattern-size, 18px);
+  }
+
+  .pattern--grid {
+    background-image:
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: var(--pattern-size, 32px) var(--pattern-size, 32px);
+  }
+
+  .pattern--diagonal {
+    background-image: repeating-linear-gradient(
+      45deg,
+      currentColor 0,
+      currentColor 1px,
+      transparent 1px,
+      transparent var(--pattern-size, 14px)
+    );
+  }
+
+  .pattern--crosshatch {
+    background-image:
+      repeating-linear-gradient(45deg, currentColor 0, currentColor 1px, transparent 1px, transparent var(--pattern-size, 16px)),
+      repeating-linear-gradient(-45deg, currentColor 0, currentColor 1px, transparent 1px, transparent var(--pattern-size, 16px));
+  }
+
+  /* Grain — the SVG supplies only the alpha mask (feTurbulence luminance);
+     the visible "ink" is this element's own `background: currentColor`, so
+     it recolors with the theme like every other pattern here. */
+  .pattern--noise {
+    background: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    -webkit-mask-size: 180px 180px;
+    mask-size: 180px 180px;
+  }
+
+  .pattern--fade {
+    -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 78%);
+    mask-image: radial-gradient(ellipse at center, black 35%, transparent 78%);
+  }
+  /* noise already uses mask-image for its own texture — layer the fade as a
+     second mask via mask-composite so both apply at once. */
+  .pattern--noise.pattern--fade {
+    -webkit-mask-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at center, black 35%, transparent 78%);
+    mask-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at center, black 35%, transparent 78%);
+    -webkit-mask-size: 180px 180px, 100% 100%;
+    mask-size: 180px 180px, 100% 100%;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+</style>
