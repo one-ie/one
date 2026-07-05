@@ -98,7 +98,7 @@ const pricing = [
     period: '/mo',
     features: ['Everything in Starter', 'AI chat + tracking plugins', 'Hosted admin console', 'Priority support', 'Unlimited workspaces'],
     ctaLabel: 'Start free trial',
-    ctaHref: '#',
+    checkoutPlan: 'pro',
     featured: true,
     accent: 'primary' as const,
   },
@@ -109,7 +109,7 @@ const pricing = [
     period: '',
     features: ['Everything in Pro', 'Dedicated support', 'SLA + uptime guarantees', 'Custom plugins', 'On-prem deployment'],
     ctaLabel: 'Talk to us',
-    ctaHref: '#',
+    ctaHref: 'https://one.ie',
     featured: false,
     accent: 'secondary' as const,
   },
@@ -191,7 +191,8 @@ const pricing = [
             period={t.period}
             features={t.features}
             ctaLabel={t.ctaLabel}
-            ctaHref={t.ctaHref}
+            ctaHref={'ctaHref' in t ? t.ctaHref : undefined}
+            checkoutPlan={'checkoutPlan' in t ? t.checkoutPlan : undefined}
           >
             <Fragment slot="header">{t.note}</Fragment>
           </Card>

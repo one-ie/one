@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getEnv } from '../../../lib/cf-env'
 import { readSelfHostedWallet } from '../../../lib/chain-balances'
+import { resolvePlan } from '../../../lib/plan-pricing'
 
 export const prerender = false
 
@@ -28,14 +29,23 @@ export const POST: APIRoute = async ({ request }) => {
   const payUrl = (env.PAY_URL as string | undefined) ?? 'https://pay.one.ie'
   const merchantSlug = (env.AGENCY_WSID as string | undefined) ?? 'one-site'
 
-  let body: { amountCents?: number; product?: string }
+  let body: { amountCents?: number; product?: string; planId?: string }
   try {
     body = (await request.json()) as typeof body
   } catch {
     return Response.json({ error: 'invalid_json' }, { status: 400 })
   }
-  const amount = Number(body.amountCents ?? 0)
-  const product = String(body.product ?? '').slice(0, 256) || 'Payment'
+  // Same anti-tamper posture as create-intent.ts: a named plan's price is
+  // resolved server-side, never taken from the client, so a plan's crypto
+  // price can't drift from its Stripe price or be spoofed by the buyer.
+  const plan = resolvePlan(body.planId)
+  // NB: despite the name, this "amount" is cents (matches the non-plan
+  // branch below, which passes body.amountCents straight through) — the
+  // pay.one.ie payment_link_create protocol takes an integer cents count
+  // regardless of unit:'usd' (confirmed against links.ts's own reader:
+  // `usdAmount = payload.a / 100` when unit==='usd').
+  const amount = plan ? plan.cents : Number(body.amountCents ?? 0)
+  const product = plan ? plan.label : (String(body.product ?? '').slice(0, 256) || 'Payment')
   if (!Number.isFinite(amount) || amount <= 0) {
     return Response.json({ error: 'amountCents must be > 0' }, { status: 400 })
   }

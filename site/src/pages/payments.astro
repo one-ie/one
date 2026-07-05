@@ -10,6 +10,7 @@ import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
 import CardCheckoutPreview from '../components/payments/CardCheckoutPreview'
 import PhysicalCardCheckout from '../components/payments/PhysicalCardCheckout'
 import { getEnv } from '../lib/cf-env'
+import { resolvePlan } from '../lib/plan-pricing'
 
 export const prerender = false
 
@@ -20,6 +21,14 @@ const stripePublishableKey =
   (env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string | undefined) ??
   (env.STRIPE_PUBLIC_KEY as string | undefined)
 const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
+
+// A pricing card elsewhere on the site can deep-link here as
+// /payments?plan=pro — both rails below then check out that plan's real,
+// server-resolved price instead of the page's own $25 demo default.
+const planId = resolvePlan(Astro.url.searchParams.get('plan'))
+  ? (Astro.url.searchParams.get('plan') as string)
+  : undefined
+const plan = resolvePlan(planId)
 ---
 
 <Layout
@@ -33,7 +42,12 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
     <div class="container">
       <div class="hero-head">
         <!-- Time-based reveal — above the fold is never scroll-driven -->
-        <div class="hr hr-0"><span class="eyebrow">Payments, first-class</span></div>
+        <div class="hr hr-0">
+          <span class="eyebrow">Payments, first-class</span>
+          {plan && (
+            <span class="plan-banner">Checking out: {plan.label} — ${(plan.cents / 100).toFixed(2)}</span>
+          )}
+        </div>
         <h1 class="hr hr-1 headline">
           Two rails to get paid.<br /><span class="grad">Both live, right here.</span>
         </h1>
@@ -53,7 +67,7 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
       <div class="hr hr-3 hero-rail">
         <div class="rail">
           <div class="rail-tag rail-tag--crypto"><span class="rail-dot"></span>Crypto · live today</div>
-          <PaymentLinkGenerator client:visible />
+          <PaymentLinkGenerator client:visible planId={planId} />
           <p class="rail-foot">A real, signed link to your wallet — created on click, no backend needed. <a href="#card">Prefer a card? ↓</a></p>
         </div>
       </div>
@@ -81,7 +95,7 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
         </div>
         <div class="card-rail-widget">
           {stripeLive && stripePublishableKey
-            ? <PhysicalCardCheckout client:visible publishableKey={stripePublishableKey} />
+            ? <PhysicalCardCheckout client:visible publishableKey={stripePublishableKey} planId={planId} />
             : <CardCheckoutPreview client:visible />}
         </div>
       </div>
@@ -299,6 +313,15 @@ return Response.json({ clientSecret: intent.client_secret })
   .eyebrow {
     display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--color-primary); margin: 0 0 1rem;
+  }
+  .hr-0 {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.6rem;
+  }
+  .plan-banner {
+    display: inline-flex; align-items: center; font-size: 0.78rem; font-weight: 600;
+    color: var(--color-font); background: var(--color-foreground);
+    border: 1px solid var(--color-border); border-radius: 9999px;
+    padding: 0.3rem 0.85rem; margin-bottom: 1rem;
   }
   .grad {
     background: linear-gradient(90deg, var(--color-primary), var(--color-tertiary));

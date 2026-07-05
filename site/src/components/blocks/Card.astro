@@ -80,6 +80,10 @@ interface Props {
   features?: string[]
   ctaLabel?: string
   ctaHref?: string
+  /** Pricing: a named plan from lib/plan-pricing.ts — the CTA becomes a
+   *  real checkout link (/payments?plan=…, both Stripe + crypto rails,
+   *  the server-resolved real price), overriding ctaHref. */
+  checkoutPlan?: string
 
   /** Extra class on the root. */
   class?: string
@@ -105,8 +109,11 @@ const {
   features = [],
   ctaLabel,
   ctaHref,
+  checkoutPlan,
   class: className,
 } = Astro.props
+
+const resolvedCtaHref = checkoutPlan ? `/payments?plan=${encodeURIComponent(checkoutPlan)}` : ctaHref
 
 // Whole-card link only when there's no in-card interactive content (pricing CTA, profile socials).
 const interactive = !!href && variant !== 'pricing' && variant !== 'profile'
@@ -327,7 +334,7 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
           {ctaLabel && (
             <a
               class:list={['card__cta', { 'card__cta--solid': featured }]}
-              href={ctaHref ?? '#'}
+              href={resolvedCtaHref ?? '#'}
             >
               {ctaLabel}
             </a>

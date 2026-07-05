@@ -499,12 +499,18 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
 export default function PhysicalCardCheckout({
   publishableKey,
   amountCents = 2500,
+  planId,
 }: {
   publishableKey: string
   amountCents?: number
+  /** A named plan from lib/plan-pricing.ts — the server resolves and
+   *  returns its own price, overriding amountCents, so a plan's charge can
+   *  never drift from or be spoofed away from its real price. */
+  planId?: string
 }) {
   const [stripe, setStripe] = useState<StripeJs | null>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [resolvedCents, setResolvedCents] = useState(amountCents)
   const [err, setErr] = useState<string | null>(null)
   const started = useRef(false)
 
@@ -518,18 +524,19 @@ export default function PhysicalCardCheckout({
     fetch('/api/pay/create-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amountCents }),
+      body: JSON.stringify(planId ? { planId } : { amountCents }),
     })
       .then(async (r) => {
-        const json = (await r.json()) as { clientSecret?: string; error?: string }
+        const json = (await r.json()) as { clientSecret?: string; amountCents?: number; error?: string }
         if (!r.ok || !json.clientSecret) throw new Error(json.error ?? `${r.status}`)
         setClientSecret(json.clientSecret)
+        if (json.amountCents) setResolvedCents(json.amountCents)
       })
       .catch((e) => setErr(e instanceof Error ? e.message : String(e)))
-  }, [publishableKey, amountCents])
+  }, [publishableKey, amountCents, planId])
 
   const options = useMemo(() => ({ appearance: { theme: 'stripe' as const } }), [])
-  const amount = `$${(amountCents / 100).toFixed(2)}`
+  const amount = `$${(resolvedCents / 100).toFixed(2)}`
 
   return (
     <div style={{ border: `1px solid ${C.border}`, borderRadius: 16, background: C.bg, overflow: 'hidden' }}>
@@ -553,7 +560,7 @@ export default function PhysicalCardCheckout({
           <p style={{ fontSize: '0.78rem', color: DANGER, background: 'color-mix(in srgb, var(--color-destructive) 12%, transparent)', borderRadius: 8, padding: '0.5rem 0.7rem', margin: 0 }}>{err}</p>
         ) : stripe && clientSecret ? (
           <Elements stripe={stripe} options={options}>
-            <CardForm clientSecret={clientSecret} amountCents={amountCents} />
+            <CardForm clientSecret={clientSecret} amountCents={resolvedCents} />
           </Elements>
         ) : (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>

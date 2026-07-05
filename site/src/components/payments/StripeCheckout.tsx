@@ -42,7 +42,7 @@ const elementOptions: StripePaymentElementOptions = {
   terms: { card: 'never' },
 }
 
-function CheckoutForm() {
+function CheckoutForm({ amountCents }: { amountCents: number }) {
   const stripe = useStripe()
   const elements = useElements()
   const [busy, setBusy] = useState(false)
@@ -136,15 +136,26 @@ function CheckoutForm() {
         }}
       >
         <Lock size={13} />
-        {busy ? 'Processing…' : `Pay $${(AMOUNT_CENTS / 100).toFixed(2)}`}
+        {busy ? 'Processing…' : `Pay $${(amountCents / 100).toFixed(2)}`}
       </button>
     </form>
   )
 }
 
-export default function StripeCheckout({ publishableKey }: { publishableKey: string }) {
+export default function StripeCheckout({
+  publishableKey,
+  amountCents = AMOUNT_CENTS,
+  planId,
+}: {
+  publishableKey: string
+  amountCents?: number
+  /** A named plan from lib/plan-pricing.ts — the server resolves and
+   *  returns its own price, overriding amountCents. */
+  planId?: string
+}) {
   const [stripe, setStripe] = useState<StripeJs | null>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [resolvedCents, setResolvedCents] = useState(amountCents)
   const [err, setErr] = useState<string | null>(null)
 
   useEffect(() => {
@@ -155,15 +166,16 @@ export default function StripeCheckout({ publishableKey }: { publishableKey: str
     fetch('/api/pay/create-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amountCents: AMOUNT_CENTS }),
+      body: JSON.stringify(planId ? { planId } : { amountCents }),
     })
       .then(async (r) => {
-        const json = (await r.json()) as { clientSecret?: string; error?: string }
+        const json = (await r.json()) as { clientSecret?: string; amountCents?: number; error?: string }
         if (!r.ok || !json.clientSecret) throw new Error(json.error ?? `${r.status}`)
         setClientSecret(json.clientSecret)
+        if (json.amountCents) setResolvedCents(json.amountCents)
       })
       .catch((e) => setErr(e instanceof Error ? e.message : String(e)))
-  }, [publishableKey])
+  }, [publishableKey, amountCents, planId])
 
   return (
     <div
@@ -245,7 +257,7 @@ export default function StripeCheckout({ publishableKey }: { publishableKey: str
               loader: 'auto',
             }}
           >
-            <CheckoutForm />
+            <CheckoutForm amountCents={resolvedCents} />
           </Elements>
         ) : (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>

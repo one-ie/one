@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Check, Copy, ExternalLink, RotateCcw, Send } from 'lucide-react'
+import { PLANS } from '../../lib/plan-pricing'
 
 /**
  * PaymentLinkGenerator — a real, working crypto payment link creator.
@@ -55,9 +56,20 @@ const labelStyle: React.CSSProperties = {
   color: C.muted,
 }
 
-export default function PaymentLinkGenerator({ showHeader = true }: { showHeader?: boolean }) {
-  const [amount, setAmount] = useState('25')
-  const [product, setProduct] = useState('')
+export default function PaymentLinkGenerator({
+  showHeader = true,
+  planId,
+}: {
+  showHeader?: boolean
+  /** A named plan from lib/plan-pricing.ts — pre-fills and locks amount +
+   *  product (the server resolves and enforces the real price regardless
+   *  of these fields, so they must never be editable while a plan drives
+   *  them — that would show a price the link wouldn't actually charge). */
+  planId?: string
+}) {
+  const plan = planId ? PLANS[planId] : undefined
+  const [amount, setAmount] = useState(plan ? String(plan.cents / 100) : '25')
+  const [product, setProduct] = useState(plan ? plan.label : '')
   const [state, setState] = useState<State>({ status: 'idle' })
   const [copied, setCopied] = useState(false)
   // The embedded pay.one.ie form reports its height and a completion event over
@@ -94,7 +106,11 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
       const res = await fetch('/api/pay/link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amountCents: Math.round(Number(amount) * 100), product: product || 'Payment' }),
+        body: JSON.stringify(
+          planId
+            ? { planId }
+            : { amountCents: Math.round(Number(amount) * 100), product: product || 'Payment' },
+        ),
       })
       const json = (await res.json()) as { url?: string; qr?: string; error?: string }
       if (!res.ok || !json.url) throw new Error(json.error ?? `${res.status}`)
@@ -177,7 +193,7 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
                     required
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    disabled={state.status === 'loading'}
+                    disabled={state.status === 'loading' || !!plan}
                     style={inputStyle}
                   />
                 </div>
@@ -192,7 +208,7 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
                     required
                     value={product}
                     onChange={(e) => setProduct(e.target.value)}
-                    disabled={state.status === 'loading'}
+                    disabled={state.status === 'loading' || !!plan}
                     style={inputStyle}
                   />
                 </div>
