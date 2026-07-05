@@ -19,6 +19,18 @@
  *
  * Decorative only: aria-hidden, pointer-events: none, absolutely
  * positioned to `inset: 0` — it never affects layout or a11y.
+ *
+ * Color gotcha (verified live in both themes): the default `currentColor`
+ * resolves to `--color-font`, which FLIPS from near-black (light mode) to
+ * near-white (dark mode). White-on-dark reads fine at low opacity; the same
+ * opacity of near-black-on-light is nearly invisible — human contrast
+ * perception isn't symmetric for thin 1px details at low alpha. On a plain
+ * page background, pass an explicit theme color instead —
+ * `color="var(--color-primary)"` (or secondary/tertiary) — which is
+ * engineered for consistent visual presence in both themes; reserve the
+ * `currentColor` default for surfaces where the pattern already sits on a
+ * solid brand-color background (e.g. `--color-primary`), where the
+ * complementary `--color-on-primary` provides that same reliable contrast.
  */
 
 interface Props {
@@ -27,7 +39,7 @@ interface Props {
   opacity?: number
   /** Tile size in px. Ignored by `noise` (fixed-size grain tile). */
   size?: number
-  /** Any CSS color. Defaults to currentColor so it inherits the surface's own font color. */
+  /** Any CSS color. Defaults to currentColor — see the color gotcha above before relying on the default over a plain page background. */
   color?: string
   /** Fade the pattern out toward the edges via a radial mask, instead of a hard rectangle. */
   fade?: boolean
