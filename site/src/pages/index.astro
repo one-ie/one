@@ -8,6 +8,7 @@ import ProofTerminal from '../components/lifecycle/ProofTerminal'
 import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
 import Button from '../components/blocks/Button.astro'
 import Card from '../components/blocks/Card.astro'
+import Pattern from '../components/blocks/Pattern.astro'
 import Tabs from '../components/blocks/Tabs.astro'
 import Footer from '../components/blocks/Footer.astro'
 
@@ -43,6 +44,7 @@ const TXS = [
 
   <!-- ── Hero — the promise, proven in place ───────────────────────── -->
   <section class="hero">
+    <Pattern pattern="dots" opacity={0.05} fade />
     <div class="container hero-grid">
       <div class="hero-copy">
         <!-- Time-based reveal (never scroll-driven above the fold). -->
@@ -289,6 +291,7 @@ plugins: <span class="tok-b">[</span>
 
   <!-- ── Metrics — real, verifiable numbers ────────────────────────── -->
   <section class="metrics-strip">
+    <Pattern pattern="grid" opacity={0.1} color="var(--color-on-primary)" />
     <div class="container">
       <Stagger class="metrics-grid" stagger={0.07} dist="md">
         {[
@@ -364,6 +367,7 @@ plugins: <span class="tok-b">[</span>
 
   <!-- ── Final CTA ─────────────────────────────────────────────────── -->
   <section class="section cta-section">
+    <Pattern pattern="diagonal" opacity={0.08} color="var(--color-on-primary)" fade />
     <div class="container cta-container">
       <Stagger dist="lg" stagger={0.1}>
         <h2 class="cta-title">Clone it. Get paid. Today.</h2>
@@ -455,10 +459,11 @@ plugins: <span class="tok-b">[</span>
   }
 
   /* ── Hero ───────────────────────────────────────────────────────── */
-  .hero { padding: clamp(4.5rem, 10vw, 8rem) 0 clamp(3rem, 7vw, 5rem); }
+  .hero { padding: clamp(4.5rem, 10vw, 8rem) 0 clamp(3rem, 7vw, 5rem); position: relative; overflow: hidden; }
   .hero-grid {
     display: grid; grid-template-columns: 1.1fr 0.9fr;
     gap: clamp(2rem, 5vw, 4rem); align-items: center;
+    position: relative; z-index: 1;
   }
   @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
 
@@ -646,7 +651,8 @@ plugins: <span class="tok-b">[</span>
   .feature-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary); margin-top: 0.45rem; }
 
   /* ── Metrics strip ──────────────────────────────────────────────── */
-  .metrics-strip { background: var(--color-primary); padding: 5rem 0; }
+  .metrics-strip { background: var(--color-primary); padding: 5rem 0; position: relative; overflow: hidden; }
+  .metrics-strip .container { position: relative; z-index: 1; }
   :global(.metrics-grid) { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; }
   @media (max-width: 768px) { :global(.metrics-grid) { grid-template-columns: repeat(2, 1fr); } }
   .metric-num { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; color: var(--color-on-primary); line-height: 1; margin-bottom: 0.4rem; }
@@ -673,7 +679,8 @@ plugins: <span class="tok-b">[</span>
   .faq-a { font-size: 0.9rem; line-height: 1.7; color: var(--color-muted); padding: 0 0 1.1rem; margin: 0; }
 
   /* ── Final CTA ──────────────────────────────────────────────────── */
-  .cta-section { background: var(--color-primary); padding: 8rem 0; }
+  .cta-section { background: var(--color-primary); padding: 8rem 0; position: relative; overflow: hidden; }
+  .cta-section .cta-container { position: relative; z-index: 1; }
   .cta-container { text-align: center; }
   .cta-title { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.04em; color: var(--color-on-primary); margin: 0 0 1.25rem; line-height: 1.05; }
   .cta-sub { font-size: 1.1rem; color: color-mix(in oklab, var(--color-on-primary) 75%, transparent); margin: 0 auto 2.5rem; max-width: 36rem; line-height: 1.7; }
