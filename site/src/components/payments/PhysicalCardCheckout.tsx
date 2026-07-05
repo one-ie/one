@@ -12,6 +12,7 @@ import {
   type Stripe as StripeJs,
   type StripeCardNumberElementChangeEvent,
 } from '@stripe/stripe-js'
+import { AnimatePresence, motion } from 'motion/react'
 import { Check, Lock, ShieldCheck } from 'lucide-react'
 
 /**
@@ -23,10 +24,12 @@ import { Check, Lock, ShieldCheck } from 'lucide-react'
  * icon, and brand mark are our own DOM; the number/expiry/CVC text lives
  * inside Stripe's iframes (PCI stays with Stripe — we never see a digit).
  *
- * The card flips to its back when the CVC is focused — the classic delight.
- * Confirmed via stripe.confirmCardPayment against a PaymentIntent minted by
- * this site's /api/pay/create-intent. Card chrome is inline-styled (Tailwind
- * classNames don't compile in React islands here — see PaymentLinkGenerator).
+ * Refinements: the card tilts toward the pointer with a specular highlight
+ * that tracks the cursor; the active field lights an underline; the brand
+ * mark cross-fades; and it flips to its back when the CVC is focused. Confirmed
+ * via stripe.confirmCardPayment against a PaymentIntent minted by this site's
+ * /api/pay/create-intent. Card chrome is inline-styled (Tailwind classNames
+ * don't compile in React islands here — see PaymentLinkGenerator).
  */
 
 const C = {
@@ -45,6 +48,9 @@ function getStripe(publishableKey: string) {
   if (!stripePromise) stripePromise = loadStripe(publishableKey)
   return stripePromise
 }
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 // White embossed text inside the Stripe iframes, over the dark card face.
 const elementStyle = {
@@ -148,6 +154,13 @@ const microLabel: React.CSSProperties = {
   fontFamily: "'SF Mono', ui-monospace, monospace",
 }
 
+// Underline that lights up under the focused field (inset shadow → no reflow).
+const fieldWrap = (active: boolean): React.CSSProperties => ({
+  boxShadow: active ? 'inset 0 -2px 0 rgba(255,255,255,0.75)' : 'inset 0 -2px 0 transparent',
+  transition: 'box-shadow 0.22s ease',
+  paddingBottom: 2,
+})
+
 // Shared card-face background — dark, derived from the theme's primary so it
 // re-themes while staying dark enough for white embossed text.
 const cardFace: React.CSSProperties = {
@@ -162,7 +175,8 @@ const cardFace: React.CSSProperties = {
   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 60px rgba(0,0,0,0.35)',
 }
 
-// Diagonal sheen + a soft tertiary holographic glow in the corner.
+// Static diagonal sheen + a soft tertiary glow, and a specular highlight that
+// tracks the cursor via the --mx/--my custom props set on the card wrapper.
 function FaceSheen() {
   return (
     <>
@@ -172,8 +186,19 @@ function FaceSheen() {
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.16) 46%, rgba(255,255,255,0) 60%)',
+            'linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.14) 46%, rgba(255,255,255,0) 60%)',
           pointerEvents: 'none',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'radial-gradient(220px circle at var(--mx, 50%) var(--my, 32%), rgba(255,255,255,0.22), rgba(255,255,255,0) 60%)',
+          pointerEvents: 'none',
+          transition: 'background 0.05s linear',
         }}
       />
       <div
@@ -199,14 +224,45 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
   const elements = useElements()
   const [brand, setBrand] = useState('unknown')
   const [flipped, setFlipped] = useState(false)
+  const [focus, setFocus] = useState<'number' | 'name' | 'expiry' | 'cvc' | null>(null)
   const [name, setName] = useState('')
   const [done, setDone] = useState({ number: false, expiry: false, cvc: false })
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string | null>(null)
   const [paidId, setPaidId] = useState<string | null>(null)
 
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const tiltRef = useRef<HTMLDivElement>(null)
+  const reduced = useRef(false)
+  useEffect(() => {
+    reduced.current = prefersReducedMotion()
+  }, [])
+
   const ready = done.number && done.expiry && done.cvc && name.trim().length > 1
   const amount = `$${(amountCents / 100).toFixed(2)}`
+
+  function resetTilt() {
+    if (tiltRef.current) tiltRef.current.style.transform = 'rotateX(0deg) rotateY(0deg)'
+    wrapRef.current?.style.setProperty('--mx', '50%')
+    wrapRef.current?.style.setProperty('--my', '32%')
+  }
+
+  // Flip disables tilt (a tilted, mirrored back looks wrong).
+  useEffect(() => {
+    if (flipped) resetTilt()
+  }, [flipped])
+
+  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (reduced.current || flipped || paidId) return
+    const el = wrapRef.current
+    if (!el || !tiltRef.current) return
+    const r = el.getBoundingClientRect()
+    const px = (e.clientX - r.left) / r.width
+    const py = (e.clientY - r.top) / r.height
+    tiltRef.current.style.transform = `rotateX(${(0.5 - py) * 11}deg) rotateY(${(px - 0.5) * 13}deg)`
+    el.style.setProperty('--mx', `${px * 100}%`)
+    el.style.setProperty('--my', `${py * 100}%`)
+  }
 
   function focusCvc() {
     setFlipped(true)
@@ -225,8 +281,11 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
         payment_method: { card, billing_details: { name: name.trim() } },
       })
       if (error) setErr(error.message ?? 'Payment failed')
-      else if (paymentIntent?.status === 'succeeded') setPaidId(paymentIntent.id)
-      else if (paymentIntent) setErr(`Unexpected status: ${paymentIntent.status}`)
+      else if (paymentIntent?.status === 'succeeded') {
+        setPaidId(paymentIntent.id)
+        setFlipped(false)
+        resetTilt()
+      } else if (paymentIntent) setErr(`Unexpected status: ${paymentIntent.status}`)
     } catch (e2) {
       setErr(e2 instanceof Error ? e2.message : 'Payment error')
     } finally {
@@ -237,168 +296,239 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
   return (
     <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
       {/* ── The card ─────────────────────────────────────────────── */}
-      {/* Shadow lives on the perspective wrapper — NOT on the rotating
-          element: a `filter` on a preserve-3d node flattens it and breaks
-          backface-visibility (the back would show a mirrored front). */}
-      <div style={{ perspective: '1400px', filter: 'drop-shadow(0 22px 40px rgba(0,0,0,0.32))' }}>
+      <div style={{ position: 'relative' }}>
+        {/* Perspective + drop-shadow wrapper. The shadow lives HERE, never on
+            the rotating element: a `filter` on a preserve-3d node flattens it
+            and breaks backface-visibility (the back shows a mirrored front). */}
         <div
+          ref={wrapRef}
+          onPointerMove={onPointerMove}
+          onPointerLeave={resetTilt}
           style={{
-            position: 'relative',
-            width: '100%',
-            aspectRatio: '1.586 / 1',
-            transformStyle: 'preserve-3d',
-            transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
-            transform: flipped ? 'rotateY(180deg)' : 'none',
+            perspective: '1400px',
+            filter: 'drop-shadow(0 22px 40px rgba(0,0,0,0.32))',
+            animation: 'pc-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
           }}
         >
-          {/* FRONT */}
-          <div style={cardFace}>
-            <FaceSheen />
+          <div ref={tiltRef} style={{ transformStyle: 'preserve-3d', transition: 'transform 0.4s ease-out', willChange: 'transform' }}>
             <div
               style={{
                 position: 'relative',
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                padding: 'clamp(1rem, 4.5%, 1.4rem)',
-                color: '#fff',
+                width: '100%',
+                aspectRatio: '1.586 / 1',
+                transformStyle: 'preserve-3d',
+                transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
+                transform: flipped ? 'rotateY(180deg)' : 'none',
               }}
             >
-              {/* top row */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.28em' }}>ONE</span>
-                <Contactless />
-              </div>
-
-              {/* chip */}
-              <div style={{ position: 'absolute', top: '38%', left: 'clamp(1rem, 4.5%, 1.4rem)' }}>
-                <Chip />
-              </div>
-
-              {/* number */}
-              <div style={{ marginTop: 'auto' }}>
-                <p style={microLabel} id="pc-num-label">Card number</p>
-                <div aria-labelledby="pc-num-label">
-                  <CardNumberElement
-                    options={{ style: elementStyle, showIcon: false, placeholder: '1234  5678  9012  3456' }}
-                    onFocus={() => setFlipped(false)}
-                    onChange={(ev: StripeCardNumberElementChangeEvent) => {
-                      setBrand(ev.brand || 'unknown')
-                      setDone((d) => ({ ...d, number: ev.complete }))
-                      if (ev.error) setErr(ev.error.message)
-                      else setErr(null)
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* bottom row: holder · expiry · brand */}
-              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '0.75rem', marginTop: '0.75rem' }}>
-                <div style={{ minWidth: 0, flex: 1 }}>
-                  <label style={microLabel} htmlFor="pc-name">Card holder</label>
-                  <input
-                    id="pc-name"
-                    type="text"
-                    autoComplete="cc-name"
-                    placeholder="YOUR NAME"
-                    aria-label="Cardholder name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value.toUpperCase())}
-                    onFocus={() => setFlipped(false)}
-                    style={{
-                      width: '100%',
-                      border: 'none',
-                      background: 'transparent',
-                      color: '#fff',
-                      fontFamily: "'SF Mono', ui-monospace, monospace",
-                      fontSize: '0.86rem',
-                      fontWeight: 500,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      padding: 0,
-                      outline: 'none',
-                    }}
-                  />
-                </div>
-                <div style={{ width: '5.4rem', flexShrink: 0 }}>
-                  <p style={microLabel} id="pc-exp-label">Expires</p>
-                  <div aria-labelledby="pc-exp-label">
-                    <CardExpiryElement
-                      options={{ style: elementStyle }}
-                      onFocus={() => setFlipped(false)}
-                      onChange={(ev) => setDone((d) => ({ ...d, expiry: ev.complete }))}
-                    />
-                  </div>
-                </div>
-                <div style={{ flexShrink: 0, paddingBottom: '0.1rem' }}>
-                  <BrandMark brand={brand} />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* BACK */}
-          <div style={{ ...cardFace, transform: 'rotateY(180deg)' }}>
-            <FaceSheen />
-            <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', color: '#fff' }}>
-              {/* magnetic stripe */}
-              <div style={{ height: '18%', marginTop: '9%', background: 'linear-gradient(#12151c, #05070c)' }} />
-              {/* signature + cvc */}
-              <div style={{ padding: 'clamp(0.9rem, 4.5%, 1.3rem)', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+              {/* FRONT */}
+              <div style={cardFace}>
+                <FaceSheen />
                 <div
-                  aria-hidden="true"
                   style={{
-                    flex: 1,
-                    height: 34,
-                    borderRadius: 4,
-                    background: 'repeating-linear-gradient(-45deg, rgba(255,255,255,0.82) 0 6px, rgba(230,230,230,0.82) 6px 12px)',
+                    position: 'relative',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    padding: 'clamp(1rem, 4.5%, 1.4rem)',
+                    color: '#fff',
                   }}
-                />
-                <div style={{ width: '4.6rem', flexShrink: 0 }}>
-                  <p style={{ ...microLabel, textAlign: 'right' }} id="pc-cvc-label">CVC</p>
-                  <div
-                    aria-labelledby="pc-cvc-label"
-                    style={{ background: 'rgba(255,255,255,0.14)', border: '1px solid rgba(255,255,255,0.28)', borderRadius: 6, padding: '0.35rem 0.5rem' }}
-                  >
-                    <CardCvcElement
-                      options={{ style: elementStyle, placeholder: '•••' }}
-                      onFocus={() => setFlipped(true)}
-                      onBlur={() => setFlipped(false)}
-                      onChange={(ev) => setDone((d) => ({ ...d, cvc: ev.complete }))}
-                    />
+                >
+                  {/* top row */}
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 800, letterSpacing: '0.28em' }}>ONE</span>
+                    <Contactless />
+                  </div>
+
+                  {/* chip */}
+                  <div style={{ position: 'absolute', top: '38%', left: 'clamp(1rem, 4.5%, 1.4rem)' }}>
+                    <Chip />
+                  </div>
+
+                  {/* number */}
+                  <div style={{ marginTop: 'auto' }}>
+                    <p style={microLabel} id="pc-num-label">Card number</p>
+                    <div aria-labelledby="pc-num-label" style={fieldWrap(focus === 'number')}>
+                      <CardNumberElement
+                        options={{ style: elementStyle, showIcon: false, placeholder: '1234  5678  9012  3456' }}
+                        onFocus={() => { setFocus('number'); setFlipped(false) }}
+                        onBlur={() => setFocus(null)}
+                        onChange={(ev: StripeCardNumberElementChangeEvent) => {
+                          setBrand(ev.brand || 'unknown')
+                          setDone((d) => ({ ...d, number: ev.complete }))
+                          setErr(ev.error ? ev.error.message : null)
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* bottom row: holder · expiry · brand */}
+                  <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '0.75rem', marginTop: '0.75rem' }}>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <label style={microLabel} htmlFor="pc-name">Card holder</label>
+                      <div style={fieldWrap(focus === 'name')}>
+                        <input
+                          id="pc-name"
+                          type="text"
+                          autoComplete="cc-name"
+                          placeholder="YOUR NAME"
+                          aria-label="Cardholder name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value.toUpperCase())}
+                          onFocus={() => { setFocus('name'); setFlipped(false) }}
+                          onBlur={() => setFocus(null)}
+                          style={{
+                            width: '100%',
+                            border: 'none',
+                            background: 'transparent',
+                            color: '#fff',
+                            fontFamily: "'SF Mono', ui-monospace, monospace",
+                            fontSize: '0.86rem',
+                            fontWeight: 500,
+                            letterSpacing: '0.1em',
+                            textTransform: 'uppercase',
+                            padding: 0,
+                            outline: 'none',
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ width: '5.4rem', flexShrink: 0 }}>
+                      <p style={microLabel} id="pc-exp-label">Expires</p>
+                      <div aria-labelledby="pc-exp-label" style={fieldWrap(focus === 'expiry')}>
+                        <CardExpiryElement
+                          options={{ style: elementStyle }}
+                          onFocus={() => { setFocus('expiry'); setFlipped(false) }}
+                          onBlur={() => setFocus(null)}
+                          onChange={(ev) => setDone((d) => ({ ...d, expiry: ev.complete }))}
+                        />
+                      </div>
+                    </div>
+                    <div style={{ flexShrink: 0, paddingBottom: '0.1rem', position: 'relative', width: 60, height: 30 }}>
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={brand}
+                          initial={{ opacity: 0, scale: 0.7, y: 4 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.7, y: -4 }}
+                          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                          style={{ position: 'absolute', right: 0, bottom: 0 }}
+                        >
+                          <BrandMark brand={brand} />
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
                   </div>
                 </div>
               </div>
-              <p style={{ marginTop: 'auto', padding: '0 clamp(0.9rem, 4.5%, 1.3rem) clamp(0.9rem, 4.5%, 1.3rem)', fontSize: '0.56rem', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.04em' }}>
-                Secured by Stripe · this starter never sees your card number.
-              </p>
+
+              {/* BACK */}
+              <div style={{ ...cardFace, transform: 'rotateY(180deg)' }}>
+                <FaceSheen />
+                <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', color: '#fff' }}>
+                  {/* magnetic stripe */}
+                  <div style={{ height: '18%', marginTop: '9%', background: 'linear-gradient(#12151c, #05070c)' }} />
+                  {/* signature + cvc */}
+                  <div style={{ padding: 'clamp(0.9rem, 4.5%, 1.3rem)', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        flex: 1,
+                        height: 34,
+                        borderRadius: 4,
+                        background: 'repeating-linear-gradient(-45deg, rgba(255,255,255,0.82) 0 6px, rgba(230,230,230,0.82) 6px 12px)',
+                      }}
+                    />
+                    <div style={{ width: '4.6rem', flexShrink: 0 }}>
+                      <p style={{ ...microLabel, textAlign: 'right' }} id="pc-cvc-label">CVC</p>
+                      <div
+                        aria-labelledby="pc-cvc-label"
+                        style={{
+                          background: 'rgba(255,255,255,0.14)',
+                          border: `1px solid ${focus === 'cvc' ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.28)'}`,
+                          borderRadius: 6,
+                          padding: '0.35rem 0.5rem',
+                          transition: 'border-color 0.22s ease',
+                        }}
+                      >
+                        <CardCvcElement
+                          options={{ style: elementStyle, placeholder: '•••' }}
+                          onFocus={() => { setFocus('cvc'); setFlipped(true) }}
+                          onBlur={() => { setFocus(null); setFlipped(false) }}
+                          onChange={(ev) => setDone((d) => ({ ...d, cvc: ev.complete }))}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <p style={{ marginTop: 'auto', padding: '0 clamp(0.9rem, 4.5%, 1.3rem) clamp(0.9rem, 4.5%, 1.3rem)', fontSize: '0.56rem', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.04em' }}>
+                    Secured by Stripe · this starter never sees your card number.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Approved stamp on success — overlays the card, outside the flip. */}
+        <AnimatePresence>
+          {paidId && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 18, background: 'rgba(6,9,14,0.42)', backdropFilter: 'blur(1px)', pointerEvents: 'none' }}
+            >
+              <motion.div
+                initial={{ scale: 1.6, opacity: 0, rotate: -22 }}
+                animate={{ scale: 1, opacity: 1, rotate: -12 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 16, delay: 0.05 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.5rem 1.1rem',
+                  border: '2.5px solid #34d17d',
+                  borderRadius: 10,
+                  color: '#34d17d',
+                  fontWeight: 800,
+                  letterSpacing: '0.14em',
+                  fontSize: '1.05rem',
+                  textTransform: 'uppercase',
+                  background: 'rgba(20,40,30,0.35)',
+                }}
+              >
+                <Check size={20} strokeWidth={3} /> Approved
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
+      <style>{'@keyframes pc-in { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } } @media (prefers-reduced-motion: reduce) { [style*="pc-in"] { animation: none !important } }'}</style>
+
       {/* helper: flip to enter CVC (works for mouse users) */}
-      <button
-        type="button"
-        onClick={flipped ? () => setFlipped(false) : focusCvc}
-        style={{
-          alignSelf: 'flex-start',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.35rem',
-          background: 'transparent',
-          border: 'none',
-          padding: 0,
-          margin: '-0.35rem 0 0',
-          color: C.muted,
-          fontSize: '0.74rem',
-          fontWeight: 600,
-          cursor: 'pointer',
-        }}
-      >
-        {flipped ? '↩ Back to front' : 'Enter CVC ↻'}
-      </button>
+      {!paidId && (
+        <button
+          type="button"
+          onClick={flipped ? () => setFlipped(false) : focusCvc}
+          style={{
+            alignSelf: 'flex-start',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.35rem',
+            background: 'transparent',
+            border: 'none',
+            padding: 0,
+            margin: '-0.35rem 0 0',
+            color: C.muted,
+            fontSize: '0.74rem',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          {flipped ? '↩ Back to front' : 'Enter CVC ↻'}
+        </button>
+      )}
 
       {err && (
         <p style={{ fontSize: '0.78rem', color: DANGER, background: 'color-mix(in srgb, #e5484d 10%, transparent)', borderRadius: 8, padding: '0.5rem 0.7rem', margin: 0 }}>
@@ -406,33 +536,37 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={!stripe || !ready || busy}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '0.45rem',
-          padding: '0.75rem 1rem',
-          background: C.primary,
-          color: C.bg,
-          border: 'none',
-          borderRadius: 10,
-          fontWeight: 700,
-          fontSize: '0.92rem',
-          cursor: !stripe || !ready || busy ? 'default' : 'pointer',
-          opacity: !stripe || !ready || busy ? 0.6 : 1,
-          transition: 'opacity 0.2s',
-        }}
-      >
-        <Lock size={14} />
-        {busy ? 'Processing…' : `Pay ${amount}`}
-      </button>
+      {!paidId && (
+        <button
+          type="submit"
+          disabled={!stripe || !ready || busy}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.45rem',
+            padding: '0.75rem 1rem',
+            background: C.primary,
+            color: C.bg,
+            border: 'none',
+            borderRadius: 10,
+            fontWeight: 700,
+            fontSize: '0.92rem',
+            cursor: !stripe || !ready || busy ? 'default' : 'pointer',
+            opacity: !stripe || !ready || busy ? 0.6 : 1,
+            transition: 'opacity 0.2s',
+          }}
+        >
+          <Lock size={14} />
+          {busy ? 'Processing…' : `Pay ${amount}`}
+        </button>
+      )}
 
       {paidId && (
-        <div
+        <motion.div
           role="status"
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
           style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', background: 'color-mix(in srgb, var(--color-primary) 10%, transparent)', border: `1px solid color-mix(in srgb, var(--color-primary) 30%, transparent)`, borderRadius: 12, padding: '0.85rem 1rem' }}
         >
           <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 9999, background: C.primary, color: C.bg, flexShrink: 0 }}>
@@ -442,7 +576,7 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
             <strong style={{ fontSize: '0.9rem', color: C.font }}>Paid {amount}</strong>
             <p style={{ margin: '0.15rem 0 0', fontSize: '0.72rem', fontFamily: "'SF Mono','Fira Code',monospace", color: C.muted, overflowWrap: 'anywhere' }}>{paidId}</p>
           </div>
-        </div>
+        </motion.div>
       )}
     </form>
   )
