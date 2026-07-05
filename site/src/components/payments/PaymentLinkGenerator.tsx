@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Check, Copy, ExternalLink, QrCode, RotateCcw, Send } from 'lucide-react'
+import { Check, Copy, ExternalLink, RotateCcw, Send } from 'lucide-react'
 
 /**
  * PaymentLinkGenerator — a real, working crypto payment link creator.
@@ -60,6 +60,32 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
   const [product, setProduct] = useState('')
   const [state, setState] = useState<State>({ status: 'idle' })
   const [copied, setCopied] = useState(false)
+  // The embedded pay.one.ie form reports its height and a completion event over
+  // postMessage; we size the iframe to it and flip to a paid banner. Gated on the
+  // pay origin so only the real payment page can drive this component.
+  const [frameH, setFrameH] = useState(560)
+  const [paid, setPaid] = useState<Record<string, unknown> | null>(null)
+
+  useEffect(() => {
+    if (state.status !== 'success') return
+    let origin = ''
+    try {
+      origin = new URL(state.url).origin
+    } catch {
+      return
+    }
+    function onMessage(e: MessageEvent) {
+      if (e.origin !== origin) return
+      const d = e.data as { type?: string; height?: number; detail?: Record<string, unknown> }
+      if (d?.type === 'one-pay:height' && typeof d.height === 'number') {
+        setFrameH(Math.max(320, Math.min(1600, Math.ceil(d.height))))
+      } else if (d?.type === 'one-pay:complete') {
+        setPaid(d.detail ?? {})
+      }
+    }
+    window.addEventListener('message', onMessage)
+    return () => window.removeEventListener('message', onMessage)
+  }, [state])
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -81,6 +107,8 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
   function reset() {
     setState({ status: 'idle' })
     setCopied(false)
+    setPaid(null)
+    setFrameH(560)
   }
 
   async function copyUrl(url: string) {
@@ -234,57 +262,43 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.97 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                {state.qr ? (
-                  <img
-                    src={state.qr}
-                    alt="Payment link QR code"
-                    style={{ width: 80, height: 80, borderRadius: 8, border: `1px solid ${C.border}`, flexShrink: 0 }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: 80,
-                      height: 80,
-                      flexShrink: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 8,
-                      border: `1px dashed ${C.border}`,
-                      color: C.muted,
-                    }}
-                  >
-                    <QrCode size={22} />
-                  </div>
-                )}
-                <div style={{ minWidth: 0, flex: 1 }}>
-                  <a
-                    href={state.url}
-                    target="_blank"
-                    rel="noopener"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
-                      color: C.primary,
-                      textDecoration: 'none',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{state.url}</span>
-                    <ExternalLink size={13} style={{ flexShrink: 0 }} />
-                  </a>
-                  <p style={{ marginTop: '0.35rem', fontSize: '0.78rem', color: C.muted }}>
-                    Share this — it settles straight to the wallet above.
-                  </p>
+              {paid && (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    color: '#34d17d',
+                    background: 'color-mix(in srgb, #34d17d 12%, transparent)',
+                    border: '1px solid color-mix(in srgb, #34d17d 30%, transparent)',
+                    borderRadius: 8,
+                    padding: '0.5rem 0.7rem',
+                  }}
+                >
+                  <Check size={15} /> Payment complete
                 </div>
+              )}
+
+              {/* The real pay.one.ie form, embedded in its ?embed=1 bare mode.
+                  loading="lazy" + mounting only in this success state means the
+                  cross-origin frame never loads on first paint (keeps Lighthouse
+                  clean); it auto-sizes via the postMessage listener above. */}
+              <div style={{ borderRadius: 12, overflow: 'hidden', border: `1px solid ${C.border}`, background: C.fg }}>
+                <iframe
+                  src={state.url + (state.url.includes('?') ? '&' : '?') + 'embed=1'}
+                  title="Pay with crypto"
+                  loading="lazy"
+                  allow="clipboard-write"
+                  style={{ width: '100%', height: frameH, border: 0, display: 'block', colorScheme: 'dark' }}
+                />
               </div>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.76rem', color: C.muted, marginRight: 'auto' }}>Or share the link:</span>
                 <button
                   type="button"
                   onClick={() => copyUrl(state.url)}
@@ -305,6 +319,26 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
                   {copied ? <Check size={13} /> : <Copy size={13} />}
                   {copied ? 'Copied' : 'Copy link'}
                 </button>
+                <a
+                  href={state.url}
+                  target="_blank"
+                  rel="noopener"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    padding: '0.4rem 0.75rem',
+                    border: `1px solid ${C.border}`,
+                    borderRadius: 8,
+                    background: C.fg,
+                    color: C.font,
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                  }}
+                >
+                  <ExternalLink size={13} /> Open
+                </a>
                 <button
                   type="button"
                   onClick={reset}
@@ -321,7 +355,7 @@ export default function PaymentLinkGenerator({ showHeader = true }: { showHeader
                     cursor: 'pointer',
                   }}
                 >
-                  <RotateCcw size={13} /> Create another
+                  <RotateCcw size={13} /> New
                 </button>
               </div>
             </motion.div>
