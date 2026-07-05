@@ -8,7 +8,7 @@ import Button from '../components/blocks/Button.astro'
 import Footer from '../components/blocks/Footer.astro'
 import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
 import CardCheckoutPreview from '../components/payments/CardCheckoutPreview'
-import StripeCheckout from '../components/payments/StripeCheckout'
+import PhysicalCardCheckout from '../components/payments/PhysicalCardCheckout'
 import { getEnv } from '../lib/cf-env'
 
 export const prerender = false
@@ -141,7 +141,7 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
         <div class="try-it-grid">
           <PaymentLinkGenerator client:visible />
           {stripeLive && stripePublishableKey
-            ? <StripeCheckout client:visible publishableKey={stripePublishableKey} />
+            ? <PhysicalCardCheckout client:visible publishableKey={stripePublishableKey} />
             : <CardCheckoutPreview client:visible />}
         </div>
       </Stagger>
