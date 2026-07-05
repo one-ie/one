@@ -60,18 +60,27 @@ const sizePx = size ? `${size}px` : undefined
 
 <div
   class:list={['pattern', `pattern--${pattern}`, { 'pattern--fade': fade }, className]}
-  style={{ '--pattern-opacity': opacity, '--pattern-color': color, ...(sizePx ? { '--pattern-size': sizePx } : {}) }}
+  style={{
+    /* Geometry inline, not in the scoped stylesheet: Astro's scoped CSS
+       loads as an external, async <link> — without this inline, the div
+       renders unstyled (0-size, in-flow) for one frame, then snaps to
+       position:absolute;inset:0 once the stylesheet arrives. That rect
+       jump gets counted as a real layout shift (verified live: ~0.65 CLS,
+       tanking Lighthouse) even though it never visually moves any
+       sibling. Only the per-pattern background-image/mask-image rules
+       (purely visual, no geometry) stay in the scoped <style> block. */
+    position: 'absolute', inset: 0, pointerEvents: 'none',
+    opacity: opacity, color: color,
+    '--pattern-opacity': opacity, '--pattern-color': color, ...(sizePx ? { '--pattern-size': sizePx } : {}),
+  }}
   aria-hidden="true"
 ></div>
 
 <style>
-  .pattern {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: var(--pattern-opacity, 0.06);
-    color: var(--pattern-color, currentColor);
-  }
+  /* Geometry + opacity/color live inline on the element (see the component
+     script above) — this scoped stylesheet only ever supplies the purely
+     visual per-pattern background-image/mask-image, which is safe to load
+     asynchronously since it can't cause a layout shift. */
 
   .pattern--dots {
     background-image: radial-gradient(currentColor 1px, transparent 1.5px);
