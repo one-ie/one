@@ -7,6 +7,7 @@ import ProofTerminal from '../components/lifecycle/ProofTerminal'
 import CountUp from '../components/home/CountUp'
 import Button from '../components/blocks/Button.astro'
 import Footer from '../components/blocks/Footer.astro'
+import Pattern from '../components/blocks/Pattern.astro'
 
 // ── Real proof data ──────────────────────────────────────────────────────
 // Captured from an actual run of pay/tools/agent-onboarding-lifecycle-demo.ts
@@ -74,6 +75,7 @@ const TXS = [
 
   <!-- ── Hero ──────────────────────────────────────────────────── -->
   <section class="hero">
+    <Pattern pattern="dots" opacity={0.09} color="var(--color-primary)" fade />
     <div class="container hero-container">
       <!-- Time-based animation — above-fold elements must not use scroll-driven animation -->
       <div class="hr hr-0"><div class="badge">Agent onboarding · tracked live</div></div>
@@ -103,6 +105,7 @@ const TXS = [
 
   <!-- ── Speed ─────────────────────────────────────────────────── -->
   <section class="speed">
+    <Pattern pattern="grid" opacity={0.06} color="var(--color-primary)" fade />
     <div class="container">
       <Reveal>
         <p class="eyebrow">Timed, not claimed</p>
@@ -196,6 +199,7 @@ const TXS = [
     <div class="container">
       <Reveal>
         <div class="cta-panel">
+          <Pattern pattern="diagonal" opacity={0.08} color="var(--color-primary)" fade />
           <h2 class="cta-title">Run it yourself.<br /><span class="headline-gradient">Same command, same system.</span></h2>
           <p class="cta-sub"><code>one onboard</code> walks all five stages in your terminal, against the same production system this page just proved.</p>
           <div class="cta-actions">
@@ -242,6 +246,8 @@ const TXS = [
 <style>
   .hero {
     padding: clamp(4rem, 10vw, 7rem) 0 clamp(2rem, 6vw, 3.5rem);
+    position: relative;
+    overflow: hidden;
   }
   .container {
     max-width: var(--content, 72rem);
@@ -250,6 +256,8 @@ const TXS = [
   }
   .hero-container {
     max-width: 48rem;
+    position: relative;
+    z-index: 1;
   }
   .badge {
     display: inline-block;
@@ -341,7 +349,8 @@ const TXS = [
   }
 
   /* Speed stats */
-  .speed { padding: clamp(2.5rem, 6vw, 4rem) 0; border-top: 1px solid var(--color-border); }
+  .speed { padding: clamp(2.5rem, 6vw, 4rem) 0; border-top: 1px solid var(--color-border); position: relative; overflow: hidden; }
+  .speed .container { position: relative; z-index: 1; }
   .speed-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -432,6 +441,8 @@ const TXS = [
         color-mix(in srgb, var(--color-tertiary) 10%, transparent));
   }
   .cta-title {
+    position: relative;
+    z-index: 1;
     font-size: clamp(1.9rem, 4.5vw, 3rem);
     font-weight: 700;
     letter-spacing: -0.035em;
@@ -440,10 +451,12 @@ const TXS = [
     margin: 0 0 1rem;
   }
   .cta-sub {
+    position: relative;
+    z-index: 1;
     font-size: 1rem;
     color: var(--color-muted);
     max-width: 32rem;
     margin: 0 auto 2rem;
   }
-  .cta-actions { display: flex; flex-wrap: wrap; gap: 0.85rem; justify-content: center; }
+  .cta-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 0.85rem; justify-content: center; }
 </style>
