@@ -11,7 +11,7 @@
     "typecheck": "astro check",
     "preview": "astro preview",
     "deploy": "astro build && wrangler deploy",
-    "deploy:template": "astro build && wrangler deploy --config wrangler.template-deploy.toml"
+    "deploy:template": "bash scripts/deploy-template.sh"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.3.1",
