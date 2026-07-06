@@ -141,6 +141,34 @@ If you don't want the backend, don't add the plugins. Nothing here requires it. 
 
 ---
 
+## Sell something, get paid, watch it happen
+
+Write a product as a markdown file in `site/src/content/products/`:
+
+```markdown
+---
+name: Sticker Pack
+priceCents: 1200
+description: Five vinyl stickers, shipped worldwide.
+---
+```
+
+It's for sale — priced server-side, so nobody can pay less than `priceCents` no
+matter what they send. `bun run deploy` puts it on your own domain.
+
+Money always lands straight in the wallet from `one wallet keygen`. Nothing above
+this line needs an account. But run `one onboard` once, and the moment someone
+pays, it shows up like this — in your workspace inbox, not your inbox client:
+
+```
+  ● pay-open · Sticker Pack · $12.00 · SUI
+    settled 0.4s ago → your treasury (no ONE credits, no custody change)
+```
+
+One command connects it. Zero commands are required to sell without it.
+
+---
+
 ## Paid plugins
 
 ```

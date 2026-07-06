@@ -59,6 +59,7 @@ const labelStyle: React.CSSProperties = {
 export default function PaymentLinkGenerator({
   showHeader = true,
   planId,
+  catalogProduct,
 }: {
   showHeader?: boolean
   /** A named plan from lib/plan-pricing.ts — pre-fills and locks amount +
@@ -66,10 +67,16 @@ export default function PaymentLinkGenerator({
    *  of these fields, so they must never be editable while a plan drives
    *  them — that would show a price the link wouldn't actually charge). */
   planId?: string
+  /** A catalog product from src/content/products/*.md, resolved server-side
+   *  in payments.astro (content collections can't be read from a client
+   *  island). Same lock-the-form posture as planId — the server enforces
+   *  the real price via resolveProduct() regardless of these display values. */
+  catalogProduct?: { slug: string; cents: number; label: string }
 }) {
   const plan = planId ? PLANS[planId] : undefined
-  const [amount, setAmount] = useState(plan ? String(plan.cents / 100) : '25')
-  const [product, setProduct] = useState(plan ? plan.label : '')
+  const locked = plan ?? catalogProduct
+  const [amount, setAmount] = useState(locked ? String(locked.cents / 100) : '25')
+  const [product, setProduct] = useState(locked ? locked.label : '')
   const [state, setState] = useState<State>({ status: 'idle' })
   const [copied, setCopied] = useState(false)
   // The embedded pay.one.ie form reports its height and a completion event over
@@ -109,7 +116,9 @@ export default function PaymentLinkGenerator({
         body: JSON.stringify(
           planId
             ? { planId }
-            : { amountCents: Math.round(Number(amount) * 100), product: product || 'Payment' },
+            : catalogProduct
+              ? { productId: catalogProduct.slug }
+              : { amountCents: Math.round(Number(amount) * 100), product: product || 'Payment' },
         ),
       })
       const json = (await res.json()) as { url?: string; qr?: string; error?: string }
@@ -193,7 +202,7 @@ export default function PaymentLinkGenerator({
                     required
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    disabled={state.status === 'loading' || !!plan}
+                    disabled={state.status === 'loading' || !!locked}
                     style={inputStyle}
                   />
                 </div>
@@ -208,7 +217,7 @@ export default function PaymentLinkGenerator({
                     required
                     value={product}
                     onChange={(e) => setProduct(e.target.value)}
-                    disabled={state.status === 'loading' || !!plan}
+                    disabled={state.status === 'loading' || !!locked}
                     style={inputStyle}
                   />
                 </div>

@@ -11,6 +11,8 @@ import CardCheckoutPreview from '../components/payments/CardCheckoutPreview'
 import PhysicalCardCheckout from '../components/payments/PhysicalCardCheckout'
 import { getEnv } from '../lib/cf-env'
 import { resolvePlan } from '../lib/plan-pricing'
+import { resolveProduct } from '../lib/product-pricing'
+import { getCollection } from 'astro:content'
 
 export const prerender = false
 
@@ -29,6 +31,13 @@ const planId = resolvePlan(Astro.url.searchParams.get('plan'))
   ? (Astro.url.searchParams.get('plan') as string)
   : undefined
 const plan = resolvePlan(planId)
+
+// A catalog product (site/src/content/products/*.md) can deep-link the same
+// way — /payments?product=<slug> — resolved server-side so the price shown
+// always matches what the link actually charges.
+const productParam = plan ? undefined : (Astro.url.searchParams.get('product') ?? undefined)
+const catalogProduct = productParam ? await resolveProduct(productParam) : null
+const products = await getCollection('products')
 ---
 
 <Layout
@@ -67,8 +76,29 @@ const plan = resolvePlan(planId)
       <div class="hr hr-3 hero-rail">
         <div class="rail">
           <div class="rail-tag rail-tag--crypto"><span class="rail-dot"></span>Crypto · live today</div>
-          <PaymentLinkGenerator client:visible planId={planId} />
+          <PaymentLinkGenerator
+            client:visible
+            planId={planId}
+            catalogProduct={catalogProduct ? { slug: catalogProduct.slug, cents: catalogProduct.cents, label: catalogProduct.label } : undefined}
+          />
           <p class="rail-foot">A real, signed link to your wallet — created on click, no backend needed. <a href="#card">Prefer a card? ↓</a></p>
+
+          {products.length > 0 && (
+            <div class="catalog">
+              <p class="catalog-eyebrow">Or buy from the catalog</p>
+              <ul class="catalog-list">
+                {products.map((p) => (
+                  <li class="catalog-item">
+                    <a href={`/payments?product=${p.id}`}>
+                      <span class="catalog-name">{p.data.name}</span>
+                      <span class="catalog-price">${(p.data.priceCents / 100).toFixed(2)}</span>
+                    </a>
+                    <p class="catalog-desc">{p.data.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -358,6 +388,15 @@ return Response.json({ clientSecret: intent.client_secret })
   .rail-foot { font-size: 0.78rem; line-height: 1.5; color: var(--color-muted); margin: 0.1rem 0 0; }
   .rail-foot a { color: var(--color-primary); text-decoration: none; font-weight: 600; white-space: nowrap; }
   .rail-foot a:hover { text-decoration: underline; }
+
+  /* Product catalog — written as a markdown file per product, priced server-side */
+  .catalog { margin-top: 1rem; padding-top: 0.9rem; border-top: 1px solid var(--color-border); }
+  .catalog-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: var(--color-muted); margin: 0 0 0.5rem; }
+  .catalog-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+  .catalog-item a { display: flex; justify-content: space-between; gap: 0.5rem; text-decoration: none; color: var(--color-font); font-weight: 600; font-size: 0.88rem; }
+  .catalog-item a:hover .catalog-name { text-decoration: underline; }
+  .catalog-price { color: var(--color-primary); white-space: nowrap; }
+  .catalog-desc { margin: 0.15rem 0 0; font-size: 0.78rem; color: var(--color-muted); }
 
   /* Card rail — its own stage, below the fold (keeps live Stripe out of the
      first paint so the page holds its Lighthouse scores; still fully live). */

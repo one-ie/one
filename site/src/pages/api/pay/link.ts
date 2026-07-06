@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro'
 import { getEnv } from '../../../lib/cf-env'
 import { readSelfHostedWallet } from '../../../lib/chain-balances'
 import { resolvePlan } from '../../../lib/plan-pricing'
+import { resolveProduct } from '../../../lib/product-pricing'
 
 export const prerender = false
 
@@ -29,7 +30,7 @@ export const POST: APIRoute = async ({ request }) => {
   const payUrl = (env.PAY_URL as string | undefined) ?? 'https://pay.one.ie'
   const merchantSlug = (env.AGENCY_WSID as string | undefined) ?? 'one-site'
 
-  let body: { amountCents?: number; product?: string; planId?: string }
+  let body: { amountCents?: number; product?: string; planId?: string; productId?: string }
   try {
     body = (await request.json()) as typeof body
   } catch {
@@ -39,13 +40,23 @@ export const POST: APIRoute = async ({ request }) => {
   // resolved server-side, never taken from the client, so a plan's crypto
   // price can't drift from its Stripe price or be spoofed by the buyer.
   const plan = resolvePlan(body.planId)
-  // NB: despite the name, this "amount" is cents (matches the non-plan
+  // A catalog product (site/src/content/products/*.md) resolves the same way —
+  // server-side only, and from its OWN field (productId), never from `product`
+  // (the free-text "For" description on the ad-hoc path). Keeping them separate
+  // means a buyer's free-text description can never accidentally — or
+  // deliberately — match a catalog slug and hijack the price they're charged.
+  const catalogProduct = plan ? null : await resolveProduct(body.productId)
+  // NB: despite the name, this "amount" is cents (matches the non-plan/product
   // branch below, which passes body.amountCents straight through) — the
   // pay.one.ie payment_link_create protocol takes an integer cents count
   // regardless of unit:'usd' (confirmed against links.ts's own reader:
   // `usdAmount = payload.a / 100` when unit==='usd').
-  const amount = plan ? plan.cents : Number(body.amountCents ?? 0)
-  const product = plan ? plan.label : (String(body.product ?? '').slice(0, 256) || 'Payment')
+  const amount = plan ? plan.cents : catalogProduct ? catalogProduct.cents : Number(body.amountCents ?? 0)
+  const product = plan
+    ? plan.label
+    : catalogProduct
+      ? catalogProduct.label
+      : (String(body.product ?? '').slice(0, 256) || 'Payment')
   if (!Number.isFinite(amount) || amount <= 0) {
     return Response.json({ error: 'amountCents must be > 0' }, { status: 400 })
   }
@@ -67,11 +78,25 @@ export const POST: APIRoute = async ({ request }) => {
     )
   }
 
+  // Connected mode: `one onboard` writes ONE_API_KEY + AGENCY_WSID to .dev.vars.
+  // When present, opt this link into the webhook that one.ie's crypto-webhook.ts
+  // already verifies (shared PAY_WEBHOOK_SECRET/WEBHOOK_SECRET) — a claimed
+  // payment then lands as a settlement + signal in the workspace, no credits
+  // granted, no custody change. Both fields stay undefined (dropped by
+  // JSON.stringify) when ONE_API_KEY is absent, so the request body sent to
+  // pay.one.ie is byte-identical to standalone mode.
+  const oneApiKey = env.ONE_API_KEY as string | undefined
+  const webhook = oneApiKey
+    ? `${(env.ONE_API_URL as string | undefined) ?? 'https://one.ie'}/api/pay/crypto-webhook`
+    : undefined
+  const meta = oneApiKey ? { workspace: merchantSlug, ppid: catalogProduct?.slug } : undefined
+
   try {
     const created = await payProtocol(payUrl, 'payment_link_create', {
       amount, unit: 'usd', product, merchantSlug,
       chains: Object.keys(treasuries),
       treasuries,
+      webhook, meta,
     })
     return Response.json({ url: created.url, qr: created.qr })
   } catch (err) {
