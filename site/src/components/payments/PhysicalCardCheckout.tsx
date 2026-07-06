@@ -165,7 +165,7 @@ function FaceSheen() {
   )
 }
 
-function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountCents: number }) {
+function CardForm({ clientSecret, amountCents, isTestMode }: { clientSecret: string; amountCents: number; isTestMode: boolean }) {
   const stripe = useStripe()
   const elements = useElements()
   const [brand, setBrand] = useState('unknown')
@@ -470,8 +470,12 @@ function CardForm({ clientSecret, amountCents }: { clientSecret: string; amountC
           </button>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.9rem', fontSize: '0.72rem', color: C.muted }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}><ShieldCheck size={12} /> Secured by Stripe</span>
-            <span>·</span>
-            <span>Test mode — no real charge</span>
+            {isTestMode && (
+              <>
+                <span>·</span>
+                <span>Test mode — no real charge</span>
+              </>
+            )}
           </div>
         </>
       )}
@@ -544,6 +548,10 @@ export default function PhysicalCardCheckout({
 
   const options = useMemo(() => ({ appearance: { theme: 'stripe' as const } }), [])
   const amount = `$${(resolvedCents / 100).toFixed(2)}`
+  // Stripe's own prefix tells test from live — never assume test mode. Showing
+  // "no real charge" + the 4242 test card against a real key would be actively
+  // misleading (and the card would just decline for a real buyer).
+  const isTestMode = publishableKey.startsWith('pk_test_')
 
   return (
     <div style={{ border: `1px solid ${C.border}`, borderRadius: 16, background: C.bg, overflow: 'hidden' }}>
@@ -554,11 +562,15 @@ export default function PhysicalCardCheckout({
           </span>
           <strong style={{ fontSize: '1rem', color: C.font }}>Pay by card</strong>
           <span style={{ marginLeft: 'auto', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: C.primary, border: `1px solid color-mix(in srgb, var(--color-primary) 35%, transparent)`, borderRadius: 6, padding: '0.15rem 0.5rem' }}>
-            Live · test mode
+            {isTestMode ? 'Live · test mode' : 'Live'}
           </span>
         </div>
         <p style={{ fontSize: '0.82rem', color: C.muted, margin: 0 }}>
-          Fill the card to pay {amount} in seconds — test mode, so no real charge. Use <strong style={{ color: C.font, fontWeight: 600 }}>4242 4242 4242 4242</strong>, any future date, any CVC.
+          {isTestMode ? (
+            <>Fill the card to pay {amount} in seconds — test mode, so no real charge. Use <strong style={{ color: C.font, fontWeight: 600 }}>4242 4242 4242 4242</strong>, any future date, any CVC.</>
+          ) : (
+            <>Fill the card to pay {amount} — a real charge, processed by Stripe.</>
+          )}
         </p>
       </div>
 
@@ -567,7 +579,7 @@ export default function PhysicalCardCheckout({
           <p style={{ fontSize: '0.78rem', color: DANGER, background: 'color-mix(in srgb, var(--color-destructive) 12%, transparent)', borderRadius: 8, padding: '0.5rem 0.7rem', margin: 0 }}>{err}</p>
         ) : stripe && clientSecret ? (
           <Elements stripe={stripe} options={options}>
-            <CardForm clientSecret={clientSecret} amountCents={resolvedCents} />
+            <CardForm clientSecret={clientSecret} amountCents={resolvedCents} isTestMode={isTestMode} />
           </Elements>
         ) : (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>

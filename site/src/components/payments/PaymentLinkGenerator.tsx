@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ArrowRight, Check, Copy, RotateCcw, Send } from 'lucide-react'
 import { PLANS } from '../../lib/plan-pricing'
@@ -79,9 +79,9 @@ export default function PaymentLinkGenerator({
   const [product, setProduct] = useState(locked ? locked.label : '')
   const [state, setState] = useState<State>({ status: 'idle' })
   const [copied, setCopied] = useState(false)
+  const autoFired = useRef(false)
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  async function createLink() {
     setState({ status: 'loading' })
     try {
       const res = await fetch('/api/pay/link', {
@@ -101,6 +101,24 @@ export default function PaymentLinkGenerator({
     } catch (err) {
       setState({ status: 'error', message: err instanceof Error ? err.message : String(err) })
     }
+  }
+
+  // Locked mode (a plan or catalog product) has nothing left to confirm — the
+  // price is fixed and already shown by the page around this component, so
+  // the link is created the moment this mounts instead of behind one more
+  // "are you sure" click. Ref-guarded so React StrictMode / re-renders never
+  // double-fire it.
+  useEffect(() => {
+    if (locked && !autoFired.current) {
+      autoFired.current = true
+      void createLink()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    void createLink()
   }
 
   function reset() {
@@ -151,7 +169,67 @@ export default function PaymentLinkGenerator({
 
       <div style={{ padding: showHeader ? '1rem 1.4rem 1.4rem' : '1.4rem' }}>
         <AnimatePresence mode="wait" initial={false}>
-          {state.status !== 'success' ? (
+          {state.status !== 'success' && locked ? (
+            // Locked mode (a plan or catalog product): nothing to confirm — the
+            // price is fixed and already shown by the calling page, so the link
+            // is created automatically (see the mount effect above). One less
+            // click between "I want this" and the actual payment page.
+            <motion.div
+              key="locked"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}
+            >
+              <div
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '0.6rem 0.8rem', borderRadius: 8, background: C.fg,
+                }}
+              >
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: C.font }}>{locked.label}</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: C.primary }}>${(locked.cents / 100).toFixed(2)}</span>
+              </div>
+
+              {state.status === 'error' ? (
+                <>
+                  <p
+                    style={{
+                      fontSize: '0.78rem', color: 'var(--color-destructive)',
+                      background: 'color-mix(in srgb, var(--color-destructive) 12%, transparent)',
+                      borderRadius: 8, padding: '0.5rem 0.7rem', margin: 0,
+                    }}
+                  >
+                    {state.message}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => void createLink()}
+                    style={{
+                      padding: '0.6rem 1rem', background: C.primary, color: C.bg, border: 'none',
+                      borderRadius: 8, fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
+                    }}
+                  >
+                    Try again
+                  </button>
+                </>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: C.muted, padding: '0.4rem 0' }}>
+                  <motion.span
+                    aria-hidden="true"
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 0.7, ease: 'linear' }}
+                    style={{
+                      display: 'inline-block', width: 14, height: 14, borderRadius: '50%',
+                      border: `2px solid ${C.border}`, borderTopColor: C.primary,
+                    }}
+                  />
+                  Preparing your payment…
+                </div>
+              )}
+            </motion.div>
+          ) : state.status !== 'success' ? (
             <motion.form
               key="form"
               onSubmit={onSubmit}
@@ -161,54 +239,39 @@ export default function PaymentLinkGenerator({
               transition={{ duration: 0.18 }}
               style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
             >
-              {locked ? (
-                // Locked mode (a plan or catalog product): the price is already
-                // shown by the calling page, so repeating it in disabled-looking
-                // inputs is just noise before the one real decision (click to pay).
-                <div
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '0.6rem 0.8rem', borderRadius: 8, background: C.fg,
-                  }}
-                >
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: C.font }}>{locked.label}</span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: C.primary }}>${(locked.cents / 100).toFixed(2)}</span>
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <div style={{ width: '6.5rem', flexShrink: 0 }}>
+                  <label htmlFor="pl-amount" style={labelStyle}>
+                    Amount (USD)
+                  </label>
+                  <input
+                    id="pl-amount"
+                    type="number"
+                    min={1}
+                    step="0.01"
+                    required
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    disabled={state.status === 'loading'}
+                    style={inputStyle}
+                  />
                 </div>
-              ) : (
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                  <div style={{ width: '6.5rem', flexShrink: 0 }}>
-                    <label htmlFor="pl-amount" style={labelStyle}>
-                      Amount (USD)
-                    </label>
-                    <input
-                      id="pl-amount"
-                      type="number"
-                      min={1}
-                      step="0.01"
-                      required
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      disabled={state.status === 'loading'}
-                      style={inputStyle}
-                    />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <label htmlFor="pl-product" style={labelStyle}>
-                      For
-                    </label>
-                    <input
-                      id="pl-product"
-                      type="text"
-                      placeholder="Invoice, service, product…"
-                      required
-                      value={product}
-                      onChange={(e) => setProduct(e.target.value)}
-                      disabled={state.status === 'loading'}
-                      style={inputStyle}
-                    />
-                  </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <label htmlFor="pl-product" style={labelStyle}>
+                    For
+                  </label>
+                  <input
+                    id="pl-product"
+                    type="text"
+                    placeholder="Invoice, service, product…"
+                    required
+                    value={product}
+                    onChange={(e) => setProduct(e.target.value)}
+                    disabled={state.status === 'loading'}
+                    style={inputStyle}
+                  />
                 </div>
-              )}
+              </div>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                 {CHAINS.map((c) => (
@@ -264,7 +327,7 @@ export default function PaymentLinkGenerator({
                   gap: '0.4rem',
                 }}
               >
-                {state.status === 'loading' ? 'Creating…' : locked ? 'Pay with crypto' : 'Create link'}
+                {state.status === 'loading' ? 'Creating…' : 'Create link'}
               </button>
             </motion.form>
           ) : (
