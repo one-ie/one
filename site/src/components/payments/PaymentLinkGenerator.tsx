@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Check, Copy, ExternalLink, RotateCcw, Send } from 'lucide-react'
+import { ArrowRight, Check, Copy, RotateCcw, Send } from 'lucide-react'
 import { PLANS } from '../../lib/plan-pricing'
 
 /**
@@ -79,32 +79,6 @@ export default function PaymentLinkGenerator({
   const [product, setProduct] = useState(locked ? locked.label : '')
   const [state, setState] = useState<State>({ status: 'idle' })
   const [copied, setCopied] = useState(false)
-  // The embedded pay.one.ie form reports its height and a completion event over
-  // postMessage; we size the iframe to it and flip to a paid banner. Gated on the
-  // pay origin so only the real payment page can drive this component.
-  const [frameH, setFrameH] = useState(560)
-  const [paid, setPaid] = useState<Record<string, unknown> | null>(null)
-
-  useEffect(() => {
-    if (state.status !== 'success') return
-    let origin = ''
-    try {
-      origin = new URL(state.url).origin
-    } catch {
-      return
-    }
-    function onMessage(e: MessageEvent) {
-      if (e.origin !== origin) return
-      const d = e.data as { type?: string; height?: number; detail?: Record<string, unknown> }
-      if (d?.type === 'one-pay:height' && typeof d.height === 'number') {
-        setFrameH(Math.max(320, Math.min(1600, Math.ceil(d.height))))
-      } else if (d?.type === 'one-pay:complete') {
-        setPaid(d.detail ?? {})
-      }
-    }
-    window.addEventListener('message', onMessage)
-    return () => window.removeEventListener('message', onMessage)
-  }, [state])
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -132,8 +106,6 @@ export default function PaymentLinkGenerator({
   function reset() {
     setState({ status: 'idle' })
     setCopied(false)
-    setPaid(null)
-    setFrameH(560)
   }
 
   async function copyUrl(url: string) {
@@ -304,41 +276,41 @@ export default function PaymentLinkGenerator({
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}
             >
-              {paid && (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    fontSize: '0.82rem',
-                    fontWeight: 600,
-                    color: 'var(--color-success)',
-                    background: 'color-mix(in srgb, var(--color-success) 14%, transparent)',
-                    border: '1px solid color-mix(in srgb, var(--color-success) 32%, transparent)',
-                    borderRadius: 8,
-                    padding: '0.5rem 0.7rem',
-                  }}
-                >
-                  <Check size={15} /> Payment complete
+              {/* Link out to pay.one.ie's own hosted checkout, rather than embed it —
+                  crypto wallets (mobile apps, browser extensions) routinely refuse to
+                  connect from inside an iframe, and a real navigation is one less thing
+                  that can silently break (iframe sizing, postMessage, cross-origin). */}
+              {state.qr && (
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '0.5rem 0' }}>
+                  <img
+                    src={state.qr}
+                    alt="Scan to pay with your phone"
+                    style={{ width: 160, height: 160, borderRadius: 12, border: `1px solid ${C.border}` }}
+                  />
                 </div>
               )}
 
-              {/* The real pay.one.ie form, embedded in its ?embed=1 bare mode.
-                  loading="lazy" + mounting only in this success state means the
-                  cross-origin frame never loads on first paint (keeps Lighthouse
-                  clean); it auto-sizes via the postMessage listener above. */}
-              <div style={{ borderRadius: 12, overflow: 'hidden', border: `1px solid ${C.border}`, background: C.fg }}>
-                <iframe
-                  src={state.url + (state.url.includes('?') ? '&' : '?') + 'embed=1'}
-                  title="Pay with crypto"
-                  loading="lazy"
-                  allow="clipboard-write"
-                  style={{ width: '100%', height: frameH, border: 0, display: 'block', colorScheme: 'dark' }}
-                />
-              </div>
+              <a
+                href={state.url}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.4rem',
+                  padding: '0.7rem 1rem',
+                  background: C.primary,
+                  color: C.bg,
+                  borderRadius: 8,
+                  fontWeight: 600,
+                  fontSize: '0.9rem',
+                  textDecoration: 'none',
+                }}
+              >
+                Open payment page <ArrowRight size={15} />
+              </a>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '0.76rem', color: C.muted, marginRight: 'auto' }}>Or share the link:</span>
+                <span style={{ fontSize: '0.76rem', color: C.muted, marginRight: 'auto' }}>Or scan the code / share the link</span>
                 <button
                   type="button"
                   onClick={() => copyUrl(state.url)}
@@ -359,26 +331,6 @@ export default function PaymentLinkGenerator({
                   {copied ? <Check size={13} /> : <Copy size={13} />}
                   {copied ? 'Copied' : 'Copy link'}
                 </button>
-                <a
-                  href={state.url}
-                  target="_blank"
-                  rel="noopener"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    padding: '0.4rem 0.75rem',
-                    border: `1px solid ${C.border}`,
-                    borderRadius: 8,
-                    background: C.fg,
-                    color: C.font,
-                    fontSize: '0.8rem',
-                    fontWeight: 600,
-                    textDecoration: 'none',
-                  }}
-                >
-                  <ExternalLink size={13} /> Open
-                </a>
                 <button
                   type="button"
                   onClick={reset}
