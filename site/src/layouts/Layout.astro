@@ -1,5 +1,6 @@
 ---
 import OneChat from '@oneie/plugin-chat/OneChat.astro'
+import { getCollection } from 'astro:content'
 
 interface Props {
   title: string
@@ -26,6 +27,10 @@ const siteName = 'ONE'
 const canonicalURL = new URL(Astro.url.pathname, Astro.url.origin).href
 const ogT = ogTitle ?? title
 const ogD = ogDescription ?? description
+
+// Every product file in src/content/products/ becomes a real nav link,
+// site-wide — writing a product is the whole "list it for sale" step.
+const products = await getCollection('products')
 const ogU = ogUrl ?? canonicalURL
 ---
 
@@ -182,6 +187,9 @@ const ogU = ogUrl ?? canonicalURL
         <a href="/" class="one-logo">ONE</a>
         <nav class="one-nav-links" aria-label="Primary">
           <a href="/payments">Payments</a>
+          {products.map((p) => (
+            <a href={`/payments?product=${p.id}`}>{p.data.name}</a>
+          ))}
           <a href="/wallet">Wallet</a>
           <a href="/lifecycle">Lifecycle</a>
           <a href="/design">Design</a>
@@ -210,6 +218,9 @@ const ogU = ogUrl ?? canonicalURL
          drawer restores them (opened by the hamburger above). -->
     <nav id="one-mobile-menu" class="one-mobile-menu" aria-label="Primary (mobile)">
       <a href="/payments">Payments</a>
+      {products.map((p) => (
+        <a href={`/payments?product=${p.id}`}>{p.data.name}</a>
+      ))}
       <a href="/wallet">Wallet</a>
       <a href="/lifecycle">Lifecycle</a>
       <a href="/design">Design</a>
