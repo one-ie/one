@@ -18,6 +18,9 @@ coverage/
 *.key
 *.pem
 
+# ONE team's own reference deploy config — never shipped to a template clone
+wrangler.template-deploy.toml
+
 # editor / OS
 .DS_Store
 *.log
