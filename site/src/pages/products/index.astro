@@ -1,0 +1,109 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Reveal from '../../components/motion/Reveal.astro'
+import Stagger from '../../components/motion/Stagger.astro'
+import Pattern from '../../components/blocks/Pattern.astro'
+import Footer from '../../components/blocks/Footer.astro'
+import { getCollection } from 'astro:content'
+
+export const prerender = true
+
+const products = (await getCollection('products')).sort((a, b) => a.data.priceCents - b.data.priceCents)
+---
+
+<Layout
+  title="Products — ONE"
+  description="Write a markdown file, it's for sale — priced server-side so a buyer can never tamper with the price."
+>
+  <section class="hero">
+    <Pattern pattern="dots" opacity={0.09} color="var(--color-primary)" fade />
+    <div class="container">
+      <Reveal class="section-head">
+        <p class="eyebrow">The catalog</p>
+        <h1 class="section-title">Write a file. It's for sale.</h1>
+        <p class="section-sub">
+          Every product below is a markdown file in <code>src/content/products/</code> —
+          priced server-side, so nobody pays more or less than what's written there.
+        </p>
+      </Reveal>
+
+      {products.length === 0 ? (
+        <Reveal>
+          <p class="empty">
+            No products yet — add a file to <code>src/content/products/</code> and it
+            shows up here. See <a href="/payments">/payments</a> for the crypto and card
+            rails in the meantime.
+          </p>
+        </Reveal>
+      ) : (
+        <Stagger stagger={0.08}>
+          <div class="grid">
+            {products.map((p) => (
+              <a class="card" href={`/products/${p.id}`}>
+                <div class="card-top">
+                  <span class="price">${(p.data.priceCents / 100).toFixed(2)}</span>
+                </div>
+                <h3 class="name">{p.data.name}</h3>
+                <p class="desc">{p.data.description}</p>
+                <span class="cta">Buy now <span class="arrow">→</span></span>
+              </a>
+            ))}
+          </div>
+        </Stagger>
+      )}
+    </div>
+  </section>
+
+  <Footer
+    tagline="The open-source Astro starter that ships payments, AI, and plugins on day one — wired from one.config.ts."
+    columns={[
+      { heading: 'Product', links: [
+        { label: 'Payments', href: '/payments' },
+        { label: 'Products', href: '/products' },
+        { label: 'Wallet', href: '/wallet' },
+        { label: 'Lifecycle', href: '/lifecycle' },
+        { label: 'Design system', href: '/design' },
+      ] },
+      { heading: 'Resources', links: [
+        { label: 'Documentation', href: 'https://one.ie/docs' },
+        { label: 'GitHub', href: 'https://github.com/one-ie/one', external: true },
+      ] },
+    ]}
+    note="Free forever, one license · Built on the open web."
+  />
+</Layout>
+
+<style>
+  .container { max-width: var(--content, 72rem); margin: 0 auto; padding: 0 1.5rem; }
+
+  .hero { position: relative; padding: 4.5rem 0 5rem; }
+  :global(.section-head) { max-width: 40rem; margin: 0 auto 2.75rem; text-align: center; }
+  .eyebrow {
+    display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--color-primary); margin: 0 0 0.75rem;
+  }
+  .section-title { font-size: clamp(1.9rem, 4vw, 2.75rem); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 0.75rem; }
+  .section-sub { color: var(--color-muted); font-size: 1rem; line-height: 1.6; margin: 0; }
+  .section-sub code, .empty code { background: var(--color-foreground); border-radius: 6px; padding: 0.1rem 0.4rem; font-size: 0.85em; }
+
+  .empty { text-align: center; color: var(--color-muted); font-size: 0.95rem; }
+  .empty a { color: var(--color-primary); font-weight: 600; text-decoration: none; }
+  .empty a:hover { text-decoration: underline; }
+
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1.25rem;
+  }
+  .card {
+    display: flex; flex-direction: column; gap: 0.5rem; padding: 1.5rem;
+    border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-background);
+    text-decoration: none; color: inherit; transition: border-color 120ms ease, transform 120ms ease;
+  }
+  .card:hover { border-color: var(--color-primary); transform: translateY(-2px); }
+  .card-top { display: flex; justify-content: flex-end; }
+  .price { font-size: 0.9rem; font-weight: 700; color: var(--color-primary); }
+  .name { font-size: 1.15rem; font-weight: 700; margin: 0; }
+  .desc { font-size: 0.85rem; color: var(--color-muted); line-height: 1.5; margin: 0; flex: 1; }
+  .cta { font-size: 0.82rem; font-weight: 600; color: var(--color-font); margin-top: 0.5rem; }
+  .arrow { display: inline-block; transition: transform 120ms ease; }
+  .card:hover .arrow { transform: translateX(3px); }
+</style>

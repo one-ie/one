@@ -89,7 +89,7 @@ const products = await getCollection('products')
               <ul class="catalog-list">
                 {products.map((p) => (
                   <li class="catalog-item">
-                    <a href={`/payments?product=${p.id}`}>
+                    <a href={`/products/${p.id}`}>
                       <span class="catalog-name">{p.data.name}</span>
                       <span class="catalog-price">${(p.data.priceCents / 100).toFixed(2)}</span>
                     </a>
@@ -97,6 +97,7 @@ const products = await getCollection('products')
                   </li>
                 ))}
               </ul>
+              <p class="catalog-foot"><a href="/products">See all products →</a></p>
             </div>
           )}
         </div>
@@ -397,6 +398,9 @@ return Response.json({ clientSecret: intent.client_secret })
   .catalog-item a:hover .catalog-name { text-decoration: underline; }
   .catalog-price { color: var(--color-primary); white-space: nowrap; }
   .catalog-desc { margin: 0.15rem 0 0; font-size: 0.78rem; color: var(--color-muted); }
+  .catalog-foot { margin: 0.75rem 0 0; font-size: 0.78rem; }
+  .catalog-foot a { color: var(--color-primary); font-weight: 600; text-decoration: none; }
+  .catalog-foot a:hover { text-decoration: underline; }
 
   /* Card rail — its own stage, below the fold (keeps live Stripe out of the
      first paint so the page holds its Lighthouse scores; still fully live). */

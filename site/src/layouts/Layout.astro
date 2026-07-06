@@ -188,7 +188,7 @@ const ogU = ogUrl ?? canonicalURL
         <nav class="one-nav-links" aria-label="Primary">
           <a href="/payments">Payments</a>
           {products.map((p) => (
-            <a href={`/payments?product=${p.id}`}>{p.data.name}</a>
+            <a href={`/products/${p.id}`}>{p.data.name}</a>
           ))}
           <a href="/wallet">Wallet</a>
           <a href="/lifecycle">Lifecycle</a>
@@ -219,7 +219,7 @@ const ogU = ogUrl ?? canonicalURL
     <nav id="one-mobile-menu" class="one-mobile-menu" aria-label="Primary (mobile)">
       <a href="/payments">Payments</a>
       {products.map((p) => (
-        <a href={`/payments?product=${p.id}`}>{p.data.name}</a>
+        <a href={`/products/${p.id}`}>{p.data.name}</a>
       ))}
       <a href="/wallet">Wallet</a>
       <a href="/lifecycle">Lifecycle</a>
