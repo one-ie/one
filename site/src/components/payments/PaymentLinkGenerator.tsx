@@ -189,39 +189,54 @@ export default function PaymentLinkGenerator({
               transition={{ duration: 0.18 }}
               style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
             >
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <div style={{ width: '6.5rem', flexShrink: 0 }}>
-                  <label htmlFor="pl-amount" style={labelStyle}>
-                    Amount (USD)
-                  </label>
-                  <input
-                    id="pl-amount"
-                    type="number"
-                    min={1}
-                    step="0.01"
-                    required
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    disabled={state.status === 'loading' || !!locked}
-                    style={inputStyle}
-                  />
+              {locked ? (
+                // Locked mode (a plan or catalog product): the price is already
+                // shown by the calling page, so repeating it in disabled-looking
+                // inputs is just noise before the one real decision (click to pay).
+                <div
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '0.6rem 0.8rem', borderRadius: 8, background: C.fg,
+                  }}
+                >
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: C.font }}>{locked.label}</span>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: C.primary }}>${(locked.cents / 100).toFixed(2)}</span>
                 </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <label htmlFor="pl-product" style={labelStyle}>
-                    For
-                  </label>
-                  <input
-                    id="pl-product"
-                    type="text"
-                    placeholder="Invoice, service, product…"
-                    required
-                    value={product}
-                    onChange={(e) => setProduct(e.target.value)}
-                    disabled={state.status === 'loading' || !!locked}
-                    style={inputStyle}
-                  />
+              ) : (
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <div style={{ width: '6.5rem', flexShrink: 0 }}>
+                    <label htmlFor="pl-amount" style={labelStyle}>
+                      Amount (USD)
+                    </label>
+                    <input
+                      id="pl-amount"
+                      type="number"
+                      min={1}
+                      step="0.01"
+                      required
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      disabled={state.status === 'loading'}
+                      style={inputStyle}
+                    />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <label htmlFor="pl-product" style={labelStyle}>
+                      For
+                    </label>
+                    <input
+                      id="pl-product"
+                      type="text"
+                      placeholder="Invoice, service, product…"
+                      required
+                      value={product}
+                      onChange={(e) => setProduct(e.target.value)}
+                      disabled={state.status === 'loading'}
+                      style={inputStyle}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
                 {CHAINS.map((c) => (
@@ -277,7 +292,7 @@ export default function PaymentLinkGenerator({
                   gap: '0.4rem',
                 }}
               >
-                {state.status === 'loading' ? 'Creating…' : 'Create link'}
+                {state.status === 'loading' ? 'Creating…' : locked ? 'Pay with crypto' : 'Create link'}
               </button>
             </motion.form>
           ) : (

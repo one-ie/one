@@ -4,9 +4,7 @@ import Reveal from '../../components/motion/Reveal.astro'
 import Stagger from '../../components/motion/Stagger.astro'
 import Pattern from '../../components/blocks/Pattern.astro'
 import Footer from '../../components/blocks/Footer.astro'
-import PaymentLinkGenerator from '../../components/payments/PaymentLinkGenerator'
-import CardCheckoutPreview from '../../components/payments/CardCheckoutPreview'
-import PhysicalCardCheckout from '../../components/payments/PhysicalCardCheckout'
+import BuyBox from '../../components/payments/BuyBox'
 import { getCollection } from 'astro:content'
 import { getEnv } from '../../lib/cf-env'
 
@@ -23,10 +21,10 @@ if (!product) return Astro.redirect('/products')
 const catalogProduct = { slug: product.id, cents: product.data.priceCents, label: product.data.name }
 const price = (product.data.priceCents / 100).toFixed(2)
 
-// Same live/preview switch as /payments — Stripe Elements only ever renders
-// below the fold (see that page's comment): a live third-party iframe above
-// the fold tanks Lighthouse a11y/best-practices, so the card rail is a
-// scroll-to destination, never the first thing painted.
+// Same live/preview switch as /payments. BuyBox lazy-loads Stripe only after
+// a "Buy with card" click, so — unlike /payments's own rails — there's no
+// fold constraint to work around here: a live third-party iframe never even
+// mounts until the buyer asks for it.
 const env = await getEnv()
 const stripePublishableKey =
   (env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string | undefined) ??
@@ -70,9 +68,7 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
         </Reveal>
 
         <Reveal class="hr hr-3 buy-block">
-          <div class="rail-tag rail-tag--crypto"><span class="rail-dot"></span>Buy with crypto · live today</div>
-          <PaymentLinkGenerator client:visible showHeader={false} catalogProduct={catalogProduct} />
-          <p class="rail-foot">Paid straight to the wallet — no account, no middleman. <a href="#card">Prefer a card? ↓</a></p>
+          <BuyBox client:visible catalogProduct={catalogProduct} stripePublishableKey={stripePublishableKey} stripeLive={stripeLive} />
         </Reveal>
 
         <ul class="trust hr hr-3" aria-label="Guarantees">
@@ -105,25 +101,6 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
       </div>
     </section>
   )}
-
-  <!-- ── Card rail — below the fold, live or honest preview ────────── -->
-  <section class="card-rail" id="card">
-    <Pattern pattern="crosshatch" opacity={0.07} color="var(--color-tertiary)" />
-    <div class="container">
-      <Reveal class="section-head">
-        <p class="eyebrow">Prefer a card?</p>
-        <h2 class="section-title">Same price. Same book. Stripe Elements.</h2>
-      </Reveal>
-      <Reveal delay={0.08}>
-        <div class="card-wrap">
-          <div class="rail-tag rail-tag--card"><span class="rail-dot"></span>{stripeLive ? 'Card · live' : 'Card · preview'}</div>
-          {stripeLive && stripePublishableKey
-            ? <PhysicalCardCheckout client:visible publishableKey={stripePublishableKey} catalogProduct={catalogProduct} />
-            : <CardCheckoutPreview client:visible />}
-        </div>
-      </Reveal>
-    </div>
-  </section>
 
   <nav class="back">
     <div class="container"><a href="/products">← All products</a></div>
@@ -194,17 +171,7 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   .price { font-size: 2rem; font-weight: 800; color: var(--color-font); }
   .price-note { font-size: 0.82rem; color: var(--color-muted); }
 
-  .buy-block { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.25rem; }
-  .rail-tag {
-    display: inline-flex; align-items: center; gap: 0.4rem; width: fit-content;
-    padding: 0.3rem 0.65rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
-  }
-  .rail-dot { width: 7px; height: 7px; border-radius: 9999px; background: currentColor; }
-  .rail-tag--crypto { color: var(--color-primary); background: color-mix(in oklab, var(--color-primary) 12%, transparent); }
-  .rail-tag--card { color: var(--color-tertiary); background: color-mix(in oklab, var(--color-tertiary) 14%, transparent); }
-  .rail-foot { font-size: 0.78rem; line-height: 1.5; color: var(--color-muted); margin: 0.1rem 0 0; }
-  .rail-foot a { color: var(--color-primary); text-decoration: none; font-weight: 600; white-space: nowrap; }
-  .rail-foot a:hover { text-decoration: underline; }
+  .buy-block { margin-top: 0.25rem; }
 
   .trust { list-style: none; padding: 0; margin: 0.75rem 0 0; display: flex; flex-direction: column; gap: 0.4rem; }
   .trust li { font-size: 0.82rem; color: var(--color-muted); }
@@ -220,10 +187,6 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   }
   .bullet-n { display: block; font-size: 0.8rem; font-weight: 800; color: var(--color-primary); margin-bottom: 0.5rem; }
   .bullet-card p { margin: 0; font-size: 0.92rem; line-height: 1.55; color: var(--color-font); }
-
-  /* ── Card rail ─────────────────────────────────────────────────── */
-  .card-rail { position: relative; padding: 4.5rem 0; }
-  .card-wrap { max-width: 26rem; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
 
   .back { padding: 0 0 2rem; }
   .back a { font-size: 0.85rem; font-weight: 600; color: var(--color-muted); text-decoration: none; }
