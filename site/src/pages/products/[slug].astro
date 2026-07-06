@@ -1,53 +1,133 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import Reveal from '../../components/motion/Reveal.astro'
+import Stagger from '../../components/motion/Stagger.astro'
 import Pattern from '../../components/blocks/Pattern.astro'
 import Footer from '../../components/blocks/Footer.astro'
 import PaymentLinkGenerator from '../../components/payments/PaymentLinkGenerator'
+import CardCheckoutPreview from '../../components/payments/CardCheckoutPreview'
+import PhysicalCardCheckout from '../../components/payments/PhysicalCardCheckout'
 import { getCollection } from 'astro:content'
+import { getEnv } from '../../lib/cf-env'
 
-export const prerender = true
+// Server-rendered, not prerendered: getEnv() needs the live cloudflare:workers
+// runtime (per-request) to read the Stripe keys for the live/preview switch
+// below — the same reason /payments itself is prerender=false.
+export const prerender = false
 
-export async function getStaticPaths() {
-  const products = await getCollection('products')
-  return products.map((p) => ({ params: { slug: p.id }, props: { product: p } }))
-}
+const { slug } = Astro.params
+const products = await getCollection('products')
+const product = products.find((p) => p.id === slug)
+if (!product) return Astro.redirect('/products')
 
-const { product } = Astro.props
+const catalogProduct = { slug: product.id, cents: product.data.priceCents, label: product.data.name }
+const price = (product.data.priceCents / 100).toFixed(2)
+
+// Same live/preview switch as /payments — Stripe Elements only ever renders
+// below the fold (see that page's comment): a live third-party iframe above
+// the fold tanks Lighthouse a11y/best-practices, so the card rail is a
+// scroll-to destination, never the first thing painted.
+const env = await getEnv()
+const stripePublishableKey =
+  (env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string | undefined) ??
+  (env.STRIPE_PUBLIC_KEY as string | undefined)
+const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
 ---
 
 <Layout
   title={`${product.data.name} — ONE`}
-  description={product.data.description}
+  description={product.data.tagline ?? product.data.description}
 >
-  <section class="hero">
+  <!-- ── Hero: cover + crypto buy, above the fold ─────────────────── -->
+  <section class="hero" id="top">
     <Pattern pattern="dots" opacity={0.09} color="var(--color-primary)" fade />
-    <div class="container">
-      <nav class="back">
-        <a href="/products">← All products</a>
-      </nav>
+    <div class="container hero-grid">
+      <Reveal class="cover-wrap">
+        <div class="cover" aria-hidden="true">
+          <span class="cover-kicker">ONE / book</span>
+          <span class="cover-title">{product.data.name}</span>
+          <span class="cover-rule"></span>
+          <span class="cover-foot">Read it. Clone it. Ship it.</span>
+        </div>
+      </Reveal>
 
-      <div class="layout">
-        <Reveal class="details">
-          <span class="price">${(product.data.priceCents / 100).toFixed(2)}</span>
+      <div class="details">
+        <Reveal class="hr hr-0">
+          <span class="eyebrow">The book</span>
+        </Reveal>
+        <Reveal class="hr hr-1">
           <h1 class="name">{product.data.name}</h1>
-          <p class="desc">{product.data.description}</p>
-          <ul class="trust" aria-label="Guarantees">
-            <li>✓ Price enforced server-side, never client-set</li>
-            <li>✓ Paid straight to the merchant's wallet</li>
-            <li>✓ No account needed to buy</li>
-          </ul>
+        </Reveal>
+        <Reveal class="hr hr-2">
+          <p class="tagline">{product.data.tagline ?? product.data.description}</p>
         </Reveal>
 
-        <Reveal delay={0.08} class="buy">
-          <PaymentLinkGenerator
-            client:visible
-            catalogProduct={{ slug: product.id, cents: product.data.priceCents, label: product.data.name }}
-          />
+        <Reveal class="hr hr-3">
+          <div class="price-row">
+            <span class="price">${price}</span>
+            <span class="price-note">one-time · yours forever</span>
+          </div>
         </Reveal>
+
+        <Reveal class="hr hr-3 buy-block">
+          <div class="rail-tag rail-tag--crypto"><span class="rail-dot"></span>Buy with crypto · live today</div>
+          <PaymentLinkGenerator client:visible showHeader={false} catalogProduct={catalogProduct} />
+          <p class="rail-foot">Paid straight to the wallet — no account, no middleman. <a href="#card">Prefer a card? ↓</a></p>
+        </Reveal>
+
+        <ul class="trust hr hr-3" aria-label="Guarantees">
+          <li>✓ Price enforced server-side, never client-set</li>
+          <li>✓ Paid straight to the merchant's wallet</li>
+          <li>✓ No account needed to buy</li>
+        </ul>
       </div>
     </div>
   </section>
+
+  <!-- ── What's inside ─────────────────────────────────────────────── -->
+  {product.data.bullets && product.data.bullets.length > 0 && (
+    <section class="inside">
+      <div class="container">
+        <Reveal class="section-head">
+          <p class="eyebrow">What's inside</p>
+          <h2 class="section-title">Four chapters, no filler</h2>
+        </Reveal>
+        <Stagger stagger={0.08}>
+          <ul class="bullet-grid">
+            {product.data.bullets.map((b, i) => (
+              <li class="bullet-card">
+                <span class="bullet-n">{String(i + 1).padStart(2, '0')}</span>
+                <p>{b}</p>
+              </li>
+            ))}
+          </ul>
+        </Stagger>
+      </div>
+    </section>
+  )}
+
+  <!-- ── Card rail — below the fold, live or honest preview ────────── -->
+  <section class="card-rail" id="card">
+    <Pattern pattern="crosshatch" opacity={0.07} color="var(--color-tertiary)" />
+    <div class="container">
+      <Reveal class="section-head">
+        <p class="eyebrow">Prefer a card?</p>
+        <h2 class="section-title">Same price. Same book. Stripe Elements.</h2>
+      </Reveal>
+      <Reveal delay={0.08}>
+        <div class="card-wrap">
+          <div class="rail-tag rail-tag--card"><span class="rail-dot"></span>{stripeLive ? 'Card · live' : 'Card · preview'}</div>
+          {stripeLive && stripePublishableKey
+            ? <PhysicalCardCheckout client:visible publishableKey={stripePublishableKey} catalogProduct={catalogProduct} />
+            : <CardCheckoutPreview client:visible />}
+        </div>
+      </Reveal>
+    </div>
+  </section>
+
+  <nav class="back">
+    <div class="container"><a href="/products">← All products</a></div>
+  </nav>
 
   <Footer
     tagline="The open-source Astro starter that ships payments, AI, and plugins on day one — wired from one.config.ts."
@@ -68,19 +148,84 @@ const { product } = Astro.props
 
 <style>
   .container { max-width: var(--content, 72rem); margin: 0 auto; padding: 0 1.5rem; }
-  .hero { position: relative; padding: 3rem 0 5rem; }
 
-  .back { margin-bottom: 2rem; }
+  /* ── Time-based hero reveal (matches /payments) ─────────────────── */
+  .hr { animation: hr-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .hr-0 { animation-delay: 0.02s; }
+  .hr-1 { animation-delay: 0.10s; }
+  .hr-2 { animation-delay: 0.18s; }
+  .hr-3 { animation-delay: 0.26s; }
+  @keyframes hr-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .hr { animation: none; } }
+
+  .hero { position: relative; padding: 3.5rem 0 5rem; }
+  .hero-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 3.5rem; align-items: start; }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+
+  /* ── CSS-only book cover — no image asset, fully token-reactive ──── */
+  .cover-wrap { display: flex; justify-content: center; }
+  .cover {
+    position: relative;
+    width: 100%; max-width: 20rem; aspect-ratio: 2 / 3;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 2rem 1.75rem;
+    border-radius: 14px;
+    background: linear-gradient(155deg, var(--color-primary), var(--color-secondary) 60%, var(--color-tertiary));
+    color: var(--color-on-primary);
+    box-shadow: 0 30px 60px -20px color-mix(in oklab, var(--color-primary) 45%, transparent), 0 2px 0 rgba(0,0,0,0.12) inset;
+    transform: rotate(-2deg);
+    transition: transform 220ms var(--ease, cubic-bezier(0.22,1,0.36,1));
+  }
+  .cover:hover { transform: rotate(0deg) scale(1.015); }
+  .cover-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.75; }
+  .cover-title { font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; }
+  .cover-rule { display: block; width: 2.5rem; height: 3px; border-radius: 999px; background: currentColor; opacity: 0.6; }
+  .cover-foot { font-size: 0.78rem; font-weight: 600; opacity: 0.85; }
+
+  .details { display: flex; flex-direction: column; gap: 0.9rem; }
+  .eyebrow {
+    display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--color-primary); margin: 0;
+  }
+  .name { font-size: clamp(2rem, 4vw, 2.9rem); font-weight: 800; letter-spacing: -0.02em; margin: 0; line-height: 1.1; }
+  .tagline { font-size: 1.05rem; line-height: 1.6; color: var(--color-muted); margin: 0; max-width: 34rem; }
+
+  .price-row { display: flex; align-items: baseline; gap: 0.6rem; }
+  .price { font-size: 2rem; font-weight: 800; color: var(--color-font); }
+  .price-note { font-size: 0.82rem; color: var(--color-muted); }
+
+  .buy-block { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.25rem; }
+  .rail-tag {
+    display: inline-flex; align-items: center; gap: 0.4rem; width: fit-content;
+    padding: 0.3rem 0.65rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
+  }
+  .rail-dot { width: 7px; height: 7px; border-radius: 9999px; background: currentColor; }
+  .rail-tag--crypto { color: var(--color-primary); background: color-mix(in oklab, var(--color-primary) 12%, transparent); }
+  .rail-tag--card { color: var(--color-tertiary); background: color-mix(in oklab, var(--color-tertiary) 14%, transparent); }
+  .rail-foot { font-size: 0.78rem; line-height: 1.5; color: var(--color-muted); margin: 0.1rem 0 0; }
+  .rail-foot a { color: var(--color-primary); text-decoration: none; font-weight: 600; white-space: nowrap; }
+  .rail-foot a:hover { text-decoration: underline; }
+
+  .trust { list-style: none; padding: 0; margin: 0.75rem 0 0; display: flex; flex-direction: column; gap: 0.4rem; }
+  .trust li { font-size: 0.82rem; color: var(--color-muted); }
+
+  /* ── What's inside ─────────────────────────────────────────────── */
+  .inside { padding: 4.5rem 0; }
+  :global(.section-head) { max-width: 40rem; margin: 0 auto 2.5rem; text-align: center; }
+  .section-title { font-size: clamp(1.7rem, 3.5vw, 2.35rem); font-weight: 800; letter-spacing: -0.02em; margin: 0.4rem 0 0; }
+
+  .bullet-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.1rem; }
+  .bullet-card {
+    padding: 1.5rem; border-radius: 16px; border: 1px solid var(--color-border); background: var(--color-foreground);
+  }
+  .bullet-n { display: block; font-size: 0.8rem; font-weight: 800; color: var(--color-primary); margin-bottom: 0.5rem; }
+  .bullet-card p { margin: 0; font-size: 0.92rem; line-height: 1.55; color: var(--color-font); }
+
+  /* ── Card rail ─────────────────────────────────────────────────── */
+  .card-rail { position: relative; padding: 4.5rem 0; }
+  .card-wrap { max-width: 26rem; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .back { padding: 0 0 2rem; }
   .back a { font-size: 0.85rem; font-weight: 600; color: var(--color-muted); text-decoration: none; }
   .back a:hover { color: var(--color-font); }
-
-  .layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: start; }
-  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
-
-  .price { display: inline-block; font-size: 0.95rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; }
-  .name { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 0.75rem; }
-  .desc { font-size: 1.05rem; line-height: 1.6; color: var(--color-muted); margin: 0 0 1.5rem; }
-
-  .trust { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-  .trust li { font-size: 0.85rem; color: var(--color-muted); }
 </style>

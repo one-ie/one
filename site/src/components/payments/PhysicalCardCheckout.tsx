@@ -500,6 +500,7 @@ export default function PhysicalCardCheckout({
   publishableKey,
   amountCents = 2500,
   planId,
+  catalogProduct,
 }: {
   publishableKey: string
   amountCents?: number
@@ -507,10 +508,14 @@ export default function PhysicalCardCheckout({
    *  returns its own price, overriding amountCents, so a plan's charge can
    *  never drift from or be spoofed away from its real price. */
   planId?: string
+  /** A catalog product from src/content/products/*.md, resolved server-side
+   *  by the calling page (content collections can't be read from a client
+   *  island). Same lock-the-price posture as planId. */
+  catalogProduct?: { slug: string; cents: number; label: string }
 }) {
   const [stripe, setStripe] = useState<StripeJs | null>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
-  const [resolvedCents, setResolvedCents] = useState(amountCents)
+  const [resolvedCents, setResolvedCents] = useState(catalogProduct?.cents ?? amountCents)
   const [err, setErr] = useState<string | null>(null)
   const started = useRef(false)
 
@@ -524,7 +529,9 @@ export default function PhysicalCardCheckout({
     fetch('/api/pay/create-intent', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(planId ? { planId } : { amountCents }),
+      body: JSON.stringify(
+        planId ? { planId } : catalogProduct ? { productId: catalogProduct.slug } : { amountCents },
+      ),
     })
       .then(async (r) => {
         const json = (await r.json()) as { clientSecret?: string; amountCents?: number; error?: string }
@@ -533,7 +540,7 @@ export default function PhysicalCardCheckout({
         if (json.amountCents) setResolvedCents(json.amountCents)
       })
       .catch((e) => setErr(e instanceof Error ? e.message : String(e)))
-  }, [publishableKey, amountCents, planId])
+  }, [publishableKey, amountCents, planId, catalogProduct])
 
   const options = useMemo(() => ({ appearance: { theme: 'stripe' as const } }), [])
   const amount = `$${(resolvedCents / 100).toFixed(2)}`
