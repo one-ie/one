@@ -1,0 +1,457 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Reveal from '../components/motion/Reveal.astro'
+import Stagger from '../components/motion/Stagger.astro'
+import Pattern from '../components/blocks/Pattern.astro'
+import Card from '../components/blocks/Card.astro'
+import Tabs from '../components/blocks/Tabs.astro'
+import Footer from '../components/blocks/Footer.astro'
+import { Icon } from '../components/ui/Icon'
+import {
+  KeyRound,
+  Server,
+  Newspaper,
+  MessageCircle,
+  FileText,
+  Activity,
+} from 'lucide-react'
+
+const ws = '019f40c477944af784075862' // workspace "template" — one init --name template
+
+// One entry per installed plugin — this list is the source of truth for the
+// grid above the fold AND the per-plugin detail sections below (id anchors
+// the same key both places, so "Jump to demo" links never drift out of sync).
+const PLUGINS = [
+  {
+    id: 'auth',
+    name: 'Auth',
+    pkg: '@oneie/plugin-auth',
+    tier: 'free',
+    icon: KeyRound,
+    tagline: 'better-auth client, wired to this site’s own D1 — no ONE_API_KEY required.',
+    features: [
+      'Email/password sign-in + sign-up out of the box',
+      'Session hook (`useSession`) for client components',
+      'Runs standalone — works before you ever connect a workspace',
+      'Same client `/signin` and `/signup` already use',
+    ],
+  },
+  {
+    id: 'backend',
+    name: 'Backend',
+    pkg: '@oneie/plugin-backend',
+    tier: 'free',
+    icon: Server,
+    tagline: 'One call to a live `SubstrateClient`, keyed from `ONE_API_KEY` at runtime.',
+    features: [
+      'Zero client bundle — server-only import',
+      'Wraps `@oneie/sdk`’s `SubstrateClient.fromApiKey`',
+      'Every other connected-tier plugin below calls through this',
+      'Throws early and loud if `ONE_API_KEY` is missing — no silent fallback',
+    ],
+  },
+  {
+    id: 'blog',
+    name: 'Blog',
+    pkg: '@oneie/plugin-blog',
+    tier: 'free',
+    icon: Newspaper,
+    tagline: 'Markdown-driven blog — index, post page, search, and an RSS feed.',
+    features: [
+      'Auto-injects `/blog` and `/blog/[slug]` routes',
+      'Client-side search (`BlogSearch.tsx`)',
+      'Reads `src/content/blog/*.md` — drop a file, it’s live',
+    ],
+  },
+  {
+    id: 'chat',
+    name: 'Chat',
+    pkg: '@oneie/plugin-chat',
+    tier: 'connected',
+    icon: MessageCircle,
+    tagline: 'The AI chat widget in the corner of every page on this site — including this one.',
+    features: [
+      'Icon, half, or full-page views',
+      'Left/right placement, brand-tinted bubble',
+      'Backed by a real agent (`ws` + `agent` scoped)',
+      'Already mounted site-wide via `Layout.astro`',
+    ],
+  },
+  {
+    id: 'docs',
+    name: 'Docs',
+    pkg: '@oneie/plugin-docs',
+    tier: 'free',
+    icon: FileText,
+    tagline: 'A documentation site — sidebar, search, syntax-highlighted code blocks.',
+    features: [
+      'Auto-injects `/docs` and `/docs/[slug]` routes',
+      'Folder-ordered, labeled sidebar navigation',
+      '`DocSearch` — client-side fuzzy search',
+      '"Edit this page" links back to your repo',
+    ],
+  },
+  {
+    id: 'track',
+    name: 'Track',
+    pkg: '@oneie/plugin-track',
+    tier: 'connected',
+    icon: Activity,
+    tagline: 'The tracking pixel that turns anonymous visits into a workspace timeline.',
+    features: [
+      'One `<script>` tag, async, non-blocking',
+      'Attributes visits + events to `ws` (and optionally an `agent`)',
+      'Feeds `/u/<slug>/in` and the lifecycle views',
+      'Already firing on every page of this site',
+    ],
+  },
+] as const
+
+const tierLabel: Record<string, string> = {
+  free: 'Free',
+  connected: 'Connected',
+}
+---
+
+<Layout
+  title="Plugins — ONE"
+  description="6 zero-bundle-cost plugins, one config file. Auth, backend, blog, chat, docs, and tracking — installed, wired, and verified live on this page."
+>
+  <!-- ── Hero ─────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <Pattern pattern="dots" opacity={0.09} color="var(--color-primary)" fade />
+    <div class="container">
+      <div class="hr hr-0"><span class="eyebrow">6 plugins · 1 config file · 0 bundle cost</span></div>
+      <h1 class="hr hr-1 headline">Plugins</h1>
+      <p class="hr hr-2 sub">
+        Every widget below is a real <code>@oneie/plugin-*</code> package, installed in
+        <code>site/package.json</code> and registered in <code>one.config.ts</code>. Free-tier
+        plugins run standalone; connected-tier plugins mount a script served from
+        <code>one.ie</code>, scoped to this workspace (<code>{ws}</code>).
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Grid — one feature card per plugin ──────────────────────── -->
+  <section class="grid-section">
+    <div class="container">
+      <Stagger>
+        <div class="plugin-grid">
+          {PLUGINS.map((p) => (
+            <Card variant="feature" accent="primary" href={`#${p.id}`} class="hr">
+              <Fragment slot="icon"><Icon icon={p.icon} size="lg" /></Fragment>
+              <Fragment slot="header">
+                {p.name}
+                <span class:list={['tier-badge', `tier-badge--${p.tier}`]}>{tierLabel[p.tier]}</span>
+              </Fragment>
+              {p.tagline}
+              <a slot="footer" href={`#${p.id}`}>See features + demo ↓</a>
+            </Card>
+          ))}
+        </div>
+      </Stagger>
+    </div>
+  </section>
+
+  <!-- ── Per-plugin detail sections ───────────────────────────────── -->
+  {PLUGINS.map((p) => (
+    <section class="detail-section" id={p.id}>
+      <div class="container">
+        <Reveal>
+          <div class="detail-head">
+            <span class="detail-chip"><Icon icon={p.icon} size="lg" /></span>
+            <div>
+              <h2>{p.name}</h2>
+              <p class="detail-pkg">
+                <code>{p.pkg}</code>
+                <span class:list={['tier-badge', `tier-badge--${p.tier}`]}>{tierLabel[p.tier]}</span>
+              </p>
+            </div>
+          </div>
+
+          <Tabs
+            ariaLabel={`${p.name} plugin`}
+            items={[
+              { id: 'features', label: 'Features' },
+              { id: 'demo', label: 'Demo' },
+            ]}
+          >
+            <Fragment slot="panel-features">
+              <ul class="feature-list">
+                {p.features.map((f) => <li>{f}</li>)}
+              </ul>
+            </Fragment>
+
+            <Fragment slot="panel-demo">
+              {p.id === 'auth' && (
+                <div class="demo-box demo-box--links">
+                  <p class="demo-note">Live — this is the same client <code>/signin</code> and <code>/signup</code> use.</p>
+                  <div class="demo-actions">
+                    <a class="demo-btn" href="/signin">Try sign in →</a>
+                    <a class="demo-btn demo-btn--ghost" href="/signup">Try sign up →</a>
+                  </div>
+                </div>
+              )}
+
+              {p.id === 'backend' && (
+                <div class="demo-box demo-box--code">
+                  <p class="demo-note">Server-only — no client UI. Called from any <code>.astro</code> frontmatter or API route:</p>
+                  <pre><code>{`import { oneClient } from '@oneie/plugin-backend'
+
+const client = await oneClient() // reads ONE_API_KEY at runtime
+const groups = await client.groups()`}</code></pre>
+                </div>
+              )}
+
+              {p.id === 'blog' && (
+                <div class="demo-box demo-box--links">
+                  <p class="demo-note">
+                    Live — <code>src/content/blog/hello-template.md</code> is real content, rendered
+                    through the plugin's injected routes.
+                  </p>
+                  <div class="demo-actions">
+                    <a class="demo-btn" href="/blog">See /blog →</a>
+                    <a class="demo-btn demo-btn--ghost" href="/blog/hello-template">See a post →</a>
+                  </div>
+                </div>
+              )}
+
+              {p.id === 'chat' && (
+                <div class="demo-box demo-box--links">
+                  <p class="demo-note">
+                    Already live — look at the bottom-right corner of <em>any</em> page on this site,
+                    including this one. It’s the same <code>chat()</code> plugin registered in
+                    <code>one.config.ts</code>.
+                  </p>
+                </div>
+              )}
+
+              {p.id === 'docs' && (
+                <div class="demo-box demo-box--links">
+                  <p class="demo-note">
+                    Live — <code>src/content/docs/getting-started.md</code> is real content, rendered
+                    through the plugin's own <code>DocsIndex</code> / <code>DocsLayout</code> components.
+                  </p>
+                  <div class="demo-actions">
+                    <a class="demo-btn" href="/docs">See /docs →</a>
+                    <a class="demo-btn demo-btn--ghost" href="/docs/getting-started">See a doc →</a>
+                  </div>
+                </div>
+              )}
+
+              {p.id === 'track' && (
+                <div class="demo-box demo-box--code">
+                  <p class="demo-note">
+                    Already firing on every page of this site (view-source, search for <code>p/one.js</code>).
+                    This is the exact tag <code>track({`{ ws: '${ws}' }`})</code> injects:
+                  </p>
+                  <pre><code>{`<script async src="https://one.ie/p/one.js" data-ws="${ws}"></script>`}</code></pre>
+                </div>
+              )}
+            </Fragment>
+          </Tabs>
+        </Reveal>
+      </div>
+    </section>
+  ))}
+
+  <Footer />
+</Layout>
+
+<style>
+  .hero {
+    position: relative;
+    padding: 6rem 0 3.5rem;
+    overflow: hidden;
+  }
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+  }
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+  .headline {
+    font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0.6rem 0 0.9rem;
+    color: var(--color-font);
+  }
+  .sub {
+    max-width: 62ch;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-muted);
+  }
+  .sub code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9em;
+    color: var(--color-tertiary);
+  }
+
+  .grid-section {
+    padding-bottom: 4rem;
+  }
+  .plugin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .tier-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    vertical-align: middle;
+  }
+  .tier-badge--free {
+    color: var(--color-tertiary);
+    background: color-mix(in oklab, var(--color-tertiary) 14%, transparent);
+  }
+  .tier-badge--connected {
+    color: var(--color-primary);
+    background: color-mix(in oklab, var(--color-primary) 14%, transparent);
+  }
+
+  .detail-section {
+    padding: 3.5rem 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .detail-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+  .detail-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    color: var(--color-primary);
+    background: color-mix(in oklab, var(--color-primary) 10%, transparent);
+    flex-shrink: 0;
+  }
+  .detail-head h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--color-font);
+  }
+  .detail-pkg {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+  .detail-pkg code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--color-tertiary);
+  }
+
+  .feature-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 60ch;
+  }
+  .feature-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--color-font);
+  }
+  .feature-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  .demo-note {
+    font-size: 0.88rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin: 0 0 1rem;
+    max-width: 65ch;
+  }
+  .demo-note code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--color-tertiary);
+  }
+  .demo-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .demo-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.65rem 1.4rem;
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    transition: opacity var(--ease);
+  }
+  .demo-btn:hover {
+    opacity: 0.9;
+  }
+  .demo-btn--ghost {
+    background: transparent;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-font);
+  }
+
+  .demo-box--code pre {
+    background: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.25rem;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  .demo-box--code code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--color-font);
+    white-space: pre;
+  }
+
+  .widget-frame {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    min-height: 220px;
+    background: var(--color-background);
+  }
+  .widget-frame--tall {
+    height: 480px;
+    overflow: auto;
+  }
+</style>

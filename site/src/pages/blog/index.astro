@@ -1,0 +1,11 @@
+---
+// blog({ injectRoutes: false }) in one.config.ts — BlogIndex is a bare
+// fragment, so this site supplies the actual page: our own Layout (nav,
+// <head>, globals.css) wrapping the plugin's real content.
+import Layout from '../../layouts/Layout.astro'
+import BlogIndex from '@oneie/plugin-blog/BlogIndex.astro'
+---
+
+<Layout title="Blog — ONE" description="Thoughts, updates, and insights.">
+  <BlogIndex />
+</Layout>

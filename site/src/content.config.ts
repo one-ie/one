@@ -20,4 +20,31 @@ const products = defineCollection({
   schema: ProductSchema,
 })
 
-export const collections = { products }
+// Blog posts — powers @oneie/plugin-blog's injected /blog + /blog/[slug] routes.
+const BlogSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  date: z.date(),
+  category: z.string().optional(),
+  image: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+})
+
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  schema: BlogSchema,
+})
+
+// Docs — powers @oneie/plugin-docs' /docs + /docs/[slug] routes.
+const DocsSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  order: z.number().optional(),
+})
+
+const docs = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/docs' }),
+  schema: DocsSchema,
+})
+
+export const collections = { products, blog, docs }

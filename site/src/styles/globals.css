@@ -1,8 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 @plugin "@tailwindcss/typography";
+
+/* Tailwind v4 only scans project source by default — these plugin packages
+   ship real Astro/React components styled with Tailwind utility classes
+   (container, prose, bg-background, ...), so their classes must be scanned
+   explicitly or the generated CSS never includes them. */
+@source "../../node_modules/@oneie/plugin-blog/src/**/*.{astro,tsx}";
+@source "../../node_modules/@oneie/plugin-docs/src/**/*.{astro,tsx}";
 
 @custom-variant dark (&:is(.dark *));
 

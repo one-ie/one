@@ -1,4 +1,12 @@
 import { defineOne } from '@oneie/frontend'
+import { auth } from '@oneie/plugin-auth'
+import { backend } from '@oneie/plugin-backend'
+import { blog } from '@oneie/plugin-blog'
+import { chat } from '@oneie/plugin-chat'
+import { docs } from '@oneie/plugin-docs'
+import { track } from '@oneie/plugin-track'
+
+const ws = '019f40c477944af784075862' // workspace "template" — one init --name template
 
 // ONE configuration — the single control surface for this site.
 // Two separate switches:
@@ -24,9 +32,14 @@ export default defineOne({
     },
   },
   plugins: [
-    // Add plugins as you install them:
-    // track({ ws: 'your-workspace' }),    // connected: served tracking pixel
-    // chat({ agent: 'your-agent' }),      // connected: served chat widget
-    // auth(),                             // free: better-auth client
+    auth(),
+    backend(),
+    // injectRoutes:false — the plugin's page components are bare fragments,
+    // not full documents. This site wraps them in its own <Layout> (nav,
+    // <head>, globals.css) via src/pages/blog/* and src/pages/docs/*.
+    blog({ injectRoutes: false }),
+    chat({ ws }),
+    docs({ injectRoutes: false }),
+    track({ ws }),
   ],
 })

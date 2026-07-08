@@ -1,5 +1,6 @@
 # Your business — the identity `one setup` provisions.
-name = "My Business"
-slug = "my-business"
-plan = "free"   # free · starter · pro — reselling to other businesses is a
-                # different plan, not this repo's shape
+# plan: free · starter · pro — reselling to other businesses is a different
+# plan, not this repo's shape
+name = "Template"
+slug = "template"
+plan = "free"

@@ -1,0 +1,22 @@
+---
+// docs({ injectRoutes: false }) in one.config.ts — see docs/index.astro.
+import Layout from '../../layouts/Layout.astro'
+import DocsLayout from '@oneie/plugin-docs/DocsLayout.astro'
+import { getCollection, render } from 'astro:content'
+
+const { slug } = Astro.params
+const entries = await getCollection('docs')
+const entry = entries.find((e) => e.id === slug)
+
+if (!entry) {
+  return Astro.redirect('/docs')
+}
+
+const { Content, headings } = await render(entry)
+---
+
+<Layout title={`${entry.data.title} — ONE`} description={entry.data.description}>
+  <DocsLayout entry={entry} entries={entries} headings={headings}>
+    <Content />
+  </DocsLayout>
+</Layout>
