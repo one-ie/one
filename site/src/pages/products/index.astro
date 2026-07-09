@@ -84,7 +84,11 @@ const products = (await getCollection('products')).sort((a, b) => a.data.priceCe
   }
   .section-title { font-size: clamp(1.9rem, 4vw, 2.75rem); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 0.75rem; }
   .section-sub { color: var(--color-muted); font-size: 1rem; line-height: 1.6; margin: 0; }
-  .section-sub code, .empty code { background: var(--color-foreground); border-radius: 6px; padding: 0.1rem 0.4rem; font-size: 0.85em; }
+  /* --color-background, not --color-foreground — this inline code chip
+     inherits its text color from .section-sub/.empty (muted, page-relative),
+     so its own fill must stay a light neutral in every theme too, not
+     assume --color-foreground always is. */
+  .section-sub code, .empty code { background: var(--color-background); border-radius: 6px; padding: 0.1rem 0.4rem; font-size: 0.85em; }
 
   .empty { text-align: center; color: var(--color-muted); font-size: 0.95rem; }
   .empty a { color: var(--color-primary); font-weight: 600; text-decoration: none; }

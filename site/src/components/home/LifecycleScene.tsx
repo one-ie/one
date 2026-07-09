@@ -20,6 +20,15 @@ const C = {
   muted: 'var(--color-muted)',
   tertiary: 'var(--color-tertiary)',
   primary: 'var(--color-primary)',
+  // index.astro's .scene-section wraps this whole component in
+  // background: var(--color-foreground) — a theme can fill that with a
+  // saturated brand tone (Plum, in light mode).
+  onFg: 'var(--color-on-foreground)', // text sitting directly on that ambient fill (Stage's intro copy)
+  accentOnFg: 'var(--color-accent-on-foreground)', // primary-tinted text on that same ambient fill
+  // Phase cards sink back to C.bg (untinted) inside the foreground-filled
+  // section — their own text needs the mode-only -fixed family instead.
+  fontFixed: 'var(--color-font-fixed)',
+  mutedFixed: 'var(--color-muted-fixed)',
 }
 
 const PHASES = [
@@ -104,8 +113,8 @@ function Phase({
       <div style={{ fontSize: '2.4rem', fontWeight: 800, letterSpacing: '-0.04em', color: C.primary, lineHeight: 1 }}>
         {phase.n}
       </div>
-      <strong style={{ fontSize: '1rem', color: C.font }}>{phase.title}</strong>
-      <p style={{ fontSize: '0.86rem', lineHeight: 1.6, color: C.muted, margin: 0, flex: 1 }}>{phase.body}</p>
+      <strong style={{ fontSize: '1rem', color: C.fontFixed }}>{phase.title}</strong>
+      <p style={{ fontSize: '0.86rem', lineHeight: 1.6, color: C.mutedFixed, margin: 0, flex: 1 }}>{phase.body}</p>
       <pre
         style={{
           background: C.fg,
@@ -149,7 +158,7 @@ function Stage({ progress }: { progress: MotionValue<number> }) {
           fontWeight: 700,
           letterSpacing: '0.12em',
           textTransform: 'uppercase',
-          color: C.primary,
+          color: C.accentOnFg,
           margin: '0 0 0.75rem',
         }}
       >
@@ -161,7 +170,7 @@ function Stage({ progress }: { progress: MotionValue<number> }) {
           fontWeight: 700,
           letterSpacing: '-0.035em',
           lineHeight: 1.12,
-          color: C.font,
+          color: C.onFg,
           margin: '0 0 2.25rem',
         }}
       >

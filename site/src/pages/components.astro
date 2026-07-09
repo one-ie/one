@@ -256,7 +256,15 @@ const BLOCKS = [
   /* Alternating band tint — matches the landing page's section-alt. */
   .cx-alt {
     background: color-mix(in oklab, var(--color-primary) 6%, var(--color-foreground));
+    /* A theme can fill --color-foreground with a saturated brand tone
+       (Plum, in light mode) — shadow the derived typography tokens so
+       .cx-desc below resolves against on-foreground. .cx-tag uses
+       --color-primary directly (a fill color) so it gets its own override
+       just below instead of a blanket shadow. */
+    --color-font: var(--color-on-foreground);
+    --color-muted: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
   }
+  .cx-alt .cx-tag { color: var(--color-accent-on-foreground); }
 
   /* ── Per-block spec strip — what the demo below is, before it shows off. */
   .cx-frame {

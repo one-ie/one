@@ -156,7 +156,7 @@ import ContactForm from '../ContactForm.astro'
     padding: 0.7rem 0.85rem;
     font: inherit;
     font-size: 0.92rem;
-    color: var(--color-font);
+    color: var(--color-on-foreground);
     background: var(--color-foreground);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
@@ -164,7 +164,7 @@ import ContactForm from '../ContactForm.astro'
     transition: border-color var(--ease), box-shadow var(--ease);
   }
   .fd__news-input::placeholder {
-    color: var(--color-muted);
+    color: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
   }
   .fd__news-input:hover {
     border-color: var(--color-border-strong);

@@ -1,0 +1,136 @@
+---
+/**
+ * ThemeGallery.astro — homepage teaser for the 12 theme presets.
+ *
+ * A compact version of /design's theme gallery: real click-to-apply,
+ * same mechanism as a nav swatch — set('one-theme', key) then
+ * window.__syncTheme() (defined in Layout.astro, runs pre-paint on every
+ * page). Scoped to its own class names so it works standalone, no
+ * dependency on design.astro's `.design-page` ancestor.
+ */
+import { THEMES } from '../../lib/themes'
+import Pattern from '../blocks/Pattern.astro'
+import Button from '../blocks/Button.astro'
+
+const hsl = (v: string) => `hsl(${v})`
+
+const darkCss = THEMES.map(
+  (t) =>
+    `html.dark .thg-card[data-key="${t.key}"]{--color-primary:${hsl(t.dark.primary)};--color-secondary:${hsl(t.dark.secondary)};--color-tertiary:${hsl(t.dark.tertiary)};--color-background:${hsl(t.dark.background)};--color-foreground:${hsl(t.dark.foreground)}}`,
+).join('\n')
+---
+
+<section class="thg">
+  <div class="thg-head">
+    <p class="eyebrow">12 presets</p>
+    <h2 class="section-title">Pick a theme. The whole site repaints.</h2>
+    <p class="section-sub">
+      Every card below is a real, clickable preset — click one and this
+      entire page (not just this section) switches live, the same engine
+      behind the nav swatches.
+    </p>
+  </div>
+
+  <style is:global set:html={darkCss}></style>
+
+  <div class="thg-grid">
+    {THEMES.map((t) => (
+      <button
+        class="thg-card"
+        type="button"
+        data-key={t.key}
+        aria-label={`Apply the ${t.name} theme`}
+        style={`--color-primary:${hsl(t.light.primary)};--color-secondary:${hsl(t.light.secondary)};--color-tertiary:${hsl(t.light.tertiary)};--color-background:${hsl(t.light.background)};--color-foreground:${hsl(t.light.foreground)}`}
+      >
+        <span class="thg-card__pattern">
+          <Pattern pattern={t.pattern} tone={t.patternTone} opacity={0.16} fade={!!t.patternFade} />
+        </span>
+        <span class="thg-card__check" aria-hidden="true">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="thg-card__dots" aria-hidden="true">
+          <i style="background: var(--color-primary)"></i>
+          <i style="background: var(--color-secondary)"></i>
+          <i style="background: var(--color-tertiary)"></i>
+        </span>
+        <span class="thg-card__name">{t.name}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="thg-cta">
+    <Button href="/design" variant="secondary" size="md">Build your own theme →</Button>
+  </div>
+</section>
+
+<script>
+  function wireThemeCards() {
+    const cards = document.querySelectorAll<HTMLButtonElement>('.thg-card:not([data-thg-bound])')
+    if (!cards.length) return
+    const sync = () => {
+      const active = localStorage.getItem('one-theme') || 'vespio'
+      const isCustom = localStorage.getItem('one-custom') !== null
+      document.querySelectorAll<HTMLButtonElement>('.thg-card').forEach((c) => {
+        c.classList.toggle('is-active', !isCustom && c.dataset.key === active)
+      })
+    }
+    cards.forEach((c) => {
+      c.dataset.thgBound = '1'
+      c.addEventListener('click', () => {
+        localStorage.removeItem('one-custom')
+        localStorage.setItem('one-theme', c.dataset.key || 'vespio')
+        ;(window as unknown as { __syncTheme?: () => void }).__syncTheme?.()
+      })
+    })
+    window.addEventListener('one:theme', sync)
+    sync()
+  }
+  wireThemeCards()
+  document.addEventListener('astro:page-load', wireThemeCards)
+</script>
+
+<style>
+  .thg { padding: 2rem 0; }
+  .thg-head { max-width: 42rem; margin: 0 auto 3rem; text-align: center; }
+  .eyebrow {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--color-primary); margin: 0 0 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; letter-spacing: -0.035em;
+    color: var(--color-font); margin: 0 0 1rem; line-height: 1.12;
+  }
+  .section-sub { font-size: 1.05rem; color: var(--color-muted); line-height: 1.7; margin: 0; }
+
+  .thg-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.85rem;
+    max-width: 64rem; margin: 0 auto;
+  }
+  @media (max-width: 900px) { .thg-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 560px) { .thg-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .thg-card {
+    position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    padding: 1.1rem 0.5rem; border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background: var(--color-background); color: var(--color-font);
+    cursor: pointer; overflow: hidden;
+    transition: border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+  }
+  .thg-card:hover { border-color: var(--color-border-strong); transform: translateY(-2px); box-shadow: var(--shadow-pop); }
+  .thg-card.is-active { border-color: var(--color-primary); box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-primary) 30%, transparent); }
+  .thg-card__pattern { position: absolute; inset: 0; }
+
+  .thg-card__check {
+    display: none; position: absolute; top: 0.5rem; right: 0.5rem;
+    width: 18px; height: 18px; border-radius: 9999px; background: var(--color-primary); color: var(--color-on-primary);
+    align-items: center; justify-content: center; z-index: 1;
+  }
+  .thg-card.is-active .thg-card__check { display: inline-flex; }
+
+  .thg-card__dots { position: relative; z-index: 1; display: flex; gap: 4px; }
+  .thg-card__dots i { width: 10px; height: 10px; border-radius: 9999px; display: block; }
+  .thg-card__name { position: relative; z-index: 1; font-size: 0.72rem; font-weight: 600; }
+
+  .thg-cta { display: flex; justify-content: center; margin-top: 2.25rem; }
+</style>

@@ -1,3 +1,31 @@
 {
-  "enabledMcpjsonServers": ["one"]
+  "enabledMcpjsonServers": ["one"],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "id": "hook:design-check",
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/design-check.sh",
+            "timeout": 5000,
+            "blocking": true
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "id": "hook:contrast-check",
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/contrast-check.sh",
+            "timeout": 5000,
+            "blocking": true
+          }
+        ]
+      }
+    ]
+  }
 }

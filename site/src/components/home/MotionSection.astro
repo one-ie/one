@@ -1,0 +1,45 @@
+---
+import MotionShowcase from '../motion/MotionShowcase'
+import Button from '../blocks/Button.astro'
+---
+
+<section class="mo">
+  <div class="mo-head">
+    <p class="eyebrow">Motion system</p>
+    <h2 class="section-title">Six primitives. One mental model.</h2>
+    <p class="section-sub">
+      Reveal, Stagger, Parallax, ScrollScene, Spring, and the tokens that
+      keep them all feeling like the same product — each one interactive,
+      right here.
+    </p>
+  </div>
+
+  <MotionShowcase client:visible />
+
+  <div class="mo-cta">
+    <Button href="/motion" variant="secondary" size="md">See the full motion system →</Button>
+  </div>
+</section>
+
+<style>
+  .mo { padding: 2rem 0; }
+  .mo-head { max-width: 42rem; margin: 0 auto 3rem; text-align: center; }
+  .eyebrow {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--color-primary); margin: 0 0 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; letter-spacing: -0.035em;
+    color: var(--color-font); margin: 0 0 1rem; line-height: 1.12;
+  }
+  .section-sub { font-size: 1.05rem; color: var(--color-muted); line-height: 1.7; margin: 0; }
+
+  .mo-cta { display: flex; justify-content: center; margin-top: 2.25rem; }
+
+  :global(.motion-showcase) {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+    max-width: 72rem; margin: 0 auto;
+  }
+  @media (max-width: 1024px) { :global(.motion-showcase) { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { :global(.motion-showcase) { grid-template-columns: 1fr; } }
+</style>

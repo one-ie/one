@@ -196,13 +196,21 @@ const features = [
     border-radius: var(--radius-lg);
     padding: 2.5rem;
     transition: border-color var(--ease), box-shadow var(--ease);
+    /* A theme can fill --color-foreground with a saturated brand tone
+       (Plum, in light mode) — shadow the derived typography tokens so
+       .cx-quote-body/.cx-quote-name/.cx-quote-role below resolve against
+       on-foreground. .cx-quote-mark uses --color-primary directly (a fill
+       color, not a derived one) so it gets its own override just below. */
+    --color-font: var(--color-on-foreground);
+    --color-muted: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
+    --color-border-strong: color-mix(in oklab, var(--color-on-foreground) 24%, transparent);
   }
   .cx-quote:hover {
     border-color: var(--color-border-strong);
     box-shadow: var(--shadow-card);
   }
   .cx-quote-mark {
-    color: var(--color-primary);
+    color: var(--color-accent-on-foreground);
     opacity: 0.28;
     flex-shrink: 0;
   }

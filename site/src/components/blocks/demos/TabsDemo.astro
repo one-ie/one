@@ -209,6 +209,11 @@ const items = [
     width: fit-content;
     max-width: 100%;
     background: var(--color-foreground);
+    /* A theme can fill --color-foreground with a saturated brand tone
+       (Plum, in light mode) — shadow the derived typography tokens so
+       .tabs-demo__metric-n/-l below resolve against on-foreground. */
+    --color-font: var(--color-on-foreground);
+    --color-muted: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
   }
 
   .tabs-demo__metric {

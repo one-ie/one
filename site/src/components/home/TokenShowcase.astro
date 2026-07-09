@@ -1,0 +1,123 @@
+---
+/**
+ * TokenShowcase.astro — homepage teaser for the design system.
+ *
+ * Presentational only (no picker, no reset) — the real editor lives at
+ * /design. Values shown are the real defaults: the active default preset
+ * (vespio) for the 5 brand/surface tokens, and the theme-independent
+ * `font` fallback both pull from the exact same source design.astro's own
+ * editor falls back to (SURFACE in design.astro / THEMES in lib/themes.ts).
+ */
+import { THEMES } from '../../lib/themes'
+import Button from '../blocks/Button.astro'
+
+const theme = THEMES.find((t) => t.key === 'vespio')!
+const hsl = (v: string) => `hsl(${v})`
+
+// font never varies per theme — same fallback design.astro's editor uses.
+const FONT = { light: '0 0% 13%', dark: '0 0% 100%' }
+
+const TOKEN_ORDER = ['primary', 'secondary', 'tertiary', 'background', 'foreground'] as const
+const TOKEN_DESC: Record<(typeof TOKEN_ORDER)[number] | 'font', string> = {
+  primary: 'Main CTA · focus ring',
+  secondary: 'Supporting accent',
+  tertiary: 'Code · highlights',
+  background: 'L1 surface — cards',
+  foreground: 'L2 surface — inputs',
+  font: 'Body text',
+}
+
+const panels = (['light', 'dark'] as const).map((mode) => ({
+  mode,
+  panelBg: hsl(theme[mode].background),
+  swatches: [
+    ...TOKEN_ORDER.map((k) => ({ key: k, value: hsl(theme[mode][k]) })),
+    { key: 'font' as const, value: hsl(FONT[mode]) },
+  ],
+}))
+---
+
+<section class="tok">
+  <div class="tok-head">
+    <p class="eyebrow">Design system</p>
+    <h2 class="section-title">Six tokens. Light and dark. Done.</h2>
+    <p class="section-sub">
+      Every component on this page derives from the same six values —
+      primary, secondary, tertiary, background, foreground, font. Pick a
+      theme below and watch them repaint live.
+    </p>
+  </div>
+
+  <div class="tok-panels">
+    {panels.map((p) => (
+      <div class:list={['tok-panel', p.mode === 'dark' && 'tok-panel--dark']} style={`background:${p.panelBg}`}>
+        <p class="tok-panel-label">{p.mode === 'light' ? 'Light mode' : 'Dark mode'}</p>
+        <div class="tok-swatches">
+          {p.swatches.map((s) => (
+            <div class="tok-swatch">
+              <span class="tok-chip" style={`background:${s.value}`}>
+                {s.key === 'font' && <span class="tok-chip-aa" style={`color:${p.mode === 'light' ? hsl(FONT.dark) : hsl(FONT.light)}`}>Aa</span>}
+              </span>
+              <span class="tok-name">{s.key}</span>
+              <span class="tok-desc">{TOKEN_DESC[s.key]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="tok-cta">
+    <Button href="/design" variant="secondary" size="md">Open the full editor →</Button>
+  </div>
+</section>
+
+<style>
+  .tok { padding: 2rem 0; }
+  .tok-head { max-width: 42rem; margin: 0 auto 3rem; text-align: center; }
+  .eyebrow {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--color-primary); margin: 0 0 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 700; letter-spacing: -0.035em;
+    color: var(--color-font); margin: 0 0 1rem; line-height: 1.12;
+  }
+  .section-sub { font-size: 1.05rem; color: var(--color-muted); line-height: 1.7; margin: 0; }
+
+  .tok-panels {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    max-width: 56rem; margin: 0 auto;
+  }
+  @media (max-width: 760px) { .tok-panels { grid-template-columns: 1fr; } }
+
+  .tok-panel {
+    border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+    padding: 1.75rem;
+  }
+  .tok-panel--dark { border-color: color-mix(in oklab, white 10%, transparent); }
+  .tok-panel-label {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    margin: 0 0 1.1rem; color: hsl(45 25% 25%);
+  }
+  .tok-panel--dark .tok-panel-label { color: hsl(42 16% 70%); }
+
+  .tok-swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .tok-swatch { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; text-align: center; }
+  .tok-chip {
+    width: 46px; height: 46px; border-radius: 9999px;
+    border: 1px solid color-mix(in oklab, black 12%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 3px color-mix(in oklab, black 15%, transparent);
+  }
+  .tok-chip-aa { font-size: 0.78rem; font-weight: 700; }
+  .tok-name {
+    font-size: 0.74rem; font-weight: 700; font-family: 'SF Mono', 'Fira Code', monospace;
+    color: hsl(45 18% 15%);
+  }
+  .tok-panel--dark .tok-name { color: hsl(42 16% 92%); }
+  .tok-desc { font-size: 0.66rem; line-height: 1.3; color: hsl(45 10% 45%); }
+  .tok-panel--dark .tok-desc { color: hsl(42 10% 62%); }
+
+  .tok-cta { display: flex; justify-content: center; margin-top: 2.25rem; }
+</style>

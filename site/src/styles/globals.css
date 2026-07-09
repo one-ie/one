@@ -153,7 +153,10 @@
   --tw-prose-quote-borders: var(--color-primary);
   --tw-prose-captions: color-mix(in oklab, var(--color-font) 55%, transparent);
   --tw-prose-code: var(--color-secondary);
-  --tw-prose-pre-code: color-mix(in oklab, var(--color-font) 85%, transparent);
+  /* Not var(--color-font) — a theme can fill --color-foreground with a
+     saturated brand tone (Plum, in light mode), which is exactly what
+     --tw-prose-pre-bg fills a <pre> block with below. */
+  --tw-prose-pre-code: color-mix(in oklab, var(--color-on-foreground) 85%, transparent);
   --tw-prose-pre-bg: var(--color-foreground);
   --tw-prose-th-borders: color-mix(in oklab, var(--color-font) 20%, transparent);
   --tw-prose-td-borders: color-mix(in oklab, var(--color-font) 10%, transparent);
@@ -165,7 +168,11 @@
 }
 
 .prose :where(code):not(:where([class~="not-prose"] *)):not(pre code) {
-  background: color-mix(in oklab, var(--color-secondary) 12%, var(--color-foreground));
+  /* --color-background, not --color-foreground — same reasoning as
+     IconBadge's tone chips: this tints toward a light neutral in every
+     theme, so the --tw-prose-code (secondary) text color above always
+     reads, instead of depending on --color-foreground staying light. */
+  background: color-mix(in oklab, var(--color-secondary) 12%, var(--color-background));
   padding: 0.15em 0.4em;
   border-radius: 4px;
   font-size: 0.875em;
@@ -225,4 +232,62 @@
 
 @media (prefers-reduced-motion: reduce) {
   .animate-orbit { animation-duration: 0.01ms !important; }
+}
+
+/* /patterns' picks — the design system's real L1 (bg-background, and every
+   shadcn surface Tailwind aliases to it: bg-card/popover/input via
+   data-slot, the stable Radix/shadcn hook independent of class-merging)
+   and L2 (bg-foreground → bg-muted/accent) surfaces. A ::before pseudo,
+   not a second background-image layer on the element itself, so
+   --pattern-bg-opacity/--pattern-fg-opacity can dim just the image —
+   these are legacy low-alpha web textures, calibrated for a light L1
+   fill, and often near-invisible at full strength against a dark one.
+   Never touches the color tokens themselves, so color-mix(), Stripe
+   Elements, and Tailwind Typography (which all read --color-background/
+   --color-foreground as plain colors elsewhere) are unaffected. Resolves
+   to `none`/`1` with no pick made — a no-op until /patterns sets one.
+   position:relative only sets the ::before's containing block — it doesn't
+   affect layout, and any element that already has its own position
+   (Radix's floating-positioned popover/dropdown/dialog content) keeps it,
+   since that inline style always wins the cascade. */
+.bg-background,
+[data-slot='card'],
+[data-slot='popover-content'],
+[data-slot='select-content'],
+[data-slot='dropdown-menu-content'],
+[data-slot='dialog-content'],
+.bg-foreground,
+[data-slot='dropdown-menu-item']:focus,
+[data-slot='select-item']:focus {
+  position: relative;
+  isolation: isolate;
+}
+.bg-background::before,
+[data-slot='card']::before,
+[data-slot='popover-content']::before,
+[data-slot='select-content']::before,
+[data-slot='dropdown-menu-content']::before,
+[data-slot='dialog-content']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(--pattern-bg-image, none);
+  background-repeat: repeat;
+  opacity: var(--pattern-bg-opacity, 1);
+}
+.bg-foreground::before,
+[data-slot='dropdown-menu-item']:focus::before,
+[data-slot='select-item']:focus::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(--pattern-fg-image, none);
+  background-repeat: repeat;
+  opacity: var(--pattern-fg-opacity, 1);
 }

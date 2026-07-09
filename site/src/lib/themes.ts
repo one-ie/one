@@ -191,6 +191,8 @@ export const THEMES: ThemeDef[] = [
     pattern: 'hexagon',
     patternTone: 'primary',
     patternFade: true,
-    nav: false,
+    // The default theme (see Layout.astro/design.astro 'vespio' fallbacks) —
+    // curated into the header row like the original 6, not gallery-only.
+    nav: true,
   },
 ]

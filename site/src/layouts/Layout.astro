@@ -92,9 +92,9 @@ const runtimeThemes = Object.fromEntries(
         --color-background: hsl(0 0% 93%);
         --color-foreground: hsl(0 0% 100%);
         --color-font: hsl(0 0% 13%);
-        --color-primary: hsl(216 55% 25%);
-        --color-secondary: hsl(219 14% 28%);
-        --color-tertiary: hsl(105 22% 25%);
+        --color-primary: hsl(42 95% 34%);
+        --color-secondary: hsl(40 15% 18%);
+        --color-tertiary: hsl(35 80% 28%);
         --color-on-primary: #fff;
         --color-on-secondary: #fff;
         --color-on-tertiary: #fff;
@@ -138,9 +138,9 @@ const runtimeThemes = Object.fromEntries(
         --color-border-fixed: color-mix(in oklab, hsl(0 0% 100%) 10%, transparent);
         --color-border-strong-fixed: color-mix(in oklab, hsl(0 0% 100%) 20%, transparent);
         --color-faint-fixed: color-mix(in oklab, hsl(0 0% 100%) 40%, transparent);
-        --color-primary: hsl(216 55% 65%);
-        --color-secondary: hsl(219 14% 65%);
-        --color-tertiary: hsl(105 22% 65%);
+        --color-primary: hsl(42 95% 62%);
+        --color-secondary: hsl(40 12% 62%);
+        --color-tertiary: hsl(35 75% 60%);
         --color-on-primary: #000;
         --color-on-secondary: #000;
         --color-on-tertiary: #000;
@@ -216,7 +216,7 @@ const runtimeThemes = Object.fromEntries(
             el.style.removeProperty('--color-' + k)
             el.style.removeProperty('--color-on-' + k)
           })
-          window.__applyTheme(localStorage.getItem('one-theme') || 'navy', dark)
+          window.__applyTheme(localStorage.getItem('one-theme') || 'vespio', dark)
           var raw = localStorage.getItem('one-custom')
           if (raw) { try { window.__applyCustom(JSON.parse(raw), dark) } catch (e) {} }
           /* Auto-contrast for whatever ends up in --color-foreground — same
@@ -252,12 +252,35 @@ const runtimeThemes = Object.fromEntries(
           window.dispatchEvent(new CustomEvent('one:theme'))
         }
 
+        /* /patterns picker — two independent image-texture layers (bg/fg),
+           each a plain url + 0-1 opacity in localStorage. Runs pre-paint
+           like __syncTheme so there's no flash. The actual paint happens
+           on the real design-system surfaces' own ::before pseudo-element
+           (Card.astro, globals.css's .bg-background/.bg-foreground +
+           shadcn data-slot rules) via var(--pattern-bg-image)/var(--pattern-
+           fg-image) + var(--pattern-*-opacity) — plain inherited custom
+           properties, so none of those elements need to exist yet for this
+           to take effect. Opacity is real (not baked into the shorthand,
+           see Card.astro's ::before) — these are legacy low-alpha web
+           textures calibrated for a light L1 fill, often near-invisible at
+           full strength against a dark one. */
+        window.__applyImagePatterns = function () {
+          var el = document.documentElement
+          ;['bg', 'fg'].forEach(function (layer) {
+            var url = localStorage.getItem('one-pattern-' + layer)
+            var opacity = localStorage.getItem('one-pattern-' + layer + '-opacity')
+            el.style.setProperty('--pattern-' + layer + '-image', url ? "url('" + url + "')" : 'none')
+            el.style.setProperty('--pattern-' + layer + '-opacity', opacity || '1')
+          })
+        }
+
         var rawDark = localStorage.getItem('one-dark')
         var dark = rawDark !== null
           ? rawDark === 'true'
           : window.matchMedia('(prefers-color-scheme: dark)').matches
         if (dark) document.documentElement.classList.add('dark')
         window.__syncTheme()
+        window.__applyImagePatterns()
       })()
     </script>
 
@@ -289,6 +312,7 @@ const runtimeThemes = Object.fromEntries(
           <a href="/lifecycle">Lifecycle</a>
           <a href="/plugins">Plugins</a>
           <a href="/design">Design</a>
+          <a href="/patterns">Patterns</a>
           <a href="/motion">Motion</a>
           <a href="/components">Components</a>
         </nav>
@@ -321,6 +345,7 @@ const runtimeThemes = Object.fromEntries(
       <a href="/lifecycle">Lifecycle</a>
       <a href="/plugins">Plugins</a>
       <a href="/design">Design</a>
+      <a href="/patterns">Patterns</a>
       <a href="/motion">Motion</a>
       <a href="/components">Components</a>
     </nav>
@@ -351,7 +376,7 @@ const runtimeThemes = Object.fromEntries(
 
         function state() {
           return {
-            theme: localStorage.getItem('one-theme') || 'navy',
+            theme: localStorage.getItem('one-theme') || 'vespio',
             dark: document.documentElement.classList.contains('dark'),
             custom: localStorage.getItem('one-custom') !== null,
           }
@@ -694,6 +719,7 @@ const runtimeThemes = Object.fromEntries(
     opacity: 0.1;
     color: var(--color-primary);
   }
+
   html[data-pattern-tone='secondary'] #site-pattern { color: var(--color-secondary); }
   html[data-pattern-tone='tertiary']  #site-pattern { color: var(--color-tertiary); }
   html[data-pattern-tone='font']      #site-pattern { color: var(--color-font); opacity: 0.055; }

@@ -252,7 +252,9 @@ const f = id
     width: 1.05rem;
     height: 1.05rem;
     transform: translateY(-50%);
-    color: var(--color-muted);
+    /* Overlays .one-cf__control, whose fill is --color-foreground (a theme
+       can make that a saturated brand tone, e.g. Plum in light mode). */
+    color: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
     pointer-events: none;
   }
 

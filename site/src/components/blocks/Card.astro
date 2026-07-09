@@ -370,7 +370,7 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
     isolation: isolate;
     display: flex;
     flex-direction: column;
-    background: var(--color-background);
+    background-color: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     padding: 1.85rem;
@@ -381,6 +381,25 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
       border-color var(--ease),
       transform var(--ease),
       box-shadow var(--ease);
+  }
+
+  /* /patterns' "Background" pick — a real texture on the design system's
+     actual L1 surface, not a decorative page-wide overlay. A pseudo-
+     element (not a second `background-image` layer on .card itself) so
+     --pattern-bg-opacity can dim JUST the image — these are legacy
+     low-alpha web textures, often calibrated for a light L1 fill, so
+     they need independent intensity control on a dark one. Defaults to
+     `none`/`1` — a no-op until /patterns sets a pick. */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: var(--pattern-bg-image, none);
+    background-repeat: repeat;
+    opacity: var(--pattern-bg-opacity, 1);
   }
 
   /* ── Pattern layer — accent-inked texture attached to the card surface ── */
@@ -689,6 +708,8 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
     text-align: center;
   }
   .card__cta {
+    position: relative;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -699,7 +720,7 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
     font-weight: 600;
     text-decoration: none;
     border: 1px solid var(--color-border-strong);
-    background: var(--color-foreground);
+    background-color: var(--color-foreground);
     color: var(--color-on-foreground);
     transition:
       background var(--ease),
@@ -707,9 +728,28 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
       opacity var(--ease),
       transform var(--ease);
   }
+  /* /patterns' "Foreground" pick — see .card::before above for why this is
+     a pseudo-element (independent opacity) rather than a second
+     background-image layer on the button itself. */
+  .card__cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: var(--pattern-fg-image, none);
+    background-repeat: repeat;
+    opacity: var(--pattern-fg-opacity, 1);
+  }
   .card__cta:hover {
     border-color: var(--color-primary);
-    color: var(--color-primary);
+    /* Not plain --color-primary — this button's own fill IS
+       --color-foreground (see .card__cta above), and a theme is free to
+       make primary and foreground close in lightness (Plum does).
+       --color-accent-on-foreground stays plain primary wherever that
+       already contrasts, falling back to on-foreground only when it doesn't. */
+    color: var(--color-accent-on-foreground);
     transform: translateY(-1px);
   }
   .card__cta--solid {

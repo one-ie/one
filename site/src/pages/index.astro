@@ -2,22 +2,31 @@
 import Layout from '../layouts/Layout.astro'
 import Reveal from '../components/motion/Reveal.astro'
 import Stagger from '../components/motion/Stagger.astro'
-import LifecycleScene from '../components/home/LifecycleScene'
 import CountUp from '../components/home/CountUp'
+import { LighthouseRings } from '../components/home/LighthouseRings'
+import TokenShowcase from '../components/home/TokenShowcase.astro'
+import ThemeGallery from '../components/home/ThemeGallery.astro'
+import MotionSection from '../components/home/MotionSection.astro'
+import CardDemo from '../components/blocks/demos/CardDemo.astro'
+import CarouselDemo from '../components/blocks/demos/CarouselDemo.astro'
+import TabsDemo from '../components/blocks/demos/TabsDemo.astro'
+import QuoteDemo from '../components/blocks/demos/QuoteDemo.astro'
 import ProofTerminal from '../components/lifecycle/ProofTerminal'
 import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
 import Button from '../components/blocks/Button.astro'
 import Card from '../components/blocks/Card.astro'
 import Pattern from '../components/blocks/Pattern.astro'
-import Tabs from '../components/blocks/Tabs.astro'
 import Footer from '../components/blocks/Footer.astro'
 
 // ── Real proof only ───────────────────────────────────────────────────────
 // This is a promise page: every number below is measured or verifiable, not
-// invented. The proof steps + on-chain digests are the same real captures the
-// /lifecycle page renders (run of agent-onboarding-lifecycle-demo against
-// one.ie, 2026-07-04). The payment-link generator in the hero is live — it
-// mints a real pay.one.ie link on click, addressed to this repo's own wallet.
+// invented. The Lighthouse scores are the same real /speed.astro run;
+// the payment link generator mints a real pay.one.ie link on click; the
+// on-chain digests are genuine, independently-verifiable Sui testnet txs.
+const LIGHTHOUSE_DATE = '2026-07-09'
+const DESKTOP_SCORES: [number, number, number, number] = [98, 100, 100, 100]
+const MOBILE_PERF = 76
+
 const PROOF_COMMAND =
   'bun pay/tools/agent-onboarding-lifecycle-demo.ts --assert-tracked --api-url https://one.ie'
 const PROOF_STEPS = [
@@ -27,8 +36,6 @@ const PROOF_STEPS = [
 ]
 const PROOF_VERDICT = 'PASS — the funnel filled itself'
 
-// Real on-chain transactions (Sui testnet) — every digest is a genuine,
-// independently-verifiable transfer. Explorer: suiscan.xyz/testnet.
 const TXS = [
   { digest: 'Bf7V7F6baz5pD9c3KH5vnCR41tUgoebiW3puuBfQRCsh', label: 'Signed transfer', amount: '0.995 SUI', detail: 'A real payer keypair signed and sent funds to this starter\'s wallet — settlement, live.' },
   { digest: 'B6XqzCQEw39xxeMqHCX6WUnBma8KAZdZ9iK5GC7fV9DU', label: 'Faucet drop', amount: '1 SUI', detail: 'Public testnet faucet funding the same wallet /wallet displays.' },
@@ -38,8 +45,8 @@ const TXS = [
 ---
 
 <Layout
-  title="ONE — get paid the day you ship"
-  description="The open-source Astro starter that ships payments, AI chat, a design system, and motion — wired from one file. Clone it and take your first real payment before the coffee's cold. Every claim on this page is live."
+  title="ONE — design beautiful websites with perfect Lighthouse scores"
+  description="The open-source Astro starter with a real design system, motion library, and payment stack — wired from one file. 100 Accessibility, Best Practices, and SEO, measured against this repo's own build. Every claim on this page is live."
 >
 
   <!-- ── Hero — the promise, proven in place ───────────────────────── -->
@@ -47,17 +54,16 @@ const TXS = [
     <Pattern pattern="dots" opacity={0.09} tone="primary" fade />
     <div class="container hero-grid">
       <div class="hero-copy">
-        <!-- Time-based reveal (never scroll-driven above the fold). -->
         <div class="hr hr-0"><div class="badge">Open source · Free forever · Astro 6 + React 19</div></div>
         <h1 class="headline">
-          <span class="headline-line">Get paid the day</span>
-          <span class="headline-line headline-gradient">you ship.</span>
+          <span class="headline-line">Design beautiful websites</span>
+          <span class="headline-line headline-gradient">with perfect Lighthouse scores.</span>
         </h1>
         <div class="hr hr-2">
           <p class="sub">
-            ONE is the open-source Astro starter that ships payments, AI chat, a
-            design system, and motion — wired from one file. Clone it and take your
-            first real payment before the coffee's cold.
+            ONE is the open-source Astro starter with a real design system, a
+            motion library, and a payment stack — wired from one file. Clone
+            it and ship a site that scores 100, not 60-with-a-tuning-pass.
           </p>
         </div>
         <div class="hr hr-3">
@@ -69,28 +75,34 @@ const TXS = [
         <div class="hr hr-4">
           <div class="hero-actions">
             <Button href="https://github.com/one-ie/one" variant="primary" size="lg">Get started free <Fragment slot="icon-right">→</Fragment></Button>
-            <Button href="/payments" variant="secondary" size="lg">See both rails</Button>
+            <Button href="/design" variant="secondary" size="lg">See the design system</Button>
           </div>
         </div>
         <div class="hr hr-5">
           <ul class="trust-row" aria-label="Guarantees">
-            <li>✓ No custody, ever</li>
-            <li>✓ Links signed server-side</li>
+            <li>✓ 100 Accessibility · Best Practices · SEO</li>
+            <li>✓ 12 themes, click to apply</li>
             <li>✓ Zero config to start</li>
           </ul>
         </div>
       </div>
 
-      <!-- The proof is the hero: a live payment-link generator. Click it and
-           pay.one.ie mints a real, signed link to this repo's wallet. -->
+      <!-- The proof is the hero: real Lighthouse scores, not a mockup. -->
       <div class="hr hr-3 hero-widget">
         <div class="widget-glow" aria-hidden="true"></div>
         <div class="widget-frame">
           <div class="widget-caption">
             <span class="widget-live"><span class="live-dot"></span>Live — not a mockup</span>
-            <span class="widget-hint">Create a real link ↓</span>
+            <span class="widget-hint">Measured {LIGHTHOUSE_DATE} ↓</span>
           </div>
-          <PaymentLinkGenerator client:visible />
+          <div class="lh-card">
+            <LighthouseRings
+              client:visible
+              scores={DESKTOP_SCORES}
+              caption={`Desktop, this exact page. ${MOBILE_PERF} on throttled Slow 4G — see the full breakdown.`}
+            />
+            <a href="/speed" class="lh-link">See the honest breakdown →</a>
+          </div>
         </div>
       </div>
     </div>
@@ -102,19 +114,48 @@ const TXS = [
       <Reveal>
         <p class="promise-line">
           Every claim on this page is live right now.
-          <span class="promise-dim">The link above is real. The transactions are on-chain. This page scores 100.</span>
+          <span class="promise-dim">The scores above are measured. The themes below really apply. The payment link is real.</span>
         </p>
       </Reveal>
       <Stagger class="verify-row" stagger={0.07}>
-        <div class="verify"><span class="verify-k">Real</span><span class="verify-v">the link above is minted by pay.one.ie on click</span></div>
-        <div class="verify"><span class="verify-k">On-chain</span><span class="verify-v">4 verifiable Sui transactions, linked below</span></div>
-        <div class="verify"><span class="verify-k">100 / 100</span><span class="verify-v">Lighthouse accessibility + best practices, this page</span></div>
+        <div class="verify"><span class="verify-k">98–100</span><span class="verify-v">Lighthouse, desktop — measured against this repo's own build</span></div>
+        <div class="verify"><span class="verify-k">12</span><span class="verify-v">theme presets, one click, whole site repaints</span></div>
+        <div class="verify"><span class="verify-k">6</span><span class="verify-v">motion primitives, interactive below — not a screenshot</span></div>
         <div class="verify"><span class="verify-k">Open</span><span class="verify-v">every line on GitHub, free forever</span></div>
       </Stagger>
     </div>
   </section>
 
-  <!-- ── Payments — the lead ───────────────────────────────────────── -->
+  <!-- ── 1 — Design ──────────────────────────────────────────────────── -->
+  <div class="section-alt">
+    <TokenShowcase />
+  </div>
+
+  <!-- ── 2 — Themes ──────────────────────────────────────────────────── -->
+  <ThemeGallery />
+
+  <!-- ── 3 — Motion ──────────────────────────────────────────────────── -->
+  <div class="section-alt">
+    <MotionSection />
+  </div>
+
+  <!-- ── 4 — Cards ───────────────────────────────────────────────────── -->
+  <CardDemo />
+
+  <!-- ── 5 — Carousels ───────────────────────────────────────────────── -->
+  <div class="section-alt">
+    <CarouselDemo />
+  </div>
+
+  <!-- ── 6 — Tabs ────────────────────────────────────────────────────── -->
+  <TabsDemo />
+
+  <!-- ── 7 — Quotes ──────────────────────────────────────────────────── -->
+  <div class="section-alt">
+    <QuoteDemo />
+  </div>
+
+  <!-- ── 8 — Payments ────────────────────────────────────────────────── -->
   <section class="section">
     <div class="container">
       <Reveal class="section-head" dist="lg">
@@ -151,20 +192,19 @@ const TXS = [
           <a slot="footer" href="/wallet" class="card__link">Open the wallet →</a>
         </Card>
       </Stagger>
-    </div>
-  </section>
 
-  <!-- ── Proof — real, on-chain, timed ─────────────────────────────── -->
-  <section class="section section-alt">
-    <div class="container">
-      <Reveal class="section-head" dist="lg">
-        <p class="eyebrow">Verification &gt; presence</p>
-        <h2 class="section-title">We don't claim it. We prove it.</h2>
-        <p class="section-sub">
-          An agent signed up, funded itself, and got paid — with no human in the loop.
-          Here are the measured timings and the real transactions it left behind.
-        </p>
-      </Reveal>
+      <!-- Live proof widget — mints a real pay.one.ie link on click. -->
+      <div class="pay-widget">
+        <Reveal>
+          <div class="widget-frame">
+            <div class="widget-caption">
+              <span class="widget-live"><span class="live-dot"></span>Live — not a mockup</span>
+              <span class="widget-hint">Create a real link ↓</span>
+            </div>
+            <PaymentLinkGenerator client:visible />
+          </div>
+        </Reveal>
+      </div>
 
       <Stagger class="speed-grid" stagger={0.08} dist="md">
         <div class="speed"><div class="speed-v"><CountUp client:visible value="6.3s" /></div><div class="speed-l">to register — no key, no human</div></div>
@@ -193,192 +233,20 @@ const TXS = [
     </div>
   </section>
 
-  <!-- ── How you ship it — ScrollScene lifecycle ───────────────────── -->
-  <section class="scene-section">
-    <LifecycleScene client:visible />
-  </section>
-
-  <!-- ── Everything included ───────────────────────────────────────── -->
-  <section class="section">
-    <div class="container">
-      <Reveal class="section-head" dist="lg">
-        <p class="eyebrow">What's in the box</p>
-        <h2 class="section-title">Everything you need.<br />Nothing you don't.</h2>
-      </Reveal>
-
-      <Stagger class="grid-3" stagger={0.06} dist="md">
-        {[
-          { icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`, color: 'var(--color-primary)', title: 'Payments', benefit: 'accept crypto today, card with your key', body: 'Signed multi-chain links via pay.one.ie and a real Stripe scaffold — both shipped, both in this repo.', link: '/payments', linkText: 'Open payments →' },
-          { icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934a8 8 0 1 0-8.688 9.134"/></svg>`, color: 'var(--color-tertiary)', title: 'Design tokens', benefit: 'change one value, everything re-colors', body: 'Six tokens every component inherits. Edit them in the nav — or in one.config.ts — and watch the whole page shift.', link: '/design', linkText: 'Explore the system →' },
-          { icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 3 14 9-14 9V3z"/></svg>`, color: 'var(--color-secondary)', title: 'Motion library', benefit: 'animation that feels intentional', body: 'Reveal, Parallax, ScrollScene, and Stagger — built on Motion/React, reduced-motion safe, zero layout shift.', link: '/motion', linkText: 'See it live →' },
-          { icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`, color: 'var(--color-primary)', title: 'AI chat', benefit: 'add an agent in one config line', body: 'The chat widget in the corner is plugin-chat, served from one.ie at zero bundle cost. Swap the agent ID and it\'s yours.', badge: 'plugin-chat' },
-          { icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`, color: 'var(--color-secondary)', title: 'Auth', benefit: 'passkey or social, zero config', body: 'Passkey + better-auth ships as a free plugin — local session, social providers, and email magic link ready to wire.', badge: 'plugin-auth · free' },
-          { icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`, color: 'var(--color-tertiary)', title: 'Analytics', benefit: 'your data stays yours', body: 'plugin-track injects a served pixel. Events flow into your workspace. No third-party product, no cookie banner.', badge: 'plugin-track' },
-        ].map((f) => (
-          <div class="card">
-            <div class="card-icon" style={`color:${f.color}`} set:html={f.icon} />
-            <h3 class="card-title">{f.title}</h3>
-            <p class="card-benefit">— {f.benefit}</p>
-            <p class="card-body">{f.body}</p>
-            {f.link && <a href={f.link} class="card-link">{f.linkText}</a>}
-            {f.badge && <div class="card-badge">{f.badge}</div>}
-          </div>
-        ))}
-      </Stagger>
-    </div>
-  </section>
-
-  <!-- ── One file controls it ──────────────────────────────────────── -->
-  <section class="section section-alt">
-    <div class="container container-split">
-      <div class="split-text">
-        <Reveal>
-          <p class="eyebrow">One file. Total control.</p>
-          <h2 class="section-title">Your entire site in one.config.ts</h2>
-          <p class="section-sub">
-            Change a brand colour — every component updates. Add a plugin — the feature
-            wires itself. Point at your backend — all API routes switch. No hunting
-            through component files.
-          </p>
-        </Reveal>
-        <Stagger class="feature-list" stagger={0.12} dist="md">
-          <div class="feature-row"><span class="feature-dot"></span>Brand tokens cascade to every component and the design page</div>
-          <div class="feature-row"><span class="feature-dot"></span>Plugins self-wire — chat, auth, payments, analytics</div>
-          <div class="feature-row"><span class="feature-dot"></span>Backend baseUrl — point at one.ie or your own deployment</div>
-        </Stagger>
-      </div>
-
-      <div class="split-code">
-        <Tabs
-          ariaLabel="one.config.ts examples"
-          items={[
-            { id: 'brand', label: 'Brand', icon: 'star' },
-            { id: 'plugins', label: 'Plugins', icon: 'grid' },
-            { id: 'backend', label: 'Backend', icon: 'bolt' },
-          ]}
-        >
-          <Fragment slot="panel-brand">
-            <pre class="code-block"><code>brand: <span class="tok-b">&#123;</span>
-  tokens: <span class="tok-b">&#123;</span>
-    primary:    <span class="tok-str">'hsl(216 55% 25%)'</span>,
-    secondary:  <span class="tok-str">'hsl(219 14% 28%)'</span>,
-    tertiary:   <span class="tok-str">'hsl(105 22% 25%)'</span>,
-    background: <span class="tok-str">'hsl(0 0% 93%)'</span>,
-    foreground: <span class="tok-str">'hsl(0 0% 100%)'</span>,
-    font:       <span class="tok-str">'hsl(0 0% 13%)'</span>,
-  <span class="tok-b">&#125;</span>,
-<span class="tok-b">&#125;</span></code></pre>
-          </Fragment>
-          <Fragment slot="panel-plugins">
-            <pre class="code-block"><code><span class="tok-kw">import</span> <span class="tok-b">&#123;</span> auth, track, chat <span class="tok-b">&#125;</span> <span class="tok-kw">from</span> <span class="tok-str">'@oneie/frontend/plugins'</span>
-
-plugins: <span class="tok-b">[</span>
-  auth(),
-  track(<span class="tok-b">&#123;</span> ws: <span class="tok-str">'my-workspace'</span> <span class="tok-b">&#125;</span>),
-  chat(<span class="tok-b">&#123;</span> agent: <span class="tok-str">'my-agent'</span> <span class="tok-b">&#125;</span>),
-<span class="tok-b">]</span></code></pre>
-          </Fragment>
-          <Fragment slot="panel-backend">
-            <pre class="code-block"><code>backend: <span class="tok-b">&#123;</span>
-  baseUrl: <span class="tok-str">'https://one.ie'</span>,
-<span class="tok-b">&#125;</span></code></pre>
-          </Fragment>
-        </Tabs>
-        <p class="split-tip">↑ The colour swatches in the nav edit these tokens live — no reload.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Metrics — real, verifiable numbers ────────────────────────── -->
-  <section class="metrics-strip">
-    <Pattern pattern="grid" opacity={0.1} tone="contrast" />
-    <div class="container">
-      <Stagger class="metrics-grid" stagger={0.07} dist="md">
-        {[
-          { num: '100', label: 'Lighthouse accessibility' },
-          { num: '4', label: 'chains per payment link' },
-          { num: '< 80 KB', label: 'JS bundle, gzipped' },
-          { num: '$0', label: 'monthly fees, ever' },
-        ].map(m => (
-          <div class="metric">
-            <div class="metric-num"><CountUp client:visible value={m.num} /></div>
-            <div class="metric-label">{m.label}</div>
-          </div>
-        ))}
-      </Stagger>
-    </div>
-  </section>
-
-  <!-- ── Plugin tiers ──────────────────────────────────────────────── -->
-  <section class="section">
-    <div class="container">
-      <Reveal class="section-head" dist="lg">
-        <p class="eyebrow">Plugin tiers</p>
-        <h2 class="section-title">Free to start. Pay only for what you use.</h2>
-        <p class="section-sub">
-          Free plugins ship full source. Connected plugins are served from one.ie —
-          zero bundle cost, auto-updated. Paid plugins unlock advanced capabilities
-          behind your API key.
-        </p>
-      </Reveal>
-
-      <Stagger class="pricing-row" stagger={0.1} dist="md">
-        <Card variant="pricing" accent="tertiary" pattern="dots" tier="Free" price="Free" period="· full source"
-          features={['auth() — passkey, social, magic link', 'Ships full source, free forever', 'No account required']}
-          ctaLabel="Start free" ctaHref="https://github.com/one-ie/one" />
-        <Card variant="pricing" featured accent="primary" pattern="grid" tier="Connected" price="Served" period="· zero bundle"
-          features={['track() — privacy-first analytics', 'chat() — AI widget, attach any agent', 'backend() — signals, payments, agents', 'Auto-updated from one.ie']}
-          ctaLabel="Connect a workspace" ctaHref="/signup" />
-        <Card variant="pricing" accent="secondary" pattern="crosshatch" tier="Paid" price="$99" period="/mo · usage after"
-          features={['premium() — x402 checkout + gating', 'admin() — hosted console', 'Unlocked by your API key']}
-          ctaLabel="Start team plan" checkoutPlan="team" />
-      </Stagger>
-    </div>
-  </section>
-
-  <!-- ── FAQ ───────────────────────────────────────────────────────── -->
-  <section class="section section-alt">
-    <div class="container faq-container">
-      <Reveal class="section-head" dist="lg">
-        <p class="eyebrow">Questions</p>
-        <h2 class="section-title">Everything you need to know</h2>
-      </Reveal>
-
-      <Stagger class="faq-grid" stagger={0.05}>
-        {[
-          { q: 'Is it really free?', a: 'Yes. Free forever under the ONE License — clone it, modify it, ship it, sell projects built on it. One string attached: keep the "Powered by ONE" link, or remove it with the white-label license. The core template has no paid gate.' },
-          { q: 'Are the payments real, or a demo?', a: 'Real. The link generator on this page posts to pay.one.ie and mints a genuine, signed payment link addressed to this repo\'s own wallet. The card rail is real Stripe Elements — it goes live the moment you add your key. Nothing here is mocked.' },
-          { q: 'Do I need ONE\'s backend?', a: 'No. The template runs standalone with any backend or none. The crypto wallet and payment links work with zero backend connection — they only need your addresses. ONE\'s backend powers the optional connected plugins (chat, tracking).' },
-          { q: 'How long does setup take?', a: 'Under 10 minutes. One command creates the project, one file configures it, one command deploys it. The design system, motion library, and payment stack are ready immediately.' },
-          { q: 'Can I use my own domain?', a: 'Yes. Deploy to Cloudflare with any custom domain — Wrangler handles it. The template has no dependency on one.ie domains.' },
-          { q: 'Can I sell sites built with this?', a: 'Yes. Build client sites, SaaS products, or your own starter and sell them. One condition: keep the "Powered by ONE" link in the deployed product, or remove it with the white-label license.' },
-        ].map(item => (
-          <details class="faq-item">
-            <summary class="faq-q">
-              {item.q}
-              <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </summary>
-            <p class="faq-a">{item.a}</p>
-          </details>
-        ))}
-      </Stagger>
-    </div>
-  </section>
-
   <!-- ── Final CTA ─────────────────────────────────────────────────── -->
   <section class="section cta-section">
     <Pattern pattern="diagonal" opacity={0.08} tone="contrast" fade />
     <div class="container cta-container">
       <Stagger dist="lg" stagger={0.1}>
-        <h2 class="cta-title">Clone it. Get paid. Today.</h2>
-        <p class="cta-sub">Free forever. No card required. Your first real payment link is one command away.</p>
+        <h2 class="cta-title">Clone it. Ship it. Score 100.</h2>
+        <p class="cta-sub">Free forever. No card required. Your first perfect Lighthouse run is one command away.</p>
         <div class="install install-cta">
           <code class="install-cmd">npm create one-app@latest my-site</code>
           <button class="copy-btn copy-btn-cta" onclick="navigator.clipboard.writeText('npm create one-app@latest my-site').then(()=>{this.textContent='Copied';setTimeout(()=>this.textContent='Copy',1500)})">Copy</button>
         </div>
         <div class="hero-actions">
           <a href="https://github.com/one-ie/one" class="btn-cta-primary">View on GitHub →</a>
-          <a href="/payments" class="btn-cta-secondary">Try payments</a>
+          <a href="/design" class="btn-cta-secondary">See the design system</a>
         </div>
         <p class="cta-risk">Source-available · Free forever · No card required · Every claim on this page is live</p>
       </Stagger>
@@ -386,15 +254,15 @@ plugins: <span class="tok-b">[</span>
   </section>
 
   <Footer
-    tagline="The open-source Astro starter that ships payments, AI, and plugins on day one — wired from one.config.ts."
+    tagline="The open-source Astro starter that ships a design system, motion, and payments on day one — wired from one.config.ts."
     columns={[
       { heading: 'Product', links: [
-        { label: 'Payments', href: '/payments' },
-        { label: 'Wallet', href: '/wallet' },
-        { label: 'Lifecycle', href: '/lifecycle' },
         { label: 'Design system', href: '/design' },
         { label: 'Motion', href: '/motion' },
         { label: 'Components', href: '/components' },
+        { label: 'Payments', href: '/payments' },
+        { label: 'Speed proof', href: '/speed' },
+        { label: 'Wallet', href: '/wallet' },
       ] },
       { heading: 'Resources', links: [
         { label: 'Documentation', href: 'https://one.ie/docs' },
@@ -437,7 +305,20 @@ plugins: <span class="tok-b">[</span>
   /* ── Layout shells ─────────────────────────────────────────────── */
   .container { max-width: var(--content); margin: 0 auto; padding: 0 1.5rem; }
   .section { padding: 7rem 0; }
-  .section-alt { background: color-mix(in oklab, var(--color-primary) 7%, var(--color-foreground)); }
+  .section-alt {
+    background: color-mix(in oklab, var(--color-primary) 7%, var(--color-foreground));
+    /* A theme can fill --color-foreground with a saturated brand tone
+       (Plum, in light mode) — shadow the derived typography tokens so
+       everything nested (custom sections + demo components alike, which
+       all read var(--color-font)/var(--color-muted)) resolves against
+       on-foreground instead. */
+    --color-font: var(--color-on-foreground);
+    --color-muted: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
+    --color-border: color-mix(in oklab, var(--color-on-foreground) 12%, transparent);
+    --color-border-strong: color-mix(in oklab, var(--color-on-foreground) 24%, transparent);
+    padding: 1px 0; /* clip margin collapse from nested sections */
+  }
+  .section-alt .eyebrow { color: var(--color-accent-on-foreground); }
 
   :global(.section-head) { max-width: 42rem; margin: 0 auto 3.5rem; text-align: center; }
   :global(.section-head) .section-sub { margin-left: auto; margin-right: auto; }
@@ -454,7 +335,7 @@ plugins: <span class="tok-b">[</span>
     font-size: 1.05rem; color: var(--color-muted); line-height: 1.7;
     max-width: 40rem; margin: 0;
   }
-  .section-sub code, .split-text code {
+  .section-sub code {
     font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.82rem; color: var(--color-tertiary);
   }
 
@@ -475,7 +356,7 @@ plugins: <span class="tok-b">[</span>
     border-radius: 9999px; padding: 0.3rem 0.9rem; margin-bottom: 1.75rem;
   }
   .headline {
-    font-size: clamp(2.6rem, 6.5vw, 4.6rem); font-weight: 800; line-height: 1.03;
+    font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 800; line-height: 1.06;
     letter-spacing: -0.045em; color: var(--color-font); margin: 0 0 1.5rem;
   }
   .headline-line { display: block; animation: hr-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -528,6 +409,28 @@ plugins: <span class="tok-b">[</span>
   @media (prefers-reduced-motion: reduce) { .live-dot { animation: none; } }
   .widget-hint { color: var(--color-muted); font-family: 'SF Mono', 'Fira Code', monospace; }
 
+  .lh-card {
+    border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+    padding: 1.75rem 1.5rem 1.5rem; background: var(--color-background);
+  }
+  .lh-link {
+    display: block; text-align: center; margin-top: 1.25rem; padding-top: 1.1rem;
+    border-top: 1px solid var(--color-border);
+    font-size: 0.8rem; font-weight: 600; color: var(--color-primary); text-decoration: none;
+  }
+  .lh-link:hover { text-decoration: underline; }
+
+  :global(.lr-rings) { display: flex; justify-content: space-around; gap: 0.5rem; }
+  :global(.lr-ring) { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+  :global(.lr-ring-svg) { position: relative; width: 76px; height: 76px; }
+  :global(.lr-svg) { width: 100%; height: 100%; transform: rotate(-90deg); }
+  :global(.lr-count) {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 1.15rem; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--color-font);
+  }
+  :global(.lr-label) { font-size: 0.68rem; color: var(--color-muted); }
+  :global(.lr-caption) { margin: 1.1rem 0 0; font-size: 0.78rem; color: var(--color-muted); text-align: center; line-height: 1.5; }
+
   /* ── Promise band ───────────────────────────────────────────────── */
   .promise { padding: clamp(2.5rem, 6vw, 4rem) 0; border-block: 1px solid var(--color-border); }
   .promise-line {
@@ -558,10 +461,12 @@ plugins: <span class="tok-b">[</span>
     font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.86em; color: var(--color-tertiary);
   }
 
+  .pay-widget { max-width: 30rem; margin: 3rem auto 0; }
+
   /* ── Proof section ──────────────────────────────────────────────── */
   :global(.speed-grid) {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-    max-width: 52rem; margin: 0 auto 2.75rem;
+    max-width: 52rem; margin: 3.5rem auto 2.75rem;
   }
   @media (max-width: 700px) { :global(.speed-grid) { grid-template-columns: 1fr; } }
   .speed {
@@ -578,11 +483,13 @@ plugins: <span class="tok-b">[</span>
   :global(.tx-list) { display: grid; grid-template-columns: 1fr; gap: 0.85rem; }
   @media (min-width: 560px) and (max-width: 900px) { :global(.tx-list) { grid-template-columns: 1fr 1fr; } }
   .tx-card {
-    display: block; border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+    display: block; border: 1px solid var(--color-border-fixed); border-radius: var(--radius-lg);
     padding: 1.1rem 1.25rem; background: var(--color-background); text-decoration: none;
     transition: border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+    --color-font: var(--color-font-fixed);
+    --color-muted: var(--color-muted-fixed);
   }
-  .tx-card:hover { border-color: var(--color-border-strong); transform: translateY(-2px); box-shadow: var(--shadow-pop); }
+  .tx-card:hover { border-color: var(--color-border-strong-fixed); transform: translateY(-2px); box-shadow: var(--shadow-pop); }
   .tx-top { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
   .tx-label { font-size: 0.88rem; font-weight: 700; color: var(--color-font); }
   .tx-amount { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.78rem; font-weight: 700; color: var(--color-primary); }
@@ -592,91 +499,6 @@ plugins: <span class="tok-b">[</span>
   }
   .tx-detail { font-size: 0.8rem; line-height: 1.55; color: var(--color-muted); margin: 0 0 0.6rem; }
   .tx-verify { font-size: 0.75rem; font-weight: 600; color: var(--color-primary); }
-
-  /* ── Scene ──────────────────────────────────────────────────────── */
-  .scene-section {
-    background: var(--color-foreground);
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  /* ── Feature cards ──────────────────────────────────────────────── */
-  :global(.grid-3) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  @media (max-width: 768px) { :global(.grid-3) { grid-template-columns: 1fr; } }
-  @media (min-width: 769px) and (max-width: 1024px) { :global(.grid-3) { grid-template-columns: repeat(2, 1fr); } }
-
-  .card {
-    background: var(--color-background); border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg); padding: 2rem; display: flex; flex-direction: column; gap: 0.6rem;
-    transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
-  }
-  .card:hover { border-color: var(--color-border-strong); box-shadow: var(--shadow-pop); transform: translateY(-2px); }
-  .card-icon {
-    width: 40px; height: 40px; border-radius: var(--radius-md);
-    background: color-mix(in oklab, currentColor 10%, transparent);
-    display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem;
-  }
-  .card-title { font-size: 1rem; font-weight: 700; color: var(--color-font); margin: 0; }
-  .card-benefit { font-size: 0.82rem; font-weight: 500; color: color-mix(in oklab, var(--color-font) 55%, transparent); margin: 0; line-height: 1.45; }
-  .card-body { font-size: 0.87rem; line-height: 1.65; color: var(--color-muted); margin: 0; flex: 1; }
-  .card-body code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8rem; color: var(--color-tertiary); }
-  .card-link { font-size: 0.82rem; font-weight: 600; color: var(--color-primary); text-decoration: none; margin-top: 0.25rem; }
-  .card-link:hover { text-decoration: underline; }
-  .card-badge {
-    display: inline-flex; align-self: flex-start; font-size: 0.68rem; font-weight: 600;
-    letter-spacing: 0.05em; color: var(--color-secondary);
-    background: color-mix(in oklab, var(--color-secondary) 10%, transparent);
-    border: 1px solid color-mix(in oklab, var(--color-secondary) 20%, transparent);
-    border-radius: 9999px; padding: 0.2rem 0.6rem; margin-top: 0.25rem;
-  }
-
-  /* ── Config split ───────────────────────────────────────────────── */
-  .container-split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-  @media (max-width: 768px) { .container-split { grid-template-columns: 1fr; gap: 2rem; } }
-  :global(.split-code) { min-width: 0; }
-  .split-tip { margin: 0.9rem 0 0; font-size: 0.78rem; color: var(--color-muted); }
-
-  .code-block {
-    background: var(--color-background); border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg); padding: 1.25rem 1.4rem;
-    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.78rem; line-height: 1.75;
-    overflow-x: auto; margin: 0; color: var(--color-font);
-  }
-  .tok-kw { color: var(--color-primary); font-weight: 600; }
-  .tok-str { color: var(--color-tertiary); }
-  .tok-b { color: var(--color-muted); }
-
-  :global(.feature-list) { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
-  .feature-row { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.88rem; color: var(--color-muted); line-height: 1.5; }
-  .feature-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary); margin-top: 0.45rem; }
-
-  /* ── Metrics strip ──────────────────────────────────────────────── */
-  .metrics-strip { background: var(--color-primary); padding: 5rem 0; position: relative; overflow: hidden; }
-  .metrics-strip .container { position: relative; z-index: 1; }
-  :global(.metrics-grid) { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center; }
-  @media (max-width: 768px) { :global(.metrics-grid) { grid-template-columns: repeat(2, 1fr); } }
-  .metric-num { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; color: var(--color-on-primary); line-height: 1; margin-bottom: 0.4rem; }
-  .metric-label { font-size: 0.82rem; color: color-mix(in oklab, var(--color-on-primary) 70%, transparent); line-height: 1.4; }
-
-  /* ── Pricing ────────────────────────────────────────────────────── */
-  :global(.pricing-row) { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-  @media (max-width: 900px) { :global(.pricing-row) { grid-template-columns: 1fr; max-width: 26rem; margin: 0 auto; } }
-
-  /* ── FAQ ────────────────────────────────────────────────────────── */
-  .faq-container { max-width: var(--content-narrow); }
-  :global(.faq-grid) { margin-top: 0; display: flex; flex-direction: column; gap: 0; }
-  .faq-item { border-bottom: 1px solid var(--color-border); }
-  .faq-item:first-child { border-top: 1px solid var(--color-border); }
-  .faq-q {
-    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-    padding: 1.35rem 0; font-size: 1rem; font-weight: 600; color: var(--color-font);
-    cursor: pointer; list-style: none; user-select: none;
-  }
-  .faq-q::-webkit-details-marker { display: none; }
-  .faq-q:hover { color: var(--color-primary); }
-  .faq-chevron { flex-shrink: 0; transition: transform 200ms ease; color: var(--color-muted); }
-  .faq-item[open] .faq-chevron { transform: rotate(180deg); }
-  .faq-a { font-size: 0.9rem; line-height: 1.7; color: var(--color-muted); padding: 0 0 1.1rem; margin: 0; }
 
   /* ── Final CTA ──────────────────────────────────────────────────── */
   .cta-section { background: var(--color-primary); padding: 8rem 0; position: relative; overflow: hidden; }

@@ -1,0 +1,273 @@
+export const prerender = true
+---
+import Layout from '../layouts/Layout.astro'
+import Card from '../components/blocks/Card.astro'
+
+// public/ is a static passthrough — not part of the Vite module graph, and
+// this site runs its SSR/prerender step through the Cloudflare adapter's
+// unenv shims (even in dev), which don't implement node:fs. So the file
+// list is a plain literal, not a directory read. Add a filename here when
+// dropping a new texture into public/patterns/.
+const FILES = [
+  'back.png', 'backd.png', 'background.png', 'brilliant.png', 'carbon.png',
+  'checkered-pattern.png', 'classy-fabric.png', 'dark-matter.png', 'fake-brick.png',
+  'graphy-dark.png', 'outlets.png', 'pattern-accent.png', 'pattern-primary.png',
+  'pattern-secondary.png', 'subtle-carbon.png', 'subtle-dots.png', 'subtle_carbon.webp',
+  'wdots.jpg', 'whitedots.jpg', 'wwdot.jpg',
+]
+const IMAGE_RE = /\.(png|jpe?g|webp|gif|svg)$/i
+const patterns = FILES.map((file) => ({
+  file,
+  url: `/patterns/${file}`,
+  name: file.replace(IMAGE_RE, '').replace(/[-_]/g, ' '),
+}))
+---
+
+<Layout title="ONE Patterns" description="Pick a tileable texture from public/patterns and apply it to the design system's real background or foreground surfaces, site-wide.">
+  <main class="patterns-page">
+    <header class="hero">
+      <h1>Patterns</h1>
+      <p>
+        {patterns.length} tileable textures from <code>public/patterns/</code>. Apply one to
+        <strong>background</strong> (the L1 token — <code>Card.astro</code>, <code>bg-background</code>, every
+        shadcn card/popover/menu surface) or <strong>foreground</strong> (the L2 token — card-body fills,
+        <code>bg-foreground</code>, <code>bg-muted</code>/<code>bg-accent</code>). Real classes, not a page-wide
+        overlay — persists site-wide the same way a theme preset does.
+      </p>
+    </header>
+
+    <!-- ============== CURRENT LAYERS ============== -->
+    <section class="layers">
+      <div class="layer-card" data-layer="bg">
+        <div class="layer-head">
+          <span class="layer-badge">Background</span>
+          <button type="button" class="clear-btn" data-clear="bg">Clear</button>
+        </div>
+        <div class="layer-preview" data-preview="bg"></div>
+        <div class="layer-meta">
+          <span class="layer-name" data-name="bg">None</span>
+        </div>
+      </div>
+
+      <div class="layer-card" data-layer="fg">
+        <div class="layer-head">
+          <span class="layer-badge">Foreground</span>
+          <button type="button" class="clear-btn" data-clear="fg">Clear</button>
+        </div>
+        <div class="layer-preview" data-preview="fg"></div>
+        <div class="layer-meta">
+          <span class="layer-name" data-name="fg">None</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== LIVE DEMO ============== -->
+    <section class="block">
+      <div class="block-head">
+        <span class="eyebrow">Proof</span>
+        <h2>Live on a real card</h2>
+        <p>
+          The actual <code>Card.astro</code> component, rendered right here — no swatch, no simulation. If a
+          pick doesn't show up below, it isn't applying; the two preview boxes above only mirror the URL, not
+          the real surface.
+        </p>
+      </div>
+      <div class="demo-card-wrap">
+        <Card variant="default" accent="primary">
+          <svg slot="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+          <Fragment slot="header">Real Card.astro</Fragment>
+          This card's own <code>background-color</code> is the L1 token; a pick above shows as its
+          <code>background-image</code>. Same component the homepage feature grid uses.
+          <a slot="footer" class="card__link" href="#">A foreground-toned link →</a>
+        </Card>
+      </div>
+    </section>
+
+    <!-- ============== GALLERY ============== -->
+    <section class="block">
+      <div class="block-head">
+        <span class="eyebrow">Gallery</span>
+        <h2>Every texture</h2>
+        <p>Click <strong>Background</strong> or <strong>Foreground</strong> on a tile to apply it to that layer.</p>
+      </div>
+
+      <div class="pattern-grid">
+        {patterns.map((p) => (
+          <div class="pattern-tile" data-file={p.url}>
+            <div class="pattern-tile__preview" style={`background-image: url('${p.url}')`}></div>
+            <div class="pattern-tile__foot">
+              <span class="pattern-tile__name">{p.name}</span>
+              <div class="pattern-tile__actions">
+                <button type="button" class="apply-btn" data-apply="bg" data-file={p.url}>Background</button>
+                <button type="button" class="apply-btn" data-apply="fg" data-file={p.url}>Foreground</button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <script is:inline>
+    /* Same persistence contract as the theme engine — plain localStorage
+       keys, applied via window.__applyImagePatterns() (Layout.astro), so
+       a pick here repaints instantly and survives navigation. */
+    const LAYERS = ['bg', 'fg']
+
+    const syncUI = () => {
+      LAYERS.forEach((layer) => {
+        const url = localStorage.getItem('one-pattern-' + layer)
+        const preview = document.querySelector(`[data-preview="${layer}"]`)
+        const name = document.querySelector(`[data-name="${layer}"]`)
+        preview.style.backgroundImage = url ? `url('${url}')` : 'none'
+        name.textContent = url ? url.split('/').pop() : 'None'
+        document.querySelectorAll(`[data-apply="${layer}"]`).forEach((btn) => {
+          btn.classList.toggle('is-active', !!url && btn.dataset.file === url)
+        })
+      })
+    }
+
+    document.querySelectorAll('.apply-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const layer = btn.dataset.apply
+        localStorage.setItem('one-pattern-' + layer, btn.dataset.file)
+        window.__applyImagePatterns()
+        syncUI()
+      })
+    })
+
+    document.querySelectorAll('[data-clear]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const layer = btn.dataset.clear
+        localStorage.removeItem('one-pattern-' + layer)
+        window.__applyImagePatterns()
+        syncUI()
+      })
+    })
+
+    syncUI()
+  </script>
+</Layout>
+
+<style is:global>
+  .patterns-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 4rem) clamp(1.25rem, 4vw, 2rem) clamp(4rem, 8vw, 6rem);
+    color: var(--color-font);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .patterns-page * { box-sizing: border-box; }
+
+  .patterns-page .hero { text-align: center; margin-bottom: clamp(2.5rem, 6vw, 3rem); }
+  .patterns-page .hero h1 { font-size: clamp(2rem, 6vw, 2.75rem); font-weight: 800; letter-spacing: -0.03em; margin: 0 0 12px; }
+  .patterns-page .hero p { max-width: 640px; margin: 0 auto; color: var(--color-muted); font-size: 16px; }
+  .patterns-page .hero code {
+    padding: 1px 6px;
+    background: color-mix(in oklab, var(--color-font) 8%, transparent);
+    border-radius: var(--radius-sm);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+  }
+
+  .patterns-page .layers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: clamp(2.5rem, 6vw, 3rem);
+  }
+  @media (max-width: 640px) { .patterns-page .layers { grid-template-columns: 1fr; } }
+
+  .patterns-page .layer-card {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .patterns-page .layer-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px;
+  }
+  .patterns-page .layer-badge {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--color-primary);
+  }
+  .patterns-page .clear-btn {
+    padding: 4px 10px;
+    background: transparent;
+    color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    font-size: 12px; cursor: pointer;
+    transition: color var(--ease), border-color var(--ease);
+  }
+  .patterns-page .clear-btn:hover { color: var(--color-font); border-color: var(--color-border-strong); }
+
+  .patterns-page .layer-preview {
+    height: 110px;
+    margin: 0 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-foreground);
+    background-repeat: repeat;
+  }
+
+  .patterns-page .layer-meta { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .patterns-page .layer-name {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; color: var(--color-muted);
+  }
+
+  .patterns-page .block { margin-bottom: 3rem; }
+  .patterns-page .block-head { margin-bottom: 16px; }
+  .patterns-page .demo-card-wrap { max-width: 360px; }
+  .patterns-page .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--color-tertiary); margin-bottom: 6px;
+  }
+  .patterns-page .eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+  .patterns-page h2 { font-size: 22px; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .patterns-page .block-head p { margin: 0; color: var(--color-muted); font-size: 14px; }
+
+  .patterns-page .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .patterns-page .pattern-tile {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .patterns-page .pattern-tile__preview {
+    height: 100px;
+    background-color: var(--color-foreground);
+    background-repeat: repeat;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .patterns-page .pattern-tile__foot { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .patterns-page .pattern-tile__name {
+    font-size: 12px; font-weight: 600; text-transform: capitalize;
+  }
+  .patterns-page .pattern-tile__actions { display: flex; gap: 6px; }
+  .patterns-page .apply-btn {
+    flex: 1;
+    padding: 6px 8px;
+    background: var(--color-foreground);
+    color: var(--color-on-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 11px; font-weight: 600; cursor: pointer;
+    transition: background var(--ease), border-color var(--ease), color var(--ease);
+  }
+  .patterns-page .apply-btn:hover { border-color: var(--color-border-strong); }
+  .patterns-page .apply-btn.is-active {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+  }
+</style>

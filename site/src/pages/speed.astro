@@ -1,0 +1,77 @@
+---
+export const prerender = true
+import Layout from '@/layouts/Layout.astro'
+import { SpeedShowcase } from '@/components/SpeedShowcase'
+
+// Source: real Lighthouse 13.x runs against this repo's own `bun run build` +
+// `astro preview` output, headless Chrome — re-run the command in the
+// methodology section below to reproduce these numbers on your own clone.
+const lighthouseDate = '2026-07-09'
+const mobileScores: [number, number, number, number] = [76, 100, 100, 100]
+const desktopScores: [number, number, number, number] = [98, 100, 100, 100]
+const pageWeightKB = 596
+---
+
+<Layout
+  title="Speed proof · Lighthouse measured against this starter | ONE"
+  description={`Measured ${lighthouseDate} against this repo's own production build with Lighthouse: ${desktopScores[0]} Performance / desktop, ${mobileScores[0]} / Slow 4G, 100 Accessibility, Best Practices, and SEO on both.`}
+>
+  <main class="mx-auto max-w-[1080px] px-6 py-12 md:py-20">
+
+    <!-- ─── HERO ─── -->
+    <header class="mb-16">
+      <div class="text-sm uppercase tracking-widest text-font/40 mb-3">Speed proof · {lighthouseDate}</div>
+      <h1 class="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight">
+        <span class="text-primary">{desktopScores[0]} / 100</span> on Lighthouse.<br/>
+        <span class="text-font/60">Against this repo's own build, not a marketing deck.</span>
+      </h1>
+      <p class="mt-6 text-lg text-font/60 max-w-[68ch]">
+        Run today against a plain <code class="px-2 py-0.5 bg-foreground rounded text-sm">bun run build && astro preview</code> of this starter — no CDN, no edge cache, no tuning pass. Lighthouse 13.x, headless Chrome. Re-run it in the next five minutes.
+      </p>
+    </header>
+
+    <!-- ─── LIVE SHOWCASE ─── -->
+    <section class="mb-16">
+      <SpeedShowcase
+        client:load
+        lighthouseDate={lighthouseDate}
+        mobileScores={mobileScores}
+        desktopScores={desktopScores}
+        pageWeightKB={pageWeightKB}
+      />
+    </section>
+
+    <!-- ─── METHODOLOGY ─── -->
+    <section class="mb-16">
+      <h2 class="text-xl font-bold mb-3">How to re-run this yourself</h2>
+      <p class="text-sm text-font/60 mb-4">Every number on this page comes from a Lighthouse CLI run against this repo's own production build — clone it and check.</p>
+      <div class="bg-foreground rounded-xl p-5 border font-mono text-xs leading-relaxed overflow-x-auto" style={`border-color: var(--color-border)`}>
+        <div class="text-font/40"># Build + serve the production output locally</div>
+        <div>bun run build && bun run preview &</div>
+        <div class="mt-3 text-font/40"># Desktop / fast-network preset</div>
+        <div>npx lighthouse http://localhost:4321 --preset=desktop --output=json</div>
+        <div class="mt-3 text-font/40"># Stock mobile preset (Slow 4G, harsher — the default)</div>
+        <div>npx lighthouse http://localhost:4321 --output=json</div>
+      </div>
+    </section>
+
+    <!-- ─── WHAT I'LL BE HONEST ABOUT ─── -->
+    <section class="mb-16 bg-background rounded-2xl p-6 md:p-8 border" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
+      <h2 class="text-xl font-bold mb-3">What I'll be honest about</h2>
+      <ul class="space-y-2 text-sm">
+        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>Performance drops to {mobileScores[0]} on Slow 4G</strong> — throttled CPU + throttled network is the harshest Lighthouse default, and this is a fresh clone with zero perf tuning applied on top.</span></li>
+        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>This is `astro preview`, not a CDN edge deploy.</strong> A real Cloudflare Pages/Workers deploy with cache headers will typically score higher than a local Node preview server.</span></li>
+        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>These numbers are for the homepage only</strong> — pages with heavier islands (payments, wallet) will score differently. Run the command above against any route you care about.</span></li>
+      </ul>
+    </section>
+
+    <!-- ─── CLOSING ─── -->
+    <section class="mb-4 text-center">
+      <div class="flex items-center justify-center gap-3">
+        <a href="https://github.com/one-ie/one" class="bg-primary text-on-primary rounded-lg px-5 py-2.5 font-medium hover:brightness-110">Clone the starter</a>
+        <a href="/design" class="border border-primary text-font rounded-lg px-5 py-2.5 font-medium">See the design system</a>
+      </div>
+    </section>
+
+  </main>
+</Layout>

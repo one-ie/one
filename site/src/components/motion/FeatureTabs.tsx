@@ -63,7 +63,7 @@ const REVEAL_VARIANTS = [
   { dist: 48, d: 0.72, label: 'lg · slow',        color: C.tertiary },
 ]
 
-function RevealPanel() {
+export function RevealPanel() {
   const [k, setK] = useState(0)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
@@ -109,7 +109,7 @@ const item = {
   show:   { opacity: 1, x: 0, transition: { duration: dur.base, ease: ease.out } },
 }
 
-function StaggerPanel() {
+export function StaggerPanel() {
   const [k, setK] = useState(0)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
@@ -199,7 +199,7 @@ function CoordReadout({ rx, ry }: { rx: ReturnType<typeof useSpring>; ry: Return
   )
 }
 
-function ParallaxPanel() {
+export function ParallaxPanel() {
   const ref = useRef<HTMLDivElement>(null)
   const rawX = useMotionValue(0)
   const rawY = useMotionValue(0)
@@ -326,7 +326,7 @@ function ParallaxPanel() {
 
 const SCENE_STEPS = ['Signal enters', 'Route resolves', 'Handler fires', 'Loop closes']
 
-function ScrollScenePanel() {
+export function ScrollScenePanel() {
   const [progress, setProgress] = useState(0)
   const [running, setRunning] = useState(true)
 
@@ -506,7 +506,7 @@ const SPRING_CONFIGS = [
 ]
 const CORNERS = [[-80,-40],[80,-40],[-80,40],[80,40]] as const
 
-function SpringPanel() {
+export function SpringPanel() {
   const [cfg, setCfg] = useState(0)
   const [ci, setCi] = useState(0)
   const { stiffness, damping } = SPRING_CONFIGS[cfg]
@@ -599,7 +599,7 @@ function EaseCurve({ type, k }: { type: 'out' | 'inout' | 'spring'; k: number })
   )
 }
 
-function TokensPanel() {
+export function TokensPanel() {
   const [k, setK] = useState(0)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -663,7 +663,7 @@ function TokensPanel() {
 
 // ─── tab definitions ──────────────────────────────────────────────────────
 
-const TABS = [
+export const TABS = [
   {
     id: 'reveal', label: 'Reveal', tag: 'whileInView',
     desc: 'Fade + translate on viewport entry. One-shot.',
