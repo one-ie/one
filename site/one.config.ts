@@ -6,7 +6,7 @@ import { chat } from '@oneie/plugin-chat'
 import { docs } from '@oneie/plugin-docs'
 import { track } from '@oneie/plugin-track'
 
-const ws = '019f40c477944af784075862' // workspace "template" — one init --name template
+const ws = 'template' // workspace slug — funded via world:create-workspace credit grants
 
 // ONE configuration — the single control surface for this site.
 // Two separate switches:

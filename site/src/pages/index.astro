@@ -44,7 +44,7 @@ const TXS = [
 
   <!-- ── Hero — the promise, proven in place ───────────────────────── -->
   <section class="hero">
-    <Pattern pattern="dots" opacity={0.09} color="var(--color-primary)" fade />
+    <Pattern pattern="dots" opacity={0.09} tone="primary" fade />
     <div class="container hero-grid">
       <div class="hero-copy">
         <!-- Time-based reveal (never scroll-driven above the fold). -->
@@ -291,7 +291,7 @@ plugins: <span class="tok-b">[</span>
 
   <!-- ── Metrics — real, verifiable numbers ────────────────────────── -->
   <section class="metrics-strip">
-    <Pattern pattern="grid" opacity={0.1} color="var(--color-on-primary)" />
+    <Pattern pattern="grid" opacity={0.1} tone="contrast" />
     <div class="container">
       <Stagger class="metrics-grid" stagger={0.07} dist="md">
         {[
@@ -367,7 +367,7 @@ plugins: <span class="tok-b">[</span>
 
   <!-- ── Final CTA ─────────────────────────────────────────────────── -->
   <section class="section cta-section">
-    <Pattern pattern="diagonal" opacity={0.08} color="var(--color-on-primary)" fade />
+    <Pattern pattern="diagonal" opacity={0.08} tone="contrast" fade />
     <div class="container cta-container">
       <Stagger dist="lg" stagger={0.1}>
         <h2 class="cta-title">Clone it. Get paid. Today.</h2>

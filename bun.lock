@@ -81,7 +81,7 @@
         "@oneie/plugin-blog": "^0.1.1",
         "@oneie/plugin-chat": "^0.1.0",
         "@oneie/plugin-docs": "0.1.2",
-        "@oneie/plugin-track": "^0.1.0",
+        "@oneie/plugin-track": "0.1.1",
         "@stripe/react-stripe-js": "^6.7.0",
         "@stripe/stripe-js": "^9.9.0",
         "@tailwindcss/typography": "^0.5.20",
@@ -110,7 +110,7 @@
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "typescript": "^6.0.3",
-        "vite": "^8.1.3",
+        "vite": "8.1.3",
         "wrangler": "^4.108.0",
       },
     },
@@ -432,7 +432,7 @@
 
     "@oneie/plugin-shop": ["@oneie/plugin-shop@workspace:packages/plugin-shop"],
 
-    "@oneie/plugin-track": ["@oneie/plugin-track@0.1.0", "", { "peerDependencies": { "@oneie/frontend": "*", "astro": ">=6.0.0" }, "optionalPeers": ["@oneie/frontend"] }, "sha512-zlk3lfepvaGraCI5jW1PQq9HtK9JOqocLw+ZHmbNZpIwp3vFuukA0fwzbCr91nDcS0j+sOR8Gm7DhFXrfQXjxA=="],
+    "@oneie/plugin-track": ["@oneie/plugin-track@0.1.1", "", { "peerDependencies": { "@oneie/frontend": "^0.1.1", "astro": ">=6.0.0" } }, "sha512-2CnuyeVtqaYfi0ga8w2kz/DngNkAJ2tnzDTQIsp9a4Idua4C2bChu8azth/OT2cjOKfp+z5V6f1WCeA7w/BzCA=="],
 
     "@oneie/sdk": ["@oneie/sdk@0.14.4", "", { "dependencies": { "better-auth": "^1.6.11", "zod": "^4.3.6" } }, "sha512-ldVTxnf0uktt2RLpSi5rl8rIZKy4b1jd0yW/gqm6so7X0/z5tTrpseGdIPIl1gHu79Lk4nWQKEHyXat1/rCdJg=="],
 

@@ -11,6 +11,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
 <Layout title="ONE Design System">
   <main class="design-page">
     <header class="hero">
+      <Pattern pattern="dots" tone="primary" opacity={0.08} fade class="hero-pattern" />
       <h1>ONE Design System</h1>
       <p>
         6 editable tokens. 3 depth levels. 1 card. 1 input. Every component derives from these — pick a token,
@@ -43,6 +44,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <!-- ============== TOKENS ============== -->
     <section class="block">
       <div class="block-head">
+        <span class="eyebrow eyebrow--primary">Tokens</span>
         <h2>The 6 editable tokens</h2>
         <p>
           Click any swatch to recolor live. Picks apply to the whole site and persist — the same
@@ -140,6 +142,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <!-- ============== DEPTH ============== -->
     <section class="block">
       <div class="block-head">
+        <span class="eyebrow eyebrow--secondary">Depth</span>
         <h2>Three levels of depth</h2>
         <p>Page (L0) → card (L1) → content (L2). No 4th level. Sidebar = L1. Inputs = L2.</p>
       </div>
@@ -316,6 +319,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <!-- ============== ICONS ============== -->
     <section class="block">
       <div class="block-head">
+        <span class="eyebrow eyebrow--tertiary">Icons</span>
         <h2>Icons</h2>
         <p>One source: <code>lucide-react</code>. 1.5px stroke · round caps · token-driven color. Wrap with <code>{'<Icon>'}</code> or <code>{'<IconBadge>'}</code>.</p>
       </div>
@@ -385,6 +389,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <!-- ============== POLISH SCALE ============== -->
     <section class="block">
       <div class="block-head">
+        <span class="eyebrow eyebrow--primary">Constants</span>
         <h2>Polish constants</h2>
         <p>Baked into components. Not editable. Snap to scale or polish breaks.</p>
       </div>
@@ -426,56 +431,109 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <!-- ============== BACKGROUND PATTERNS ============== -->
     <section class="block">
       <div class="block-head">
+        <span class="eyebrow eyebrow--secondary">Texture</span>
         <h2>Background patterns</h2>
         <p>
           <code>Pattern.astro</code> — five subtle, tileable textures, all pure CSS/SVG
-          with zero downloaded assets. Every one recolors with <code>currentColor</code>,
-          so it re-themes across every swatch above automatically — switch a preset in
-          the nav and watch these repaint too.
+          with zero downloaded assets. Pass a <code>tone</code> and the pattern binds to a
+          theme token with a calibrated opacity — pattern and palette can never disagree.
+          Switch a preset in the nav and watch these repaint too.
         </p>
       </div>
 
       <div class="pattern-grid">
         <div class="pattern-cell">
           <div class="pattern-demo">
-            <Pattern pattern="dots" opacity={0.14} />
+            <Pattern pattern="dots" tone="primary" opacity={0.16} />
           </div>
-          <code class="vocab-tag">pattern="dots"</code>
+          <code class="vocab-tag">pattern="dots" tone="primary"</code>
         </div>
 
         <div class="pattern-cell">
           <div class="pattern-demo">
-            <Pattern pattern="grid" opacity={0.14} />
+            <Pattern pattern="grid" tone="secondary" opacity={0.16} />
           </div>
-          <code class="vocab-tag">pattern="grid"</code>
+          <code class="vocab-tag">pattern="grid" tone="secondary"</code>
         </div>
 
         <div class="pattern-cell">
           <div class="pattern-demo">
-            <Pattern pattern="diagonal" opacity={0.14} />
+            <Pattern pattern="diagonal" tone="tertiary" opacity={0.16} />
           </div>
-          <code class="vocab-tag">pattern="diagonal"</code>
+          <code class="vocab-tag">pattern="diagonal" tone="tertiary"</code>
         </div>
 
         <div class="pattern-cell">
           <div class="pattern-demo">
-            <Pattern pattern="crosshatch" opacity={0.14} />
+            <Pattern pattern="crosshatch" tone="font" opacity={0.1} />
           </div>
-          <code class="vocab-tag">pattern="crosshatch"</code>
+          <code class="vocab-tag">pattern="crosshatch" tone="font"</code>
         </div>
 
         <div class="pattern-cell">
           <div class="pattern-demo">
-            <Pattern pattern="noise" opacity={0.22} />
+            <Pattern pattern="noise" tone="primary" opacity={0.24} />
           </div>
-          <code class="vocab-tag">pattern="noise"</code>
+          <code class="vocab-tag">pattern="noise" tone="primary"</code>
         </div>
 
         <div class="pattern-cell">
           <div class="pattern-demo">
-            <Pattern pattern="dots" opacity={0.35} fade />
+            <Pattern pattern="dots" tone="primary" opacity={0.35} fade />
           </div>
-          <code class="vocab-tag">pattern="dots" fade</code>
+          <code class="vocab-tag">pattern="dots" tone="primary" fade</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== PATTERN × COLOR RECIPES ============== -->
+    <section class="block">
+      <div class="block-head">
+        <span class="eyebrow eyebrow--tertiary">Recipes</span>
+        <h2>Pattern × color — the pairing rule</h2>
+        <p>
+          Every surface owns an ink. Page and card surfaces take a <strong>brand tone</strong>;
+          a card's texture takes <strong>its own accent</strong>; a solid brand fill takes
+          <strong>contrast</strong> (the <code>on-*</code> label color). Attach the pattern to a
+          role, never a raw color — recolor any swatch above and every pairing below still holds.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="recipe-cell">
+          <div class="recipe recipe--page">
+            <Pattern pattern="dots" tone="primary" opacity={0.14} fade />
+            <div class="recipe-body">
+              <span class="recipe-kicker" style="color: var(--color-primary)">L0 · page</span>
+              <strong>Hero wash</strong>
+              <span class="muted small">dots · primary · fade — behind page-level heros and section intros</span>
+            </div>
+          </div>
+          <code class="vocab-tag">&lt;Pattern pattern="dots" tone="primary" fade /&gt;</code>
+        </div>
+
+        <div class="recipe-cell">
+          <div class="recipe recipe--card">
+            <Pattern pattern="grid" tone="secondary" opacity={0.12} />
+            <div class="recipe-body">
+              <span class="recipe-kicker" style="color: var(--color-secondary)">L1 · card</span>
+              <strong>Card texture</strong>
+              <span class="muted small">grid · secondary — or pass <code>pattern</code> straight to <code>Card</code> and it inks with the accent</span>
+            </div>
+          </div>
+          <code class="vocab-tag">&lt;Card accent="secondary" pattern="grid"&gt;</code>
+        </div>
+
+        <div class="recipe-cell">
+          <div class="recipe recipe--brand">
+            <Pattern pattern="diagonal" tone="contrast" opacity={0.12} fade />
+            <div class="recipe-body">
+              <span class="recipe-kicker" style="color: var(--color-on-primary); opacity: 0.75">brand fill</span>
+              <strong>Brand band</strong>
+              <span class="small recipe-on-brand">diagonal · contrast — CTAs and banded sections on <code>--color-primary</code></span>
+            </div>
+          </div>
+          <code class="vocab-tag">&lt;Pattern pattern="diagonal" tone="contrast" fade /&gt;</code>
         </div>
       </div>
     </section>
@@ -483,11 +541,13 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     <!-- ============== CARD VOCABULARY ============== -->
     <section class="block mt-20 mb-16">
       <div class="block-head">
+        <span class="eyebrow eyebrow--primary">Vocabulary</span>
         <h2>Card vocabulary — 5 variants</h2>
         <p>
           One composable component, <code>Card.astro</code>. Feature grids, dashboards,
           team pages, and pricing tables all derive from one of these five shapes —
-          rendered live below, not mocked.
+          rendered live below, not mocked. Add <code>pattern</code> and the texture
+          inks itself with the card's accent.
         </p>
       </div>
 
@@ -503,13 +563,13 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         </div>
 
         <div class="vocab-cell">
-          <Card variant="feature" accent="tertiary">
+          <Card variant="feature" accent="tertiary" pattern="dots">
             <svg slot="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 3 14 9-14 9V3z"/></svg>
             <Fragment slot="header">Feature</Fragment>
             Icon chip, title, body copy, footer link — the shape behind the homepage's "what's in the box" grid.
             <a slot="footer" class="card__link" href="/">See it on the homepage →</a>
           </Card>
-          <code class="vocab-tag">variant="feature"</code>
+          <code class="vocab-tag">variant="feature" pattern="dots"</code>
         </div>
 
         <div class="vocab-cell">
@@ -532,17 +592,17 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         </div>
 
         <div class="vocab-cell">
-          <Card variant="pricing" featured accent="primary" tier="Pro" price="$29" period="/mo"
+          <Card variant="pricing" featured accent="primary" pattern="grid" tier="Pro" price="$29" period="/mo"
             features={['Everything in Free', 'AI chat', 'Priority support']}
             ctaLabel="Start trial" checkoutPlan="pro" />
-          <code class="vocab-tag">variant="pricing" featured</code>
+          <code class="vocab-tag">variant="pricing" featured pattern="grid"</code>
         </div>
       </div>
     </section>
 
 
     <footer class="footer muted">
-      6 tokens · 3 depths · 1 card · 1 input · 6 button variants · one palette per workspace
+      6 tokens · 3 depths · 1 card · 1 input · 6 button variants · 5 patterns × 5 tones · one palette per workspace
     </footer>
   </main>
 
@@ -716,7 +776,21 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page * { box-sizing: border-box; }
 
   /* ---------- Hero ---------- */
-  .design-page .hero { text-align: center; margin-bottom: clamp(3rem, 6vw, 4rem); }
+  .design-page .hero {
+    position: relative;
+    isolation: isolate;
+    text-align: center;
+    margin-bottom: clamp(3rem, 6vw, 4rem);
+    /* Brand wash — primary at 6% radiating from the top, over the page surface */
+    background: radial-gradient(
+      ellipse 80% 100% at 50% 0%,
+      color-mix(in oklab, var(--color-primary) 6%, transparent),
+      transparent 70%
+    );
+    border-radius: var(--radius-lg);
+    padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
+  }
+  .design-page .hero .hero-pattern { z-index: -1; }
   .design-page .hero h1 {
     font-size: clamp(2rem, 6vw, 3rem); font-weight: 800; letter-spacing: -0.03em; margin: 0 0 12px;
   }
@@ -755,6 +829,21 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   /* ---------- Block (section) ---------- */
   .design-page .block { margin-bottom: clamp(2.5rem, 6vw, 3rem); }
   .design-page .block-head { margin-bottom: 16px; }
+
+  /* Eyebrow — threads the three brand tones through the page rhythm */
+  .design-page .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.09em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .design-page .eyebrow::before {
+    content: ''; width: 6px; height: 6px; border-radius: 999px;
+    background: currentColor;
+  }
+  .design-page .eyebrow--primary   { color: var(--color-primary); }
+  .design-page .eyebrow--secondary { color: var(--color-secondary); }
+  .design-page .eyebrow--tertiary  { color: var(--color-tertiary); }
   .design-page h2 { font-size: 22px; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.01em; }
   .design-page .block-head p { margin: 0; color: var(--color-muted); font-size: 14px; }
   .design-page .muted { color: var(--color-muted); }
@@ -1249,6 +1338,37 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     border: 1px solid var(--color-border);
     background: var(--color-background);
     color: var(--color-primary);
+  }
+
+  /* ---------- Pattern × color recipes ---------- */
+  .design-page .recipe-cell { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .design-page .recipe {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 170px;
+    display: flex; align-items: flex-end;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+  }
+  .design-page .recipe--page  { background: var(--color-page); }
+  .design-page .recipe--card  { background: var(--color-background); }
+  .design-page .recipe--brand { background: var(--color-primary); color: var(--color-on-primary); }
+  .design-page .recipe-body {
+    position: relative;
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 16px;
+  }
+  .design-page .recipe-body strong { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  .design-page .recipe-kicker {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+  }
+  .design-page .recipe-on-brand { color: color-mix(in oklab, var(--color-on-primary) 78%, transparent); }
+  .design-page .recipe--brand code {
+    background: color-mix(in oklab, var(--color-on-primary) 14%, transparent);
+    color: var(--color-on-primary);
   }
 
   /* ---------- Card vocabulary ---------- */

@@ -35,10 +35,15 @@
  *              Don't nest interactive controls inside; use a non-href card for those.
  *   featured — pricing only: primary ring + a small "Popular" badge.
  *   accent   — tints the icon chip / number / accents ('primary' | 'secondary' | 'tertiary').
+ *   pattern  — attaches a background texture to the card surface, inked with the
+ *              SAME accent and masked to fade before the body copy — one prop,
+ *              color and pattern always agree.
  *
  * Tokens only — no hardcoded colours. Auto-flips for dark mode.
  * Slotted content is styled via :global() (slotted nodes carry the PARENT scope hash).
  */
+
+import Pattern from './Pattern.astro'
 
 type Accent = 'primary' | 'secondary' | 'tertiary'
 
@@ -58,6 +63,8 @@ interface Props {
   featured?: boolean
   /** Tints the icon chip / number / accents. */
   accent?: Accent
+  /** Background texture attached to the card surface — inked with the card's accent. */
+  pattern?: 'dots' | 'grid' | 'diagonal' | 'crosshatch' | 'noise'
   /** Badge text for `featured` pricing cards. */
   badge?: string
 
@@ -94,6 +101,7 @@ const {
   href,
   featured = false,
   accent = 'primary',
+  pattern,
   badge = 'Popular',
   stat,
   label,
@@ -153,6 +161,14 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
   style={`--card-accent:${accentColor}`}
   {...interactive ? { href } : {}}
 >
+  {
+    pattern && (
+      <span class="card__pattern" aria-hidden="true">
+        <Pattern pattern={pattern} color="var(--card-accent)" opacity={pattern === 'noise' ? 0.14 : 0.08} />
+      </span>
+    )
+  }
+
   {
     featured && variant === 'pricing' && (
       <span class="card__badge" aria-hidden="true">{badge}</span>
@@ -349,6 +365,9 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
   /* ── Base surface — the home-page .card language, elevated ──────── */
   .card {
     position: relative;
+    /* New stacking context so the pattern layer (z:-1) stays ABOVE the
+       card's own background fill while sitting under every child. */
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     background: var(--color-background);
@@ -362,6 +381,20 @@ const SOCIAL_PATHS: Record<NonNullable<Social['icon']>, string> = {
       border-color var(--ease),
       transform var(--ease),
       box-shadow var(--ease);
+  }
+
+  /* ── Pattern layer — accent-inked texture attached to the card surface ── */
+  .card__pattern {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+    /* Texture lives in the card's top zone (icon/title) and fades out
+       before the body copy — pattern never runs under reading text. */
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 72%);
+    mask-image: linear-gradient(to bottom, black, transparent 72%);
   }
 
   /* Interactive (whole-card link) — hover lift + keyboard focus ring. */

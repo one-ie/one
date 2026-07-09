@@ -47,7 +47,7 @@ const products = await getCollection('products')
 
   <!-- ── Hero: the page IS the demo ─────────────────────────────── -->
   <section class="hero" id="top">
-    <Pattern pattern="dots" opacity={0.09} color="var(--color-primary)" fade />
+    <Pattern pattern="dots" opacity={0.09} tone="primary" fade />
     <div class="container">
       <div class="hero-head">
         <!-- Time-based reveal — above the fold is never scroll-driven -->
@@ -107,7 +107,7 @@ const products = await getCollection('products')
 
   <!-- ── Card rail — live, its own stage ────────────────────────── -->
   <section class="card-rail" id="card">
-    <Pattern pattern="crosshatch" opacity={0.07} color="var(--color-tertiary)" />
+    <Pattern pattern="crosshatch" opacity={0.07} tone="tertiary" />
     <div class="container">
       <div class="card-rail-grid">
         <div class="card-rail-copy">
@@ -286,7 +286,7 @@ return Response.json({ clientSecret: intent.client_secret })
     <div class="container">
       <Reveal>
         <div class="cta-panel">
-          <Pattern pattern="grid" opacity={0.08} color="var(--color-primary)" fade />
+          <Pattern pattern="grid" opacity={0.08} tone="primary" fade />
           <h2 class="cta-title">Clone it. Get paid<br /><span class="grad">today.</span></h2>
           <p class="cta-sub">Run <code>one wallet keygen</code>, share a link, or add your Stripe key. That's the whole setup.</p>
           <div class="cta-actions">

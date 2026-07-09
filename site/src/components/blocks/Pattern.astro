@@ -20,40 +20,70 @@
  * Decorative only: aria-hidden, pointer-events: none, absolutely
  * positioned to `inset: 0` — it never affects layout or a11y.
  *
+ * Pairing rule — attach the pattern to a COLOR ROLE, not a raw color.
+ * Pass `tone` and the component resolves both the theme token and a
+ * calibrated opacity, so every call site inherits the same tuning:
+ *
+ *   surface it sits on          tone to pass
+ *   ─────────────────────────   ─────────────────────────────
+ *   L0 page / L1 card / L2      "primary" | "secondary" | "tertiary"
+ *   solid brand fill            "contrast"  (→ --color-on-primary)
+ *   already-tinted contexts     "font"      (quietest, mode-flipping)
+ *
  * Color gotcha (verified live in both themes): the default `currentColor`
  * resolves to `--color-font`, which FLIPS from near-black (light mode) to
  * near-white (dark mode). White-on-dark reads fine at low opacity; the same
  * opacity of near-black-on-light is nearly invisible — human contrast
  * perception isn't symmetric for thin 1px details at low alpha. On a plain
- * page background, pass an explicit theme color instead —
- * `color="var(--color-primary)"` (or secondary/tertiary) — which is
- * engineered for consistent visual presence in both themes; reserve the
- * `currentColor` default for surfaces where the pattern already sits on a
- * solid brand-color background (e.g. `--color-primary`), where the
- * complementary `--color-on-primary` provides that same reliable contrast.
+ * page background, pass a brand `tone` instead — the brand tokens are
+ * engineered for consistent visual presence in both themes; use
+ * `tone="contrast"` where the pattern sits on a solid brand-color
+ * background (e.g. `--color-primary`), so the complementary
+ * `--color-on-primary` provides that same reliable contrast.
  */
+
+type Tone = 'primary' | 'secondary' | 'tertiary' | 'font' | 'contrast'
 
 interface Props {
   pattern?: 'dots' | 'grid' | 'diagonal' | 'crosshatch' | 'noise'
-  /** 0–1. Default is deliberately subtle — this is texture, not decoration. */
+  /** Color role — resolves the theme token AND a calibrated default opacity. Prefer this over `color`. */
+  tone?: Tone
+  /** 0–1. Overrides the tone's calibrated default. Texture, not decoration — keep it subtle. */
   opacity?: number
   /** Tile size in px. Ignored by `noise` (fixed-size grain tile). */
   size?: number
-  /** Any CSS color. Defaults to currentColor — see the color gotcha above before relying on the default over a plain page background. */
+  /** Escape hatch: any CSS color. Overrides `tone`. Defaults to currentColor — see the color gotcha above. */
   color?: string
   /** Fade the pattern out toward the edges via a radial mask, instead of a hard rectangle. */
   fade?: boolean
   class?: string
 }
 
+/* Calibrated ink per role — brand tones carry more alpha than font ink
+   because they're mid-lightness in both modes; `font` stays quietest. */
+const TONES: Record<Tone, { color: string; opacity: number }> = {
+  primary: { color: 'var(--color-primary)', opacity: 0.09 },
+  secondary: { color: 'var(--color-secondary)', opacity: 0.09 },
+  tertiary: { color: 'var(--color-tertiary)', opacity: 0.09 },
+  font: { color: 'var(--color-font)', opacity: 0.05 },
+  contrast: { color: 'var(--color-on-primary)', opacity: 0.1 },
+}
+
 const {
   pattern = 'dots',
-  opacity = 0.06,
+  tone,
+  opacity,
   size,
-  color = 'currentColor',
+  color,
   fade = false,
   class: className,
 } = Astro.props
+
+const toneSpec = tone ? TONES[tone] : undefined
+const resolvedColor = color ?? toneSpec?.color ?? 'currentColor'
+/* Grain reads far fainter than 1px lines at equal alpha — boost its default. */
+const noiseBoost = pattern === 'noise' ? 1.8 : 1
+const resolvedOpacity = opacity ?? (toneSpec?.opacity ?? 0.06) * noiseBoost
 
 const sizePx = size ? `${size}px` : undefined
 ---
@@ -70,8 +100,8 @@ const sizePx = size ? `${size}px` : undefined
        sibling. Only the per-pattern background-image/mask-image rules
        (purely visual, no geometry) stay in the scoped <style> block. */
     position: 'absolute', inset: 0, pointerEvents: 'none',
-    opacity: opacity, color: color,
-    '--pattern-opacity': opacity, '--pattern-color': color, ...(sizePx ? { '--pattern-size': sizePx } : {}),
+    opacity: resolvedOpacity, color: resolvedColor,
+    '--pattern-opacity': resolvedOpacity, '--pattern-color': resolvedColor, ...(sizePx ? { '--pattern-size': sizePx } : {}),
   }}
   aria-hidden="true"
 ></div>

@@ -147,6 +147,28 @@ import { IconBadge } from '@/components/ui/IconBadge'
 
 In Astro pages where you can't easily import React, use inline SVG with `viewBox="0 0 24 24"`, `stroke="currentColor"`, `stroke-width="1.5"`, `stroke-linecap="round"`, `stroke-linejoin="round"`. Copy paths from `lucide.dev`. Never use unicode glyphs.
 
+### Background patterns (Pattern.astro)
+
+Attach a pattern to a **color role**, never a raw color — pass `tone` and the
+component resolves the theme token plus a calibrated opacity, so pattern and
+palette can never disagree and every pairing survives a live re-theme.
+
+| Surface the pattern sits on | `tone` to pass |
+| --- | --- |
+| L0 page / L1 card / L2 content | `primary` \| `secondary` \| `tertiary` |
+| Solid brand fill (`bg-primary` band, CTA) | `contrast` (→ `--color-on-primary`) |
+| Already-tinted contexts (quietest) | `font` |
+
+```astro
+<Pattern pattern="dots" tone="primary" fade />          <!-- hero wash on page -->
+<Pattern pattern="diagonal" tone="contrast" fade />     <!-- on a bg-primary band -->
+<Card variant="feature" accent="tertiary" pattern="dots">  <!-- card: texture inks with the accent -->
+```
+
+`Card`'s `pattern` prop reuses the card's `accent` as ink and masks the texture
+to fade before the body copy — one prop, color and pattern always agree.
+The `color` prop remains as an escape hatch; new call sites should use `tone`.
+
 ### Form fields
 
 Inputs use `background` (sunken), not `foreground` (raised). The card body is `foreground`; inputs sink back to `background` so they stand out as interactive surfaces against the body.
