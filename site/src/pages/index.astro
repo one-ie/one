@@ -126,7 +126,7 @@ const TXS = [
         </p>
       </Reveal>
       <Stagger class="rails-grid" stagger={0.1} dist="md">
-        <Card variant="feature" accent="primary">
+        <Card variant="feature" accent="primary" pattern="dots">
           <svg slot="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M8.5 9.5c0-1.4 1.6-2.5 3.5-2.5s3.5 1 3.5 2.2c0 3-7 1.6-7 4.6 0 1.4 1.6 2.5 3.5 2.5s3.5-1 3.5-2.2"/></svg>
           <Fragment slot="header">Crypto — live today</Fragment>
           Signed payment links across Sui, Ethereum, Solana, and Bitcoin. Every link is
@@ -134,7 +134,7 @@ const TXS = [
           chargebacks. Settlement is the transaction itself.
           <a slot="footer" href="/payments#try-it" class="card__link">Create one now →</a>
         </Card>
-        <Card variant="feature" accent="tertiary">
+        <Card variant="feature" accent="tertiary" pattern="grid">
           <svg slot="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><path d="M2.5 9.5h19"/></svg>
           <Fragment slot="header">Card — bring your own key</Fragment>
           Real Stripe Elements, fully wired: <code>/api/pay/create-intent</code> mints
@@ -142,7 +142,7 @@ const TXS = [
           fail-closed until you add two env vars. Then this exact form is live on your account.
           <a slot="footer" href="/payments" class="card__link">See the card rail →</a>
         </Card>
-        <Card variant="feature" accent="secondary">
+        <Card variant="feature" accent="secondary" pattern="diagonal">
           <svg slot="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="12" rx="2"/><path d="M2 11h20M6 15h4"/></svg>
           <Fragment slot="header">Wallet — self-hosted</Fragment>
           Run <code>one wallet keygen</code> and your keys never leave your machine. The
@@ -323,13 +323,13 @@ plugins: <span class="tok-b">[</span>
       </Reveal>
 
       <Stagger class="pricing-row" stagger={0.1} dist="md">
-        <Card variant="pricing" accent="tertiary" tier="Free" price="Free" period="· full source"
+        <Card variant="pricing" accent="tertiary" pattern="dots" tier="Free" price="Free" period="· full source"
           features={['auth() — passkey, social, magic link', 'Ships full source, free forever', 'No account required']}
           ctaLabel="Start free" ctaHref="https://github.com/one-ie/one" />
-        <Card variant="pricing" featured accent="primary" tier="Connected" price="Served" period="· zero bundle"
+        <Card variant="pricing" featured accent="primary" pattern="grid" tier="Connected" price="Served" period="· zero bundle"
           features={['track() — privacy-first analytics', 'chat() — AI widget, attach any agent', 'backend() — signals, payments, agents', 'Auto-updated from one.ie']}
           ctaLabel="Connect a workspace" ctaHref="/signup" />
-        <Card variant="pricing" accent="secondary" tier="Paid" price="$99" period="/mo · usage after"
+        <Card variant="pricing" accent="secondary" pattern="crosshatch" tier="Paid" price="$99" period="/mo · usage after"
           features={['premium() — x402 checkout + gating', 'admin() — hosted console', 'Unlocked by your API key']}
           ctaLabel="Start team plan" checkoutPlan="team" />
       </Stagger>

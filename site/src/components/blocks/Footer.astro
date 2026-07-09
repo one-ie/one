@@ -324,7 +324,19 @@ const targetFor = (link: FooterLink | SocialLink) =>
   .footer {
     background: var(--color-foreground);
     border-top: 1px solid var(--color-border);
-    color: var(--color-font);
+    color: var(--color-on-foreground);
+    /* The footer is a surface island on --color-foreground (can be a filled
+       brand tone, e.g. Plum in light mode) — shadow the derived typography
+       tokens so every var(--color-font/muted/faint/border*) below resolves
+       against on-foreground automatically, EXCEPT inside .footer__input:
+       that field deliberately sinks to the untinted --color-background (the
+       normal "inputs sink" rule), so it re-shadows back to the true globals
+       itself — see its rule below. */
+    --color-font: var(--color-on-foreground);
+    --color-muted: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
+    --color-faint: color-mix(in oklab, var(--color-on-foreground) 40%, transparent);
+    --color-border: color-mix(in oklab, var(--color-on-foreground) 10%, transparent);
+    --color-border-strong: color-mix(in oklab, var(--color-on-foreground) 20%, transparent);
   }
   .footer__inner {
     max-width: var(--content-wide);
@@ -375,9 +387,12 @@ const targetFor = (link: FooterLink | SocialLink) =>
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    border: 1px solid var(--color-border);
+    /* Deliberately escapes .footer's on-foreground shadow above — a light
+       circular icon button, same "sinks to background" exception as
+       .footer__input. */
+    border: 1px solid var(--color-border-fixed);
     background: var(--color-background);
-    color: var(--color-muted);
+    color: var(--color-muted-fixed);
     transition:
       color var(--ease),
       border-color var(--ease),
@@ -385,8 +400,8 @@ const targetFor = (link: FooterLink | SocialLink) =>
       transform var(--ease);
   }
   .footer__social:hover {
-    color: var(--color-font);
-    border-color: var(--color-border-strong);
+    color: var(--color-font-fixed);
+    border-color: var(--color-border-strong-fixed);
     background: color-mix(in oklab, var(--color-primary) 6%, var(--color-background));
     transform: translateY(-2px);
   }
@@ -499,14 +514,17 @@ const targetFor = (link: FooterLink | SocialLink) =>
     padding: 0 0.85rem;
     font: inherit;
     font-size: 0.88rem;
-    color: var(--color-font);
+    /* Deliberately escapes .footer's on-foreground shadow above — this
+       field sinks to the untinted --color-background (the normal "inputs
+       sink" rule), so its own text/border must stay mode-only too. */
+    color: var(--color-font-fixed);
     background: var(--color-background);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-border-fixed);
     border-radius: var(--radius-md);
     transition: border-color var(--ease), box-shadow var(--ease);
   }
-  .footer__input::placeholder { color: var(--color-faint); }
-  .footer__input:hover { border-color: var(--color-border-strong); }
+  .footer__input::placeholder { color: var(--color-faint-fixed); }
+  .footer__input:hover { border-color: var(--color-border-strong-fixed); }
   .footer__input:focus-visible {
     outline: none;
     border-color: var(--color-ring);

@@ -2,6 +2,7 @@
 import '../styles/globals.css'
 import OneChat from '@oneie/plugin-chat/OneChat.astro'
 import { getCollection } from 'astro:content'
+import { THEMES } from '../lib/themes'
 
 interface Props {
   title: string
@@ -33,6 +34,28 @@ const ogD = ogDescription ?? description
 // site-wide — writing a product is the whole "list it for sale" step.
 const products = await getCollection('products')
 const ogU = ogUrl ?? canonicalURL
+
+// Reshape THEMES (bare "H S% L%" triplets) into the anti-FOUC script's
+// existing runtime contract — {l,d,s,name} wrapped in hsl(), additive
+// bg/fg/pattern/patternTone/nav. Kept as a separate is:inline data script
+// (below) so the logic script can stay untouched, readable JS.
+const hsl = (v: string) => `hsl(${v})`
+const runtimeThemes = Object.fromEntries(
+  THEMES.map((t) => [
+    t.key,
+    {
+      name: t.name,
+      l: [hsl(t.light.primary), hsl(t.light.secondary), hsl(t.light.tertiary)],
+      d: [hsl(t.dark.primary), hsl(t.dark.secondary), hsl(t.dark.tertiary)],
+      s: hsl(t.swatch),
+      bg: [hsl(t.light.background), hsl(t.dark.background)],
+      fg: [hsl(t.light.foreground), hsl(t.dark.foreground)],
+      pattern: t.pattern,
+      patternTone: t.patternTone,
+      nav: !!t.nav,
+    },
+  ]),
+)
 ---
 
 <!doctype html>
@@ -77,6 +100,25 @@ const ogU = ogUrl ?? canonicalURL
         --color-on-tertiary: #fff;
         --color-border: color-mix(in oklab, var(--color-font) 10%, transparent);
         --color-page: color-mix(in oklab, var(--color-background) 96%, var(--color-font));
+        /* Static fallback — matches font, since the default foreground is
+           near-white here. __syncTheme overrides with the real auto-contrast
+           the instant JS runs (see Layout.astro's theme engine script). */
+        --color-on-foreground: var(--color-font);
+        --color-accent-on-foreground: var(--color-primary);
+        /* Mode-only, NEVER shadowed by a component (unlike --color-font
+           itself, which Footer.astro's surface-island rule locally
+           redefines). Literal duplicates, not var(--color-font) — a
+           var() reference re-resolves at the point of USE, not of
+           declaration, so it would still pick up a descendant's shadow.
+           For a nested element that deliberately escapes a tinted parent
+           (e.g. an input sinking to --color-background inside a
+           --color-foreground-filled container), reach for these instead
+           of the plain names. */
+        --color-font-fixed: hsl(0 0% 13%);
+        --color-muted-fixed: color-mix(in oklab, hsl(0 0% 13%) 60%, transparent);
+        --color-border-fixed: color-mix(in oklab, hsl(0 0% 13%) 10%, transparent);
+        --color-border-strong-fixed: color-mix(in oklab, hsl(0 0% 13%) 20%, transparent);
+        --color-faint-fixed: color-mix(in oklab, hsl(0 0% 13%) 40%, transparent);
         /* Invariants — never themed, never flipped. Declared here (not only in
            Tailwind's @theme) so var() references resolve at runtime everywhere. */
         --color-white: #fff;
@@ -91,6 +133,11 @@ const ogU = ogUrl ?? canonicalURL
         --color-background: hsl(0 0% 10%);
         --color-foreground: hsl(0 0% 13%);
         --color-font: hsl(0 0% 100%);
+        --color-font-fixed: hsl(0 0% 100%);
+        --color-muted-fixed: color-mix(in oklab, hsl(0 0% 100%) 60%, transparent);
+        --color-border-fixed: color-mix(in oklab, hsl(0 0% 100%) 10%, transparent);
+        --color-border-strong-fixed: color-mix(in oklab, hsl(0 0% 100%) 20%, transparent);
+        --color-faint-fixed: color-mix(in oklab, hsl(0 0% 100%) 40%, transparent);
         --color-primary: hsl(216 55% 65%);
         --color-secondary: hsl(219 14% 65%);
         --color-tertiary: hsl(105 22% 65%);
@@ -107,22 +154,17 @@ const ogU = ogUrl ?? canonicalURL
       body { background: var(--color-page); color: var(--color-font); margin: 0; }
     </style>
 
+    <!-- Theme preset data — from themes.ts, the single source of truth
+         (see runtimeThemes above). A separate tiny is:inline script so the
+         logic script below stays static, readable JS untouched by build data. -->
+    <script is:inline set:html={`window.__T=${JSON.stringify(runtimeThemes)};`} />
+
     <!--
       Anti-FOUC: runs synchronously before first paint.
       Reads localStorage, applies dark class + theme CSS vars immediately.
     -->
     <script is:inline>
       (function () {
-        /* Six preset themes — light/dark token pairs + swatch color */
-        window.__T = {
-          navy:   { l:['hsl(216 55% 25%)','hsl(219 14% 28%)','hsl(105 22% 25%)'], d:['hsl(216 55% 65%)','hsl(219 14% 65%)','hsl(105 22% 65%)'], s:'hsl(216 55% 35%)', name:'Navy'   },
-          ocean:  { l:['hsl(198 70% 28%)','hsl(175 55% 28%)','hsl(210 80% 30%)'], d:['hsl(198 70% 62%)','hsl(175 55% 62%)','hsl(210 80% 65%)'], s:'hsl(198 60% 38%)', name:'Ocean'  },
-          forest: { l:['hsl(140 45% 22%)','hsl(160 35% 26%)','hsl(90  40% 24%)'], d:['hsl(140 45% 60%)','hsl(160 35% 62%)','hsl(90  40% 60%)'], s:'hsl(140 42% 30%)', name:'Forest' },
-          sunset: { l:['hsl(24  75% 35%)','hsl(35  65% 38%)','hsl(4   60% 35%)'], d:['hsl(24  75% 65%)','hsl(35  65% 65%)','hsl(4   60% 65%)'], s:'hsl(24  70% 42%)', name:'Sunset' },
-          violet: { l:['hsl(268 55% 30%)','hsl(248 50% 35%)','hsl(288 45% 30%)'], d:['hsl(268 55% 68%)','hsl(248 50% 68%)','hsl(288 45% 68%)'], s:'hsl(268 50% 40%)', name:'Violet' },
-          rose:   { l:['hsl(342 65% 35%)','hsl(320 50% 38%)','hsl(14  60% 36%)'], d:['hsl(342 65% 68%)','hsl(320 50% 68%)','hsl(14  60% 65%)'], s:'hsl(342 60% 43%)', name:'Rose'   },
-        }
-
         window.__applyTheme = function (name, dark) {
           var t = window.__T[name]; if (!t) return
           var c = dark ? t.d : t.l, on = dark ? '#000' : '#fff'
@@ -133,6 +175,18 @@ const ogU = ogUrl ?? canonicalURL
           el.style.setProperty('--color-on-primary',   on)
           el.style.setProperty('--color-on-secondary', on)
           el.style.setProperty('--color-on-tertiary',  on)
+          if (t.bg) el.style.setProperty('--color-background', t.bg[dark ? 1 : 0])
+          if (t.fg) el.style.setProperty('--color-foreground', t.fg[dark ? 1 : 0])
+          /* Site-wide ambient texture — every page, not just /design. Shape
+             + ink both ride the theme (see #site-pattern CSS below), so
+             switching presets visibly changes the whole site, not just
+             its buttons. Survives custom edits: they only touch the 6
+             tokens, never these two attributes. */
+          if (t.pattern) el.setAttribute('data-pattern', t.pattern)
+          if (t.patternTone) el.setAttribute('data-pattern-tone', t.patternTone)
+          /* Brand swap (logo, etc.) — set before first paint so there's no
+             flash of the wrong mark. CSS keys off this attribute alone. */
+          el.setAttribute('data-brand', name)
         }
 
         /* Custom token overrides — written by /design's editor ('one-custom'),
@@ -165,6 +219,36 @@ const ogU = ogUrl ?? canonicalURL
           window.__applyTheme(localStorage.getItem('one-theme') || 'navy', dark)
           var raw = localStorage.getItem('one-custom')
           if (raw) { try { window.__applyCustom(JSON.parse(raw), dark) } catch (e) {} }
+          /* Auto-contrast for whatever ends up in --color-foreground — same
+             idea as on-primary/secondary/tertiary, but computed generically
+             from the FINAL foreground lightness (preset or custom) instead
+             of a per-theme flag. A no-op for every theme whose foreground
+             stays near-white/near-black (the common case): the threshold
+             lands on the same color `--color-font` already is. Only matters
+             when a theme (or a custom edit) pushes foreground dark in light
+             mode, or light in dark mode — e.g. Plum's plum-filled buttons/
+             tabs/footer in light mode. */
+          var fg = el.style.getPropertyValue('--color-foreground')
+          var fgL = parseFloat((fg.match(/([\d.]+)%\s*\)/) || [])[1])
+          var onFg = '#000'
+          if (!isNaN(fgL)) {
+            onFg = fgL < 55 ? '#fff' : '#000'
+            el.style.setProperty('--color-on-foreground', onFg)
+          }
+          /* Accent that stays legible ON a --color-foreground fill — for a
+             small colored mark (the nav logo) where plain on-foreground
+             black/white would flatten the brand entirely. Primary already
+             has enough contrast against foreground in every theme except
+             one designed to collide (Plum's foreground IS ~primary) — so
+             use plain primary unless the two are close in lightness, only
+             THEN fall back to on-foreground. A fixed color-mix ratio here
+             would dim primary for every theme just to fix that one case;
+             this measures the actual gap instead. */
+          var primaryL = parseFloat((el.style.getPropertyValue('--color-primary').match(/([\d.]+)%\s*\)/) || [])[1])
+          el.style.setProperty(
+            '--color-accent-on-foreground',
+            !isNaN(fgL) && !isNaN(primaryL) && Math.abs(primaryL - fgL) < 30 ? onFg : 'var(--color-primary)',
+          )
           window.dispatchEvent(new CustomEvent('one:theme'))
         }
 
@@ -181,11 +265,21 @@ const ogU = ogUrl ?? canonicalURL
   </head>
 
   <body>
+    <!-- Ambient theme texture — fixed, full-viewport, behind everything.
+         Shape + color driven purely by data-pattern/data-pattern-tone on
+         <html> (see the CSS below) so switching presets recolors AND
+         re-shapes this with zero extra JS beyond the two attrs set in
+         __applyTheme. Semi-transparent surfaces (nav) show it faintly
+         through their blur; opaque cards occlude it, same as any texture. -->
+    <div id="site-pattern" aria-hidden="true"></div>
 
     <!-- ── Nav ──────────────────────────────────────────────────── -->
     <header id="one-nav">
       <div class="one-nav-left">
-        <a href="/" class="one-logo">ONE</a>
+        <a href="/" class="one-logo" aria-label="Home">
+          <span class="one-logo-text">ONE</span>
+          <img class="one-logo-img" src="https://vespio.ai/vespio-logo.svg" alt="Vespio" width="157" height="38" />
+        </a>
         <nav class="one-nav-links" aria-label="Primary">
           <a href="/payments">Payments</a>
           {products.map((p) => (
@@ -250,7 +344,10 @@ const ogU = ogUrl ?? canonicalURL
     <script is:inline>
       (function () {
         var T = window.__T
-        var names = Object.keys(T)
+        /* Header stays curated to the original 6 — the full set of 10 lives
+           in the /design theme gallery, all of them still reachable via
+           localStorage('one-theme') + __syncTheme() regardless of nav flag. */
+        var names = Object.keys(T).filter(function (n) { return T[n].nav })
 
         function state() {
           return {
@@ -430,17 +527,48 @@ const ogU = ogUrl ?? canonicalURL
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
+    /* The nav is a surface island on --color-foreground, same as .footer —
+       a theme can fill it with a saturated brand tone (e.g. Plum in light
+       mode). Shadow the derived typography tokens so every descendant
+       var(--color-font/muted/border*) resolves against on-foreground,
+       EXCEPT .one-menu-btn, which deliberately sinks to the untinted
+       --color-background and re-shadows back to the -fixed aliases itself. */
+    --color-font: var(--color-on-foreground);
+    --color-muted: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
+    --color-border: color-mix(in oklab, var(--color-on-foreground) 12%, transparent);
+    --color-border-strong: color-mix(in oklab, var(--color-on-foreground) 24%, transparent);
   }
 
   .one-logo {
+    display: inline-flex;
+    align-items: center;
     font-size: 0.9rem;
     font-weight: 800;
     letter-spacing: -0.03em;
-    color: var(--color-primary);
+    /* Not pure --color-primary — the nav is a --color-foreground fill (see
+       #one-nav above), and a theme is free to make primary and foreground
+       close in lightness (Plum does). --color-accent-on-foreground stays
+       plain primary in every theme where that already contrasts (the
+       common case — untouched brand color), and only falls back to
+       on-foreground when primary and foreground are too close to read. */
+    color: var(--color-accent-on-foreground);
     text-decoration: none;
     transition: opacity var(--ease);
   }
   .one-logo:hover { opacity: 0.75; }
+
+  /* Vespio brand swap — data-brand is set pre-paint (see __applyTheme), so
+     this never flashes the wrong mark. */
+  .one-logo-img { display: none; height: 38px; width: auto; }
+  html[data-brand='vespio'] .one-logo-text { display: none; }
+  html[data-brand='vespio'] .one-logo-img { display: block; }
+  /* The mark's wordmark is near-white — legible on vespio's own near-black
+     dark mode, but invisible on light mode's pale nav. A soft dark halo
+     (not a background box) keeps it readable in both without touching the
+     mark's own colors. */
+  html[data-brand='vespio']:not(.dark) .one-logo-img {
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 5px rgba(0, 0, 0, 0.35));
+  }
 
   .one-nav-left { display: flex; align-items: center; gap: 1.5rem; }
   .one-nav-links { display: flex; align-items: center; gap: 1.25rem; }
@@ -461,9 +589,12 @@ const ogU = ogUrl ?? canonicalURL
     width: 32px;
     height: 32px;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border);
+    /* Deliberately escapes #one-nav's on-foreground shadow above — this
+       button sinks to the untinted --color-background, same exception as
+       .footer__input / .footer__social. */
+    border: 1px solid var(--color-border-fixed);
     background: var(--color-background);
-    color: var(--color-font);
+    color: var(--color-font-fixed);
     cursor: pointer;
     flex-shrink: 0;
     transition: background var(--ease), border-color var(--ease), color var(--ease);
@@ -484,6 +615,10 @@ const ogU = ogUrl ?? canonicalURL
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
+    /* A separate surface island (sibling of #one-nav, not a descendant) on
+       the same --color-foreground fill — needs its own shadow. */
+    --color-font: var(--color-on-foreground);
+    --color-border: color-mix(in oklab, var(--color-on-foreground) 12%, transparent);
   }
   .one-mobile-menu.open { display: flex; }
   .one-mobile-menu a {
@@ -528,9 +663,11 @@ const ogU = ogUrl ?? canonicalURL
     width: 32px;
     height: 32px;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border);
+    /* Deliberately escapes #one-nav's on-foreground shadow above — see
+       .one-menu-btn's comment. */
+    border: 1px solid var(--color-border-fixed);
     background: var(--color-background);
-    color: var(--color-font);
+    color: var(--color-font-fixed);
     cursor: pointer;
     transition: background var(--ease), border-color var(--ease), color var(--ease);
     flex-shrink: 0;
@@ -539,6 +676,71 @@ const ogU = ogUrl ?? canonicalURL
     background: color-mix(in oklab, var(--color-primary) 8%, var(--color-background));
     border-color: color-mix(in oklab, var(--color-primary) 40%, transparent);
     color: var(--color-primary);
+  }
+</style>
+
+<!-- #site-pattern shape/color driven by html[data-pattern]/[data-pattern-tone]
+     (set by __applyTheme) — must be global, no scope hash to match against. -->
+<style is:global>
+  #site-pattern {
+    position: fixed;
+    inset: 0;
+    /* Negative, not 0 — a fixed z-index:0 element paints ABOVE static
+       in-flow content (positioned/stacking-context layers paint after
+       normal flow), which would cover every page's text. -1 keeps it
+       strictly behind. */
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.1;
+    color: var(--color-primary);
+  }
+  html[data-pattern-tone='secondary'] #site-pattern { color: var(--color-secondary); }
+  html[data-pattern-tone='tertiary']  #site-pattern { color: var(--color-tertiary); }
+  html[data-pattern-tone='font']      #site-pattern { color: var(--color-font); opacity: 0.055; }
+
+  html[data-pattern='dots'] #site-pattern {
+    background-image: radial-gradient(currentColor 1px, transparent 1.5px);
+    background-size: 20px 20px;
+  }
+  html[data-pattern='grid'] #site-pattern {
+    background-image:
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 34px 34px;
+  }
+  html[data-pattern='diagonal'] #site-pattern {
+    background-image: repeating-linear-gradient(
+      45deg, currentColor 0, currentColor 1px, transparent 1px, transparent 15px
+    );
+  }
+  html[data-pattern='crosshatch'] #site-pattern {
+    background-image:
+      repeating-linear-gradient(45deg, currentColor 0, currentColor 1px, transparent 1px, transparent 17px),
+      repeating-linear-gradient(-45deg, currentColor 0, currentColor 1px, transparent 1px, transparent 17px);
+  }
+  /* Grain reads fainter than 1px lines at equal alpha (same reason
+     Pattern.astro boosts its own default) — bump opacity for this shape only. */
+  html[data-pattern='noise'] #site-pattern {
+    opacity: 0.16;
+    background: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    -webkit-mask-size: 180px 180px;
+    mask-size: 180px 180px;
+  }
+  /* Honeycomb — same seamless flat-top hex tile as Pattern.astro's
+     .pattern--hexagon, mirrored here for the full-page ambient texture.
+     Continuous connected lines read as a much stronger shape than the
+     same alpha of isolated dots/grid — needs a lower base opacity than
+     the default 0.1 to stay barely-there, plus a larger tile so it reads
+     as quiet background texture rather than a busy wall pattern. */
+  html[data-pattern='hexagon'] #site-pattern {
+    opacity: 0.018;
+    background: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 34.64'%3E%3Cpath d='M-10,-17.32 L-20,0 L-40,0 L-50,-17.32 L-40,-34.64 L-20,-34.64Z M-10,17.32 L-20,34.64 L-40,34.64 L-50,17.32 L-40,0 L-20,0Z M-10,51.96 L-20,69.28 L-40,69.28 L-50,51.96 L-40,34.64 L-20,34.64Z M20,-34.64 L10,-17.32 L-10,-17.32 L-20,-34.64 L-10,-51.96 L10,-51.96Z M20,0 L10,17.32 L-10,17.32 L-20,0 L-10,-17.32 L10,-17.32Z M20,34.64 L10,51.96 L-10,51.96 L-20,34.64 L-10,17.32 L10,17.32Z M50,-17.32 L40,0 L20,0 L10,-17.32 L20,-34.64 L40,-34.64Z M50,17.32 L40,34.64 L20,34.64 L10,17.32 L20,0 L40,0Z M50,51.96 L40,69.28 L20,69.28 L10,51.96 L20,34.64 L40,34.64Z M80,-34.64 L70,-17.32 L50,-17.32 L40,-34.64 L50,-51.96 L70,-51.96Z M80,0 L70,17.32 L50,17.32 L40,0 L50,-17.32 L70,-17.32Z M80,34.64 L70,51.96 L50,51.96 L40,34.64 L50,17.32 L70,17.32Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 34.64'%3E%3Cpath d='M-10,-17.32 L-20,0 L-40,0 L-50,-17.32 L-40,-34.64 L-20,-34.64Z M-10,17.32 L-20,34.64 L-40,34.64 L-50,17.32 L-40,0 L-20,0Z M-10,51.96 L-20,69.28 L-40,69.28 L-50,51.96 L-40,34.64 L-20,34.64Z M20,-34.64 L10,-17.32 L-10,-17.32 L-20,-34.64 L-10,-51.96 L10,-51.96Z M20,0 L10,17.32 L-10,17.32 L-20,0 L-10,-17.32 L10,-17.32Z M20,34.64 L10,51.96 L-10,51.96 L-20,34.64 L-10,17.32 L10,17.32Z M50,-17.32 L40,0 L20,0 L10,-17.32 L20,-34.64 L40,-34.64Z M50,17.32 L40,34.64 L20,34.64 L10,17.32 L20,0 L40,0Z M50,51.96 L40,69.28 L20,69.28 L10,51.96 L20,34.64 L40,34.64Z M80,-34.64 L70,-17.32 L50,-17.32 L40,-34.64 L50,-51.96 L70,-51.96Z M80,0 L70,17.32 L50,17.32 L40,0 L50,-17.32 L70,-17.32Z M80,34.64 L70,51.96 L50,51.96 L40,34.64 L50,17.32 L70,17.32Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+    -webkit-mask-size: 108px 62.35px;
+    mask-size: 108px 62.35px;
   }
 </style>
 

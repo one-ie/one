@@ -17,6 +17,7 @@ import { CreditCard, KeyRound } from 'lucide-react'
 const C = {
   bg: 'var(--color-background)',
   fg: 'var(--color-foreground)',
+  onFg: 'var(--color-on-foreground)', // text/icons ON a C.fg fill — a theme can fill foreground with a saturated brand tone
   border: 'var(--color-border)',
   font: 'var(--color-font)',
   muted: 'var(--color-muted)',
@@ -30,7 +31,7 @@ const inputStyle: React.CSSProperties = {
   border: `1px solid ${C.border}`,
   borderRadius: 8,
   background: C.fg,
-  color: C.muted,
+  color: C.onFg,
   fontSize: '0.9rem',
   boxSizing: 'border-box',
 }
@@ -73,7 +74,7 @@ export default function CardCheckoutPreview() {
               height: 28,
               borderRadius: 9999,
               background: C.fg,
-              color: C.muted,
+              color: C.onFg,
               flexShrink: 0,
             }}
           >
@@ -125,7 +126,7 @@ export default function CardCheckoutPreview() {
                 alignItems: 'center',
                 gap: '0.4rem',
                 fontSize: '0.78rem',
-                color: C.muted,
+                color: C.onFg,
                 background: C.fg,
                 borderRadius: 8,
                 padding: '0.5rem 0.7rem',
@@ -144,7 +145,7 @@ export default function CardCheckoutPreview() {
                 marginTop: '0.15rem',
                 padding: '0.6rem 1rem',
                 background: C.fg,
-                color: C.font,
+                color: C.onFg,
                 border: `1px solid ${C.border}`,
                 borderRadius: 8,
                 fontWeight: 600,

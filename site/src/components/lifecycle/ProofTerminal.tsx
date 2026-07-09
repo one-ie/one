@@ -17,6 +17,7 @@ import { motion, useInView } from 'motion/react'
 const C = {
   bg: 'var(--color-background)',
   fg: 'var(--color-foreground)',
+  onFg: 'var(--color-on-foreground)', // text/icons ON a C.fg fill — a theme can fill foreground with a saturated brand tone
   border: 'var(--color-border)',
   font: 'var(--color-font)',
   muted: 'var(--color-muted)',
@@ -97,7 +98,7 @@ export default function ProofTerminal({ command, steps, verdict, cadenceS = 0.55
             fontSize: '0.62rem',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: C.muted,
+            color: `color-mix(in oklab, ${C.onFg} 65%, transparent)`,
           }}
         >
           live proof · recorded run

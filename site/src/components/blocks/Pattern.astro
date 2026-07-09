@@ -2,13 +2,17 @@
 /**
  * Pattern — a subtle, token-reactive background texture.
  *
- * Five pure-CSS/SVG patterns (dots, grid, diagonal, crosshatch, noise) —
- * no downloaded image assets, so every pattern re-colors automatically
- * across all six theme swatches and both light/dark, the same way every
- * other block in this system does. `noise` uses an SVG feTurbulence
- * filter as a `mask-image` (the SVG supplies only the alpha shape; the
- * element's own `color` renders through it), so even grain texture stays
- * fully theme-reactive rather than a baked bitmap.
+ * Six pure-CSS/SVG patterns (dots, grid, diagonal, crosshatch, noise,
+ * hexagon) — no downloaded image assets, so every pattern re-colors
+ * automatically across all theme swatches and both light/dark, the same
+ * way every other block in this system does. `noise` and `hexagon` use an
+ * SVG shape as a `mask-image` (the SVG supplies only the alpha shape; the
+ * element's own `color` renders through it), so both stay fully
+ * theme-reactive rather than a baked bitmap. `hexagon` is a seamless
+ * flat-top honeycomb line grid — one SVG tile sized exactly to the tiling
+ * period (60 × 34.64, derived from a 20px hex radius) with the tile's own
+ * boundary-crossing hex fragments pre-drawn so `background-repeat` lines
+ * up edge to edge with no visible seam.
  *
  * Usage — drop inside any `position: relative` container, before the
  * real content:
@@ -45,12 +49,12 @@
 type Tone = 'primary' | 'secondary' | 'tertiary' | 'font' | 'contrast'
 
 interface Props {
-  pattern?: 'dots' | 'grid' | 'diagonal' | 'crosshatch' | 'noise'
+  pattern?: 'dots' | 'grid' | 'diagonal' | 'crosshatch' | 'noise' | 'hexagon'
   /** Color role — resolves the theme token AND a calibrated default opacity. Prefer this over `color`. */
   tone?: Tone
   /** 0–1. Overrides the tone's calibrated default. Texture, not decoration — keep it subtle. */
   opacity?: number
-  /** Tile size in px. Ignored by `noise` (fixed-size grain tile). */
+  /** Tile size in px (hex tile width — height follows at the fixed 0.577 aspect ratio). Ignored by `noise` (fixed-size grain tile). */
   size?: number
   /** Escape hatch: any CSS color. Overrides `tone`. Defaults to currentColor — see the color gotcha above. */
   color?: string
@@ -151,12 +155,25 @@ const sizePx = size ? `${size}px` : undefined
     mask-size: 180px 180px;
   }
 
+  /* Honeycomb — flat-top hexagon line grid. One SVG tile, sized to the
+     exact tiling period (60 × 34.64 = 1.5R × R√3 for R=20), with the
+     boundary-crossing hex fragments pre-drawn so background-repeat abuts
+     seamlessly — same masking trick as noise, but a hard-edged shape
+     instead of turbulence, so the lines stay crisp at any opacity. */
+  .pattern--hexagon {
+    background: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 34.64'%3E%3Cpath d='M-10,-17.32 L-20,0 L-40,0 L-50,-17.32 L-40,-34.64 L-20,-34.64Z M-10,17.32 L-20,34.64 L-40,34.64 L-50,17.32 L-40,0 L-20,0Z M-10,51.96 L-20,69.28 L-40,69.28 L-50,51.96 L-40,34.64 L-20,34.64Z M20,-34.64 L10,-17.32 L-10,-17.32 L-20,-34.64 L-10,-51.96 L10,-51.96Z M20,0 L10,17.32 L-10,17.32 L-20,0 L-10,-17.32 L10,-17.32Z M20,34.64 L10,51.96 L-10,51.96 L-20,34.64 L-10,17.32 L10,17.32Z M50,-17.32 L40,0 L20,0 L10,-17.32 L20,-34.64 L40,-34.64Z M50,17.32 L40,34.64 L20,34.64 L10,17.32 L20,0 L40,0Z M50,51.96 L40,69.28 L20,69.28 L10,51.96 L20,34.64 L40,34.64Z M80,-34.64 L70,-17.32 L50,-17.32 L40,-34.64 L50,-51.96 L70,-51.96Z M80,0 L70,17.32 L50,17.32 L40,0 L50,-17.32 L70,-17.32Z M80,34.64 L70,51.96 L50,51.96 L40,34.64 L50,17.32 L70,17.32Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 34.64'%3E%3Cpath d='M-10,-17.32 L-20,0 L-40,0 L-50,-17.32 L-40,-34.64 L-20,-34.64Z M-10,17.32 L-20,34.64 L-40,34.64 L-50,17.32 L-40,0 L-20,0Z M-10,51.96 L-20,69.28 L-40,69.28 L-50,51.96 L-40,34.64 L-20,34.64Z M20,-34.64 L10,-17.32 L-10,-17.32 L-20,-34.64 L-10,-51.96 L10,-51.96Z M20,0 L10,17.32 L-10,17.32 L-20,0 L-10,-17.32 L10,-17.32Z M20,34.64 L10,51.96 L-10,51.96 L-20,34.64 L-10,17.32 L10,17.32Z M50,-17.32 L40,0 L20,0 L10,-17.32 L20,-34.64 L40,-34.64Z M50,17.32 L40,34.64 L20,34.64 L10,17.32 L20,0 L40,0Z M50,51.96 L40,69.28 L20,69.28 L10,51.96 L20,34.64 L40,34.64Z M80,-34.64 L70,-17.32 L50,-17.32 L40,-34.64 L50,-51.96 L70,-51.96Z M80,0 L70,17.32 L50,17.32 L40,0 L50,-17.32 L70,-17.32Z M80,34.64 L70,51.96 L50,51.96 L40,34.64 L50,17.32 L70,17.32Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E");
+    -webkit-mask-size: var(--pattern-size, 60px) calc(var(--pattern-size, 60px) * 0.5773);
+    mask-size: var(--pattern-size, 60px) calc(var(--pattern-size, 60px) * 0.5773);
+  }
+
   .pattern--fade {
     -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 78%);
     mask-image: radial-gradient(ellipse at center, black 35%, transparent 78%);
   }
-  /* noise already uses mask-image for its own texture — layer the fade as a
-     second mask via mask-composite so both apply at once. */
+  /* noise/hexagon already use mask-image for their own texture — layer the
+     fade as a second mask via mask-composite so both apply at once. */
   .pattern--noise.pattern--fade {
     -webkit-mask-image:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
@@ -166,6 +183,18 @@ const sizePx = size ? `${size}px` : undefined
       radial-gradient(ellipse at center, black 35%, transparent 78%);
     -webkit-mask-size: 180px 180px, 100% 100%;
     mask-size: 180px 180px, 100% 100%;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .pattern--hexagon.pattern--fade {
+    -webkit-mask-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 34.64'%3E%3Cpath d='M-10,-17.32 L-20,0 L-40,0 L-50,-17.32 L-40,-34.64 L-20,-34.64Z M-10,17.32 L-20,34.64 L-40,34.64 L-50,17.32 L-40,0 L-20,0Z M-10,51.96 L-20,69.28 L-40,69.28 L-50,51.96 L-40,34.64 L-20,34.64Z M20,-34.64 L10,-17.32 L-10,-17.32 L-20,-34.64 L-10,-51.96 L10,-51.96Z M20,0 L10,17.32 L-10,17.32 L-20,0 L-10,-17.32 L10,-17.32Z M20,34.64 L10,51.96 L-10,51.96 L-20,34.64 L-10,17.32 L10,17.32Z M50,-17.32 L40,0 L20,0 L10,-17.32 L20,-34.64 L40,-34.64Z M50,17.32 L40,34.64 L20,34.64 L10,17.32 L20,0 L40,0Z M50,51.96 L40,69.28 L20,69.28 L10,51.96 L20,34.64 L40,34.64Z M80,-34.64 L70,-17.32 L50,-17.32 L40,-34.64 L50,-51.96 L70,-51.96Z M80,0 L70,17.32 L50,17.32 L40,0 L50,-17.32 L70,-17.32Z M80,34.64 L70,51.96 L50,51.96 L40,34.64 L50,17.32 L70,17.32Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at center, black 35%, transparent 78%);
+    mask-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 34.64'%3E%3Cpath d='M-10,-17.32 L-20,0 L-40,0 L-50,-17.32 L-40,-34.64 L-20,-34.64Z M-10,17.32 L-20,34.64 L-40,34.64 L-50,17.32 L-40,0 L-20,0Z M-10,51.96 L-20,69.28 L-40,69.28 L-50,51.96 L-40,34.64 L-20,34.64Z M20,-34.64 L10,-17.32 L-10,-17.32 L-20,-34.64 L-10,-51.96 L10,-51.96Z M20,0 L10,17.32 L-10,17.32 L-20,0 L-10,-17.32 L10,-17.32Z M20,34.64 L10,51.96 L-10,51.96 L-20,34.64 L-10,17.32 L10,17.32Z M50,-17.32 L40,0 L20,0 L10,-17.32 L20,-34.64 L40,-34.64Z M50,17.32 L40,34.64 L20,34.64 L10,17.32 L20,0 L40,0Z M50,51.96 L40,69.28 L20,69.28 L10,51.96 L20,34.64 L40,34.64Z M80,-34.64 L70,-17.32 L50,-17.32 L40,-34.64 L50,-51.96 L70,-51.96Z M80,0 L70,17.32 L50,17.32 L40,0 L50,-17.32 L70,-17.32Z M80,34.64 L70,51.96 L50,51.96 L40,34.64 L50,17.32 L70,17.32Z' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at center, black 35%, transparent 78%);
+    -webkit-mask-size: var(--pattern-size, 60px) calc(var(--pattern-size, 60px) * 0.5773), 100% 100%;
+    mask-size: var(--pattern-size, 60px) calc(var(--pattern-size, 60px) * 0.5773), 100% 100%;
     -webkit-mask-composite: source-in;
     mask-composite: intersect;
   }

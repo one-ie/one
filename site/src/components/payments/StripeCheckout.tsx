@@ -249,7 +249,9 @@ export default function StripeCheckout({
                 variables: {
                   colorPrimary: 'var(--color-primary)',
                   colorBackground: 'var(--color-foreground)',
-                  colorText: 'var(--color-font)',
+                  // Not colorText — a theme can fill foreground with a
+                  // saturated brand tone (e.g. Plum in light mode).
+                  colorText: 'var(--color-on-foreground)',
                   fontFamily: 'system-ui, sans-serif',
                   borderRadius: '8px',
                 },

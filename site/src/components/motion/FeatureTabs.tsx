@@ -11,6 +11,7 @@ import ScrollScene from './ScrollScene'
 const C = {
   bg:       'var(--color-background)',
   fg:       'var(--color-foreground)',
+  onFg:     'var(--color-on-foreground)', // text/icons ON a C.fg fill — a theme can fill foreground with a saturated brand tone
   border:   'var(--color-border)',
   font:     'var(--color-font)',
   muted:    'var(--color-muted)',
@@ -728,7 +729,7 @@ export default function FeatureTabs() {
           padding: '0.9rem 1rem 0.5rem',
           fontSize: '0.65rem', fontWeight: 700,
           letterSpacing: '0.1em', textTransform: 'uppercase',
-          color: C.muted,
+          color: `color-mix(in oklab, ${C.onFg} 65%, transparent)`,
           borderBottom: `1px solid ${C.border}`,
         }}>
           6 Capabilities
@@ -772,7 +773,11 @@ export default function FeatureTabs() {
               >
                 <span style={{
                   fontSize: '0.82rem', fontWeight: isActive ? 600 : 400,
-                  color: isActive ? C.primary : C.font,
+                  // Inactive sits on the strip's own C.fg fill (can be a
+                  // saturated brand tone); active gets its own light
+                  // color-mix(primary, C.bg) background above, so primary
+                  // text stays correctly paired there.
+                  color: isActive ? C.primary : C.onFg,
                   letterSpacing: isActive ? '-0.01em' : '0',
                   transition: 'color 120ms',
                 }}>
@@ -784,7 +789,7 @@ export default function FeatureTabs() {
                   // Full primary, no alpha — any transparency drops this 10px
                   // tag below 4.5:1 on dark surfaces (65% → 3.2, 85% → 4.4,
                   // both verified via Lighthouse). Size carries the hierarchy.
-                  color: isActive ? C.primary : C.muted,
+                  color: isActive ? C.primary : `color-mix(in oklab, ${C.onFg} 65%, transparent)`,
                   transition: 'color 120ms',
                 }}>
                   {t.tag}

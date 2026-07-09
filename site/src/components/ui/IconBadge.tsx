@@ -17,8 +17,13 @@ interface ToneStyle {
   color: string
 }
 
+// Mixes toward --color-background (L1), not --color-foreground (L2) — a
+// theme can fill foreground with a saturated brand tone (e.g. Plum in light
+// mode), which would collapse this chip's tint AND its icon color into the
+// same dark fill. Background stays a light neutral shell in every theme, so
+// the accent tint always reads.
 const tone = (name: 'primary' | 'secondary' | 'tertiary'): ToneStyle => ({
-  background: `color-mix(in oklab, var(--color-${name}) 14%, var(--color-foreground))`,
+  background: `color-mix(in oklab, var(--color-${name}) 14%, var(--color-background))`,
   borderColor: `color-mix(in oklab, var(--color-${name}) 28%, var(--color-border))`,
   color: `var(--color-${name})`,
 })
@@ -30,7 +35,7 @@ const TONE: Record<IconBadgeTone, ToneStyle> = {
   neutral: {
     background: 'var(--color-foreground)',
     borderColor: 'var(--color-border)',
-    color: 'var(--color-font)',
+    color: 'var(--color-on-foreground)',
   },
 }
 

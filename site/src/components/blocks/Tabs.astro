@@ -213,6 +213,16 @@ const ICONS: Record<string, string> = {
     color: var(--color-primary);
   }
 
+  /* Pill rail sits on --color-foreground (can be a filled brand tone, e.g.
+     Plum in light mode) — its inactive/hover text rides --color-on-foreground
+     instead of the page-relative --color-muted/--color-font above. */
+  .one-tabs--pill .one-tabs__tab {
+    color: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
+  }
+  .one-tabs--pill .one-tabs__tab:hover {
+    color: var(--color-on-foreground);
+  }
+
   .one-tabs--pill .one-tabs__tab[aria-selected='true'] {
     color: var(--color-on-primary);
   }

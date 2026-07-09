@@ -169,6 +169,59 @@ palette can never disagree and every pairing survives a live re-theme.
 to fade before the body copy — one prop, color and pattern always agree.
 The `color` prop remains as an escape hatch; new call sites should use `tone`.
 
+### Theme presets (`src/lib/themes.ts`)
+
+12 curated presets, each picking all 6 tokens at once (3 brand tones + tinted
+background/foreground) plus a **signature pattern** — a shape and a
+`patternTone` that always matches one of the theme's own brand tones (or
+`font` for the quietest ones), so a theme's texture never clashes with its
+palette. `themes.ts` is the single source for both the nav's quick-swatch row
+(`Layout.astro`, curated to the original 6 via each entry's `nav: true`) and
+the full theme gallery on `/design` (`design.astro`, unfiltered). Add a
+theme by appending one `ThemeDef` entry — both surfaces pick it up.
+
+A theme's `foreground` isn't required to stay a near-white/near-black
+surface tint — a theme can fill it with a saturated brand tone instead (Plum
+does, in light mode: buttons/tabs/footer/code blocks go plum with white
+text, the way the reference mockup's featured cards read). `--color-on-
+foreground` (`Layout.astro`, computed generically in `__syncTheme` from
+foreground's own lightness, same idea as `on-primary`) is the contrast label
+for anything painted ON a `--color-foreground` fill — reach for it instead
+of `--color-font`/`--color-muted` wherever you set `background:
+var(--color-foreground)`. It's a no-op for every theme whose foreground
+stays light (the common case), so this never needs a per-theme flag.
+
+One trap: a `--color-foreground`-filled surface can itself contain a NESTED
+element that deliberately sinks back to the untinted `--color-background`
+(the normal "inputs sink" rule — see a form field inside a filled card
+body). That nested element must NOT inherit the parent's on-foreground
+styling. Two techniques, pick by how much of the surface needs it:
+- **Single declaration** (an isolated button/badge): swap it directly,
+  `color: var(--color-on-foreground)`.
+- **A subtree with many descendants** (a footer, a card body hosting a whole
+  form): shadow the derived tokens locally — `--color-font: var(--color-on-
+  foreground); --color-muted: color-mix(...); …` on the container, so every
+  existing `var(--color-font)`/`var(--color-muted)`/`var(--color-border)`
+  reference below it resolves correctly with zero per-line edits. Then for
+  the nested sink-to-background exception, reach for `--color-font-fixed` /
+  `--color-muted-fixed` / `--color-border-fixed` / `--color-border-strong-
+  fixed` / `--color-faint-fixed` (`Layout.astro`) — literal, mode-only
+  duplicates that no component can ever shadow (a `var(--color-font)`
+  reference re-resolves at the point of use, so it would still pick up the
+  shadow; these `-fixed` aliases exist specifically to escape it).
+
+Background/foreground saturation is bold by design (18–42% light, 18–32%
+dark) — a theme should change the *room*, not just its furniture. Every
+theme also drives a **site-wide ambient texture**: `#site-pattern` in
+`Layout.astro` is a `position:fixed` full-viewport layer behind all content
+(`z-index:-1`, `pointer-events:none`), shape-swapped and re-colored purely
+via `html[data-pattern]`/`[data-pattern-tone]` attribute selectors — no
+client JS beyond the two `setAttribute` calls `__applyTheme` already makes.
+It's present on every page, not just `/design`. `--color-border` stays
+derived from the untinted `font` token specifically so card edges keep
+working as the depth cue even when a saturated background/foreground sit
+close in lightness.
+
 ### Form fields
 
 Inputs use `background` (sunken), not `foreground` (raised). The card body is `foreground`; inputs sink back to `background` so they stand out as interactive surfaces against the body.

@@ -23,6 +23,7 @@ import { PLANS } from '../../lib/plan-pricing'
 const C = {
   bg: 'var(--color-background)',
   fg: 'var(--color-foreground)',
+  onFg: 'var(--color-on-foreground)', // text/icons ON a C.fg fill — a theme can fill foreground with a saturated brand tone
   border: 'var(--color-border)',
   font: 'var(--color-font)',
   muted: 'var(--color-muted)',
@@ -43,7 +44,7 @@ const inputStyle: React.CSSProperties = {
   border: `1px solid ${C.border}`,
   borderRadius: 8,
   background: C.fg,
-  color: C.font,
+  color: C.onFg,
   fontSize: '0.9rem',
   boxSizing: 'border-box',
 }
@@ -188,8 +189,8 @@ export default function PaymentLinkGenerator({
                   padding: '0.6rem 0.8rem', borderRadius: 8, background: C.fg,
                 }}
               >
-                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: C.font }}>{locked.label}</span>
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: C.primary }}>${(locked.cents / 100).toFixed(2)}</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: C.onFg }}>{locked.label}</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: C.onFg }}>${(locked.cents / 100).toFixed(2)}</span>
               </div>
 
               {state.status === 'error' ? (
@@ -385,7 +386,7 @@ export default function PaymentLinkGenerator({
                     border: `1px solid ${C.border}`,
                     borderRadius: 8,
                     background: C.fg,
-                    color: C.font,
+                    color: C.onFg,
                     fontSize: '0.8rem',
                     fontWeight: 600,
                     cursor: 'pointer',

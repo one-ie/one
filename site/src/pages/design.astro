@@ -6,6 +6,16 @@ import Pattern from '../components/blocks/Pattern.astro'
 import { IconBadge } from '../components/ui/IconBadge'
 import { Icon } from '../components/ui/Icon'
 import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, ArrowRight, X } from 'lucide-react'
+import { THEMES } from '../lib/themes'
+
+const hsl = (v: string) => `hsl(${v})`
+
+// Light-mode vars go inline per card (below); dark-mode vars need a
+// declarative html.dark override per theme key — generated once here so
+// the whole gallery needs zero client JS to preview correctly in both modes.
+const themeDarkCss = THEMES.map(
+  (t) => `html.dark .theme-card[data-key="${t.key}"]{--color-primary:${hsl(t.dark.primary)};--color-secondary:${hsl(t.dark.secondary)};--color-tertiary:${hsl(t.dark.tertiary)};--color-background:${hsl(t.dark.background)};--color-foreground:${hsl(t.dark.foreground)}}`,
+).join('\n')
 ---
 
 <Layout title="ONE Design System">
@@ -136,6 +146,48 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         <span class="chip"><span class="dot dot-bordered" style="background: var(--color-white);"></span>white</span>
         <span class="chip"><span class="dot" style="background: var(--color-black);"></span>black</span>
         <span class="muted small">+ derived: <code>{'on-{primary,secondary,tertiary,destructive,success}'}</code> · <code>border</code> · <code>muted</code> · <code>page</code></span>
+      </div>
+    </section>
+
+    <!-- ============== THEME GALLERY ============== -->
+    <section class="block">
+      <div class="block-head">
+        <span class="eyebrow eyebrow--tertiary">Presets</span>
+        <h2>12 themes</h2>
+        <p>
+          Each preset picks all 6 tokens at once — brand tones, tinted background/foreground,
+          and a <strong>signature pattern</strong> inked with the same accent the theme leads
+          with, per the pairing rule below. Click a card to apply it site-wide; it persists
+          the same way a hand-picked swatch does.
+        </p>
+      </div>
+
+      <style is:global set:html={themeDarkCss}></style>
+
+      <div class="theme-grid">
+        {THEMES.map((t) => (
+          <button
+            class="theme-card"
+            type="button"
+            data-key={t.key}
+            aria-label={`Apply the ${t.name} theme`}
+            style={`--color-primary:${hsl(t.light.primary)};--color-secondary:${hsl(t.light.secondary)};--color-tertiary:${hsl(t.light.tertiary)};--color-background:${hsl(t.light.background)};--color-foreground:${hsl(t.light.foreground)}`}
+          >
+            <span class="theme-card__pattern">
+              <Pattern pattern={t.pattern} tone={t.patternTone} opacity={0.16} fade={!!t.patternFade} />
+            </span>
+            <span class="theme-card__check" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="theme-card__swatches" aria-hidden="true">
+              <i class="theme-card__dot" style="background: var(--color-primary)"></i>
+              <i class="theme-card__dot" style="background: var(--color-secondary)"></i>
+              <i class="theme-card__dot" style="background: var(--color-tertiary)"></i>
+            </span>
+            <span class="theme-card__name">{t.name}</span>
+            <span class="theme-card__meta">{t.pattern} · {t.patternTone}</span>
+          </button>
+        ))}
       </div>
     </section>
 
@@ -434,7 +486,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
         <span class="eyebrow eyebrow--secondary">Texture</span>
         <h2>Background patterns</h2>
         <p>
-          <code>Pattern.astro</code> — five subtle, tileable textures, all pure CSS/SVG
+          <code>Pattern.astro</code> — six subtle, tileable textures, all pure CSS/SVG
           with zero downloaded assets. Pass a <code>tone</code> and the pattern binds to a
           theme token with a calibrated opacity — pattern and palette can never disagree.
           Switch a preset in the nav and watch these repaint too.
@@ -475,6 +527,13 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
             <Pattern pattern="noise" tone="primary" opacity={0.24} />
           </div>
           <code class="vocab-tag">pattern="noise" tone="primary"</code>
+        </div>
+
+        <div class="pattern-cell">
+          <div class="pattern-demo">
+            <Pattern pattern="hexagon" tone="primary" opacity={0.3} />
+          </div>
+          <code class="vocab-tag">pattern="hexagon" tone="primary"</code>
         </div>
 
         <div class="pattern-cell">
@@ -602,7 +661,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
 
 
     <footer class="footer muted">
-      6 tokens · 3 depths · 1 card · 1 input · 6 button variants · 5 patterns × 5 tones · one palette per workspace
+      6 tokens · 3 depths · 1 card · 1 input · 6 button variants · 6 patterns × 5 tones · 12 themes · one palette per workspace
     </footer>
   </main>
 
@@ -618,17 +677,26 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     const TOKENS = ['background', 'foreground', 'font', 'primary', 'secondary', 'tertiary']
     localStorage.removeItem('one:theme') // migrate away the old page-local key
 
+    /* font never varies per theme (see themes.ts) — background/foreground
+       DO, so they come from the preset itself below, this is only the
+       pre-theme-engine fallback for a __T entry missing bg/fg. */
     const SURFACE = {
       light: { background: '0 0% 93%', foreground: '0 0% 100%', font: '0 0% 13%' },
       dark:  { background: '0 0% 10%', foreground: '0 0% 13%', font: '0 0% 100%' },
     }
     const strip = (s) => s.trim().replace(/^hsl\(/, '').replace(/\)$/, '')
 
-    /* The active preset's full token set for a mode — the editor's baseline */
+    /* The active preset's full token set for a mode — the editor's baseline.
+       Must read t.bg/t.fg (not just the neutral SURFACE fallback) or the
+       swatch/hex readout — and worse, the very first edit via ANY swatch —
+       would silently revert a theme's tinted background/foreground to gray. */
     const presetSet = (mode) => {
       const t = window.__T[localStorage.getItem('one-theme') || 'navy'] || window.__T.navy
       const brand = (mode === 'dark' ? t.d : t.l).map(strip)
-      return { ...SURFACE[mode], primary: brand[0], secondary: brand[1], tertiary: brand[2] }
+      const idx = mode === 'dark' ? 1 : 0
+      const background = t.bg ? strip(t.bg[idx]) : SURFACE[mode].background
+      const foreground = t.fg ? strip(t.fg[idx]) : SURFACE[mode].foreground
+      return { font: SURFACE[mode].font, background, foreground, primary: brand[0], secondary: brand[1], tertiary: brand[2] }
     }
 
     const load = () => {
@@ -745,16 +813,38 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
       })
     })
 
-    /* Any theme change — ours, a nav swatch, the nav mode button — lands
-       here via the engine's event: re-seed the model and repaint the UI. */
+    /* ── Theme gallery — the 10 selectable presets ──────────────────
+       Click = same apply semantics as a nav swatch (drop custom edits,
+       set the preset, resync). Active ring follows the nav's own rule:
+       a custom edit means no preset is "the" theme, so no card lights up. */
+    const syncGallery = () => {
+      const active = localStorage.getItem('one-theme') || 'navy'
+      const isCustom = localStorage.getItem(STORAGE) !== null
+      document.querySelectorAll('.theme-card').forEach((card) => {
+        card.classList.toggle('is-active', !isCustom && card.dataset.key === active)
+      })
+    }
+    document.querySelectorAll('.theme-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        localStorage.removeItem(STORAGE)
+        localStorage.setItem('one-theme', card.dataset.key)
+        window.__syncTheme()
+      })
+    })
+
+    /* Any theme change — ours, a nav swatch, the nav mode button, a gallery
+       card — lands here via the engine's event: re-seed the model and
+       repaint the UI. */
     window.addEventListener('one:theme', () => {
       theme = load()
       syncModeButtons()
       syncUI(theme)
+      syncGallery()
     })
 
     syncModeButtons()
     syncUI(theme)
+    syncGallery()
   </script>
 </Layout>
 
@@ -925,6 +1015,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     display: inline-flex; align-items: center; gap: 6px;
     padding: 4px 10px;
     background: var(--color-foreground);
+    color: var(--color-on-foreground);
     border: 1px solid var(--color-border);
     border-radius: 999px; font-size: 12px;
   }
@@ -961,6 +1052,11 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     font-size: 11px; color: var(--color-muted);
   }
   .design-page .depth-label.inv { display: block; margin-bottom: 4px; }
+  /* depth-inner sits on --color-foreground (can be a filled brand tone) —
+     its label rides on-foreground instead of the page-relative muted. */
+  .design-page .depth-inner .depth-label {
+    color: color-mix(in oklab, var(--color-on-foreground) 65%, transparent);
+  }
 
   /* ---------- Card ---------- */
   .design-page .grid-2 {
@@ -998,6 +1094,16 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     display: flex; flex-direction: column; gap: 12px;
+    /* Card body is a surface island on --color-foreground (can be a filled
+       brand tone, e.g. Plum in light mode) — shadow the derived typography
+       tokens so descendant text resolves against on-foreground. EXCEPT the
+       real form controls further down (input/select/textarea/.check-box),
+       which deliberately sink to the untinted --color-background and
+       re-shadow back to the -fixed aliases themselves. */
+    --color-font: var(--color-on-foreground);
+    --color-muted: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
+    --color-border: color-mix(in oklab, var(--color-on-foreground) 15%, transparent);
+    --color-border-strong: color-mix(in oklab, var(--color-on-foreground) 28%, transparent);
   }
   .design-page .card-foot {
     display: flex; align-items: center; justify-content: space-between;
@@ -1012,7 +1118,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     border: 1px solid var(--color-border);
     border-radius: 999px;
     font-size: 11px; font-weight: 500;
-    color: var(--color-muted);
+    color: color-mix(in oklab, var(--color-on-foreground) 65%, transparent);
     letter-spacing: 0.02em;
     flex-shrink: 0;
   }
@@ -1067,7 +1173,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   }
   .design-page .shell-link:hover { background: color-mix(in oklab, var(--color-font) 6%, transparent); color: var(--color-font); }
   .design-page .shell-link.active {
-    background: var(--color-foreground); color: var(--color-font); font-weight: 500;
+    background: var(--color-foreground); color: var(--color-on-foreground); font-weight: 500;
   }
   .design-page .shell-dot {
     width: 6px; height: 6px; border-radius: 999px;
@@ -1109,6 +1215,9 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page .helper { font-size: 12px; color: var(--color-muted); }
   .design-page .error { font-size: 12px; color: var(--color-destructive); }
 
+  /* Inputs deliberately escape .card-body's on-foreground shadow above —
+     they sink to the untinted --color-background (the normal "inputs sink"
+     rule), so text/border/placeholder stay on the -fixed aliases. */
   .design-page input[type='text'],
   .design-page input[type='email'],
   .design-page textarea,
@@ -1116,15 +1225,15 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     width: 100%;
     padding: 10px 14px;
     background: var(--color-background);
-    color: var(--color-font);
-    border: 1px solid var(--color-border);
+    color: var(--color-font-fixed);
+    border: 1px solid var(--color-border-fixed);
     border-radius: var(--radius-md);
     font: inherit; font-size: 14px;
     transition: border-color var(--ease), box-shadow var(--ease);
     appearance: none;
   }
   .design-page input:hover, .design-page textarea:hover, .design-page select:hover {
-    border-color: var(--color-border-strong);
+    border-color: var(--color-border-strong-fixed);
   }
   .design-page input:focus-visible,
   .design-page textarea:focus-visible,
@@ -1134,7 +1243,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-ring) 25%, transparent);
   }
   .design-page input::placeholder, .design-page textarea::placeholder {
-    color: var(--color-muted);
+    color: var(--color-faint-fixed);
   }
   .design-page input[aria-invalid='true'] {
     border-color: var(--color-destructive);
@@ -1148,7 +1257,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page .select-wrap select { padding-right: 36px; }
   .design-page .select-chev {
     position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-    pointer-events: none; color: var(--color-muted);
+    pointer-events: none; color: var(--color-faint-fixed);
     width: 16px; height: 16px;
   }
 
@@ -1168,7 +1277,7 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   .design-page .check-box {
     width: 16px; height: 16px; border-radius: var(--radius-sm);
     background: var(--color-background);
-    border: 1px solid var(--color-border-strong);
+    border: 1px solid var(--color-border-strong-fixed);
     display: inline-flex; align-items: center; justify-content: center;
     transition: background var(--ease), border-color var(--ease);
     flex-shrink: 0;
@@ -1261,7 +1370,12 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
   }
   .design-page .btn.inverse {
     background: var(--color-font);
-    color: var(--color-foreground);
+    /* --color-background, not --color-foreground: this button's whole trick
+       is font-as-fill + a guaranteed-light text color: a theme is free to
+       fill --color-foreground with a saturated brand tone (e.g. Plum in
+       light mode), but --color-background stays a plain near-white/near-
+       black surface in every theme, which is what "inverse of font" means. */
+    color: var(--color-background);
   }
 
   /* ---------- Icons showcase ---------- */
@@ -1338,6 +1452,78 @@ import { Zap, Brain, Coins, Code2, Send, Check, Search, Settings, Bell, Heart, A
     border: 1px solid var(--color-border);
     background: var(--color-background);
     color: var(--color-primary);
+  }
+
+  /* ---------- Theme gallery ---------- */
+  .design-page .theme-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+  }
+  @media (max-width: 980px) { .design-page .theme-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 560px) { .design-page .theme-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .design-page .theme-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    text-align: left;
+    padding: 14px;
+    /* Card previews its OWN light/dark vars (set inline + via the generated
+       html.dark override) — deliberately NOT the page's --color-* tokens. */
+    background: var(--color-background);
+    color: var(--color-font);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    font: inherit;
+    transition: border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+  }
+  .design-page .theme-card:hover {
+    border-color: color-mix(in oklab, var(--color-primary) 45%, var(--color-border));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-pop);
+  }
+  .design-page .theme-card:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .design-page .theme-card.is-active {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary), var(--shadow-pop);
+  }
+
+  .design-page .theme-card__pattern {
+    position: absolute; inset: 0; z-index: -1;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .design-page .theme-card__check {
+    position: absolute; top: 10px; right: 10px;
+    display: none; align-items: center; justify-content: center;
+    width: 20px; height: 20px;
+    background: var(--color-primary);
+    color: var(--color-on-primary, #fff);
+    border-radius: 999px;
+  }
+  .design-page .theme-card.is-active .theme-card__check { display: inline-flex; }
+
+  .design-page .theme-card__swatches { display: flex; gap: 5px; }
+  .design-page .theme-card__dot {
+    width: 15px; height: 15px; border-radius: 999px;
+    border: 1px solid color-mix(in oklab, var(--color-font) 15%, transparent);
+  }
+
+  .design-page .theme-card__name {
+    font-size: 13px; font-weight: 700; letter-spacing: -0.01em;
+    color: var(--color-font);
+  }
+  .design-page .theme-card__meta {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10px; color: color-mix(in oklab, var(--color-font) 55%, transparent);
+    text-transform: uppercase; letter-spacing: 0.03em;
   }
 
   /* ---------- Pattern × color recipes ---------- */
