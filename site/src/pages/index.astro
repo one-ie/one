@@ -20,12 +20,14 @@ import Footer from '../components/blocks/Footer.astro'
 
 // ── Real proof only ───────────────────────────────────────────────────────
 // This is a promise page: every number below is measured or verifiable, not
-// invented. The Lighthouse scores are the same real /speed.astro run;
-// the payment link generator mints a real pay.one.ie link on click; the
+// invented. These Lighthouse scores were measured against THIS page's own
+// `bun run build && bun run preview` output (Lighthouse 13.x, headless
+// Chrome) — not copied from /speed.astro, which measures a different build.
+// The payment link generator mints a real pay.one.ie link on click; the
 // on-chain digests are genuine, independently-verifiable Sui testnet txs.
 const LIGHTHOUSE_DATE = '2026-07-09'
-const DESKTOP_SCORES: [number, number, number, number] = [98, 100, 100, 100]
-const MOBILE_PERF = 76
+const DESKTOP_SCORES: [number, number, number, number] = [99, 100, 100, 100]
+const MOBILE_PERF = 86
 
 const PROOF_COMMAND =
   'bun pay/tools/agent-onboarding-lifecycle-demo.ts --assert-tracked --api-url https://one.ie'

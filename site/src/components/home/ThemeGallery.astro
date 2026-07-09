@@ -14,10 +14,17 @@ import Button from '../blocks/Button.astro'
 
 const hsl = (v: string) => `hsl(${v})`
 
-const darkCss = THEMES.map(
-  (t) =>
-    `html.dark .thg-card[data-key="${t.key}"]{--color-primary:${hsl(t.dark.primary)};--color-secondary:${hsl(t.dark.secondary)};--color-tertiary:${hsl(t.dark.tertiary)};--color-background:${hsl(t.dark.background)};--color-foreground:${hsl(t.dark.foreground)}}`,
-).join('\n')
+// An inline `style` attribute always wins over any external rule for the
+// same custom property — so `--color-background` etc. can't be set inline
+// AND overridden by an `html.dark ...` stylesheet rule (that override would
+// silently lose). Instead, inline BOTH light and dark values under distinct
+// names; `--color-*` itself is only ever assigned by the plain/`.thg-card`
+// and `html.dark .thg-card` rules below, so the normal cascade picks the
+// right one.
+const cardVars = (t: (typeof THEMES)[number]) =>
+  (['primary', 'secondary', 'tertiary', 'background', 'foreground'] as const)
+    .map((k) => `--thg-l-${k}:${hsl(t.light[k])};--thg-d-${k}:${hsl(t.dark[k])}`)
+    .join(';')
 ---
 
 <section class="thg">
@@ -31,8 +38,6 @@ const darkCss = THEMES.map(
     </p>
   </div>
 
-  <style is:global set:html={darkCss}></style>
-
   <div class="thg-grid">
     {THEMES.map((t) => (
       <button
@@ -40,7 +45,7 @@ const darkCss = THEMES.map(
         type="button"
         data-key={t.key}
         aria-label={`Apply the ${t.name} theme`}
-        style={`--color-primary:${hsl(t.light.primary)};--color-secondary:${hsl(t.light.secondary)};--color-tertiary:${hsl(t.light.tertiary)};--color-background:${hsl(t.light.background)};--color-foreground:${hsl(t.light.foreground)}`}
+        style={cardVars(t)}
       >
         <span class="thg-card__pattern">
           <Pattern pattern={t.pattern} tone={t.patternTone} opacity={0.16} fade={!!t.patternFade} />
@@ -110,12 +115,20 @@ const darkCss = THEMES.map(
   @media (max-width: 560px) { .thg-grid { grid-template-columns: repeat(3, 1fr); } }
 
   .thg-card {
+    --color-primary: var(--thg-l-primary); --color-secondary: var(--thg-l-secondary);
+    --color-tertiary: var(--thg-l-tertiary); --color-background: var(--thg-l-background);
+    --color-foreground: var(--thg-l-foreground);
     position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
     padding: 1.1rem 0.5rem; border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
     background: var(--color-background); color: var(--color-font);
     cursor: pointer; overflow: hidden;
     transition: border-color var(--ease), transform var(--ease), box-shadow var(--ease);
+  }
+  html.dark .thg-card {
+    --color-primary: var(--thg-d-primary); --color-secondary: var(--thg-d-secondary);
+    --color-tertiary: var(--thg-d-tertiary); --color-background: var(--thg-d-background);
+    --color-foreground: var(--thg-d-foreground);
   }
   .thg-card:hover { border-color: var(--color-border-strong); transform: translateY(-2px); box-shadow: var(--shadow-pop); }
   .thg-card.is-active { border-color: var(--color-primary); box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-primary) 30%, transparent); }
@@ -130,7 +143,14 @@ const darkCss = THEMES.map(
 
   .thg-card__dots { position: relative; z-index: 1; display: flex; gap: 4px; }
   .thg-card__dots i { width: 10px; height: 10px; border-radius: 9999px; display: block; }
-  .thg-card__name { position: relative; z-index: 1; font-size: 0.72rem; font-weight: 600; }
+  /* Each card's own --color-background swaps per theme (pale in light mode,
+     near-black in dark — see themes.ts), but --color-font stays the AMBIENT
+     page value, so it doesn't reliably contrast with the card's own swatch.
+     Every light preset is high-lightness and every dark preset is
+     low-lightness (see themes.ts), so a flat light/dark pair — not a
+     per-theme one — always contrasts, same fallback TokenShowcase uses. */
+  .thg-card__name { position: relative; z-index: 1; font-size: 0.72rem; font-weight: 600; color: hsl(0 0% 13%); }
+  html.dark .thg-card__name { color: hsl(0 0% 100%); }
 
   .thg-cta { display: flex; justify-content: center; margin-top: 2.25rem; }
 </style>

@@ -37,7 +37,7 @@ function Ring({ score, label, active, delay = 0 }: { score: number; label: strin
   const stroke = score >= 90 ? 'var(--color-success)' : score >= 70 ? 'var(--color-secondary)' : 'var(--color-primary)'
 
   return (
-    <div className="lr-ring" style={{ opacity: active ? 1 : 0, transition: `opacity 400ms ease ${delay}ms` }}>
+    <div className="lr-ring" role="listitem" style={{ opacity: active ? 1 : 0, transition: `opacity 400ms ease ${delay}ms` }}>
       <div className="lr-ring-svg">
         <svg viewBox="0 0 88 88" className="lr-svg" aria-hidden="true">
           <circle cx="44" cy="44" r={r} fill="none" strokeWidth="7" style={{ stroke: 'color-mix(in srgb, var(--color-font) 10%, transparent)' }} />

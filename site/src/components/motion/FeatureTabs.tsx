@@ -227,7 +227,7 @@ export function ParallaxPanel() {
       {/* layer legend */}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
         {[
-          { label: 'Far',  speed: '4×', color: C.border },
+          { label: 'Far',  speed: '4×', color: C.muted },
           { label: 'Mid',  speed: '2×', color: C.secondary },
           { label: 'Near', speed: '1×', color: C.primary },
         ].map(l => (
