@@ -1,0 +1,84 @@
+---
+/**
+ * SectionNav.astro — homepage-only "on this page" anchor nav.
+ *
+ * Sticky just below the global #one-nav (52px tall, see Layout.astro),
+ * jumps to the 8 tour sections below. Scoped to the homepage — the
+ * site-wide header in Layout.astro is untouched.
+ */
+const ITEMS = [
+  { id: 'design', label: 'Design' },
+  { id: 'themes', label: 'Themes' },
+  { id: 'motion', label: 'Motion' },
+  { id: 'cards', label: 'Cards' },
+  { id: 'carousels', label: 'Carousels' },
+  { id: 'tabs', label: 'Tabs' },
+  { id: 'quotes', label: 'Quotes' },
+  { id: 'payments', label: 'Payments' },
+] as const
+---
+
+<nav class="secnav" aria-label="Page sections">
+  <div class="secnav-inner">
+    {ITEMS.map((item) => (
+      <a href={`#${item.id}`} data-secnav-link={item.id}>{item.label}</a>
+    ))}
+  </div>
+</nav>
+
+<script>
+  function wireSectionNav() {
+    const nav = document.querySelector<HTMLElement>('.secnav')
+    if (!nav || nav.dataset.secnavBound) return
+    nav.dataset.secnavBound = '1'
+
+    const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-secnav-link]'))
+    const sections = links
+      .map((l) => document.getElementById(l.dataset.secnavLink || ''))
+      .filter((el): el is HTMLElement => !!el)
+    if (!sections.length) return
+
+    const setActive = (id: string) => {
+      links.forEach((l) => l.classList.toggle('is-active', l.dataset.secnavLink === id))
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting)
+        if (visible.length) setActive(visible[0].target.id)
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 },
+    )
+    sections.forEach((s) => io.observe(s))
+  }
+  wireSectionNav()
+  document.addEventListener('astro:page-load', wireSectionNav)
+</script>
+
+<style>
+  .secnav {
+    position: sticky; top: 52px; z-index: 90;
+    background: color-mix(in oklab, var(--color-foreground) 92%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .secnav-inner {
+    max-width: var(--content); margin: 0 auto; padding: 0 1.5rem;
+    display: flex; gap: 1.5rem; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .secnav-inner::-webkit-scrollbar { display: none; }
+  .secnav a {
+    flex-shrink: 0; padding: 0.7rem 0.1rem; margin: 0 0.15rem;
+    font-size: 0.82rem; font-weight: 600; color: var(--color-muted);
+    text-decoration: none; white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color var(--ease), border-color var(--ease);
+  }
+  .secnav a:hover { color: var(--color-font); }
+  .secnav a.is-active { color: var(--color-primary); border-color: var(--color-primary); }
+
+  @media (max-width: 640px) {
+    .secnav-inner { gap: 1.1rem; }
+  }
+</style>

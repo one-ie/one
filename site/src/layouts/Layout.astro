@@ -1,7 +1,6 @@
 ---
 import '../styles/globals.css'
 import OneChat from '@oneie/plugin-chat/OneChat.astro'
-import { getCollection } from 'astro:content'
 import { THEMES } from '../lib/themes'
 
 interface Props {
@@ -30,9 +29,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.url.origin).href
 const ogT = ogTitle ?? title
 const ogD = ogDescription ?? description
 
-// Every product file in src/content/products/ becomes a real nav link,
-// site-wide — writing a product is the whole "list it for sale" step.
-const products = await getCollection('products')
 const ogU = ogUrl ?? canonicalURL
 
 // Reshape THEMES (bare "H S% L%" triplets) into the anti-FOUC script's
@@ -304,17 +300,14 @@ const runtimeThemes = Object.fromEntries(
           <img class="one-logo-img" src="https://vespio.ai/vespio-logo.svg" alt="Vespio" width="157" height="38" />
         </a>
         <nav class="one-nav-links" aria-label="Primary">
-          <a href="/payments">Payments</a>
-          {products.map((p) => (
-            <a href={`/products/${p.id}`}>{p.data.name}</a>
-          ))}
-          <a href="/wallet">Wallet</a>
-          <a href="/lifecycle">Lifecycle</a>
-          <a href="/plugins">Plugins</a>
-          <a href="/design">Design</a>
-          <a href="/patterns">Patterns</a>
-          <a href="/motion">Motion</a>
-          <a href="/components">Components</a>
+          <a href="/#design">Design</a>
+          <a href="/#themes">Themes</a>
+          <a href="/#motion">Motion</a>
+          <a href="/#cards">Cards</a>
+          <a href="/#carousels">Carousels</a>
+          <a href="/#tabs">Tabs</a>
+          <a href="/#quotes">Quotes</a>
+          <a href="/#payments">Payments</a>
         </nav>
       </div>
       <div class="one-controls">
@@ -337,17 +330,14 @@ const runtimeThemes = Object.fromEntries(
     <!-- Mobile menu — the primary links are display:none under 640px; this
          drawer restores them (opened by the hamburger above). -->
     <nav id="one-mobile-menu" class="one-mobile-menu" aria-label="Primary (mobile)">
-      <a href="/payments">Payments</a>
-      {products.map((p) => (
-        <a href={`/products/${p.id}`}>{p.data.name}</a>
-      ))}
-      <a href="/wallet">Wallet</a>
-      <a href="/lifecycle">Lifecycle</a>
-      <a href="/plugins">Plugins</a>
-      <a href="/design">Design</a>
-      <a href="/patterns">Patterns</a>
-      <a href="/motion">Motion</a>
-      <a href="/components">Components</a>
+      <a href="/#design">Design</a>
+      <a href="/#themes">Themes</a>
+      <a href="/#motion">Motion</a>
+      <a href="/#cards">Cards</a>
+      <a href="/#carousels">Carousels</a>
+      <a href="/#tabs">Tabs</a>
+      <a href="/#quotes">Quotes</a>
+      <a href="/#payments">Payments</a>
     </nav>
 
     <!-- ── Page content ─────────────────────────────────────────── -->
