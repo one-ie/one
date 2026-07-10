@@ -5,7 +5,7 @@
     "": {
       "name": "one-frontend",
       "devDependencies": {
-        "@oneie/cli": "^0.7.0",
+        "@oneie/cli": "^0.10.0",
       },
     },
     "packages/plugin-admin": {
@@ -408,7 +408,7 @@
 
     "@noble/hashes": ["@noble/hashes@2.2.0", "", {}, "sha512-IYqDGiTXab6FniAgnSdZwgWbomxpy9FtYvLKs7wCUs2a8RkITG+DFGO1DM9cr+E3/RgADRpFjrKVaJ1z6sjtEg=="],
 
-    "@oneie/cli": ["@oneie/cli@0.7.0", "", { "dependencies": { "@oneie/sdk": "^0.14.4", "commander": "^12.0.0" }, "bin": { "oneie": "dist/src/index.js", "one": "dist/src/index.js" } }, "sha512-KNb63anbYxZrM8Zr3UE7yS4b5ERefDSATkJydU4glHHXA1LptY0TMZhA05QmH1mUPQbK9i8NaY3E5OJzHz/oPw=="],
+    "@oneie/cli": ["@oneie/cli@0.10.0", "", { "dependencies": { "@oneie/sdk": "^0.14.4", "commander": "^12.0.0" }, "bin": { "oneie": "dist/src/index.js", "one": "dist/src/index.js" } }, "sha512-YFJBT3jxIIIyAEiVn5cH1+ohm4X0+0UcmTllUvxlClL1SN/vNLpXE67kc8shU70oFAeBPoR2ef/x65S5up7pKA=="],
 
     "@oneie/frontend": ["@oneie/frontend@0.1.1", "", { "peerDependencies": { "astro": ">=6.0.0", "zod": ">=3.0.0" } }, "sha512-O+cnni8ojPTrOQAYKYZsQQhP52McThA4l7ff+bjl8R5N4eZ9xu+SvDbtoCYmcuVOUJBsKF3jwN/BJ5tElAFNug=="],
 
@@ -1537,8 +1537,6 @@
     "vscode-css-languageservice/vscode-languageserver-types": ["vscode-languageserver-types@3.17.5", "", {}, "sha512-Ld1VelNuX9pdF39h2Hgaeb5hEZM2Z3jUrrMgWQAu82jMtZp7p3vJT3BzToKtZI7NgQssZje5o0zryOrhQvzQAg=="],
 
     "vscode-languageserver/vscode-languageserver-protocol": ["vscode-languageserver-protocol@3.17.5", "", { "dependencies": { "vscode-jsonrpc": "8.2.0", "vscode-languageserver-types": "3.17.5" } }, "sha512-mb1bvRJN8SVznADSGWM9u/b07H7Ecg0I3OgXDuLdn307rl/J3A9YD6/eYOssqhecL27hK1IPZAsaqh00i/Jljg=="],
-
-    "web/@oneie/cli": ["@oneie/cli@0.10.0", "", { "dependencies": { "@oneie/sdk": "^0.14.4", "commander": "^12.0.0" }, "bin": { "oneie": "dist/src/index.js", "one": "dist/src/index.js" } }, "sha512-YFJBT3jxIIIyAEiVn5cH1+ohm4X0+0UcmTllUvxlClL1SN/vNLpXE67kc8shU70oFAeBPoR2ef/x65S5up7pKA=="],
 
     "web/astro": ["astro@7.0.6", "", { "dependencies": { "@astrojs/compiler-rs": "^0.3.0", "@astrojs/internal-helpers": "0.10.1", "@astrojs/markdown-satteri": "0.3.3", "@astrojs/telemetry": "3.3.2", "@capsizecss/unpack": "^4.0.0", "@clack/prompts": "^1.1.0", "@oslojs/encoding": "^1.1.0", "@rollup/pluginutils": "^5.3.0", "am-i-vibing": "^0.4.0", "aria-query": "^5.3.2", "axobject-query": "^4.1.0", "ci-info": "^4.4.0", "clsx": "^2.1.1", "common-ancestor-path": "^2.0.0", "cookie": "^1.1.1", "devalue": "^5.8.1", "diff": "^8.0.3", "dset": "^3.1.4", "es-module-lexer": "^2.0.0", "esbuild": "^0.28.0", "flattie": "^1.1.1", "fontace": "~0.4.1", "get-tsconfig": "5.0.0-beta.4", "github-slugger": "^2.0.0", "html-escaper": "3.0.3", "http-cache-semantics": "^4.2.0", "js-yaml": "^4.1.1", "jsonc-parser": "^3.3.1", "magic-string": "^0.30.21", "magicast": "^0.5.2", "mrmime": "^2.0.1", "neotraverse": "^0.6.18", "obug": "^2.1.1", "p-limit": "^7.3.0", "p-queue": "^9.1.0", "package-manager-detector": "^1.6.0", "piccolore": "^0.1.3", "picomatch": "^4.0.4", "semver": "^7.7.4", "shiki": "^4.0.2", "smol-toml": "^1.6.0", "svgo": "^4.0.1", "tinyclip": "^0.1.12", "tinyexec": "^1.0.4", "tinyglobby": "^0.2.15", "ultrahtml": "^1.6.0", "unifont": "~0.7.4", "unstorage": "^1.17.5", "vite": "^8.0.13", "vitefu": "^1.1.2", "xxhash-wasm": "^1.1.0", "yargs-parser": "^22.0.0", "zod": "^4.3.6" }, "optionalDependencies": { "sharp": "^0.34.0 || ^0.35.0" }, "peerDependencies": { "@astrojs/markdown-remark": "7.2.1" }, "optionalPeers": ["@astrojs/markdown-remark"], "bin": { "astro": "./bin/astro.mjs" } }, "sha512-Myw0sFia+zs/Y0yqfZEsUYXfDPh3ELcLf1f0Q/qQzVXBh/af1qO62WNT+P89DCcfGVV51nMoQhEfkBYqJmoUOQ=="],
 

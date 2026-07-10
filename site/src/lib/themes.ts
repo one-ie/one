@@ -1,5 +1,5 @@
 /**
- * themes.ts — the 12 selectable theme presets, single source of truth.
+ * themes.ts — the 14 selectable theme presets, single source of truth.
  *
  * Consumed by two surfaces that can't share a runtime object directly
  * (one runs in the browser before first paint, the other prerenders
@@ -53,6 +53,17 @@ export interface ThemeDef {
   patternFade?: boolean
   /** Shown in the header's quick-swatch row. All 10 are always selectable on /design. */
   nav?: boolean
+  /**
+   * Literal bitmap texture (e.g. `/patterns/subtle_carbon.webp`) layered onto
+   * --color-foreground-filled L2 surfaces (.bg-foreground, focused dropdown/
+   * select items) via the SAME --pattern-fg-image mechanism /patterns' picker
+   * uses (see Layout.astro's __applyImagePatterns) — a theme-level default
+   * that a manual /patterns pick still overrides. Independent of `pattern`
+   * above, which only drives the ambient CSS-generated page texture.
+   */
+  foregroundImage?: string
+  /** 0–1 opacity for foregroundImage. Omit to use the image at full strength. */
+  foregroundImageOpacity?: number
 }
 
 export const THEMES: ThemeDef[] = [
@@ -194,5 +205,47 @@ export const THEMES: ThemeDef[] = [
     // The default theme (see Layout.astro/design.astro 'vespio' fallbacks) —
     // curated into the header row like the original 6, not gallery-only.
     nav: true,
+  },
+  {
+    // Sampled from a moving-company client mockup (elitemoversca.com):
+    // near-black header with serif wordmark, cream/beige page, white card,
+    // silver-grey label ink. Warm near-neutral hue (36°) throughout instead
+    // of a true grayscale — reads as brushed graphite/bronze, not cool
+    // slate — with `crosshatch`'s woven diagonal lines standing in for a
+    // subtle carbon-fiber texture (no bitmap asset needed).
+    key: 'carbon',
+    name: 'Carbon',
+    light: { primary: '36 8% 22%', secondary: '38 5% 42%', tertiary: '32 22% 30%', background: '38 18% 90%', foreground: '38 12% 99%' },
+    dark: { primary: '36 8% 66%', secondary: '38 6% 64%', tertiary: '32 24% 62%', background: '35 20% 8%', foreground: '35 16% 14%' },
+    swatch: '36 8% 30%',
+    pattern: 'crosshatch',
+    patternTone: 'primary',
+    patternFade: true,
+    nav: false,
+  },
+  {
+    // Strictly black / white — every brand + neutral tone is pure grayscale
+    // (0% saturation), so nothing reads brown; only `background` keeps a
+    // barely-there cream warmth (~40°, 8–10% sat) as the single soft note in
+    // the palette, and only in light mode — dark mode goes true neutral black.
+    // Deliberately inverts the usual L1→L2 step (foreground normally reads a
+    // touch LIGHTER than background — see the file header comment) in BOTH
+    // modes, not just light like Plum: L2 is always the theme's signature
+    // near-black surface, textured with the real subtle_carbon.webp tile (a
+    // fine dot weave) via `foregroundImage` rather than a Pattern.astro shape,
+    // so it reads as an actual material instead of a CSS approximation. The
+    // ambient page texture is `dots`, echoing that same weave at page scale.
+    // Background stays the lighter cream/white L1 card + page tone in both
+    // modes so the black L2 always has something to sit on top of.
+    key: 'elite',
+    name: 'Elite',
+    light: { primary: '0 0% 10%', secondary: '0 0% 42%', tertiary: '0 0% 28%', background: '40 12% 93%', foreground: '0 0% 7%' },
+    dark: { primary: '0 0% 90%', secondary: '0 0% 64%', tertiary: '0 0% 78%', background: '0 0% 9%', foreground: '0 0% 4%' },
+    swatch: '0 0% 20%',
+    pattern: 'dots',
+    patternTone: 'primary',
+    patternFade: true,
+    foregroundImage: '/patterns/subtle_carbon.webp',
+    nav: false,
   },
 ]

@@ -49,6 +49,8 @@ const runtimeThemes = Object.fromEntries(
       pattern: t.pattern,
       patternTone: t.patternTone,
       nav: !!t.nav,
+      fgImg: t.foregroundImage,
+      fgImgOpacity: t.foregroundImageOpacity,
     },
   ]),
 )
@@ -249,6 +251,11 @@ const runtimeThemes = Object.fromEntries(
             '--color-accent-on-foreground',
             !isNaN(fgL) && !isNaN(primaryL) && Math.abs(primaryL - fgL) < 30 ? onFg : 'var(--color-primary)',
           )
+          /* Re-evaluate the fg layer's theme-default image on every switch —
+             defined below, but already assigned by the time this runs (this
+             function body only executes once __syncTheme() is CALLED, at the
+             bottom of this script, after every window.* assignment above it). */
+          if (window.__applyImagePatterns) window.__applyImagePatterns()
           window.dispatchEvent(new CustomEvent('one:theme'))
         }
 
@@ -263,12 +270,21 @@ const runtimeThemes = Object.fromEntries(
            to take effect. Opacity is real (not baked into the shorthand,
            see Card.astro's ::before) — these are legacy low-alpha web
            textures calibrated for a light L1 fill, often near-invisible at
-           full strength against a dark one. */
+           full strength against a dark one.
+
+           The fg layer also has a THEME-level default (ThemeDef.foregroundImage,
+           e.g. Elite's subtle_carbon.webp) — a manual /patterns pick always
+           wins over it (same override precedent as __applyCustom over
+           __applyTheme), and switching to a theme with no default clears it. */
         window.__applyImagePatterns = function () {
           var el = document.documentElement
+          var t = window.__T[localStorage.getItem('one-theme') || 'vespio'] || {}
           ;['bg', 'fg'].forEach(function (layer) {
-            var url = localStorage.getItem('one-pattern-' + layer)
+            var manual = localStorage.getItem('one-pattern-' + layer)
+            var themeUrl = layer === 'fg' ? t.fgImg : null
+            var url = manual || themeUrl
             var opacity = localStorage.getItem('one-pattern-' + layer + '-opacity')
+              || (!manual && themeUrl && t.fgImgOpacity != null ? String(t.fgImgOpacity) : null)
             el.style.setProperty('--pattern-' + layer + '-image', url ? "url('" + url + "')" : 'none')
             el.style.setProperty('--pattern-' + layer + '-opacity', opacity || '1')
           })
@@ -279,8 +295,7 @@ const runtimeThemes = Object.fromEntries(
           ? rawDark === 'true'
           : window.matchMedia('(prefers-color-scheme: dark)').matches
         if (dark) document.documentElement.classList.add('dark')
-        window.__syncTheme()
-        window.__applyImagePatterns()
+        window.__syncTheme() // also runs __applyImagePatterns() — see above
       })()
     </script>
 
