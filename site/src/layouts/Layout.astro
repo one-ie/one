@@ -327,7 +327,7 @@ const runtimeThemes = Object.fromEntries(
       </div>
     </header>
 
-    <!-- Mobile menu — the primary links are display:none under 640px; this
+    <!-- Mobile menu — the primary links are display:none under 1020px; this
          drawer restores them (opened by the hamburger above). -->
     <nav id="one-mobile-menu" class="one-mobile-menu" aria-label="Primary (mobile)">
       <a href="/#design">Design</a>
@@ -590,11 +590,16 @@ const runtimeThemes = Object.fromEntries(
   .one-nav-links a {
     font-size: 0.82rem;
     font-weight: 500;
+    white-space: nowrap;
     color: var(--color-muted);
     text-decoration: none;
     transition: color var(--ease);
   }
   .one-nav-links a:hover { color: var(--color-font); }
+  /* Scroll-spy hook — the homepage tags whichever link's section is in
+     view. Accent (not plain font color) so "where am I" reads at a glance;
+     same contrast-safe token the logo uses on this foreground fill. */
+  .one-nav-links a.is-active { color: var(--color-accent-on-foreground); font-weight: 600; }
 
   /* ── Mobile menu ───────────────────────────────────────────────── */
   .one-menu-btn {
@@ -646,12 +651,26 @@ const runtimeThemes = Object.fromEntries(
   }
   .one-mobile-menu a:last-child { border-bottom: none; }
 
-  @media (max-width: 640px) {
+  /* Tighten before collapsing — buys ~100px so the drawer kicks in later. */
+  @media (max-width: 1150px) {
+    .one-nav-left { gap: 1rem; }
+    .one-nav-links { gap: 0.9rem; }
+  }
+  /* Eight links + logo + swatches + mode need ~1000px; below that the row
+     used to overflow and wrap the 52px bar. Collapse to the drawer while
+     everything still fits, not at phone width. */
+  @media (max-width: 1020px) {
     .one-nav-links { display: none; }
     .one-menu-btn { display: flex; }
   }
   /* Never leave the drawer open past the breakpoint where the button vanishes. */
-  @media (min-width: 641px) { .one-mobile-menu.open { display: none; } }
+  @media (min-width: 1021px) { .one-mobile-menu.open { display: none; } }
+  /* Phones: the 6-swatch row + divider is the widest control; drop it before
+     it shoves the mode/menu buttons off the bar. Themes stay reachable from
+     the #themes gallery and /design. */
+  @media (max-width: 480px) {
+    .one-swatches, .one-divider { display: none; }
+  }
 
   .one-controls {
     display: flex;

@@ -13,10 +13,13 @@ import TabsDemo from '../components/blocks/demos/TabsDemo.astro'
 import QuoteDemo from '../components/blocks/demos/QuoteDemo.astro'
 import ProofTerminal from '../components/lifecycle/ProofTerminal'
 import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
+import PhysicalCardCheckout from '../components/payments/PhysicalCardCheckout'
+import CardCheckoutPreview from '../components/payments/CardCheckoutPreview'
 import Button from '../components/blocks/Button.astro'
 import Card from '../components/blocks/Card.astro'
 import Pattern from '../components/blocks/Pattern.astro'
 import Footer from '../components/blocks/Footer.astro'
+import { getEnv } from '../lib/cf-env'
 
 // ── Real proof only ───────────────────────────────────────────────────────
 // This is a promise page: every number below is measured or verifiable, not
@@ -44,6 +47,14 @@ const TXS = [
   { digest: 'AdEFmNNB5dDNsFHTdmXfYkSeTBkzTnZveQi4gn75CHBP', label: 'Auto-fund at bootstrap', amount: '0.05 SUI', detail: 'Treasury faucet dispensing to a freshly bootstrapped agent — the funding wall, removed.' },
   { digest: '3rTxWzgh7313MW357q3caSPaQ9aeB1jUXkQprP2EQgaq', label: 'Dispense, repeated', amount: '0.05 SUI', detail: 'Second treasury dispense — and the 24h per-address rate limit held on the retry.' },
 ]
+
+// Same live/preview switch payments.astro uses — real Stripe Elements the
+// moment both keys exist, an honest static preview until then.
+const env = await getEnv()
+const stripePublishableKey =
+  (env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string | undefined) ??
+  (env.STRIPE_PUBLIC_KEY as string | undefined)
+const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
 ---
 
 <Layout
@@ -78,7 +89,7 @@ const TXS = [
       </div>
 
       <!-- The proof is the hero: real Lighthouse scores, not a mockup. -->
-      <div class="hr hr-5 hero-proof">
+      <div class="hr hr-4 hero-proof">
         <div class="proof-glow" aria-hidden="true"></div>
         <div class="proof-card">
           <div class="proof-header">
@@ -208,7 +219,36 @@ const TXS = [
     </div>
   </section>
 
-  <!-- ── Final CTA ─────────────────────────────────────────────────── -->
+  <!-- ── Card checkout — live, its own stage ──────────────────────────── -->
+  <section class="card-rail" id="card">
+    <Pattern pattern="crosshatch" opacity={0.07} tone="tertiary" />
+    <div class="container">
+      <div class="card-rail-grid">
+        <div class="card-rail-copy">
+          <div class="rail-tag rail-tag--card"><span class="rail-dot"></span>Card · your Stripe key</div>
+          <h2 class="card-rail-title">And a card form you'd want to fill in.</h2>
+          <p class="card-rail-sub">
+            Real Stripe Elements dressed as a card — tilts to your cursor, guides you
+            field to field, and settles straight to your own Stripe account. It goes
+            live the moment you add two env vars; until then it's an honest preview.
+          </p>
+          <ul class="card-rail-list">
+            <li>✓ PCI stays with Stripe — we never see a digit</li>
+            <li>✓ Fail-closed without your keys</li>
+            <li>✓ Cards, wallets, and Link out of the box</li>
+          </ul>
+          <a href="/payments" class="card__link">See the full payments page →</a>
+        </div>
+        <div class="card-rail-widget">
+          {stripeLive && stripePublishableKey
+            ? <PhysicalCardCheckout client:visible publishableKey={stripePublishableKey} />
+            : <CardCheckoutPreview client:visible />}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Final CTA — the last word before the footer ───────────────── -->
   <section class="section cta-section">
     <Pattern pattern="diagonal" opacity={0.08} tone="contrast" fade />
     <div class="container cta-container">
@@ -260,6 +300,38 @@ const TXS = [
 
 </Layout>
 
+<script>
+  // Scroll-spy for the global header — homepage only (this script ships with
+  // this page alone). Tags the nav link whose section is in view; the
+  // `.one-nav-links a.is-active` style lives with the nav in Layout.astro.
+  function wireNavSpy() {
+    const links = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>('#one-nav .one-nav-links a[href^="/#"]'),
+    )
+    if (!links.length || links[0].dataset.spyBound) return
+    links.forEach((l) => { l.dataset.spyBound = '1' })
+
+    const byId = new Map(links.map((l) => [l.getAttribute('href')!.slice(2), l]))
+    const sections = Array.from(byId.keys())
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => !!el)
+    if (!sections.length) return
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting)
+        if (!visible.length) return
+        links.forEach((l) => l.classList.remove('is-active'))
+        byId.get(visible[0].target.id)?.classList.add('is-active')
+      },
+      { rootMargin: '-30% 0px -60% 0px', threshold: 0 },
+    )
+    sections.forEach((s) => io.observe(s))
+  }
+  wireNavSpy()
+  document.addEventListener('astro:page-load', wireNavSpy)
+</script>
+
 <style>
   /* ── Time-based hero reveal (NOT scroll-driven — above the fold uses
         animation-delay, never animation-timeline:view()). ───────────── */
@@ -269,7 +341,6 @@ const TXS = [
   .hr-2 { animation-delay: 0.16s; }
   .hr-3 { animation-delay: 0.23s; }
   .hr-4 { animation-delay: 0.30s; }
-  .hr-5 { animation-delay: 0.37s; }
   @keyframes hr-in {
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -524,4 +595,23 @@ const TXS = [
     transition: background var(--ease), color var(--ease);
   }
   .copy-btn:hover { background: color-mix(in oklab, var(--color-primary) 8%, var(--color-background)); color: var(--color-primary); }
+
+  /* ── Card checkout — its own stage, below the fold (keeps live Stripe
+        out of first paint so the page holds its Lighthouse scores). ──── */
+  .card-rail { padding: clamp(3rem, 7vw, 5.5rem) 0; border-top: 1px solid var(--color-border); background: color-mix(in oklab, var(--color-tertiary) 4%, var(--color-background)); position: relative; overflow: hidden; }
+  .card-rail-grid { display: grid; grid-template-columns: 1fr 0.95fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; position: relative; z-index: 1; }
+  @media (max-width: 860px) { .card-rail-grid { grid-template-columns: 1fr; gap: 2rem; max-width: 32rem; margin: 0 auto; } }
+  .rail-tag {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.28rem 0.7rem; border-radius: 9999px; margin-bottom: 1.1rem;
+  }
+  .rail-dot { width: 7px; height: 7px; border-radius: 9999px; background: currentColor; }
+  .rail-tag--card { color: var(--color-tertiary); background: color-mix(in oklab, var(--color-tertiary) 14%, transparent); }
+  .card-rail-title { font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; color: var(--color-font); margin: 0 0 1rem; }
+  .card-rail-sub { font-size: 1rem; line-height: 1.65; color: var(--color-muted); margin: 0 0 1.4rem; max-width: 32rem; }
+  .card-rail-list { list-style: none; margin: 0 0 1.4rem; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.88rem; color: var(--color-font); }
+  .card-rail-widget { min-width: 0; }
+  .card__link { color: var(--color-primary); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
+  .card__link:hover { text-decoration: underline; }
 </style>
