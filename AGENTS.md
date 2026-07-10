@@ -8,7 +8,14 @@ Markdown, TOML, and TypeScript — never SQL, never TypeDB.
 
 1. Read `CLAUDE.md` — who the business is and the four files it edits.
 2. Read `README.md` — the build recipe, with what each step does at the substrate.
-3. **Discover the surface from the terminal — don't study it.** The whole 54-receiver
+3. **Check your footing before anything else:**
+   ```bash
+   one whoami                        # who this key is, which workspace
+   one doctor                        # config / key / reachability — exit 0/1
+   ```
+   Both are read-only and take under 5 seconds — run them cold at the start of every
+   session, not just when something looks wrong.
+4. **Discover the surface from the terminal — don't study it.** The whole 54-receiver
    namespace is one command away:
    ```bash
    one catalog                       # every receiver, grouped by recipe (meta:catalog)

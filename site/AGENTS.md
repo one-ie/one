@@ -1,6 +1,6 @@
 # ONE Frontend — Agent Context
 
-This is an Astro 6 + React 19 + Tailwind 4 site wired to the ONE backend.
+This is an Astro 7 + React 19 + Tailwind 4 site wired to the ONE backend.
 
 ## Architecture
 

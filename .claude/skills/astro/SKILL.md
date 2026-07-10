@@ -1,6 +1,6 @@
 ---
 name: astro
-description: Astro 6 conventions for ONE sites — plugin wiring via one.config.ts, OneChat/OneTrack placement, Cloudflare SSR. Invoke when editing .astro files or astro.config.mjs.
+description: Astro 7 conventions for ONE sites — plugin wiring via one.config.ts, OneChat/OneTrack placement, Cloudflare SSR. Invoke when editing .astro files or astro.config.mjs.
 ---
 
 # Astro in ONE sites

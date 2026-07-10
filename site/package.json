@@ -1,7 +1,7 @@
 {
   "name": "web",
   "version": "0.1.0",
-  "description": "ONE starter — Astro 6 + React 19 + shadcn/ui on Cloudflare Workers",
+  "description": "ONE starter — Astro 7 + React 19 + shadcn/ui on Cloudflare Workers",
   "type": "module",
   "private": true,
   "scripts": {
@@ -52,7 +52,7 @@
     "zod": "^4.4.2"
   },
   "devDependencies": {
-    "@oneie/cli": "^0.10.1",
+    "@oneie/cli": "^4.0.1",
     "@astrojs/check": "^0.9.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",

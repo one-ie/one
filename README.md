@@ -7,7 +7,7 @@
  ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 ```
 
-> Astro 6 · React 19 · shadcn/ui · Cloudflare Workers
+> Astro 7 · React 19 · shadcn/ui · Cloudflare Workers
 
 Build Astro sites. Deploy on Cloudflare. Completely free, with real performance to show for it: **100 on Lighthouse — Accessibility, Best Practices, SEO — LCP 137ms, CLS 0.00.** Verified against a production build, not asserted. See [Performance](#performance) for how to check it yourself.
 
@@ -58,7 +58,7 @@ packages/        ← paid plugin stubs only — see Paid plugins below
 
 **Grows.** Your data model and your lifecycles — the stages a contact, deal, or agent moves through. Declare a type once; it's typed everywhere.
 
-**Shows.** The site people see. Astro 6, React 19, shadcn/ui, deployed to Cloudflare's edge. Static-first by default — most of the page ships zero JavaScript, which is the actual reason it's fast.
+**Shows.** The site people see. Astro 7, React 19, shadcn/ui, deployed to Cloudflare's edge. Static-first by default — most of the page ships zero JavaScript, which is the actual reason it's fast.
 
 Every file compiles to one typed call on the ONE substrate. Every command calls a **receiver** — a named, typed action. That's the whole model. `CLAUDE.md` and `AGENTS.md` are the operating manual and the agent briefing.
 
@@ -187,18 +187,44 @@ Paid plugins (`admin`, `course`, `dashboard`, `shop`) ship as thin stubs in `pac
 
 ## The commands
 
+`npm install -g @oneie/cli` gives you `one` and `oneie` — same binary, either name.
+
+**Bootstrap, once:**
+
 ```bash
-one setup                       # stand up your workspace (idempotent)
-one onboard [--name N]          # walk register→bootstrap deterministically, then show where you are in the agent lifecycle and what's next
-one push [path] [--dry-run]     # upsert agents + skills, then close the loop
-one status                      # your usage — credits, meters, plan
+npx oneie create <name>         # scaffold this exact repo shape — or `git clone` it yourself
+one onboard [--name N]          # provision a workspace + agent identity, no .env.local prep needed
+one whoami                      # confirm your identity + workspace — the footing check
+one doctor                      # config, key, and substrate reachability in one pass — exit 0/1, safe for CI
+```
+
+**Operate:**
+
+```bash
+one push [path] [--dry-run]     # upsert your agents + skills, then close the loop
 one deploy                      # wrangler pages deploy site/
+one status                      # your usage — credits, meters, plan
+one ship "<message>"            # git add + commit + push in one step
+```
+
+**Grow:**
+
+```bash
 one market [query]              # browse the capability market
 one hire <skillId> --budget 50  # hire a peer agent for a skill
 one earn                        # accept payment for work you do
+one staff invite [--role R]     # invite a human to this workspace
+one plugin list                 # see what's free and what's paid — then `plugin buy <name>`
 ```
 
-`--dry-run` injects `simulate: true` — projects the outcome, commits nothing. Dry-run-first on every irreversible verb.
+**Discover the rest** — every command is one typed call into the same receiver namespace, so there's no separate API to learn:
+
+```bash
+one catalog                     # browse every receiver, grouped by recipe
+one ask <receiver> {json}       # typed pass-through — validated before it hits the network
+```
+
+`--dry-run` injects `simulate: true` — projects the outcome, commits nothing. Dry-run-first on every irreversible verb. This works exactly the same whether a human types it or an agent calls it — see [AI-ready](#ai-ready) below.
 
 ---
 

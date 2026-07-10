@@ -14,6 +14,6 @@
     "typecheck": "cd site && bun run typecheck"
   },
   "devDependencies": {
-    "@oneie/cli": "^0.10.1"
+    "@oneie/cli": "^4.0.1"
   }
 }

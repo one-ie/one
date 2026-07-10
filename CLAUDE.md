@@ -21,10 +21,10 @@ a second identity.
 
 1. Set `slug`/`name`/`plan` in `workspace.toml`
 2. Fill `.env.local` with `WORKSPACE_OWNER_EMAIL`
-3. Run `one setup` — returns `{ uid, scopedKey, ownerKey }`. Put `ownerKey` in `ONE_API_KEY`.
-4. Done. Your `WORKSPACE_SLUG`, `CC_ACTOR_ID`, and `ONE_API_KEY` are now in `.env.local`
+3. Run `one setup` — no key yet, so it provisions keyless (`POST /api/provision/agent`), then reconciles: writes `ONE_API_KEY`/`WORKSPACE_ID`/`WORKSPACE_SLUG` (+ legacy `AGENCY_WSID`/`AGENCY_SLUG`/`CC_ACTOR_ID`) to `.env.local`, and patches `workspace.toml`'s `slug` to whatever the server actually minted — it does not accept a desired slug
+4. Done. `.env.local` has your key, `workspace.toml` has your real slug
 
-`one setup` now mints an owner key directly — no Settings UI visit needed.
+`one setup` is idempotent — re-running it once a key is already in `.env.local` is a no-op. Then run `one whoami` to confirm identity, `one doctor` to confirm reachability — the footing check, every time.
 
 ## One key, full authority
 
@@ -71,6 +71,8 @@ Your workspace slug is the `slug` in `workspace.toml`. Your Claude Code actor id
 
 ```bash
 one setup                      # once — stand up your workspace (idempotent)
+one whoami                     # confirm identity + workspace — the footing check
+one doctor                     # config / key / reachability — exit 0/1, safe for CI
 one onboard [--name N]         # deterministically walk register→bootstrap, then show your position in the agent lifecycle + what unlocks each remaining stage
 one push [path] [--dry-run]    # ship your agents + skills
 one deploy                     # wrangler pages deploy site/
