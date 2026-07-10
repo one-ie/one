@@ -1,7 +1,10 @@
 ---
 import '../styles/globals.css'
 import OneChat from '@oneie/plugin-chat/OneChat.astro'
+import Seo from '@jdevalk/astro-seo-graph/Seo.astro'
 import { THEMES } from '../lib/themes'
+import { SITE } from '../lib/seo-site'
+import { buildPageGraph } from '../lib/seo-graph'
 
 interface Props {
   title: string
@@ -10,26 +13,60 @@ interface Props {
   ogDescription?: string
   ogImage?: string
   ogUrl?: string
+  /** JSON-LD `@graph` from a page's own piece builders (e.g. WP-3's
+   *  BlogPosting/TechArticle/BreadcrumbList) — merged with the site-wide
+   *  Organization/WebSite/WebPage baseline built in seo-graph.ts. Typed
+   *  identically to `@jdevalk/astro-seo-graph`'s own `SeoProps['graph']`
+   *  (contract 2, data/text/seo.md §0) so no adapter layer is needed. */
+  graph?: Record<string, unknown> | null
+  /** Passed straight through to `<Seo>` — emits robots noindex and omits
+   *  canonical, per Google guidance. */
+  noindex?: boolean
 }
 
+// `ogTitle`/`ogUrl` stay in Props (below) for call-site compatibility but
+// are intentionally not destructured — see the comments above `pageTitle`
+// and `canonicalURL` for why `<Seo>` can no longer honor them.
 const {
   title,
-  description = 'The open-source Astro starter that ships payments, AI, and plugins on day one.',
-  ogTitle,
+  description,
   ogDescription,
   ogImage,
-  ogUrl,
+  graph,
+  noindex,
 } = Astro.props
 
-// Canonical + social defaults are derived so every page gets them for free —
-// no page has to remember to pass og props. Canonical reflects the serving
-// origin (the real host in production SSR).
-const siteName = 'ONE'
-const canonicalURL = new URL(Astro.url.pathname, Astro.url.origin).href
-const ogT = ogTitle ?? title
-const ogD = ogDescription ?? description
+const siteName = SITE.name
 
-const ogU = ogUrl ?? canonicalURL
+// Canonical always self-references the real request URL (the real host in
+// production SSR) — the playbook's own rule (data/text/seo.md §1: "self-
+// referencing canonical on every page"). `<Seo>` has no separate "og:url
+// override" distinct from canonical (og:url always falls back to it), so
+// `ogUrl` (legacy prop) can no longer divert canonical away from the real
+// URL the way the old hand-rolled og:url-only override did. No current call
+// site sets `ogUrl`, so this is a documented limitation, not a live break.
+const canonicalURL = new URL(Astro.url.pathname, Astro.url.origin).href
+
+// No page-specific description falls back to one derived from this page's
+// own title (not a single shared static string) — a shared static fallback
+// made every page that omits `description` collide on the exact same text,
+// which validateUniqueMetadata (rightly) flags as a duplicate-content bug.
+// Deriving from `title` keeps every fallback unique, same as the rest of
+// the site's real descriptions. `ogDescription` (legacy override prop) still
+// wins if a caller passes it.
+const pageDescription = description ?? ogDescription ?? `${title} — ${SITE.description}`
+
+// `<Seo>` unifies og:title with the page `title` (no separate override in
+// its props surface) — `ogTitle` is kept in Props for backwards
+// compatibility with the pre-Seo API, but no current call site sets it, so
+// preserving that unification introduces no behavior change in practice.
+const pageTitle = title
+
+const pageGraph = buildPageGraph({
+  url: canonicalURL,
+  title: pageTitle,
+  callerGraph: graph,
+})
 
 // Reshape THEMES (bare "H S% L%" triplets) into the anti-FOUC script's
 // existing runtime contract — {l,d,s,name} wrapped in hsl(), additive
@@ -61,31 +98,31 @@ const runtimeThemes = Object.fromEntries(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
-    <link rel="canonical" href={canonicalURL} />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eeeeee" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a" />
 
-    <!-- Open Graph — always emitted, defaulted from title/description/URL -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={siteName} />
-    <meta property="og:title" content={ogT} />
-    <meta property="og:description" content={ogD} />
-    <meta property="og:url" content={ogU} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
-    <meta name="twitter:title" content={ogT} />
-    <meta name="twitter:description" content={ogD} />
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <!-- Title, canonical, description, robots, OG, Twitter, and the JSON-LD
+         @graph are all owned by the package now — see seo-graph.ts for the
+         Organization/WebSite/WebPage baseline fed through the `graph` prop.
+         `twitter.card` mirrors the old ogImage-conditional logic so Twitter
+         cards keep the same summary vs. summary_large_image split as before. -->
+    <Seo
+      title={pageTitle}
+      description={pageDescription}
+      canonical={canonicalURL}
+      siteName={siteName}
+      ogImage={ogImage}
+      twitter={{ card: ogImage ? 'summary_large_image' : 'summary' }}
+      graph={pageGraph}
+      noindex={noindex}
+    />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
 
     <!-- LCP element on every page is the nav logo — preload so the browser
-         doesn't wait for HTML parsing to reach the <img> before fetching it. -->
+         doesn't wait for HTML parsing to reach the logo image before fetching
+         it. -->
     <link rel="preload" href="/vespio-logo.svg" as="image" fetchpriority="high" />
 
     <!-- Critical tokens — inlined to prevent FOUC on first paint -->
@@ -313,36 +350,42 @@ const runtimeThemes = Object.fromEntries(
 
     <!-- ── Nav ──────────────────────────────────────────────────── -->
     <header id="one-nav">
-      <div class="one-nav-left">
-        <a href="/" class="one-logo" aria-label="Home">
-          <span class="one-logo-text">ONE</span>
-          <img class="one-logo-img" src="/vespio-logo.svg" alt="Vespio" width="157" height="38" fetchpriority="high" />
-        </a>
-        <nav class="one-nav-links" aria-label="Primary">
-          <a href="/#design">Design</a>
-          <a href="/#themes">Themes</a>
-          <a href="/#motion">Motion</a>
-          <a href="/#cards">Cards</a>
-          <a href="/#carousels">Carousels</a>
-          <a href="/#tabs">Tabs</a>
-          <a href="/#quotes">Quotes</a>
-          <a href="/#payments">Payments</a>
-        </nav>
+      <div class="one-topbar">
+        <span class="one-topbar-msg">Astro 7 + React 19 · clone it free, ships with perfect Lighthouse scores</span>
+        <a href="https://github.com/one-ie/one" class="one-topbar-link">Get started free →</a>
       </div>
-      <div class="one-controls">
-        <div id="one-swatches" class="one-swatches" role="group" aria-label="Color theme"></div>
-        <div class="one-divider"></div>
-        <button id="one-mode" class="one-mode" type="button" aria-label="Toggle dark mode"></button>
-        <button
-          id="one-menu-btn"
-          class="one-menu-btn"
-          type="button"
-          aria-label="Open menu"
-          aria-expanded="false"
-          aria-controls="one-mobile-menu"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
-        </button>
+      <div class="one-navbar">
+        <div class="one-nav-left">
+          <a href="/" class="one-logo" aria-label="Home">
+            <span class="one-logo-text">ONE</span>
+            <img class="one-logo-img" src="/vespio-logo.svg" alt="Vespio" width="157" height="38" fetchpriority="high" />
+          </a>
+          <nav class="one-nav-links" aria-label="Primary">
+            <a href="/#design">Design</a>
+            <a href="/#themes">Themes</a>
+            <a href="/#motion">Motion</a>
+            <a href="/#cards">Cards</a>
+            <a href="/#carousels">Carousels</a>
+            <a href="/#tabs">Tabs</a>
+            <a href="/#quotes">Quotes</a>
+            <a href="/#payments">Payments</a>
+          </nav>
+        </div>
+        <div class="one-controls">
+          <div id="one-swatches" class="one-swatches" role="group" aria-label="Color theme"></div>
+          <div class="one-divider"></div>
+          <button id="one-mode" class="one-mode" type="button" aria-label="Toggle dark mode"></button>
+          <button
+            id="one-menu-btn"
+            class="one-menu-btn"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="one-mobile-menu"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -457,6 +500,37 @@ const runtimeThemes = Object.fromEntries(
           })
         }
 
+        /* Scroll-direction reveal — hide the nav on scroll-down, bring it
+           back on scroll-up. Stays put (no hide) until past its own height
+           so it never flickers right at the top of the page, and closes
+           the mobile drawer before hiding so it can't be left stranded
+           off-screen open. rAF-throttled since scroll fires on every frame. */
+        var nav = document.getElementById('one-nav')
+        if (nav) {
+          var lastY = window.scrollY
+          var ticking = false
+          function onScroll() {
+            var y = window.scrollY
+            var goingDown = y > lastY
+            if (y <= nav.offsetHeight) {
+              nav.classList.remove('one-nav--hidden')
+            } else if (goingDown) {
+              if (menu && menu.classList.contains('open')) menu.classList.remove('open')
+              nav.classList.add('one-nav--hidden')
+            } else {
+              nav.classList.remove('one-nav--hidden')
+            }
+            lastY = y
+            ticking = false
+          }
+          window.addEventListener('scroll', function () {
+            if (!ticking) {
+              window.requestAnimationFrame(onScroll)
+              ticking = true
+            }
+          }, { passive: true })
+        }
+
         /* Stay honest when another surface (e.g. /design's editor) changes
            the theme — __syncTheme dispatches this after every apply. */
         window.addEventListener('one:theme', sync)
@@ -519,6 +593,12 @@ const runtimeThemes = Object.fromEntries(
     --content:        56rem;
     --content-wide:   64rem;
 
+    /* Total sticky header height: .one-topbar (32) + .one-navbar (60) +
+       #one-nav's own top/bottom border (1 + 2). Every scroll-offset
+       consumer (mobile drawer, section anchors, error-page min-height)
+       reads this instead of a hardcoded px figure. */
+    --nav-total-h: 95px;
+
     --radius-sm: 6px;
     --radius-md: 10px;
     --radius-lg: 16px;
@@ -548,19 +628,24 @@ const runtimeThemes = Object.fromEntries(
   }
 
   /* ── Nav ───────────────────────────────────────────────────────── */
+  /* Two stacked rows — thin .one-topbar, thicker .one-navbar — sharing one
+     sticky/hide-on-scroll shell. #one-nav itself is just the column frame;
+     background/blur/borders live here so both rows read as one surface. */
   #one-nav {
     position: sticky;
     top: 0;
     z-index: 100;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5rem;
-    height: 52px;
+    flex-direction: column;
     background: color-mix(in oklab, var(--color-foreground) 90%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--color-border);
+    /* Thin hairline on top, thicker accent line underneath — frames the
+       whole two-row header so it reads as a distinct plane when it slides
+       back in on scroll-up (see .one-nav--hidden below). */
+    border-top: 1px solid var(--color-border);
+    border-bottom: 2px solid var(--color-border-strong);
+    transition: transform 0.3s ease;
     /* The nav is a surface island on --color-foreground, same as .footer —
        a theme can fill it with a saturated brand tone (e.g. Plum in light
        mode). Shadow the derived typography tokens so every descendant
@@ -571,6 +656,51 @@ const runtimeThemes = Object.fromEntries(
     --color-muted: color-mix(in oklab, var(--color-on-foreground) 60%, transparent);
     --color-border: color-mix(in oklab, var(--color-on-foreground) 12%, transparent);
     --color-border-strong: color-mix(in oklab, var(--color-on-foreground) 24%, transparent);
+  }
+
+  /* Scroll-direction reveal — slides fully out of view on scroll-down past
+     the header's own height, slides back in (bordered frame intact) on
+     scroll-up. JS toggle lives in the theme-wiring script below. */
+  #one-nav.one-nav--hidden { transform: translateY(-100%); }
+  @media (prefers-reduced-motion: reduce) {
+    #one-nav { transition: none; }
+  }
+
+  /* Thin row — secondary/promo strip. 8% on-foreground tint lightens it a
+     touch against .one-navbar below, mode-safe since it derives from the
+     same on-foreground shadow #one-nav already sets. */
+  .one-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 32px;
+    padding: 0 1.5rem;
+    font-size: 0.72rem;
+    color: var(--color-muted);
+    background: color-mix(in oklab, var(--color-on-foreground) 8%, transparent);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .one-topbar-msg { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .one-topbar-link {
+    flex-shrink: 0;
+    color: var(--color-font);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color var(--ease);
+  }
+  .one-topbar-link:hover { color: var(--color-accent-on-foreground); }
+  @media (max-width: 640px) { .one-topbar-msg { display: none; } }
+
+  /* Thick row — primary nav. Taller than the old single-row bar (60px vs
+     52px) so it visibly outweighs .one-topbar per the two-tier reference. */
+  .one-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    height: 60px;
   }
 
   .one-logo {
@@ -646,7 +776,7 @@ const runtimeThemes = Object.fromEntries(
   .one-mobile-menu {
     display: none;
     position: sticky;
-    top: 52px;
+    top: var(--nav-total-h);
     z-index: 99;
     flex-direction: column;
     padding: 0.25rem 1.5rem 0.75rem;
@@ -676,7 +806,7 @@ const runtimeThemes = Object.fromEntries(
     .one-nav-links { gap: 0.9rem; }
   }
   /* Eight links + logo + swatches + mode need ~1000px; below that the row
-     used to overflow and wrap the 52px bar. Collapse to the drawer while
+     used to overflow and wrap the navbar. Collapse to the drawer while
      everything still fits, not at phone width. */
   @media (max-width: 1020px) {
     .one-nav-links { display: none; }

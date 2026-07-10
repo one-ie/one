@@ -2,7 +2,7 @@
 /**
  * SectionNav.astro — homepage-only "on this page" anchor nav.
  *
- * Sticky just below the global #one-nav (52px tall, see Layout.astro),
+ * Sticky just below the global #one-nav (--nav-total-h, see Layout.astro),
  * jumps to the 8 tour sections below. Scoped to the homepage — the
  * site-wide header in Layout.astro is untouched.
  */
@@ -57,7 +57,7 @@ const ITEMS = [
 
 <style>
   .secnav {
-    position: sticky; top: 52px; z-index: 90;
+    position: sticky; top: var(--nav-total-h); z-index: 90;
     background: color-mix(in oklab, var(--color-foreground) 92%, transparent);
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--color-border);

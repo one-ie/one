@@ -107,8 +107,9 @@ const cardVars = (t: (typeof THEMES)[number]) =>
   }
   .section-sub { font-size: 1.05rem; color: var(--color-muted); line-height: 1.7; margin: 0; }
 
+  /* 7 columns — the 14 presets fill exactly two rows, no ragged remainder. */
   .thg-grid {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.85rem;
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.85rem;
     max-width: 64rem; margin: 0 auto;
   }
   @media (max-width: 900px) { .thg-grid { grid-template-columns: repeat(4, 1fr); } }

@@ -1,21 +1,106 @@
 ---
 // docs({ injectRoutes: false }) in one.config.ts — see docs/index.astro.
+//
+// Prerendered (WP-3, data/text/seo.md §0 finding 2 + WP-3 entry): every real
+// slug is enumerated below via getStaticPaths(), so this page is fully known
+// at `astro build` time — safe to prerender (no request-scoped Cloudflare
+// env/cookies/session are read anywhere in this file).
 import Layout from '../../layouts/Layout.astro'
 import DocsLayout from '@oneie/plugin-docs/DocsLayout.astro'
 import { getCollection, render } from 'astro:content'
+import { breadcrumbsFromUrl } from '@jdevalk/astro-seo-graph'
+import { buildArticle, buildBreadcrumbList, assembleGraph } from '@jdevalk/seo-graph-core'
+import { SITE } from '../../lib/seo-site'
+// Reuse WP-1's single IdFactory instance — see blog/[slug].astro's identical
+// comment for why, and the `ids.organization('primary')` coupling note.
+import { ids } from '../../lib/seo-graph'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('docs')
+  return entries.map((entry) => ({ params: { slug: entry.id } }))
+}
+
+export const prerender = true
 
 const { slug } = Astro.params
 const entries = await getCollection('docs')
 const entry = entries.find((e) => e.id === slug)
 
+// Defensive only — getStaticPaths() enumerates every real entry above (see
+// blog/[slug].astro for the identical reasoning). A URL nobody enumerated is
+// a genuine 404, not a redirect to /docs (data/text/seo.md §9's soft-404).
 if (!entry) {
-  return Astro.redirect('/docs')
+  return new Response('Not found', { status: 404 })
 }
 
 const { Content, headings } = await render(entry)
+
+// --- dateModified/datePublished, resolved at build time only ---
+// gitLastmod() itself is NOT called here — see content.config.ts's
+// `withGitLastmod()` and blog/[slug].astro's identical comment: this
+// adapter prerenders inside a workerd sandbox with no git binary reachable,
+// so the git shell-out has to happen during content sync instead.
+// `entry.data.gitLastmod` is that already-resolved ISO string (or null).
+//
+// Docs entries have no required frontmatter date (most docs pages don't
+// have a natural "publish date"). Resolution order: explicit frontmatter
+// `publishDate` override, then the git signal, then nothing — buildArticle
+// requires a real Date, so when neither resolves we simply don't emit a
+// TechArticle node for that page (WebPage + BreadcrumbList still ship via
+// Layout/WP-1 + the breadcrumb piece below), rather than fabricate a date.
+const gitDate = entry.data.gitLastmod ? new Date(entry.data.gitLastmod) : null
+const datePublished = entry.data.publishDate ?? gitDate ?? undefined
+const dateModified = gitDate ?? entry.data.publishDate ?? undefined
+
+const seoTitle = entry.data.seo?.title ?? entry.data.title
+const seoDescription = entry.data.seo?.description ?? entry.data.description ?? ''
+
+// --- per-page JSON-LD graph ---
+// Same division of labour as blog/[slug].astro: only per-page pieces here
+// (TechArticle when a date resolves, always BreadcrumbList); site-wide
+// Organization/Person/WebSite entities are WP-1's, referenced purely by
+// their deterministic @id.
+const pageUrl = Astro.url.href
+const organizationRef = { '@id': ids.organization('primary') }
+
+const pieces = [
+  buildBreadcrumbList(
+    {
+      url: pageUrl,
+      items: breadcrumbsFromUrl({
+        url: Astro.url,
+        siteUrl: SITE.url,
+        pageName: entry.data.title,
+        names: { docs: 'Docs' },
+      }),
+    },
+    ids,
+  ),
+]
+
+if (datePublished) {
+  pieces.push(
+    buildArticle(
+      {
+        url: pageUrl,
+        isPartOf: { '@id': ids.webPage(pageUrl) },
+        author: organizationRef,
+        publisher: organizationRef,
+        headline: seoTitle,
+        description: seoDescription,
+        datePublished,
+        dateModified,
+      },
+      ids,
+      'TechArticle',
+    ),
+  )
+}
+
+const graph = assembleGraph(pieces)
 ---
 
-<Layout title={`${entry.data.title} — ONE`} description={entry.data.description}>
+<Layout title={`${seoTitle} — ONE`} description={seoDescription} graph={graph}>
   <DocsLayout entry={entry} entries={entries} headings={headings}>
     <Content />
   </DocsLayout>

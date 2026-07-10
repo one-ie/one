@@ -17,6 +17,8 @@
     "@astrojs/cloudflare": "^14.1.1",
     "@astrojs/react": "^6.0.1",
     "@fontsource-variable/geist": "^5.2.9",
+    "@jdevalk/astro-seo-graph": "2.2.0",
+    "@jdevalk/seo-graph-core": "0.7.0",
     "@oneie/frontend": "^0.1.1",
     "@oneie/plugin-auth": "^0.1.0",
     "@oneie/plugin-backend": "^0.1.0",
@@ -39,6 +41,7 @@
     "radix-ui": "^1.6.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "schema-dts": "^2.0.0",
     "sonner": "^2.0.7",
     "stripe": "^22.3.0",
     "tailwind-merge": "^3.5.0",
@@ -47,7 +50,7 @@
     "zod": "^4.4.2"
   },
   "devDependencies": {
-    "@oneie/cli": "^0.10.0",
+    "@oneie/cli": "^0.10.1",
     "@astrojs/check": "^0.9.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",

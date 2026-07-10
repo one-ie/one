@@ -135,6 +135,9 @@ const shared = {
        One shape for every variant. Position:relative so the spinner can
        overlay the content without changing the button's width. */
   .one-btn {
+    /* Springy deceleration — snappier in than out, so the button feels
+       like it responds instantly and settles softly. */
+    --btn-ease: cubic-bezier(0.3, 0, 0.2, 1);
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -144,20 +147,23 @@ const shared = {
     border-radius: var(--radius-md);
     font-family: inherit;
     font-weight: 600;
-    letter-spacing: 0.005em;
+    letter-spacing: 0.01em;
     line-height: 1;
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    /* Per-variant depth — each variant sets its own rest / hover / press
+       shadow stack; the base only orchestrates the transitions. */
+    box-shadow: var(--btn-shadow, none);
     transition:
-      background var(--ease),
-      border-color var(--ease),
-      color var(--ease),
-      box-shadow var(--ease),
-      transform var(--ease),
-      opacity var(--ease);
+      background 140ms var(--btn-ease),
+      border-color 140ms var(--btn-ease),
+      color 140ms var(--btn-ease),
+      box-shadow 200ms var(--btn-ease),
+      transform 160ms var(--btn-ease),
+      opacity 140ms var(--btn-ease);
   }
 
   /* Content row — icons + label share one baseline; gap scales per size. */
@@ -177,6 +183,15 @@ const shared = {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: transform 200ms var(--btn-ease);
+  }
+  /* CTA affordance — the trailing icon (usually an arrow) leans into the
+     action on hover; it snaps back on press so the click reads as arrival. */
+  .one-btn:hover .one-btn__icon--right {
+    transform: translateX(2px);
+  }
+  .one-btn:active .one-btn__icon--right {
+    transform: translateX(0);
   }
   .one-btn__icon:empty {
     display: none;
@@ -223,40 +238,93 @@ const shared = {
     width: 100%;
   }
 
+  /* ── Filled variants — shared depth recipe ─────────────────────────
+       Three layers make a filled button read as a physical object:
+       1. a top-light gradient (lit from above, like every real surface),
+       2. an inset highlight on the top edge + a hairline of shade below,
+       3. an ambient shadow tinted with the fill colour — never grey.
+       On hover the fill brightens and the tinted glow blooms; on press
+       the shadows collapse to an inner shade so the button visibly sinks. */
+
   /* ── Variant · primary ─────────────────────────────────────────────
-       Filled brand. Label uses the auto-contrast on-primary token. */
+       Filled brand — the conversion button. Label uses the auto-contrast
+       on-primary token. */
   .one-btn--primary {
-    background: var(--color-primary);
+    --btn-fill: var(--color-primary);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--btn-fill) 90%, var(--color-white)),
+      var(--btn-fill) 62%
+    );
     color: var(--color-on-primary);
+    --btn-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 18%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--color-black) 12%, transparent),
+      0 1px 2px color-mix(in oklab, var(--btn-fill) 35%, transparent);
+    --btn-shadow-hover:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 24%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--color-black) 12%, transparent),
+      0 2px 5px color-mix(in oklab, var(--btn-fill) 30%, transparent),
+      0 6px 20px color-mix(in oklab, var(--btn-fill) 30%, transparent);
   }
   .one-btn--primary:hover {
-    background: color-mix(in oklab, var(--color-primary) 90%, var(--color-font));
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--btn-fill) 82%, var(--color-white)),
+      color-mix(in oklab, var(--btn-fill) 96%, var(--color-white)) 62%
+    );
   }
 
   /* ── Variant · secondary ───────────────────────────────────────────
-       Surface fill + hairline border — the calm, neutral action. */
+       Surface fill + hairline border — the calm, neutral action. A faint
+       top highlight keeps it in the same lighting model as the fills. */
   .one-btn--secondary {
     background: var(--color-foreground);
     color: var(--color-on-foreground);
     border-color: var(--color-border);
+    --btn-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 6%, transparent),
+      0 1px 2px color-mix(in oklab, var(--color-font) 5%, transparent);
+    --btn-shadow-hover:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 8%, transparent),
+      0 2px 8px color-mix(in oklab, var(--color-font) 9%, transparent);
   }
   .one-btn--secondary:hover {
-    background: var(--color-background);
+    background: color-mix(in oklab, var(--color-foreground) 96%, var(--color-font));
     border-color: var(--color-border-strong);
   }
 
   /* ── Variant · tertiary ────────────────────────────────────────────
-       Filled accent. */
+       Filled accent — same depth recipe, accent fill. */
   .one-btn--tertiary {
-    background: var(--color-tertiary);
+    --btn-fill: var(--color-tertiary);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--btn-fill) 90%, var(--color-white)),
+      var(--btn-fill) 62%
+    );
     color: var(--color-on-tertiary);
+    --btn-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 18%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--color-black) 12%, transparent),
+      0 1px 2px color-mix(in oklab, var(--btn-fill) 35%, transparent);
+    --btn-shadow-hover:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 24%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--color-black) 12%, transparent),
+      0 2px 5px color-mix(in oklab, var(--btn-fill) 30%, transparent),
+      0 6px 20px color-mix(in oklab, var(--btn-fill) 30%, transparent);
   }
   .one-btn--tertiary:hover {
-    background: color-mix(in oklab, var(--color-tertiary) 90%, var(--color-font));
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--btn-fill) 82%, var(--color-white)),
+      color-mix(in oklab, var(--btn-fill) 96%, var(--color-white)) 62%
+    );
   }
 
   /* ── Variant · ghost ───────────────────────────────────────────────
-       Transparent until hover — muted text resolves to full font colour. */
+       Transparent until hover — muted text resolves to full font colour.
+       No lift, no shadow: ghosts stay flat on the page plane. */
   .one-btn--ghost {
     background: transparent;
     color: var(--color-muted);
@@ -267,28 +335,52 @@ const shared = {
   }
 
   /* ── Variant · destructive ─────────────────────────────────────────
-       Filled danger. Label is always near-white for contrast on red. */
+       Filled danger — same depth recipe, danger fill. */
   .one-btn--destructive {
-    background: var(--color-destructive);
+    --btn-fill: var(--color-destructive);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--btn-fill) 90%, var(--color-white)),
+      var(--btn-fill) 62%
+    );
     /* System contrast label — #fff in light mode, #000 in dark (the dark
        destructive is lightened for small-text AA, so white fails on it). */
     color: var(--color-on-destructive);
+    --btn-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 18%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--color-black) 12%, transparent),
+      0 1px 2px color-mix(in oklab, var(--btn-fill) 35%, transparent);
+    --btn-shadow-hover:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 24%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--color-black) 12%, transparent),
+      0 2px 5px color-mix(in oklab, var(--btn-fill) 30%, transparent),
+      0 6px 20px color-mix(in oklab, var(--btn-fill) 30%, transparent);
   }
   .one-btn--destructive:hover {
-    background: color-mix(in oklab, var(--color-destructive) 88%, var(--color-black));
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--btn-fill) 84%, var(--color-white)),
+      color-mix(in oklab, var(--btn-fill) 96%, var(--color-black)) 62%
+    );
   }
 
   /* ── Micro-interactions ────────────────────────────────────────────
-       Lift on hover, press on active, crisp ring on keyboard focus. */
+       Lift + glow-bloom on hover, sink on press, crisp ring on keyboard
+       focus. The press transition is faster than the release so the
+       button feels like it reacts instantly and settles softly. */
   .one-btn:hover {
     transform: translateY(-1px);
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--btn-shadow-hover, var(--shadow-card));
   }
   .one-btn:active {
-    transform: scale(0.98);
-    box-shadow: none;
+    transform: translateY(0.5px);
+    box-shadow:
+      var(--btn-press-shadow, inset 0 1px 2px color-mix(in oklab, var(--color-black) 12%, transparent));
+    transition-duration: 60ms;
   }
-  .one-btn--ghost:hover {
+  .one-btn--ghost:hover,
+  .one-btn--ghost:active {
+    transform: none;
     box-shadow: none;
   }
 
@@ -354,6 +446,11 @@ const shared = {
     }
     .one-btn:hover,
     .one-btn:active {
+      transform: none;
+    }
+    .one-btn__icon,
+    .one-btn:hover .one-btn__icon--right {
+      transition: none;
       transform: none;
     }
     .one-btn__spinner svg {

@@ -194,10 +194,13 @@ export const THEMES: ThemeDef[] = [
     // Vespio brand — amber double-V mark on black (vespio.ai/vespio-logo.svg
     // is #f5b417 ≈ 42° 92% 53%). Secondary/tertiary lean into near-black
     // graphite rather than a third hue — the brand is strictly two colors.
+    // Dark mode runs a deep amber-black canvas (bg 3% / fg 8%) so the amber
+    // reads as lit against near-true-black — the flagship look — while the
+    // 5L L1→L2 step keeps cards legible above the page.
     key: 'vespio',
     name: 'Vespio',
     light: { primary: '42 95% 34%', secondary: '40 15% 18%', tertiary: '35 80% 28%', background: '45 30% 93%', foreground: '45 18% 99%' },
-    dark: { primary: '42 95% 62%', secondary: '40 12% 62%', tertiary: '35 75% 60%', background: '42 22% 6%', foreground: '42 16% 12%' },
+    dark: { primary: '42 95% 62%', secondary: '40 12% 62%', tertiary: '35 75% 60%', background: '42 28% 3%', foreground: '42 22% 8%' },
     swatch: '42 90% 45%',
     pattern: 'hexagon',
     patternTone: 'primary',

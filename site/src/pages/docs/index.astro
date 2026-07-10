@@ -3,6 +3,8 @@
 // fragment, so this site supplies the actual page via its own Layout.
 import Layout from '../../layouts/Layout.astro'
 import DocsIndex from '@oneie/plugin-docs/DocsIndex.astro'
+
+export const prerender = true
 ---
 
 <Layout title="Docs — ONE" description="Everything you need to get started.">

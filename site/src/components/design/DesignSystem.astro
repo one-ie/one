@@ -37,7 +37,7 @@ const themeDarkCss = THEMES.map(
 ).join('\n')
 ---
 
-<Shell class="design-page">
+<Shell class={`design-page${full ? '' : ' is-embed'}`}>
   <header class="hero">
     <Pattern pattern="dots" tone="primary" opacity={0.08} fade class="hero-pattern" />
     <Heading>{full ? 'ONE Design System' : 'Six tokens. Light and dark. Done.'}</Heading>
@@ -380,7 +380,7 @@ const themeDarkCss = THEMES.map(
       </div>
 
       <footer class="card-foot">
-        <span class="muted small">All buttons: 10px radius · 120ms ease · ring focus</span>
+        <span class="muted small">All buttons: 10px radius · top-lit sheen · lift on hover, sink on press · ring focus</span>
       </footer>
     </article>
   </section>
@@ -877,6 +877,11 @@ const themeDarkCss = THEMES.map(
     font-size: 15px;
     line-height: 1.55;
   }
+  /* Homepage embed sits inside its own <section> that follows the hero — no
+     sticky nav to clear, unlike the standalone /design page. Drop the top
+     padding so the hero's own dotted texture starts flush at the section
+     boundary instead of behind a strip of solid section-alt background. */
+  .design-page.is-embed { padding-top: 0; }
   .design-page * { box-sizing: border-box; }
 
   /* ---------- Hero ---------- */
@@ -1352,21 +1357,71 @@ const themeDarkCss = THEMES.map(
     .design-page .buttons-grid { grid-template-columns: repeat(2, 1fr); }
   }
   .design-page .btn {
-    padding: 10px 14px;
+    --btn-ease: cubic-bezier(0.3, 0, 0.2, 1);
+    padding: 10px 16px;
     border-radius: var(--radius-md);
     border: 1px solid transparent;
-    font: inherit; font-size: 14px; font-weight: 600;
+    font: inherit; font-size: 14px; font-weight: 600; letter-spacing: 0.01em;
     cursor: pointer;
-    transition: filter var(--ease), background var(--ease), border-color var(--ease), color var(--ease);
+    box-shadow: var(--btn-shadow, none);
+    transition:
+      background 140ms var(--btn-ease),
+      border-color 140ms var(--btn-ease),
+      color 140ms var(--btn-ease),
+      box-shadow 200ms var(--btn-ease),
+      transform 160ms var(--btn-ease);
   }
-  .design-page .btn:hover { filter: brightness(1.08); }
-  .design-page .btn:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+  .design-page .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--btn-shadow-hover, var(--shadow-card));
+  }
+  .design-page .btn:active {
+    transform: translateY(0.5px);
+    box-shadow: inset 0 1px 2px color-mix(in oklab, var(--color-black) 12%, transparent);
+    transition-duration: 60ms;
+  }
+  .design-page .btn:disabled {
+    opacity: 0.5; cursor: not-allowed;
+    transform: none; box-shadow: none;
+  }
   .design-page .btn.loading { opacity: 0.7; cursor: progress; }
 
-  .design-page .btn.primary    { background: var(--color-primary);    color: var(--color-on-primary); }
-  .design-page .btn.secondary  { background: var(--color-secondary);  color: var(--color-on-secondary); }
-  .design-page .btn.tertiary   { background: var(--color-tertiary);   color: var(--color-on-tertiary); }
-  .design-page .btn.destructive{ background: var(--color-destructive); color: var(--color-on-destructive); }
+  /* Filled buttons share the depth recipe from blocks/Button.astro:
+     top-light gradient + inset highlight/shade edges + fill-tinted glow. */
+  .design-page .btn.primary,
+  .design-page .btn.secondary,
+  .design-page .btn.tertiary,
+  .design-page .btn.destructive {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--btn-fill) 90%, var(--color-white)),
+      var(--btn-fill) 62%
+    );
+    --btn-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 18%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--color-black) 12%, transparent),
+      0 1px 2px color-mix(in oklab, var(--btn-fill) 35%, transparent);
+    --btn-shadow-hover:
+      inset 0 1px 0 color-mix(in oklab, var(--color-white) 24%, transparent),
+      inset 0 -1px 0 color-mix(in oklab, var(--color-black) 12%, transparent),
+      0 2px 5px color-mix(in oklab, var(--btn-fill) 30%, transparent),
+      0 6px 20px color-mix(in oklab, var(--btn-fill) 30%, transparent);
+  }
+  .design-page .btn.primary:hover,
+  .design-page .btn.secondary:hover,
+  .design-page .btn.tertiary:hover,
+  .design-page .btn.destructive:hover {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--btn-fill) 82%, var(--color-white)),
+      color-mix(in oklab, var(--btn-fill) 96%, var(--color-white)) 62%
+    );
+  }
+
+  .design-page .btn.primary    { --btn-fill: var(--color-primary);    color: var(--color-on-primary); }
+  .design-page .btn.secondary  { --btn-fill: var(--color-secondary);  color: var(--color-on-secondary); }
+  .design-page .btn.tertiary   { --btn-fill: var(--color-tertiary);   color: var(--color-on-tertiary); }
+  .design-page .btn.destructive{ --btn-fill: var(--color-destructive); color: var(--color-on-destructive); }
 
   .design-page .btn.outline {
     background: transparent;
@@ -1375,14 +1430,19 @@ const themeDarkCss = THEMES.map(
   }
   .design-page .btn.outline:hover {
     background: color-mix(in oklab, var(--color-primary) 10%, transparent);
-    filter: none;
   }
+  /* Ghosts stay flat on the page plane — no lift, no shadow. */
   .design-page .btn.ghost {
     background: transparent; color: var(--color-font);
   }
   .design-page .btn.ghost:hover {
     background: color-mix(in oklab, var(--color-font) 8%, transparent);
-    filter: none;
+    transform: none;
+    box-shadow: none;
+  }
+  .design-page .btn.ghost:active {
+    transform: none;
+    box-shadow: none;
   }
   .design-page .btn.inverse {
     background: var(--color-font);
@@ -1471,8 +1531,9 @@ const themeDarkCss = THEMES.map(
   }
 
   /* ---------- Theme gallery ---------- */
+  /* 7 columns — 14 presets fill exactly two rows, no ragged remainder. */
   .design-page .theme-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px;
   }
   @media (max-width: 980px) { .design-page .theme-grid { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 560px) { .design-page .theme-grid { grid-template-columns: repeat(2, 1fr); } }

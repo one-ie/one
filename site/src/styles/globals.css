@@ -291,3 +291,12 @@
   background-repeat: repeat;
   opacity: var(--pattern-fg-opacity, 1);
 }
+
+/* OneChat's launcher bubble ships a hardcoded blue as an INLINE style — the
+   one element on the page that ignores the active theme. !important is the
+   only lever that beats an inline declaration. on-primary flips black/white
+   with mode, the same rule every brand fill follows. */
+.one-chat-bubble {
+  background: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
+}

@@ -1,21 +1,116 @@
 ---
 // blog({ injectRoutes: false }) in one.config.ts — see blog/index.astro.
-// Site is output:'server', so this resolves the post at request time.
+//
+// Prerendered (WP-3, data/text/seo.md §0 finding 2 + WP-3 entry): every real
+// slug is enumerated below via getStaticPaths(), so this page is fully known
+// at `astro build` time — safe to prerender (no request-scoped Cloudflare
+// env/cookies/session are read anywhere in this file, only `getCollection`
+// and `render` against the content collection). That also makes it eligible
+// for the seo-graph integration's build-time H1/metadata/alt validators,
+// which only scan prerendered HTML on disk.
 import Layout from '../../layouts/Layout.astro'
 import BlogPost from '@oneie/plugin-blog/BlogPost.astro'
 import { getCollection, render } from 'astro:content'
+import { breadcrumbsFromUrl } from '@jdevalk/astro-seo-graph'
+import { buildArticle, buildBreadcrumbList, assembleGraph } from '@jdevalk/seo-graph-core'
+import { SITE } from '../../lib/seo-site'
+// Reuse WP-1's single IdFactory instance (not a duplicate `makeIds()` call)
+// so every @id in the final merged graph — site-wide and per-page alike —
+// comes from the exact same factory. `ids.organization('primary')` matches
+// the ORGANIZATION_SLUG seo-graph.ts builds its Organization entity with;
+// that constant isn't exported today, so this is a real (if narrow)
+// cross-file coupling — flagged in the WP-3 report as a follow-up for
+// seo-graph.ts to export a stable `organizationId` instead of a bare string
+// literal both files must agree on independently.
+import { ids } from '../../lib/seo-graph'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  return posts.map((post) => ({ params: { slug: post.id } }))
+}
+
+export const prerender = true
 
 const { slug } = Astro.params
 const posts = await getCollection('blog')
 const entry = posts.find((p) => p.id === slug)
 
+// Defensive only — getStaticPaths() enumerates every real entry above, so
+// every slug Astro will ever generate a page for has one. A URL nobody
+// enumerated (never existed, or removed since the last build) is a genuine
+// 404, not a redirect to /blog — a redirect-to-listing on a slug that used
+// to exist reads as a soft-404 (data/text/seo.md §9).
 if (!entry) {
-  return Astro.redirect('/blog')
+  return new Response('Not found', { status: 404 })
 }
 
 const { headings } = await render(entry)
+
+// --- dateModified, resolved at build time only (data/text/seo.md §0 finding 3) ---
+// gitLastmod() itself is NOT called here — see content.config.ts's
+// `withGitLastmod()` for why: on this repo's actual adapter
+// (@astrojs/cloudflare, `output:'server'`), prerendering runs inside a
+// workerd/Miniflare sandbox, not the plain Node `astro build` process the
+// plan assumed — no git binary reachable there (verified empirically while
+// building this). gitLastmod() only ever runs during content sync, in the
+// real Node process; `entry.data.gitLastmod` below is its already-resolved
+// output (an ISO string, or null).
+//
+// Falls back to frontmatter `date` when gitLastmod returned null — it will
+// for squashed/absorbed git history (merge-loop-absorbed content's git life
+// starts at the absorption commit, not its true origin), so frontmatter is
+// the source of truth there, not an absent/misleading git signal.
+const datePublished = entry.data.date
+const dateModified = entry.data.gitLastmod ? new Date(entry.data.gitLastmod) : entry.data.date
+
+const seoTitle = entry.data.seo?.title ?? entry.data.title
+const seoDescription = entry.data.seo?.description ?? entry.data.description
+
+// --- per-page JSON-LD graph (data/text/seo.md §0 WP-3 + Layout contract 2) ---
+// Only the per-page pieces belong here — BlogPosting + BreadcrumbList.
+// Site-wide entities (Organization/Person/WebSite) are WP-1's
+// (src/lib/seo-graph.ts + Layout.astro), referenced here purely by their
+// deterministic @id (makeIds() is a pure id factory: same siteUrl always
+// produces the same ids.person/ids.website, regardless of which file calls
+// it) — no direct import of WP-1's file, no coordination needed.
+const pageUrl = Astro.url.href
+// This site models its blog as a company blog (no per-post human byline in
+// frontmatter) — author and publisher both reference the site's single
+// Organization entity, matching the package's "Business/company blog"
+// recipe when no named author exists.
+const organizationRef = { '@id': ids.organization('primary') }
+
+const graph = assembleGraph([
+  buildArticle(
+    {
+      url: pageUrl,
+      isPartOf: { '@id': ids.webPage(pageUrl) },
+      author: organizationRef,
+      publisher: organizationRef,
+      headline: seoTitle,
+      description: seoDescription,
+      datePublished,
+      dateModified,
+      articleSection: entry.data.category,
+    },
+    ids,
+    'BlogPosting',
+  ),
+  buildBreadcrumbList(
+    {
+      url: pageUrl,
+      items: breadcrumbsFromUrl({
+        url: Astro.url,
+        siteUrl: SITE.url,
+        pageName: entry.data.title,
+        names: { blog: 'Blog' },
+      }),
+    },
+    ids,
+  ),
+])
 ---
 
-<Layout title={`${entry.data.title} — ONE`} description={entry.data.description}>
+<Layout title={`${seoTitle} — ONE`} description={seoDescription} graph={graph}>
   <BlogPost entry={entry} headings={headings} />
 </Layout>
