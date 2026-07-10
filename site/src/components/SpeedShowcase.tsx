@@ -212,8 +212,9 @@ function LiveReceipt({ lighthouseDate, pageWeightKB, active, delay = 0 }: {
 
   return (
     <div
-      className="rounded-2xl border p-7 md:p-9 space-y-5 font-mono bg-foreground"
+      className="rounded-2xl border p-7 md:p-9 space-y-5 font-mono"
       style={{
+        background: 'var(--color-foreground)',
         borderColor: 'var(--color-border)',
         opacity: active ? 1 : 0,
         transform: active ? 'translateY(0) scale(1)' : 'translateY(22px) scale(0.97)',

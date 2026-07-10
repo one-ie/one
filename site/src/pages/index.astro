@@ -20,6 +20,9 @@ import Card from '../components/blocks/Card.astro'
 import Pattern from '../components/blocks/Pattern.astro'
 import Footer from '../components/blocks/Footer.astro'
 import { getEnv } from '../lib/cf-env'
+import { buildPiece } from '@jdevalk/seo-graph-core'
+import type { FAQPage } from 'schema-dts'
+import { SITE } from '../lib/seo-site'
 
 // ── Real proof only ───────────────────────────────────────────────────────
 // This is a promise page: every number below is measured or verifiable, not
@@ -55,11 +58,52 @@ const stripePublishableKey =
   (env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string | undefined) ??
   (env.STRIPE_PUBLIC_KEY as string | undefined)
 const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
+
+// ── Homepage FAQ excerpt — real answers only ──────────────────────────────
+// A compact subset (not the full hub at /faq/) of the questions a visitor
+// actually lands here with. Single source for BOTH the rendered cards below
+// AND the FAQPage JSON-LD, so the two can never drift. Sources: one.config.ts
+// (plugin list), /LICENSE (repo root — ONE License v1.0 terms), package.json
+// (tech stack), and this page's own verified 14-theme count (src/lib/themes.ts).
+const faqs = [
+  {
+    q: 'What is ONE?',
+    a: 'ONE is a source-available Astro 7 + React 19 starter template. Clone it and you get a production design system, a motion library, and a payments stack already wired together through one.config.ts — not a blank scaffold you assemble yourself.',
+  },
+  {
+    q: 'Is it free to use commercially?',
+    a: 'Yes. ONE ships under the ONE License v1.0 — full commercial use, resale, and modification, with no usage limits or royalty fees. The only obligation is keeping the ONE brand, logo, and a link to https://one.ie/ in your deployed product; removing that requires a separate ONE Enterprise License.',
+  },
+  {
+    q: 'What comes wired in by default?',
+    a: 'Six plugins declared in one.config.ts — auth, backend, blog, chat, docs, and track — plus 14 built-in themes, a motion library, and two live payment rails: signed crypto links today, a Stripe card scaffold that activates the moment you add your own keys.',
+  },
+  {
+    q: "What's the tech stack?",
+    a: 'Astro 7 and React 19 on Cloudflare Workers, styled with Tailwind CSS 4, with Stripe for card payments and better-auth for sessions — the exact stack rendering this page.',
+  },
+]
+
+// FAQPage node — same `buildPiece<FAQPage>` construction as /seo.astro (the
+// `schema-dts` type, not a re-export from @jdevalk/seo-graph-core — that
+// import bug was already fixed elsewhere and isn't reintroduced here).
+// Merged into Layout's own Organization/WebSite/WebPage baseline via `graph`.
+const faqEntity = buildPiece<FAQPage>({
+  '@type': 'FAQPage',
+  '@id': `${SITE.url}/#faq`,
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+})
+const pageGraph = { '@graph': [faqEntity] }
 ---
 
 <Layout
   title="ONE — design beautiful websites with perfect Lighthouse scores"
   description="Open-source Astro 7 + React 19 starter with a production design system, motion library, and payment stack. 14 themes, a perfect Lighthouse score, measured against this repo's own build."
+  graph={pageGraph}
 >
 
   <!-- ── Hero — the promise, proven in place ───────────────────────── -->
@@ -73,9 +117,9 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
         </h1>
         <div class="hr hr-2">
           <p class="sub">
-            Clone it and your first build already scores 100 — tokens,
-            motion, and payments come wired together, no separate
-            integration pass.
+            ONE is a source-available starter template — clone it and your
+            first build already scores 100, with tokens, motion, and
+            payments wired together, no separate integration pass.
           </p>
         </div>
         <div class="hr hr-3">
@@ -246,6 +290,29 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
     </div>
   </section>
 
+  <!-- ── FAQ — compact excerpt, full hub linked below ───────────────── -->
+  <section id="faq" class="section section-alt">
+    <div class="container">
+      <Reveal class="section-head" dist="lg">
+        <p class="eyebrow">Questions, answered</p>
+        <h2 class="section-title">Before you clone it.</h2>
+        <p class="section-sub">
+          The questions people actually land here with — answered straight,
+          no marketing fog. More detail and more questions on the
+          <a href="/faq/" class="card__link">full FAQ →</a>
+        </p>
+      </Reveal>
+      <Stagger class="faq-grid" stagger={0.08} dist="md">
+        {faqs.map((f) => (
+          <Card variant="default">
+            <Fragment slot="header">{f.q}</Fragment>
+            {f.a}
+          </Card>
+        ))}
+      </Stagger>
+    </div>
+  </section>
+
   <!-- ── Final CTA — the last word before the footer ───────────────── -->
   <section class="section cta-section">
     <Pattern pattern="diagonal" opacity={0.08} tone="contrast" fade />
@@ -359,7 +426,7 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
         tuck the heading under it. ─────────────────────────────────────── */
   :global(#design), :global(#themes), :global(#motion), :global(#cards),
   :global(#carousels), :global(#tabs), :global(#quotes), :global(#payments),
-  :global(#card) {
+  :global(#card), :global(#faq) {
     scroll-margin-top: calc(var(--nav-total-h) + 16px);
   }
 
@@ -563,6 +630,13 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   }
   .tx-detail { font-size: 0.8rem; line-height: 1.55; color: var(--color-muted); margin: 0 0 0.6rem; }
   .tx-verify { font-size: 0.75rem; font-weight: 600; color: var(--color-primary); }
+
+  /* ── FAQ excerpt ────────────────────────────────────────────────── */
+  :global(.faq-grid) {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+    max-width: 52rem; margin: 0 auto;
+  }
+  @media (max-width: 700px) { :global(.faq-grid) { grid-template-columns: 1fr; } }
 
   /* ── Final CTA ──────────────────────────────────────────────────── */
   .cta-section { background: var(--color-primary); padding: 8rem 0; position: relative; overflow: hidden; }

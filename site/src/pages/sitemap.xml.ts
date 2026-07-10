@@ -22,15 +22,29 @@ import { SITE } from '../lib/seo-site'
 // In practice, verified against this exact build: the Cloudflare adapter's
 // prerender phase itself resolves `process.cwd()` to `/`, not the project
 // root, so `git log -- <relative path>` fails and `gitLastmod` returns
-// null for every call here today — every lastmod below currently falls
-// back to `fallback` (frontmatter `date` for blog, the build date
-// otherwise). Left in rather than removed: it degrades safely to that
-// fallback, and starts producing real commit dates for free if this
-// cwd quirk is ever fixed upstream, with no code change needed here.
+// null for every call made directly from *this* file today — STATIC_PAGES'
+// `isoDate(file)` below always falls back to the build date. Left in rather
+// than removed: it degrades safely to that fallback, and starts producing
+// real commit dates for free if this cwd quirk is ever fixed upstream, with
+// no code change needed here.
+//
+// Blog/docs are different: content.config.ts's `withGitLastmod()` already
+// resolves `gitLastmod()` once, during content-collection sync — the one
+// build phase that runs in real Node, before the workerd sandbox exists —
+// and stores the result as `entry.data.gitLastmod` (a plain ISO string, or
+// `null` when the file has no usable git history). So blog/docs URLs below
+// read that precomputed field instead of calling `gitLastmod()` again here.
 export const prerender = true
 
 function isoDate(gitPath: string, fallback: Date = new Date()): string {
   return (gitLastmod(gitPath) ?? fallback).toISOString().slice(0, 10)
+}
+
+// Blog/docs lastmod already resolved at content-sync time (see the module
+// header) — this just re-formats it to match `isoDate`'s YYYY-MM-DD output,
+// falling back to `fallback` when the collection entry has no git history.
+function resolvedLastmod(gitLastmod: string | null | undefined, fallback: Date): string {
+  return (gitLastmod ? new Date(gitLastmod) : fallback).toISOString().slice(0, 10)
 }
 
 // Canonical URL form must match how the page actually serves, or Google is
@@ -103,23 +117,23 @@ async function buildUrls(): Promise<SitemapUrl[]> {
     getCollection('products'),
   ])
 
-  // Blog frontmatter carries a real `date` — prefer it over the build date
-  // when git has no usable history (squashed/absorbed content, or — as
-  // verified here — this build environment's gitLastmod always returning
-  // null; see the module header), matching WP-3's stated policy for
-  // per-page schema. Docs has no frontmatter date field, so it falls back
-  // to the build date. blog/[slug] and docs/[slug] are both prerendered
-  // (WP-3, getStaticPaths()) — trailing slash to match. products/[slug]
-  // stays SSR (reads live Cloudflare env, same as /payments and /wallet)
-  // — no trailing slash.
+  // Prefer the git-derived `entry.data.gitLastmod` (resolved once during
+  // content-collection sync — see the module header) over the build date
+  // when git has no usable history (squashed/absorbed content). Blog
+  // frontmatter carries a real `date`, so that's the blog fallback,
+  // matching WP-3's stated policy for per-page schema; docs has no
+  // frontmatter date field, so it falls back to the build date. blog/[slug]
+  // and docs/[slug] are both prerendered (WP-3, getStaticPaths()) —
+  // trailing slash to match. products/[slug] stays SSR (reads live
+  // Cloudflare env, same as /payments and /wallet) — no trailing slash.
   const blogUrls: SitemapUrl[] = blogPosts.map((post) => ({
     loc: new URL(withSlash(`/blog/${post.id}`), SITE.url).href,
-    lastmod: isoDate(`src/content/blog/${post.id}.md`, post.data.date),
+    lastmod: resolvedLastmod(post.data.gitLastmod, post.data.date),
   }))
 
   const docsUrls: SitemapUrl[] = docsPages.map((entry) => ({
     loc: new URL(withSlash(`/docs/${entry.id}`), SITE.url).href,
-    lastmod: isoDate(`src/content/docs/${entry.id}.md`),
+    lastmod: resolvedLastmod(entry.data.gitLastmod, new Date()),
   }))
 
   const productUrls: SitemapUrl[] = products.map((product) => ({

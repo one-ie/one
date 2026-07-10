@@ -1,309 +1,288 @@
 ---
 export const prerender = true
 import Layout from '@/layouts/Layout.astro'
-import Card from '@/components/blocks/Card.astro'
 import Button from '@/components/blocks/Button.astro'
 import { getCollection } from 'astro:content'
-import { buildPiece, type FAQPage } from '@jdevalk/seo-graph-core'
+import { buildPiece } from '@jdevalk/seo-graph-core'
+import type { FAQPage } from 'schema-dts'
 import { SITE } from '@/lib/seo-site'
 
-// Real counts, not decoration — every number on this page is read from the
-// actual content collections or the same build this page itself ships in.
+// Every figure on this page is read from the real content collections or the
+// same build this page ships in — nothing here is decorative.
 const [blogPosts, docsPages, products] = await Promise.all([
   getCollection('blog'),
   getCollection('docs'),
   getCollection('products'),
 ])
+const samplePost = blogPosts[0]?.id ?? 'hello-template'
+const sampleDoc = docsPages[0]?.id ?? 'getting-started'
 
-// This page proves contract 2 (Layout's `graph` prop, data/text/seo.md §0)
-// on itself: a real FAQPage node, assembled the same way WP-3's blog/docs
-// pages assemble BlogPosting/TechArticle — not a special case for this page.
+// The feature catalogue — the spine of the page. Grouped by audience/stage,
+// every entry true against what actually shipped. `href` entries are real,
+// fetchable URLs (the page's whole ethos: click it, it's live).
+const groups = [
+  {
+    eyebrow: 'Structured data',
+    title: 'A linked knowledge graph',
+    tagline: 'One @graph of cross-referenced entities, not isolated JSON-LD blobs pasted per page — this is how Google and LLMs actually resolve who an entity is.',
+    features: [
+      { name: 'Graph on every page', detail: 'Organization + WebSite + WebPage baseline, emitted from one place, deduplicated by @id.' },
+      { name: 'Organization with logo + sameAs', detail: 'Real entity disambiguation — linked to the actual GitHub, X, Discord, and LinkedIn profiles, not invented ones.' },
+      { name: 'BlogPosting + BreadcrumbList', detail: 'Per post — author, published + git-resolved modified dates, breadcrumb trail.', href: `/blog/${samplePost}/` },
+      { name: 'TechArticle + BreadcrumbList', detail: 'Per doc — the technical-reference subtype, chosen deliberately over generic Article.', href: `/docs/${sampleDoc}/` },
+      { name: 'FAQPage', detail: 'This page proves it — the questions at the bottom are answered inside its own JSON-LD.' },
+      { name: 'Self-checking graph', detail: 'A page referencing an entity that was never defined is a build failure, not a silent gap Google discovers for you.' },
+    ],
+  },
+  {
+    eyebrow: 'Discovery',
+    title: 'Findable by machines',
+    tagline: 'The surface search engines and crawlers read to map the whole site in one pass.',
+    features: [
+      { name: '/sitemap.xml', detail: 'Every canonical, indexable URL — trailing-slash-correct so crawlers never waste a hop on a redirect, with real git-resolved lastmod dates instead of a build timestamp.', href: '/sitemap.xml' },
+      { name: '/rss.xml', detail: 'Every blog post, real dates, canonical trailing-slash-correct links — discoverable from a <link> tag on every page.', href: '/rss.xml' },
+      { name: 'robots.txt + Sitemap', detail: 'Permissive by default, AI crawlers allowed, sitemap directive wired.', href: '/robots.txt' },
+      { name: '/.well-known/api-catalog', detail: 'RFC 9727 linkset — declares this site as one of four coordinated ONE surfaces.', href: '/.well-known/api-catalog' },
+      { name: 'A 404 that helps', detail: 'Real HTTP 404 status, plus a fuzzy-matched "did you mean" against the real sitemap — not a dead end.' },
+    ],
+  },
+  {
+    eyebrow: 'AI agents',
+    title: 'Built for LLMs, not just crawlers',
+    tagline: 'Answer-engine optimization, not retrofitted — almost no templates ship this layer today. ChatGPT, Perplexity, and Claude read this site natively instead of scraping rendered HTML.',
+    features: [
+      { name: '/llms.txt', detail: 'Auto-generated site summary, one line per page with its real description.', href: '/llms.txt' },
+      { name: 'Markdown alternates', detail: 'Every post + doc served as clean .md at a twin URL, with a discovery link on the HTML.', href: `/blog/${samplePost}.md` },
+      { name: '/schema.json', detail: 'The corpus-wide graph across blog + docs — one fetch instead of crawling page by page.', href: '/schema.json' },
+      { name: '/schema-map.xml', detail: 'Discovery listing of the schema.org endpoints, distinct from the page sitemap.', href: '/schema-map.xml' },
+    ],
+  },
+  {
+    eyebrow: 'AI citation',
+    title: 'Written to be quoted, not just indexed',
+    tagline: 'Answer engines extract a chunk and cite it — not the page. If a paragraph only makes sense after three sentences of setup, it never gets lifted. Every answer here is written to be correct standing alone.',
+    features: [
+      { name: '/faq', detail: 'Real, sourced answers — license terms, tech stack, what ships by default — each one self-contained and lifted straight into its own FAQPage schema, not written after the fact.', href: '/faq/' },
+      { name: 'Direct-answer openings', detail: 'The homepage and this page both lead with the answer in the first sentence, not after a paragraph of scene-setting an engine would have to discard.' },
+      { name: 'Structured facts over prose', detail: 'What a real product includes rendered as a checklist on /products, not buried in a sales paragraph an engine has to parse to extract.', href: '/products/' },
+      { name: 'No invented numbers', detail: 'Every reused figure (Lighthouse scores, plugin counts) is sourced from one real place and re-verified before it\'s repeated anywhere else — drift between two pages is what erodes an entity\'s citability.' },
+    ],
+  },
+  {
+    eyebrow: 'Per page',
+    title: 'The fundamentals, automatic',
+    tagline: 'Every page inherits these from the shared <Seo> layer — no page has to remember them.',
+    features: [
+      { name: 'Self-referencing canonical', detail: 'Query-stripped by default; correctly omitted when a page is noindex, per Google guidance.' },
+      { name: 'A real default share image', detail: '1200×630, generated from the actual brand tokens — every share gets a real card, not a bare link.', href: '/og.png' },
+      { name: 'Article Open Graph', detail: 'Blog posts emit og:type=article with real published/modified timestamps, not the generic website type.' },
+      { name: 'Robots meta', detail: 'max-snippet:-1, max-image-preview:large, max-video-preview:-1 — opted in everywhere.' },
+      { name: 'noindex control', detail: 'One prop flips a page to noindex and drops its canonical, the correct pairing.' },
+      { name: 'Search Console / Bing slots', detail: 'Verification meta tags ready on every page — set an env var, no code change, to go live.' },
+    ],
+  },
+  {
+    eyebrow: 'Validation',
+    title: 'Caught at build, not in production',
+    tagline: 'Most sites find these problems via an audit tool months after they ship. Here they fail the build itself — the checks are the guardrail, not a report.',
+    features: [
+      { name: 'Exactly one H1', detail: 'Zero or duplicate H1s flagged — a common accessibility and ranking issue.' },
+      { name: 'Unique metadata', detail: 'Two pages sharing a title or description is a cannibalisation smell, caught across the corpus.' },
+      { name: 'Image alt text', detail: 'Missing alt flagged; alt="" and role="presentation" respected as intentionally decorative.' },
+      { name: 'Metadata length', detail: 'Title 30–65, description 70–200 — SERP-truncation-safe bounds, not arbitrary ones.' },
+      { name: 'Internal links', detail: 'Trailing-slash redirects and true 404s caught; intentional SSR routes correctly exempt.' },
+    ],
+  },
+  {
+    eyebrow: 'Operations',
+    title: 'Verified live, then watched',
+    tagline: 'Almost nobody re-checks SEO after launch until traffic drops. This runs the same checks on a schedule, so drift is caught the week it happens, not the quarter revenue does.',
+    features: [
+      { name: 'Launch gate', detail: 'scripts/seo-gate.sh — the pre-launch checklist as runnable checks against a live URL.' },
+      { name: 'Drift monitor', detail: 'scripts/seo-drift.sh — snapshots and diffs; a new Disallow line is the loudest alarm.' },
+      { name: 'Single identity source', detail: 'One file holds the production origin — rebrand the whole template by editing it alone.' },
+      { name: 'IndexNow ready', detail: 'Wired and waiting — deliberately off until the workspace identity is final (a one-way signal).' },
+    ],
+  },
+]
+
+// FAQPage node — assembled the same way the blog/docs pages assemble their
+// own schema. The three Q&As below render in both the HTML and this graph.
 const faqEntity = buildPiece<FAQPage>({
   '@type': 'FAQPage',
   '@id': `${SITE.url}/seo/#faq`,
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'What powers SEO on this site?',
+      name: 'What powers SEO on this template?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: '@jdevalk/astro-seo-graph — a schema.org JSON-LD graph builder, plus build-time validators, a hand-built sitemap, and AI-agent discovery endpoints (schema.json, schema-map.xml, an RFC 9727 API catalog).',
+        text: '@jdevalk/astro-seo-graph — a schema.org knowledge-graph builder, not a meta-tag plugin. It links a real, disambiguated Organization entity into every page, enforces SEO fundamentals at build time instead of via an audit tool, and extends discovery to AI answer engines through llms.txt, per-page markdown, and a corpus-wide schema endpoint most templates never build.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Is the JSON-LD on this page real or a mockup?',
+      name: 'Can AI agents read this site efficiently?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Real. View source on this page (or curl it) and the FAQPage entity answering this exact question is in the `application/ld+json` script tag — the same mechanism every page on this site uses.',
+        text: 'Yes — three ways. /llms.txt summarises every page; each blog post and doc is served as clean markdown at a .md twin URL linked from the HTML; and /schema.json returns the whole knowledge graph in one request, so an agent never has to crawl page by page.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Why do some pages skip build-time SEO validation?',
+      name: 'Is the structured data on this page real?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'This site is server-rendered (Astro output: "server"). The validators only scan prerendered HTML on disk at build time — pages that read live request state (payments, wallet, the homepage\'s Stripe-gated demo) stay server-rendered on purpose and are exempt, rather than silently unvalidated.',
+        text: 'Real. View source (or curl this page) and the FAQPage entity answering this exact question is in the application/ld+json script tag — the same mechanism every page on this site uses.',
       },
     },
   ],
 })
 const pageGraph = { '@graph': [faqEntity] }
-
-const totalPages = 29 // counted under src/pages/ at time of writing, excluding .well-known
-const prerenderedPages = 10 // pages with export const prerender = true, per the last `astro build`
 ---
 
 <Layout
-  title="SEO on this site — every mechanism, live | ONE"
-  description="Structured data, sitemap, AI-agent discovery endpoints, build-time validators, launch gate, drift monitor — all real, all runnable against this repo's own build."
+  title="SEO on this template — every mechanism, live and clickable | ONE"
+  description="A linked schema.org knowledge graph and an AI-agent discovery layer most templates skip — enforced at build time, not left to an audit tool to find later."
   graph={pageGraph}
 >
-  <main class="mx-auto max-w-[1080px] px-6 py-12 md:py-20">
+  <main class="mx-auto max-w-[1000px] px-6 py-14 md:py-24">
 
     <!-- ─── HERO ─── -->
-    <header class="mb-14">
-      <div class="text-sm uppercase tracking-widest text-font/40 mb-3">SEO · proven, not promised</div>
-      <h1 class="text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight">
-        <span class="text-primary">Every SEO mechanism</span><br/>
-        <span class="text-font/60">this site actually ships.</span>
+    <header class="mb-14 md:mb-20">
+      <div class="text-xs font-bold uppercase tracking-[0.2em] text-tertiary mb-4">SEO · proven, not promised</div>
+      <h1 class="text-[2.75rem] md:text-[4.5rem] font-bold leading-[1.02] tracking-tight max-w-[16ch]">
+        Every SEO feature this template <span class="text-primary">actually ships.</span>
       </h1>
-      <p class="mt-6 text-lg text-font/60 max-w-[70ch]">
-        Not a checklist — a running system. Core mechanism: <a href="https://github.com/jdevalk/seo-graph/tree/main/packages/astro-seo-graph" class="underline decoration-primary/40 hover:decoration-primary">@jdevalk/astro-seo-graph</a>.
-        Everything below is a real link, a real number from this repo's own last build, or a script you can run yourself.
+      <p class="mt-6 text-lg text-font/60 max-w-[62ch] leading-relaxed">
+        Most site templates treat SEO as meta tags bolted onto a `&lt;head&gt;`. This one builds a linked schema.org knowledge graph, then extends the same discovery layer to answer engines — ChatGPT, Perplexity, Claude — that don't crawl the way Google does. Core engine:
+        <a href="https://github.com/jdevalk/seo-graph/tree/main/packages/astro-seo-graph" class="underline decoration-primary/40 underline-offset-2 hover:decoration-primary">@jdevalk/astro-seo-graph</a>.
+        Nothing below is a mockup — click anything.
       </p>
-      <div class="mt-6 flex flex-wrap gap-3">
-        <Button href="/sitemap.xml" variant="secondary" size="sm">View /sitemap.xml</Button>
-        <Button href="/schema.json" variant="secondary" size="sm">View /schema.json</Button>
-        <Button href="/.well-known/api-catalog" variant="secondary" size="sm">View API catalog</Button>
-        <Button href="/llms.txt" variant="secondary" size="sm">View /llms.txt</Button>
+      <div class="mt-8 flex flex-wrap gap-2.5">
+        <Button href="/sitemap.xml" variant="secondary" size="sm">sitemap.xml</Button>
+        <Button href="/rss.xml" variant="secondary" size="sm">rss.xml</Button>
+        <Button href="/schema.json" variant="secondary" size="sm">schema.json</Button>
+        <Button href="/.well-known/api-catalog" variant="secondary" size="sm">api-catalog</Button>
+        <Button href="/llms.txt" variant="secondary" size="sm">llms.txt</Button>
+        <Button href={`/blog/${samplePost}.md`} variant="secondary" size="sm">a page as .md</Button>
+        <Button href="/og.png" variant="secondary" size="sm">og:image</Button>
+        <Button href="/faq/" variant="secondary" size="sm">/faq</Button>
       </div>
     </header>
 
-    <!-- ─── STATS ─── -->
-    <section class="mb-16 grid grid-cols-2 md:grid-cols-4 gap-4">
-      <Card variant="stat" stat="18" label="URLs in /sitemap.xml" accent="primary" />
-      <Card variant="stat" stat={`${prerenderedPages}/${totalPages}`} label="pages build-validated" accent="secondary" />
-      <Card variant="stat" stat="4" label="discovery endpoints" accent="tertiary" />
-      <Card variant="stat" stat="0" label="dangling @id references" accent="primary" />
-    </section>
+    <!-- ─── FEATURE CATALOGUE ─── -->
+    <div>
+      {groups.map((group, i) => (
+        <section class="border-t py-10 md:py-12 grid md:grid-cols-[minmax(0,240px)_1fr] gap-5 md:gap-12" style={`border-color: var(--color-border)`}>
+          <div class="md:sticky md:top-24 self-start">
+            <div class="flex items-baseline gap-3">
+              <span class="text-3xl font-bold tabular-nums text-font/15">{String(i + 1).padStart(2, '0')}</span>
+              <span class="text-xs font-bold uppercase tracking-[0.15em] text-tertiary">{group.eyebrow}</span>
+            </div>
+            <h2 class="mt-3 text-2xl font-bold tracking-tight leading-tight">{group.title}</h2>
+            <p class="mt-2.5 text-sm text-font/55 leading-relaxed max-w-[36ch]">{group.tagline}</p>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-x-10 gap-y-6 self-start">
+            {group.features.map((f) => (
+              <div>
+                <div class="flex items-center gap-2">
+                  <svg class="shrink-0 text-primary" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
+                  {f.href ? (
+                    <a href={f.href} class="font-medium text-[15px] hover:text-primary transition-colors">
+                      <span class="font-mono text-[13px]">{f.name}</span> <span class="opacity-30 text-xs">↗</span>
+                    </a>
+                  ) : (
+                    <span class="font-medium text-[15px]">{f.name}</span>
+                  )}
+                </div>
+                <p class="mt-1.5 pl-[23px] text-sm text-font/55 leading-relaxed">{f.detail}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+      <div class="border-t" style={`border-color: var(--color-border)`}></div>
+    </div>
 
-    <!-- ─── STRUCTURED DATA ─── -->
-    <section class="mb-16">
-      <div class="text-sm font-bold uppercase tracking-widest text-tertiary mb-2">Structured data</div>
-      <h2 class="text-2xl font-bold mb-4">A real knowledge graph, not scattered meta tags</h2>
-      <p class="text-font/60 max-w-[70ch] mb-6">
-        Every page emits one <code class="px-1.5 py-0.5 bg-foreground rounded text-sm">application/ld+json</code> script: an
-        <code class="px-1.5 py-0.5 bg-foreground rounded text-sm">Organization</code> + <code class="px-1.5 py-0.5 bg-foreground rounded text-sm">WebSite</code> baseline
-        (site-wide, deduplicated by <code class="px-1.5 py-0.5 bg-foreground rounded text-sm">@id</code>), plus a per-page node. This page adds a
-        <code class="px-1.5 py-0.5 bg-foreground rounded text-sm">FAQPage</code> — the exact three questions in the "Frequently asked" section below, answered in the graph itself, not just the HTML.
-      </p>
-      <div class="grid md:grid-cols-2 gap-4">
-        <Card variant="feature" accent="primary">
-          <svg slot="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
-          <Fragment slot="header">Blog posts → BlogPosting</Fragment>
-          Author, <code>datePublished</code>, <code>dateModified</code>, plus a <code>BreadcrumbList</code> — assembled per post from real frontmatter and a build-time-resolved git date.
-          <a slot="footer" class="card__link" href={`/blog/${blogPosts[0]?.id ?? ''}/`}>See it on a real post →</a>
-        </Card>
-        <Card variant="feature" accent="secondary">
-          <svg slot="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          <Fragment slot="header">Docs pages → TechArticle</Fragment>
-          Same pattern, different schema.org subtype — <code>TechArticle</code> plus <code>BreadcrumbList</code>, chosen because docs content is technical reference, not editorial.
-          <a slot="footer" class="card__link" href={`/docs/${docsPages[0]?.id ?? ''}/`}>See it on a real doc →</a>
-        </Card>
+    <!-- ─── ENGINEERING NOTES ─── -->
+    <section class="mt-16 md:mt-24 grid md:grid-cols-2 gap-4">
+      <div class="rounded-2xl border p-6 md:p-7" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
+        <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-3">Honest by design</div>
+        <h3 class="text-lg font-bold mb-2">Why some pages opt out of validation</h3>
+        <p class="text-sm text-font/60 leading-relaxed">
+          The validators only see prerendered HTML. Pages that read live Cloudflare state — the homepage's Stripe-gated demo, <code class="font-mono text-xs">/payments</code>, <code class="font-mono text-xs">/wallet</code> — stay server-rendered on purpose. They're <em>exempted</em>, not silently unchecked. Prerendering the homepage would bake an empty environment in forever.
+        </p>
+      </div>
+      <div class="rounded-2xl border p-6 md:p-7" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
+        <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-3">A real gotcha, fixed</div>
+        <h3 class="text-lg font-bold mb-2">Where <code class="font-mono">dateModified</code> comes from</h3>
+        <p class="text-sm text-font/60 leading-relaxed">
+          <code class="font-mono text-xs">gitLastmod()</code> needs a git binary — but on this Cloudflare adapter, prerendering runs in a sandbox where <code class="font-mono text-xs">cwd</code> is <code class="font-mono text-xs">/</code> and git fails. So dates are resolved once during content-collection sync (real Node), then read as plain strings. No git dependency in any page's own code.
+        </p>
       </div>
     </section>
 
-    <!-- ─── DISCOVERY ENDPOINTS ─── -->
-    <section class="mb-16">
-      <div class="text-sm font-bold uppercase tracking-widest text-tertiary mb-2">Discovery endpoints</div>
-      <h2 class="text-2xl font-bold mb-4">Four endpoints, four different audiences</h2>
-      <p class="text-font/60 max-w-[70ch] mb-6">
-        These look similar (XML, JSON) but are not interchangeable — each is built for a different consumer. The most common mistake with this package is treating the schema map as a page sitemap; it isn't.
-      </p>
-      <div class="overflow-x-auto rounded-xl border" style={`border-color: var(--color-border)`}>
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b text-left text-font/50" style={`border-color: var(--color-border)`}>
-              <th class="p-3 font-medium">Endpoint</th>
-              <th class="p-3 font-medium">For</th>
-              <th class="p-3 font-medium">Built with</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b" style={`border-color: var(--color-border)`}>
-              <td class="p-3"><a href="/sitemap.xml" class="font-mono text-primary hover:underline">/sitemap.xml</a></td>
-              <td class="p-3 text-font/70">Search engines (Search Console) — every real indexable URL</td>
-              <td class="p-3 text-font/50">Hand-built API route — the package has no page-sitemap builder</td>
-            </tr>
-            <tr class="border-b" style={`border-color: var(--color-border)`}>
-              <td class="p-3"><a href="/schema.json" class="font-mono text-primary hover:underline">/schema.json</a></td>
-              <td class="p-3 text-font/70">AI agents — the corpus-wide JSON-LD graph, one fetch instead of crawling every page</td>
-              <td class="p-3 text-font/50"><code>createSchemaEndpoint</code></td>
-            </tr>
-            <tr class="border-b" style={`border-color: var(--color-border)`}>
-              <td class="p-3"><a href="/schema-map.xml" class="font-mono text-primary hover:underline">/schema-map.xml</a></td>
-              <td class="p-3 text-font/70">AI agents — discovery listing of the schema.org JSON endpoints (not page URLs)</td>
-              <td class="p-3 text-font/50"><code>createSchemaMap</code></td>
-            </tr>
-            <tr>
-              <td class="p-3"><a href="/.well-known/api-catalog" class="font-mono text-primary hover:underline">/.well-known/api-catalog</a></td>
-              <td class="p-3 text-font/70">Machines — RFC 9727 catalog of this site's APIs, including the ONE backend gateway</td>
-              <td class="p-3 text-font/50"><code>createApiCatalog</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- ─── BUILD-TIME VALIDATORS ─── -->
-    <section class="mb-16">
-      <div class="text-sm font-bold uppercase tracking-widest text-tertiary mb-2">Build-time validation</div>
-      <h2 class="text-2xl font-bold mb-4">Five checks, every <code class="text-2xl">astro build</code></h2>
-      <p class="text-font/60 max-w-[70ch] mb-6">
-        These only scan pages that are actually on disk at build time — a page that stays server-rendered (this site has several, on purpose) is invisible to them. That's a real gap, not a false guarantee; see the honesty section below.
-      </p>
-      <div class="grid sm:grid-cols-2 gap-3">
-        <div class="rounded-lg border p-4" style={`border-color: var(--color-border)`}>
-          <div class="font-medium text-sm">H1 count</div>
-          <div class="text-xs text-font/50 mt-1">Exactly one <code>&lt;h1&gt;</code> per page — none, or more than one, is flagged.</div>
-        </div>
-        <div class="rounded-lg border p-4" style={`border-color: var(--color-border)`}>
-          <div class="font-medium text-sm">Unique metadata</div>
-          <div class="text-xs text-font/50 mt-1">Two pages sharing a title or description is a cannibalization smell — checked across the whole corpus.</div>
-        </div>
-        <div class="rounded-lg border p-4" style={`border-color: var(--color-border)`}>
-          <div class="font-medium text-sm">Image alt text</div>
-          <div class="text-xs text-font/50 mt-1">Missing <code>alt</code> flagged; <code>alt=""</code> or <code>role="presentation"</code> correctly read as "intentionally decorative."</div>
-        </div>
-        <div class="rounded-lg border p-4" style={`border-color: var(--color-border)`}>
-          <div class="font-medium text-sm">Metadata length</div>
-          <div class="text-xs text-font/50 mt-1">Title 30–65 chars, description 70–200 — SERP-truncation-safe bounds, not arbitrary ones.</div>
-        </div>
-        <div class="rounded-lg border p-4 sm:col-span-2" style={`border-color: var(--color-border)`}>
-          <div class="font-medium text-sm">Internal links</div>
-          <div class="text-xs text-font/50 mt-1">Catches trailing-slash mismatches (a silent redirect on every visit) and real 404s — links to known server-rendered routes are correctly excluded, not flagged as false 404s.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── PRERENDER VS SSR ─── -->
-    <section class="mb-16 bg-background rounded-2xl p-6 md:p-8 border" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
-      <h2 class="text-xl font-bold mb-3">Why some pages opt out of validation — on purpose</h2>
-      <p class="text-sm text-font/70 mb-4 max-w-[70ch]">
-        This site is fully server-rendered (<code class="px-1 bg-foreground rounded">output: 'server'</code>). The validators above can only see pages that are actually prerendered to disk. Rather than force every page static to get validator coverage, pages that genuinely need per-request state stay server-rendered — and are honestly excluded, not silently broken.
-      </p>
-      <ul class="space-y-2 text-sm">
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span>The <strong>homepage</strong> reads live Cloudflare Worker bindings to decide whether to show a real Stripe payment demo. Prerendering it would bake in an empty environment forever — so it stays server-rendered.</span></li>
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>/payments</strong> and <strong>/wallet</strong> read the same live environment, for the same reason.</span></li>
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>Blog and docs posts</strong> ({blogPosts.length} + {docsPages.length} entries today) are prerendered via <code>getStaticPaths()</code> — they read nothing request-scoped, so full validation and per-post structured data both apply.</span></li>
-      </ul>
-    </section>
-
-    <!-- ─── THE GITLASTMOD DISCOVERY ─── -->
-    <section class="mb-16">
-      <div class="text-sm font-bold uppercase tracking-widest text-tertiary mb-2">A real gotcha, found and fixed</div>
-      <h2 class="text-2xl font-bold mb-4">Where <code class="text-2xl">dateModified</code> actually comes from</h2>
-      <p class="text-font/60 max-w-[70ch] mb-4">
-        The package's <code class="px-1.5 py-0.5 bg-foreground rounded text-sm">gitLastmod()</code> shells out to a real <code>git</code> binary — it needs a live checkout. The first assumption was that any prerendered page's frontmatter script runs in that environment. It doesn't, here:
-      </p>
-      <div class="bg-foreground rounded-xl p-5 border font-mono text-xs leading-relaxed overflow-x-auto" style={`border-color: var(--color-border)`}>
-        <div class="text-font/40"># Verified empirically against this exact adapter + build</div>
-        <div>On @astrojs/cloudflare, prerendering runs inside a workerd/Miniflare sandbox —</div>
-        <div>not the plain Node process. process.cwd() resolves to "/" there, so</div>
-        <div>`git log` fails for every file, even ones with real history.</div>
-        <div class="mt-3 text-font/40"># The one place that DOES run in real Node</div>
-        <div>Content-collection sync — before the sandbox spins up. So dateModified</div>
-        <div>is resolved once, there, inside each collection's loader — pages read</div>
-        <div>`entry.data.gitLastmod` as a plain pre-resolved string. No git binary,</div>
-        <div>no sandbox dependency, anywhere in the page code itself.</div>
-      </div>
-    </section>
-
-    <!-- ─── OPERATIONS ─── -->
-    <section class="mb-16">
-      <div class="text-sm font-bold uppercase tracking-widest text-tertiary mb-2">Operations</div>
-      <h2 class="text-2xl font-bold mb-4">Two scripts — before launch, and after</h2>
-      <div class="grid md:grid-cols-2 gap-4">
-        <Card variant="feature" accent="primary">
-          <svg slot="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-          <Fragment slot="header">scripts/seo-gate.sh</Fragment>
-          The launch checklist as executable checks against a live URL: no accidental <code>noindex</code>, real 404s (not soft-404s), a non-empty sitemap, the primary asset actually loads, JSON-LD parses, and AI crawlers aren't CDN-blocked.
-        </Card>
-        <Card variant="feature" accent="secondary">
-          <svg slot="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
-          <Fragment slot="header">scripts/seo-drift.sh</Fragment>
-          Snapshots robots.txt, canonicals, sitemap count, and page word counts; every later run diffs and names the exact regression — a new <code>Disallow</code> line is the loudest possible alarm.
-        </Card>
-      </div>
-    </section>
-
-    <!-- ─── LLMS.TXT ─── -->
-    <section class="mb-16">
-      <div class="text-sm font-bold uppercase tracking-widest text-tertiary mb-2">AI-agent readiness</div>
-      <h2 class="text-2xl font-bold mb-4"><code class="text-2xl">/llms.txt</code>, generated from the real build</h2>
-      <p class="text-font/60 max-w-[70ch] mb-4">Not hand-maintained — every entry below is auto-collected from what actually built, with each page's real description.</p>
-      <div class="bg-foreground rounded-xl p-5 border font-mono text-xs leading-relaxed overflow-x-auto max-h-72 overflow-y-auto" style={`border-color: var(--color-border)`}>
-        <div class="text-font/80"># {SITE.name}</div>
-        <div class="text-font/50 mt-1">&gt; {SITE.description}</div>
-        <div class="mt-3 text-font/80">## Pages</div>
-        <div class="mt-1 text-font/60">- [Blog — ONE](https://one.ie/blog/): Thoughts, updates, and insights.</div>
-        <div class="text-font/60">- [Docs — ONE](https://one.ie/docs/): Everything you need to get started.</div>
-        <div class="text-font/60">- …and one line per prerendered page, regenerated on every build.</div>
-      </div>
-    </section>
-
-    <!-- ─── METHODOLOGY ─── -->
-    <section class="mb-16">
-      <h2 class="text-xl font-bold mb-3">Reproduce all of it yourself</h2>
-      <div class="bg-foreground rounded-xl p-5 border font-mono text-xs leading-relaxed overflow-x-auto" style={`border-color: var(--color-border)`}>
-        <div class="text-font/40"># Build, then check the warning list — this is what "10 pages checked, all good" means</div>
+    <!-- ─── REPRODUCE ─── -->
+    <section class="mt-16 md:mt-24">
+      <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-2">Reproduce it</div>
+      <h2 class="text-2xl font-bold mb-5 tracking-tight">Every claim, runnable in five minutes</h2>
+      <div class="bg-foreground rounded-2xl p-6 border font-mono text-xs leading-relaxed overflow-x-auto" style={`border-color: var(--color-border)`}>
+        <div class="text-font/40"># Build — the validators print "N pages checked, all good"</div>
         <div>bun run build</div>
-        <div class="mt-3 text-font/40"># Serve the production output</div>
+        <div class="mt-4 text-font/40"># Serve the production output, then run the full launch gate</div>
         <div>bun run preview &</div>
-        <div class="mt-3 text-font/40"># Run the full launch gate against it</div>
         <div>bash scripts/seo-gate.sh http://localhost:4321</div>
-        <div class="mt-3 text-font/40"># Baseline, then re-run any time to check for drift</div>
+        <div class="mt-4 text-font/40"># Baseline once, then re-run any time to catch drift</div>
         <div>bash scripts/seo-drift.sh http://localhost:4321</div>
       </div>
     </section>
 
-    <!-- ─── HONESTY ─── -->
-    <section class="mb-16 bg-background rounded-2xl p-6 md:p-8 border" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
-      <h2 class="text-xl font-bold mb-3">What's not done yet</h2>
-      <ul class="space-y-2 text-sm">
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><code>robots.txt</code> doesn't have its <code>Sitemap:</code> line yet — deliberately gated until this sitemap is verified live in production, not local preview.</span></li>
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>IndexNow is off.</strong> It's a one-way signal to search engines — blocked until this workspace's rebrand (its <code>workspace.toml</code> slug) is finalized, so a still-changing identity never gets announced.</span></li>
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>Markdown alternates</strong> (serving a real <code>.md</code> version of each page for AI agents) are speced but not wired — needs one small, deliberate addition to <code>Layout.astro</code>'s props first.</span></li>
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span>A handful of existing pages still have titles under the 30-character minimum, one duplicate-content link pattern, and no <code>/privacy</code> or <code>/terms</code> page yet — all caught by the validators above, none hidden.</span></li>
-      </ul>
+    <!-- ─── ROADMAP / HONESTY ─── -->
+    <section class="mt-16 md:mt-24">
+      <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-2">Deliberately deferred</div>
+      <h2 class="text-2xl font-bold mb-5 tracking-tight">What's gated, and why</h2>
+      <div class="space-y-3">
+        {[
+          { h: 'IndexNow submission', d: 'Wired but off — it announces URLs one-way to search engines, so it stays blocked until this workspace’s identity is finalised. Nothing half-branded gets broadcast.' },
+          { h: 'Upstream trailing-slash links', d: 'A handful of links inside the blog/docs plugins redirect once; the correct fix is a one-line change in each plugin’s own repo, not a fork here — patched around with a scoped skip in the meantime.' },
+          { h: 'Image optimization', d: 'Researched, not flipped — this codebase has zero astro:assets usage today, so the setting is currently inert either way. Every mode that actually shrinks bytes needs a paid Cloudflare product; a real call for whoever adds real content photography.' },
+        ].map((r) => (
+          <div class="flex gap-4 rounded-xl border p-4" style={`border-color: var(--color-border)`}>
+            <div class="shrink-0 mt-0.5 text-tertiary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <div>
+              <div class="font-medium text-sm">{r.h}</div>
+              <div class="text-sm text-font/55 mt-1 leading-relaxed">{r.d}</div>
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
 
-    <!-- ─── FAQ (matches the FAQPage in this page's own JSON-LD) ─── -->
-    <section class="mb-16">
-      <h2 class="text-xl font-bold mb-4">Frequently asked</h2>
-      <div class="space-y-4">
-        <div class="rounded-lg border p-4" style={`border-color: var(--color-border)`}>
-          <div class="font-medium text-sm mb-1">What powers SEO on this site?</div>
-          <div class="text-sm text-font/60">@jdevalk/astro-seo-graph — a schema.org JSON-LD graph builder, plus build-time validators, a hand-built sitemap, and AI-agent discovery endpoints (schema.json, schema-map.xml, an RFC 9727 API catalog).</div>
-        </div>
-        <div class="rounded-lg border p-4" style={`border-color: var(--color-border)`}>
-          <div class="font-medium text-sm mb-1">Is the JSON-LD on this page real or a mockup?</div>
-          <div class="text-sm text-font/60">Real — view source on this page and this exact FAQPage entity is in the JSON-LD script tag, the same mechanism every page on this site uses.</div>
-        </div>
-        <div class="rounded-lg border p-4" style={`border-color: var(--color-border)`}>
-          <div class="font-medium text-sm mb-1">Why do some pages skip build-time SEO validation?</div>
-          <div class="text-sm text-font/60">This site is server-rendered. The validators only scan prerendered HTML on disk — pages reading live request state stay server-rendered on purpose, and are exempt rather than silently unvalidated.</div>
-        </div>
+    <!-- ─── FAQ (mirrors the FAQPage in this page's JSON-LD) ─── -->
+    <section class="mt-16 md:mt-24">
+      <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-2">Frequently asked</div>
+      <h2 class="text-2xl font-bold mb-5 tracking-tight">Answered here — and in this page's schema</h2>
+      <div class="divide-y rounded-2xl border" style={`border-color: var(--color-border)`}>
+        {[
+          { q: 'What powers SEO on this template?', a: '@jdevalk/astro-seo-graph — a schema.org knowledge-graph builder, not a meta-tag plugin. It links a real, disambiguated Organization entity into every page, enforces SEO fundamentals at build time instead of via an audit tool, and extends discovery to AI answer engines through llms.txt, per-page markdown, and a corpus-wide schema endpoint most templates never build.' },
+          { q: 'Can AI agents read this site efficiently?', a: 'Yes — three ways. /llms.txt summarises every page; each post and doc is served as clean markdown at a .md twin URL linked from the HTML; and /schema.json returns the whole knowledge graph in one request.' },
+          { q: 'Is the structured data on this page real?', a: 'Real — view source and the FAQPage entity answering this exact question is in the application/ld+json script tag, the same mechanism every page uses.' },
+        ].map((item) => (
+          <div class="p-5 md:p-6">
+            <div class="font-medium text-[15px] mb-1.5">{item.q}</div>
+            <div class="text-sm text-font/60 leading-relaxed">{item.a}</div>
+          </div>
+        ))}
       </div>
     </section>
 
     <!-- ─── CLOSING ─── -->
-    <section class="mb-4 text-center">
-      <div class="flex items-center justify-center gap-3 flex-wrap">
-        <Button href="/design/" variant="primary">See the design system</Button>
-        <Button href="/speed/" variant="secondary">See the speed proof</Button>
-      </div>
+    <section class="mt-16 md:mt-20 flex items-center justify-center gap-3 flex-wrap">
+      <Button href="/design/" variant="primary">See the design system</Button>
+      <Button href="/speed/" variant="secondary">See the speed proof</Button>
     </section>
 
   </main>

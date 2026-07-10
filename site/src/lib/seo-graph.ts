@@ -46,6 +46,13 @@ function siteWideEntities(): GraphEntity[] {
       name: SITE.name,
       url: SITE.url,
       description: SITE.description,
+      logo: `${SITE.url}/vespio-logo.svg`,
+      sameAs: [
+        'https://github.com/one-ie/one',
+        'https://x.com/one_ie',
+        'https://discord.gg/one',
+        'https://linkedin.com/company/one-ie',
+      ],
     }),
     buildWebSite(
       {

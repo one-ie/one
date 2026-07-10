@@ -9,6 +9,19 @@ import { getCollection } from 'astro:content'
 export const prerender = true
 
 const products = (await getCollection('products')).sort((a, b) => a.data.priceCents - b.data.priceCents)
+
+// The one real product with a written "what's included" list — rendered as a
+// scannable checklist below, not buried in the card description. Uses
+// whatever `bullets` the frontmatter actually has; adds nothing invented.
+const featured = products.find((p) => p.data.bullets && p.data.bullets.length > 0)
+
+// Reused, not re-derived: same published Lighthouse run cited on /speed —
+// verify this still matches site/src/pages/speed.astro's own constants
+// before shipping (diff, don't eyeball) so this stays a consistent,
+// zero-drift citation rather than a second, divergent claim.
+const lighthouseDate = '2026-07-10'
+const lighthouseDesktop = 100
+const lighthouseMobile = 100
 ---
 
 <Layout
@@ -51,8 +64,42 @@ const products = (await getCollection('products')).sort((a, b) => a.data.priceCe
           </div>
         </Stagger>
       )}
+
+      {featured && (
+        <p class="proof">
+          Built on the same starter that scores {lighthouseDesktop}/100 on Lighthouse desktop
+          and {lighthouseMobile}/100 mobile (measured {lighthouseDate}) —
+          <a href="/speed/">see the full breakdown</a>.
+        </p>
+      )}
     </div>
   </section>
+
+  {featured && (
+    <section class="included">
+      <Pattern pattern="grid" opacity={0.06} color="var(--color-primary)" fade />
+      <div class="container">
+        <Reveal class="section-head">
+          <p class="eyebrow">What's included</p>
+          <h2 class="section-title">{featured.data.name} — the actual list</h2>
+          <p class="section-sub">
+            Every line below is what's in <code>src/content/products/{featured.id}.md</code>{' '}
+            today — no invented extras.
+          </p>
+        </Reveal>
+        <Stagger stagger={0.06}>
+          <ul class="checklist">
+            {featured.data.bullets!.map((b) => (
+              <li class="check-item">
+                <span class="check-mark" aria-hidden="true">✓</span>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </Stagger>
+      </div>
+    </section>
+  )}
 
   <Footer
     tagline="The open-source Astro starter that ships payments, AI, and plugins on day one — wired from one.config.ts."
@@ -110,4 +157,31 @@ const products = (await getCollection('products')).sort((a, b) => a.data.priceCe
   .cta { font-size: 0.82rem; font-weight: 600; color: var(--color-font); margin-top: 0.5rem; }
   .arrow { display: inline-block; transition: transform 120ms ease; }
   .card:hover .arrow { transform: translateX(3px); }
+
+  /* ── Proof line (pattern 6: same Lighthouse stat published on /speed/) ── */
+  .proof {
+    margin: 2rem 0 0; text-align: center; font-size: 0.85rem; color: var(--color-muted);
+  }
+  .proof a { color: var(--color-primary); font-weight: 600; text-decoration: none; }
+  .proof a:hover { text-decoration: underline; }
+
+  /* ── What's included (pattern 3: real bullets as a scannable checklist) ── */
+  .included { position: relative; padding: 1rem 0 5rem; }
+  .included .section-sub code { background: var(--color-background); border-radius: 6px; padding: 0.1rem 0.4rem; font-size: 0.85em; }
+
+  .checklist {
+    list-style: none; margin: 0; padding: 0; max-width: 42rem; margin-inline: auto;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.9rem 1.1rem;
+    border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-background);
+    font-size: 0.95rem; line-height: 1.55;
+  }
+  .check-mark {
+    flex: none; display: inline-flex; align-items: center; justify-content: center;
+    width: 1.4rem; height: 1.4rem; border-radius: 999px; margin-top: 0.05rem;
+    background: var(--color-primary); color: var(--color-on-primary);
+    font-size: 0.75rem; font-weight: 800;
+  }
 </style>

@@ -1,11 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import FuzzyRedirect from '@jdevalk/astro-seo-graph/FuzzyRedirect.astro'
 ---
 
 <Layout title="404 — Page not found">
   <main class="error-page">
     <h1 class="error-number">404</h1>
     <p class="error-message">Page not found</p>
+    <!-- Client-side only (see the component's own <script>): fetches
+         /sitemap.xml and fuzzy-matches the broken URL against every real
+         page path, rendering a "Did you mean" link into this div when a
+         close match is found. This is pure post-load DOM work — it runs
+         after the browser has already received this page's real 404
+         status, so it cannot turn this response into a 200 (data/text/
+         seo.md §9 "soft 404s"). sitemapUrl is explicit because this site
+         ships a single flat /sitemap.xml (see public/robots.txt), not the
+         component's default /sitemap-index.xml. autoRedirectThreshold is
+         set to 1 (the component's documented "disable auto-redirect"
+         value) so a 404 always shows a suggestion link rather than
+         silently teleporting the visitor via `location.replace` — that
+         would drop the back button and, on a wrong match, leave them
+         stranded with no way back to the page they actually typed. -->
+    <div class="error-suggestion">
+      <FuzzyRedirect sitemapUrl="/sitemap.xml" autoRedirectThreshold={1} suggestionText="Did you mean" />
+    </div>
     <div class="error-actions">
       <a href="/" class="error-btn error-btn--primary">Go home</a>
     </div>
@@ -34,6 +52,16 @@ import Layout from '../layouts/Layout.astro'
     font-size: 1.25rem;
     color: var(--color-muted);
     margin: 0;
+  }
+  .error-suggestion {
+    font-size: 1rem;
+    color: var(--color-font);
+    margin: 0;
+  }
+  .error-suggestion :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+    font-weight: 600;
   }
   .error-actions {
     display: flex;

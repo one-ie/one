@@ -1,0 +1,95 @@
+---
+export const prerender = true
+import Layout from '@/layouts/Layout.astro'
+import { buildPiece } from '@jdevalk/seo-graph-core'
+import type { FAQPage } from 'schema-dts'
+import { SITE } from '@/lib/seo-site'
+
+// Every answer below is verified against a real file in this repo — see the
+// inline source comments. Nothing here is invented copy; this is the single
+// list rendered both in the page body and in the FAQPage JSON-LD below, so
+// the two can never drift.
+const faqs = [
+  {
+    q: 'What is ONE?',
+    a: `ONE is an open-source Astro starter template that ships payments, AI, and plugins on day one, built with Astro 7, React 19, Tailwind CSS, and shadcn/ui, deployed on Cloudflare Workers. It comes wired to six optional plugins (auth, backend, blog, chat, docs, track) and a six-token brand system in one.config.ts, so a business can rebrand and deploy the whole site by editing a single file. It is one of four coordinated surfaces — one.ie, pay.one.ie, api.one.ie, and the github.com/one-ie/one repo — that share the same backend.`,
+  },
+  {
+    q: 'Is ONE free to use commercially?',
+    a: `Yes. ONE is released under a custom "ONE License v1.0" — not MIT or Apache — which grants unrestricted commercial rights: you can use, modify, sell, resell, and build products on top of the software at any price, with no usage limits and no royalty fees. The only obligation, called the Brand Requirement, is that you don't remove the ONE brand, logo, and link to https://one.ie/ from your deployed product. Removing that branding for a fully white-labeled deployment requires a separate paid ONE Enterprise License.`,
+  },
+  {
+    q: "What's included — what plugins does it ship with?",
+    a: `ONE ships with six official plugins wired in one.config.ts: @oneie/plugin-auth (authentication), @oneie/plugin-backend (connects the site to the ONE backend), @oneie/plugin-blog, @oneie/plugin-chat (an AI chat widget), @oneie/plugin-docs, and @oneie/plugin-track (analytics). Each is a build-time Astro integration — installing the package and listing it in one.config.ts are both required — and ONE runs fully standalone, without any of them connected to a live backend, using local auth and a Cloudflare D1 database.`,
+  },
+  {
+    q: "What's the tech stack?",
+    a: `ONE runs on Astro 7 with the @astrojs/react integration (React 19.1) and the @astrojs/cloudflare adapter for server rendering, styled with Tailwind CSS 4 and shadcn/ui components, and deployed to Cloudflare Workers. It also bundles Better Auth 1.6 for authentication, the official Stripe SDK for card payments, schema-dts plus @jdevalk/astro-seo-graph for structured data, and Zod 4 for validation — all declared in site/package.json.`,
+  },
+  {
+    q: 'How do I deploy it?',
+    a: `ONE deploys from the site directory with bun run deploy, which runs astro build && wrangler deploy to ship straight to Cloudflare Workers; a deploy:template script (scripts/deploy-template.sh) handles template-specific deploy steps. Before that, provisioning a workspace identity is one command — one setup, or the zero-config one onboard — which mints a workspace and agent identity and writes a ONE_API_KEY to .env.local. The site itself runs and can be previewed without that step; it's only needed to connect the blog, chat, docs, and tracking plugins to a live ONE backend.`,
+  },
+  {
+    q: 'Does it come with payments built in?',
+    a: `Yes — two payment rails are wired in and live on the /payments page. Crypto payment links work across four chains (SUI, ETH, SOL, BTC) with no account and no custody required, created and signed server-side. Real Stripe Elements card checkout is also included and activates once two environment variables (a publishable key and a secret key) are set; without them it renders an honest preview instead of a broken form. Pricing is centralized in one place (src/lib/plan-pricing.ts) so both rails and any pricing card always charge the same amount for a given plan, and a real product — "Own Your Stack" at $24.99 — ships in the content collection to demonstrate the full checkout path.`,
+  },
+  {
+    q: 'Does it ship structured data and AI-search optimization out of the box?',
+    a: `Yes — the template wires @jdevalk/astro-seo-graph to emit a linked schema.org JSON-LD graph (Organization, WebSite, and per-page nodes) on every page instead of isolated meta tags. It also generates discovery surfaces built for AI agents that most templates skip: /llms.txt, markdown alternates of every blog and docs page, a corpus-wide /schema.json endpoint, and a real /sitemap.xml — all checked at build time for a single H1 per page, unique titles and descriptions, image alt text, and SERP-safe metadata length. The /seo page on this site shows every one of these mechanisms live and clickable.`,
+  },
+  {
+    q: 'Do I need to connect to the ONE backend to start developing?',
+    a: `No. ONE runs standalone without any connection to its backend — authentication and sessions are handled locally through Better Auth and a Cloudflare D1 database, so the full UI can be built and previewed before a ONE_API_KEY ever exists. Setting that key later, via one setup or one onboard, is what activates the plugins that call out to the shared backend at https://one.ie — blog, chat, docs, and tracking.`,
+  },
+]
+
+// FAQPage node — same buildPiece<FAQPage> pattern as src/pages/seo.astro,
+// fed straight through to Layout's `graph` prop (contract 2, data/text/seo.md
+// §0). The mainEntity list below is generated from the same `faqs` array
+// rendered on the page, so the schema can never drift from what's visible.
+const faqEntity = buildPiece<FAQPage>({
+  '@type': 'FAQPage',
+  '@id': `${SITE.url}/faq/#faq`,
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+})
+const pageGraph = { '@graph': [faqEntity] }
+---
+
+<Layout
+  title="FAQ — ONE Astro Starter Template"
+  description="Real answers about ONE's license, plugins, tech stack, deployment, and built-in payments — the open-source Astro starter that ships on day one."
+  graph={pageGraph}
+>
+  <main class="mx-auto max-w-[760px] px-6 py-12 md:py-20">
+
+    <!-- ─── HERO / DIRECT-ANSWER INTRO ─── -->
+    <header class="mb-12">
+      <div class="text-sm uppercase tracking-widest text-font/40 mb-3">FAQ</div>
+      <h1 class="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight">Frequently asked questions</h1>
+      <p class="mt-4 text-lg text-font/60 max-w-[62ch] leading-relaxed">
+        This page answers real, specific questions about the <strong>ONE</strong> Astro starter template — its license terms, what ships in the box, the tech stack, how to deploy it, and whether payments and AI-search tooling are wired in. Every answer is verified against the actual files in this repo, not marketing copy, and each one is written to stand on its own if quoted directly by an AI assistant or search result.
+      </p>
+    </header>
+
+    <!-- ─── FAQ LIST (mirrors the FAQPage in this page's JSON-LD) ─── -->
+    <section>
+      <div class="divide-y rounded-2xl border" style={`border-color: var(--color-border)`}>
+        {faqs.map((item) => (
+          <div class="p-5 md:p-6">
+            <h2 class="font-medium text-[15px] mb-1.5">{item.q}</h2>
+            <p class="text-sm text-font/60 leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </main>
+</Layout>

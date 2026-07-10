@@ -29,6 +29,20 @@ interface Props {
    *  link only when set, so pages that don't serve a `.md` sibling emit
    *  nothing. */
   mdAlternateHref?: string
+  /** OG type — defaults to `'website'`. Set `'article'` on content pages
+   *  (blog posts, docs) together with `article` below so `<Seo>` emits
+   *  `article:published_time`/`article:modified_time`/`article:author`.
+   *  Contract for data/text/seo.md's "blog article OG type" work — see
+   *  `blog/[slug].astro` for a real call site. */
+  ogType?: 'website' | 'article' | 'profile' | 'book'
+  /** Article-specific OG metadata, only emitted when `ogType` is
+   *  `'article'`. Passed straight through to `<Seo>`'s own `article` prop —
+   *  same shape, no adapter layer. */
+  article?: {
+    publishedTime?: Date | string
+    modifiedTime?: Date | string
+    authors?: readonly string[]
+  }
 }
 
 // `ogTitle`/`ogUrl` stay in Props (below) for call-site compatibility but
@@ -42,7 +56,24 @@ const {
   graph,
   noindex,
   mdAlternateHref,
+  ogType,
+  article,
 } = Astro.props
+
+// Default share image — every page gets a real, on-brand image rather than
+// no image at all (the previous behavior: og:image was omitted entirely
+// unless a page passed one, so every untouched share rendered as a bare
+// link). Generated once via `scripts/generate-og-image.mjs`, not at
+// request/build time — see that script for regeneration instructions.
+// A page-specific `ogImage` still wins.
+const resolvedOgImage = ogImage ?? `${SITE.url}/og.png`
+
+// Search Console / Bing verification meta — public build-time env vars
+// (not Cloudflare runtime secrets; these are static per-deployment, read
+// the same way in prerendered and SSR pages). Omitted entirely when unset,
+// never rendered as an empty/placeholder content attribute.
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION
+const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION
 
 const siteName = SITE.name
 
@@ -119,19 +150,31 @@ const runtimeThemes = Object.fromEntries(
     <!-- Title, canonical, description, robots, OG, Twitter, and the JSON-LD
          @graph are all owned by the package now — see seo-graph.ts for the
          Organization/WebSite/WebPage baseline fed through the `graph` prop.
-         `twitter.card` mirrors the old ogImage-conditional logic so Twitter
-         cards keep the same summary vs. summary_large_image split as before. -->
+         Every page now resolves to a real ogImage (page-specific or the
+         generated default), so the Twitter card is always the richer
+         summary_large_image — no page renders as a bare link anymore. -->
     <Seo
       title={pageTitle}
       description={pageDescription}
       canonical={canonicalURL}
       siteName={siteName}
-      ogImage={ogImage}
-      twitter={{ card: ogImage ? 'summary_large_image' : 'summary' }}
+      ogImage={resolvedOgImage}
+      ogType={ogType}
+      article={article}
+      twitter={{ card: 'summary_large_image' }}
       graph={pageGraph}
       noindex={noindex}
       extraLinks={extraLinks}
     />
+
+    {googleSiteVerification && (
+      <meta name="google-site-verification" content={googleSiteVerification} />
+    )}
+    {bingSiteVerification && (
+      <meta name="msvalidate.01" content={bingSiteVerification} />
+    )}
+
+    <link rel="alternate" type="application/rss+xml" title={`${siteName} Blog`} href={`${SITE.url}/rss.xml`} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />

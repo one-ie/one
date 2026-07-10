@@ -121,6 +121,8 @@ const mdAlternateHref = deriveMdUrl(pageUrl)
   description={seoDescription}
   graph={graph}
   mdAlternateHref={mdAlternateHref}
+  ogType="article"
+  article={{ publishedTime: datePublished, modifiedTime: dateModified }}
 >
   <BlogPost entry={entry} headings={headings} />
 </Layout>

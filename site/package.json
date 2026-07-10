@@ -16,6 +16,7 @@
   "dependencies": {
     "@astrojs/cloudflare": "^14.1.1",
     "@astrojs/react": "^6.0.1",
+    "@astrojs/rss": "^4.0.19",
     "@fontsource-variable/geist": "^5.2.9",
     "@jdevalk/astro-seo-graph": "2.2.0",
     "@jdevalk/seo-graph-core": "0.7.0",
@@ -42,6 +43,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "schema-dts": "^2.0.0",
+    "sharp": "^0.35.3",
     "sonner": "^2.0.7",
     "stripe": "^22.3.0",
     "tailwind-merge": "^3.5.0",

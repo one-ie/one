@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import { getEnv } from '../lib/cf-env'
+import { one, unwrap } from '../lib/one'
 import { readSelfHostedWallet, fetchSelfHostedBalances, type ChainBalance } from '../lib/chain-balances'
 import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
 
@@ -18,11 +19,6 @@ interface WalletTx {
 }
 
 const env = await getEnv()
-const apiKey = env.ONE_API_KEY as string | undefined
-// one.config.ts's convention is ONE_BASE_URL; `one onboard`/`one init` write
-// ONE_API_URL instead (a real naming mismatch between the CLI and this
-// template — accept both rather than silently falling back to the default).
-const baseUrl = (env.ONE_BASE_URL as string | undefined) ?? (env.ONE_API_URL as string | undefined) ?? 'https://one.ie'
 
 // Self-hosted wallet — `one wallet keygen`'s addresses, stored in .dev.vars.
 // Works with NO backend connection at all: these are public RPC reads, not
@@ -36,28 +32,18 @@ let credits = 0
 let transactions: WalletTx[] = []
 let fetchError: string | null = null
 
-// one.ie/web only answers the long form (/api/ask/<receiver>) — the short form
-// (/ask/<receiver>) is the api.one.ie gateway's own path, a different host.
-// ONE_BASE_URL defaults to https://one.ie, so this is the correct form here.
-async function ask(receiver: string, data: Record<string, unknown> = {}): Promise<Record<string, unknown>> {
-  const res = await fetch(`${baseUrl}/api/ask/${encodeURIComponent(receiver)}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({ data }),
-  })
-  const json = (await res.json().catch(() => ({}))) as { outcome?: string; result?: Record<string, unknown>; error?: string }
-  if (!res.ok || (json.outcome && json.outcome !== 'result')) {
-    throw new Error(json.error ?? json.outcome ?? `${receiver} → ${res.status}`)
-  }
-  return json.result ?? (json as Record<string, unknown>)
-}
+const client = await one()
+const connected = client !== null
 
-if (apiKey) {
+if (client) {
   try {
-    const wallet = await ask('wallet:get')
+    const wallet = unwrap<{ credits?: number }>(await client.ask('wallet:get'), 'wallet:get')
     credits = Number(wallet.credits ?? 0)
-    const tx = await ask('wallet:transactions', { limit: 20 })
-    transactions = (tx.transactions as WalletTx[] | undefined) ?? []
+    const tx = unwrap<{ transactions?: WalletTx[] }>(
+      await client.ask('wallet:transactions', { limit: 20 }),
+      'wallet:transactions',
+    )
+    transactions = tx.transactions ?? []
   } catch (e) {
     fetchError = e instanceof Error ? e.message : String(e)
   }
@@ -88,7 +74,7 @@ function fmtDate(ts: number): string {
       <h2 style="font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem;">Balances</h2>
       <p style="color: var(--color-muted); margin-bottom: 1rem; font-size: 0.9rem;">
         {balances.length} on-chain address{balances.length === 1 ? '' : 'es'} — self-hosted, generated fully offline
-        {apiKey && !fetchError && <> · {credits} credits (ONE backend)</>}
+        {connected && !fetchError && <> · {credits} credits (ONE backend)</>}
       </p>
       {balances.length === 0 && (
         <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem; background: var(--color-background);">
@@ -130,16 +116,16 @@ function fmtDate(ts: number): string {
     <section>
       <p class="section-eyebrow">Settlement history</p>
       <h2 style="font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem;">Recent transactions</h2>
-      {!apiKey && (
+      {!connected && (
         <p style="color: var(--color-muted);">
           No backend connected — this section reads the ONE settlement ledger, not the chains above. Run <code>one onboard</code> to see it.
         </p>
       )}
-      {apiKey && fetchError && (
+      {connected && fetchError && (
         <p style="color: var(--color-muted);">Couldn't load: {fetchError}</p>
       )}
-      {apiKey && !fetchError && transactions.length === 0 && <p style="color: var(--color-muted);">No transactions yet.</p>}
-      {apiKey && !fetchError && transactions.length > 0 && (
+      {connected && !fetchError && transactions.length === 0 && <p style="color: var(--color-muted);">No transactions yet.</p>}
+      {connected && !fetchError && transactions.length > 0 && (
         <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
           <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.9rem;">
             <thead>

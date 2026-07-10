@@ -7,6 +7,7 @@ import Card from '../components/blocks/Card.astro'
 import Tabs from '../components/blocks/Tabs.astro'
 import Footer from '../components/blocks/Footer.astro'
 import { Icon } from '../components/ui/Icon'
+import { one } from '../lib/one'
 import {
   KeyRound,
   Server,
@@ -111,6 +112,30 @@ const tierLabel: Record<string, string> = {
   free: 'Free',
   connected: 'Connected',
 }
+
+// Live proof for the backend panel — one real substrate read per page view,
+// so "verified live on this page" is literally true. recall() is within the
+// template key's scope (highways/frontiers are not). Failure or standalone
+// mode degrades to a note; the page never depends on the call succeeding.
+let backendLive: { total: number; latest: string | null; latency: number } | null = null
+let backendLiveError: string | null = null
+try {
+  const client = await one()
+  if (client) {
+    const t0 = performance.now()
+    const res = (await client.recall(undefined, undefined, 1)) as {
+      hypotheses?: { statement?: string }[]
+      total?: number
+    }
+    backendLive = {
+      total: res.total ?? 0,
+      latest: res.hypotheses?.[0]?.statement ?? null,
+      latency: Math.round(performance.now() - t0),
+    }
+  }
+} catch (e) {
+  backendLiveError = e instanceof Error ? e.message : String(e)
+}
 ---
 
 <Layout
@@ -195,11 +220,25 @@ const tierLabel: Record<string, string> = {
 
               {p.id === 'backend' && (
                 <div class="demo-box demo-box--code">
-                  <p class="demo-note">Server-only — no client UI. Called from any <code>.astro</code> frontmatter or API route:</p>
-                  <pre><code>{`import { oneClient } from '@oneie/plugin-backend'
+                  {backendLive && (
+                    <p class="demo-note">
+                      Live — rendering this page just called <code>recall()</code> against the workspace:
+                      {' '}{backendLive.total} {backendLive.total === 1 ? 'hypothesis' : 'hypotheses'} in memory
+                      {backendLive.latest && <> · latest: “{backendLive.latest}”</>}
+                      {' '}· {backendLive.latency}ms round-trip.
+                    </p>
+                  )}
+                  {!backendLive && (
+                    <p class="demo-note">
+                      {backendLiveError
+                        ? `Live call failed: ${backendLiveError}`
+                        : 'Standalone mode — set ONE_API_KEY and this note becomes a live substrate read.'}
+                    </p>
+                  )}
+                  <pre><code>{`import { one } from '../lib/one'
 
-const client = await oneClient() // reads ONE_API_KEY at runtime
-const groups = await client.groups()`}</code></pre>
+const client = await one() // null without ONE_API_KEY
+const memory = await client?.recall()`}</code></pre>
                 </div>
               )}
 
