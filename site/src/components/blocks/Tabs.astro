@@ -375,9 +375,12 @@ const ICONS: Record<string, string> = {
         panel.hidden = !on
         panel.removeAttribute('data-enter')
         if (on && animate) {
-          // Force reflow so the animation restarts on re-selection.
-          void panel.offsetWidth
-          panel.setAttribute('data-enter', '')
+          // Restart the animation on re-selection without a synchronous
+          // layout read: a double rAF guarantees a paint with the attribute
+          // removed before it's re-added, same effect as forcing reflow.
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => panel.setAttribute('data-enter', ''))
+          })
         }
       })
       moveIndicator(tabs[clamped])

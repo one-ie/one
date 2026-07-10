@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro'
 import Reveal from '../components/motion/Reveal.astro'
 import Stagger from '../components/motion/Stagger.astro'
-import CountUp from '../components/home/CountUp'
 import { LighthouseRings } from '../components/home/LighthouseRings'
 import DesignSystem from '../components/design/DesignSystem.astro'
 import ThemeGallery from '../components/home/ThemeGallery.astro'
@@ -11,7 +10,6 @@ import CardDemo from '../components/blocks/demos/CardDemo.astro'
 import CarouselDemo from '../components/blocks/demos/CarouselDemo.astro'
 import TabsDemo from '../components/blocks/demos/TabsDemo.astro'
 import QuoteDemo from '../components/blocks/demos/QuoteDemo.astro'
-import ProofTerminal from '../components/lifecycle/ProofTerminal'
 import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
 import PhysicalCardCheckout from '../components/payments/PhysicalCardCheckout'
 import CardCheckoutPreview from '../components/payments/CardCheckoutPreview'
@@ -20,36 +18,16 @@ import Card from '../components/blocks/Card.astro'
 import Pattern from '../components/blocks/Pattern.astro'
 import Footer from '../components/blocks/Footer.astro'
 import { getEnv } from '../lib/cf-env'
-import { buildPiece } from '@jdevalk/seo-graph-core'
-import type { FAQPage } from 'schema-dts'
-import { SITE } from '../lib/seo-site'
 
 // ── Real proof only ───────────────────────────────────────────────────────
 // This is a promise page: every number below is measured or verifiable, not
 // invented. These Lighthouse scores were measured against THIS page's own
 // `bun run build && bun run preview` output (Lighthouse 13.x, headless
 // Chrome) — not copied from /speed.astro, which measures a different build.
-// The payment link generator mints a real pay.one.ie link on click; the
-// on-chain digests are genuine, independently-verifiable Sui testnet txs.
+// The payment link generator mints a real pay.one.ie link on click.
 const LIGHTHOUSE_DATE = '2026-07-09'
 const DESKTOP_SCORES: [number, number, number, number] = [100, 100, 100, 100]
 const MOBILE_PERF = 86
-
-const PROOF_COMMAND =
-  'bun pay/tools/agent-onboarding-lifecycle-demo.ts --assert-tracked --api-url https://one.ie'
-const PROOF_STEPS = [
-  { t: 6.3, ok: true, label: 'register', detail: 'POST /api/auth/agent — no key, no human. uid + apiKey minted, wallet bound at signup.' },
-  { t: 16.1, ok: true, label: 'bootstrap', detail: 'agent:bootstrap — own workspace, gid + aid + scopedKey minted.' },
-  { t: 17.2, ok: true, label: 'tracked', detail: 'lifecycle:mine — registered→bootstrapped, 2 rows written by rules.' },
-]
-const PROOF_VERDICT = 'PASS — the funnel filled itself'
-
-const TXS = [
-  { digest: 'Bf7V7F6baz5pD9c3KH5vnCR41tUgoebiW3puuBfQRCsh', label: 'Signed transfer', amount: '0.995 SUI', detail: 'A real payer keypair signed and sent funds to this starter\'s wallet — settlement, live.' },
-  { digest: 'B6XqzCQEw39xxeMqHCX6WUnBma8KAZdZ9iK5GC7fV9DU', label: 'Faucet drop', amount: '1 SUI', detail: 'Public testnet faucet funding the same wallet /wallet displays.' },
-  { digest: 'AdEFmNNB5dDNsFHTdmXfYkSeTBkzTnZveQi4gn75CHBP', label: 'Auto-fund at bootstrap', amount: '0.05 SUI', detail: 'Treasury faucet dispensing to a freshly bootstrapped agent — the funding wall, removed.' },
-  { digest: '3rTxWzgh7313MW357q3caSPaQ9aeB1jUXkQprP2EQgaq', label: 'Dispense, repeated', amount: '0.05 SUI', detail: 'Second treasury dispense — and the 24h per-address rate limit held on the retry.' },
-]
 
 // Same live/preview switch payments.astro uses — real Stripe Elements the
 // moment both keys exist, an honest static preview until then.
@@ -58,52 +36,11 @@ const stripePublishableKey =
   (env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string | undefined) ??
   (env.STRIPE_PUBLIC_KEY as string | undefined)
 const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
-
-// ── Homepage FAQ excerpt — real answers only ──────────────────────────────
-// A compact subset (not the full hub at /faq/) of the questions a visitor
-// actually lands here with. Single source for BOTH the rendered cards below
-// AND the FAQPage JSON-LD, so the two can never drift. Sources: one.config.ts
-// (plugin list), /LICENSE (repo root — ONE License v1.0 terms), package.json
-// (tech stack), and this page's own verified 14-theme count (src/lib/themes.ts).
-const faqs = [
-  {
-    q: 'What is ONE?',
-    a: 'ONE is a source-available Astro 7 + React 19 starter template. Clone it and you get a production design system, a motion library, and a payments stack already wired together through one.config.ts — not a blank scaffold you assemble yourself.',
-  },
-  {
-    q: 'Is it free to use commercially?',
-    a: 'Yes. ONE ships under the ONE License v1.0 — full commercial use, resale, and modification, with no usage limits or royalty fees. The only obligation is keeping the ONE brand, logo, and a link to https://one.ie/ in your deployed product; removing that requires a separate ONE Enterprise License.',
-  },
-  {
-    q: 'What comes wired in by default?',
-    a: 'Six plugins declared in one.config.ts — auth, backend, blog, chat, docs, and track — plus 14 built-in themes, a motion library, and two live payment rails: signed crypto links today, a Stripe card scaffold that activates the moment you add your own keys.',
-  },
-  {
-    q: "What's the tech stack?",
-    a: 'Astro 7 and React 19 on Cloudflare Workers, styled with Tailwind CSS 4, with Stripe for card payments and better-auth for sessions — the exact stack rendering this page.',
-  },
-]
-
-// FAQPage node — same `buildPiece<FAQPage>` construction as /seo.astro (the
-// `schema-dts` type, not a re-export from @jdevalk/seo-graph-core — that
-// import bug was already fixed elsewhere and isn't reintroduced here).
-// Merged into Layout's own Organization/WebSite/WebPage baseline via `graph`.
-const faqEntity = buildPiece<FAQPage>({
-  '@type': 'FAQPage',
-  '@id': `${SITE.url}/#faq`,
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-})
-const pageGraph = { '@graph': [faqEntity] }
 ---
 
 <Layout
   title="ONE — design beautiful websites with perfect Lighthouse scores"
   description="Open-source Astro 7 + React 19 starter with a production design system, motion library, and payment stack. 14 themes, a perfect Lighthouse score, measured against this repo's own build."
-  graph={pageGraph}
 >
 
   <!-- ── Hero — the promise, proven in place ───────────────────────── -->
@@ -236,30 +173,6 @@ const pageGraph = { '@graph': [faqEntity] }
         </Reveal>
       </div>
 
-      <Stagger class="speed-grid" stagger={0.08} dist="md">
-        <div class="speed"><div class="speed-v"><CountUp client:visible value="6.3s" /></div><div class="speed-l">to register — no key, no human</div></div>
-        <div class="speed"><div class="speed-v"><CountUp client:visible value="16.1s" /></div><div class="speed-l">to a bootstrapped workspace</div></div>
-        <div class="speed"><div class="speed-v"><CountUp client:visible value="17.2s" /></div><div class="speed-l">to a tracked, filled funnel</div></div>
-      </Stagger>
-
-      <div class="proof-grid">
-        <Reveal>
-          <ProofTerminal client:visible command={PROOF_COMMAND} steps={PROOF_STEPS} verdict={PROOF_VERDICT} />
-        </Reveal>
-        <Stagger class="tx-list" stagger={0.08} dist="md">
-          {TXS.map((tx) => (
-            <a class="tx-card" href={`https://suiscan.xyz/testnet/tx/${tx.digest}`} target="_blank" rel="noopener">
-              <div class="tx-top">
-                <span class="tx-label">{tx.label}</span>
-                <span class="tx-amount">{tx.amount}</span>
-              </div>
-              <code class="tx-digest">{tx.digest}</code>
-              <p class="tx-detail">{tx.detail}</p>
-              <span class="tx-verify">Verify on suiscan ↗</span>
-            </a>
-          ))}
-        </Stagger>
-      </div>
     </div>
   </section>
 
@@ -290,29 +203,6 @@ const pageGraph = { '@graph': [faqEntity] }
     </div>
   </section>
 
-  <!-- ── FAQ — compact excerpt, full hub linked below ───────────────── -->
-  <section id="faq" class="section section-alt">
-    <div class="container">
-      <Reveal class="section-head" dist="lg">
-        <p class="eyebrow">Questions, answered</p>
-        <h2 class="section-title">Before you clone it.</h2>
-        <p class="section-sub">
-          The questions people actually land here with — answered straight,
-          no marketing fog. More detail and more questions on the
-          <a href="/faq/" class="card__link">full FAQ →</a>
-        </p>
-      </Reveal>
-      <Stagger class="faq-grid" stagger={0.08} dist="md">
-        {faqs.map((f) => (
-          <Card variant="default">
-            <Fragment slot="header">{f.q}</Fragment>
-            {f.a}
-          </Card>
-        ))}
-      </Stagger>
-    </div>
-  </section>
-
   <!-- ── Final CTA — the last word before the footer ───────────────── -->
   <section class="section cta-section">
     <Pattern pattern="diagonal" opacity={0.08} tone="contrast" fade />
@@ -325,7 +215,7 @@ const pageGraph = { '@graph': [faqEntity] }
           <button class="copy-btn copy-btn-cta" onclick="navigator.clipboard.writeText('npm create one-app@latest my-site').then(()=>{this.textContent='Copied';setTimeout(()=>this.textContent='Copy',1500)})">Copy</button>
         </div>
         <div class="hero-actions">
-          <a href="https://github.com/one-ie/one" class="btn-cta-primary">View on GitHub →</a>
+          <a href="#" class="btn-cta-primary">View on GitHub →</a>
           <a href="/design" class="btn-cta-secondary">See the design system</a>
         </div>
         <p class="cta-risk">Source-available · Free forever · No card required · Every claim on this page is live</p>
@@ -337,27 +227,27 @@ const pageGraph = { '@graph': [faqEntity] }
     tagline="The open-source Astro starter that ships a design system, motion, and payments on day one — wired from one.config.ts."
     columns={[
       { heading: 'Product', links: [
-        { label: 'Design system', href: '/design' },
-        { label: 'Motion', href: '/motion' },
-        { label: 'Components', href: '/components' },
-        { label: 'Payments', href: '/payments' },
-        { label: 'Speed proof', href: '/speed' },
-        { label: 'Wallet', href: '/wallet' },
+        { label: 'Design system', href: '#' },
+        { label: 'Motion', href: '#' },
+        { label: 'Components', href: '#' },
+        { label: 'Payments', href: '#' },
+        { label: 'Speed proof', href: '#' },
+        { label: 'Wallet', href: '#' },
       ] },
       { heading: 'Resources', links: [
-        { label: 'Documentation', href: 'https://one.ie/docs' },
-        { label: 'GitHub', href: 'https://github.com/one-ie/one', external: true },
-        { label: 'Changelog', href: 'https://one.ie/docs' },
+        { label: 'Documentation', href: '#' },
+        { label: 'GitHub', href: '#' },
+        { label: 'Changelog', href: '#' },
       ] },
       { heading: 'Company', links: [
-        { label: 'About', href: 'https://one.ie' },
-        { label: 'Blog', href: 'https://one.ie' },
-        { label: 'Contact', href: 'https://one.ie' },
+        { label: 'About', href: '#' },
+        { label: 'Blog', href: '#' },
+        { label: 'Contact', href: '#' },
       ] },
       { heading: 'Legal', links: [
-        { label: 'License', href: 'https://github.com/one-ie/one/blob/main/LICENSE' },
-        { label: 'Privacy', href: 'https://one.ie' },
-        { label: 'Terms', href: 'https://one.ie' },
+        { label: 'License', href: '#' },
+        { label: 'Privacy', href: '#' },
+        { label: 'Terms', href: '#' },
       ] },
     ]}
     note="Free forever, one license · Built on the open web."
@@ -426,7 +316,7 @@ const pageGraph = { '@graph': [faqEntity] }
         tuck the heading under it. ─────────────────────────────────────── */
   :global(#design), :global(#themes), :global(#motion), :global(#cards),
   :global(#carousels), :global(#tabs), :global(#quotes), :global(#payments),
-  :global(#card), :global(#faq) {
+  :global(#card) {
     scroll-margin-top: calc(var(--nav-total-h) + 16px);
   }
 
@@ -593,50 +483,6 @@ const pageGraph = { '@graph': [faqEntity] }
     letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-primary);
   }
   .widget-hint { color: var(--color-muted); font-family: 'SF Mono', 'Fira Code', monospace; }
-
-  /* ── Proof section ──────────────────────────────────────────────── */
-  :global(.speed-grid) {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-    max-width: 52rem; margin: 3.5rem auto 2.75rem;
-  }
-  @media (max-width: 700px) { :global(.speed-grid) { grid-template-columns: 1fr; } }
-  .speed {
-    text-align: center; border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg); padding: 1.5rem 1rem; background: var(--color-background);
-  }
-  .speed-v { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.03em; color: var(--color-font); font-variant-numeric: tabular-nums; }
-  .speed-l { font-size: 0.82rem; color: var(--color-muted); margin-top: 0.35rem; line-height: 1.4; }
-
-  .proof-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;
-  }
-  @media (max-width: 900px) { .proof-grid { grid-template-columns: 1fr; } }
-  :global(.tx-list) { display: grid; grid-template-columns: 1fr; gap: 0.85rem; }
-  @media (min-width: 560px) and (max-width: 900px) { :global(.tx-list) { grid-template-columns: 1fr 1fr; } }
-  .tx-card {
-    display: block; border: 1px solid var(--color-border-fixed); border-radius: var(--radius-lg);
-    padding: 1.1rem 1.25rem; background: var(--color-background); text-decoration: none;
-    transition: border-color var(--ease), transform var(--ease), box-shadow var(--ease);
-    --color-font: var(--color-font-fixed);
-    --color-muted: var(--color-muted-fixed);
-  }
-  .tx-card:hover { border-color: var(--color-border-strong-fixed); transform: translateY(-2px); box-shadow: var(--shadow-pop); }
-  .tx-top { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
-  .tx-label { font-size: 0.88rem; font-weight: 700; color: var(--color-font); }
-  .tx-amount { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.78rem; font-weight: 700; color: var(--color-primary); }
-  .tx-digest {
-    display: block; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.68rem;
-    color: var(--color-muted); margin: 0.5rem 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .tx-detail { font-size: 0.8rem; line-height: 1.55; color: var(--color-muted); margin: 0 0 0.6rem; }
-  .tx-verify { font-size: 0.75rem; font-weight: 600; color: var(--color-primary); }
-
-  /* ── FAQ excerpt ────────────────────────────────────────────────── */
-  :global(.faq-grid) {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
-    max-width: 52rem; margin: 0 auto;
-  }
-  @media (max-width: 700px) { :global(.faq-grid) { grid-template-columns: 1fr; } }
 
   /* ── Final CTA ──────────────────────────────────────────────────── */
   .cta-section { background: var(--color-primary); padding: 8rem 0; position: relative; overflow: hidden; }

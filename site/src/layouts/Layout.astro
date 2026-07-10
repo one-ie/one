@@ -187,12 +187,14 @@ const runtimeThemes = Object.fromEntries(
     <!-- Critical tokens — inlined to prevent FOUC on first paint -->
     <style is:inline>
       :root {
-        --color-background: hsl(0 0% 93%);
-        --color-foreground: hsl(0 0% 100%);
+        /* Fallbacks mirror the 'navy' preset (the default theme) so the
+           pre-JS first paint matches what __applyTheme lands on. */
+        --color-background: hsl(216 20% 92%);
+        --color-foreground: hsl(216 12% 99%);
         --color-font: hsl(0 0% 13%);
-        --color-primary: hsl(42 95% 34%);
-        --color-secondary: hsl(40 15% 18%);
-        --color-tertiary: hsl(35 80% 28%);
+        --color-primary: hsl(216 55% 25%);
+        --color-secondary: hsl(219 14% 28%);
+        --color-tertiary: hsl(105 22% 25%);
         --color-on-primary: #fff;
         --color-on-secondary: #fff;
         --color-on-tertiary: #fff;
@@ -228,17 +230,17 @@ const runtimeThemes = Object.fromEntries(
         --color-gold: hsl(42 90% 52%);
       }
       html.dark {
-        --color-background: hsl(0 0% 10%);
-        --color-foreground: hsl(0 0% 13%);
+        --color-background: hsl(216 24% 9%);
+        --color-foreground: hsl(216 18% 15%);
         --color-font: hsl(0 0% 100%);
         --color-font-fixed: hsl(0 0% 100%);
         --color-muted-fixed: color-mix(in oklab, hsl(0 0% 100%) 60%, transparent);
         --color-border-fixed: color-mix(in oklab, hsl(0 0% 100%) 10%, transparent);
         --color-border-strong-fixed: color-mix(in oklab, hsl(0 0% 100%) 20%, transparent);
         --color-faint-fixed: color-mix(in oklab, hsl(0 0% 100%) 40%, transparent);
-        --color-primary: hsl(42 95% 62%);
-        --color-secondary: hsl(40 12% 62%);
-        --color-tertiary: hsl(35 75% 60%);
+        --color-primary: hsl(216 55% 65%);
+        --color-secondary: hsl(219 14% 65%);
+        --color-tertiary: hsl(105 22% 65%);
         --color-on-primary: #000;
         --color-on-secondary: #000;
         --color-on-tertiary: #000;
@@ -314,7 +316,7 @@ const runtimeThemes = Object.fromEntries(
             el.style.removeProperty('--color-' + k)
             el.style.removeProperty('--color-on-' + k)
           })
-          window.__applyTheme(localStorage.getItem('one-theme') || 'vespio', dark)
+          window.__applyTheme(localStorage.getItem('one-theme') || 'navy', dark)
           var raw = localStorage.getItem('one-custom')
           if (raw) { try { window.__applyCustom(JSON.parse(raw), dark) } catch (e) {} }
           /* Auto-contrast for whatever ends up in --color-foreground — same
@@ -374,7 +376,7 @@ const runtimeThemes = Object.fromEntries(
            __applyTheme), and switching to a theme with no default clears it. */
         window.__applyImagePatterns = function () {
           var el = document.documentElement
-          var t = window.__T[localStorage.getItem('one-theme') || 'vespio'] || {}
+          var t = window.__T[localStorage.getItem('one-theme') || 'navy'] || {}
           ;['bg', 'fg'].forEach(function (layer) {
             var manual = localStorage.getItem('one-pattern-' + layer)
             var themeUrl = layer === 'fg' ? t.fgImg : null
@@ -387,9 +389,9 @@ const runtimeThemes = Object.fromEntries(
         }
 
         var rawDark = localStorage.getItem('one-dark')
-        var dark = rawDark !== null
-          ? rawDark === 'true'
-          : window.matchMedia('(prefers-color-scheme: dark)').matches
+        /* Dark by default — a stored pick still wins, but a first visit gets
+           the dark canvas regardless of OS preference. */
+        var dark = rawDark !== null ? rawDark === 'true' : true
         if (dark) document.documentElement.classList.add('dark')
         window.__syncTheme() // also runs __applyImagePatterns() — see above
       })()
@@ -487,7 +489,7 @@ const runtimeThemes = Object.fromEntries(
 
         function state() {
           return {
-            theme: localStorage.getItem('one-theme') || 'vespio',
+            theme: localStorage.getItem('one-theme') || 'navy',
             dark: document.documentElement.classList.contains('dark'),
             custom: localStorage.getItem('one-custom') !== null,
           }
@@ -568,10 +570,25 @@ const runtimeThemes = Object.fromEntries(
         if (nav) {
           var lastY = window.scrollY
           var ticking = false
+          // Cached, not read from nav.offsetHeight per scroll frame — reading
+          // a layout property inside a scroll-driven rAF forces a synchronous
+          // reflow whenever another on-page animation (e.g. Motion/Reveal)
+          // has invalidated styles that same frame. The nav's height only
+          // ever changes on resize, so measure it there instead. The first
+          // measurement is deferred to rAF too — reading it inline here would
+          // force a synchronous layout flush mid-parse, before the rest of
+          // this script's DOM writes (menu, swatches) get a natural paint.
+          var navHeight = 0
+          window.requestAnimationFrame(function () {
+            navHeight = nav.offsetHeight
+          })
+          window.addEventListener('resize', function () {
+            navHeight = nav.offsetHeight
+          }, { passive: true })
           function onScroll() {
             var y = window.scrollY
             var goingDown = y > lastY
-            if (y <= nav.offsetHeight) {
+            if (y <= navHeight) {
               nav.classList.remove('one-nav--hidden')
             } else if (goingDown) {
               if (menu && menu.classList.contains('open')) menu.classList.remove('open')
@@ -615,9 +632,9 @@ const runtimeThemes = Object.fromEntries(
     --color-destructive: hsl(0 70% 50%);
     --color-success: hsl(140 60% 40%);
 
-    /* 6 extractable tokens */
-    --color-background: hsl(0 0% 93%);
-    --color-foreground: hsl(0 0% 100%);
+    /* 6 extractable tokens — mirror the 'navy' default preset */
+    --color-background: hsl(216 20% 92%);
+    --color-foreground: hsl(216 12% 99%);
     --color-font: hsl(0 0% 13%);
     --color-primary: hsl(216 55% 25%);
     --color-secondary: hsl(219 14% 28%);

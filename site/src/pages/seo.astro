@@ -172,28 +172,34 @@ const pageGraph = { '@graph': [faqEntity] }
     </header>
 
     <!-- ─── FEATURE CATALOGUE ─── -->
-    <div>
+    <div class="space-y-5 md:space-y-6">
       {groups.map((group, i) => (
-        <section class="border-t py-10 md:py-12 grid md:grid-cols-[minmax(0,240px)_1fr] gap-5 md:gap-12" style={`border-color: var(--color-border)`}>
+        <section
+          class="rounded-3xl py-8 px-6 md:py-11 md:px-10 grid md:grid-cols-[minmax(0,240px)_1fr] gap-6 md:gap-12"
+          style={`background: color-mix(in oklab, var(--color-primary) 7%, var(--color-foreground)); --color-font: var(--color-on-foreground); --color-border: color-mix(in oklab, var(--color-on-foreground) 12%, transparent);`}
+        >
           <div class="md:sticky md:top-24 self-start">
             <div class="flex items-baseline gap-3">
               <span class="text-3xl font-bold tabular-nums text-font/15">{String(i + 1).padStart(2, '0')}</span>
-              <span class="text-xs font-bold uppercase tracking-[0.15em] text-tertiary">{group.eyebrow}</span>
+              <span class="text-xs font-bold uppercase tracking-[0.15em]" style={`color: var(--color-accent-on-foreground)`}>{group.eyebrow}</span>
             </div>
-            <h2 class="mt-3 text-2xl font-bold tracking-tight leading-tight">{group.title}</h2>
+            <h2 class="mt-3 text-2xl font-bold tracking-tight leading-tight text-font">{group.title}</h2>
             <p class="mt-2.5 text-sm text-font/55 leading-relaxed max-w-[36ch]">{group.tagline}</p>
           </div>
-          <div class="grid sm:grid-cols-2 gap-x-10 gap-y-6 self-start">
+          <div class="grid sm:grid-cols-2 gap-3.5">
             {group.features.map((f) => (
-              <div>
+              <div
+                class="rounded-xl p-4"
+                style={`background: var(--color-background); border: 1px solid var(--color-border-fixed); box-shadow: var(--shadow-card); --color-font: var(--color-font-fixed);`}
+              >
                 <div class="flex items-center gap-2">
                   <svg class="shrink-0 text-primary" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
                   {f.href ? (
-                    <a href={f.href} class="font-medium text-[15px] hover:text-primary transition-colors">
+                    <a href={f.href} class="font-medium text-[15px] text-font hover:text-primary transition-colors">
                       <span class="font-mono text-[13px]">{f.name}</span> <span class="opacity-30 text-xs">↗</span>
                     </a>
                   ) : (
-                    <span class="font-medium text-[15px]">{f.name}</span>
+                    <span class="font-medium text-[15px] text-font">{f.name}</span>
                   )}
                 </div>
                 <p class="mt-1.5 pl-[23px] text-sm text-font/55 leading-relaxed">{f.detail}</p>
@@ -202,70 +208,13 @@ const pageGraph = { '@graph': [faqEntity] }
           </div>
         </section>
       ))}
-      <div class="border-t" style={`border-color: var(--color-border)`}></div>
     </div>
-
-    <!-- ─── ENGINEERING NOTES ─── -->
-    <section class="mt-16 md:mt-24 grid md:grid-cols-2 gap-4">
-      <div class="rounded-2xl border p-6 md:p-7" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
-        <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-3">Honest by design</div>
-        <h3 class="text-lg font-bold mb-2">Why some pages opt out of validation</h3>
-        <p class="text-sm text-font/60 leading-relaxed">
-          The validators only see prerendered HTML. Pages that read live Cloudflare state — the homepage's Stripe-gated demo, <code class="font-mono text-xs">/payments</code>, <code class="font-mono text-xs">/wallet</code> — stay server-rendered on purpose. They're <em>exempted</em>, not silently unchecked. Prerendering the homepage would bake an empty environment in forever.
-        </p>
-      </div>
-      <div class="rounded-2xl border p-6 md:p-7" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
-        <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-3">A real gotcha, fixed</div>
-        <h3 class="text-lg font-bold mb-2">Where <code class="font-mono">dateModified</code> comes from</h3>
-        <p class="text-sm text-font/60 leading-relaxed">
-          <code class="font-mono text-xs">gitLastmod()</code> needs a git binary — but on this Cloudflare adapter, prerendering runs in a sandbox where <code class="font-mono text-xs">cwd</code> is <code class="font-mono text-xs">/</code> and git fails. So dates are resolved once during content-collection sync (real Node), then read as plain strings. No git dependency in any page's own code.
-        </p>
-      </div>
-    </section>
-
-    <!-- ─── REPRODUCE ─── -->
-    <section class="mt-16 md:mt-24">
-      <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-2">Reproduce it</div>
-      <h2 class="text-2xl font-bold mb-5 tracking-tight">Every claim, runnable in five minutes</h2>
-      <div class="bg-foreground rounded-2xl p-6 border font-mono text-xs leading-relaxed overflow-x-auto" style={`border-color: var(--color-border)`}>
-        <div class="text-font/40"># Build — the validators print "N pages checked, all good"</div>
-        <div>bun run build</div>
-        <div class="mt-4 text-font/40"># Serve the production output, then run the full launch gate</div>
-        <div>bun run preview &</div>
-        <div>bash scripts/seo-gate.sh http://localhost:4321</div>
-        <div class="mt-4 text-font/40"># Baseline once, then re-run any time to catch drift</div>
-        <div>bash scripts/seo-drift.sh http://localhost:4321</div>
-      </div>
-    </section>
-
-    <!-- ─── ROADMAP / HONESTY ─── -->
-    <section class="mt-16 md:mt-24">
-      <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-2">Deliberately deferred</div>
-      <h2 class="text-2xl font-bold mb-5 tracking-tight">What's gated, and why</h2>
-      <div class="space-y-3">
-        {[
-          { h: 'IndexNow submission', d: 'Wired but off — it announces URLs one-way to search engines, so it stays blocked until this workspace’s identity is finalised. Nothing half-branded gets broadcast.' },
-          { h: 'Upstream trailing-slash links', d: 'A handful of links inside the blog/docs plugins redirect once; the correct fix is a one-line change in each plugin’s own repo, not a fork here — patched around with a scoped skip in the meantime.' },
-          { h: 'Image optimization', d: 'Researched, not flipped — this codebase has zero astro:assets usage today, so the setting is currently inert either way. Every mode that actually shrinks bytes needs a paid Cloudflare product; a real call for whoever adds real content photography.' },
-        ].map((r) => (
-          <div class="flex gap-4 rounded-xl border p-4" style={`border-color: var(--color-border)`}>
-            <div class="shrink-0 mt-0.5 text-tertiary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-            </div>
-            <div>
-              <div class="font-medium text-sm">{r.h}</div>
-              <div class="text-sm text-font/55 mt-1 leading-relaxed">{r.d}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
 
     <!-- ─── FAQ (mirrors the FAQPage in this page's JSON-LD) ─── -->
     <section class="mt-16 md:mt-24">
       <div class="text-xs font-bold uppercase tracking-widest text-tertiary mb-2">Frequently asked</div>
       <h2 class="text-2xl font-bold mb-5 tracking-tight">Answered here — and in this page's schema</h2>
-      <div class="divide-y rounded-2xl border" style={`border-color: var(--color-border)`}>
+      <div class="divide-y rounded-2xl border" style={`background: var(--color-foreground); border-color: var(--color-border); box-shadow: var(--shadow-card);`}>
         {[
           { q: 'What powers SEO on this template?', a: '@jdevalk/astro-seo-graph — a schema.org knowledge-graph builder, not a meta-tag plugin. It links a real, disambiguated Organization entity into every page, enforces SEO fundamentals at build time instead of via an audit tool, and extends discovery to AI answer engines through llms.txt, per-page markdown, and a corpus-wide schema endpoint most templates never build.' },
           { q: 'Can AI agents read this site efficiently?', a: 'Yes — three ways. /llms.txt summarises every page; each post and doc is served as clean markdown at a .md twin URL linked from the HTML; and /schema.json returns the whole knowledge graph in one request.' },

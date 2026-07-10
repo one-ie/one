@@ -705,7 +705,7 @@ const themeDarkCss = THEMES.map(
      swatch/hex readout — and worse, the very first edit via ANY swatch —
      would silently revert a theme's tinted background/foreground to gray. */
   const presetSet = (mode) => {
-    const t = window.__T[localStorage.getItem('one-theme') || 'vespio'] || window.__T.vespio
+    const t = window.__T[localStorage.getItem('one-theme') || 'navy'] || window.__T.navy
     const brand = (mode === 'dark' ? t.d : t.l).map(strip)
     const idx = mode === 'dark' ? 1 : 0
     const background = t.bg ? strip(t.bg[idx]) : SURFACE[mode].background
@@ -833,7 +833,7 @@ const themeDarkCss = THEMES.map(
      set the preset, resync). Active ring follows the nav's own rule:
      a custom edit means no preset is "the" theme, so no card lights up. */
   const syncGallery = () => {
-    const active = localStorage.getItem('one-theme') || 'vespio'
+    const active = localStorage.getItem('one-theme') || 'navy'
     const isCustom = localStorage.getItem(STORAGE) !== null
     document.querySelectorAll('.theme-card').forEach((card) => {
       card.classList.toggle('is-active', !isCustom && card.dataset.key === active)

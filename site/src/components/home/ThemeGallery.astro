@@ -73,7 +73,7 @@ const cardVars = (t: (typeof THEMES)[number]) =>
     const cards = document.querySelectorAll<HTMLButtonElement>('.thg-card:not([data-thg-bound])')
     if (!cards.length) return
     const sync = () => {
-      const active = localStorage.getItem('one-theme') || 'vespio'
+      const active = localStorage.getItem('one-theme') || 'navy'
       const isCustom = localStorage.getItem('one-custom') !== null
       document.querySelectorAll<HTMLButtonElement>('.thg-card').forEach((c) => {
         c.classList.toggle('is-active', !isCustom && c.dataset.key === active)
@@ -83,7 +83,7 @@ const cardVars = (t: (typeof THEMES)[number]) =>
       c.dataset.thgBound = '1'
       c.addEventListener('click', () => {
         localStorage.removeItem('one-custom')
-        localStorage.setItem('one-theme', c.dataset.key || 'vespio')
+        localStorage.setItem('one-theme', c.dataset.key || 'navy')
         ;(window as unknown as { __syncTheme?: () => void }).__syncTheme?.()
       })
     })
