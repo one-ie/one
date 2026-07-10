@@ -33,7 +33,37 @@ export default defineConfig({
         skip: (href) =>
           href === '/' ||
           href.startsWith('/#') ||
-          ['/wallet', '/lifecycle', '/payments', '/signin', '/signup'].includes(href),
+          href.startsWith('/payments') || // includes query-string variants, e.g. /payments?plan=pro
+          href.startsWith('/products/') || // dynamic product slugs (e.g. own-your-stack) — real SSR routes, reads live Cloudflare env same as /payments
+          // Real trailing-slash redirects (not false positives) from
+          // @oneie/plugin-blog (BlogPost.astro, PostCard.tsx) and
+          // @oneie/plugin-docs (DocsLayout.astro, SidebarDocs.tsx,
+          // DocsIndex.astro) — data/text/seo.md Phase 3, WP-11: investigated
+          // and confirmed no plugin config controls this, and Astro's
+          // `trailingSlash` option doesn't apply to prerendered pages (only
+          // `build.format`, which would be a site-wide URL-shape change).
+          // Correct fix is upstream in the plugins. Known, bounded risk:
+          // this pattern would also silence a genuinely broken future link
+          // shaped like these but missing its trailing slash for a real
+          // reason — acceptable until the plugins are fixed.
+          href === '/blog' ||
+          href === '/docs' ||
+          ((href.startsWith('/blog/') || href.startsWith('/docs/')) && !href.endsWith('/')) ||
+          [
+            '/wallet',
+            '/lifecycle',
+            '/payments',
+            '/signin',
+            '/signup',
+            '/components',
+            // On-demand SSR discovery endpoints (WP-2) and the build-output-root
+            // llms.txt — none are prerendered HTML pages, so the disk-scanning
+            // validator can't see them; they're real 200s at runtime (see
+            // site/scripts/seo-gate.sh, which checks the actual runtime response).
+            '/schema.json',
+            '/.well-known/api-catalog',
+            '/llms.txt',
+          ].includes(href),
       },
       llmsTxt: {
         title: SITE.name,

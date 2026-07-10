@@ -1,6 +1,6 @@
 ---
-title: Getting started
-description: How this workspace was provisioned and how its plugins are wired.
+title: Getting started — provisioning and plugin wiring
+description: How this workspace was provisioned and how its connected-tier plugins are wired end to end.
 order: 1
 ---
 

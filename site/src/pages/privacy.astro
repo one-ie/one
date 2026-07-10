@@ -1,0 +1,120 @@
+---
+export const prerender = true
+import Layout from '../layouts/Layout.astro'
+
+const lastUpdated = 'July 10, 2026'
+---
+
+<Layout
+  title="Privacy Policy — ONE Astro Starter Template"
+  description="How the ONE Astro starter's auth, tracking, chat, and payment plugins handle personal data and cookies, plus the Stripe and auth processors involved — a starting template, not legal advice."
+>
+  <main class="mx-auto max-w-[760px] px-6 py-12 md:py-20">
+
+    <!-- ─── HERO ─── -->
+    <header class="mb-10">
+      <div class="text-sm uppercase tracking-widest text-font/40 mb-3">Legal · Last updated {lastUpdated}</div>
+      <h1 class="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight">Privacy Policy</h1>
+      <p class="mt-4 text-lg text-font/60 max-w-[62ch]">
+        This policy explains what data a site built on the <strong>ONE</strong> Astro starter can collect, why, and who it's shared with — based on the plugins this template actually ships with (auth, tracking, chat, and Stripe-backed payments).
+      </p>
+    </header>
+
+    <!-- ─── TEMPLATE NOTICE ─── -->
+    <section class="mb-12 bg-background rounded-2xl p-6 md:p-8 border" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
+      <h2 class="text-lg font-bold mb-2">Before you publish this page</h2>
+      <p class="text-sm text-font/70 leading-relaxed">
+        This is a <strong>starting template</strong> shipped with the ONE Astro starter, not a finished legal document and not legal advice. If you fork this repo to run a real business, replace the bracketed placeholders below, confirm which plugins you actually enabled in <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">one.config.ts</code>, and have the result reviewed by counsel familiar with your jurisdiction (GDPR, CCPA, or otherwise) before you rely on it.
+      </p>
+    </section>
+
+    <!-- ─── SECTIONS ─── -->
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">1. Information we collect</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed mb-4">
+        What's collected depends on which plugins a given instance of this template has enabled in <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">one.config.ts</code>. In the default configuration, this can include:
+      </p>
+      <ul class="list-disc pl-5 space-y-2 text-sm md:text-base text-font/70 leading-relaxed mb-4">
+        <li><strong>Account &amp; authentication data</strong> — when <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">@oneie/plugin-auth</code> (built on Better Auth) is enabled, we collect the email address, hashed password or OAuth provider identifier, and session tokens needed to sign you in and keep you signed in.</li>
+        <li><strong>Usage &amp; analytics data</strong> — when <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">@oneie/plugin-track</code> is enabled, we collect page views, referrers, approximate location derived from IP address, device/browser user-agent strings, and on-site interaction events, scoped to the workspace slug configured for this instance.</li>
+        <li><strong>Chat &amp; support communications</strong> — when <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">@oneie/plugin-chat</code> is enabled, we collect the messages you send to the AI chat assistant and the responses it returns, so the conversation can continue across a session.</li>
+        <li><strong>Payment information</strong> — when payments are enabled, card numbers and other sensitive payment details are collected directly by <strong>Stripe</strong>, our payment processor, and never touch our own servers in raw form. We retain only what Stripe returns: transaction identifiers, amounts, currency, and payment status.</li>
+        <li><strong>Contact form &amp; newsletter submissions</strong> — the email address and message content you voluntarily submit through any contact or newsletter form on this site.</li>
+      </ul>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">2. Cookies &amp; local storage</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed mb-4">
+        This template uses a small number of cookies and browser-storage entries:
+      </p>
+      <ul class="list-disc pl-5 space-y-2 text-sm md:text-base text-font/70 leading-relaxed mb-4">
+        <li><strong>Session cookies</strong> set by the authentication plugin to keep you signed in between page loads.</li>
+        <li><strong>Analytics identifiers</strong> set by the tracking plugin to distinguish sessions and de-duplicate page-view counts.</li>
+        <li><strong>Local-storage preferences</strong> — theme, color, and pattern choices are stored only in your browser's <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">localStorage</code>, never transmitted to a server, and reset if you clear site data.</li>
+      </ul>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        We do not use cookies for third-party advertising. Most browsers let you block or delete cookies through their settings; doing so may prevent sign-in from persisting across visits.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">3. How we use information</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        We use the data above to: operate and secure accounts; process and reconcile payments; respond to support and chat requests; understand which pages and features are used so we can improve them; and meet legal and tax obligations tied to processing payments. We do not sell personal data.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">4. Third-party service providers</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed mb-4">
+        This template is built to hand specific jobs to specialized processors rather than build them from scratch. Depending on which plugins an instance enables, personal data may be processed by:
+      </p>
+      <ul class="list-disc pl-5 space-y-2 text-sm md:text-base text-font/70 leading-relaxed">
+        <li><strong>Stripe</strong> — card processing, subscription billing, and payment fraud prevention for any payment flow this site exposes.</li>
+        <li><strong>Better Auth</strong> (and any OAuth provider you connect through it, e.g. Google or GitHub) — authentication, session issuance, and account recovery.</li>
+        <li><strong>Cloudflare</strong> — hosting (Workers), the D1 database that backs authentication sessions, and edge caching/CDN delivery of this site.</li>
+        <li>The AI model provider behind the chat plugin, which processes chat message content in order to generate a response.</li>
+      </ul>
+      <p class="mt-4 text-sm md:text-base text-font/70 leading-relaxed">
+        Each of these processors has its own privacy policy governing how it handles data on our behalf; we encourage you to review theirs alongside this one.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">5. Data retention &amp; security</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        We retain account and payment records for as long as an account is active and for a reasonable period afterward to meet accounting, tax, and fraud-prevention obligations. Analytics data is retained in aggregate or de-identified form beyond that window. We use industry-standard safeguards (encryption in transit, hashed credentials, scoped access) but no method of transmission or storage is 100% secure, and we cannot guarantee absolute security.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">6. Your rights &amp; choices</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        Depending on where you live, you may have the right to access, correct, export, or delete the personal data we hold about you, and to object to or restrict certain processing. To exercise any of these rights, contact us using the details below. We will verify your request and respond within the timeframe required by applicable law.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">7. Children's privacy</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        This site is not directed at children under 13 (or the equivalent minimum age in your jurisdiction), and we do not knowingly collect personal data from children. If you believe a child has provided us with personal data, contact us and we will delete it.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">8. Changes to this policy</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        We may update this policy as this site's features change. Material changes will be reflected by updating the "Last updated" date above; continued use of the site after a change constitutes acceptance of the revised policy.
+      </p>
+    </section>
+
+    <section class="mb-4">
+      <h2 class="text-xl font-bold mb-3">9. Contact us</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        Questions about this policy or your data can be sent to <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">[your-support-email@example.com]</code> — replace this placeholder with your own business's contact address before launch.
+      </p>
+    </section>
+
+  </main>
+</Layout>

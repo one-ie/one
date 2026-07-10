@@ -1,5 +1,5 @@
 ---
-title: Hello, template
+title: "Hello, template — this workspace's first live post"
 description: This workspace was provisioned live — a real client, a real API key, a real blog post.
 date: 2026-07-08
 category: Updates

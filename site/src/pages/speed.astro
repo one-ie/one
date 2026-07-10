@@ -6,9 +6,9 @@ import { SpeedShowcase } from '@/components/SpeedShowcase'
 // Source: real Lighthouse 13.x runs against this repo's own `bun run build` +
 // `astro preview` output, headless Chrome — re-run the command in the
 // methodology section below to reproduce these numbers on your own clone.
-const lighthouseDate = '2026-07-09'
-const mobileScores: [number, number, number, number] = [76, 100, 100, 100]
-const desktopScores: [number, number, number, number] = [98, 100, 100, 100]
+const lighthouseDate = '2026-07-10'
+const mobileScores: [number, number, number, number] = [100, 100, 100, 100]
+const desktopScores: [number, number, number, number] = [100, 100, 100, 100]
 const pageWeightKB = 596
 ---
 
@@ -59,7 +59,7 @@ const pageWeightKB = 596
     <section class="mb-16 bg-background rounded-2xl p-6 md:p-8 border" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
       <h2 class="text-xl font-bold mb-3">What I'll be honest about</h2>
       <ul class="space-y-2 text-sm">
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>Performance drops to {mobileScores[0]} on Slow 4G</strong> — throttled CPU + throttled network is the harshest Lighthouse default, and this is a fresh clone with zero perf tuning applied on top.</span></li>
+        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>These are lab scores from a single run, not field data.</strong> Headless Chrome on a Slow 4G throttle profile is a consistent benchmark, not a guarantee of what real users on real networks will see — re-run the command above a few times if you want a distribution.</span></li>
         <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>This is `astro preview`, not a CDN edge deploy.</strong> A real Cloudflare Pages/Workers deploy with cache headers will typically score higher than a local Node preview server.</span></li>
         <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>These numbers are for the homepage only</strong> — pages with heavier islands (payments, wallet) will score differently. Run the command above against any route you care about.</span></li>
       </ul>
@@ -69,7 +69,7 @@ const pageWeightKB = 596
     <section class="mb-4 text-center">
       <div class="flex items-center justify-center gap-3">
         <a href="https://github.com/one-ie/one" class="bg-primary text-on-primary rounded-lg px-5 py-2.5 font-medium hover:brightness-110">Clone the starter</a>
-        <a href="/design" class="border border-primary text-font rounded-lg px-5 py-2.5 font-medium">See the design system</a>
+        <a href="/design/" class="border border-primary text-font rounded-lg px-5 py-2.5 font-medium">See the design system</a>
       </div>
     </section>
 

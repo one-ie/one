@@ -22,6 +22,13 @@ interface Props {
   /** Passed straight through to `<Seo>` — emits robots noindex and omits
    *  canonical, per Google guidance. */
   noindex?: boolean
+  /** Absolute URL of this page's markdown alternate (WP-8a/WP-8b,
+   *  data/text/seo.md Phase 3) — e.g. `deriveMdUrl(canonicalURL)` from a
+   *  `blog/[slug].astro`/`docs/[slug].astro` call site. Passed through to
+   *  `<Seo>`'s `extraLinks` as a `rel="alternate" type="text/markdown"`
+   *  link only when set, so pages that don't serve a `.md` sibling emit
+   *  nothing. */
+  mdAlternateHref?: string
 }
 
 // `ogTitle`/`ogUrl` stay in Props (below) for call-site compatibility but
@@ -34,6 +41,7 @@ const {
   ogImage,
   graph,
   noindex,
+  mdAlternateHref,
 } = Astro.props
 
 const siteName = SITE.name
@@ -67,6 +75,13 @@ const pageGraph = buildPageGraph({
   title: pageTitle,
   callerGraph: graph,
 })
+
+// Discovery link for this page's markdown alternate (WP-8b) — only emitted
+// when a caller actually serves one; an empty/broken `<link>` with no href
+// is worse than omitting it entirely.
+const extraLinks = mdAlternateHref
+  ? [{ rel: 'alternate', type: 'text/markdown', href: mdAlternateHref }]
+  : undefined
 
 // Reshape THEMES (bare "H S% L%" triplets) into the anti-FOUC script's
 // existing runtime contract — {l,d,s,name} wrapped in hsl(), additive
@@ -115,6 +130,7 @@ const runtimeThemes = Object.fromEntries(
       twitter={{ card: ogImage ? 'summary_large_image' : 'summary' }}
       graph={pageGraph}
       noindex={noindex}
+      extraLinks={extraLinks}
     />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

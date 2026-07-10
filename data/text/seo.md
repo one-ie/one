@@ -415,6 +415,26 @@ The robots.txt diff is the single highest-value check on the list. Cheap to run,
 
 ---
 
+## Phase 3 — closing the loop (post-launch follow-up, dispatched 2026-07-10)
+
+Phase 1 shipped (WP-0 through WP-5, WP-8a) and was verified end to end: `bun run build` clean, `seo-gate.sh` passing every check except the one deliberately Phase-2-gated item, JSON-LD validated across every prerendered page. Two items from that verification were closed immediately, by hand, no agent needed (both single-line, both in files already owned by WP-0):
+- **`robots.txt`** now carries `Sitemap: https://one.ie/sitemap.xml`. (Originally gated on "verified live in prod" — done here on the judgment that the line is inert and harmless until a real deploy exists, unlike IndexNow's one-way signal, which stays blocked.)
+- **`validateInternalLinks.skip`** extended for three routes that are real, working, intentionally-SSR pages the disk-scanning validator can't see: `/components`, `/payments` with a query string, and dynamic `/products/<slug>` pages (same reasoning as `/wallet` and bare `/payments`).
+
+What that verification pass surfaced as still-open, real (not false-positive) findings — the four packages below, independent of each other, dispatched in parallel:
+
+**WP-9 — content & link hygiene, marketing pages.** Owns `design.astro`, `motion.astro`, `patterns.astro`, `products/index.astro`, `speed.astro`, `blog/index.astro`, `docs/index.astro`, `500.astro`. Two jobs, same small file set: (a) every title/description on this list is below the validator's 30–65/70–200 char bounds — write real, accurate copy, no padding; (b) fix the internal links inside these exact files' own markup that redirect on every visit — `/products` → `/products/`, `/design` → `/design/` (two call sites), and the hardcoded `https://one.ie/docs` → relative `/docs/` (this last one also violates the plan's own "never hardcode `one.ie`" rule). Explicitly out of scope: any link that originates inside an imported `@oneie/plugin-blog`/`@oneie/plugin-docs` component rather than these files' own markup — that's WP-11.
+
+**WP-10 — legal pages.** Create `site/src/pages/privacy.astro` and `site/src/pages/terms.astro`. `Footer.astro` (not in this package's ownership — already correct, do not touch it) has linked to `/privacy` and `/terms` since before this plan existed; the pages just don't exist yet, which is exactly the missing-page gap §1 calls out ("Privacy policy... required before launch"). New files only.
+
+**WP-11 — plugin-owned link investigation (research, narrow fix only).** The remaining trailing-slash warnings (`/blog/hello-template` ↔ `/blog`, `/docs/getting-started` ↔ `/docs` and a self-link) originate inside `@oneie/plugin-blog`'s and `@oneie/plugin-docs`'s own components (`BlogIndex`/`PostCard`/`DocsLayout`), not in this site's `blog/[slug].astro`/`docs/index.astro` source — confirmed by grep, those exact anchor strings aren't in this repo's own files. Investigate: do the plugins expose a trailing-slash/link-generation config option? Would `astro.config.mjs`'s `trailingSlash` setting fix this site-wide — and if so, what does it break, given `sitemap.xml.ts` (WP-2) already hard-codes an assumption about which routes serve with vs. without a trailing slash? Do not fork or vendor the plugins. Do not edit `astro.config.mjs` (WP-0's file) — report findings and a recommendation for me to apply.
+
+**WP-8b — markdown alternates.** Implements WP-8a's spike verdict: `createMarkdownEndpoint` is SSR-native and serves a distinct `.md` URL, not content negotiation. Add one new scoped optional prop to `Layout.astro`'s `Props` (e.g. `mdAlternateHref?: string`, passed through to `<Seo>`'s `extraLinks`) — the exact gap WP-8a flagged. Wire `createMarkdownEndpoint` at `site/src/pages/blog/[slug].md.ts` and `site/src/pages/docs/[slug].md.ts`, and pass the derived href (via the package's `deriveMdUrl`) from `blog/[slug].astro`/`docs/[slug].astro` into the new prop. Owns: `Layout.astro`, `blog/[slug].astro`, `docs/[slug].astro`, the two new `.md.ts` files.
+
+File ownership stays exclusive and disjoint across these four, same discipline as Phase 1 — verified: WP-9 and WP-8b both touch `blog/[slug].astro`/`docs/[slug].astro`? No — WP-9 owns `blog/index.astro`/`docs/index.astro` (the listing pages), WP-8b owns `blog/[slug].astro`/`docs/[slug].astro` (the detail pages). No overlap.
+
+---
+
 ## Appendix: replatforming an existing RANKING site
 
 Different discipline from launching a fresh instance. Only relevant when a template instance replaces a live site that already ranks — not applicable to this repo today (fresh template, no live site to migrate), but load-bearing the day this template is used to rebuild an existing client site. The short version of what we learned the hard way:

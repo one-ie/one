@@ -12,7 +12,7 @@ const products = (await getCollection('products')).sort((a, b) => a.data.priceCe
 ---
 
 <Layout
-  title="Products — ONE"
+  title="ONE Products — Markdown Files Priced and Sold Server-Side"
   description="Write a markdown file, it's for sale — priced server-side so a buyer can never tamper with the price."
 >
   <section class="hero">
@@ -59,13 +59,13 @@ const products = (await getCollection('products')).sort((a, b) => a.data.priceCe
     columns={[
       { heading: 'Product', links: [
         { label: 'Payments', href: '/payments' },
-        { label: 'Products', href: '/products' },
+        { label: 'Products', href: '/products/' },
         { label: 'Wallet', href: '/wallet' },
         { label: 'Lifecycle', href: '/lifecycle' },
-        { label: 'Design system', href: '/design' },
+        { label: 'Design system', href: '/design/' },
       ] },
       { heading: 'Resources', links: [
-        { label: 'Documentation', href: 'https://one.ie/docs' },
+        { label: 'Documentation', href: '/docs/' },
         { label: 'GitHub', href: 'https://github.com/one-ie/one', external: true },
       ] },
     ]}

@@ -8,7 +8,7 @@
 import Layout from '../../layouts/Layout.astro'
 import DocsLayout from '@oneie/plugin-docs/DocsLayout.astro'
 import { getCollection, render } from 'astro:content'
-import { breadcrumbsFromUrl } from '@jdevalk/astro-seo-graph'
+import { breadcrumbsFromUrl, deriveMdUrl } from '@jdevalk/astro-seo-graph'
 import { buildArticle, buildBreadcrumbList, assembleGraph } from '@jdevalk/seo-graph-core'
 import { SITE } from '../../lib/seo-site'
 // Reuse WP-1's single IdFactory instance — see blog/[slug].astro's identical
@@ -98,9 +98,19 @@ if (datePublished) {
 }
 
 const graph = assembleGraph(pieces)
+
+// --- markdown alternate discovery link (WP-8b, data/text/seo.md Phase 3) ---
+// `.md.ts` sibling (src/pages/docs/[slug].md.ts) serves the actual content;
+// this just derives the URL it lives at so <Seo> can advertise it.
+const mdAlternateHref = deriveMdUrl(pageUrl)
 ---
 
-<Layout title={`${seoTitle} — ONE`} description={seoDescription} graph={graph}>
+<Layout
+  title={`${seoTitle} — ONE`}
+  description={seoDescription}
+  graph={graph}
+  mdAlternateHref={mdAlternateHref}
+>
   <DocsLayout entry={entry} entries={entries} headings={headings}>
     <Content />
   </DocsLayout>

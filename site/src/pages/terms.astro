@@ -1,0 +1,122 @@
+---
+export const prerender = true
+import Layout from '../layouts/Layout.astro'
+
+const lastUpdated = 'July 10, 2026'
+---
+
+<Layout
+  title="Terms of Service — ONE Astro Starter Template"
+  description="The terms governing a site built on the ONE Astro starter, covering accounts, Stripe-processed payments, the AI chat assistant, acceptable use, and open-source licensing before you launch."
+>
+  <main class="mx-auto max-w-[760px] px-6 py-12 md:py-20">
+
+    <!-- ─── HERO ─── -->
+    <header class="mb-10">
+      <div class="text-sm uppercase tracking-widest text-font/40 mb-3">Legal · Last updated {lastUpdated}</div>
+      <h1 class="text-4xl md:text-5xl font-bold leading-[1.1] tracking-tight">Terms of Service</h1>
+      <p class="mt-4 text-lg text-font/60 max-w-[62ch]">
+        These terms govern your use of this site, built on the <strong>ONE</strong> Astro starter template. By using the site you agree to them.
+      </p>
+    </header>
+
+    <!-- ─── TEMPLATE NOTICE ─── -->
+    <section class="mb-12 bg-background rounded-2xl p-6 md:p-8 border" style={`border-color: var(--color-border); box-shadow: var(--shadow-card)`}>
+      <h2 class="text-lg font-bold mb-2">Before you publish this page</h2>
+      <p class="text-sm text-font/70 leading-relaxed">
+        This is a <strong>starting template</strong> shipped with the ONE Astro starter, not a finished legal document and not legal advice. Replace the bracketed placeholders below with your business's real name, jurisdiction, and contact details, confirm which plugins (auth, payments, chat) your instance actually enables, and have the result reviewed by counsel before you rely on it.
+      </p>
+    </section>
+
+    <!-- ─── SECTIONS ─── -->
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">1. Acceptance of terms</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        By accessing or using this site, you agree to be bound by these Terms of Service and our <a href="/privacy/" class="underline decoration-1 underline-offset-2">Privacy Policy</a>. If you do not agree, do not use the site. We may update these terms from time to time; continued use after an update means you accept the revised terms.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">2. Description of the service</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        This site is built on the ONE Astro starter template, which can be configured with account authentication, a documentation and blog area, an AI chat assistant, usage tracking, and Stripe-backed payments. Which of these are actually active depends on the operator's own configuration in <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">one.config.ts</code> — a given instance may enable only some of them.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">3. Accounts &amp; registration</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        Where account creation is enabled, you're responsible for maintaining the confidentiality of your credentials and for all activity under your account. Notify us promptly of any unauthorized use. We may suspend or terminate accounts that violate these terms or that we reasonably believe pose a security or fraud risk.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">4. Payments, subscriptions &amp; billing</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        Where payments are enabled, all card processing is handled by <strong>Stripe</strong>; we never store your full card number. Prices, billing intervals, and any trial or subscription terms are shown at the point of purchase. Refunds, if offered, follow the policy stated at checkout or in a separate refund policy — replace <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">[your refund policy]</code> here with your own terms before launch. You authorize us (via Stripe) to charge your chosen payment method for the amounts due.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">5. Acceptable use</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed mb-4">You agree not to:</p>
+      <ul class="list-disc pl-5 space-y-2 text-sm md:text-base text-font/70 leading-relaxed">
+        <li>Use the site for any unlawful purpose or in violation of any applicable regulation.</li>
+        <li>Attempt to gain unauthorized access to accounts, systems, or data connected to this site.</li>
+        <li>Interfere with or disrupt the site's normal operation, including through excessive automated requests.</li>
+        <li>Use the AI chat assistant to generate content that is unlawful, infringing, or intended to harass or deceive others.</li>
+        <li>Reverse-engineer, scrape, or resell access to the site's paid features without authorization.</li>
+      </ul>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">6. AI chat assistant</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        Where enabled, the chat widget on this site is powered by an AI model. Responses are generated automatically and may be incomplete, out of date, or incorrect — they are provided for informational convenience only and do not constitute professional, financial, or legal advice. Verify anything important independently before relying on it.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">7. Intellectual property &amp; license</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        The underlying ONE Astro starter template is open-source software; its license terms (see the project's <a href="https://github.com/one-ie/one" class="underline decoration-1 underline-offset-2">GitHub repository</a>) govern reuse of the template's code itself. Content, branding, and business-specific material added on top of the template by the site operator remain that operator's property unless stated otherwise.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">8. Third-party services &amp; links</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        This site may link to, or rely on, third-party services such as Stripe, an authentication provider, or a hosting/CDN provider. We aren't responsible for the content, policies, or practices of third-party services, and your use of them is subject to their own terms.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">9. Disclaimer of warranties</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        The site is provided "as is" and "as available" without warranties of any kind, express or implied, including merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the site will be uninterrupted, error-free, or free of harmful components.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">10. Limitation of liability</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        To the maximum extent permitted by law, we are not liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the site, even if advised of the possibility of such damages. Our total liability for any claim arising from these terms is limited to the amount you paid us, if any, in the twelve months preceding the claim.
+      </p>
+    </section>
+
+    <section class="mb-10">
+      <h2 class="text-xl font-bold mb-3">11. Governing law</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        These terms are governed by the laws of <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">[your jurisdiction]</code> — replace this placeholder with the state, province, or country whose law should apply, without regard to conflict-of-law principles.
+      </p>
+    </section>
+
+    <section class="mb-4">
+      <h2 class="text-xl font-bold mb-3">12. Contact us</h2>
+      <p class="text-sm md:text-base text-font/70 leading-relaxed">
+        Questions about these terms can be sent to <code class="px-1.5 py-0.5 bg-foreground rounded text-xs">[your-support-email@example.com]</code> — replace this placeholder with your own business's contact address before launch.
+      </p>
+    </section>
+
+  </main>
+</Layout>
