@@ -1,12 +1,11 @@
 {
   "mcpServers": {
     "one": {
-      "command": "npx",
-      "args": ["-y", "@oneie/mcp"],
-      "env": {
-        "ONEIE_API_URL": "https://one.ie",
-        "ONEIE_API_KEY": "${ONE_API_KEY}"
-      }
+      "command": "sh",
+      "args": [
+        "-c",
+        "set -a; [ -f site/.dev.vars ] && . ./site/.dev.vars; [ -f .env.local ] && . ./.env.local; set +a; exec npx -y @oneie/mcp"
+      ]
     }
   }
 }

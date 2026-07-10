@@ -82,6 +82,10 @@ const runtimeThemes = Object.fromEntries(
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
 
+    <!-- LCP element on every page is the nav logo — preload so the browser
+         doesn't wait for HTML parsing to reach the <img> before fetching it. -->
+    <link rel="preload" href="/vespio-logo.svg" as="image" fetchpriority="high" />
+
     <!-- Critical tokens — inlined to prevent FOUC on first paint -->
     <style is:inline>
       :root {
@@ -297,7 +301,7 @@ const runtimeThemes = Object.fromEntries(
       <div class="one-nav-left">
         <a href="/" class="one-logo" aria-label="Home">
           <span class="one-logo-text">ONE</span>
-          <img class="one-logo-img" src="https://vespio.ai/vespio-logo.svg" alt="Vespio" width="157" height="38" />
+          <img class="one-logo-img" src="/vespio-logo.svg" alt="Vespio" width="157" height="38" fetchpriority="high" />
         </a>
         <nav class="one-nav-links" aria-label="Primary">
           <a href="/#design">Design</a>

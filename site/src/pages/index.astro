@@ -223,27 +223,25 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   <section class="card-rail" id="card">
     <Pattern pattern="crosshatch" opacity={0.07} tone="tertiary" />
     <div class="container">
-      <div class="card-rail-grid">
-        <div class="card-rail-copy">
-          <div class="rail-tag rail-tag--card"><span class="rail-dot"></span>Card · your Stripe key</div>
-          <h2 class="card-rail-title">And a card form you'd want to fill in.</h2>
-          <p class="card-rail-sub">
-            Real Stripe Elements dressed as a card — tilts to your cursor, guides you
-            field to field, and settles straight to your own Stripe account. It goes
-            live the moment you add two env vars; until then it's an honest preview.
-          </p>
-          <ul class="card-rail-list">
-            <li>✓ PCI stays with Stripe — we never see a digit</li>
-            <li>✓ Fail-closed without your keys</li>
-            <li>✓ Cards, wallets, and Link out of the box</li>
-          </ul>
-          <a href="/payments" class="card__link">See the full payments page →</a>
-        </div>
-        <div class="card-rail-widget">
-          {stripeLive && stripePublishableKey
-            ? <PhysicalCardCheckout client:visible publishableKey={stripePublishableKey} />
-            : <CardCheckoutPreview client:visible />}
-        </div>
+      <Reveal class="card-rail-head">
+        <div class="rail-tag rail-tag--card"><span class="rail-dot"></span>Card · your Stripe key</div>
+        <h2 class="card-rail-title">And a card form you'd want to fill in.</h2>
+        <p class="card-rail-sub">
+          Real Stripe Elements dressed as a card — tilts to your cursor, guides you
+          field to field, and settles straight to your own Stripe account. It goes
+          live the moment you add two env vars; until then it's an honest preview.
+        </p>
+        <ul class="card-rail-list">
+          <li>✓ PCI stays with Stripe — we never see a digit</li>
+          <li>✓ Fail-closed without your keys</li>
+          <li>✓ Cards, wallets, and Link out of the box</li>
+        </ul>
+        <a href="/payments" class="card__link">See the full payments page →</a>
+      </Reveal>
+      <div class="card-rail-widget">
+        {stripeLive && stripePublishableKey
+          ? <PhysicalCardCheckout client:visible publishableKey={stripePublishableKey} />
+          : <CardCheckoutPreview client:visible />}
       </div>
     </div>
   </section>
@@ -360,7 +358,8 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   /* ── Section anchors — offset for the sticky #one-nav (52px) so a jump
         doesn't tuck the heading under it. ────────────────────────────── */
   :global(#design), :global(#themes), :global(#motion), :global(#cards),
-  :global(#carousels), :global(#tabs), :global(#quotes), :global(#payments) {
+  :global(#carousels), :global(#tabs), :global(#quotes), :global(#payments),
+  :global(#card) {
     scroll-margin-top: 68px;
   }
 
@@ -404,7 +403,13 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   /* ── Hero ───────────────────────────────────────────────────────── */
   .hero { padding: clamp(4.5rem, 10vw, 8rem) 0 clamp(3rem, 7vw, 5rem); position: relative; overflow: hidden; }
   .hero::before {
-    content: ''; position: absolute; inset: -20% -10% auto -10%; height: 130%;
+    /* inset:0 (not a %-of-self height like 130%) — the old sizing measured
+       against .hero's own content-driven box height, so any sub-pixel
+       reflow (hydration, font metrics settling) recomputed this pseudo-
+       element's box too and Lighthouse counted it as a layout shift
+       (CLS 0.25, intermittent under CPU throttling). .hero's overflow:
+       hidden still clips the gradient the same as the old overscan did. */
+    content: ''; position: absolute; inset: 0;
     background: radial-gradient(60% 55% at 22% 15%,
       color-mix(in oklab, var(--color-primary) 14%, transparent), transparent 70%),
       radial-gradient(50% 45% at 85% 10%,
@@ -512,6 +517,15 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   }
 
   .pay-widget { max-width: 30rem; margin: 3rem auto 0; }
+  .widget-caption {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 0.7rem; font-size: 0.72rem;
+  }
+  .widget-live {
+    display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-primary);
+  }
+  .widget-hint { color: var(--color-muted); font-family: 'SF Mono', 'Fira Code', monospace; }
 
   /* ── Proof section ──────────────────────────────────────────────── */
   :global(.speed-grid) {
@@ -599,8 +613,7 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   /* ── Card checkout — its own stage, below the fold (keeps live Stripe
         out of first paint so the page holds its Lighthouse scores). ──── */
   .card-rail { padding: clamp(3rem, 7vw, 5.5rem) 0; border-top: 1px solid var(--color-border); background: color-mix(in oklab, var(--color-tertiary) 4%, var(--color-background)); position: relative; overflow: hidden; }
-  .card-rail-grid { display: grid; grid-template-columns: 1fr 0.95fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; position: relative; z-index: 1; }
-  @media (max-width: 860px) { .card-rail-grid { grid-template-columns: 1fr; gap: 2rem; max-width: 32rem; margin: 0 auto; } }
+  .card-rail-head { max-width: 36rem; margin: 0 auto 2.75rem; text-align: center; position: relative; z-index: 1; }
   .rail-tag {
     display: inline-flex; align-items: center; gap: 0.45rem;
     font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
@@ -609,9 +622,9 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   .rail-dot { width: 7px; height: 7px; border-radius: 9999px; background: currentColor; }
   .rail-tag--card { color: var(--color-tertiary); background: color-mix(in oklab, var(--color-tertiary) 14%, transparent); }
   .card-rail-title { font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; color: var(--color-font); margin: 0 0 1rem; }
-  .card-rail-sub { font-size: 1rem; line-height: 1.65; color: var(--color-muted); margin: 0 0 1.4rem; max-width: 32rem; }
-  .card-rail-list { list-style: none; margin: 0 0 1.4rem; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; font-size: 0.88rem; color: var(--color-font); }
-  .card-rail-widget { min-width: 0; }
+  .card-rail-sub { font-size: 1rem; line-height: 1.65; color: var(--color-muted); margin: 0 0 1.4rem; }
+  .card-rail-list { list-style: none; margin: 0 0 1.4rem; padding: 0; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.4rem 1.1rem; font-size: 0.88rem; color: var(--color-font); }
+  .card-rail-widget { max-width: 40rem; margin: 0 auto; position: relative; z-index: 1; }
   .card__link { color: var(--color-primary); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
   .card__link:hover { text-decoration: underline; }
 </style>

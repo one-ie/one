@@ -10,6 +10,9 @@ export default defineConfig({
     imageService: 'passthrough',
     sessions: false,
   }),
+  build: {
+    inlineStylesheets: 'always',
+  },
   integrations: [react(), oneIntegration],
   vite: {
     plugins: [tailwindcss()],
