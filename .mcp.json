@@ -4,7 +4,7 @@
       "command": "sh",
       "args": [
         "-c",
-        "set -a; [ -f site/.dev.vars ] && . ./site/.dev.vars; [ -f .env.local ] && . ./.env.local; set +a; exec npx -y @oneie/mcp"
+        "set -a; [ -f site/.dev.vars ] && . ./site/.dev.vars; [ -f .env.local ] && . ./.env.local; set +a; exec node \"$(node -e 'console.log(require(\"fs\").realpathSync(process.argv[1]))' \"$(npm root -g)/@oneie/mcp/dist/index.js\")\""
       ]
     }
   }
