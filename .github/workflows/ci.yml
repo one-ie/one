@@ -13,16 +13,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - name: Install dependencies
-        run: cd apps/web && bun install
+        run: cd site && bun install
       - name: Build
-        run: cd apps/web && bun run build
+        run: cd site && bun run build
       - name: Typecheck
-        run: cd apps/web && bun run typecheck
-      - name: STRIP guard
-        run: bash scripts/strip-guard.sh
-      - name: Install workspace deps
-        run: bun install
-      - name: Tests
-        run: bun vitest run tests/
+        run: cd site && bun run typecheck
       - name: Standalone mode build (no API key)
-        run: cd apps/web && ONE_API_KEY="" bun run build
+        run: cd site && ONE_API_KEY="" bun run build

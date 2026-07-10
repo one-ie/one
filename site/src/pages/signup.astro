@@ -76,21 +76,20 @@ import Layout from '../layouts/Layout.astro'
   </section>
 
   <script>
-    const form = document.getElementById('signup-form')
+    const form = document.getElementById('signup-form') as HTMLFormElement | null
     const errorBox = document.getElementById('signup-error')
-    const submitBtn = document.getElementById('signup-submit')
+    const submitBtn = document.getElementById('signup-submit') as HTMLButtonElement | null
     const btnLabel = submitBtn?.querySelector('.btn-label')
-    const passwordInput = document.getElementById('password')
     const confirmInput = document.getElementById('confirm-password')
 
-    function setBusy(busy) {
+    function setBusy(busy: boolean) {
       if (!submitBtn) return
       submitBtn.disabled = busy
       submitBtn.classList.toggle('is-busy', busy)
       if (btnLabel) btnLabel.textContent = busy ? 'Creating account…' : 'Create account'
     }
 
-    function showError(message) {
+    function showError(message: string) {
       if (!errorBox) return
       errorBox.textContent = message
       errorBox.hidden = false

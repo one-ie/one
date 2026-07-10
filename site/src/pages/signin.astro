@@ -63,19 +63,19 @@ import Layout from '../layouts/Layout.astro'
   </section>
 
   <script>
-    const form = document.getElementById('signin-form')
+    const form = document.getElementById('signin-form') as HTMLFormElement | null
     const errorBox = document.getElementById('signin-error')
-    const submitBtn = document.getElementById('signin-submit')
+    const submitBtn = document.getElementById('signin-submit') as HTMLButtonElement | null
     const btnLabel = submitBtn?.querySelector('.btn-label')
 
-    function setBusy(busy) {
+    function setBusy(busy: boolean) {
       if (!submitBtn) return
       submitBtn.disabled = busy
       submitBtn.classList.toggle('is-busy', busy)
       if (btnLabel) btnLabel.textContent = busy ? 'Signing in…' : 'Sign in'
     }
 
-    function showError(message) {
+    function showError(message: string) {
       if (!errorBox) return
       errorBox.textContent = message
       errorBox.hidden = false
