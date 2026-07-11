@@ -1,0 +1,43 @@
+diff --git a/dist/telemetry.js b/dist/telemetry.js
+index bcc83b37349f37cf30b5290178e798cd95af3562..133c9211cc534e0c10d3609c1e6e67133dedba94 100644
+--- a/dist/telemetry.js
++++ b/dist/telemetry.js
+@@ -4,19 +4,27 @@ const RATE_LIMIT = 100;
+ const RATE_WINDOW_MS = 3_600_000;
+ // Browser-compatible random session ID generation
+ function generateSessionId() {
+-    if (typeof crypto !== "undefined" && crypto.randomUUID) {
+-        return crypto.randomUUID().replace(/-/g, "").slice(0, 16);
++    try {
++        if (typeof crypto !== "undefined" && crypto.randomUUID) {
++            return crypto.randomUUID().replace(/-/g, "").slice(0, 16);
++        }
++        // Fallback for older browsers
++        const arr = new Uint8Array(8);
++        if (typeof crypto !== "undefined" && crypto.getRandomValues) {
++            crypto.getRandomValues(arr);
++        }
++        else {
++            for (let i = 0; i < arr.length; i++)
++                arr[i] = Math.floor(Math.random() * 256);
++        }
++        return Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
+     }
+-    // Fallback for older browsers
+-    const arr = new Uint8Array(8);
+-    if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+-        crypto.getRandomValues(arr);
++    catch {
++        // workerd forbids random-value generation during module evaluation
++        // (always global scope, even via dynamic import) — don't 500 every
++        // importing route; a time-derived id is fine for telemetry.
++        return `t${Date.now().toString(36)}`;
+     }
+-    else {
+-        for (let i = 0; i < arr.length; i++)
+-            arr[i] = Math.floor(Math.random() * 256);
+-    }
+-    return Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
+ }
+ let tokenCount = 0;
+ let windowStart = Date.now();

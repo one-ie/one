@@ -15,5 +15,8 @@
   },
   "devDependencies": {
     "@oneie/cli": "^4.0.1"
+  },
+  "patchedDependencies": {
+    "@oneie/sdk@0.14.6": "patches/@oneie%2Fsdk@0.14.6.patch"
   }
 }
