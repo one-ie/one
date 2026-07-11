@@ -1,43 +1,100 @@
+diff --git a/node_modules/@oneie/sdk/.bun-tag-2f523d0b76b1e7d3 b/.bun-tag-2f523d0b76b1e7d3
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 7807247d6d9f2b1836b9c9e3ed7b20beefb7ab3f..b2b29ef568072bb354247e27da1b516414270286 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -12,7 +12,7 @@ export { BrainClient } from "./brain.js";
+ export type { BrainEnv } from "./brain.js";
+ export { GatewayClient } from "./gateway.js";
+ export type { GatewayEnv } from "./gateway.js";
+-export { emit as telemetryEmit, isDisabled as isTelemetryDisabled, sessionId } from "./telemetry.js";
++export { emit as telemetryEmit, isDisabled as isTelemetryDisabled, getSessionId } from "./telemetry.js";
+ export * from "./errors.js";
+ export * from "./schemas.js";
+ export * from "./generated/schemas/index.js";
+diff --git a/dist/index.js b/dist/index.js
+index 88612e3bbea5a2059c4c01e5b89af5249074dec8..2b46e466b39c5e4ff91e45309817abdb9c024460 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -8,7 +8,7 @@ export { SubstrateClient } from "./client.js";
+ export { SubstrateClient as OneieClient } from "./client.js";
+ export { BrainClient } from "./brain.js";
+ export { GatewayClient } from "./gateway.js";
+-export { emit as telemetryEmit, isDisabled as isTelemetryDisabled, sessionId } from "./telemetry.js";
++export { emit as telemetryEmit, isDisabled as isTelemetryDisabled, getSessionId } from "./telemetry.js";
+ export * from "./errors.js";
+ export * from "./schemas.js";
+ export * from "./generated/schemas/index.js";
+diff --git a/dist/telemetry.d.ts b/dist/telemetry.d.ts
+index 8cabd3f9bd3ee486c40e60385ea382ebce6ecacb..0bfdb2c098c61b1ec321d2bca15f4469f0dfdb22 100644
+--- a/dist/telemetry.d.ts
++++ b/dist/telemetry.d.ts
+@@ -1,4 +1,4 @@
+-export declare const sessionId: string;
++export declare function getSessionId(): string;
+ export declare function emit(receiver: string, tags: string[], content?: Record<string, unknown>): void;
+ export declare function isDisabled(): boolean;
+ /**
 diff --git a/dist/telemetry.js b/dist/telemetry.js
-index bcc83b37349f37cf30b5290178e798cd95af3562..133c9211cc534e0c10d3609c1e6e67133dedba94 100644
+index bcc83b37349f37cf30b5290178e798cd95af3562..74634188f8ea0249d79592fc5e9b85d9b1506421 100644
 --- a/dist/telemetry.js
 +++ b/dist/telemetry.js
-@@ -4,19 +4,27 @@ const RATE_LIMIT = 100;
+@@ -2,7 +2,14 @@ const DISABLE_KEY = "ONEIE_TELEMETRY_DISABLE";
+ const ENDPOINT = "https://api.one.ie/api/signal";
+ const RATE_LIMIT = 100;
  const RATE_WINDOW_MS = 3_600_000;
- // Browser-compatible random session ID generation
+-// Browser-compatible random session ID generation
++// Browser-compatible random session ID generation. NEVER call this at module
++// scope — see the lazy accessor below. Cloudflare workerd's "disallowed
++// operation in global scope" guard for random-value generation is enforced
++// as a runtime-level abort, not a catchable JS exception: wrapping the
++// crypto call in try/catch (the previous patch) does NOT prevent the abort,
++// because the abort happens before the JS engine's catch machinery runs.
++// The only real fix is to never touch crypto during module evaluation at
++// all — defer it to first actual use, inside a request handler.
  function generateSessionId() {
--    if (typeof crypto !== "undefined" && crypto.randomUUID) {
--        return crypto.randomUUID().replace(/-/g, "").slice(0, 16);
-+    try {
-+        if (typeof crypto !== "undefined" && crypto.randomUUID) {
-+            return crypto.randomUUID().replace(/-/g, "").slice(0, 16);
-+        }
-+        // Fallback for older browsers
-+        const arr = new Uint8Array(8);
-+        if (typeof crypto !== "undefined" && crypto.getRandomValues) {
-+            crypto.getRandomValues(arr);
-+        }
-+        else {
-+            for (let i = 0; i < arr.length; i++)
-+                arr[i] = Math.floor(Math.random() * 256);
-+        }
-+        return Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
-     }
--    // Fallback for older browsers
--    const arr = new Uint8Array(8);
--    if (typeof crypto !== "undefined" && crypto.getRandomValues) {
--        crypto.getRandomValues(arr);
-+    catch {
-+        // workerd forbids random-value generation during module evaluation
-+        // (always global scope, even via dynamic import) — don't 500 every
-+        // importing route; a time-derived id is fine for telemetry.
-+        return `t${Date.now().toString(36)}`;
-     }
--    else {
--        for (let i = 0; i < arr.length; i++)
--            arr[i] = Math.floor(Math.random() * 256);
--    }
--    return Array.from(arr, (b) => b.toString(16).padStart(2, "0")).join("");
+     if (typeof crypto !== "undefined" && crypto.randomUUID) {
+         return crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+@@ -20,7 +27,19 @@ function generateSessionId() {
  }
  let tokenCount = 0;
  let windowStart = Date.now();
+-export const sessionId = generateSessionId();
++let _sessionId;
++/** Lazily computed, memoized on first access — never at module evaluation. */
++export function getSessionId() {
++    if (_sessionId === undefined) {
++        try {
++            _sessionId = generateSessionId();
++        }
++        catch {
++            _sessionId = `t${Date.now().toString(36)}`;
++        }
++    }
++    return _sessionId;
++}
+ function isEnabled() {
+     // In browser: always enabled (no config file access)
+     if (typeof window !== "undefined")
+@@ -46,16 +65,17 @@ function consume() {
+ export function emit(receiver, tags, content) {
+     if (!isEnabled() || !consume())
+         return;
++    const id = getSessionId();
+     void fetch(ENDPOINT, {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({
+-            sender: `toolkit:${sessionId}`,
++            sender: `toolkit:${id}`,
+             receiver,
+             data: JSON.stringify({
+                 tags: ["telemetry", ...tags],
+                 weight: 1,
+-                content: { id: sessionId, ...content },
++                content: { id, ...content },
+             }),
+         }),
+     }).catch(() => undefined);

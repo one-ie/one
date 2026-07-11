@@ -7,17 +7,13 @@ import { docs } from '@oneie/plugin-docs'
 import { newsletter } from '@oneie/plugin-newsletter'
 import { pages } from '@oneie/plugin-pages'
 import { track } from '@oneie/plugin-track'
+import { chatConfig } from './src/lib/chat-config'
 
-const ws = 'template' // workspace slug — funded via world:create-workspace credit grants
-
-// Chat layout default — single source of truth, imported by both the plugin
-// registration below and Layout.astro's <OneChat> mount, so the mount never
-// duplicates a literal that could drift from what's actually configured.
-export const chatConfig = {
-  ws,
-  view: 'icon' as const,
-  position: 'right' as const,
-}
+// workspace slug — funded via world:create-workspace credit grants; chatConfig
+// (./src/lib/chat-config.ts) carries the same value for Layout.astro's mount,
+// kept in its own side-effect-free module — see that file's header comment
+// for why it must not live here.
+const ws = chatConfig.ws
 
 // ONE configuration — the single control surface for this site.
 // Two separate switches:

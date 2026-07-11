@@ -1,0 +1,42 @@
+diff --git a/node_modules/@puckeditor/core/.bun-tag-8b713cf8065c64f3 b/.bun-tag-8b713cf8065c64f3
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/chunk-XQHCQEAF.mjs b/dist/chunk-XQHCQEAF.mjs
+index ea8f2b24f26c2c0c1ef99a2f9c4f2832a1e46f86..d8217314f6e14b6e457dede4e63e76f1ae4bea34 100644
+--- a/dist/chunk-XQHCQEAF.mjs
++++ b/dist/chunk-XQHCQEAF.mjs
+@@ -1402,7 +1402,7 @@ var createAppStore = (initialAppStore) => create2()(
+     });
+   })
+ );
+-var appStoreContext = createContext(createAppStore());
++var appStoreContext = createContext(null);
+ function useAppStore(selector) {
+   const context = useContext(appStoreContext);
+   return useStore(context, selector);
+diff --git a/dist/index.js b/dist/index.js
+index 703412f780b9f5c23900dcd249427c6f6e9bf46f..8c38ce841da1bdec356334ffacd8b1c51458da7b 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -3556,7 +3556,7 @@ var init_store = __esm({
+         });
+       })
+     );
+-    appStoreContext = (0, import_react11.createContext)(createAppStore());
++    appStoreContext = (0, import_react11.createContext)(null);
+   }
+ });
+ 
+diff --git a/dist/no-external.js b/dist/no-external.js
+index 2f039ed05c64e8652303cb0f31fc7f2ade390192..ad1a50aafa419071f974f3c66011041a79d97070 100644
+--- a/dist/no-external.js
++++ b/dist/no-external.js
+@@ -3556,7 +3556,7 @@ var init_store = __esm({
+         });
+       })
+     );
+-    appStoreContext = (0, import_react11.createContext)(createAppStore());
++    appStoreContext = (0, import_react11.createContext)(null);
+   }
+ });
+ 

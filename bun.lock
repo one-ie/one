@@ -150,6 +150,7 @@
   },
   "patchedDependencies": {
     "@oneie/sdk@0.14.6": "patches/@oneie%2Fsdk@0.14.6.patch",
+    "@puckeditor/core@0.22.0": "patches/@puckeditor%2Fcore@0.22.0.patch",
   },
   "packages": {
     "@astrojs/check": ["@astrojs/check@0.9.9", "", { "dependencies": { "@astrojs/language-server": "^2.16.7", "chokidar": "^4.0.3", "kleur": "^4.1.5", "yargs": "^17.7.2" }, "peerDependencies": { "typescript": "^5.0.0 || ^6.0.0" }, "bin": { "astro-check": "bin/astro-check.js" } }, "sha512-A5UW8uIuErLWEoRQvzgXpO1gTjUFtK8r7nU2Z7GewAMxUb7bPvpk11qaKKgxqXlHJWlAvaaxy+Xg28A6bmQ1Tg=="],
