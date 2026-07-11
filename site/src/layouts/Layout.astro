@@ -1,6 +1,7 @@
 ---
 import '../styles/globals.css'
 import OneChat from '@oneie/plugin-chat/OneChat.astro'
+import { chatConfig } from '../../one.config'
 import Seo from '@jdevalk/astro-seo-graph/Seo.astro'
 import { THEMES } from '../lib/themes'
 import { SITE } from '../lib/seo-site'
@@ -472,9 +473,9 @@ const runtimeThemes = Object.fromEntries(
     <!-- ── Chat widget ───────────────────────────────────────────── -->
     <OneChat
       agent="one"
-      view="icon"
-      position="right"
-      ws="template"
+      view={chatConfig.view}
+      position={chatConfig.position}
+      ws={chatConfig.ws}
       greeting="Hi! Ask me anything about the ONE platform."
     />
 

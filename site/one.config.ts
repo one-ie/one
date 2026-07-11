@@ -5,9 +5,19 @@ import { blog } from '@oneie/plugin-blog'
 import { chat } from '@oneie/plugin-chat'
 import { docs } from '@oneie/plugin-docs'
 import { newsletter } from '@oneie/plugin-newsletter'
+import { pages } from '@oneie/plugin-pages'
 import { track } from '@oneie/plugin-track'
 
 const ws = 'template' // workspace slug — funded via world:create-workspace credit grants
+
+// Chat layout default — single source of truth, imported by both the plugin
+// registration below and Layout.astro's <OneChat> mount, so the mount never
+// duplicates a literal that could drift from what's actually configured.
+export const chatConfig = {
+  ws,
+  view: 'icon' as const,
+  position: 'right' as const,
+}
 
 // ONE configuration — the single control surface for this site.
 // Two separate switches:
@@ -39,9 +49,12 @@ export default defineOne({
     // not full documents. This site wraps them in its own <Layout> (nav,
     // <head>, globals.css) via src/pages/blog/* and src/pages/docs/*.
     blog({ injectRoutes: false }),
-    chat({ ws }),
+    chat(chatConfig),
     docs({ injectRoutes: false }),
     newsletter({ workspace: ws }),
+    // /p/[slug] is hand-written below (SSR, not prerendered — every request
+    // re-fetches pages:view so a publish in ONE's editor is live on refresh).
+    pages({ ws, injectRoutes: false }),
     track({ ws }),
   ],
 })
