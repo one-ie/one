@@ -4,6 +4,7 @@ import { backend } from '@oneie/plugin-backend'
 import { blog } from '@oneie/plugin-blog'
 import { chat } from '@oneie/plugin-chat'
 import { docs } from '@oneie/plugin-docs'
+import { newsletter } from '@oneie/plugin-newsletter'
 import { track } from '@oneie/plugin-track'
 
 const ws = 'template' // workspace slug — funded via world:create-workspace credit grants
@@ -40,6 +41,7 @@ export default defineOne({
     blog({ injectRoutes: false }),
     chat({ ws }),
     docs({ injectRoutes: false }),
+    newsletter({ workspace: ws }),
     track({ ws }),
   ],
 })

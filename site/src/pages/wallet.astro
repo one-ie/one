@@ -26,7 +26,16 @@ const env = await getEnv()
 // substrate's own wallet:get (below) only adds credits + settlement history
 // on top when a backend is connected.
 const selfHosted = readSelfHostedWallet(env)
-const balances: ChainBalance[] = await fetchSelfHostedBalances(selfHosted)
+// Guarded — these are public-RPC fetches to third-party endpoints; any one
+// of them timing out or throwing was 500ing the whole page in production.
+// The wallet identity is still real without balances, so degrade to empty.
+let balances: ChainBalance[] = []
+let balanceError: string | null = null
+try {
+  balances = await fetchSelfHostedBalances(selfHosted)
+} catch (e) {
+  balanceError = e instanceof Error ? e.message : String(e)
+}
 
 let credits = 0
 let transactions: WalletTx[] = []
@@ -57,7 +66,7 @@ function fmtDate(ts: number): string {
 }
 ---
 
-<Layout title="Wallet & payments" description="Your ONE workspace wallet — balances, transactions, and payment links.">
+<Layout title="Wallet — Balances, Transactions, Payment Links | ONE" description="Your ONE workspace wallet — live on-chain balances across four chains, settlement history, and shareable payment links.">
   <main style="max-width: 720px; margin: 0 auto; padding: 4rem 1.5rem 6rem;">
     <div class="hero">
       <div class="hr hr-0"><span class="eyebrow">Your workspace</span></div>
@@ -76,7 +85,10 @@ function fmtDate(ts: number): string {
         {balances.length} on-chain address{balances.length === 1 ? '' : 'es'} — self-hosted, generated fully offline
         {connected && !fetchError && <> · {credits} credits (ONE backend)</>}
       </p>
-      {balances.length === 0 && (
+      {balanceError && (
+        <p style="color: var(--color-muted); margin-bottom: 1rem;">Couldn't load on-chain balances right now: {balanceError}</p>
+      )}
+      {balances.length === 0 && !balanceError && (
         <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem; background: var(--color-background);">
           <strong>No wallet configured yet.</strong>
           <p style="margin: 0.5rem 0 1rem; color: var(--color-muted);">

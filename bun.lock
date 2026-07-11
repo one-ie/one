@@ -5,7 +5,7 @@
     "": {
       "name": "one-frontend",
       "devDependencies": {
-        "@oneie/cli": "^0.10.1",
+        "@oneie/cli": "^4.0.1",
       },
     },
     "packages/plugin-admin": {
@@ -43,6 +43,16 @@
       "peerDependencies": {
         "@oneie/frontend": ">=0.1.0",
         "astro": ">=6.0.0",
+      },
+    },
+    "packages/plugin-newsletter": {
+      "name": "@oneie/plugin-newsletter",
+      "version": "0.1.0",
+      "devDependencies": {
+        "typescript": "^6.0.3",
+      },
+      "peerDependencies": {
+        "@oneie/frontend": ">=0.1.0",
       },
     },
     "packages/plugin-premium": {
@@ -84,6 +94,7 @@
         "@oneie/plugin-blog": "^0.1.1",
         "@oneie/plugin-chat": "^0.1.0",
         "@oneie/plugin-docs": "0.1.2",
+        "@oneie/plugin-newsletter": "workspace:*",
         "@oneie/plugin-track": "0.1.1",
         "@stripe/react-stripe-js": "^6.7.0",
         "@stripe/stripe-js": "^9.9.0",
@@ -111,7 +122,7 @@
       },
       "devDependencies": {
         "@astrojs/check": "^0.9.9",
-        "@oneie/cli": "^0.10.1",
+        "@oneie/cli": "^4.0.1",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "typescript": "^6.0.3",
@@ -427,7 +438,7 @@
 
     "@nodable/entities": ["@nodable/entities@2.2.0", "", {}, "sha512-9uGyhaQavEUMC8AIddIjau4NsnsXhou+j5sBAGojCM1oxmQpVKTWR/9JxABD6UAv12vpIms55fPZKFQEhG6uBg=="],
 
-    "@oneie/cli": ["@oneie/cli@0.10.1", "", { "dependencies": { "@oneie/sdk": "0.14.5", "commander": "^12.0.0" }, "bin": { "oneie": "dist/src/index.js", "one": "dist/src/index.js" } }, "sha512-Pc8IK6JgK+8KSZT6JZpOrC392g/QIXDE8lvV0/W9jmxKNv03OMWV8dx9DaylIKMuGeSe+S0FkxsYmah2jQNMnA=="],
+    "@oneie/cli": ["@oneie/cli@4.0.1", "", { "dependencies": { "@oneie/sdk": "^0.14.6", "commander": "^12.0.0" }, "bin": { "oneie": "dist/src/index.js", "one": "dist/src/index.js" } }, "sha512-GcoPuaWvFlY5pk89gaLru1GodTr4ZORX6yMuWHe1yt1Hj/5VON4GYflbgGVSX1K9UPCaJU8tQQQUr/DtQ/EG+w=="],
 
     "@oneie/frontend": ["@oneie/frontend@0.1.1", "", { "peerDependencies": { "astro": ">=6.0.0", "zod": ">=3.0.0" } }, "sha512-O+cnni8ojPTrOQAYKYZsQQhP52McThA4l7ff+bjl8R5N4eZ9xu+SvDbtoCYmcuVOUJBsKF3jwN/BJ5tElAFNug=="],
 
@@ -447,13 +458,15 @@
 
     "@oneie/plugin-docs": ["@oneie/plugin-docs@0.1.2", "", { "peerDependencies": { "@oneie/frontend": "^0.1.1", "astro": ">=6.0.0", "react": ">=19.0.0" } }, "sha512-Kq0dmNp5Zz7nIhQfzPzxFu77dQdyUMVlEpQw2ncGfRbeH/qXrzw1QXFyC6gwN+b4u7sSMvyPCjonERT/VTGB6A=="],
 
+    "@oneie/plugin-newsletter": ["@oneie/plugin-newsletter@workspace:packages/plugin-newsletter"],
+
     "@oneie/plugin-premium": ["@oneie/plugin-premium@workspace:packages/plugin-premium"],
 
     "@oneie/plugin-shop": ["@oneie/plugin-shop@workspace:packages/plugin-shop"],
 
     "@oneie/plugin-track": ["@oneie/plugin-track@0.1.1", "", { "peerDependencies": { "@oneie/frontend": "^0.1.1", "astro": ">=6.0.0" } }, "sha512-2CnuyeVtqaYfi0ga8w2kz/DngNkAJ2tnzDTQIsp9a4Idua4C2bChu8azth/OT2cjOKfp+z5V6f1WCeA7w/BzCA=="],
 
-    "@oneie/sdk": ["@oneie/sdk@0.14.5", "", { "dependencies": { "@noble/curves": "^2.2.0", "@noble/hashes": "^2.2.0", "@scure/base": "^2.2.0", "@scure/bip39": "^2.2.0", "better-auth": "^1.6.11", "zod": "^4.3.6" } }, "sha512-X25CbV4XT238mks7eyRK7D+34X5F8nfSpT8LfdiWkHJgc0F45W01LzSoc0h90hDG7HXEhQFGlJpNRKQt6r6+DQ=="],
+    "@oneie/sdk": ["@oneie/sdk@0.14.6", "", { "dependencies": { "@noble/curves": "^2.2.0", "@noble/hashes": "^2.2.0", "@scure/base": "^2.2.0", "@scure/bip39": "^2.2.0", "better-auth": "^1.6.11", "zod": "^4.3.6" } }, "sha512-d7QxRjDRm4aCcQ4c57/+EpQr0lOVandhA+3JMniPs4T50K1Fd/8kMgVWzwGuhwdePEB8kSeb43323oiPu8Evaw=="],
 
     "@opentelemetry/semantic-conventions": ["@opentelemetry/semantic-conventions@1.41.1", "", {}, "sha512-/UhIkaZgPutTFmQ7RnIJGgDXZmtEJ7Dvi86xNTFWcnRxVRNk/aotsqDJYeEvDP+FSMB2SdW+pQzNMcWP0rwuNA=="],
 
@@ -1534,6 +1547,8 @@
     "@jridgewell/gen-mapping/@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
     "@jridgewell/remapping/@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
+
+    "@oneie/plugin-newsletter/typescript": ["typescript@6.0.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw=="],
 
     "@radix-ui/react-alert-dialog/@radix-ui/react-dialog": ["@radix-ui/react-dialog@1.1.19", "", { "dependencies": { "@radix-ui/primitive": "1.1.5", "@radix-ui/react-compose-refs": "1.1.3", "@radix-ui/react-context": "1.2.0", "@radix-ui/react-dismissable-layer": "1.1.15", "@radix-ui/react-focus-guards": "1.1.4", "@radix-ui/react-focus-scope": "1.1.12", "@radix-ui/react-id": "1.1.2", "@radix-ui/react-portal": "1.1.13", "@radix-ui/react-presence": "1.1.7", "@radix-ui/react-primitive": "2.1.7", "@radix-ui/react-slot": "1.3.0", "@radix-ui/react-use-controllable-state": "1.2.3", "aria-hidden": "^1.2.4", "react-remove-scroll": "^2.7.2" }, "peerDependencies": { "@types/react": "*", "@types/react-dom": "*", "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc", "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc" }, "optionalPeers": ["@types/react", "@types/react-dom"] }, "sha512-+HhbN2+YtkRgVirjZ2afMeutQRuGOrdkWR5+EFC58SJojGmtyNQwYzgi6tHBpOxvFHefMtPeHdgtjz0BOGxFQg=="],
 

@@ -26,6 +26,7 @@
     "@oneie/plugin-blog": "^0.1.1",
     "@oneie/plugin-chat": "^0.1.0",
     "@oneie/plugin-docs": "0.1.2",
+    "@oneie/plugin-newsletter": "workspace:*",
     "@oneie/plugin-track": "0.1.1",
     "@stripe/react-stripe-js": "^6.7.0",
     "@stripe/stripe-js": "^9.9.0",

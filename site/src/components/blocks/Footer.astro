@@ -240,7 +240,7 @@ const targetFor = (link: FooterLink | SocialLink) =>
               <p class="footer__news-desc">{news.description}</p>
             )}
           </div>
-          <form class="footer__form" method="post" action="#" data-footer-newsletter>
+          <form class="footer__form" method="post" action="#" data-newsletter-form>
             <label class="footer__sr-only" for="footer-email">
               Email address
             </label>
@@ -252,11 +252,13 @@ const targetFor = (link: FooterLink | SocialLink) =>
               autocomplete="email"
               required
               placeholder={news.placeholder}
+              data-newsletter-input
             />
-            <button class="footer__submit" type="submit">
+            <button class="footer__submit" type="submit" data-newsletter-submit>
               {news.cta}
             </button>
           </form>
+          <p class="footer__news-error" role="alert" aria-live="polite" hidden data-newsletter-error></p>
         </div>
       )
     }
@@ -291,30 +293,9 @@ const targetFor = (link: FooterLink | SocialLink) =>
 
 {
   news && (
-    <script is:inline>
-      {`
-        document.querySelectorAll('[data-footer-newsletter]').forEach(function (form) {
-          if (form.dataset.bound) return
-          form.dataset.bound = '1'
-          form.addEventListener('submit', function (e) {
-            e.preventDefault()
-            var btn = form.querySelector('.footer__submit')
-            if (!btn || btn.dataset.done) return
-            var input = form.querySelector('.footer__input')
-            if (input && !input.checkValidity()) { input.reportValidity(); return }
-            btn.dataset.done = '1'
-            var label = btn.textContent
-            btn.textContent = 'Subscribed ✓'
-            btn.disabled = true
-            if (input) input.value = ''
-            setTimeout(function () {
-              btn.textContent = label
-              btn.disabled = false
-              delete btn.dataset.done
-            }, 2600)
-          })
-        })
-      `}
+    <script>
+      import { bindNewsletterForms } from '@oneie/plugin-newsletter'
+      bindNewsletterForms()
     </script>
   )
 }
@@ -551,6 +532,13 @@ const targetFor = (link: FooterLink | SocialLink) =>
     outline-offset: 2px;
   }
   .footer__submit:disabled { cursor: default; opacity: 1; transform: none; }
+  .footer__news-error {
+    grid-column: 1 / -1;
+    margin: 0.6rem 0 0;
+    font-size: 0.82rem;
+    color: var(--color-destructive);
+  }
+  .footer__news-error[hidden] { display: none; }
 
   /* ── Bottom bar ─────────────────────────────────────────────────── */
   .footer__bottom {

@@ -7,19 +7,26 @@
  * the key must be passed explicitly. Do that here, once, instead of at every
  * call site.
  */
-import { oneClient } from '@oneie/plugin-backend'
 import { getEnv } from './cf-env'
 
-export type OneClient = Awaited<ReturnType<typeof oneClient>>
+export type OneClient = Awaited<ReturnType<typeof import('@oneie/plugin-backend').oneClient>>
 
 /**
  * A keyed SubstrateClient, or null when ONE_API_KEY isn't set — standalone
  * mode. Callers render without backend data rather than crash, matching the
  * template's promise that the site runs before a workspace is connected.
+ *
+ * The SDK import is dynamic, NOT static: @oneie/sdk's telemetry module
+ * generates a random session id at module scope, and workerd forbids
+ * random-value generation in global scope — a static import 500s every
+ * page that touches this file. Importing inside the handler runs module
+ * init in request context, where it's allowed. Remove once the SDK
+ * defers sessionId generation to first use.
  */
 export async function one(): Promise<OneClient | null> {
   const env = await getEnv()
   if (!env.ONE_API_KEY) return null
+  const { oneClient } = await import('@oneie/plugin-backend')
   return oneClient({
     apiKey: env.ONE_API_KEY,
     // one.config.ts's convention is ONE_BASE_URL; `one onboard`/`one init`
