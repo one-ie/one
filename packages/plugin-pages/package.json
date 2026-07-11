@@ -1,0 +1,26 @@
+{
+  "name": "@oneie/plugin-pages",
+  "version": "0.1.0",
+  "description": "ONE pages — renders a workspace's published Puck pages on any Astro site via the public pages:view receiver",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./PageRenderer.tsx": "./src/PageRenderer.tsx",
+    "./fetchPage.ts": "./src/fetchPage.ts",
+    "./PageRoute.astro": "./src/PageRoute.astro"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.14.0",
+    "radix-ui": "^1.6.2",
+    "tailwind-merge": "^3.5.0"
+  },
+  "peerDependencies": {
+    "astro": ">=6.0.0",
+    "@oneie/frontend": ">=0.1.0",
+    "@puckeditor/core": ">=0.21.0",
+    "react": ">=19.0.0"
+  }
+}

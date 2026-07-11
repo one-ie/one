@@ -1,0 +1,29 @@
+---
+// pages({ ws, injectRoutes: false }) in one.config.ts — this site wraps the
+// bare renderer in its own <Layout>, same pattern as blog/[slug].astro and
+// docs/[slug].astro. Unlike those, NOT prerendered: the promise is "sourced
+// live... not copied, not cached at build time" — every request re-fetches
+// pages:view so a publish in ONE's own editor is live here on refresh, no
+// rebuild (text/page-editor-external.md).
+import Layout from '../../layouts/Layout.astro'
+import { PageRenderer, fetchPage } from '@oneie/plugin-pages'
+import { getEnv } from '../../lib/cf-env'
+
+export const prerender = false
+
+const { slug } = Astro.params as { slug: string }
+const env = await getEnv()
+// AGENCY_WSID is the runtime workspace slug (`one setup`/`one onboard` write
+// it); falls back to one.config.ts's build-time `ws` constant so the route
+// still resolves in standalone/dev before that step runs.
+const ws = (env.AGENCY_WSID as string | undefined) || 'template'
+const baseUrl = (env.ONE_BASE_URL as string | undefined) ?? (env.ONE_API_URL as string | undefined) ?? 'https://one.ie'
+const apiKey = env.ONE_API_KEY as string | undefined
+
+const data = slug ? await fetchPage(ws, slug, { baseUrl, apiKey }) : null
+if (!data) return new Response('Not found', { status: 404 })
+---
+
+<Layout title="Page — ONE">
+  <PageRenderer data={data} client:only="react" />
+</Layout>

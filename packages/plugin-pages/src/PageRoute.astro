@@ -1,0 +1,17 @@
+---
+// Default injected entrypoint for the /p/[slug] route. Self-resolves the page slug
+// from Astro.params and the workspace from env; renders the published Puck tree.
+// apps/one/site (C2) sets injectRoutes:false and wraps <PageRenderer> in its own
+// <Layout> instead of using this file.
+import { PageRenderer } from './PageRenderer'
+import { fetchPage } from './fetchPage'
+
+const { slug } = Astro.params as { slug: string }
+const ws = import.meta.env.ONE_WS ?? import.meta.env.PUBLIC_ONE_WS ?? ''
+const baseUrl = import.meta.env.ONE_BASE_URL as string | undefined
+const apiKey = import.meta.env.ONE_API_KEY as string | undefined
+
+const data = ws ? await fetchPage(ws, slug, { baseUrl, apiKey }) : null
+if (!data) return new Response(null, { status: 404 })
+---
+<PageRenderer data={data} client:only="react" />
