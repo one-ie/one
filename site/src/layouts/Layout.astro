@@ -670,11 +670,11 @@ const runtimeThemes = Object.fromEntries(
     --content:        56rem;
     --content-wide:   64rem;
 
-    /* Total sticky header height: .one-topbar (32) + .one-navbar (60) +
+    /* Total sticky header height: .one-topbar (36) + .one-navbar (60) +
        #one-nav's own top/bottom border (1 + 2). Every scroll-offset
        consumer (mobile drawer, section anchors, error-page min-height)
        reads this instead of a hardcoded px figure. */
-    --nav-total-h: 95px;
+    --nav-total-h: 99px;
 
     --radius-sm: 6px;
     --radius-md: 10px;
@@ -751,7 +751,7 @@ const runtimeThemes = Object.fromEntries(
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    height: 32px;
+    height: 36px;
     padding: 0 1.5rem;
     font-size: 0.72rem;
     color: var(--color-muted);
@@ -769,6 +769,15 @@ const runtimeThemes = Object.fromEntries(
   }
   .one-topbar-link:hover { color: var(--color-accent-on-foreground); }
   @media (max-width: 640px) { .one-topbar-msg { display: none; } }
+
+  /* Chat widget header (chat.js's own light-DOM `.one-chat-switcher` bar) —
+     matched to the same surface as .one-topbar instead of the loader's
+     hardcoded OS-dark-mode black/white. :global() because chat.js appends
+     this element straight to <body>, outside this component's template, so
+     Astro's scoped data-astro-cid selector would never match it. !important
+     beats chat.js's inline style.cssText, the only way to reach an element
+     that script owns. */
+  :global(.one-chat-switcher) { background: var(--color-foreground) !important; }
 
   /* Thick row — primary nav. Taller than the old single-row bar (60px vs
      52px) so it visibly outweighs .one-topbar per the two-tier reference. */
