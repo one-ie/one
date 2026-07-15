@@ -1,0 +1,60 @@
+# The generic customer spine — one actor kind ("customer"), one journey, drawn
+# on /u/template/analytics as the default lifecycle (most-recently-updated wins
+# when no ?kind= is given). Shape follows text/simplify.md's four-word law: an
+# actor stands at a stage, a lever moves it forward, a crossing is the recorded
+# move, the weight is what crossings teach. This is the ONE spine every visitor
+# to a site built on this template walks — not a department-specific funnel
+# like data/lifecycles/newsletter.toml (email opt-in only).
+#
+# Stage ids are NOT arbitrary — they are named to match the five buckets
+# one.ie/web/src/lib/event-vocabulary.ts's CONVERSION_STAGE_MAP sorts every
+# tracked event into (pageview/scroll -> awareness, click -> interest,
+# submit/identify -> intent, purchase/renew -> purchase, referral/review ->
+# loyalty). The tracking pixel (public/p/one.js, mounted in Layout.astro)
+# already sends those raw events to /api/events, which runs each one through
+# the lifecycle rule engine (populateFromEvent -> evaluate, C7/C8) — so once
+# each stage's enter_when rule is set to its own bucket name, real site
+# traffic auto-advances contacts along this exact spine with zero extra code.
+#
+# Known limitation (see data/lifecycles/_example.toml): `one push`'s TOML
+# compiler always sets enter_when to null — it does not read enter_when,
+# goal, principle, levers, or band from this file yet (packages/cli/src/
+# compiler.ts, data/lifecycles/*.toml -> lifecycle:save block). Push this
+# file to create the def + stage rows, then set each stage's enter_when to
+# its own id directly (one-time, until the compiler grows enter_when
+# support) so the rule engine actually fires. The goal/principle lines below
+# document intent for that future compiler upgrade — LifecycleStage
+# (lib/lifecycle/def.ts) already carries these fields end to end.
+
+id    = "customer"
+label = "Customer Journey"
+
+[[stages]]
+id      = "awareness"
+label   = "Awareness"
+goal    = "A visitor lands on the site and looks around"
+principle = "Every pageview, scroll, and view counts — the top of the spine is never gated"
+
+[[stages]]
+id      = "interest"
+label   = "Interest"
+goal    = "A visitor engages — clicks a CTA, opens the chat, follows a link deeper into the site"
+principle = "Interest is a click, not a pageview — high-volume awareness events never inflate this stage"
+
+[[stages]]
+id      = "intent"
+label   = "Intent"
+goal    = "A visitor signals they want something — submits a form, identifies themselves, subscribes, replies to chat"
+principle = "The strongest leading indicator before money moves — this is the stage sales watches"
+
+[[stages]]
+id      = "purchase"
+label   = "Purchase"
+goal    = "The visitor becomes a customer — buys, renews, or (tracked the same bucket) refunds"
+principle = "The keystone crossing — every stage before this exists to raise its conversion rate"
+
+[[stages]]
+id      = "loyalty"
+label   = "Loyalty"
+goal    = "A customer becomes an advocate — refers, reviews, or scores well on NPS"
+principle = "The compounding stage — a loyal customer is a lever for the next visitor's awareness"

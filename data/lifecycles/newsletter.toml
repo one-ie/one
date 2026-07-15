@@ -1,0 +1,27 @@
+# Newsletter subscriber lifecycle — pushed via `one push` -> lifecycle:save.
+# Visible on /u/template/lifecycles. `one push`'s TOML compiler (packages/cli/
+# src/compiler.ts) always sets enter_when to null on push — it does not read
+# an enter_when column from this file — so each push needs a one-time direct
+# patch (until the compiler grows enter_when support) to actually auto-advance:
+#   subscribed (slot 0) -> enter_when "identify" — audience:subscribe's
+#     pending-signup handler calls recordConversion(..., 'identify')
+#     (one.ie/web/src/lib/resolvers/newsletter.ts)
+#   confirmed  (slot 1) -> enter_when "subscribe" — audience:confirm's
+#     double-opt-in handler calls recordConversion(..., 'subscribe')
+#   engaged    (slot 2) -> left null; no email-open/click webhook exists yet
+#     to fire a real event for this stage (see text/newsletter-workflow-plan.md)
+
+id    = "newsletter"
+label = "Newsletter"
+
+[[stages]]
+id    = "subscribed"
+label = "Subscribed"
+
+[[stages]]
+id    = "confirmed"
+label = "Confirmed"
+
+[[stages]]
+id    = "engaged"
+label = "Engaged"

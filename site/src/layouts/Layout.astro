@@ -1,6 +1,7 @@
 ---
 import '../styles/globals.css'
 import OneChat from '@oneie/plugin-chat/OneChat.astro'
+import OneTrack from '@oneie/plugin-track/OneTrack.astro'
 import { chatConfig } from '../lib/chat-config'
 import Seo from '@jdevalk/astro-seo-graph/Seo.astro'
 import { THEMES } from '../lib/themes'
@@ -478,6 +479,15 @@ const runtimeThemes = Object.fromEntries(
       ws={chatConfig.ws}
       greeting="Hi! Ask me anything about the ONE platform."
     />
+
+    <!-- ── Tracking pixel — sends pageview/click/scroll events to
+         one.ie/u/{ws}/analytics. one.config.ts's track({ ws }) plugin entry
+         only registers metadata (tier/serves); its injectScript-based
+         integration never reaches the build output (defineOne's nested-
+         integration merge doesn't propagate injectScript calls — same gap
+         chat sidesteps via this exact component pattern). Mount directly,
+         mirroring <OneChat> above, until that's fixed upstream. ────────── -->
+    <OneTrack ws={chatConfig.ws} />
 
     <!-- ── Theme wiring — runs after DOM is ready ───────────────── -->
     <script is:inline>
