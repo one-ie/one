@@ -15,6 +15,11 @@ import { chatConfig } from './src/lib/chat-config'
 // for why it must not live here.
 const ws = chatConfig.ws
 
+// Chat widget switch — flip to re-enable the @oneie/plugin-chat registration
+// below AND the <OneChat> mount in src/layouts/Layout.astro (both must match;
+// this const only gates the plugin() entry, not the widget component import).
+const CHAT_ENABLED = false
+
 // ONE configuration — the single control surface for this site.
 // Two separate switches:
 //   1. Backend mode: set ONE_API_KEY + ONE_BASE_URL in .env to connect to the
@@ -45,12 +50,12 @@ export default defineOne({
     // not full documents. This site wraps them in its own <Layout> (nav,
     // <head>, globals.css) via src/pages/blog/* and src/pages/docs/*.
     blog({ injectRoutes: false }),
-    chat(chatConfig),
     docs({ injectRoutes: false }),
     newsletter({ workspace: ws }),
     // /p/[slug] is hand-written below (SSR, not prerendered — every request
     // re-fetches pages:view so a publish in ONE's editor is live on refresh).
     pages({ ws, injectRoutes: false }),
     track({ ws }),
+    ...(CHAT_ENABLED ? [chat(chatConfig)] : []),
   ],
 })

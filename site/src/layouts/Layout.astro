@@ -8,6 +8,9 @@ import { THEMES } from '../lib/themes'
 import { SITE } from '../lib/seo-site'
 import { buildPageGraph } from '../lib/seo-graph'
 
+// Mirrors one.config.ts's CHAT_ENABLED — flip both together to re-enable.
+const CHAT_ENABLED = false
+
 interface Props {
   title: string
   description?: string
@@ -471,14 +474,16 @@ const runtimeThemes = Object.fromEntries(
     </main>
     <slot name="footer" />
 
-    <!-- ── Chat widget ───────────────────────────────────────────── -->
-    <OneChat
-      agent="one"
-      view={chatConfig.view}
-      position={chatConfig.position}
-      ws={chatConfig.ws}
-      greeting="Hi! Ask me anything about the ONE platform."
-    />
+    <!-- ── Chat widget — disabled, see CHAT_ENABLED above ──────────── -->
+    {CHAT_ENABLED && (
+      <OneChat
+        agent="one"
+        view={chatConfig.view}
+        position={chatConfig.position}
+        ws={chatConfig.ws}
+        greeting="Hi! Ask me anything about the ONE platform."
+      />
+    )}
 
     <!-- ── Tracking pixel — sends pageview/click/scroll events to
          one.ie/u/{ws}/analytics. one.config.ts's track({ ws }) plugin entry
