@@ -1,24 +1,60 @@
 diff --git a/node_modules/@puckeditor/core/.bun-tag-8b713cf8065c64f3 b/.bun-tag-8b713cf8065c64f3
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/node_modules/@puckeditor/core/.bun-tag-d17029c13f08426e b/.bun-tag-d17029c13f08426e
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/dist/chunk-XQHCQEAF.mjs b/dist/chunk-XQHCQEAF.mjs
-index ea8f2b24f26c2c0c1ef99a2f9c4f2832a1e46f86..d8217314f6e14b6e457dede4e63e76f1ae4bea34 100644
+index ea8f2b24f26c2c0c1ef99a2f9c4f2832a1e46f86..6bb6d1ad9b73896def7314be1621a617e7506d8b 100644
 --- a/dist/chunk-XQHCQEAF.mjs
 +++ b/dist/chunk-XQHCQEAF.mjs
-@@ -1402,7 +1402,7 @@ var createAppStore = (initialAppStore) => create2()(
+@@ -1402,13 +1402,18 @@ var createAppStore = (initialAppStore) => create2()(
      });
    })
  );
 -var appStoreContext = createContext(createAppStore());
 +var appStoreContext = createContext(null);
++var _defaultAppStore = null;
++function getDefaultAppStore() {
++  if (_defaultAppStore === null) _defaultAppStore = createAppStore();
++  return _defaultAppStore;
++}
  function useAppStore(selector) {
-   const context = useContext(appStoreContext);
+-  const context = useContext(appStoreContext);
++  const context = useContext(appStoreContext) ?? getDefaultAppStore();
    return useStore(context, selector);
+ }
+ function useAppStoreApi() {
+-  return useContext(appStoreContext);
++  return useContext(appStoreContext) ?? getDefaultAppStore();
+ }
+ 
+ // components/IconButton/IconButton.tsx
 diff --git a/dist/index.js b/dist/index.js
-index 703412f780b9f5c23900dcd249427c6f6e9bf46f..8c38ce841da1bdec356334ffacd8b1c51458da7b 100644
+index 703412f780b9f5c23900dcd249427c6f6e9bf46f..6dbf3b6f2ff18f8f47fd30e76c45963be45122b7 100644
 --- a/dist/index.js
 +++ b/dist/index.js
-@@ -3556,7 +3556,7 @@ var init_store = __esm({
+@@ -3336,12 +3336,17 @@ var init_default_app_state = __esm({
+ });
+ 
+ // store/index.ts
++var _defaultAppStore;
++function getDefaultAppStore() {
++  if (_defaultAppStore === undefined) _defaultAppStore = createAppStore();
++  return _defaultAppStore;
++}
+ function useAppStore(selector) {
+-  const context = (0, import_react11.useContext)(appStoreContext);
++  const context = (0, import_react11.useContext)(appStoreContext) ?? getDefaultAppStore();
+   return (0, import_zustand4.useStore)(context, selector);
+ }
+ function useAppStoreApi() {
+-  return (0, import_react11.useContext)(appStoreContext);
++  return (0, import_react11.useContext)(appStoreContext) ?? getDefaultAppStore();
+ }
+ var import_zustand4, import_middleware3, import_react11, defaultPageFields, createAppStore, appStoreContext;
+ var init_store = __esm({
+@@ -3556,7 +3561,7 @@ var init_store = __esm({
          });
        })
      );
@@ -28,10 +64,30 @@ index 703412f780b9f5c23900dcd249427c6f6e9bf46f..8c38ce841da1bdec356334ffacd8b1c5
  });
  
 diff --git a/dist/no-external.js b/dist/no-external.js
-index 2f039ed05c64e8652303cb0f31fc7f2ade390192..ad1a50aafa419071f974f3c66011041a79d97070 100644
+index 2f039ed05c64e8652303cb0f31fc7f2ade390192..a444e7eaa4bcfcd70387330bf484764e52fb75b0 100644
 --- a/dist/no-external.js
 +++ b/dist/no-external.js
-@@ -3556,7 +3556,7 @@ var init_store = __esm({
+@@ -3336,12 +3336,17 @@ var init_default_app_state = __esm({
+ });
+ 
+ // store/index.ts
++var _defaultAppStore;
++function getDefaultAppStore() {
++  if (_defaultAppStore === undefined) _defaultAppStore = createAppStore();
++  return _defaultAppStore;
++}
+ function useAppStore(selector) {
+-  const context = (0, import_react11.useContext)(appStoreContext);
++  const context = (0, import_react11.useContext)(appStoreContext) ?? getDefaultAppStore();
+   return (0, import_zustand4.useStore)(context, selector);
+ }
+ function useAppStoreApi() {
+-  return (0, import_react11.useContext)(appStoreContext);
++  return (0, import_react11.useContext)(appStoreContext) ?? getDefaultAppStore();
+ }
+ var import_zustand4, import_middleware3, import_react11, defaultPageFields, createAppStore, appStoreContext;
+ var init_store = __esm({
+@@ -3556,7 +3561,7 @@ var init_store = __esm({
          });
        })
      );

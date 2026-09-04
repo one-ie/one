@@ -16,15 +16,23 @@
 # each stage's enter_when rule is set to its own bucket name, real site
 # traffic auto-advances contacts along this exact spine with zero extra code.
 #
-# Known limitation (see data/lifecycles/_example.toml): `one push`'s TOML
-# compiler always sets enter_when to null — it does not read enter_when,
-# goal, principle, levers, or band from this file yet (packages/cli/src/
-# compiler.ts, data/lifecycles/*.toml -> lifecycle:save block). Push this
-# file to create the def + stage rows, then set each stage's enter_when to
-# its own id directly (one-time, until the compiler grows enter_when
-# support) so the rule engine actually fires. The goal/principle lines below
-# document intent for that future compiler upgrade — LifecycleStage
-# (lib/lifecycle/def.ts) already carries these fields end to end.
+# Compiler note: packages/cli/src/compiler.ts now reads goal/principle/band/
+# levers from this file (levers as bracket-list strings "<kind>:<id>", since
+# the hand-rolled TOML parser has no nested array-of-tables) — but that fix
+# ships in @oneie/cli's next publish, and this workspace pushed with 4.0.1
+# from before it. Until this file is re-pushed with an updated CLI, this
+# workspace's enter_when + levers were set with a one-time direct patch on
+# lifecycle_stages (D1) instead — re-pushing with an updated CLI will
+# overwrite the def with whatever the compiler produces at push time, so
+# keep this file and the live def in sync by hand until then.
+
+# Levers — the page each stage leans on hardest. "add" a stronger one any
+# time; this is a starting guess, not a fixed truth.
+#   awareness -> "/"          the homepage, the only door every visitor uses
+#   interest  -> "/patterns"  the block/pattern showcase — the deepest browse
+#   intent    -> "/signup"    creating an account is the textbook intent signal
+#   purchase  -> "/payments"  where the transaction actually happens
+#   loyalty   -> agent "one"  the chat agent, the only thing that can ask for a referral
 
 id    = "customer"
 label = "Customer Journey"
@@ -34,27 +42,32 @@ id      = "awareness"
 label   = "Awareness"
 goal    = "A visitor lands on the site and looks around"
 principle = "Every pageview, scroll, and view counts — the top of the spine is never gated"
+levers  = ["page:/"]
 
 [[stages]]
 id      = "interest"
 label   = "Interest"
 goal    = "A visitor engages — clicks a CTA, opens the chat, follows a link deeper into the site"
 principle = "Interest is a click, not a pageview — high-volume awareness events never inflate this stage"
+levers  = ["page:/patterns"]
 
 [[stages]]
 id      = "intent"
 label   = "Intent"
 goal    = "A visitor signals they want something — submits a form, identifies themselves, subscribes, replies to chat"
 principle = "The strongest leading indicator before money moves — this is the stage sales watches"
+levers  = ["page:/signup"]
 
 [[stages]]
 id      = "purchase"
 label   = "Purchase"
 goal    = "The visitor becomes a customer — buys, renews, or (tracked the same bucket) refunds"
 principle = "The keystone crossing — every stage before this exists to raise its conversion rate"
+levers  = ["page:/payments"]
 
 [[stages]]
 id      = "loyalty"
 label   = "Loyalty"
 goal    = "A customer becomes an advocate — refers, reviews, or scores well on NPS"
 principle = "The compounding stage — a loyal customer is a lever for the next visitor's awareness"
+levers  = ["agent:one"]
