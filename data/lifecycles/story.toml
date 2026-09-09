@@ -1,0 +1,99 @@
+# The life of a story — the funnel that starts AFTER the story is settled.
+#
+# A story that is told, promised, built and proven is not finished. That is the
+# point at which it starts working: it gets seen, it gets finished, it gets
+# passed on, someone does the thing the Want asked for, and someone tells their
+# own. Those five are the only measurements that matter, and each one is an
+# ordinary tracked event — nothing here needs new machinery.
+#
+# HONEST NOTE about auto-advance. data/lifecycles/customer.toml's stage ids are
+# named to match the five buckets the tracking pixel's events sort into, so
+# real traffic moves a contact along that spine with no extra code. This spine
+# is a different kind ("story"), and its stage ids are NOT those buckets — so
+# the first five stages are moved by your own signals as the work happens, and
+# only `viewed` onward can be driven by the pixel (a story page view is a
+# pageview like any other). Do not expect this one to fill itself in.
+#
+# What makes it actionable rather than a dashboard: when a story converts, mark
+# the trail from the story to the FRAMEWORK it was told in and the MEDIUM it was
+# rendered in. Frames that never convert for a kind of teller fade on their own.
+# Two frames for one story is two children with different frame tags, and the
+# stronger trail wins the next pick. That is an A/B test, and you did not have
+# to build a testing product to get it.
+#
+# The number to watch is the last one. Retells over stories told is the
+# k-factor, and a k-factor above one is the only definition of organic growth
+# that means anything: every story told produces more than one more.
+
+id    = "story"
+label = "Life of a Story"
+
+[[stages]]
+id        = "told"
+label     = "Told"
+goal      = "Someone said something real — the beats are filed and the six tests pass"
+principle = "Never present a form; read the sentence for the beats it already carries"
+levers    = ["agent:storyteller"]
+
+[[stages]]
+id        = "framed"
+label     = "Framed"
+goal      = "A framework, a register and a medium are chosen and stated in one sentence"
+principle = "The pick is said out loud before anything is promised, so it can be overruled"
+levers    = ["agent:storyteller"]
+
+[[stages]]
+id        = "promised"
+label     = "Promised"
+goal      = "The teller heard their own story back and said yes — terms and one proof are frozen"
+principle = "The proof is written down at the moment of agreement and can never be swapped later"
+levers    = ["agent:storyteller"]
+
+[[stages]]
+id        = "building"
+label     = "Building"
+goal      = "The Way is being walked"
+principle = "Report settles, never effort — silence during the Way is correct"
+levers    = ["page:/docs"]
+
+[[stages]]
+id        = "settled"
+label     = "Settled"
+goal      = "The proof ran and passed — the Turn that was promised is now true"
+principle = "A promise honestly broken and recorded beats one quietly redefined"
+levers    = ["agent:storyteller"]
+
+[[stages]]
+id        = "viewed"
+label     = "Viewed"
+goal      = "The story reached someone"
+principle = "A view is the denominator of everything below it — count it before optimising anything"
+levers    = ["page:/"]
+
+[[stages]]
+id        = "completed"
+label     = "Completed"
+goal      = "They read, listened or watched to the end"
+principle = "Views to completes is whether the MEDIUM holds attention — the only honest test of a renderer"
+levers    = ["page:/blog"]
+
+[[stages]]
+id        = "shared"
+label     = "Shared"
+goal      = "They passed it on"
+principle = "Views to shares is whether the story was worth passing on — this is organic reach, not a vanity count"
+levers    = ["page:/blog"]
+
+[[stages]]
+id        = "converted"
+label     = "Converted"
+goal      = "Someone did the thing the Want asked for"
+principle = "Mark the framework and the medium that earned it — this is how the registry gets its weights from outcomes instead of from a document"
+levers    = ["page:/products"]
+
+[[stages]]
+id        = "retold"
+label     = "Retold"
+goal      = "A reader told their own story, and it names this one as its parent"
+principle = "Retells over stories told is the k-factor — above one is growth, and the teller-to-teller edge is reputation the world wrote"
+levers    = ["agent:storyteller"]

@@ -11,10 +11,13 @@
 
 **An open, production-grade Astro starter you actually own.** Clone it, brand it in six tokens, ship it to the edge for free — and, when you want them, switch on AI chat, a CRM, analytics, commerce, and autonomous agents without changing your stack.
 
-Two things make it different from every other starter:
+**Every business is already telling a story. Most of them are telling it one customer at a time.** This repo is what happens when you tell it once, to a machine that holds the shape: seven beats, a promise with one checkable proof, and a site and a team of agents that tell it everywhere, forever. [How that works →](#tell-it-once--the-story-layer)
+
+Three things make it different from every other starter:
 
 1. **It runs standalone.** No account, no API key, no backend. Sessions, auth, and data work locally from your first `bun run dev`.
 2. **It scales into a platform.** Set one environment variable and the same site gains the full ONE backend — AI, CRM, payments, agents — with zero rewrites.
+3. **It knows what a story is.** Not a blog folder — a `story` type, a storyteller agent, a registry of every framework that has survived, and a funnel that ends at the only growth number worth having.
 
 Real numbers, verified against a production build, not asserted: **100 on Lighthouse (Accessibility · Best Practices · SEO) · LCP 137 ms · CLS 0.00.** [See how to check it yourself.](#performance)
 
@@ -90,6 +93,13 @@ Everything below ships in this repo, free, working:
 - The `one` / `oneie` CLI — every command is one typed call, no separate API to learn
 - `ai/` folder: agents, skills, tools, and workflows as plain Markdown + TOML
 
+**Story, as a first-class type**
+- `ai/skills/story/` — the six tests a story has to pass, the seven beats, the arc, and the refusals
+- `ai/skills/story/frameworks.md` — **a registry, not a rulebook**: Labov, StoryBrand, Kishōtenketsu, the Story Circle, quest grammar and a dozen more, each mapped onto the same seven beats. Adding a framework is adding a row
+- `ai/skills/story/mediums.md` — one renderer per surface. The beats never change; the order they're spoken in does
+- `ai/agents/storyteller.md` — the agent that listens, files beats, speaks the spine back, and then goes quiet
+- `data/types/story.toml` + `data/lifecycles/story.toml` — the story as a typed entity, and the ten steps of its life after it ships
+
 **Nine free plugins**
 - auth · backend · chat · track · blog · booking · docs · mail · media
 
@@ -110,6 +120,7 @@ The repo is three folders, one idea:
 ai/              knows  → agents · skills · tools · workflows · context.md
 data/            grows  → types · content · lifecycles
 site/            shows  → Astro + shadcn + plugins (one.config.ts)
+clients/         one folder per client — the same three, scoped to them
 workspace.toml   who you are
 packages/        paid plugin stubs only — see Paid plugins below
 ```
@@ -121,6 +132,158 @@ packages/        paid plugin stubs only — see Paid plugins below
 **Shows.** The site people see. Astro 7, React 19, shadcn/ui, on Cloudflare's edge.
 
 `CLAUDE.md` is the operating manual; `AGENTS.md` is the briefing an AI agent reads before it touches anything.
+
+---
+
+## Tell it once — the story layer
+
+A form is not a story. Every starter on the internet gives you a blog folder and
+calls that content. This one gives you the craft that goes around it, as files an
+agent reads — never as a paragraph buried in a prompt.
+
+### Six tests, run at intake
+
+A story that fails one is named in a sentence and handed back. It is never
+quietly padded until it passes.
+
+| Test | Fails when |
+|---|---|
+| Someone wants something | there is no Want — it's a description |
+| The want is hard to get | nothing stands in the way — it's a shopping list |
+| Things cause other things | it's a sequence, not a chain |
+| Something is at stake | nothing is lost if the Want fails |
+| Something changes | the world at the end is the world at the start |
+| It is specific | it's true and general — "we struggled" instead of one detail |
+
+### Seven beats
+
+**World · Cast · Knock · Want · Way · Turn · Lesson.** That's the whole form. A
+child, a founder or an agent can fill it in, and nobody has to learn a new
+vocabulary on either side.
+
+The storyteller only ever *asks* for two of them — the **Want** and the
+**Knock**. The Way, the Turn and the Lesson are supplied by the work and
+recognised by the teller. It never asks what you'll learn from this; nobody
+knows, and asking makes a machine sound like a school.
+
+### Promise · progress · payoff
+
+The arc, and the one rule a reader won't forgive you breaking.
+
+```
+  promise  ─────────►  progress  ─────────►  payoff
+  terms + one proof    the board walking      the proof passed
+  frozen at "yes"      settles, not effort    the Turn you promised
+```
+
+**Pay off what was promised, not something else.** The proof is written down at
+the moment you agree and can never be swapped for an easier one afterwards.
+That's the reason to trust the thing, and it's a shell command, not a claim.
+
+### A registry, not a rulebook
+
+`ai/skills/story/frameworks.md` holds one row per framework, each mapping its own
+stops onto the same seven beats, with the kind of teller it serves:
+
+| Beat | Story Spine | Story Circle | Kishōtenketsu | Quest grammar |
+|---|---|---|---|---|
+| World | once upon a time | you | ki | the world |
+| Knock | one day | need | shō | the call |
+| Want | *(in "one day")* | go | shō | objective |
+| Way | because of that… | search / find | shō | the obstacle |
+| Turn | until finally | take / return | **ten** | the reward |
+| Lesson | ever since then | change | ketsu | experience |
+
+**Adding a framework is adding a row.** Labov for listening to a real person.
+StoryBrand when the teller sells and the customer is the hero. Raskin's
+strategic narrative for a founder with a pitch. Kishōtenketsu for a Turn with no
+enemy — which is most real tellers, because a mover in Austin isn't fighting
+anyone. The agent states its pick in one sentence so you can overrule it.
+
+### One story, every surface
+
+The beats never change between media. The order they're spoken in does, and
+`ai/skills/story/mediums.md` says how: the headline as promise and the proof
+block as payoff for a **page**, a cold open on the Knock for **voice**, the Turn
+in the first five seconds for **video**, the spine for a **conversation**. A
+medium with no renderer is named, not faked.
+
+### Speak it back
+
+```
+Once upon a time there was a mover in Austin.
+Every day she told her story to one customer at a time.
+One day she told it once, to ONE.
+Because of that, a promise was made.
+Because of that, the agents built the page.
+Until finally the proof passed.
+Ever since then, the page has told it for her.
+```
+
+That's the story spine — the one grammar that forces causation, because you
+can't say "because of that" without naming a cause. It's the first thing the
+storyteller says back after intake, before anything is promised, and then it
+asks the only question that matters: **does this promise tell your story?**
+
+### The story is alive
+
+Shipping is where it starts working, not where it ends. `data/lifecycles/story.toml`
+tracks ten steps:
+
+```
+told → framed → promised → building → settled
+     → viewed → completed → shared → converted → retold
+```
+
+Each one is an ordinary tracked event. **Views to completes** is whether the
+medium holds attention. **Views to shares** is organic reach. **Views to
+conversions** is sales. And **retells over stories told is the k-factor** — above
+one and every story you tell produces more than one more.
+
+When a story converts, the framework and the medium that earned it get the
+credit, and frames that stop converting fade on their own. Two frames for one
+story is two stories with different tags and the stronger one wins the next
+pick. That's an A/B test, and you didn't have to build a testing product to get
+it.
+
+### The refusals
+
+These are load-bearing, not decoration. A machine that can make any story
+persuasive has to be allowed to decline.
+
+- No **Want with no observable** — if nothing could check it, it isn't a Want.
+- No story told **for someone else** without their name on the Cast and their consent.
+- No **status claim that wasn't measured**.
+- No **framework chosen that the teller didn't see**.
+- No **Lesson invented** by the machine.
+- A decline is **recorded with its reason**, never a silent stall.
+
+> If the story cannot help, at least it must not hurt.
+
+---
+
+## Clients — one folder, three ideas, scoped
+
+`clients/<slug>/` is the same `ai/ · data/ · site/` shape as the root, holding
+everything about one client and nothing about anyone else:
+
+```
+clients/ehc/
+  workspace.toml     who they are
+  ai/                their agents, their skills, their context.md
+  data/              their types and their lifecycles
+  site/              their one.config.ts, their brand tokens, their content
+  source/            raw material, gitignored — never shipped
+```
+
+A client folder is **portable and inspectable**: everything an agent needs to
+speak for that business is text you can read, in a folder you can hand over. The
+brand tokens live in the client's own `one.config.ts`, so the same site
+component tree repaints per client without a fork.
+
+`clients/ehc/` ships as the worked example — a real SEND / Education, Health and
+Care framework, its agents, its ontology, its content. See
+[`clients/ehc/README.md`](clients/ehc/README.md).
 
 ---
 

@@ -1,0 +1,84 @@
+# The story — seven beats, one promise, one proof. `one push` sends this to
+# world:declare-types so a story is a typed entity in your workspace and every
+# agent reads the same shape.
+#
+# The beats are LOCKED names. Rename one and the storyteller, the frameworks
+# registry and every medium renderer stop lining up.
+#
+# `proof` is the one field that makes this different from a content type:
+# exactly one checkable command, frozen when the promise is made, and the only
+# thing allowed to settle the story. See ai/skills/story/SKILL.md § the arc.
+
+id          = "story"
+label       = "Story"
+description = "A story told to the platform: seven beats, a promise, and one proof that settles it"
+
+[[fields]]
+name  = "title"
+type  = "string"
+label = "Title"
+
+[[fields]]
+name  = "teller"
+type  = "string"
+label = "Teller"
+
+[[fields]]
+name  = "world"
+type  = "string"
+label = "World — where and when"
+
+[[fields]]
+name  = "cast"
+type  = "string"
+label = "Cast — everyone named, and nobody who did not consent"
+
+[[fields]]
+name  = "knock"
+type  = "string"
+label = "Knock — what made now the moment"
+
+[[fields]]
+name  = "want"
+type  = "string"
+label = "Want — stated so a machine could check it"
+
+[[fields]]
+name  = "way"
+type  = "string"
+label = "Way — what has to happen"
+
+[[fields]]
+name  = "turn"
+type  = "string"
+label = "Turn — what is different once it is real"
+
+[[fields]]
+name  = "lesson"
+type  = "string"
+label = "Lesson — written after, together, never invented"
+
+[[fields]]
+name  = "framework"
+type  = "string"
+label = "Framework — a row in ai/skills/story/frameworks.md"
+
+[[fields]]
+name  = "register"
+type  = "string"
+label = "Register — book or commercial, never both"
+
+[[fields]]
+name  = "medium"
+type  = "string"
+label = "Medium — page, voice, video, conversation, thread, testimonial, pitch"
+
+[[fields]]
+name  = "proof"
+type  = "string"
+label = "Proof — the one command that settles this, frozen at the promise"
+
+[[fields]]
+name  = "parent"
+type  = "string"
+label = "Parent story — set when this story was retold from another"

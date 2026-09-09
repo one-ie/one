@@ -24,3 +24,6 @@ wrangler.template-deploy.toml
 # editor / OS
 .DS_Store
 *.log
+
+# linked worktrees
+.worktrees/
