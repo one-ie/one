@@ -1,6 +1,6 @@
 > **Astro 7 · React 19 · shadcn/ui · Tailwind 4 · Cloudflare Workers**
 
-**The open-source Astro starter you actually own.** Free forever, yours to sell at any price you set, with one obligation: keep the ONE link in your deployed product. Clone it, brand it in six tokens, ship it to Cloudflare's edge.
+**The open-source Astro starter you actually own.** Free forever, yours to sell at any price you set, with one obligation: keep the ONE brand, logo and link in your deployed product. Clone it, brand it in six tokens, ship it to Cloudflare's edge.
 
 ## 60 seconds to running
 
@@ -121,7 +121,6 @@ The repo is three folders, one idea:
 ai/              knows  → agents · skills · tools · workflows · context.md
 data/            grows  → types · content · lifecycles
 site/            shows  → Astro + shadcn + plugins (one.config.ts)
-clients/         one folder per client — the same three, scoped to them
 workspace.toml   who you are
 packages/        paid plugin stubs only — see Paid plugins below
 ```
