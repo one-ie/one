@@ -351,13 +351,59 @@ custody change.
 
 ## Components
 
-![The ONE components page in light mode. An eyebrow reads "ONE CARD, FIVE LAYOUTS" above the headline "A card for every surface." Three feature cards are shown, headed Design tokens, Motion library and AI chat, with the top of a row of stat cards below them.](.github/assets/06-cards.png)
+Nine blocks, each one primitive rather than a family of near-duplicates. Every
+block reads the same six tokens — that is the whole trick: you never restyle
+components, you restyle the tokens they were already reading.
 
-Every block reads the same six tokens. That is the whole trick: you never restyle
-components, you restyle the tokens they were already reading. Four motion
-primitives sit on top, and nothing ships until the island it belongs to enters
-the viewport, which is how a site this animated stays this light. See `/components`,
-`/motion` and `/patterns` on a running dev server.
+![The ONE buttons page in dark mode. An eyebrow reads "DESIGN SYSTEM" above the headline "Buttons." A table lays five variants — Primary, Secondary, Tertiary, Ghost and Destructive — across three size columns headed Small, Medium and Large.](.github/assets/c-buttons.png)
+
+**Buttons** — five variants across three sizes, with icon slots, loading and
+disabled states, and an `href` prop that renders a real anchor instead of a
+button.
+
+![The ONE tabs demo in dark mode. An eyebrow reads "COMPONENT" above the headline "Tabs that glide." Four tabs read Overview, Build, Ship and Secure, with Overview active and underlined. The Overview panel is headed "One mental model."](.github/assets/c-tabs.png)
+
+**Tabs** — a sliding indicator tracks the active tab. Full keyboard support
+(arrow keys, Home/End), ARIA roles, and a crossfade that yields to
+`prefers-reduced-motion`. Pure Astro plus one scoped script; zero React.
+
+<details>
+<summary><strong>The rest of the set</strong> — cards, carousel, quotes, forms, breadcrumbs, footer</summary>
+
+<br>
+
+![The ONE card demo in dark mode, showing three feature cards headed Design tokens, Motion library and AI chat, a row of four stat cards reading 1,234 / 0.0d / 00% / 00 KB each labelled "your metric here", and three profile cards each reading "Team member · Role, Company".](.github/assets/c-cards.png)
+
+**Card** — one composable component, five layouts: feature, stat, profile,
+pricing and media. The placeholder figures above are deliberate; see
+[The ONE Licence](#the-one-licence) for why this repo ships no invented numbers.
+
+![The ONE carousel demo in dark mode.](.github/assets/c-carousel.png)
+
+**Carousel** — native CSS scroll-snap, so touch works without a JavaScript
+animation loop and there is no dependency to carry.
+
+![The ONE quote demo in dark mode.](.github/assets/c-quotes.png)
+
+**Quote** — three variants: featured pull-quote, inline blockquote, and a
+compact grid.
+
+![The ONE form demo in dark mode.](.github/assets/c-form.png)
+
+**Form** — labelled inputs, real validation states, and a consent checkbox.
+
+![The ONE breadcrumbs demo in dark mode.](.github/assets/c-breadcrumbs.png)
+
+![The ONE footer demo in dark mode.](.github/assets/c-footer.png)
+
+**Breadcrumbs** and **Footer** — the structural blocks every page needs and
+nobody enjoys rebuilding.
+
+</details>
+
+Four motion primitives sit on top, and nothing ships until the island it belongs
+to enters the viewport, which is how a site this animated stays this light. See
+`/components`, `/motion` and `/patterns` on a running dev server.
 
 ---
 
