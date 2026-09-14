@@ -40,10 +40,15 @@
  * after the rendered stat cards had been fixed.)
  */
 
-import { readFileSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative, extname, sep } from 'node:path'
 
 const ROOT = process.cwd()
+if (!existsSync(join(ROOT, 'site/package.json'))) {
+  console.error('check-claims: run me from the repository root (`node scripts/check-claims.mjs` or `bun run check:claims`).')
+  console.error(`  cwd is ${ROOT}, which has no site/package.json — that is a wrong directory, not a violation.`)
+  process.exit(2)
+}
 
 /* ── what we read ───────────────────────────────────────────────────────────── */
 
@@ -286,7 +291,7 @@ function checkC(all, textOf) {
   const v = []
   let examined = 0
   if (!major) return { name: 'C  version strings', v: ['site/package.json: no `astro` dependency found — cannot determine the major'], note: 'manifest unreadable' }
-  const RE = /\bastro[\s@]+v?(\d+)(?:\.\d+)*\b/gi
+  const RE = /\bastro[\s@]+[\^~]?v?(\d+)(?:\.\d+)*\b/gi
   for (const { file } of all) {
     const lines = textOf(file).split('\n')
     lines.forEach((line, i) => {
@@ -321,7 +326,14 @@ const ALLOWED_SCAFFOLDS = new Set(['astro', 'cloudflare', 'vite', 'create-astro'
  * published 2022 — and it sat behind the home page's copy-to-clipboard CTA. An
  * allowlist of what we own catches the NEXT squatter; a blocklist of `one-app`
  * catches only the one already typed. */
-const BRAND_RE = /(?:^|[@/-])one(?:$|[-/])|one-?app|oneie|one\.ie/i
+/* Matches a package that wears this project's name. NOTE the deliberate absence of
+ * a bare `one`: "You can npm install one of the plugins later" is a sentence, and a
+ * gate that reds ordinary English gets disabled — which is the one outcome worse than
+ * no gate at all. (Measured: it fired on exactly that line in docs/tutorial.md.) Bare
+ * `one` is only a package name after an unambiguous `create`, so BRAND_SCAFFOLD adds
+ * it back there. Known miss: a foreign package literally named `one`, installed. */
+const BRAND_RE = /one-?app|oneie|one\.ie|(?:^|[@/])one[-/]|-one$/i
+const BRAND_SCAFFOLD = /^one$/i
 
 const CMD_PATTERNS = [
   { kind: 'scaffold', re: /\b(?:npm|yarn|pnpm|bun)\s+create\s+(@?[\w.@/-]+)/gi },
@@ -354,7 +366,7 @@ function checkD(all, textOf) {
           const pkg = normalizePkg(m[1])
           if (!pkg || seen.has(pkg)) continue
           seen.add(pkg)
-          const brand = BRAND_RE.test(pkg)
+          const brand = BRAND_RE.test(pkg) || (kind === 'scaffold' && BRAND_SCAFFOLD.test(pkg))
           // Two questions only: is this a SCAFFOLD (a command that claims to create a
           // project here), and does it wear OUR NAME? Everything else is not our business.
           if (kind !== 'scaffold' && !brand) continue
