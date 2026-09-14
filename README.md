@@ -375,7 +375,7 @@ first request to a cold preview server scored 83 on desktop where all seven warm
 runs scored 99, so run it more than once. And both Performance numbers are down
 from the previous July figures (100 desktop, 86 Slow 4G) — that drop has not been
 investigated, and the July run's conditions are not recorded, so nobody can yet
-say whether the Astro upgrade caused it. The screenshots below predate this
+say whether the Astro upgrade caused it. The screenshots above predate this
 re-measure and still show the July card.
 
 So do not take it from us. The mechanism is static-first Astro, zero JavaScript by
