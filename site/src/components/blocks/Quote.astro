@@ -6,15 +6,15 @@
  *   <Quote
  *     variant="featured"
  *     quote="We shipped in three days."
- *     author="Sarah M."
- *     role="Head of Growth, Acme Agency"
+ *     author="Customer name"
+ *     role="Role, Company"
  *     avatarInitials="SM"
  *     rating={5}
  *   />
  *
  *   <!-- quote can also come from the default slot -->
- *   <Quote variant="inline" author="James L." role="Founder, BuildFast">
- *     The token system survives a client rebrand. Change six values, done.
+ *   <Quote variant="inline" author="Customer name" role="Role, Company">
+ *     A short customer quote goes here.
  *   </Quote>
  *
  * Variants:
@@ -28,9 +28,9 @@
 interface Props {
   /** Quote text. Optional — may instead be supplied via the default <slot>. */
   quote?: string
-  /** Attribution name, e.g. "Sarah M." */
+  /** Attribution name, e.g. "Customer name" */
   author?: string
-  /** Role / company line, e.g. "Head of Growth, Acme Agency" */
+  /** Role / company line, e.g. "Role, Company" */
   role?: string
   /** Avatar initials, e.g. "SM". Falls back to the first letter of `author`. */
   avatarInitials?: string
