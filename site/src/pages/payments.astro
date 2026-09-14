@@ -61,15 +61,16 @@ const products = await getCollection('products')
           Two rails to get paid.<br /><span class="grad">Both live, right here.</span>
         </h1>
         <p class="hr hr-2 sub">
-          Crypto links work the moment you clone — four chains, no account, no custody.
-          Cards are real Stripe Elements that go live with your key. Try both below —
-          nothing on this page is a mockup.
+          Crypto links take one offline command — `one wallet keygen`, paste the
+          addresses, and you are live across four chains. No merchant account, no
+          approval to wait for, no custody. Cards are real Stripe Elements that go
+          live with your key. Try both below — nothing on this page is a mockup.
         </p>
         <ul class="hr hr-3 trust" aria-label="Guarantees">
           <li>✓ No custody, ever</li>
           <li>✓ Signed server-side</li>
           <li>✓ Cards by Stripe</li>
-          <li>✓ Zero config to start</li>
+          <li>✓ One keygen to start</li>
         </ul>
       </div>
 
@@ -248,7 +249,7 @@ const products = await getCollection('products')
   -d '{
     "protocol": "payment_link_create",
     "data": {
-      "amount": 25,
+      "amount": 2500,
       "unit": "usd",
       "product": "Pro plan",
       "merchantSlug": "your-workspace",
@@ -257,6 +258,7 @@ const products = await getCollection('products')
     }
   }'
 
+# amount is in CENTS — 2500 = $25.00
 # → { "success": true, "data": { "url": "https://pay.one.ie/l/...", "qr": "..." } }
 # Signed server-side. Visiting the link verifies the signature before it
 # renders — an unsigned or tampered link never reaches a payer.`}</code></pre>
