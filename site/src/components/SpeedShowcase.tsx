@@ -281,9 +281,10 @@ export function SpeedShowcase({ lighthouseDate, mobileScores, desktopScores, pag
           Not a claim.
         </h2>
         <p className="mt-6 text-lg md:text-xl text-font/60 leading-relaxed">
-          This page times itself while you read it: page load, transfer weight, latest audit —
-          dated, reproducible, measured on the build actually shipping. Re-run the command below
-          against your own clone.
+          This page times its own load in your browser while you read it. Transfer weight and the
+          Lighthouse rings are not live — they are the last recorded audit, dated, measured on the
+          build actually shipping. All of it is reproducible: re-run the command below against your
+          own clone.
         </p>
       </header>
 

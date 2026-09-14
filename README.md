@@ -363,11 +363,20 @@ the viewport, which is how a site this animated stays this light. See `/componen
 
 ## Performance
 
-The hero card in the screenshots above is a real Lighthouse run, dated
-**2026-07-09**: 100 for performance, accessibility, best practices and SEO on
-desktop against this repo's own build, and 86 on throttled Slow 4G. That figure
-is carried forward here, not re-measured. The tree has since moved to Astro 7.3.2
-with three adapters upgraded, and nobody has re-run it since.
+Re-measured **2026-09-14** on Astro 7.3.2, at commit `68078201`, with Lighthouse
+13.2.0 and headless Chrome against this repo's own `bun run build && astro
+preview` output. Desktop, `--preset=desktop`, median of 8 runs: **99**
+Performance, **100** Accessibility, **100** Best Practices, **100** SEO, LCP
+**891 ms**, CLS **0.00**. Stock mobile preset (Slow 4G), median of 5 runs: **76**
+Performance, and 100 on the other three.
+
+Two things that spread is hiding, both worth knowing before you quote it. The
+first request to a cold preview server scored 83 on desktop where all seven warm
+runs scored 99, so run it more than once. And both Performance numbers are down
+from the previous July figures (100 desktop, 86 Slow 4G) — that drop has not been
+investigated, and the July run's conditions are not recorded, so nobody can yet
+say whether the Astro upgrade caused it. The screenshots below predate this
+re-measure and still show the July card.
 
 So do not take it from us. The mechanism is static-first Astro, zero JavaScript by
 default and Cloudflare's edge, and the check is two commands:

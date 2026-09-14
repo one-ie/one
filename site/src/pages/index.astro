@@ -21,13 +21,17 @@ import { getEnv } from '../lib/cf-env'
 
 // ── Real proof only ───────────────────────────────────────────────────────
 // This is a promise page: every number below is measured or verifiable, not
-// invented. These Lighthouse scores were measured against THIS page's own
-// `bun run build && bun run preview` output (Lighthouse 13.x, headless
-// Chrome) — not copied from /speed.astro, which measures a different build.
+// invented. Re-measured 2026-09-14 on Astro 7.3.2 against THIS page's own
+// `bun run build && astro preview` output, Lighthouse 13.2.0, headless
+// Chrome, at commit 68078201. Desktop `--preset=desktop`: 8 runs, Performance
+// 99 in 7 of them and 83 on the first request to a cold preview server —
+// median 99. Mobile stock preset (Slow 4G): 5 runs, 75-76, median 76.
+// Accessibility, Best Practices and SEO scored a raw 1.0 in all 13 runs.
+// LCP 891ms desktop / 4.5s Slow 4G; CLS 0.00 in every run.
 // The payment link generator mints a real pay.one.ie link on click.
-const LIGHTHOUSE_DATE = '2026-07-09'
-const DESKTOP_SCORES: [number, number, number, number] = [100, 100, 100, 100]
-const MOBILE_PERF = 86
+const LIGHTHOUSE_DATE = '2026-09-14'
+const DESKTOP_SCORES: [number, number, number, number] = [99, 100, 100, 100]
+const MOBILE_PERF = 76
 
 // Same live/preview switch payments.astro uses — real Stripe Elements the
 // moment both keys exist, an honest static preview until then.
@@ -40,7 +44,7 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
 
 <Layout
   title="ONE — design beautiful websites with perfect Lighthouse scores"
-  description="Open-source Astro 7 + React 19 starter with a production design system, motion library, and payment stack. 14 themes, a perfect Lighthouse score, measured against this repo's own build."
+  description="Open-source Astro 7 + React 19 starter with a production design system, motion library, and payment stack. 14 themes, and 100 for Accessibility, Best Practices and SEO with 99 Performance, measured against this repo's own build."
 >
 
   <!-- ── Hero — the promise, proven in place ───────────────────────── -->
@@ -55,8 +59,9 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
         <div class="hr hr-2">
           <p class="sub">
             ONE is an open source starter template — clone it and your
-            first build already scores 100, with tokens, motion, and
-            payments wired together, no separate integration pass.
+            first build already scores 100 for accessibility, best
+            practices and SEO, with tokens, motion, and payments wired
+            together, no separate integration pass.
           </p>
         </div>
         <div class="hr hr-3">
@@ -208,8 +213,8 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
     <Pattern pattern="diagonal" opacity={0.08} tone="contrast" fade />
     <div class="container cta-container">
       <Stagger dist="lg" stagger={0.1}>
-        <h2 class="cta-title">Clone it. Ship it. Score 100.</h2>
-        <p class="cta-sub">Free forever. No card required. Your first perfect Lighthouse run is one command away.</p>
+        <h2 class="cta-title">Clone it. Ship it. Measure it yourself.</h2>
+        <p class="cta-sub">Free forever. No card required. Your first Lighthouse run is one command away.</p>
         <div class="install install-cta">
           <code class="install-cmd">npx oneie create node my-app</code>
           <button class="copy-btn copy-btn-cta" onclick="navigator.clipboard.writeText('npx oneie create node my-app').then(()=>{this.textContent='Copied';setTimeout(()=>this.textContent='Copy',1500)})">Copy</button>
