@@ -14,6 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # First, and before install: the cheapest gate in the repo, and the only one
+      # that reads what the site CLAIMS rather than whether it compiles. Four classes
+      # of defect shipped to production here in a single day — invented people,
+      # invented statistics, a stale framework version, and a scaffold command
+      # pointing at a stranger's npm package. Dependency-free, so it needs no setup
+      # step and fails in seconds. See scripts/check-claims.mjs.
+      - name: Claims gate (no fabricated people, statistics, versions or packages)
+        run: node scripts/check-claims.mjs
       - uses: oven-sh/setup-bun@v2
       - name: Install dependencies
         run: cd site && bun install
