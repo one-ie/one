@@ -1,15 +1,36 @@
-```
- ██████╗ ███╗   ██╗███████╗
-██╔═══██╗████╗  ██║██╔════╝
-██║   ██║██╔██╗ ██║█████╗
-██║   ██║██║╚██╗██║██╔══╝
-╚██████╔╝██║ ╚████║███████╗
- ╚═════╝ ╚═╝  ╚═══╝╚══════╝
-```
-
 > **Astro 7 · React 19 · shadcn/ui · Tailwind 4 · Cloudflare Workers**
 
-**An open, production-grade Astro starter you actually own.** Clone it, brand it in six tokens, ship it to the edge for free — and, when you want them, switch on AI chat, a CRM, analytics, commerce, and autonomous agents without changing your stack.
+**The open-source Astro starter you actually own.** Free forever, yours to sell at any price you set, with one obligation: keep the ONE link in your deployed product. Clone it, brand it in six tokens, ship it to Cloudflare's edge.
+
+## 60 seconds to running
+
+```bash
+git clone https://github.com/one-ie/one my-app
+cd my-app && bun install
+cd site && bun run dev          # → http://localhost:4321
+```
+
+**No account, no API key, no backend.** Better Auth and Cloudflare D1 handle sessions and data locally from the first run.
+
+Prefer a single scaffold over the whole monorepo? Same shape, one command:
+
+```bash
+npx oneie create my-app         # .claude/ + .mcp.json included
+```
+
+Either way you get a real site, not a hello-world: a home page, blog, docs, a product catalog with checkout, auth pages, an SEO graph, and a design system — all wired, all yours.
+
+## Free forever, and yours to sell
+
+**100% free — not a trial, not a tier, not open-core.** The whole product is here: source, design system, plugins, agents, CLI. Clone it, read every line, modify it, brand it, and **sell what you build with it** at any price you set. No usage limits. No royalty fees.
+
+**One obligation:** keep the ONE brand, logo and link in your deployed product. That is the whole catch, and it is stated here rather than left in a file for you to find. The [Enterprise License](LICENSE-ENTERPRISE.md) removes it.
+
+[The ONE License v1.0](LICENSE) grants everything else, in perpetuity and irrevocably: commercial use, derivative works, software as a service, AI training, sublicensing, distribution, resale, and patents on what you build. No copyleft. You own your modifications. You never have to share your code or data. It is compatible with MIT, Apache, GPL, BSD and MPL.
+
+---
+
+## Why this one
 
 **Every business is already telling a story. Most of them are telling it one customer at a time.** This repo is what happens when you tell it once, to a machine that holds the shape: seven beats, a promise with one checkable proof, and a site and a team of agents that tell it everywhere, forever. [How that works →](#tell-it-once--the-story-layer)
 
@@ -20,26 +41,6 @@ Three things make it different from every other starter:
 3. **It knows what a story is.** Not a blog folder — a `story` type, a storyteller agent, a registry of every framework that has survived, and a funnel that ends at the only growth number worth having.
 
 Real numbers, verified against a production build, not asserted: **100 on Lighthouse (Accessibility · Best Practices · SEO) · LCP 137 ms · CLS 0.00.** [See how to check it yourself.](#performance)
-
----
-
-## 60 seconds to running
-
-```bash
-git clone https://github.com/one-ie/one my-app
-cd my-app && bun install
-cd site && bun run dev          # → http://localhost:4321
-```
-
-That's the whole thing. **No account, no API key, no backend connection** — Better Auth and Cloudflare D1 handle sessions and data locally from the first run.
-
-Prefer a single scaffold over the whole monorepo?
-
-```bash
-npx oneie create my-app         # downloads this exact shape, .claude/ + .mcp.json included
-```
-
-Either way you get a real site, not a hello-world: a home page, blog, docs, a product catalog with checkout, auth pages, an SEO graph, and a design system — all wired, all yours.
 
 ---
 
@@ -281,10 +282,6 @@ speak for that business is text you can read, in a folder you can hand over. The
 brand tokens live in the client's own `one.config.ts`, so the same site
 component tree repaints per client without a fork.
 
-`clients/ehc/` ships as the worked example — a real SEND / Education, Health and
-Care framework, its agents, its ontology, its content. See
-[`clients/ehc/README.md`](clients/ehc/README.md).
-
 ---
 
 ## Free plugins
@@ -479,12 +476,10 @@ Paid plugins ship as thin stubs in `packages/` — never published — built on 
 
 ---
 
-## Open, and honest about it
+## The licence
 
-**100% free, forever — not a trial, not a tier, not open-core.** The whole product is here: source, design system, plugins, agents, CLI. Clone it, read every line, modify it, brand it, and **sell what you build with it** at any price you set. No usage limits. No royalty fees.
+[The ONE License v1.0](LICENSE), in one line: **everything, in perpetuity, for free — keep the ONE brand, logo and link in your deployed product.** [The full grant is at the top of this page.](#free-forever-and-yours-to-sell)
 
-[The ONE License v1.0](LICENSE) grants full commercial rights with **one obligation**: keep the "Powered by ONE" link in your deployed product. White-label removes it ([Enterprise License](LICENSE-ENTERPRISE.md)).
-
-We say this plainly: it's **source-available, not OSI-approved open source** — the difference is real, and being upfront about it is the point. The ONE backend itself is not distributed; this repo is the fully functional client, and it runs without that backend. Read the [full license](LICENSE) before you rely on it.
+The ONE backend itself is not distributed. This repo is the fully functional client, and it runs without that backend. Read the [full license](LICENSE) before you rely on it.
 
 Free hosting on Cloudflare's global edge. Free design system. 100 on Lighthouse, measured, not claimed. **This is yours.**
