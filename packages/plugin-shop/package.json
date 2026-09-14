@@ -16,7 +16,7 @@
     "@oneie/frontend": ">=0.1.0"
   },
   "devDependencies": {
-    "astro": "^6.2.2",
+    "astro": "^7.3.2",
     "typescript": "^5.7.3"
   }
 }
