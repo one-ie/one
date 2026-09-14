@@ -1,5 +1,5 @@
 /**
- * Cloudflare env accessor for Astro 6.
+ * Cloudflare env accessor for Astro 7.
  * locals.runtime.env throws in v13 — use cloudflare:workers import.
  */
 
