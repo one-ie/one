@@ -35,8 +35,8 @@ const PHASES = [
   {
     n: '01',
     title: 'Clone the template',
-    body: 'Astro 6, React 19, Tailwind 4 and shadcn/ui — wired and ready.',
-    cmd: 'npm create one-app@latest my-site',
+    body: 'Astro 7, React 19, Tailwind 4 and shadcn/ui — wired and ready.',
+    cmd: 'npx oneie create node my-app',
   },
   {
     n: '02',
