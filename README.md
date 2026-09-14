@@ -1,68 +1,177 @@
 <h1 align="center">ONE</h1>
 
 <p align="center">
-  <strong>Design beautiful websites with perfect Lighthouse scores.</strong><br>
-  Astro 7 · React 19 · shadcn/ui · Tailwind 4 · Cloudflare Workers
+  <strong>Sell anything in seconds. No merchant account, no custody, no monthly fee.</strong><br>
+  A complete website that takes real money on day one.<br>
+  Astro 7 · React 19 · shadcn/ui · Tailwind 4 · free hosting on Cloudflare's edge
 </p>
 
 <p align="center">
+  <a href="https://github.com/one-ie/one/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/one-ie/one?style=flat&color=f59f00"></a>
   <a href="https://github.com/one-ie/one/actions/workflows/ci.yml"><img alt="CI build status" src="https://github.com/one-ie/one/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="Licensed under the ONE License v1.0" src="https://img.shields.io/badge/license-ONE%20v1.0-2b8a3e"></a>
   <a href="https://www.npmjs.com/package/@oneie/cli"><img alt="@oneie/cli on npm" src="https://img.shields.io/npm/v/%40oneie%2Fcli?label=%40oneie%2Fcli&color=0b7285"></a>
   <a href="https://www.npmjs.com/package/@oneie/frontend"><img alt="@oneie/frontend on npm" src="https://img.shields.io/npm/v/%40oneie%2Ffrontend?label=%40oneie%2Ffrontend&color=0b7285"></a>
 </p>
 
-A whole website in one repo: home, blog, docs, a product catalog that takes real
-money, auth, an SEO graph, a design system, and a team of AI agents. It runs with
-no account, no API key and no backend.
+Every other starter template hands you a blog and a contact form. This one hands
+you a checkout.
 
-**Free. Yours to sell at any price you set. One obligation: keep the ONE brand,
-logo and link in your deployed product.** That is the entire catch, and it is
-[stated here](#the-one-licence) rather than left in a file for you to find.
+Clone it and both payment rails are already wired. **Crypto links** across Sui,
+Ethereum, Solana and Bitcoin, with no merchant account to open, no API key to
+request, no approval to wait for and nobody holding your money in between.
+**Cards** through real Stripe Elements, live on your own Stripe account the
+moment you add two environment variables. Neither needs a backend of your own.
+Neither charges a platform fee or a monthly fee.
 
-![The ONE home page. A badge reads ASTRO 7 + REACT 19 above the headline "Design beautiful websites with perfect Lighthouse scores", with two buttons: Get started free, and See the design system. On the right, a dark card headed LIVE — NOT A MOCKUP, dated 2026-07-09, shows four green rings each reading 100, labelled Perf, A11y, Best and SEO, with the footnote "Desktop, this exact page. 86 on throttled Slow 4G."](.github/assets/01-hero.png)
+**4 chains per link · No custody, ever · $0 monthly fees · 2 env vars for cards.**
+
+**Free forever. Yours to sell and resell at any price you set.** One obligation:
+keep the ONE brand, logo and link in your deployed product. That is the entire
+catch, and it is [stated here](#free-forever-and-yours-to-sell) rather than left
+in a file for you to find.
+
+![The ONE payments page in light mode. The headline reads "Two rails to get paid. Both live, right here." The copy below reads: four chains, no account, no custody. Cards are real Stripe Elements that go live with your key. Try both below, nothing on this page is a mockup. Four checks read: No custody ever, Signed server-side, Cards by Stripe, Zero config to start. Beneath them is a working "Create a payment link" card with an Amount (USD) field set to 25, a "For" field placeholdered "Invoice, service, product…", currency chips for SUI, ETH, SOL and BTC, and a Create link button. The footnote reads: Real, signed, live against pay.one.ie — not a mock.](.github/assets/01-payments-create-link.png)
 
 ---
 
-## 60 seconds to running
+## From clone to a payment link
+
+**1. Get the code.**
 
 ```bash
 git clone https://github.com/one-ie/one my-app
 cd my-app && bun install
-cd site && bun run dev
 ```
-
-Open **http://localhost:4321**. That is the whole setup. Better Auth and
-Cloudflare D1 give you sessions and data locally from the first run, so nothing
-above needs a key, an account or a card.
 
 Prefer one command to a clone? The scaffold pulls the same shape, `.claude/` and
 `.mcp.json` included:
 
 ```bash
-bunx oneie@latest create node my-app
+npx oneie create node my-app
 ```
 
+**2. Mint a wallet.** `one wallet keygen` runs fully offline. It never touches the
+network, and only the four public addresses ever leave it:
+
+```bash
+npm install -g @oneie/cli
+one wallet keygen                 # prints once, copy the four addresses
+```
+
+Paste them into `site/.dev.vars` (see [`.dev.vars.example`](site/.dev.vars.example)):
+
+```
+WALLET_SUI_ADDRESS=
+WALLET_EVM_ADDRESS=
+WALLET_SOL_ADDRESS=
+WALLET_BTC_ADDRESS=
+```
+
+Do this before you start the dev server. `.dev.vars` is read once at startup, so
+if the server is already running, restart it.
+
+**3. Start it, and take money.**
+
+```bash
+cd site && bun run dev            # → http://localhost:4321
+```
+
+Better Auth and Cloudflare D1 give you sessions and data locally from the first
+run, so nothing so far needs a key, an account or a card. Those four addresses are
+now the treasury on every link this site creates. Use the form at `/payments`, or
+POST to your own route:
+
+```bash
+curl -X POST http://localhost:4321/api/pay/link \
+  -H 'Content-Type: application/json' \
+  -d '{"amountCents": 2500, "product": "Consulting hour"}'
+
+# → { "url": "https://pay.one.ie/l/…", "qr": "…" }
+```
+
+The buyer opens the URL, picks a chain, and signs. Funds land in your addresses.
+There is no middle account, so there is nothing to withdraw and nothing to
+reconcile. Settlement is the transaction.
+
 **Next:** the [step-by-step tutorial](docs/tutorial.md) walks from empty folder to
-deployed site — your first colour change, your first post, your first product,
-and the build gate. About 20 minutes.
+deployed site, including your first colour change, your first post, your first
+product and the build gate. About 20 minutes.
 
 ---
 
 ## Contents
 
+- [Two rails, zero custody](#two-rails-zero-custody)
 - [Free forever, and yours to sell](#free-forever-and-yours-to-sell)
+- [Free hosting](#free-hosting)
 - [Two ways to run it](#two-ways-to-run-it)
 - [What's in the box](#whats-in-the-box)
 - [Brand it](#brand-it)
-- [Sell something](#sell-something)
-- [Motion and components](#motion-and-components)
+- [Sell something from the catalog](#sell-something-from-the-catalog)
+- [Components](#components)
 - [Performance](#performance)
 - [The `one` CLI](#the-one-cli)
 - [Tell it once: the story layer](#tell-it-once-the-story-layer)
 - [Plugins](#plugins)
 - [AI-ready](#ai-ready)
 - [The ONE Licence](#the-one-licence)
+
+---
+
+## Two rails, zero custody
+
+### Crypto
+
+Links are minted and signed by [pay.one.ie](https://pay.one.ie), which returns a
+URL and a QR code. Your clone never holds a key for this and never proxies a
+payment. `site/src/pages/api/pay/link.ts` is one short route: it resolves the price
+server-side, attaches your wallet addresses as the treasuries, and returns the
+link. It works with no `ONE_API_KEY` at all, because it never touches the ONE
+backend.
+
+The price is resolved from the catalog or the plan table, never from the request
+body, so a buyer cannot set the amount they are charged. Ad-hoc amounts and
+catalog products read from separate fields, which means a free-text description
+can never collide with a product slug and hijack a price.
+
+| | |
+|---|---|
+| Setup | Four addresses from one offline command |
+| Custody | Never. Peer to peer |
+| Chargebacks | None. The transaction is final |
+| Fees | Network gas. No platform fee, no monthly fee |
+| Chains | Sui · Ethereum · Solana · Bitcoin |
+
+### Card
+
+![The card rail on the ONE payments page in light mode. A badge reads "CARD · YOUR STRIPE KEY" above the headline "And a card form you'd want to fill in." The copy reads: Real Stripe Elements dressed as a card — tilts to your cursor, guides you field to field, and settles straight to your own Stripe account. It goes live the moment you add two env vars; until then it's an honest preview. Three checks read: PCI stays with Stripe, we never see a digit · Fail-closed without your keys · Cards, wallets, and Link out of the box. On the right sits a "Pay by card" panel badged "LIVE · TEST MODE" with the line: Fill the card to pay $25.00 in seconds — test mode, so no real charge. Use 4242 4242 4242 4242, any future date, any CVC. Below it a rendered credit card in dark navy carries the ONE wordmark, a gold chip, a contactless symbol, a card-number field reading 1234 5678 9012 3456, and Name on card, MM, YY and CVC fields. Tab chips read Card, Name, Expiry and CVC above a "Start — enter card number" button and the footnote "Secured by Stripe · Test mode — no real charge". Under the panel: Funds settle straight to your own Stripe account — this starter never touches them.](.github/assets/08-card-form.png)
+
+Real Stripe Elements, wired end to end.
+[`/api/pay/create-intent`](site/src/pages/api/pay/create-intent.ts) mints
+PaymentIntents through the Stripe SDK.
+[`/api/pay/webhook`](site/src/pages/api/pay/webhook.ts) verifies every event's
+signature with `constructEventAsync` and SubtleCrypto before it trusts a byte,
+and returns 400 on anything it cannot verify.
+
+Both fail closed. Without `STRIPE_SECRET_KEY` the API returns 503 and the
+`/payments` page renders an honest preview instead of a live form. Add two keys
+and the same form charges your own Stripe account. PCI stays with Stripe; the
+card number never reaches your worker.
+
+### Wallet
+
+`one wallet keygen` generates the keys on your machine and leaves them there. The
+mnemonic and private keys are never written to any file in this repo, and the
+four public addresses are the only thing that crosses its boundary. `--recover`
+rebuilds the same wallet from the mnemonic.
+
+The `/wallet` page reads balances over public RPC with no backend and no API key.
+Those RPC endpoints are **testnet by default** (Sui testnet, Sepolia, Solana
+devnet, Blockstream testnet) and are four constants at the top of
+[`site/src/lib/chain-balances.ts`](site/src/lib/chain-balances.ts). Payment links
+themselves settle on the chains pay.one.ie serves, which is a separate thing from
+what that page displays.
 
 ---
 
@@ -91,6 +200,20 @@ white-label work.
 
 ---
 
+## Free hosting
+
+The site is static-first Astro with SSR on Cloudflare Workers. Most pages ship
+zero JavaScript, so most of the site is files on Cloudflare's edge and the
+dynamic routes fit inside the Workers free tier.
+
+```bash
+cd site && bun run deploy         # astro build && wrangler deploy
+```
+
+Your domain, your Cloudflare account, no platform in between.
+
+---
+
 ## Two ways to run it
 
 The site has two independent switches. Neither is required, both flip back.
@@ -103,13 +226,14 @@ The site has two independent switches. Neither is required, both flip back.
    │  Astro + React + shadcn │        │  everything on the left, plus:  │
    │  Better Auth + D1       │        │  AI chat · CRM · analytics      │
    │  Blog · docs · products │        │  agents · workflows · wallet    │
-   │  Stripe checkout        │        │  credit metering · lifecycles   │
+   │  Crypto links + Stripe  │        │  credit metering · lifecycles   │
    │  100% local, 100% free  │        │  the ONE backend behind it      │
    └─────────────────────────┘        └─────────────────────────────────┘
 ```
 
 **Switch 1: the backend.** Without `ONE_API_KEY` the app runs standalone on local
 auth and D1. Add the key and the same code talks to `https://one.ie`. No rewrite.
+Both payment rails sit on the left column and stay there.
 
 **Switch 2: which widgets ship.** Every plugin is a build-time Astro integration
 you list in `site/one.config.ts`. Add `chat()` and a chat widget mounts. Remove it
@@ -124,13 +248,13 @@ You can build and sell a business on the left column and never touch the right.
 <details open>
 <summary><strong>The parts people clone it for</strong></summary>
 
+- Two payment rails, both wired, both fail-closed until they are yours
 - Astro 7 + React 19 islands + shadcn/ui + Tailwind 4, SSR on Cloudflare Workers
 - Static-first: most pages ship zero JavaScript, which is *why* it is fast
 - Products priced **server-side**. `resolveProduct()` reads the catalog, never a
   client-sent amount, so a buyer cannot tamper with a price
-- Stripe checkout, and a self-custody crypto wallet via `one wallet keygen`
-- Six tokens in `site/src/lib/themes.ts` carry every component. Showcase pages
-  at `/design`, `/components`, `/motion`, `/patterns`
+- Six tokens in `site/src/lib/themes.ts` carry every component, across 14 presets.
+  Showcase pages at `/design`, `/components`, `/motion`, `/patterns`
 - Content collections for blog, docs and products. Write Markdown, get routes
 </details>
 
@@ -162,13 +286,25 @@ before it touches anything.
 
 Six tokens carry the whole site: `primary`, `secondary`, `tertiary`,
 `background`, `foreground`, `font`. Every component is built on them, so changing
-one value re-skins everything downstream of it.
+one value re-skins everything downstream of it. Here is the same page in both
+themes, nothing swapped but the tokens:
 
-![The ONE Design System page, with a Light / Dark / Reset toggle and a section headed "The 6 editable tokens". Live clickable swatches show background #11161C, foreground #1F252D, font #FFFFFF, primary #759CD7, secondary and tertiary #9CB992. The copy reads: Click any swatch to recolor live. Picks apply to the whole site and persist.](.github/assets/02-design.png)
+![The ONE home page hero in light mode. A badge reads ASTRO 7 + REACT 19 above the headline "Design beautiful websites with perfect Lighthouse scores." The subheading reads: ONE is an open source starter template — clone it and your first build already scores 100. Two buttons read Get started free and See the design system. On the right, a dark card headed LIVE — NOT A MOCKUP, dated 2026-07-09, shows four green rings each reading 100, labelled Perf, A11y, Best and SEO, with the footnote "Desktop, this exact page. 86 on throttled Slow 4G."](.github/assets/04-hero-light.png)
+
+![The identical ONE home page hero in dark mode. Same badge, same headline, same two buttons and the same LIVE — NOT A MOCKUP card showing four green 100s.](.github/assets/05-hero-dark.png)
+
+Fourteen presets ship with it. Every one is a real, clickable card on the site,
+and clicking it repaints the whole page rather than a preview pane:
+
+![The ONE themes page in light mode. An eyebrow reads "14 PRESETS" above the headline "Pick a theme. The whole site repaints." The copy reads: Every card below is a real, clickable preset — click one and this entire page (not just this section) switches live. Fourteen named swatch cards follow: Navy (selected), Ocean, Forest, Sunset, Violet, Rose, Slate, Amber, Cyan, Terracotta, Plum, Vespio, Carbon and Elite. A "Build your own theme" button sits below them.](.github/assets/03-themes-14-presets.png)
 
 **Two ways to change them.** Click the swatches on `/design` and the picks apply
-live and persist, no code. Or edit a preset in `site/src/lib/themes.ts`, the
-single source of truth for all 14 themes:
+live and persist, no code:
+
+![The ONE Design System page, with a Light / Dark / Reset toggle and a section headed "The 6 editable tokens". Live swatches show background #11161C, foreground #1F252D, font #FFFFFF, primary #759CD7 and tertiary #9CB992, each with its hex value.](.github/assets/07-design-tokens.png)
+
+Or edit a preset in `site/src/lib/themes.ts`, the single source of truth for all
+14 themes:
 
 ```ts
 {
@@ -193,10 +329,10 @@ export default defineOne({
 
 ---
 
-## Sell something
+## Sell something from the catalog
 
-Write a product as a Markdown file in `site/src/content/products/`. Three fields
-are required:
+A payment link is the fast path. A catalog is the durable one. Write a product as
+a Markdown file in `site/src/content/products/`. Three fields are required:
 
 ```markdown
 ---
@@ -206,36 +342,32 @@ description: The technical playbook behind this exact site.
 ---
 ```
 
-It is now for sale, priced server-side. Money lands in the wallet from
-`one wallet keygen`. Your keys, your treasury, no custody change.
-
-![A page headed "Two rails to get paid. Both live, right here." Four checks read: No custody ever, Signed server-side, Cards by Stripe, Zero config to start. Below is a working "Create a payment link" card with an Amount field set to 25 USD, a "For" field, currency chips for SUI, ETH, SOL and BTC, and a Create link button. The copy reads: Real, signed, live against pay.one.ie — not a mock.](.github/assets/03-payments.png)
+It is now for sale on both rails, priced server-side, and both
+`/payments?product=<slug>` and the product page charge the same resolved price.
+Money lands in the wallet from `one wallet keygen`. Your keys, your treasury, no
+custody change.
 
 ---
 
-## Motion and components
+## Components
 
-![A page headed MOTION SYSTEM · V1 with the headline "Crisp. Purposeful. Fast." The copy reads: Four primitives. One mental model. Ships near-zero JS until each island enters the viewport. Footer chips count 12 motion primitives and note WCAG AA.](.github/assets/04-motion.png)
-
-Four motion primitives, one mental model. Nothing ships until the island it
-belongs to enters the viewport, which is how a site this animated stays this
-light.
-
-![A page headed COMPONENT LIBRARY with the headline "Beautiful blocks, wired to your brand". The copy explains that every component is built on the same six tokens, so changing one value in one.config.ts re-skins all of them. Two buttons read Clone the template and See the tokens. Below, a Button block shows five variants across three sizes.](.github/assets/05-components.png)
+![The ONE components page in light mode. An eyebrow reads "ONE CARD, FIVE LAYOUTS" above the headline "A card for every surface." Three feature cards are shown, headed Design tokens, Motion library and AI chat, with the top of a row of stat cards below them.](.github/assets/06-cards.png)
 
 Every block reads the same six tokens. That is the whole trick: you never restyle
-components, you restyle the tokens they were already reading.
+components, you restyle the tokens they were already reading. Four motion
+primitives sit on top, and nothing ships until the island it belongs to enters
+the viewport, which is how a site this animated stays this light. See `/components`,
+`/motion` and `/patterns` on a running dev server.
 
 ---
 
 ## Performance
 
-![A page headed SPEED PROOF · 2026-07-10 with the headline "100 / 100 on Lighthouse. Against this repo's own build, not a marketing deck." The copy reads: Run today against a plain bun run build && astro preview of this starter — no CDN, no edge cache, no tuning pass. Lighthouse 13.x, headless Chrome. Re-run it in the next five minutes. Below, in large type: Speed is a measurement. Not a claim.](.github/assets/06-speed.png)
-
-**100 on Lighthouse · LCP 137 ms · CLS 0.00, verified against a production
-build.** That figure was measured on 2026-07-10 and is carried forward here. The
-tree has since moved to Astro 7.3.2 with three adapters upgraded, and it has not
-been re-measured since.
+The hero card in the screenshots above is a real Lighthouse run, dated
+**2026-07-09**: 100 for performance, accessibility, best practices and SEO on
+desktop against this repo's own build, and 86 on throttled Slow 4G. That figure
+is carried forward here, not re-measured. The tree has since moved to Astro 7.3.2
+with three adapters upgraded, and nobody has re-run it since.
 
 So do not take it from us. The mechanism is static-first Astro, zero JavaScript by
 default and Cloudflare's edge, and the check is two commands:
@@ -259,10 +391,11 @@ typed call into the same API, so there is no second interface to learn and it
 behaves identically whether a human types it or an agent runs it headless.
 
 ```bash
+one wallet keygen               # generate or recover a self-hosted wallet, offline
+one wallet get                  # credits, ceiling, wallet rows, live chain balances
+one wallet send <to>            # send crypto via pay.one.ie payment links
 one whoami                      # who this key is, which workspace
 one doctor                      # config, key, reachability — exit 0/1, CI-safe
-one setup                       # provision a workspace, keyless, idempotent
-one push [path]                 # compile ai/ + data/ and push to the substrate
 one deploy                      # deploy site/ to Cloudflare via wrangler
 ```
 
@@ -271,9 +404,6 @@ one deploy                      # deploy site/ to Cloudflare via wrangler
 
 ```bash
 # money
-one wallet keygen               # generate or recover a self-hosted wallet locally
-one wallet get                  # credits, ceiling, wallet rows, live chain balances
-one wallet send <to>            # send crypto via pay.one.ie payment links
 one earn                        # credit earned summary
 one usage                       # credit usage dashboard
 one status                      # agency P&L — pool, margin, per-client burns
@@ -286,6 +416,8 @@ one hire <skillId>              # hire an agent for a skill (--dry-run to simula
 one bounty <skillId>            # post a bounty for a skill
 
 # the substrate, directly
+one setup                       # provision a workspace, keyless, idempotent
+one push [path]                 # compile ai/ + data/ and push to the substrate
 one catalog                     # browse the receiver surface by recipe
 one ask <receiver> {json}       # signal, then wait for the outcome
 one signal <receiver> {json}    # fire and forget
@@ -436,7 +568,7 @@ A node scaffolded with `oneie create node` is AI-connected from its first
 ```bash
 bun install                     # install all workspaces
 cd site && bun run dev          # dev server, no backend needed → :4321
-cd site && bun run typecheck    # astro check — 130 files, 0 errors
+cd site && bun run typecheck    # astro check
 cd site && bun run build        # production build
 cd site && bun run deploy       # astro build && wrangler deploy
 ```
@@ -457,6 +589,7 @@ The [full grant is above](#free-forever-and-yours-to-sell), and the
 you rely on it.
 
 The ONE backend is not distributed. This repo is the fully functional client, and
-it runs without that backend.
+it runs without that backend. Both payment rails are on the client side, which is
+why they keep working whether or not you ever connect one.
 
-**Free hosting on Cloudflare's edge. Free design system. Yours to sell.**
+**Sell anything. Keep every cent the network does not take. Host it for free.**
