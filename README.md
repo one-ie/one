@@ -289,7 +289,7 @@ Six tokens carry the whole site: `primary`, `secondary`, `tertiary`,
 one value re-skins everything downstream of it. Here is the same page in both
 themes, nothing swapped but the tokens:
 
-![The ONE home page hero in light mode. A badge reads ASTRO 7 + REACT 19 above the headline "Design beautiful websites with perfect Lighthouse scores." The subheading reads: ONE is an open source starter template — clone it and your first build already scores 100. Two buttons read Get started free and See the design system. On the right, a dark card headed LIVE — NOT A MOCKUP, dated 2026-07-09, shows four green rings each reading 100, labelled Perf, A11y, Best and SEO, with the footnote "Desktop, this exact page. 86 on throttled Slow 4G."](.github/assets/04-hero-light.png)
+![The ONE home page hero in light mode. A badge reads ASTRO 7 + REACT 19 above the headline "Design beautiful websites with perfect Lighthouse scores." The subheading reads: ONE is an open source starter template — clone it and your first build already scores 100 for accessibility, best practices and SEO. Two buttons read Get started free and See the design system. On the right, a dark card headed LIVE — NOT A MOCKUP, dated 2026-09-14, shows four green rings reading 99, 100, 100 and 100, labelled Perf, A11y, Best and SEO, with the footnote "Desktop, this exact page. 76 on throttled Slow 4G."](.github/assets/04-hero-light.png)
 
 ![The identical ONE home page hero in dark mode. Same badge, same headline, same two buttons and the same LIVE — NOT A MOCKUP card showing four green 100s.](.github/assets/05-hero-dark.png)
 
@@ -375,8 +375,8 @@ first request to a cold preview server scored 83 on desktop where all seven warm
 runs scored 99, so run it more than once. And both Performance numbers are down
 from the previous July figures (100 desktop, 86 Slow 4G) — that drop has not been
 investigated, and the July run's conditions are not recorded, so nobody can yet
-say whether the Astro upgrade caused it. The screenshots above predate this
-re-measure and still show the July card.
+say whether the Astro upgrade caused it. The hero screenshots below were re-shot after this
+re-measure and show the September card.
 
 So do not take it from us. The mechanism is static-first Astro, zero JavaScript by
 default and Cloudflare's edge, and the check is two commands:
