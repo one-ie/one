@@ -263,7 +263,7 @@ export function SpeedShowcase({ lighthouseDate, mobileScores, desktopScores, pag
         <div className="flex items-center gap-3 mb-5">
           <p className="text-xs uppercase tracking-[0.18em] text-font/40">Speed</p>
           <button
-            onClick={() => { emitClick('speed', 'replay'); replay() }}
+            onClick={() => { emitClick('ui:speed:replay'); replay() }}
             aria-label="Replay animations"
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium border transition-[opacity,filter] duration-[120ms] hover:brightness-110 text-font/60"
             style={{

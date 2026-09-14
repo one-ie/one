@@ -22,13 +22,13 @@ export function EmptyCard({ title, hint, children, className }: EmptyCardProps) 
       <div
         className="bg-foreground rounded-xl border p-4"
         style={{ borderColor: 'var(--color-border)' }}
-        onClick={!children ? () => emitClick('ui:emptycard', 'focus') : undefined}
+        onClick={!children ? () => emitClick('ui:emptycard:focus') : undefined}
       >
         {children ?? (
           <button
             type="button"
             className="w-full text-left text-sm text-font/40 focus:outline-none"
-            onClick={() => emitClick('ui:emptycard', 'focus')}
+            onClick={() => emitClick('ui:emptycard:focus')}
           >
             Type a message…
           </button>

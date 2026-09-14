@@ -1,5 +1,5 @@
 // Ported verbatim from one.ie/web/src/components/cro/ProofBar.tsx
-const BRAND_TOKENS = new Set(['primary', 'secondary', 'tertiary'])
+import { onText } from '../lib/surface-chrome'
 
 interface Stat {
   label: string
@@ -22,11 +22,12 @@ interface ProofBarProps {
 
 export function ProofBar({ stats, leadQuote, bgToken }: ProofBarProps) {
   const hasBgToken = !!bgToken && bgToken !== 'none'
-  const isBrandToken = hasBgToken && BRAND_TOKENS.has(bgToken)
+  // Per-token contrast. Was `text-on-primary` for all three brand fills.
+  const onTextClass = onText(bgToken)
 
   return (
     <section
-      className={`px-6 py-12 border-y${isBrandToken ? ' text-on-primary' : ''}`}
+      className={`px-6 py-12 border-y${onTextClass ? ` ${onTextClass}` : ''}`}
       style={{ borderColor: 'var(--color-border)', ...(hasBgToken ? { backgroundColor: `var(--color-${bgToken})` } : {}) }}
     >
       <div className="max-w-5xl mx-auto">

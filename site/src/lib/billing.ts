@@ -9,7 +9,13 @@ export function rateFor(model: string): Pick<RateBlob, 'input_per_1k' | 'output_
   return RATES[model] ?? RATES['default']
 }
 
-export function toCredits(usd: number, ratePerCredit = 0.0001): number {
+// The canonical credit rate: one thousand credits to the dollar, so 1 credit =
+// $0.001. This package does not depend on @oneie/sdk, so the rate is written out
+// here as the single root literal. It MUST stay equal to USD_PER_CREDIT in
+// packages/sdk/src/billing.ts. Change one, change both.
+const USD_PER_CREDIT = 0.001
+
+export function toCredits(usd: number, ratePerCredit = USD_PER_CREDIT): number {
   return Math.round(usd / ratePerCredit)
 }
 

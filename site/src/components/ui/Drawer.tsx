@@ -44,7 +44,7 @@ export function Drawer({
 
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
-      emitClick('ui:drawer', next ? 'open' : 'close', { id })
+      emitClick(next ? 'ui:drawer:open' : 'ui:drawer:close', { id })
 
       // Sync query param
       if (typeof window !== "undefined") {

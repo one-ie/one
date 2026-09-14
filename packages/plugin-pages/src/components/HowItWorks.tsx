@@ -1,5 +1,5 @@
 // Ported verbatim from one.ie/web/src/components/cro/HowItWorks.tsx
-const BRAND_TOKENS = new Set(['primary', 'secondary', 'tertiary'])
+import { onText } from '../lib/surface-chrome'
 
 interface Step {
   label: string
@@ -16,11 +16,12 @@ interface HowItWorksProps {
 
 export function HowItWorks({ title = 'How it works', subtitle, steps, bgToken }: HowItWorksProps) {
   const hasBgToken = !!bgToken && bgToken !== 'none'
-  const isBrandToken = hasBgToken && BRAND_TOKENS.has(bgToken)
+  // Per-token contrast. Was `text-on-primary` for all three brand fills.
+  const onTextClass = onText(bgToken)
 
   return (
     <section
-      className={`px-6 py-24${isBrandToken ? ' text-on-primary' : ''}`}
+      className={`px-6 py-24${onTextClass ? ` ${onTextClass}` : ''}`}
       style={hasBgToken ? { backgroundColor: `var(--color-${bgToken})` } : undefined}
     >
       <div className="max-w-4xl mx-auto">

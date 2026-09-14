@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { emitClick } from '../lib/ui-signal'
 
-const BRAND_TOKENS = new Set(['primary', 'secondary', 'tertiary'])
+import { onText } from '../lib/surface-chrome'
 
 interface FAQ {
   q: string
@@ -20,11 +20,12 @@ export function FAQSection({ title = 'Common questions', faqs, bgToken }: FAQSec
   const [open, setOpen] = useState<number | null>(null)
 
   const hasBgToken = !!bgToken && bgToken !== 'none'
-  const isBrandToken = hasBgToken && BRAND_TOKENS.has(bgToken)
+  // Per-token contrast. Was `text-on-primary` for all three brand fills.
+  const onTextClass = onText(bgToken)
 
   return (
     <section
-      className={`px-6 py-24 ${hasBgToken ? '' : 'bg-foreground/30'}${isBrandToken ? ' text-on-primary' : ''}`}
+      className={`px-6 py-24 ${hasBgToken ? '' : 'bg-foreground/30'}${onTextClass ? ` ${onTextClass}` : ''}`}
       style={hasBgToken ? { backgroundColor: `var(--color-${bgToken})` } : undefined}
     >
       <div className="max-w-3xl mx-auto">

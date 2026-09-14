@@ -2,7 +2,7 @@
 import type { LucideIcon } from 'lucide-react'
 import { IconBadge, type IconBadgeTone } from './IconBadge'
 
-const BRAND_TOKENS = new Set(['primary', 'secondary', 'tertiary'])
+import { onText } from '../lib/surface-chrome'
 
 export interface LandingFeature {
   headline: string
@@ -27,13 +27,14 @@ export function LandingFeatures({
   bgToken,
 }: LandingFeaturesProps) {
   const hasBgToken = !!bgToken && bgToken !== 'none'
-  const isBrandToken = hasBgToken && BRAND_TOKENS.has(bgToken)
+  // Per-token contrast. Was `text-on-primary` for all three brand fills.
+  const onTextClass = onText(bgToken)
 
   const gridClass = columns === 2 ? 'grid sm:grid-cols-2 gap-8' : 'grid sm:grid-cols-2 lg:grid-cols-3 gap-8'
 
   return (
     <section
-      className={`px-6 py-24 ${hasBgToken ? '' : 'bg-foreground/30'}${isBrandToken ? ' text-on-primary' : ''}`}
+      className={`px-6 py-24 ${hasBgToken ? '' : 'bg-foreground/30'}${onTextClass ? ` ${onTextClass}` : ''}`}
       style={hasBgToken ? { backgroundColor: `var(--color-${bgToken})` } : undefined}
     >
       <div className="max-w-5xl mx-auto">

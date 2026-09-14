@@ -5,7 +5,7 @@ import { Icon } from './Icon'
 import { emitClick } from '../lib/ui-signal'
 import { safeHref } from '../lib/safe-url'
 
-const BRAND_TOKENS = new Set(['primary', 'secondary', 'tertiary'])
+import { onText } from '../lib/surface-chrome'
 
 interface SecondaryCTAProps {
   headline: string
@@ -25,11 +25,12 @@ export function SecondaryCTA({
   bgToken,
 }: SecondaryCTAProps) {
   const hasBgToken = !!bgToken && bgToken !== 'none'
-  const isBrandToken = hasBgToken && BRAND_TOKENS.has(bgToken)
+  // Per-token contrast. Was `text-on-primary` for all three brand fills.
+  const onTextClass = onText(bgToken)
 
   return (
     <section
-      className={`px-6 py-24${isBrandToken ? ' text-on-primary' : ''}`}
+      className={`px-6 py-24${onTextClass ? ` ${onTextClass}` : ''}`}
       style={hasBgToken ? { backgroundColor: `var(--color-${bgToken})` } : undefined}
     >
       <div className="max-w-2xl mx-auto text-center">

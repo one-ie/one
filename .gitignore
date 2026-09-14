@@ -27,3 +27,7 @@ wrangler.template-deploy.toml
 
 # linked worktrees
 .worktrees/
+
+# /do harness scratch — wave handoff state, never shipped
+.w2-*.json
+.w3-*.json
