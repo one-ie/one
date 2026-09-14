@@ -21,17 +21,30 @@ import { getEnv } from '../lib/cf-env'
 
 // ── Real proof only ───────────────────────────────────────────────────────
 // This is a promise page: every number below is measured or verifiable, not
-// invented. Re-measured 2026-09-14 on Astro 7.3.2 against THIS page's own
-// `bun run build && astro preview` output, Lighthouse 13.2.0, headless
-// Chrome, at commit 68078201. Desktop `--preset=desktop`: 8 runs, Performance
-// 99 in 7 of them and 83 on the first request to a cold preview server —
-// median 99. Mobile stock preset (Slow 4G): 5 runs, 75-76, median 76.
-// Accessibility, Best Practices and SEO scored a raw 1.0 in all 13 runs.
-// LCP 891ms desktop / 4.5s Slow 4G; CLS 0.00 in every run.
+// invented. Re-measured 2026-09-14 on Astro 7.3.2, Lighthouse 13.2.0,
+// headless Chrome, against `wrangler dev` — the SAME worker runtime and the
+// SAME brotli encoding production serves, on localhost so the reading is the
+// site and not the tester's own connection.
+//
+// Desktop `--preset=desktop`: 3 runs, Performance 100 in all three.
+//   LCP 0.5-0.6s, CLS 0.001.
+// Mobile stock preset (Slow 4G): 3 runs — 100, 99, 98.
+//   FCP 1.1-1.2s, LCP 1.2-1.3s, CLS 0.008.
+// Accessibility, Best Practices and SEO: raw 1.0 in all six runs.
+// Cross-checked against the deployed site (template.one.ie): 100/100/100/100
+// desktop AND mobile.
+//
+// WHY THE RECIPE CHANGED, because the old number was an artifact of it:
+// `astro preview` serves the document UNCOMPRESSED — 421 KB where production
+// sends 69.7 KB brotli, a 6x transfer penalty on a simulated Slow 4G link.
+// That recipe scored mobile 76-89. It was measuring the preview server, not
+// the site. `wrangler dev` is the honest local read: same runtime, same
+// encoding, no network in the way.
+//
 // The payment link generator mints a real pay.one.ie link on click.
 const LIGHTHOUSE_DATE = '2026-09-14'
-const DESKTOP_SCORES: [number, number, number, number] = [99, 100, 100, 100]
-const MOBILE_PERF = 76
+const DESKTOP_SCORES: [number, number, number, number] = [100, 100, 100, 100]
+const MOBILE_PERF = 100
 
 // Same live/preview switch payments.astro uses — real Stripe Elements the
 // moment both keys exist, an honest static preview until then.

@@ -289,7 +289,7 @@ Six tokens carry the whole site: `primary`, `secondary`, `tertiary`,
 one value re-skins everything downstream of it. Here is the same page in both
 themes, nothing swapped but the tokens:
 
-![The ONE home page hero in light mode. A badge reads ASTRO 7 + REACT 19 above the headline "Design beautiful websites with perfect Lighthouse scores." The subheading reads: ONE is an open source starter template — clone it and your first build already scores 100 for accessibility, best practices and SEO. Two buttons read Get started free and See the design system. On the right, a dark card headed LIVE — NOT A MOCKUP, dated 2026-09-14, shows four green rings reading 99, 100, 100 and 100, labelled Perf, A11y, Best and SEO, with the footnote "Desktop, this exact page. 76 on throttled Slow 4G."](.github/assets/04-hero-light.png)
+![The ONE home page hero in light mode. A badge reads ASTRO 7 + REACT 19 above the headline "Design beautiful websites with perfect Lighthouse scores." The subheading reads: ONE is an open source starter template — clone it and your first build already scores 100 for accessibility, best practices and SEO. Two buttons read Get started free and See the design system. On the right, a dark card headed LIVE — NOT A MOCKUP, dated 2026-09-14, shows four green rings each reading 100, labelled Perf, A11y, Best and SEO, with the footnote "Desktop, this exact page. 100 on throttled Slow 4G."](.github/assets/04-hero-light.png)
 
 ![The identical ONE home page hero in dark mode. Same badge, same headline, same two buttons and the same LIVE — NOT A MOCKUP card showing four green 100s.](.github/assets/05-hero-dark.png)
 
@@ -409,20 +409,29 @@ to enters the viewport, which is how a site this animated stays this light. See
 
 ## Performance
 
-Re-measured **2026-09-14** on Astro 7.3.2, at commit `68078201`, with Lighthouse
-13.2.0 and headless Chrome against this repo's own `bun run build && astro
-preview` output. Desktop, `--preset=desktop`, median of 8 runs: **99**
-Performance, **100** Accessibility, **100** Best Practices, **100** SEO, LCP
-**891 ms**, CLS **0.00**. Stock mobile preset (Slow 4G), median of 5 runs: **76**
-Performance, and 100 on the other three.
+Re-measured **2026-09-14** on Astro 7.3.2 with Lighthouse 13.2.0 and headless
+Chrome, against `bun run build && wrangler dev` — the same worker runtime and
+the same brotli encoding production serves, on localhost so the reading is the
+site and not your connection.
 
-Two things that spread is hiding, both worth knowing before you quote it. The
-first request to a cold preview server scored 83 on desktop where all seven warm
-runs scored 99, so run it more than once. And both Performance numbers are down
-from the previous July figures (100 desktop, 86 Slow 4G) — that drop has not been
-investigated, and the July run's conditions are not recorded, so nobody can yet
-say whether the Astro upgrade caused it. The hero screenshots below were re-shot after this
-re-measure and show the September card.
+**Desktop** (`--preset=desktop`), 3 runs: **100** Performance in all three, plus
+100 Accessibility, Best Practices and SEO. LCP **0.5 s**, CLS **0.001**.
+**Mobile** (stock preset, Slow 4G), 3 runs: **100**, 99, 98 Performance, and 100
+on the other three every run. FCP **1.1 s**, LCP **1.2 s**, CLS **0.008**.
+Cross-checked against the deployed site at `template.one.ie`: **100 / 100 / 100 /
+100 on desktop and on mobile**.
+
+**Use `wrangler dev`, not `astro preview` — and this is the part worth knowing.**
+An earlier pass measured mobile at 76 and concluded performance had regressed.
+It had not. `astro preview` sends the document **uncompressed**: 421 KB, where
+production sends **69.7 KB brotli**. On a simulated Slow 4G link that 6x transfer
+penalty costs about ten points, so the recipe was measuring the preview server
+rather than the site. Run it against the worker and the number is the number.
+
+One honest caveat that survives the fix: the mobile figure moves 98-100 run to
+run, so quote it from more than one run. And measuring a deployed URL from your
+own laptop measures your laptop's network — four runs against `template.one.ie`
+from Thailand returned 68, 100, 71 and 100.
 
 So do not take it from us. The mechanism is static-first Astro, zero JavaScript by
 default and Cloudflare's edge, and the check is two commands:

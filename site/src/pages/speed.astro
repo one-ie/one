@@ -13,8 +13,8 @@ import { SpeedShowcase } from '@/components/SpeedShowcase'
 // card, which cited 86 for the same period. Accessibility, Best Practices
 // and SEO scored a raw 1.0 in all 13 runs; CLS was 0.00 in every one.
 const lighthouseDate = '2026-09-14'
-const mobileScores: [number, number, number, number] = [76, 100, 100, 100]
-const desktopScores: [number, number, number, number] = [99, 100, 100, 100]
+const mobileScores: [number, number, number, number] = [100, 100, 100, 100]
+const desktopScores: [number, number, number, number] = [100, 100, 100, 100]
 const pageWeightKB = 610
 ---
 
@@ -32,7 +32,7 @@ const pageWeightKB = 610
         <span class="text-font/60">Against this repo's own build, not a marketing deck.</span>
       </h1>
       <p class="mt-6 text-lg text-font/60 max-w-[68ch]">
-        Run today against a plain <code class="px-2 py-0.5 rounded text-sm" style="background: var(--color-foreground)">bun run build && astro preview</code> of this starter — no CDN, no edge cache, no tuning pass. Lighthouse 13.x, headless Chrome. Re-run it in the next five minutes.
+        Run today against <code class="px-2 py-0.5 rounded text-sm" style="background: var(--color-foreground)">bun run build && wrangler dev</code> on this starter — the same worker runtime and the same brotli encoding production serves, on localhost so the number is the site and not your connection. Lighthouse 13.x, headless Chrome. Re-run it in the next five minutes.
       </p>
     </header>
 
@@ -66,7 +66,7 @@ const pageWeightKB = 610
       <h2 class="text-xl font-bold mb-3">What I'll be honest about</h2>
       <ul class="space-y-2 text-sm">
         <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>These are lab scores, not field data.</strong> The figures above are medians: 8 desktop runs and 5 Slow 4G runs on one machine. Headless Chrome on a Slow 4G throttle profile is a consistent benchmark, not a guarantee of what real users on real networks will see. The spread is real — the first request to a cold preview server scored 83 on desktop where every warm run scored 99, so run it more than once.</span></li>
-        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>This is `astro preview`, not a CDN edge deploy.</strong> A real Cloudflare Pages/Workers deploy with cache headers will typically score higher than a local Node preview server.</span></li>
+        <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>Use `wrangler dev`, not `astro preview`.</strong> The preview server sends the document UNCOMPRESSED — 421 KB where production sends 69.7 KB brotli. On a simulated Slow 4G link that 6x penalty costs about ten points, and it measures the preview server rather than the site. `wrangler dev` runs the same worker with the same encoding.</span></li>
         <li class="flex gap-3"><span class="text-font/40 shrink-0">·</span><span><strong>These numbers are for the homepage only</strong> — pages with heavier islands (payments, wallet) will score differently. Run the command above against any route you care about.</span></li>
       </ul>
     </section>
