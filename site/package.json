@@ -54,7 +54,7 @@
     "zod": "^4.4.2"
   },
   "devDependencies": {
-    "@oneie/cli": "^4.1.0",
+    "@oneie/cli": "^4.2.1",
     "@astrojs/check": "^0.9.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",

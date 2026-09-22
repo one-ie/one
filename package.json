@@ -15,7 +15,7 @@
     "check:claims": "node scripts/check-claims.mjs"
   },
   "devDependencies": {
-    "@oneie/cli": "^4.1.0"
+    "@oneie/cli": "^4.2.1"
   },
   "patchedDependencies": {
     "@puckeditor/core@0.22.0": "patches/@puckeditor%2Fcore@0.22.0.patch"
