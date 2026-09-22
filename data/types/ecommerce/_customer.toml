@@ -1,0 +1,37 @@
+# An ACTOR, not a thing — which is why `dimension` is set. Actors are who acts;
+# things are what exists. A customer signs in, holds a role and can carry a key;
+# a product cannot.
+id          = "customer"
+label       = "Customer"
+description = "Someone who buys — the actor a key, a role and an order history hang from"
+dimension   = "actors"
+
+[[fields]]
+name  = "name"
+type  = "string"
+label = "Name"
+
+[[fields]]
+name  = "email"
+type  = "string"
+label = "Email"
+
+[[fields]]
+name  = "phone"
+type  = "string"
+label = "Phone"
+
+[[fields]]
+name  = "lifetime_value"
+type  = "currency"
+label = "Lifetime value"
+
+[[fields]]
+name  = "status"
+type  = "select"
+label = "Status"
+
+[[fields]]
+name  = "tags"
+type  = "tags"
+label = "Tags"

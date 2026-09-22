@@ -1,0 +1,30 @@
+# A group of products. The `products` relation draws a line to Product in the
+# schema designer and resolves to record names in the index.
+id          = "collection"
+label       = "Collection"
+description = "A curated group of products — a category, a season, a bundle"
+
+[[fields]]
+name  = "title"
+type  = "string"
+label = "Title"
+
+[[fields]]
+name  = "description"
+type  = "markdown"
+label = "Description"
+
+[[fields]]
+name  = "image"
+type  = "image"
+label = "Cover image"
+
+[[fields]]
+name  = "products"
+type  = "relation"
+label = "Products"
+
+[[fields]]
+name  = "tags"
+type  = "tags"
+label = "Tags"

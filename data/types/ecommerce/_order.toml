@@ -1,0 +1,48 @@
+# What a customer actually bought. `status` drives the Kanban toggle, which is
+# the view most shops run their fulfilment from.
+id          = "order"
+label       = "Order"
+description = "A placed order — what was bought, by whom, for how much, and where it is"
+
+[[fields]]
+name  = "reference"
+type  = "string"
+label = "Order reference"
+
+[[fields]]
+name  = "customer"
+type  = "relation"
+label = "Customer"
+
+[[fields]]
+name  = "items"
+type  = "markdown"
+label = "Items"
+
+[[fields]]
+name  = "total"
+type  = "currency"
+label = "Total"
+
+[[fields]]
+name  = "currency"
+type  = "string"
+label = "Currency"
+# Spell the settlement currency here — "USD", "EUR", "USDC". The wallet page
+# reads chain balances directly over public RPC, so a crypto-settled order is
+# the same row with a different currency and a transaction hash in `reference`.
+
+[[fields]]
+name  = "status"
+type  = "select"
+label = "Status"
+
+[[fields]]
+name  = "placed"
+type  = "date"
+label = "Placed"
+
+[[fields]]
+name  = "tags"
+type  = "tags"
+label = "Tags"

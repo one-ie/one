@@ -1,0 +1,52 @@
+# A sellable thing. `status` is spelled exactly that way on purpose: a type
+# carrying a `status` field gets the Table/Kanban toggle in the index.
+id          = "product"
+label       = "Product"
+description = "Something you sell — physical, digital, or a service package"
+
+[[fields]]
+name  = "title"
+type  = "string"
+label = "Title"
+
+[[fields]]
+name  = "description"
+type  = "markdown"
+label = "Description"
+
+[[fields]]
+name  = "price"
+type  = "currency"
+label = "Price"
+
+[[fields]]
+name  = "image"
+type  = "image"
+label = "Image"
+# Images are stored as URLs. There is no upload endpoint in this version —
+# paste a link from your own storage or a CDN.
+
+[[fields]]
+name  = "sku"
+type  = "string"
+label = "SKU"
+
+[[fields]]
+name  = "stock"
+type  = "number"
+label = "Stock on hand"
+
+[[fields]]
+name  = "status"
+type  = "select"
+label = "Status"
+
+[[fields]]
+name  = "collection"
+type  = "relation"
+label = "Collection"
+
+[[fields]]
+name  = "tags"
+type  = "tags"
+label = "Tags"

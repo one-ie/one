@@ -1,0 +1,35 @@
+# A reason to buy now. `kind` is a select because the two shapes — percentage
+# off and a fixed amount off — read and validate differently downstream.
+id          = "discount"
+label       = "Discount"
+description = "A code that reduces a total, and the window it is valid in"
+
+[[fields]]
+name  = "code"
+type  = "string"
+label = "Code"
+
+[[fields]]
+name  = "kind"
+type  = "select"
+label = "Kind"
+
+[[fields]]
+name  = "amount"
+type  = "currency"
+label = "Amount"
+
+[[fields]]
+name  = "starts"
+type  = "date"
+label = "Starts"
+
+[[fields]]
+name  = "expires"
+type  = "date"
+label = "Expires"
+
+[[fields]]
+name  = "status"
+type  = "select"
+label = "Status"
