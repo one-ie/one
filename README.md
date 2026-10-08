@@ -1,9 +1,17 @@
-<h1 align="center">ONE</h1>
+<h1 align="center">ONE 1.0</h1>
 
 <p align="center">
-  <strong>Sell anything in seconds. No merchant account, no custody, no monthly fee.</strong><br>
-  A complete website that takes real money on day one.<br>
+  <strong>Keys. Wallets. Products. Payments. Sovereign.</strong><br>
+  A complete website that holds your key, sells your products and takes real money on day one.<br>
+  Free and open source. You own the data, and nobody can take it from you.<br>
   Astro 7 · React 19 · shadcn/ui · Tailwind 4 · free hosting on Cloudflare's edge
+</p>
+
+<p align="center">
+  <a href="https://one.ie/download"><strong>Download ONE</strong></a> ·
+  <a href="https://one.ie/key">Make a key</a> ·
+  <a href="#from-clone-to-a-payment-link">Quick start</a> ·
+  <a href="#free-forever-and-yours-to-sell">The licence</a>
 </p>
 
 <p align="center">
@@ -13,6 +21,18 @@
   <a href="https://www.npmjs.com/package/@oneie/cli"><img alt="@oneie/cli on npm" src="https://img.shields.io/npm/v/%40oneie%2Fcli?label=%40oneie%2Fcli&color=0b7285"></a>
   <a href="https://www.npmjs.com/package/@oneie/frontend"><img alt="@oneie/frontend on npm" src="https://img.shields.io/npm/v/%40oneie%2Ffrontend?label=%40oneie%2Ffrontend&color=0b7285"></a>
 </p>
+
+```bash
+npx oneie create my-app
+```
+
+| | What you get | Where it lives |
+|---|---|---|
+| **Keys** | One key, made on your device, for Sui, Ethereum, Solana, Bitcoin and ASI. The secret never leaves your machine. We cannot hold it, freeze it or lose it. | [one.ie/key](https://one.ie/key) |
+| **Wallets** | Six wallets from that one key (SUI, ONE, ETH, FET, SOL, BTC) on standard derivation paths, so any wallet can open them. Restore offline with [`@oneie/recover`](https://www.npmjs.com/package/@oneie/recover). | [`one wallet`](#the-one-cli) |
+| **Products** | A shop, product pages, a cart and checkout. Your catalog is files in this repository. | [Sell something](#sell-something-from-the-catalog) |
+| **Payments** | Crypto payment links on Sui, Ethereum, Solana and Bitcoin with nobody holding the money in between, and cards through Stripe on your own account. | [Two rails](#two-rails-zero-custody) |
+| **Sovereign** | Runs on your own Cloudflare account with no ONE account and no API key. Your data is in your own database. Connect the ONE backend only if you choose to. | [Two ways to run it](#two-ways-to-run-it) |
 
 Every other starter template hands you a blog and a contact form. This one hands
 you a checkout.
@@ -48,7 +68,7 @@ Prefer one command to a clone? The scaffold pulls the same shape, `.claude/` and
 `.mcp.json` included:
 
 ```bash
-npx oneie create node my-app
+npx oneie create my-app
 ```
 
 **2. Mint a wallet.** `one wallet keygen` runs fully offline. It never touches the
