@@ -26,6 +26,16 @@
 npx oneie create my-app
 ```
 
+**Setting this up for an agent?** These run unattended in Claude Code, Cursor or any shell. `oneie init` writes the key to `~/.config/one/key`, and the MCP server reads it from there:
+
+```bash
+npx oneie create my-app                    # the site: shop, checkout, key, wallets
+npx oneie init                             # a workspace and an API key, no account
+claude mcp add oneie -- npx -y @oneie/mcp  # every ONE receiver as a tool
+```
+
+Or hand your agent one link: [one.ie/llms.txt](https://one.ie/llms.txt).
+
 | | What you get | Where it lives |
 |---|---|---|
 | **Keys** | One key, made on your device, for Sui, Ethereum, Solana, Bitcoin and ASI. The secret never leaves your machine. We cannot hold it, freeze it or lose it. | [one.ie/key](https://one.ie/key) |
