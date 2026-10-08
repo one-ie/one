@@ -1,4 +1,4 @@
-<h1 align="center">ONE 1.0</h1>
+<h1 align="center">ONE 4.0</h1>
 
 <p align="center">
   <strong>Keys. Wallets. Products. Payments. Sovereign.</strong><br>
