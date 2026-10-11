@@ -84,6 +84,7 @@ function fmtDate(ts: number): string {
       <p style="color: var(--color-muted); margin-bottom: 1rem; font-size: 0.9rem;">
         {balances.length} on-chain address{balances.length === 1 ? '' : 'es'} — self-hosted, generated fully offline
         {connected && !fetchError && <> · {credits} credits (ONE backend)</>}
+        <br /><strong>Testnet balances</strong> (Sui testnet, Sepolia, Solana devnet, Bitcoin testnet). Mainnet funds will not show here until you change the RPCs in <code>src/lib/chain-balances.ts</code>.
       </p>
       {balanceError && (
         <p style="color: var(--color-muted); margin-bottom: 1rem;">Couldn't load on-chain balances right now: {balanceError}</p>
