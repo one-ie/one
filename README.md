@@ -1,305 +1,307 @@
-<h1 align="center">ONE 4.0</h1>
+<h1 align="center">ONE</h1>
 
 <p align="center">
-  <strong>Keys. Wallets. Products. Payments. Sovereign.</strong><br>
-  A complete website that holds your key, sells your products and takes real money on day one.<br>
-  Free and open source. You own the data, and nobody can take it from you.<br>
-  Astro 7 · React 19 · shadcn/ui · Tailwind 4 · free hosting on Cloudflare's edge
+  <strong>Build anything. Plug it into any backend. Host it for free.</strong><br>
+  A beautiful way to build high-performance websites, superfast, and the agents, skills and workflows that run them.<br>
+  It's open source and light by default, it runs on its own, and Cloudflare's edge serves it.<br>
+  <sub>Astro 7 · React 19 · shadcn/ui · Tailwind 4 · Cloudflare Workers</sub>
 </p>
 
 <p align="center">
-  <a href="https://one.ie/download"><strong>Download ONE</strong></a> ·
-  <a href="https://one.ie/key">Make a key</a> ·
-  <a href="#from-clone-to-a-payment-link">Quick start</a> ·
-  <a href="#free-forever-and-yours-to-sell">The licence</a>
+  <a href="#quick-start"><strong>Quick start</strong></a> ·
+  <a href="#agents-skills-and-workflows">Agents</a> ·
+  <a href="#any-backend-or-none">Any backend</a> ·
+  <a href="#fast-and-measured">Speed</a> ·
+  <a href="docs/tutorial.md">Tutorial</a> ·
+  <a href="https://one.ie/llms.txt">llms.txt</a>
 </p>
 
 <p align="center">
   <a href="https://github.com/one-ie/one/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/one-ie/one?style=flat&color=f59f00"></a>
   <a href="https://github.com/one-ie/one/actions/workflows/ci.yml"><img alt="CI build status" src="https://github.com/one-ie/one/actions/workflows/ci.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="Licensed under the ONE License v1.0" src="https://img.shields.io/badge/license-ONE%20v1.0-2b8a3e"></a>
-  <a href="https://www.npmjs.com/package/@oneie/cli"><img alt="@oneie/cli on npm" src="https://img.shields.io/npm/v/%40oneie%2Fcli?label=%40oneie%2Fcli&color=0b7285"></a>
-  <a href="https://www.npmjs.com/package/@oneie/frontend"><img alt="@oneie/frontend on npm" src="https://img.shields.io/npm/v/%40oneie%2Ffrontend?label=%40oneie%2Ffrontend&color=0b7285"></a>
+  <a href="https://www.npmjs.com/package/@oneie/cli"><img alt="@oneie/cli on npm" src="https://img.shields.io/npm/v/%40oneie%2Fcli?label=cli&color=0b7285"></a>
+  <a href="https://www.npmjs.com/package/@oneie/sdk"><img alt="@oneie/sdk on npm" src="https://img.shields.io/npm/v/%40oneie%2Fsdk?label=sdk&color=0b7285"></a>
+  <a href="https://www.npmjs.com/package/@oneie/mcp"><img alt="@oneie/mcp on npm" src="https://img.shields.io/npm/v/%40oneie%2Fmcp?label=mcp&color=0b7285"></a>
 </p>
 
+<br>
+
+<p align="center">
+  <code>npx oneie create my-app</code>
+</p>
+
+<br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/hero-dark.webp">
+  <img alt="The ONE home page. A badge reads ASTRO 7 + REACT 19 above the headline 'Design beautiful websites with perfect Lighthouse scores.' The copy below calls ONE an open source starter template whose first build already scores 100 for accessibility, best practices and SEO. Two buttons read 'Get started free' and 'See the design system'. On the right, a card headed 'LIVE — NOT A MOCKUP', dated 2026-09-14, shows four green rings reading 100 for Perf, A11y, Best and SEO. The nav holds seven theme swatches and a light/dark toggle." src=".github/assets/hero-light.webp">
+</picture>
+
+<p align="center"><sub>Every screenshot here follows your GitHub theme. Switch between light and dark and you'll see the same site in the other mode.</sub></p>
+
+---
+
+## Why ONE
+
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <h3>🔓 Open source</h3>
+      The whole site is in this repo: pages, design system, components, content, agents, skills and workflows. Fork it, change it and ship it.
+    </td>
+    <td width="33%" valign="top">
+      <h3>🧱 Build anything</h3>
+      A landing page, a blog, docs, a shop or a SaaS front end. It's plain Astro and React underneath, so nothing stops you halfway.
+    </td>
+    <td width="33%" valign="top">
+      <h3>🔌 Any backend</h3>
+      It runs standalone with local auth and a D1 database. Call any API from your routes. You can connect the ONE backend with one environment variable.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <h3>🪶 Lightweight</h3>
+      Static-first, and most pages ship zero JavaScript. Most React islands hydrate only when they scroll into view.
+    </td>
+    <td valign="top">
+      <h3>☁️ Free hosting</h3>
+      One command deploys it to your own Cloudflare account. Static files go to the edge, and the dynamic routes fit the Workers free tier.
+    </td>
+    <td valign="top">
+      <h3>⚡ Superfast</h3>
+      Lighthouse scores 100 / 100 / 100 / 100 on desktop and mobile. That was measured on the production worker, and you can <a href="#fast-and-measured">reproduce it in two commands</a>.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <h3>🤖 Agents</h3>
+      An agent is one Markdown file: who it is, what it reads and what it listens for. Sixteen templates ship ready to copy, from a CEO down to a support desk.
+    </td>
+    <td valign="top">
+      <h3>🛠️ Skills</h3>
+      A skill is a folder with a <code>SKILL.md</code>. Agents and workflows call skills to sell, publish, declare types, write workflows and tell stories.
+    </td>
+    <td valign="top">
+      <h3>🔀 Workflows</h3>
+      A workflow is Markdown with one JSON graph inside. It has eight step kinds, and a person can approve any step before the run goes on.
+    </td>
+  </tr>
+</table>
+
+---
+
+## Quick start
+
+**1. Create it.**
+
 ```bash
-npx oneie create my-app
+npx oneie create my-app        # or: git clone https://github.com/one-ie/one my-app
+cd my-app && bun install
 ```
 
-**Setting this up for an agent?** These run unattended in Claude Code, Cursor or any shell. `oneie init` writes the key to `~/.config/one/key`, and the MCP server reads it from there:
+**2. Run it.** No keys and no account. Better Auth and Cloudflare D1 handle sessions and data locally from the first run.
 
 ```bash
-npx oneie create my-app                    # the site: shop, checkout, key, wallets
+cd site && bun run dev         # → http://localhost:4321
+```
+
+**3. Ship it.** It goes to your domain on your Cloudflare account, with no platform in between.
+
+```bash
+cd site && bun run deploy      # astro build && wrangler deploy
+```
+
+That's a live site. Next, the [step-by-step tutorial](docs/tutorial.md) goes from an empty folder to a deployed site in about 20 minutes. It covers your first colour change, post and product, and the build gate.
+
+<details>
+<summary><strong>🤖 Setting this up for an agent?</strong> Three commands, all unattended</summary>
+
+<br>
+
+These run in Claude Code, Cursor or any shell. `oneie init` writes the key to `~/.config/one/key`, and the MCP server reads it from there:
+
+```bash
+npx oneie create my-app                    # the site
 npx oneie init                             # a workspace and an API key, no account
 claude mcp add oneie -- npx -y @oneie/mcp  # every ONE receiver as a tool
 ```
 
-Or hand your agent one link: [one.ie/llms.txt](https://one.ie/llms.txt).
+Or give your agent one link: [one.ie/llms.txt](https://one.ie/llms.txt).
 
-| | What you get | Where it lives |
-|---|---|---|
-| **Keys** | One key, made on your device, for Sui, Ethereum, Solana, Bitcoin and ASI. The secret never leaves your machine. We cannot hold it, freeze it or lose it. | [one.ie/key](https://one.ie/key) |
-| **Wallets** | Six wallets from that one key (SUI, ONE, ETH, FET, SOL, BTC) on standard derivation paths, so any wallet can open them. Restore offline with [`@oneie/recover`](https://www.npmjs.com/package/@oneie/recover). | [`one wallet`](#the-one-cli) |
-| **Products** | A shop, product pages, a cart and checkout. Your catalog is files in this repository. | [Sell something](#sell-something-from-the-catalog) |
-| **Payments** | Crypto payment links with nobody holding the money in between, settling today on Base, Ethereum and Sui. Cards through Stripe on your own account. | [Two rails](#two-rails-zero-custody) |
-| **Sovereign** | Runs on your own Cloudflare account with no ONE account and no API key. Your key and the code leave with you, and self-hosted data is in your own database. Connect the ONE backend only if you choose to. | [Two ways to run it](#two-ways-to-run-it) |
-
-Every other starter template hands you a blog and a contact form. This one hands
-you a checkout.
-
-Clone it and both payment rails are already wired. **Crypto links** across Sui,
-Ethereum, Solana and Bitcoin, with no merchant account to open, no API key to
-request, no approval to wait for and nobody holding your money in between.
-**Cards** through real Stripe Elements, live on your own Stripe account the
-moment you add two environment variables. Neither needs a backend of your own.
-Neither charges a platform fee or a monthly fee.
-
-**4 chains per link · No custody, ever · $0 monthly fees · 2 env vars for cards.**
-
-**Free forever. Yours to sell and resell at any price you set.** One obligation:
-keep the ONE brand, logo and link in your deployed product. That is the entire
-catch, and it is [stated here](#free-forever-and-yours-to-sell) rather than left
-in a file for you to find.
-
-![The ONE payments page in light mode. The headline reads "Two rails to get paid. Both live, right here." The copy below reads: four chains, no account, no custody. Cards are real Stripe Elements that go live with your key. Try both below, nothing on this page is a mockup. Four checks read: No custody ever, Signed server-side, Cards by Stripe, Zero config to start. Beneath them is a working "Create a payment link" card with an Amount (USD) field set to 25, a "For" field placeholdered "Invoice, service, product…", currency chips for SUI, ETH, SOL and BTC, and a Create link button. The footnote reads: Real, signed, live against pay.one.ie — not a mock.](.github/assets/01-payments-create-link.png)
-
----
-
-## From clone to a payment link
-
-**1. Get the code.**
-
-```bash
-git clone https://github.com/one-ie/one my-app
-cd my-app && bun install
-```
-
-Prefer one command to a clone? The scaffold pulls the same shape, `.claude/` and
-`.mcp.json` included:
-
-```bash
-npx oneie create my-app
-```
-
-**2. Mint a wallet.** `one wallet keygen` runs fully offline. It never touches the
-network, and only the four public addresses ever leave it:
-
-```bash
-npm install -g @oneie/cli
-one wallet keygen                 # prints once, copy the four addresses
-```
-
-Paste them into `site/.dev.vars` (see [`.dev.vars.example`](site/.dev.vars.example)):
-
-```
-WALLET_SUI_ADDRESS=
-WALLET_EVM_ADDRESS=
-WALLET_SOL_ADDRESS=
-WALLET_BTC_ADDRESS=
-```
-
-Do this before you start the dev server. `.dev.vars` is read once at startup, so
-if the server is already running, restart it.
-
-**3. Start it, and take money.**
-
-```bash
-cd site && bun run dev            # → http://localhost:4321
-```
-
-Better Auth and Cloudflare D1 give you sessions and data locally from the first
-run, so nothing so far needs a key, an account or a card. Those four addresses are
-now the treasury on every link this site creates. Use the form at `/payments`, or
-POST to your own route:
-
-```bash
-curl -X POST http://localhost:4321/api/pay/link \
-  -H 'Content-Type: application/json' \
-  -d '{"amountCents": 2500, "product": "Consulting hour"}'
-
-# → { "url": "https://pay.one.ie/l/…", "qr": "…" }
-```
-
-The buyer opens the URL, picks a chain, and signs. Funds land in your addresses.
-There is no middle account, so there is nothing to withdraw and nothing to
-reconcile. Settlement is the transaction.
-
-**Next:** the [step-by-step tutorial](docs/tutorial.md) walks from empty folder to
-deployed site, including your first colour change, your first post, your first
-product and the build gate. About 20 minutes.
+</details>
 
 ---
 
 ## Contents
 
-- [Two rails, zero custody](#two-rails-zero-custody)
-- [Free forever, and yours to sell](#free-forever-and-yours-to-sell)
-- [Free hosting](#free-hosting)
-- [Two ways to run it](#two-ways-to-run-it)
+- [Agents, skills and workflows](#agents-skills-and-workflows)
+- [Any backend, or none](#any-backend-or-none)
 - [What's in the box](#whats-in-the-box)
 - [Brand it](#brand-it)
-- [Sell something from the catalog](#sell-something-from-the-catalog)
-- [Components](#components)
-- [Performance](#performance)
-- [The `one` CLI](#the-one-cli)
-- [Tell it once: the story layer](#tell-it-once-the-story-layer)
+- [Fast, and measured](#fast-and-measured)
+- [Found by search engines and AI](#found-by-search-engines-and-ai)
+- [Keys, wallets and payments](#keys-wallets-and-payments)
 - [Plugins](#plugins)
+- [The ONE toolkit](#the-one-toolkit)
 - [AI-ready](#ai-ready)
 - [Herdr: terminals and agents in one window](#herdr-terminals-and-agents-in-one-window)
-- [The ONE Licence](#the-one-licence)
+- [Develop](#develop)
+- [Licence](#licence)
 
 ---
 
-## Two rails, zero custody
+## Agents, skills and workflows
 
-### Crypto
+The site is half of ONE. The other half is `ai/`: the agents that run your business, the skills they use and the workflows that connect them. Everything there is plain Markdown and TOML. You write it next to your site, review it in a pull request, and ship it with one command.
 
-Links are minted and signed by [pay.one.ie](https://pay.one.ie), which returns a
-URL and a QR code. Your clone never holds a key for this and never proxies a
-payment. `site/src/pages/api/pay/link.ts` is one short route: it resolves the price
-server-side, attaches your wallet addresses as the treasuries, and returns the
-link. It works with no `ONE_API_KEY` at all, because it never touches the ONE
-backend.
+```
+ai/
+├── context.md        the ground truth every agent reads on every turn
+├── agents/           who does the work         →  one .md per agent
+│   └── templates/    16 ready-made agents to copy
+├── skills/           what they know how to do  →  one folder + SKILL.md each
+├── workflows/        how work flows            →  .md with a JSON graph
+└── tools/            what they connect to      →  one .toml per integration
+data/
+├── types/            what the business tracks  →  products, orders, stories …
+└── lifecycles/       the stages things move through
+```
 
-The price is resolved from the catalog or the plan table, never from the request
-body, so a buyer cannot set the amount they are charged. Ad-hoc amounts and
-catalog products read from separate fields, which means a free-text description
-can never collide with a product slug and hijack a price.
+### An agent is one file
+
+```markdown
+---
+name: storyteller
+description: Turns what someone says into seven beats, a promise with one
+  checkable proof, and a story spoken back in their own words.
+model: openrouter/auto
+subscribes: [story, lead, marketing]
+reads:
+  - ai/skills/story/SKILL.md
+  - ai/context.md
+---
+
+# Storyteller
+
+You listen, you file beats, you speak the story back …
+```
+
+The frontmatter says what the agent listens for (`subscribes`) and what it reads before it acts (`reads`). The body is its brief. Copy [`ai/agents/_example.md`](ai/agents/_example.md) to start one.
+
+**Sixteen templates** in [`ai/agents/templates/`](ai/agents/templates) give you a working org to copy and rename:
+
+```
+                        ceo
+                         │
+        ┌────────────────┴────────────────┐
+   marketing/                        community/
+   director                          director
+     ├── writer                        ├── support
+     ├── seo                           └── moderator
+     ├── social
+     └── ads
+```
+
+There are also sales discovery, tier-1 support, code review, booking consultations, classroom sessions, a marketing strategist and a travel planner.
+
+### A skill is a folder
+
+| Skill | What it knows |
+|---|---|
+| [`sell`](ai/skills/sell/SKILL.md) | Which payment rail a situation needs, and never to state a price the server didn't resolve |
+| [`publish`](ai/skills/publish/SKILL.md) | Where a piece of writing belongs (blog, docs, product or a live page) and the frontmatter each one rejects |
+| [`declare-types`](ai/skills/declare-types/SKILL.md) | How to give the workspace a new type in one TOML file, with navigation, an index, a detail page and a form appearing without code |
+| [`workflow`](ai/skills/workflow/SKILL.md) | How to write a workflow that actually runs, including the trap where neat prose compiles to zero steps |
+| [`story`](ai/skills/story/SKILL.md) | Seven beats, six tests and a framework registry for telling true stories ([more below](#ai-ready)) |
+
+Copy [`ai/skills/_example/`](ai/skills/_example) to write your own.
+
+### A workflow is a graph you can read
+
+[`ai/workflows/order-fulfilment.md`](ai/workflows/order-fulfilment.md) acknowledges an order, has an agent pick it, waits for a person to confirm it shipped, and only then tells the customer. The prose explains it to people, and the fenced `graph` block is what runs. Here it is with each step's `config` trimmed:
+
+```json
+{
+  "steps": [
+    { "id": "ack",     "kind": "tool",  "name": "Acknowledge the order" },
+    { "id": "pick",    "kind": "agent", "name": "Pick and pack" },
+    { "id": "shipped", "kind": "human", "name": "Confirm it actually shipped" },
+    { "id": "tell",    "kind": "tool",  "name": "Tell the customer it is on its way" }
+  ],
+  "edges": [["ack", "pick"], ["pick", "shipped"], ["shipped", "tell"]]
+}
+```
+
+There are eight step kinds: `trigger`, `tool`, `skill`, `agent`, `condition`, `human`, `delay` and `sell`. `tool → skill → agent` is the autonomy ladder, so you use the least autonomous step that can do the job. `human` pauses the run until a person acts.
+
+### Ship it with one command
+
+`one push` compiles `ai/` and `data/` and sends them to your ONE workspace, where the agents run. Preview it first with `--dry-run`. This is this repo's own output, shortened:
+
+```console
+$ one push --dry-run
+[dry-run] 35 item(s) would push:
+  world:create-thing   ai/agents/storyteller.md
+  world:create-thing   ai/agents/templates/ceo.md
+  …
+  skill:save           ai/skills/sell/SKILL.md
+  settings:write       ai/context.md
+  world:declare-types  data/types/story.toml
+  lifecycle:save       data/lifecycles/customer.toml
+  workflow:create      ai/workflows/order-fulfilment.md  (+5 steps)
+```
+
+To skip a file, start its name with `_`. That's how the shop types in [`data/types/ecommerce/`](data/types/ecommerce) stay off until you rename them.
+
+---
+
+## Any backend, or none
+
+The site starts with no backend at all, and each step after that is your choice.
+
+```
+                     ┌──────────────────────────────┐
+                     │            site/             │
+                     │  Astro 7 · React 19 · shadcn │
+                     │  Better Auth + D1 (built in) │
+                     └──────────────┬───────────────┘
+                                    │  src/pages/api/*  — your routes
+              ┌─────────────────────┼─────────────────────┐
+              ▼                     ▼                     ▼
+       ┌─────────────┐      ┌───────────────┐     ┌────────────────┐
+       │   nothing   │      │  any backend  │     │  ONE backend   │
+       │  (default)  │      │ your API, a   │     │  set           │
+       │  runs as is │      │ CMS, a DB …   │     │  ONE_API_KEY   │
+       └─────────────┘      └───────────────┘     └────────────────┘
+```
+
+**On its own.** Without `ONE_API_KEY`, the app runs on local auth and D1. CI proves this on every push with a second build that runs with `ONE_API_KEY=""`.
+
+**Any backend.** It's ordinary Astro, so server routes in `site/src/pages/api/` can call whatever you run, whether that's your own API, a headless CMS or a database. Nothing in the starter assumes a vendor.
+
+**The ONE backend, if you want it.** Add `ONE_API_KEY` and the same code talks to `https://one.ie` with no rewrite. One place knows how to do that: [`site/src/lib/one.ts`](site/src/lib/one.ts) returns a keyed client, or `null` in standalone mode. Callers render without backend data instead of crashing. Plugging in makes these available:
 
 | | |
 |---|---|
-| Setup | Four addresses from one offline command |
-| Custody | Never. Peer to peer |
-| Chargebacks | None. The transaction is final |
-| Fees | Network gas. No platform fee, no monthly fee |
-| Chains | Sui · Ethereum · Solana · Bitcoin |
+| **AI chat** | A chat widget served from one.ie, so it adds nothing to your bundle. It's off by default: turn on `CHAT_ENABLED` in `one.config.ts` and the `<OneChat>` mount in `Layout.astro` |
+| **Audience** | The footer newsletter form writes real CRM contacts with double opt-in |
+| **Analytics** | A served tracking pixel scoped to your workspace |
+| **Pages** | Pages you build in ONE's visual editor render at `/p/<slug>`, live on refresh |
+| **Agents and workflows** | `ai/` and `data/` push to your workspace with `one push` |
 
-### Card
+**Which widgets ship is a separate switch.** Every plugin is a build-time Astro integration you list in [`site/one.config.ts`](site/one.config.ts). A key on its own never mounts anything you didn't ask for.
 
-![The card rail on the ONE payments page in light mode. A badge reads "CARD · YOUR STRIPE KEY" above the headline "And a card form you'd want to fill in." The copy reads: Real Stripe Elements dressed as a card — tilts to your cursor, guides you field to field, and settles straight to your own Stripe account. It goes live the moment you add two env vars; until then it's an honest preview. Three checks read: PCI stays with Stripe, we never see a digit · Fail-closed without your keys · Cards, wallets, and Link out of the box. On the right sits a "Pay by card" panel badged "LIVE · TEST MODE" with the line: Fill the card to pay $25.00 in seconds — test mode, so no real charge. Use 4242 4242 4242 4242, any future date, any CVC. Below it a rendered credit card in dark navy carries the ONE wordmark, a gold chip, a contactless symbol, a card-number field reading 1234 5678 9012 3456, and Name on card, MM, YY and CVC fields. Tab chips read Card, Name, Expiry and CVC above a "Start — enter card number" button and the footnote "Secured by Stripe · Test mode — no real charge". Under the panel: Funds settle straight to your own Stripe account — this starter never touches them.](.github/assets/08-card-form.png)
-
-Real Stripe Elements, wired end to end.
-[`/api/pay/create-intent`](site/src/pages/api/pay/create-intent.ts) mints
-PaymentIntents through the Stripe SDK.
-[`/api/pay/webhook`](site/src/pages/api/pay/webhook.ts) verifies every event's
-signature with `constructEventAsync` and SubtleCrypto before it trusts a byte,
-and returns 400 on anything it cannot verify.
-
-Both fail closed. Without `STRIPE_SECRET_KEY` the API returns 503 and the
-`/payments` page renders an honest preview instead of a live form. Add two keys
-and the same form charges your own Stripe account. PCI stays with Stripe; the
-card number never reaches your worker.
-
-### Wallet
-
-`one wallet keygen` generates the keys on your machine and leaves them there. The
-mnemonic and private keys are never written to any file in this repo, and the
-four public addresses are the only thing that crosses its boundary. `--recover`
-rebuilds the same wallet from the mnemonic.
-
-The `/wallet` page reads balances over public RPC with no backend and no API key.
-Those RPC endpoints are **testnet by default** (Sui testnet, Sepolia, Solana
-devnet, Blockstream testnet) and are four constants at the top of
-[`site/src/lib/chain-balances.ts`](site/src/lib/chain-balances.ts). Payment links
-themselves settle on the chains pay.one.ie serves, which is a separate thing from
-what that page displays.
-
----
-
-## Free forever, and yours to sell
-
-Not a trial. Not a free tier. Not open-core. The whole product is in this repo:
-source, design system, plugins, agents, CLI.
-
-[The ONE License v1.0](LICENSE) grants, in perpetuity and irrevocably:
-
-| You may | Without |
-|---|---|
-| Use it commercially, anywhere | Usage limits |
-| Modify it and own your modifications | Royalty fees |
-| **Sell and resell** what you build, at any price you set | Sharing your code or data |
-| Sublicense and distribute it | Copyleft |
-| Run it as a service | Asking permission |
-| Train AI on it | Telling us |
-| Patent what you invent on top of it | A contributor agreement |
-
-It is compatible with MIT, Apache, GPL, BSD and MPL.
-
-**The one obligation:** keep the ONE brand, logo and link in your deployed
-product. The [Enterprise License](LICENSE-ENTERPRISE.md) removes it for
-white-label work.
-
----
-
-## Free hosting
-
-The site is static-first Astro with SSR on Cloudflare Workers. Most pages ship
-zero JavaScript, so most of the site is files on Cloudflare's edge and the
-dynamic routes fit inside the Workers free tier.
-
-```bash
-cd site && bun run deploy         # astro build && wrangler deploy
+```ts
+export default defineOne({
+  backend: { baseUrl: 'https://one.ie' },
+  plugins: [auth(), backend(), blog(), docs(), newsletter({ workspace: ws }), pages({ ws }), track({ ws })],
+})
 ```
-
-Your domain, your Cloudflare account, no platform in between.
-
----
-
-## Two ways to run it
-
-The site has two independent switches. Neither is required, both flip back.
-
-```
-   ┌─────────────────────────┐        ┌─────────────────────────────────┐
-   │      SITE ONLY          │  ───►  │        SITE + BACKEND           │
-   │      (the default)      │        │       (one env var away)        │
-   ├─────────────────────────┤        ├─────────────────────────────────┤
-   │  Astro + React + shadcn │        │  everything on the left, plus:  │
-   │  Better Auth + D1       │        │  AI chat · CRM · analytics      │
-   │  Blog · docs · products │        │  agents · workflows · wallet    │
-   │  Crypto links + Stripe  │        │  credit metering · lifecycles   │
-   │  100% local, 100% free  │        │  the ONE backend behind it      │
-   └─────────────────────────┘        └─────────────────────────────────┘
-```
-
-**Switch 1: the backend.** Without `ONE_API_KEY` the app runs standalone on local
-auth and D1. Add the key and the same code talks to `https://one.ie`. No rewrite.
-Both payment rails sit on the left column and stay there.
-
-**Switch 2: which widgets ship.** Every plugin is a build-time Astro integration
-you list in `site/one.config.ts`. Add `chat()` and a chat widget mounts. Remove it
-and it is gone. A key on its own never mounts anything you did not ask for.
-
-You can build and sell a business on the left column and never touch the right.
 
 ---
 
 ## What's in the box
-
-<details open>
-<summary><strong>The parts people clone it for</strong></summary>
-
-- Two payment rails, both wired, both fail-closed until they are yours
-- Astro 7 + React 19 islands + shadcn/ui + Tailwind 4, SSR on Cloudflare Workers
-- Static-first: most pages ship zero JavaScript, which is *why* it is fast
-- Products priced **server-side**. `resolveProduct()` reads the catalog, never a
-  client-sent amount, so a buyer cannot tamper with a price
-- Six tokens in `site/src/lib/themes.ts` carry every component, across 14 presets.
-  Showcase pages at `/design`, `/components`, `/motion`, `/patterns`
-- Content collections for blog, docs and products. Write Markdown, get routes
-</details>
-
-<details>
-<summary><strong>And everything under it</strong></summary>
-
-- Auth pages, Better Auth and D1 sessions that work with no backend at all
-- Error pages, RSS, sitemaps, and a full SEO structured-data graph (schema.org
-  JSON-LD, git-based `lastmod`). The build validates H1s, internal links, image
-  alt text and metadata on every page, and fails loudly when one is wrong
-- `.claude/` (hooks, rules, skills, commands) and `.mcp.json` at the repo root
-- `ai/` holds agents, skills, tools and workflows as plain Markdown and TOML
-- `data/` holds your types and lifecycles, declared once, typed everywhere
-</details>
 
 The repo is three folders and one idea:
 
@@ -308,34 +310,54 @@ The repo is three folders and one idea:
  knows           grows            shows
 ```
 
-`CLAUDE.md` is the operating manual. `AGENTS.md` is the briefing an AI agent reads
-before it touches anything.
+| | |
+|---|---|
+| **Design system** | Six tokens carry every component, across 14 presets, in light and dark. Live showcase at `/design`, `/components`, `/motion` and `/patterns` |
+| **Components** | Primitive blocks (buttons, tabs, cards, carousel, quotes, forms, breadcrumbs and footer), accessible and token-driven |
+| **Motion** | Four scroll primitives (Reveal, Stagger, Parallax and ScrollScene) built on Motion, with shared easing and reduced-motion support |
+| **Content** | Content collections for blog, docs and products. Write Markdown and the routes are generated for you |
+| **SEO** | A schema.org knowledge graph, sitemaps, RSS, `llms.txt` and `.md` twins of every post. The build fails loudly on a bad H1, a broken link or missing alt text |
+| **Auth** | Sign-in and sign-up pages, with Better Auth and D1 sessions that need no backend |
+| **Keys and wallets** | One key made on your device, with wallets on standard derivation paths |
+| **Payments** | Crypto payment links and Stripe card checkout, both wired and both off until you configure them |
+| **Agents** | Sixteen agent templates, five skills and a runnable workflow in `ai/` |
+| **AI-ready** | `.claude/`, `.mcp.json`, `CLAUDE.md` and `AGENTS.md`, so Claude Code knows the repo from the first prompt |
+
+<details>
+<summary><strong>The components, in light and dark</strong></summary>
+
+<br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/components-dark.webp">
+  <img alt="The ONE components page. An eyebrow reads COMPONENT LIBRARY above the headline 'Beautiful blocks, wired to your brand.' The copy says every component is built on the same six design tokens, so changing one value in one.config.ts re-skins them all. Two buttons read 'Clone the template' and 'See the tokens'." src=".github/assets/components-light.webp">
+</picture>
+
+Each block is one primitive, not a family of near-duplicates. **Tabs** have a sliding indicator, full keyboard support, ARIA roles and zero React. The **carousel** uses native CSS scroll-snap, so it needs no animation loop and no dependency. **Card** is one component with five layouts. **Buttons** come in five variants and three sizes, with an `href` prop that renders a real anchor.
+
+See them all on a running dev server at `/components`, `/motion` and `/patterns`.
+
+</details>
 
 ---
 
 ## Brand it
 
-Six tokens carry the whole site: `primary`, `secondary`, `tertiary`,
-`background`, `foreground`, `font`. Every component is built on them, so changing
-one value re-skins everything downstream of it. Here is the same page in both
-themes, nothing swapped but the tokens:
+Six tokens carry the whole site: `primary`, `secondary`, `tertiary`, `background`, `foreground` and `font`. Every component reads them, so you never restyle components. You change the tokens, and everything that reads them follows.
 
-![The ONE home page hero in light mode. A badge reads ASTRO 7 + REACT 19 above the headline "Design beautiful websites with perfect Lighthouse scores." The subheading reads: ONE is an open source starter template — clone it and your first build already scores 100 for accessibility, best practices and SEO. Two buttons read Get started free and See the design system. On the right, a dark card headed LIVE — NOT A MOCKUP, dated 2026-09-14, shows four green rings each reading 100, labelled Perf, A11y, Best and SEO, with the footnote "Desktop, this exact page. 100 on throttled Slow 4G."](.github/assets/04-hero-light.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/tokens-dark.webp">
+  <img alt="The ONE Design System page. Under the headline 'ONE Design System' are a Light / Dark / Reset toggle and a section headed 'The 6 editable tokens', with live swatches for background, foreground, font, primary, secondary and tertiary, each showing its hex value and which surfaces it drives." src=".github/assets/tokens-light.webp">
+</picture>
 
-![The identical ONE home page hero in dark mode. Same badge, same headline, same two buttons and the same LIVE — NOT A MOCKUP card showing four green 100s.](.github/assets/05-hero-dark.png)
+Fourteen presets ship with it: Navy, Ocean, Forest, Sunset, Violet, Rose, Slate, Amber, Cyan, Terracotta, Plum, Vespio, Carbon and Elite. Each card is a real control. Clicking one repaints the whole page, not a preview pane.
 
-Fourteen presets ship with it. Every one is a real, clickable card on the site,
-and clicking it repaints the whole page rather than a preview pane:
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/themes-dark.webp">
+  <img alt="The ONE theme gallery. An eyebrow reads 14 PRESETS above the headline 'Pick a theme. The whole site repaints.' Fourteen swatch cards sit in two rows with Navy selected, then a 'Build your own theme' button. Below it starts the next section: 'Six primitives. One mental model.'" src=".github/assets/themes-light.webp">
+</picture>
 
-![The ONE themes page in light mode. An eyebrow reads "14 PRESETS" above the headline "Pick a theme. The whole site repaints." The copy reads: Every card below is a real, clickable preset — click one and this entire page (not just this section) switches live. Fourteen named swatch cards follow: Navy (selected), Ocean, Forest, Sunset, Violet, Rose, Slate, Amber, Cyan, Terracotta, Plum, Vespio, Carbon and Elite. A "Build your own theme" button sits below them.](.github/assets/03-themes-14-presets.png)
-
-**Two ways to change them.** Click the swatches on `/design` and the picks apply
-live and persist, no code:
-
-![The ONE Design System page, with a Light / Dark / Reset toggle and a section headed "The 6 editable tokens". Live swatches show background #11161C, foreground #1F252D, font #FFFFFF, primary #759CD7 and tertiary #9CB992, each with its hex value.](.github/assets/07-design-tokens.png)
-
-Or edit a preset in `site/src/lib/themes.ts`, the single source of truth for all
-14 themes:
+**Two ways to change them.** You can click the swatches on `/design`, and your picks apply live and persist. Or you can edit [`site/src/lib/themes.ts`](site/src/lib/themes.ts), the single source of truth for every preset:
 
 ```ts
 {
@@ -346,214 +368,182 @@ Or edit a preset in `site/src/lib/themes.ts`, the single source of truth for all
 }
 ```
 
-Save the file and the running dev server repaints in about four seconds.
+When you save the file, the running dev server repaints.
 
-`site/one.config.ts` is the other control surface. It decides which plugins are
-compiled in:
+---
 
-```ts
-export default defineOne({
-  backend: { baseUrl: 'https://one.ie' },
-  plugins: [auth(), backend(), blog(), docs(), pages({ ws }), track({ ws })],
-})
+## Fast, and measured
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/speed-dark.webp">
+  <img alt="The ONE speed page. An eyebrow reads SPEED PROOF · 2026-09-14 above the headline '100 / 100 on Lighthouse. Against this repo's own build, not a marketing deck.' Below it a second heading reads 'Speed is a measurement. Not a claim.'" src=".github/assets/speed-light.webp">
+</picture>
+
+Re-measured on **2026-09-14** on Astro 7.3.2, with Lighthouse 13.2.0 and headless Chrome. The target was `bun run build && wrangler dev`: the same worker runtime and brotli encoding production serves, on localhost so the result measures the site, not your connection.
+
+| | Performance | Accessibility | Best Practices | SEO | Vitals |
+|---|---|---|---|---|---|
+| **Desktop**, 3 runs | **100** · 100 · 100 | 100 | 100 | 100 | LCP 0.5 s · CLS 0.001 |
+| **Mobile**, Slow 4G, 3 runs | **100** · 99 · 98 | 100 | 100 | 100 | FCP 1.1 s · LCP 1.2 s · CLS 0.008 |
+
+Cross-checked against the deployed site at `template.one.ie`: **100 / 100 / 100 / 100 on desktop and on mobile**.
+
+**Don't take our word for it.** The speed comes from three things: static-first Astro, zero JavaScript by default and Cloudflare's edge. You can check it yourself:
+
+```bash
+cd site && bun run build && npx wrangler dev   # then point Lighthouse at it
 ```
-
----
-
-## Sell something from the catalog
-
-A payment link is the fast path. A catalog is the durable one. Write a product as
-a Markdown file in `site/src/content/products/`. Three fields are required:
-
-```markdown
----
-name: Own Your Stack
-priceCents: 2499
-description: The technical playbook behind this exact site.
----
-```
-
-It is now for sale on both rails, priced server-side, and both
-`/payments?product=<slug>` and the product page charge the same resolved price.
-Money lands in the wallet from `one wallet keygen`. Your keys, your treasury, no
-custody change.
-
----
-
-## Components
-
-Nine blocks, each one primitive rather than a family of near-duplicates. Every
-block reads the same six tokens — that is the whole trick: you never restyle
-components, you restyle the tokens they were already reading.
-
-![The ONE buttons page in dark mode. An eyebrow reads "DESIGN SYSTEM" above the headline "Buttons." A table lays five variants — Primary, Secondary, Tertiary, Ghost and Destructive — across three size columns headed Small, Medium and Large.](.github/assets/c-buttons.png)
-
-**Buttons** — five variants across three sizes, with icon slots, loading and
-disabled states, and an `href` prop that renders a real anchor instead of a
-button.
-
-![The ONE tabs demo in dark mode. An eyebrow reads "COMPONENT" above the headline "Tabs that glide." Four tabs read Overview, Build, Ship and Secure, with Overview active and underlined. The Overview panel is headed "One mental model."](.github/assets/c-tabs.png)
-
-**Tabs** — a sliding indicator tracks the active tab. Full keyboard support
-(arrow keys, Home/End), ARIA roles, and a crossfade that yields to
-`prefers-reduced-motion`. Pure Astro plus one scoped script; zero React.
 
 <details>
-<summary><strong>The rest of the set</strong> — cards, carousel, quotes, forms, breadcrumbs, footer</summary>
+<summary><strong>Why <code>wrangler dev</code> and not <code>astro preview</code></strong></summary>
 
 <br>
 
-![The ONE card demo in dark mode, showing three feature cards headed Design tokens, Motion library and AI chat, a row of four stat cards reading 1,234 / 0.0d / 00% / 00 KB each labelled "your metric here", and three profile cards each reading "Team member · Role, Company".](.github/assets/c-cards.png)
+An earlier pass measured mobile at 76 and concluded performance had regressed. It hadn't. `astro preview` sends the document **uncompressed** at 421 KB, where production sends **69.7 KB brotli**. On a simulated Slow 4G link, that 6x transfer penalty costs about ten points, so that recipe measured the preview server, not the site.
 
-**Card** — one composable component, five layouts: feature, stat, profile,
-pricing and media. The placeholder figures above are deliberate; see
-[The ONE Licence](#the-one-licence) for why this repo ships no invented numbers.
-
-![The ONE carousel demo in dark mode.](.github/assets/c-carousel.png)
-
-**Carousel** — native CSS scroll-snap, so touch works without a JavaScript
-animation loop and there is no dependency to carry.
-
-![The ONE quote demo in dark mode.](.github/assets/c-quotes.png)
-
-**Quote** — three variants: featured pull-quote, inline blockquote, and a
-compact grid.
-
-![The ONE form demo in dark mode.](.github/assets/c-form.png)
-
-**Form** — labelled inputs, real validation states, and a consent checkbox.
-
-![The ONE breadcrumbs demo in dark mode.](.github/assets/c-breadcrumbs.png)
-
-![The ONE footer demo in dark mode.](.github/assets/c-footer.png)
-
-**Breadcrumbs** and **Footer** — the structural blocks every page needs and
-nobody enjoys rebuilding.
+One caveat still holds: the mobile figure moves between 98 and 100 from run to run, so quote it from more than one run. Measuring a deployed URL from your laptop also measures your laptop's network. Four runs against `template.one.ie` from Thailand returned 68, 100, 71 and 100.
 
 </details>
 
-Four motion primitives sit on top, and nothing ships until the island it belongs
-to enters the viewport, which is how a site this animated stays this light. See
-`/components`, `/motion` and `/patterns` on a running dev server.
+---
+
+## Found by search engines and AI
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/seo-dark.webp">
+  <img alt="The ONE SEO page. An eyebrow reads SEO · PROVEN, NOT PROMISED above the headline 'Every SEO feature this template actually ships.' A row of chips links to sitemap.xml, rss.xml, schema.json, api-catalog, llms.txt, a page as .md, og:image and /faq. Below them a card headed '01 Structured data — A linked knowledge graph' explains the schema.org graph." src=".github/assets/seo-light.webp">
+</picture>
+
+Most templates bolt meta tags onto `<head>`. This one builds a linked schema.org knowledge graph with [`@jdevalk/astro-seo-graph`](https://www.npmjs.com/package/@jdevalk/astro-seo-graph) and extends it to AI answer engines. Every route below is served by the build:
+
+| Route | What it is |
+|---|---|
+| `/sitemap.xml` · `/rss.xml` | The usual, with git-based `lastmod` |
+| `/schema.json` | The whole knowledge graph in one request |
+| `/llms.txt` | A one-line summary of every page, written from its real description |
+| `/blog/<post>.md` | A clean Markdown twin of every post and doc, linked from the HTML |
+| `/.well-known/api-catalog` | An RFC 9727 linkset |
+
+The build validates H1s, internal links, image alt text and metadata on every page, and fails when one is wrong.
 
 ---
 
-## Performance
+## Keys, wallets and payments
 
-Re-measured **2026-09-14** on Astro 7.3.2 with Lighthouse 13.2.0 and headless
-Chrome, against `bun run build && wrangler dev` — the same worker runtime and
-the same brotli encoding production serves, on localhost so the reading is the
-site and not your connection.
+**Keys.** `one key new` mints a key on your machine: 24 words, printed once, for paper. It never touches the network. `one key recover` rebuilds it from the words, and [`@oneie/recover`](https://www.npmjs.com/package/@oneie/recover) restores it offline. The secret never leaves your device.
 
-**Desktop** (`--preset=desktop`), 3 runs: **100** Performance in all three, plus
-100 Accessibility, Best Practices and SEO. LCP **0.5 s**, CLS **0.001**.
-**Mobile** (stock preset, Slow 4G), 3 runs: **100**, 99, 98 Performance, and 100
-on the other three every run. FCP **1.1 s**, LCP **1.2 s**, CLS **0.008**.
-Cross-checked against the deployed site at `template.one.ie`: **100 / 100 / 100 /
-100 on desktop and on mobile**.
+**Wallets.** `one wallet keygen` produces Sui, EVM, Solana and Bitcoin addresses fully offline. Only the public addresses ever leave it. Paste them into `site/.dev.vars` (see [`.dev.vars.example`](site/.dev.vars.example)). The `/wallet` page then reads balances over public RPC, with no backend and no API key. Those endpoints are **testnet by default** and are four constants at the top of [`site/src/lib/chain-balances.ts`](site/src/lib/chain-balances.ts).
 
-**Use `wrangler dev`, not `astro preview` — and this is the part worth knowing.**
-An earlier pass measured mobile at 76 and concluded performance had regressed.
-It had not. `astro preview` sends the document **uncompressed**: 421 KB, where
-production sends **69.7 KB brotli**. On a simulated Slow 4G link that 6x transfer
-penalty costs about ten points, so the recipe was measuring the preview server
-rather than the site. Run it against the worker and the number is the number.
+**Payments.** Two rails are wired and stay off until you configure them:
 
-One honest caveat that survives the fix: the mobile figure moves 98-100 run to
-run, so quote it from more than one run. And measuring a deployed URL from your
-own laptop measures your laptop's network — four runs against `template.one.ie`
-from Thailand returned 68, 100, 71 and 100.
+- **Crypto links.** [`/api/pay/link`](site/src/pages/api/pay/link.ts) returns a payment link and QR from pay.one.ie, with your own addresses as the destination. Nobody holds the funds in between. It works without `ONE_API_KEY`.
+- **Cards.** Real Stripe Elements. [`/api/pay/create-intent`](site/src/pages/api/pay/create-intent.ts) uses the Stripe SDK, and [`/api/pay/webhook`](site/src/pages/api/pay/webhook.ts) verifies every event's signature before it trusts a byte. Without `STRIPE_SECRET_KEY`, the API returns 503 and `/payments` shows an honest preview. Card numbers never reach your worker.
 
-So do not take it from us. The mechanism is static-first Astro, zero JavaScript by
-default and Cloudflare's edge, and the check is two commands:
-
-```bash
-cd site && bun run build && bun run preview   # → http://localhost:4321
-```
-
-Then point Lighthouse at it. A cold production build takes a few seconds.
+Prices are always resolved on the server from the catalog in `site/src/content/products/`, never from the request body. A buyer can't set their own price.
 
 ---
 
-## The `one` CLI
+## Plugins
+
+Each plugin is a package and a line in `one.config.ts`. Most are on npm, so you can install one without this repo, for example `bun add @oneie/plugin-blog`. Newsletter and pages are used from `packages/` in this repo. Plugins marked *served* render from one.ie, add nothing to your bundle, and need the backend switch on.
+
+| Package | What |
+|---|---|
+| `@oneie/plugin-auth` | Better Auth client. Sign-in works standalone; the auth server is optional |
+| `@oneie/plugin-backend` | The `@oneie/sdk` client plus React 19 hooks |
+| `@oneie/plugin-blog` | Markdown blog, zero config |
+| `@oneie/plugin-docs` | Docs site on the same content pipeline |
+| `@oneie/plugin-newsletter` | Subscribe form wired to your audience, with double opt-in |
+| `@oneie/plugin-pages` | Renders pages built in ONE's visual editor |
+| `@oneie/plugin-chat` | AI chat widget, *served* |
+| `@oneie/plugin-track` | Analytics pixel, *served* |
+| `@oneie/plugin-booking` | Appointment scheduling with calendar and email confirmations |
+| `@oneie/plugin-mail` | Inbox UI, real-time |
+| `@oneie/plugin-media` | Video gallery and player for Mux and YouTube |
+
+`packages/` also holds the `admin`, `course`, `dashboard` and `shop` plugins, which load their UI from one.ie at runtime.
+
+---
+
+## The ONE toolkit
+
+This repo is the open source part of ONE. The packages below are the ones the ONE platform ships, and `site/` depends on the current releases of the CLI and SDK.
+
+| Package | What it does | |
+|---|---|---|
+| [`@oneie/cli`](https://www.npmjs.com/package/@oneie/cli) | `one` and `oneie`. Every command is one typed call into the same API | <img alt="npm" src="https://img.shields.io/npm/v/%40oneie%2Fcli?label=&color=0b7285"> |
+| [`@oneie/sdk`](https://www.npmjs.com/package/@oneie/sdk) | The typed client behind the CLI, the plugins and `site/src/lib/one.ts` | <img alt="npm" src="https://img.shields.io/npm/v/%40oneie%2Fsdk?label=&color=0b7285"> |
+| [`@oneie/mcp`](https://www.npmjs.com/package/@oneie/mcp) | Every ONE receiver as an MCP tool for Claude, Cursor and any MCP client | <img alt="npm" src="https://img.shields.io/npm/v/%40oneie%2Fmcp?label=&color=0b7285"> |
+| [`@oneie/frontend`](https://www.npmjs.com/package/@oneie/frontend) | `defineOne()` and the plugin contract | <img alt="npm" src="https://img.shields.io/npm/v/%40oneie%2Ffrontend?label=&color=0b7285"> |
+| [`@oneie/recover`](https://www.npmjs.com/package/@oneie/recover) | Offline key and wallet recovery | <img alt="npm" src="https://img.shields.io/npm/v/%40oneie%2Frecover?label=&color=0b7285"> |
 
 ```bash
 npm install -g @oneie/cli
-```
 
-You get `one` and `oneie`, the same binary under either name. Every command is one
-typed call into the same API, so there is no second interface to learn and it
-behaves identically whether a human types it or an agent runs it headless.
-
-```bash
-one wallet keygen               # generate or recover a self-hosted wallet, offline
-one wallet get                  # credits, ceiling, wallet rows, live chain balances
-one wallet send <to>            # send crypto via pay.one.ie payment links
-one whoami                      # who this key is, which workspace
 one doctor                      # config, key, reachability — exit 0/1, CI-safe
-one deploy                      # deploy site/ to Cloudflare via wrangler
+one whoami                      # who this key is, which workspace
+one key new                     # mint a key on this machine, offline
+one wallet keygen               # wallet addresses from your machine, offline
+one push                        # compile ai/ + data/ and push to your workspace
+one deploy                      # deploy site/ to Cloudflare
 ```
 
 <details>
-<summary><strong>The rest of the surface</strong> (verified against <code>oneie --help</code> at v4.1.0)</summary>
+<summary><strong>The rest of the CLI</strong> (from <code>oneie --help</code>, 5.7.0)</summary>
 
 ```bash
-# money
-one earn                        # credit earned summary
-one usage                       # credit usage dashboard
-one status                      # agency P&L — pool, margin, per-client burns
-
-# people and agents
-one staff invite [email]        # invite a human; omit the email to get a URL
-one staff add-agent <name>      # create an agent and print its key once
-one market                      # discover agents and skills on the market
-one hire <skillId>              # hire an agent for a skill (--dry-run to simulate)
-one bounty <skillId>            # post a bounty for a skill
+# start
+one init                        # a workspace and an API key, no account
+one onboard                     # zero-to-live, then where you are in the lifecycle
+one setup                       # provision from workspace.toml, idempotent
+one create node [name]          # this repo's shape, fresh
 
 # the substrate, directly
-one setup                       # provision a workspace, keyless, idempotent
-one push [path]                 # compile ai/ + data/ and push to the substrate
 one catalog                     # browse the receiver surface by recipe
 one ask <receiver> {json}       # signal, then wait for the outcome
 one signal <receiver> {json}    # fire and forget
 one groups | actors | things | paths | events | learning
+one recall                      # cross-session memory
 
-# scaffolding
-one create node [name]          # this repo's shape, fresh
+# people, agents, work
+one staff                       # invite humans, add agents
+one market | hire | bounty      # discover, hire and post work for agents
+one tasks | workflow            # the board and the runs
+
+# ship
 one ship "<message>"            # git add, commit, push
 ```
 
-`--dry-run` projects the outcome and writes nothing. Dry-run first on every
-irreversible verb.
+`--dry-run` shows the outcome and writes nothing. Use it first on every irreversible command.
+
 </details>
 
 ---
 
-## Tell it once: the story layer
+## AI-ready
 
-Every starter gives you a blog folder and calls that content. This one gives you
-the craft that goes around it, as files an agent reads.
+Open the root in Claude Code and it's already wired.
 
-**Seven beats: World · Cast · Knock · Want · Way · Turn · Lesson.** That is the
-whole form. A child, a founder or an agent can fill it in, and nobody has to learn
-a new vocabulary on either side. The storyteller only ever *asks* for two of them,
-the Want and the Knock. The rest is supplied by the work and recognised by the
-teller.
+- **`.claude/`** teaches your assistant this repo's file conventions, plugin patterns and design rules. It works with Claude Code, Cursor and any editor that reads `CLAUDE.md`.
+- **`.mcp.json`** exposes the whole ONE API as native MCP tools once you run `npm i -g @oneie/mcp`. It reads `ONE_API_KEY` from `site/.dev.vars` or `.env.local`.
+- **`AGENTS.md`** is the briefing an agent reads before it touches anything. `CLAUDE.md` is the operating manual.
+- **`ai/`** and **`data/`** hold your [agents, skills, workflows, types and lifecycles](#agents-skills-and-workflows), so the assistant that edits your site can also read and write the agents that run it.
+
+<details>
+<summary><strong>Tell it once: the story layer</strong></summary>
+
+<br>
+
+Most starters give you a blog folder and call that content. This one also gives you the craft around it, as files an agent reads.
+
+**Seven beats: World · Cast · Knock · Want · Way · Turn · Lesson.** That's the whole form. A child, a founder or an agent can fill it in. The storyteller only ever asks for two of them, the Want and the Knock. The work supplies the rest.
 
 ```
   promise  ─────────►  progress  ─────────►  payoff
   terms + one proof    the board walking      the proof passed
-  frozen at "yes"      settles, not effort    the Turn you promised
 ```
 
-Pay off what was promised, not something else. The proof is written down at the
-moment you agree and can never be swapped for an easier one afterwards.
-
-<details>
-<summary><strong>The six tests, the framework registry, and the refusals</strong></summary>
-
-A story that fails one test is named in a sentence and handed back, never quietly
-padded until it passes.
+A story that fails one of six tests is named in a sentence and handed back. It is never padded until it passes:
 
 | Test | Fails when |
 |---|---|
@@ -564,104 +554,19 @@ padded until it passes.
 | Something changes | the world at the end is the world at the start |
 | It is specific | it is true and general: "we struggled" instead of one detail |
 
-`ai/skills/story/frameworks.md` holds one row per framework, each mapping its own
-stops onto the same seven beats:
+`frameworks.md` maps Story Spine, Story Circle, Kishōtenketsu, quest grammar and others onto the same seven beats, and adding a framework means adding a row. `mediums.md` sets the order of the beats for each surface. `data/lifecycles/story.toml` tracks a story from `told` to `retold`.
 
-| Beat | Story Spine | Story Circle | Kishōtenketsu | Quest grammar |
-|---|---|---|---|---|
-| World | once upon a time | you | ki | the world |
-| Knock | one day | need | shō | the call |
-| Want | *(in "one day")* | go | shō | objective |
-| Way | because of that… | search / find | shō | the obstacle |
-| Turn | until finally | take / return | **ten** | the reward |
-| Lesson | ever since then | change | ketsu | experience |
+**The refusals.** No Want without something observable. No story told for someone else without their name and consent. No status claim that wasn't measured. No Lesson invented by the machine.
 
-Adding a framework is adding a row. Labov for listening to a real person.
-StoryBrand when the teller sells and the customer is the hero. Kishōtenketsu for
-a Turn with no enemy, which is most real tellers, because a mover in Austin is not
-fighting anyone. The agent states its pick in one sentence so you can overrule it.
+Files: `ai/skills/story/` · `ai/agents/storyteller.md` · `data/types/story.toml` · `data/lifecycles/story.toml`.
 
-`ai/skills/story/mediums.md` says how the beats are ordered per surface: headline
-as promise and proof block as payoff for a page, a cold open on the Knock for
-voice, the Turn in the first five seconds for video. A medium with no renderer is
-named, not faked.
-
-**The refusals.** A machine that can make any story persuasive has to be allowed
-to decline.
-
-- No Want with no observable. If nothing could check it, it is not a Want.
-- No story told for someone else without their name on the Cast and their consent.
-- No status claim that was not measured.
-- No framework chosen that the teller did not see.
-- No Lesson invented by the machine.
-- A decline is recorded with its reason, never a silent stall.
-
-> If the story cannot help, at least it must not hurt.
-
-**The story is alive.** `data/lifecycles/story.toml` tracks ten steps:
-`told → framed → promised → building → settled → viewed → completed → shared →
-converted → retold`. Retells over stories told is the k-factor. Above one, every
-story you tell produces more than one more.
 </details>
-
-The files: `ai/skills/story/SKILL.md` · `frameworks.md` · `mediums.md` ·
-`ai/agents/storyteller.md` · `data/types/story.toml` ·
-`data/lifecycles/story.toml`.
-
----
-
-## Plugins
-
-Ten, all free, all on npm. Install one without checking out this repo:
-`bun add @oneie/plugin-chat`. The ones marked *served* render from `one.ie`, so
-nothing ships in your bundle and they need the backend switch on.
-
-| Package | What |
-|---|---|
-| `@oneie/plugin-auth` | better-auth client. Sign-in works standalone, auth server optional |
-| `@oneie/plugin-backend` | `@oneie/sdk` client plus React 19 hooks |
-| `@oneie/plugin-blog` | Markdown blog, zero config |
-| `@oneie/plugin-booking` | Appointment scheduling, Google Calendar and email confirmations |
-| `@oneie/plugin-chat` | Served AI chat widget, zero bundle |
-| `@oneie/plugin-docs` | Docs site, same content pipeline as this repo |
-| `@oneie/plugin-mail` | Inbox UI, real-time through the channels worker |
-| `@oneie/plugin-media` | Video gallery and player, Mux and YouTube |
-| `@oneie/plugin-pages` | Renders a workspace's visually-edited Puck pages |
-| `@oneie/plugin-track` | Served analytics pixel, zero bundle |
-
-`@oneie/frontend` and `@oneie/design` are free too, and `site/` depends on all of
-it via real semver.
-
-**Paid, and clearly marked:** `admin`, `course`, `dashboard` and `shop` ship as
-thin stubs in `packages/`, never published, built on `@oneie/plugin-premium`'s
-entitlement gate. They load the real UI from `one.ie/x/<plugin>.js` after payment.
-Nothing reaches your repo before you buy it.
-
----
-
-## AI-ready
-
-Open the root in Claude Code and it is already wired.
-
-- **`.claude/`** teaches your assistant the file conventions, plugin patterns and
-  design rules of this repo. Works with Claude Code, Cursor, and any editor that
-  reads `CLAUDE.md`.
-- **`.mcp.json`** exposes the whole ONE API as native MCP tools, no wrapper
-  needed. It reads `ONE_API_KEY` from your shell.
-
-```bash
-export ONE_API_KEY=$(grep '^ONE_API_KEY=' site/.env.local | cut -d= -f2)
-```
-
-A node scaffolded with `oneie create node` is AI-connected from its first
-`git init`.
 
 ---
 
 ## Herdr: terminals and agents in one window
 
-[Herdr](https://herdr.dev) keeps your terminals and Claude Code agents in one window:
-spaces, tabs, agents. [`packages/herdr`](packages/herdr) sets it up the ONE way, in one command:
+[Herdr](https://herdr.dev) keeps your terminals and Claude Code agents in one window, with spaces, tabs and agents. [`packages/herdr`](packages/herdr) sets it up the ONE way in one command:
 
 ```bash
 git clone https://github.com/one-ie/one.git
@@ -669,22 +574,14 @@ cd one
 bash packages/herdr/install.sh
 ```
 
-It installs Herdr if you don't have it, checks every piece, switches the window over and
-makes a ONE space with Claude Code ready. Run it again any time: it only replaces what
-changed and never deletes anything.
+It installs Herdr if you don't have it, checks every piece, switches the window over and creates a ONE space with Claude Code ready. You can run it again any time. It only replaces what changed and never deletes anything.
 
-- **Start panel.** Six things you can ask your agent in plain words. Press one and Claude
-  Code opens in a new tab and starts on it.
-- **Documents.** Beside Files, markdown only. Click one and it opens in the viewer next to
-  your terminal; `cmd-shift-m` opens the viewer as a picker.
-- **Changed files highlighted** in Files and Documents: `M` modified, `A` new, `D`/`U`
-  deleted or conflict.
-- **Updates come to you.** An **Update** button appears next to ONE's mark when a newer
-  version is out.
+- **Start panel.** Six things you can ask your agent in plain words. Press one and Claude Code opens in a new tab and starts on it.
+- **Documents.** Sits beside Files and shows Markdown only. Click a document and it opens in the viewer next to your terminal. `cmd-shift-m` opens the viewer as a picker.
+- **Changed files highlighted** in Files and Documents: `M` modified, `A` new, `D`/`U` deleted or conflict.
+- **Updates come to you.** An **Update** button appears next to ONE's mark when a newer version is out.
 
-Needs an Apple Silicon Mac and `node`. Back to Herdr's own layout: `ctrl-shift-l`. Take it
-all out: `bash packages/herdr/install.sh --remove`. More in
-[`packages/herdr/README.md`](packages/herdr/README.md).
+It needs an Apple Silicon Mac and `node`. To go back to Herdr's own layout, press `ctrl-shift-l`. To remove everything, run `bash packages/herdr/install.sh --remove`. More in [`packages/herdr/README.md`](packages/herdr/README.md).
 
 ---
 
@@ -696,25 +593,34 @@ cd site && bun run dev          # dev server, no backend needed → :4321
 cd site && bun run typecheck    # astro check
 cd site && bun run build        # production build
 cd site && bun run deploy       # astro build && wrangler deploy
+bun run check:claims            # the claims gate, see below
 ```
 
-CI runs the build, the typecheck, and a second build with `ONE_API_KEY=""` to
-prove standalone mode still works. Contributions welcome: open an issue or a PR at
-[github.com/one-ie/one](https://github.com/one-ie/one).
+```
+.
+├── ai/              agents · skills · tools · workflows · context.md
+├── data/            types · lifecycles
+├── site/            the Astro app: pages, components, content, one.config.ts
+├── packages/        in-repo plugins and Herdr
+├── docs/            the tutorial
+└── scripts/         check-claims.mjs
+```
+
+**CI checks what the site says, not just whether it compiles.** Before anything is installed, [`scripts/check-claims.mjs`](scripts/check-claims.mjs) fails the build on invented people, unsourced statistics, a framework version that doesn't match `package.json`, or an install command pointing at a package this project doesn't own. Then CI runs the build, the typecheck, and a second build with `ONE_API_KEY=""` to prove standalone mode still works.
+
+Contributions are welcome. Open an issue or a PR at [github.com/one-ie/one](https://github.com/one-ie/one).
 
 ---
 
-## The ONE Licence
+## Licence
 
-In one line: **everything, in perpetuity, for free. Keep the ONE brand, logo and
-link in your deployed product.**
+Open source under [the ONE License v1.0](LICENSE). You can use it, modify it, distribute it, run it as a service and build products on it. It's compatible with MIT, Apache, GPL, BSD and MPL.
 
-The [full grant is above](#free-forever-and-yours-to-sell), and the
-[licence itself](LICENSE) is short enough to read in two minutes. Read it before
-you rely on it.
+**One obligation:** keep the ONE brand, logo and link in your deployed product. For white-label work, see the [Enterprise License](LICENSE-ENTERPRISE.md). The licence is short enough to read in two minutes, so read it before you rely on it.
 
-The ONE backend is not distributed. This repo is the fully functional client, and
-it runs without that backend. Both payment rails are on the client side, which is
-why they keep working whether or not you ever connect one.
+<br>
 
-**Sell anything. Keep every cent the network does not take. Host it for free.**
+<p align="center">
+  <strong>Build anything. Plug it into anything. Host it for free.</strong><br>
+  <sub><a href="https://one.ie">one.ie</a> · <a href="https://github.com/one-ie/one">github.com/one-ie/one</a></sub>
+</p>
