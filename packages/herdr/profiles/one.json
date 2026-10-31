@@ -1,0 +1,18 @@
+{
+  "name": "one",
+  "about": "ONE, open source: the ONE space with ONE's mark, Documents, the markdown viewer and Start.",
+  "brand": null,
+  "branch": "main",
+  "spaces": [
+    { "name": "ONE", "folder": ".", "icon": "mods/one-brand/brands/one.svg", "tint": true }
+  ],
+  "icons": [],
+  "start": [
+    { "label": "Show me around", "prompt": "I'm new to this window and this project. In plain English, explain what a space, a tab and an agent are here, what ONE is and what is in this repo, and suggest three things I could ask you to do today." },
+    { "label": "What changed?", "prompt": "Tell me in plain English what changed in this project since yesterday: who changed what, and whether anything needs me. No code, just the story." },
+    { "label": "I have an idea", "prompt": "I have an idea for ONE. Ask me about it one question at a time until you can say who it is for and what they get. Then build it and show it to me before anything is shared." },
+    { "label": "Fix something", "prompt": "Something looks wrong. Ask me what I saw and where. Then find it, fix it, and show me the fix before anything is shared." },
+    { "label": "Check the site", "prompt": "Open https://one.ie, go through the main pages and tell me anything broken, slow or ugly, in plain words, most important first. Don't change anything yet." },
+    { "label": "Save my work", "prompt": "Save my work: show me what I changed in plain words, then commit it with a clear message. Ask me first if anything looks risky, and before you push." }
+  ]
+}
