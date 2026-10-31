@@ -29,6 +29,7 @@
     "@oneie/plugin-newsletter": "workspace:*",
     "@oneie/plugin-pages": "workspace:*",
     "@oneie/plugin-track": "^0.1.2",
+    "@oneie/sdk": "^0.17.4",
     "@stripe/react-stripe-js": "^6.7.0",
     "@stripe/stripe-js": "^9.9.0",
     "@tailwindcss/typography": "^0.5.20",
@@ -54,7 +55,7 @@
     "zod": "^4.4.2"
   },
   "devDependencies": {
-    "@oneie/cli": "^5.2.2",
+    "@oneie/cli": "^5.7.0",
     "@astrojs/check": "^0.9.9",
     "@types/react": "^19",
     "@types/react-dom": "^19",
