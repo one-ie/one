@@ -145,6 +145,7 @@ product and the build gate. About 20 minutes.
 - [Tell it once: the story layer](#tell-it-once-the-story-layer)
 - [Plugins](#plugins)
 - [AI-ready](#ai-ready)
+- [Herdr: terminals and agents in one window](#herdr-terminals-and-agents-in-one-window)
 - [The ONE Licence](#the-one-licence)
 
 ---
@@ -654,6 +655,36 @@ export ONE_API_KEY=$(grep '^ONE_API_KEY=' site/.env.local | cut -d= -f2)
 
 A node scaffolded with `oneie create node` is AI-connected from its first
 `git init`.
+
+---
+
+## Herdr: terminals and agents in one window
+
+[Herdr](https://herdr.dev) keeps your terminals and Claude Code agents in one window:
+spaces, tabs, agents. [`packages/herdr`](packages/herdr) sets it up the ONE way, in one command:
+
+```bash
+git clone https://github.com/one-ie/one.git
+cd one
+bash packages/herdr/install.sh
+```
+
+It installs Herdr if you don't have it, checks every piece, switches the window over and
+makes a ONE space with Claude Code ready. Run it again any time: it only replaces what
+changed and never deletes anything.
+
+- **Start panel.** Six things you can ask your agent in plain words. Press one and Claude
+  Code opens in a new tab and starts on it.
+- **Documents.** Beside Files, markdown only. Click one and it opens in the viewer next to
+  your terminal; `cmd-shift-m` opens the viewer as a picker.
+- **Changed files highlighted** in Files and Documents: `M` modified, `A` new, `D`/`U`
+  deleted or conflict.
+- **Updates come to you.** An **Update** button appears next to ONE's mark when a newer
+  version is out.
+
+Needs an Apple Silicon Mac and `node`. Back to Herdr's own layout: `ctrl-shift-l`. Take it
+all out: `bash packages/herdr/install.sh --remove`. More in
+[`packages/herdr/README.md`](packages/herdr/README.md).
 
 ---
 
