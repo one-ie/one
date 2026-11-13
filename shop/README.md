@@ -52,7 +52,7 @@ goes in `one.config.ts` and never into git.
 
 | | Where it goes | Who can move it |
 |---|---|---|
-| USDC on Sui, Base or Ethereum | your own address, from `one.config.ts` | only your key |
+| USDC on Sui, Base or Ethereum (and Solana once pay.one.ie offers it) | your own address, from `one.config.ts` | only your key |
 | Card | your own Stripe account | only you |
 
 Crypto links are minted by [pay.one.ie](https://pay.one.ie), which signs the
