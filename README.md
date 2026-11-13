@@ -109,6 +109,8 @@ cd site && bun run dev         # → http://localhost:4321
 **3. Ship it.** It goes to your domain on your Cloudflare account, with no platform in between.
 
 ```bash
+cd site && wrangler d1 migrations apply web --remote   # sign-in tables (D1), once before the first deploy
+cd site && wrangler secret put BETTER_AUTH_SECRET      # signs sessions; sign-in answers 503 until set
 cd site && bun run deploy      # astro build && wrangler deploy
 ```
 
@@ -592,6 +594,8 @@ bun install                     # install all workspaces
 cd site && bun run dev          # dev server, no backend needed → :4321
 cd site && bun run typecheck    # astro check
 cd site && bun run build        # production build
+cd site && wrangler d1 migrations apply web --remote   # sign-in tables, before the first deploy
+cd site && wrangler secret put BETTER_AUTH_SECRET      # sign-in answers 503 until set
 cd site && bun run deploy       # astro build && wrangler deploy
 bun run check:claims            # the claims gate, see below
 ```
