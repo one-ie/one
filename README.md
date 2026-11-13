@@ -100,6 +100,8 @@ npx oneie create my-app        # or: git clone https://github.com/one-ie/one my-
 cd my-app && bun install
 ```
 
+**Just want to take money?** `npx oneie create shop my-shop` makes a small shop that takes card and USDC into your own accounts: your key, your Stripe, your Cloudflare. A real payment link prints in about 3 seconds. See [`shop/`](shop/README.md).
+
 **2. Run it.** No keys and no account. Better Auth and Cloudflare D1 handle sessions and data locally from the first run.
 
 ```bash
@@ -438,10 +440,12 @@ The build validates H1s, internal links, image alt text and metadata on every pa
 
 **Payments.** Two rails are wired and stay off until you configure them:
 
-- **Crypto links.** [`/api/pay/link`](site/src/pages/api/pay/link.ts) returns a payment link and QR from pay.one.ie, with your own addresses as the destination. Nobody holds the funds in between. It works without `ONE_API_KEY`.
+- **Crypto links.** [`/api/pay/link`](site/src/pages/api/pay/link.ts) returns a payment link and QR from pay.one.ie, with your own addresses as the destination (Sui, and one EVM address offered on both Base and Ethereum). Nobody holds the funds in between. It works without `ONE_API_KEY`.
 - **Cards.** Real Stripe Elements. [`/api/pay/create-intent`](site/src/pages/api/pay/create-intent.ts) uses the Stripe SDK, and [`/api/pay/webhook`](site/src/pages/api/pay/webhook.ts) verifies every event's signature before it trusts a byte. Without `STRIPE_SECRET_KEY`, the API returns 503 and `/payments` shows an honest preview. Card numbers never reach your worker.
 
 Prices are always resolved on the server from the catalog in `site/src/content/products/`, never from the request body. A buyer can't set their own price.
+
+**A shop on its own.** [`shop/`](shop/README.md) is the same two rails in about a dozen files, with no database and no auth: `npx oneie create shop my-shop`. Copy its `src/lib/pay.ts` into any Astro site you already have.
 
 ---
 
