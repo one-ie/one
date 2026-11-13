@@ -1,0 +1,38 @@
+---
+import config from '../../one.config'
+import MadeWithOne from '../components/MadeWithOne.astro'
+interface Props { title?: string }
+const { title = config.name } = Astro.props
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header><a href="/" class="brand">{config.name}</a></header>
+    <main><slot /></main>
+    <footer><MadeWithOne /></footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #fafaf9; --fg: #1c1917; --muted: #78716c; --card: #ffffff;
+    --line: #e7e5e4; --accent: #1c1917; --accent-fg: #fafaf9;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0c0a09; --fg: #f5f5f4; --muted: #a8a29e; --card: #1c1917; --line: #292524; --accent: #f5f5f4; --accent-fg: #0c0a09; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+  header, main, footer { max-width: 44rem; margin: 0 auto; padding: 1rem; }
+  footer { padding-bottom: 2rem; }
+  .brand { color: inherit; font-weight: 600; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border-radius: 0.5rem; padding: 0.55rem 1rem; border: 1px solid var(--line); background: var(--card); color: var(--fg); }
+  button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+</style>

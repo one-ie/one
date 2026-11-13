@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getEnv } from '../../../lib/cf-env'
 import { readSelfHostedWallet } from '../../../lib/chain-balances'
+import { linkRequest, merchantSlugFor } from '../../../lib/pay-link'
 import { resolvePlan } from '../../../lib/plan-pricing'
 import { resolveProduct } from '../../../lib/product-pricing'
 
@@ -23,12 +24,9 @@ async function payProtocol(payUrl: string, protocol: string, data: Record<string
   return body.data ?? {}
 }
 
-const CHAIN_TO_PAY: Record<string, string> = { sui: 'SUI', evm: 'ETH', sol: 'SOL', btc: 'BTC' }
-
 export const POST: APIRoute = async ({ request }) => {
   const env = await getEnv()
   const payUrl = (env.PAY_URL as string | undefined) ?? 'https://pay.one.ie'
-  const merchantSlug = (env.AGENCY_WSID as string | undefined) ?? 'one-site'
 
   let body: { amountCents?: number; product?: string; planId?: string; productId?: string }
   try {
@@ -66,38 +64,30 @@ export const POST: APIRoute = async ({ request }) => {
   // funds land directly in the addresses /wallet displays. No ONE_API_KEY
   // needed: this never touches the substrate, only pay.one.ie.
   const wallet = readSelfHostedWallet(env)
-  const treasuries: Record<string, string> = {}
-  for (const [chain, address] of Object.entries(wallet)) {
-    const payChain = CHAIN_TO_PAY[chain]
-    if (payChain && address) treasuries[payChain] = address
-  }
-  if (Object.keys(treasuries).length === 0) {
-    return Response.json(
-      { error: 'No wallet configured — run `one wallet keygen` and add the addresses to .dev.vars (see .dev.vars.example).' },
-      { status: 409 },
-    )
-  }
+  const merchantSlug = merchantSlugFor(env.AGENCY_WSID as string | undefined, wallet)
 
   // Connected mode: `one onboard` writes ONE_API_KEY + AGENCY_WSID to .dev.vars.
   // When present, opt this link into the webhook that one.ie's crypto-webhook.ts
-  // already verifies (shared PAY_WEBHOOK_SECRET/WEBHOOK_SECRET) — a claimed
-  // payment then lands as a settlement + signal in the workspace, no credits
-  // granted, no custody change. Both fields stay undefined (dropped by
-  // JSON.stringify) when ONE_API_KEY is absent, so the request body sent to
-  // pay.one.ie is byte-identical to standalone mode.
+  // verifies, so the workspace hears of a claim (no credits granted, no custody
+  // change). Standalone mode sends neither, so the link is exactly the one it
+  // always was.
   const oneApiKey = env.ONE_API_KEY as string | undefined
-  const webhook = oneApiKey
-    ? `${(env.ONE_API_URL as string | undefined) ?? 'https://one.ie'}/api/pay/crypto-webhook`
-    : undefined
-  const meta = oneApiKey ? { workspace: merchantSlug, ppid: catalogProduct?.slug } : undefined
+  const req = linkRequest({
+    wallet, amountCents: amount, product, merchantSlug,
+    webhook: oneApiKey ? `${(env.ONE_API_URL as string | undefined) ?? 'https://one.ie'}/api/pay/crypto-webhook` : undefined,
+    metadata: oneApiKey ? { workspace: merchantSlug, product: catalogProduct?.slug } : undefined,
+  })
+  if (!req.ok) {
+    return Response.json(
+      req.error === 'no_wallet'
+        ? { error: 'No wallet configured — run `one wallet keygen` and add the addresses to .dev.vars (see .dev.vars.example).' }
+        : { error: 'amountCents must be > 0' },
+      { status: req.error === 'no_wallet' ? 409 : 400 },
+    )
+  }
 
   try {
-    const created = await payProtocol(payUrl, 'payment_link_create', {
-      amount, unit: 'usd', product, merchantSlug,
-      chains: Object.keys(treasuries),
-      treasuries,
-      webhook, meta,
-    })
+    const created = await payProtocol(payUrl, req.body.protocol, req.body.data)
     return Response.json({ url: created.url, qr: created.qr })
   } catch (err) {
     return Response.json({ error: err instanceof Error ? err.message : String(err) }, { status: 502 })
