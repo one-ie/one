@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Redeploys the ONE team's own reference instance (https://template.one.ie).
+# Redeploys the ONE team's own reference instance (https://open.one.ie;
+# template.one.ie and demo.one.ie 301 their page paths to it).
 #
 # wrangler's Cloudflare-adapter build injects `main` into whatever file is
 # literally named wrangler.toml — `wrangler deploy --config <other-file>`
@@ -24,4 +25,6 @@ restore() { cp "$BACKUP" "$TRACKED"; rm -f "$BACKUP"; }
 trap restore EXIT
 
 cp "$REAL" "$TRACKED"
-astro build && wrangler deploy
+# SITE_REPO: the repo whose live star count the front page shows. Set here,
+# for ONE's own instance only — a clone's seo-site.ts repo stays empty.
+astro build && wrangler deploy --var SITE_REPO:one-ie/one

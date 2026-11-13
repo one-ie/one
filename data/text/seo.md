@@ -1,7 +1,7 @@
 ---
 title: Technical SEO Playbook — business node (ONE template)
-audience: Tony (one.ie / Vespio template optimisation)
-source: OO field manual — distilled from 10+ live client Astro builds, cutovers, and recovery work — merged with the repo-specific implementation plan for this template
+audience: anyone shipping a site from this template
+source: a field manual — distilled from 10+ live client Astro builds, cutovers, and recovery work — merged with the repo-specific implementation plan for this template
 date: 2026-07-10
 version: 3.1
 status: shareable (client data scrubbed) · §0 is execution-ready — parallel work packages with exclusive file ownership
@@ -9,7 +9,7 @@ status: shareable (client data scrubbed) · §0 is execution-ready — parallel 
 
 # Technical SEO Playbook — business node
 
-Everything in sections 1–11 and the appendix is scar tissue from real builds, not theory — the OO field manual, distilled from 10+ live client Astro builds, cutovers, and recovery work, including one recovery where a migration shipped with redirects drafted but never deployed and the client lost more than half their inbound call volume for 3 weeks before anyone noticed. Technical SEO failures are silent. **The point of this doc: a template with perfect technical SEO baked in, so every site instance forked from this repo starts perfect by default.**
+Everything in sections 1–11 and the appendix is scar tissue from real builds, not theory — a field manual distilled from 10+ live client Astro builds, cutovers, and recovery work, including one recovery where a migration shipped with redirects drafted but never deployed and the client lost more than half their inbound call volume for 3 weeks before anyone noticed. Technical SEO failures are silent. **The point of this doc: a template with perfect technical SEO baked in, so every site instance forked from this repo starts perfect by default.**
 
 Section 0 is repo-specific and execution-ready: it maps the playbook's plumbing requirements (§1) onto this actual codebase, names the mechanism — [`@jdevalk/astro-seo-graph`](https://github.com/jdevalk/seo-graph/tree/main/packages/astro-seo-graph) — that implements most of them, and breaks the work into packages (WP-0…WP-8) designed to be dispatched to multiple agents in parallel: exclusive file ownership per package, frozen interface contracts so no package waits on another's implementation, and per-package acceptance criteria phrased as runnable checks. Every other section is the general standard the packages implement; wherever it intersects something concrete in this repo, a **Repo:** note says so. Sections 1–11 are the spec agents cite; §0 is the dispatch sheet.
 
@@ -463,4 +463,4 @@ Different discipline from launching a fresh instance. Only relevant when a templ
 
 ---
 
-*Compiled from the OO field manual: 10+ production Astro builds, multiple WP-to-Astro cutovers on ranking sites, and the recovery work when things went wrong — merged with the `astro-seo-graph` implementation plan for this repo. Questions to Donal (playbook) or Tony (this repo's implementation).*
+*Compiled from a field manual: 10+ production Astro builds, multiple WP-to-Astro cutovers on ranking sites, and the recovery work when things went wrong — merged with the `astro-seo-graph` implementation plan for this repo.*

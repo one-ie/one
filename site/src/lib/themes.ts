@@ -210,7 +210,7 @@ export const THEMES: ThemeDef[] = [
     nav: true,
   },
   {
-    // Sampled from a moving-company client mockup (elitemoversca.com):
+    // Sampled from a moving-company site mockup:
     // near-black header with serif wordmark, cream/beige page, white card,
     // silver-grey label ink. Warm near-neutral hue (36°) throughout instead
     // of a true grayscale — reads as brushed graphite/bronze, not cool
