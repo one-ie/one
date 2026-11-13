@@ -624,7 +624,7 @@ Contributions are welcome. Open an issue or a PR at [github.com/one-ie/one](http
 
 Open source under [the ONE License v1.0](LICENSE). You can use it, modify it, distribute it, run it as a service and build products on it. It's compatible with MIT, Apache, GPL, BSD and MPL.
 
-**One obligation:** keep the ONE brand, logo and link in your deployed product. Because of that condition, the ONE License is not an OSI-approved licence. One folder is different: `shop/`, the starter behind `npx oneie create shop`, is MIT (its own `shop/LICENSE`), so its badge can come off. For white-label work, see the [Enterprise License](LICENSE-ENTERPRISE.md). The licence is short enough to read in two minutes, so read it before you rely on it.
+**One obligation:** keep the ONE brand, logo and link in your deployed product. Because of that condition, the ONE License is not an OSI-approved licence. `shop/`, the starter behind `npx oneie create shop`, is under the same licence: its "Made with ONE" line is the link to keep. For white-label work, see the [Enterprise License](LICENSE-ENTERPRISE.md). The licence is short enough to read in two minutes, so read it before you rely on it.
 
 <br>
 

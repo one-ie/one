@@ -4,7 +4,7 @@
   "description": "A shop that takes card and USDC into your own accounts. Made with ONE.",
   "type": "module",
   "private": true,
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
