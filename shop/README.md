@@ -5,8 +5,8 @@
 This is a small Astro shop that takes card and USDC payments into accounts only
 you control. Your key is made on your own machine. Buyers pay straight to your
 own addresses. Card sales land in your own Stripe account, and nothing in this
-code adds a platform fee (Stripe takes its own fee). Nobody, ONE included, can
-move your money but you.
+code adds a platform fee (Stripe takes its own fee). ONE never holds your
+money.
 
 It is free and open source. It asks for nothing, not even an email.
 
@@ -50,10 +50,10 @@ goes in `one.config.ts` and never into git.
 
 ## How the money moves
 
-| | Where it goes | Who can move it |
+| | Where it goes | Who holds it |
 |---|---|---|
-| USDC on Sui, Base or Ethereum (and Solana once pay.one.ie offers it) | your own address, from `one.config.ts` | only your key |
-| Card | your own Stripe account | only you |
+| USDC on Sui, Base or Ethereum | your own address, from `one.config.ts` | your key alone |
+| Card | your own Stripe account | your Stripe account, never ONE |
 
 Crypto links are minted by [pay.one.ie](https://pay.one.ie), which signs the
 link and stores nothing. The buyer pays USDC (or the chain's own coin) to your
@@ -65,8 +65,10 @@ address; pay.one.ie never holds it.
 and their prices (in cents), and two switches:
 
 - `card: true` shows "Pay by card" once `STRIPE_SECRET_KEY` is set
-- `badge: true` shows a small "Made with ONE — get your free key" line. It is
-  how the next person finds this. Set it to `false` to remove it; it is yours.
+- `badge: true` shows a small "Made with ONE — get your free key" line that
+  links to one.ie. It is how the next person finds this, and it is the one thing
+  the ONE License asks of you: keep it. To white-label (`badge: false`), take the
+  ONE Enterprise License.
 
 The price a buyer pays is always read from this file, on the server. A buyer
 can never set their own price.
@@ -104,4 +106,5 @@ Add one line to [SHOWCASE.md](SHOWCASE.md) with a pull request.
 
 ## License
 
-MIT. Fork it, change it, remove the badge, sell with it.
+Free under the [ONE License](LICENSE): use it, change it, sell with it, run it
+for clients. Keep the ONE link. To white-label, take the ONE Enterprise License.

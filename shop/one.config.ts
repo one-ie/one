@@ -13,10 +13,10 @@ export default {
   slug: 'my-shop',
 
   // Your receiving addresses: from `npx oneie wallet open`. Buyers pay these
-  // directly. Nobody, ONE included, can move money out of them but you.
+  // directly. Only your key can move money out of them; ONE never holds it.
   //   sui -> USDC or SUI on Sui
   //   evm -> USDC or ETH on Base and Ethereum (one address, both chains)
-  //   sol -> USDC or SOL on Solana (offered once pay.one.ie advertises Solana)
+  //   sol -> kept for later; not offered to buyers yet
   wallet: {
     sui: '',
     evm: '',
@@ -34,7 +34,8 @@ export default {
   card: true,
 
   // A small "Made with ONE — get your free key" line in the footer and on
-  // checkout. It is how the next person finds the gift. Set false to remove it.
+  // checkout, linking to one.ie. The ONE License asks you to keep it; set false
+  // only under the ONE Enterprise License (white-label).
   badge: true,
 
   // Who showed you ONE (their shop's slug), signed into your shop's attestation
