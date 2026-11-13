@@ -44,11 +44,13 @@ Your workspace slug is the `slug` in `workspace.toml`. Your Claude Code actor id
 
 ```
 <node>/
-├── ai/              knows  →  agents · skills · tools · workflows · context.md
-├── data/            grows  →  types · content · lifecycles
-├── site/            shows  →  Astro + shadcn + ONE plugins (one.config.ts)
-├── packages/         paid, zero-bundle plugin stubs (see below)
-└── workspace.toml   who it is
+├── ai/            knows → agents · skills · tools ·
+│                         workflows · context.md
+├── data/          grows → types · lifecycles · text
+├── site/          shows → Astro + shadcn + plugins
+├── packages/      local plugin workspaces
+├── text/          promises + plans
+└── workspace.toml who it is
 ```
 
 ## What you edit
@@ -64,8 +66,8 @@ Your workspace slug is the `slug` in `workspace.toml`. Your Claude Code actor id
 | `data/types/*.toml` | Custom entity types pushed via `world:declare-types` |
 | `data/lifecycles/*.toml` | Lifecycle definitions — `one push` parses the TOML's `id`/`label`/`stages` directly and calls `lifecycle:save`; stages need a manual move (drag a card, an `entity:tag` call) — `enter_when` auto-advance isn't wired for this path yet. Copy `_example.toml` (mirrors ONE's own agent-onboarding funnel) to start |
 | `site/` | Astro starter — shadcn, React 19, Cloudflare Workers, pre-wired to ONE. No `ONE_API_KEY` yet? The site still runs — Better Auth + D1 handle sessions standalone (`site/src/lib/auth.ts`), no backend connection required to develop the UI |
-| `packages/` | Paid, zero-bundle plugin stubs (`admin`, `course`, `dashboard`, `shop`) — each calls `premium({ plugin: name })` (`@oneie/plugin-premium`) to load its real UI from `one.ie/x/<plugin>.js` at runtime, gated by an entitlement claim. Nothing ships to your repo until the entitlement is bought (`one plugin buy <name>`) |
-| `site/one.config.ts` | Brand tokens + backend key — the only file you need to edit in `site/` |
+| `packages/` | Local plugin workspaces. Free + editable: `plugin-newsletter`, `plugin-pages`. Zero-bundle paid stubs: `plugin-admin`, `plugin-course`, `plugin-dashboard`, `plugin-shop` — each declares `serves: one.ie/x/<name>.js` + an `entitlement` claim (`plugin-admin` does it via `premium({ plugin })` from `plugin-premium`; the others declare both fields inline). No paid UI source ships to your repo until the entitlement is bought — `one plugin list`, then `one plugin buy <name>` with the **bare** name (`shop`, `dashboard`, `admin`, `course`, `premium`), not the folder name |
+| `site/one.config.ts` | Brand tokens + which plugins mount — with `site/src/lib/chat-config.ts` (your workspace slug), the only two files you need to edit in `site/`. See § Site for why they stay separate |
 
 ## The commands
 
@@ -100,40 +102,39 @@ one recall | reputation        # coordinate — cross-session memory; standing
 | Half | Is | Use it to |
 |---|---|---|
 | **`one` — the reach** | `@oneie/cli` — every command is one typed SDK call | *act on the world* — push, hire, earn, recall |
-| **`/do` — the build** | `@oneie/claude` harness (devDependency) | *improve the thing acting* — author agents, skills, code; gated by rubric ≥ 0.65 |
+| **`/do` — the build** | `@oneie/claude` harness — **not installed here; add it with `bun add -d @oneie/claude`** | *improve the thing acting* — author agents, skills, code; gated by rubric ≥ 0.65 |
 
 `one` is how an agent acts; `/do` is how it gets better. Neither invents substrate — `one` only calls existing receivers, `/do` only writes files here.
 
 ## `/do` in this repo
 
-`/do "<idea>"` walks the artifact spine — AIM → PROMISE → SURVEY → DESIGN → PLAN → BUILD → TEST → VERIFY → PROVE → TEACH → SHIP → LEARN. Rubric ≥ 0.65 gates every cycle.
+Once `@oneie/claude` is installed, `/do "<idea>"` walks the artifact spine — AIM → PROMISE → SURVEY → DESIGN → PLAN → BUILD → TEST → VERIFY → PROVE → TEACH → SHIP → LEARN. Rubric ≥ 0.65 gates every cycle. Here the spine ends at `one push --dry-run` (PROVE).
 
-In this repo the spine ends at `one push --dry-run` (PROVE).
+Without it, `.claude/` ships only `/create`, `/deploy`, the four skills (`astro` · `react19` · `sdk` · `shadcn`), and two blocking design hooks.
 
 ## Site
 
-`site/` is the ONE Astro starter ([github.com/one-ie/one](https://github.com/one-ie/one)). The only file you edit is `site/one.config.ts`:
+`site/` is the ONE Astro starter ([github.com/one-ie/one](https://github.com/one-ie/one)). Two files control it:
 
 ```ts
+// site/one.config.ts — brand + which plugins mount
 import { defineOne } from '@oneie/frontend'
 
 export default defineOne({
   backend: { baseUrl: 'https://one.ie' },
   brand: {
     tokens: {
-      primary: '#your-brand',
-      // ... 5 more tokens
+      primary: 'hsl(216 55% 25%)',
+      // ... 5 more: secondary, tertiary, background, foreground, font
     },
   },
-  plugins: [
-    auth(),
-    track({ ws: 'your-slug' }),
-    chat({ agent: 'your-agent' }),
-  ],
+  plugins: [auth(), backend(), chat(chatConfig), track({ ws })],
 })
 ```
 
-6 tokens rebrand the entire site. Plugins are served from `one.ie` — zero bundle cost.
+6 tokens rebrand the entire site. Tokens are **space-separated HSL, never hex** — `hook:design-check` blocks hex literals and raw `hsl()`/`rgb()` calls in `src/**/*.{tsx,astro,css}` (`Layout.astro`, the token source, is allowlisted). A plugin mounts only if it is both installed (`bun add @oneie/plugin-x`) and listed in `plugins:` — `ONE_API_KEY` alone mounts nothing. Paid plugins are served from `one.ie/x/` — zero bundle cost.
+
+`site/src/lib/chat-config.ts` holds your workspace slug (`const ws = '…'`) and is the second file to edit. It exists as its own side-effect-free module on purpose: `Layout.astro` needs the slug on prerendered pages, and importing `one.config.ts` there runs the whole plugin graph during Cloudflare's prerender pass and breaks `astro build`. Don't merge the two.
 
 ## What you cannot do from here
 

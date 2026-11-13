@@ -5,7 +5,7 @@ This is an Astro 7 + React 19 + Tailwind 4 site wired to the ONE backend.
 ## Architecture
 
 ```
-apps/web/
+site/
 ├── one.config.ts     — the single control surface (defineOne, plugins)
 ├── src/
 │   ├── layouts/      — Layout.astro (3-slot: head/default/footer)
@@ -40,6 +40,8 @@ See `.claude/rules/design.md` for the full rule set.
 
 Chat, tracking, auth, and data all go through `one.config.ts`. The moat (chat/tracking source) is served from one.ie — never copy it into this repo.
 
+**Payments run on mainnet** since 2026-11-12: crypto settles on real networks, so test with small amounts. Card checkout runs on your own Stripe keys (use a test-mode key while you build). Read the network live: `curl -s https://pay.one.ie/status` → `"network"`. A seller's card money goes to the seller's own Stripe; ONE never holds it.
+
 ## Hard rules (the design-check hook enforces #2)
 
 1. **Never import `@oneie/sdk` directly in an API route** — use `oneClient()` from `@oneie/plugin-backend` (lazy-imports the SDK; the bare barrel crashes CF Workers at init).
@@ -58,6 +60,6 @@ Chat, tracking, auth, and data all go through `one.config.ts`. The moat (chat/tr
 ## See also
 
 - [ONE docs](https://one.ie/docs)
-- [Frontend reference](https://one.ie/docs/frontend-reference)
+- [Agent front door](https://one.ie/llms.txt) — keys, test money, x402 credits, error names
 - `.claude/skills/` — domain skills for astro, react19, shadcn, sdk
 - `.claude/commands/` — `/deploy`, `/create`

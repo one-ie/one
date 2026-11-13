@@ -12,11 +12,13 @@
  */
 
 import type { APIRoute } from "astro";
-import { auth } from "@/lib/auth";
+import { authNotConfigured, getAuth } from "@/lib/auth";
 
 const SESSION_COOKIE_RE = /^(?:__Secure-)?better-auth\.session_token=/;
 
 export const ALL: APIRoute = async ({ request }) => {
+	const auth = await getAuth();
+	if (!auth) return authNotConfigured();
 	const res = await auth.handler(request);
 	const setCookies = res.headers.getSetCookie?.() ?? [];
 	if (setCookies.some((c) => SESSION_COOKIE_RE.test(c))) {

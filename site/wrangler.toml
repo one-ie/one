@@ -15,3 +15,5 @@ id = "change-me"
 binding = "DB"
 database_name = "web"
 database_id = "change-me"
+# Better Auth's tables (sign-in sessions live here): wrangler d1 migrations apply web --local|--remote
+migrations_dir = "migrations"
