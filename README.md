@@ -109,6 +109,8 @@ cd site && bun run dev         # → http://localhost:4321
 **3. Ship it.** It goes to your domain on your Cloudflare account, with no platform in between.
 
 ```bash
+cd site && wrangler d1 migrations apply web --remote   # sign-in tables (D1), once before the first deploy
+cd site && wrangler secret put BETTER_AUTH_SECRET      # signs sessions; sign-in answers 503 until set
 cd site && bun run deploy      # astro build && wrangler deploy
 ```
 
@@ -467,7 +469,7 @@ Each plugin is a package and a line in `one.config.ts`. Most are on npm, so you 
 
 ## The ONE toolkit
 
-This repo is the open source part of ONE. The packages below are the ones the ONE platform ships, and `site/` depends on the current releases of the CLI and SDK.
+This repo is the open source part of ONE. The packages below are the ones the ONE platform ships, and `site/` depends on the current releases of the CLI and SDK. Their source is not in this repo: npm carries them as built code, under the same ONE License.
 
 | Package | What it does | |
 |---|---|---|
@@ -592,6 +594,8 @@ bun install                     # install all workspaces
 cd site && bun run dev          # dev server, no backend needed → :4321
 cd site && bun run typecheck    # astro check
 cd site && bun run build        # production build
+cd site && wrangler d1 migrations apply web --remote   # sign-in tables, before the first deploy
+cd site && wrangler secret put BETTER_AUTH_SECRET      # sign-in answers 503 until set
 cd site && bun run deploy       # astro build && wrangler deploy
 bun run check:claims            # the claims gate, see below
 ```
@@ -616,7 +620,7 @@ Contributions are welcome. Open an issue or a PR at [github.com/one-ie/one](http
 
 Open source under [the ONE License v1.0](LICENSE). You can use it, modify it, distribute it, run it as a service and build products on it. It's compatible with MIT, Apache, GPL, BSD and MPL.
 
-**One obligation:** keep the ONE brand, logo and link in your deployed product. For white-label work, see the [Enterprise License](LICENSE-ENTERPRISE.md). The licence is short enough to read in two minutes, so read it before you rely on it.
+**One obligation:** keep the ONE brand, logo and link in your deployed product. Because of that condition, the ONE License is not an OSI-approved licence. For white-label work, see the [Enterprise License](LICENSE-ENTERPRISE.md). The licence is short enough to read in two minutes, so read it before you rely on it.
 
 <br>
 

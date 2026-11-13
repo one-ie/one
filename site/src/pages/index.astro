@@ -13,11 +13,12 @@ import QuoteDemo from '../components/blocks/demos/QuoteDemo.astro'
 import PaymentLinkGenerator from '../components/payments/PaymentLinkGenerator'
 import PhysicalCardCheckout from '../components/payments/PhysicalCardCheckout'
 import CardCheckoutPreview from '../components/payments/CardCheckoutPreview'
-import Button from '../components/blocks/Button.astro'
 import Card from '../components/blocks/Card.astro'
 import Pattern from '../components/blocks/Pattern.astro'
 import Footer from '../components/blocks/Footer.astro'
-import { getEnv } from '../lib/cf-env'
+import { getEnv, getCfCtx } from '../lib/cf-env'
+import { SITE } from '../lib/seo-site'
+import { edgeCache, normalizeRepo, readStars, starsNote } from '../lib/github-stars'
 
 // ── Real proof only ───────────────────────────────────────────────────────
 // This is a promise page: every number below is measured or verifiable, not
@@ -53,38 +54,150 @@ const stripePublishableKey =
   (env.PUBLIC_STRIPE_PUBLISHABLE_KEY as string | undefined) ??
   (env.STRIPE_PUBLIC_KEY as string | undefined)
 const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
+
+// ── Open source, live ─────────────────────────────────────────────────────
+// The repo whose stars are shown comes from site config (SITE.repo, or the
+// SITE_REPO var). Unset in a fresh clone, so it shows no count — never ONE's.
+// The count is read at the edge and cached (lib/github-stars.ts); the page
+// says how old it is.
+const repo = normalizeRepo(env.SITE_REPO || SITE.repo)
+const repoUrl = repo ? `https://github.com/${repo}` : ''
+const zipUrl = repo ? `${repoUrl}/archive/refs/heads/main.zip` : ''
+const cfCtx = await getCfCtx()
+const now = Date.now()
+const stars = await readStars(repo, {
+  cache: edgeCache(),
+  fetch: globalThis.fetch.bind(globalThis),
+  now: () => now,
+  waitUntil: cfCtx ? (p) => cfCtx.waitUntil(p) : undefined,
+  token: env.GITHUB_TOKEN || undefined,
+})
+const starsLine = stars ? starsNote(stars, now) : ''
+
+const CREATE = 'npx oneie create my-app'
+const cloneSteps = `git clone ${repoUrl} my-app\ncd my-app && bun install\ncd site && bun run dev`
+// The same three commands a person types, in the order an agent can run them
+// unattended. `oneie init` writes the key to ~/.config/one/key and @oneie/mcp
+// reads that file, so step 3 needs no key pasted.
+const agentSteps = `npx oneie create my-app
+npx oneie init
+claude mcp add oneie -- npx -y @oneie/mcp`
+
+// npm figures are the @oneie packages every clone runs on, ALL-TIME, measured
+// 2026-10-08 (ONE's own npm download counter). Never hand-edit one
+// alone; re-measure and change them together.
+const NPM_ORG = 'https://www.npmjs.com/org/oneie'
+const chips: Array<{ value: string; label: string; href?: string; gold?: boolean }> = [
+  ...(stars
+    ? [
+        { value: stars.stars.toLocaleString('en-US'), label: 'GitHub stars', href: `${repoUrl}/stargazers`, gold: true },
+        { value: stars.forks.toLocaleString('en-US'), label: 'forks', href: `${repoUrl}/forks`, gold: true },
+      ]
+    : []),
+  { value: '75,248', label: '@oneie npm downloads, all time', href: NPM_ORG },
+  { value: '31', label: '@oneie packages', href: NPM_ORG },
+]
+
+// The five words. Keys are made on one.ie or offline with `one wallet keygen`;
+// the other four run on this site.
+const pillars = [
+  {
+    word: 'Keys',
+    line: 'One key, made in your browser or offline, for Sui, Ethereum, Solana, Bitcoin and ASI.',
+    proof: 'The secret never leaves your device. Nobody can hold it, freeze it or lose it, and nobody can get it back for you either.',
+    href: 'https://one.ie/key',
+    cta: 'Make a key',
+  },
+  {
+    word: 'Wallets',
+    line: 'Wallets on standard derivation paths, read live over public RPC.',
+    proof: 'Any wallet can open them, and @oneie/recover restores them offline. No backend needed.',
+    href: '/wallet',
+    cta: 'Open the wallet',
+  },
+  {
+    word: 'Products',
+    line: 'A shop, product pages, a cart and checkout.',
+    proof: 'Your catalog is files in your own repository. Add a product by adding a file, and it is for sale on the next deploy.',
+    href: '/products/',
+    cta: 'See the shop',
+  },
+  {
+    word: 'Payments',
+    line: 'Signed crypto payment links, and a card rail on your own Stripe account.',
+    proof: 'Nobody holds the money in between. Moving money costs gas, and the sponsored path adds 1%. Cards go live when you add your Stripe keys.',
+    href: '/payments',
+    cta: 'Watch a payment clear',
+  },
+  {
+    word: 'Sovereign',
+    line: 'It runs on your own Cloudflare account, with no ONE account and no API key.',
+    proof: 'Your key and the code leave with you. Self-hosted, your data is in your own database.',
+    href: '/docs/',
+    cta: 'Read the docs',
+  },
+]
+
+const GITHUB_MARK =
+  'M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'
+const STAR =
+  'M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z'
 ---
 
 <Layout
-  title="ONE — design beautiful websites with perfect Lighthouse scores"
-  description="Open-source Astro 7 + React 19 starter with a production design system, motion library, and payment stack. 14 themes, and 100 for Accessibility, Best Practices and SEO with 99 Performance, measured against this repo's own build."
+  title={`${SITE.name} — the open-source template for AI agents`}
+  description="Keys, wallets, products and payments on your own Cloudflare account. Free and open source: clone it, deploy it, keep the brand and it is yours to sell."
 >
 
-  <!-- ── Hero — the promise, proven in place ───────────────────────── -->
+  <!-- ── Hero — open source, proven in place: live stars, then install ─ -->
   <section class="hero">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <div class="hr hr-0"><div class="badge"><span class="badge-dot"></span>Astro 7 + React 19</div></div>
+        <div class="hr hr-0">
+          {repo ? (
+            <a class="star-pill" href={`${repoUrl}/stargazers`} target="_blank" rel="noopener noreferrer">
+              <span class="star-pill-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={GITHUB_MARK} /></svg>
+                Star {repo} on GitHub
+              </span>
+              {stars && (
+                <span class="star-pill-count">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={STAR} /></svg>
+                  {stars.stars.toLocaleString('en-US')}
+                </span>
+              )}
+            </a>
+          ) : (
+            <div class="badge"><span class="badge-dot"></span>Free and open source</div>
+          )}
+        </div>
         <h1 class="hr hr-1 headline">
-          Design beautiful websites{' '}
-          <span class="headline-gradient">with perfect Lighthouse scores.</span>
+          {SITE.name} is{' '}
+          <span class="headline-gradient">open source.</span>
         </h1>
         <div class="hr hr-2">
           <p class="sub">
-            ONE is an open source starter template — clone it and your
-            first build already scores 100 for accessibility, best
-            practices and SEO, with tokens, motion, and payments wired
-            together, no separate integration pass.
+            The template for building and deploying AI agents. Keys, wallets, products
+            and payments, on your own Cloudflare account. Free. Keep the brand, and it
+            is yours to sell.
           </p>
         </div>
-        <div class="hr hr-3">
-          <div class="hero-cta-group">
-            <div class="hero-actions">
-              <Button href="#" variant="primary" size="lg">Get started free <Fragment slot="icon-right">→</Fragment></Button>
-              <Button href="/design" variant="secondary" size="lg">See the design system</Button>
-            </div>
-          </div>
-        </div>
+        <ul class="hr hr-3 proof-chips" aria-label="Proof">
+          {chips.map((c) => {
+            const Tag = c.href ? 'a' : 'span'
+            return (
+              <li>
+                <Tag
+                  class:list={['chip', c.gold && 'chip--gold']}
+                  {...(c.href ? { href: c.href, target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  <strong>{c.value}</strong> {c.label}
+                </Tag>
+              </li>
+            )
+          })}
+        </ul>
+        {stars && <p class="hr hr-3 stars-note" data-stars-source={stars.source}>{starsLine}</p>}
       </div>
 
       <!-- The proof is the hero: real Lighthouse scores, not a mockup. -->
@@ -98,9 +211,66 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
           <LighthouseRings
             client:visible
             scores={DESKTOP_SCORES}
-            caption={`Desktop, this exact page. ${MOBILE_PERF} on throttled Slow 4G.`}
+            caption={`Desktop, measured ${LIGHTHOUSE_DATE} on this site's earlier front page. ${MOBILE_PERF} on throttled Slow 4G.`}
           />
         </div>
+      </div>
+    </div>
+
+    <!-- Install — for a person and for an agent, side by side -->
+    <div class="container install-grid">
+      <article class="install-card">
+        <div class="install-card-head">
+          <h2>Install it</h2>
+          <span>No account, no API key</span>
+        </div>
+        <div class="install">
+          <code class="install-cmd">{CREATE}</code>
+          <button type="button" class="copy-btn" data-copy={CREATE}>Copy</button>
+        </div>
+        {repo && (
+          <div class="install-links">
+            <button type="button" class="install-link" data-copy={cloneSteps}>git clone</button>
+            <a class="install-link" href={zipUrl}>Download .zip</a>
+            <a class="install-link" href={repoUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        )}
+        <p class="install-note">
+          A running site at <code>localhost:4321</code> with a shop, checkout, auth and
+          docs. The only prerequisite is <a href="https://bun.sh" target="_blank" rel="noopener noreferrer">Bun</a>.
+        </p>
+      </article>
+      <article class="install-card" id="agents">
+        <div class="install-card-head">
+          <h2>For your agent</h2>
+          <span>Runs unattended</span>
+        </div>
+        <pre class="agent-steps"><code>{agentSteps}</code></pre>
+        <button type="button" class="copy-btn copy-btn--wide" data-copy={agentSteps}>Copy for your agent</button>
+        <p class="install-note">
+          The site, then a workspace and key with no account, then every ONE tool in
+          Claude Code, Cursor or any MCP client.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── The five words ─────────────────────────────────────────────── -->
+  <section class="section five-words" aria-labelledby="five-words">
+    <div class="container">
+      <Reveal class="section-head" dist="lg">
+        <p class="eyebrow">What you get</p>
+        <h2 id="five-words" class="section-title">Five words, all in the box.</h2>
+      </Reveal>
+      <div class="pillars">
+        {pillars.map((p) => (
+          <a class="pillar" href={p.href}>
+            <h3>{p.word}</h3>
+            <p class="pillar-line">{p.line}</p>
+            <p class="pillar-proof">{p.proof}</p>
+            <span class="card__link">{p.cta} →</span>
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -229,11 +399,11 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
         <h2 class="cta-title">Clone it. Ship it. Measure it yourself.</h2>
         <p class="cta-sub">Free forever. No card required. Your first Lighthouse run is one command away.</p>
         <div class="install install-cta">
-          <code class="install-cmd">npx oneie create node my-app</code>
-          <button class="copy-btn copy-btn-cta" onclick="navigator.clipboard.writeText('npx oneie create node my-app').then(()=>{this.textContent='Copied';setTimeout(()=>this.textContent='Copy',1500)})">Copy</button>
+          <code class="install-cmd">{CREATE}</code>
+          <button type="button" class="copy-btn copy-btn-cta" data-copy={CREATE}>Copy</button>
         </div>
         <div class="hero-actions">
-          <a href="#" class="btn-cta-primary">View on GitHub →</a>
+          {repo && <a href={repoUrl} class="btn-cta-primary">View on GitHub →</a>}
           <a href="/design" class="btn-cta-secondary">See the design system</a>
         </div>
         <p class="cta-risk">Source-available · Free forever · No card required · Every claim on this page is live</p>
@@ -303,6 +473,23 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
   }
   wireNavSpy()
   document.addEventListener('astro:page-load', wireNavSpy)
+
+  // Copy buttons: data-copy holds the text; the label flips to "Copied".
+  function wireCopy() {
+    document.querySelectorAll<HTMLButtonElement>('button[data-copy]').forEach((b) => {
+      if (b.dataset.copyBound) return
+      b.dataset.copyBound = '1'
+      const label = b.textContent ?? 'Copy'
+      b.addEventListener('click', () => {
+        navigator.clipboard.writeText(b.dataset.copy ?? '').then(() => {
+          b.textContent = 'Copied'
+          setTimeout(() => { b.textContent = label }, 1500)
+        })
+      })
+    })
+  }
+  wireCopy()
+  document.addEventListener('astro:page-load', wireCopy)
 </script>
 
 <style>
@@ -433,6 +620,90 @@ const stripeLive = Boolean(stripePublishableKey && env.STRIPE_SECRET_KEY)
 
   .hero-cta-group { display: flex; flex-direction: column; gap: 0.85rem; }
   .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+  /* ── Star pill + proof chips (the download fold) ─────────────────── */
+  .star-pill {
+    display: inline-flex; align-items: stretch; overflow: hidden;
+    border: 1px solid var(--color-border); border-radius: 9999px;
+    background: var(--color-foreground); color: var(--color-font);
+    font-size: 0.85rem; font-weight: 600; text-decoration: none;
+    transition: border-color var(--ease);
+  }
+  .star-pill:hover { border-color: var(--color-tertiary); }
+  .star-pill-label { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.85rem; }
+  .star-pill-count {
+    display: inline-flex; align-items: center; gap: 0.35rem; padding: 0 0.85rem;
+    border-left: 1px solid var(--color-border); font-variant-numeric: tabular-nums;
+    background: color-mix(in oklab, var(--color-tertiary) 12%, transparent);
+  }
+  .star-pill-count svg { color: var(--color-tertiary); }
+  .proof-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; margin: 0; padding: 0; }
+  .chip {
+    display: inline-flex; align-items: baseline; gap: 0.35rem; padding: 0.35rem 0.85rem;
+    border: 1px solid var(--color-border); border-radius: 9999px;
+    background: var(--color-foreground); color: var(--color-muted);
+    font-size: 0.82rem; text-decoration: none; transition: border-color var(--ease);
+  }
+  a.chip:hover { border-color: var(--color-primary); }
+  .chip strong { color: var(--color-font); font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+  .chip--gold strong { color: var(--color-tertiary); }
+  .stars-note { margin: -0.75rem 0 0; font-size: 0.75rem; color: var(--color-muted); }
+
+  /* ── Install cards ──────────────────────────────────────────────── */
+  .hero .install-grid {
+    max-width: 78rem; position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  @media (max-width: 900px) { .hero .install-grid { grid-template-columns: 1fr; } }
+  .install-card {
+    display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem;
+    border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+    background: var(--color-background); box-shadow: var(--shadow-card);
+    scroll-margin-top: calc(var(--nav-total-h) + 16px);
+  }
+  .install-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+  .install-card-head h2 { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; color: var(--color-font); }
+  .install-card-head span { font-size: 0.75rem; color: var(--color-muted); }
+  .install-card .install { display: flex; margin: 0; }
+  .install-card .install-cmd { flex: 1; }
+  .install-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .install-link {
+    display: inline-flex; align-items: center; justify-content: center; padding: 0.6rem 0.5rem;
+    border: 1px solid var(--color-primary); border-radius: var(--radius-md); background: transparent;
+    color: var(--color-font); font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer;
+    transition: background var(--ease);
+  }
+  .install-link:hover { background: color-mix(in oklab, var(--color-primary) 10%, transparent); }
+  .install-note { margin: 0; font-size: 0.85rem; line-height: 1.6; color: var(--color-muted); }
+  .install-note a { color: var(--color-primary); }
+  .install-note code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8rem; }
+  .agent-steps {
+    margin: 0; padding: 0.85rem 1.1rem; overflow-x: auto;
+    border: 1px solid var(--color-border); border-radius: var(--radius-md);
+    background: var(--color-foreground); color: var(--color-tertiary);
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.7;
+  }
+  .copy-btn--wide {
+    border: none; border-radius: var(--radius-md); padding: 0.75rem 1rem;
+    background: var(--color-primary); color: var(--color-on-primary); font-size: 0.9rem;
+  }
+  .copy-btn--wide:hover { background: var(--color-primary); color: var(--color-on-primary); filter: brightness(1.1); }
+
+  /* ── The five words ─────────────────────────────────────────────── */
+  .five-words .container { max-width: 78rem; }
+  .pillars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
+  @media (max-width: 1100px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    display: flex; flex-direction: column; gap: 0.75rem; padding: 1.5rem;
+    border: 1px solid var(--color-border); border-radius: var(--radius-lg);
+    background: var(--color-foreground); box-shadow: var(--shadow-card);
+    color: var(--color-font); text-decoration: none; transition: border-color var(--ease);
+  }
+  .pillar:hover { border-color: var(--color-primary); }
+  .pillar h3 { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
+  .pillar-line { margin: 0; font-size: 0.9rem; font-weight: 500; line-height: 1.55; }
+  .pillar-proof { margin: 0; flex: 1; font-size: 0.85rem; line-height: 1.6; color: var(--color-muted); }
 
   /* ── Hero proof — the live Lighthouse card ──────────────────────── */
   .hero-proof { position: relative; }

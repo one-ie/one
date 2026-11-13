@@ -41,7 +41,7 @@ A full sales or service consultation flow: booking confirmation triggers room cr
 
 8. **tool** — `entity:tag`
    - Advances contact lifecycle after a completed session
-   - Input: `{ id: actorId, add: ["lifecycle:sql"], source: "video" }`
+   - Input: `{ id: actorId, add: ["lifecycle:engage"], source: "video" }`
 
 9. **tool** — `world:update-contact`
    - Writes last_contacted timestamp and session note to the contact record
@@ -51,5 +51,5 @@ A full sales or service consultation flow: booking confirmation triggers room cr
 
 - `video:create-session` creates host + guest tracked go-links (analytics from first click)
 - HMS webhook fires `recording.success` → `video:summary` automatically when recording completes
-- Lifecycle advance from mql → sql requires a completed session (step 8); partial sessions advance to mql only (wired in the HMS webhook handler)
+- Lifecycle advance from identify → engage requires a completed session (step 8); partial sessions advance to identify only (wired in the HMS webhook handler)
 - No-show guard: if `human` step times out without `session.close.success`, send a follow-up via `chat:send`
