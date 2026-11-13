@@ -469,7 +469,7 @@ Each plugin is a package and a line in `one.config.ts`. Most are on npm, so you 
 
 ## The ONE toolkit
 
-This repo is the open source part of ONE. The packages below are the ones the ONE platform ships, and `site/` depends on the current releases of the CLI and SDK.
+This repo is the open source part of ONE. The packages below are the ones the ONE platform ships, and `site/` depends on the current releases of the CLI and SDK. Their source is not in this repo: npm carries them as built code, under the same ONE License.
 
 | Package | What it does | |
 |---|---|---|
@@ -620,7 +620,7 @@ Contributions are welcome. Open an issue or a PR at [github.com/one-ie/one](http
 
 Open source under [the ONE License v1.0](LICENSE). You can use it, modify it, distribute it, run it as a service and build products on it. It's compatible with MIT, Apache, GPL, BSD and MPL.
 
-**One obligation:** keep the ONE brand, logo and link in your deployed product. For white-label work, see the [Enterprise License](LICENSE-ENTERPRISE.md). The licence is short enough to read in two minutes, so read it before you rely on it.
+**One obligation:** keep the ONE brand, logo and link in your deployed product. Because of that condition, the ONE License is not an OSI-approved licence. For white-label work, see the [Enterprise License](LICENSE-ENTERPRISE.md). The licence is short enough to read in two minutes, so read it before you rely on it.
 
 <br>
 
