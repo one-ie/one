@@ -53,7 +53,7 @@ export async function getAuth(): Promise<Auth | null> {
     emailAndPassword: {
       enabled: true,
     },
-  })
+  }) as unknown as Auth // the options literal narrows the generic; callers use the base shape
   built = { secret, db, auth }
   return auth
 }
