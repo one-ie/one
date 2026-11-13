@@ -16,9 +16,11 @@ export default {
   // directly. Nobody, ONE included, can move money out of them but you.
   //   sui -> USDC or SUI on Sui
   //   evm -> USDC or ETH on Base and Ethereum (one address, both chains)
+  //   sol -> USDC or SOL on Solana (offered once pay.one.ie advertises Solana)
   wallet: {
     sui: '',
     evm: '',
+    sol: '',
   },
 
   // Prices in cents. The price a buyer pays is always read from here, on the
