@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.dev.vars
+.env*
+# Your key lives here, sealed. It never goes to git and never to Cloudflare.
+.one/

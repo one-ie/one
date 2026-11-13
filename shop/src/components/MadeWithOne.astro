@@ -1,0 +1,15 @@
+---
+// The gift, passed on. Turn it off with `badge: false` in one.config.ts.
+import config from '../../one.config'
+const href = 'https://github.com/one-ie/one/tree/main/shop#readme'
+---
+{config.badge && (
+  <p class="made-with-one">
+    <a href={href} rel="noopener">Made with ONE — get your free key</a>
+  </p>
+)}
+
+<style>
+  .made-with-one { margin: 0; font-size: 0.8rem; color: var(--muted); }
+  .made-with-one a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+</style>

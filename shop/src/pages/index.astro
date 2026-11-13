@@ -1,0 +1,41 @@
+---
+import Shop from '../layouts/Shop.astro'
+import config from '../../one.config'
+import { serverEnv } from '../lib/pay'
+
+export const prerender = false
+
+const env = await serverEnv()
+const cardReady = config.card && Boolean(env.STRIPE_SECRET_KEY)
+const cryptoReady = Boolean(config.wallet.sui || config.wallet.evm || config.wallet.sol)
+const money = (cents: number) => new Intl.NumberFormat('en', { style: 'currency', currency: (config.currency ?? 'usd').toUpperCase() }).format(cents / 100)
+---
+<Shop>
+  <h1>{config.name}</h1>
+  <ul class="products">
+    {config.products.map((p) => (
+      <li>
+        <div>
+          <h2>{p.name}</h2>
+          {p.description && <p>{p.description}</p>}
+          <p class="price">{money(p.price)}</p>
+        </div>
+        <form method="post" action="/api/buy">
+          <input type="hidden" name="product" value={p.slug} />
+          {cardReady && <button class="primary" name="rail" value="card">Pay by card</button>}
+          {cryptoReady && <button name="rail" value="crypto">Pay with USDC</button>}
+        </form>
+      </li>
+    ))}
+  </ul>
+  {!cardReady && !cryptoReady && <p>This shop is not taking payments yet.</p>}
+</Shop>
+
+<style>
+  .products { list-style: none; padding: 0; display: grid; gap: 1rem; }
+  .products li { background: var(--card); border: 1px solid var(--line); border-radius: 0.75rem; padding: 1rem; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: end; }
+  h2 { margin: 0 0 0.25rem; font-size: 1.1rem; }
+  p { margin: 0 0 0.25rem; color: var(--muted); }
+  .price { color: var(--fg); font-weight: 600; }
+  form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+</style>

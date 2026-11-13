@@ -1,0 +1,8 @@
+{
+  // Your shop runs on YOUR Cloudflare account: `npx wrangler login`, then `bun run deploy`.
+  // No database, no KV, nothing to provision. Astro's adapter sets `main` at build time.
+  "name": "my-shop",
+  "compatibility_date": "2025-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "directory": "dist/client", "binding": "ASSETS" }
+}

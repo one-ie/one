@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local card payments. Never commit .dev.vars.
+# In production: npx wrangler secret put STRIPE_SECRET_KEY
+# (or keep it sealed with `npx oneie secrets seal .env` and `npx oneie run -- …`)
+STRIPE_SECRET_KEY=sk_test_your_own_key

@@ -1,0 +1,11 @@
+---
+import Shop from '../layouts/Shop.astro'
+import MadeWithOne from '../components/MadeWithOne.astro'
+export const prerender = false
+---
+<Shop title="Thank you">
+  <h1>Thank you</h1>
+  <p>Your payment went straight to the seller. No one in between holds it.</p>
+  <p><a href="/">Back to the shop</a></p>
+  <MadeWithOne />
+</Shop>
