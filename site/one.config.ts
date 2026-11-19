@@ -15,10 +15,9 @@ import { chatConfig } from './src/lib/chat-config'
 // for why it must not live here.
 const ws = chatConfig.ws
 
-// Chat widget switch — flip to re-enable the @oneie/plugin-chat registration
-// below AND the <OneChat> mount in src/layouts/Layout.astro (both must match;
-// this const only gates the plugin() entry, not the widget component import).
-const CHAT_ENABLED = false
+// The front desk switch is chatConfig.enabled (src/lib/chat-config.ts): it gates
+// both the plugin registration below and the chat.js tag Layout.astro renders.
+// `oneie create site <name> --ws <slug>` turns it on for a client.
 
 // ONE configuration — the single control surface for this site.
 // Two separate switches:
@@ -56,6 +55,6 @@ export default defineOne({
     // re-fetches pages:view so a publish in ONE's editor is live on refresh).
     pages({ ws, injectRoutes: false }),
     track({ ws }),
-    ...(CHAT_ENABLED ? [chat(chatConfig)] : []),
+    ...(chatConfig.enabled ? [chat(chatConfig)] : []),
   ],
 })

@@ -63,13 +63,12 @@ export default defineConfig({
             '/schema.json',
             '/.well-known/api-catalog',
             '/llms.txt',
+            // The front desk's catalogue reads products:list per request (SSR).
+            '/catalogue',
           ].includes(href),
       },
-      llmsTxt: {
-        title: SITE.name,
-        siteUrl: SITE.url,
-        summary: SITE.description,
-      },
+      // llms.txt is src/pages/llms.txt.ts (the catalogue with live prices from
+      // ONE), not the integration's generated file — two would collide.
       // indexNow: intentionally omitted — gated on a rebrand-verified prod
       // deploy, see data/text/seo.md §0 Phase 2, WP-7
     }),

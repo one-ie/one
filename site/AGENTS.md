@@ -40,6 +40,22 @@ See `.claude/rules/design.md` for the full rule set.
 
 Chat, tracking, auth, and data all go through `one.config.ts`. The moat (chat/tracking source) is served from one.ie — never copy it into this repo.
 
+## The front desk
+
+`src/lib/chat-config.ts` is the one switch: `ws` (the workspace chat bills to
+and leads land in), `agent`, `page` (the ONE page `lead:capture` files the form
+under) and `enabled`. `npx oneie create site --ws <slug>` writes all four for a
+client. `src/lib/front-desk.ts` holds the logic, with no imports:
+
+- `Layout.astro` renders the `chat.js` tag from `embedAttrs(chatConfig)`.
+- `/contact` posts to `/api/lead`, which calls `lead:capture` server-side with
+  `ONE_API_KEY` for this site's workspace — never one the form names, never a
+  browser POST to one.ie. It answers 200 only when the lead was filed.
+- `/catalogue` and `/llms.txt` read `products:list`, the same read the front
+  desk quotes from.
+
+Proof: the client-site test upstream, which runs every piece against the real receivers.
+
 **Payments run on mainnet** since 2026-11-12: crypto settles on real networks, so test with small amounts. Card checkout runs on your own Stripe keys (use a test-mode key while you build). Read the network live: `curl -s https://pay.one.ie/status` → `"network"`. A seller's card money goes to the seller's own Stripe; ONE never holds it.
 
 ## Hard rules (the design-check hook enforces #2)

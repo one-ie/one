@@ -1,0 +1,33 @@
+---
+export const prerender = true
+import Layout from '@/layouts/Layout.astro'
+import ContactForm from '@/components/blocks/ContactForm.astro'
+import Footer from '@/components/blocks/Footer.astro'
+import { SITE } from '@/lib/seo-site'
+import { chatConfig } from '@/lib/chat-config'
+
+// The lead form. It posts to this site's /api/lead, which files the lead with
+// ONE's lead:capture into this site's workspace: the visitor lands in the
+// client's CRM tagged lead, and the follow-up path fires from there.
+---
+
+<Layout title={`Contact — ${SITE.name}`} description={`Get in touch with ${SITE.name}. A person or our front desk replies.`}>
+  <section class="contact">
+    <div class="container">
+      <h1>Contact {SITE.name}</h1>
+      <p class="lede">
+        Tell us what you need and how to reach you.
+        {chatConfig.enabled && ' Or open the chat: our front desk answers at any hour.'}
+      </p>
+      <ContactForm action="/api/lead" topics={['A quote', 'A booking', 'A question']} minMessage={2} />
+    </div>
+  </section>
+  <Footer />
+</Layout>
+
+<style>
+  .contact { padding: 6rem 0 4rem; }
+  .container { max-width: 40rem; margin: 0 auto; padding: 0 1.25rem; }
+  h1 { font-size: 2rem; margin: 0 0 0.75rem; color: var(--color-font); }
+  .lede { margin: 0 0 2rem; color: var(--color-muted); }
+</style>

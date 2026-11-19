@@ -35,6 +35,8 @@ interface Props {
   minMessage?: number
   /** Extra classes, appended after the component's own. */
   class?: string
+  /** POST the fields here as JSON (e.g. '/api/lead'). Unset = simulated send, for demos. */
+  action?: string
 }
 
 const {
@@ -43,6 +45,7 @@ const {
   topics = ['General enquiry', 'Sales', 'Support', 'Partnership', 'Press'],
   minMessage = 20,
   class: className,
+  action,
 } = Astro.props
 
 // Per-form id namespace so the component can be rendered more than once.
@@ -54,6 +57,7 @@ const f = id
   class:list={['one-cf', className]}
   novalidate
   data-min-message={minMessage}
+  data-action={action}
   aria-describedby={`${f}-status`}
 >
   <!-- ── Name ──────────────────────────────────────────────────────── -->
@@ -157,6 +161,12 @@ const f = id
     <p class="one-cf__error" id={`${f}-consent-error`} data-error aria-live="polite"></p>
   </div>
 
+  <!-- ── Honeypot — off-screen and out of the tab order; a person never fills it,
+       a form-filling bot does, and /api/lead refuses that post. ─────────── -->
+  <div class="one-cf__hp" aria-hidden="true">
+    <label>Leave this empty <input type="text" name="company_website" tabindex="-1" autocomplete="off" /></label>
+  </div>
+
   <!-- ── Submit ────────────────────────────────────────────────────── -->
   <button class="one-cf__submit" id={`${f}-submit`} type="submit">
     <span class="one-cf__submit-label">{submitLabel}</span>
@@ -169,6 +179,9 @@ const f = id
   <p class="one-cf__status" id={`${f}-status`} role="status" aria-live="polite" data-status hidden>
     <svg class="one-cf__status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
     <span data-status-text>Thanks — your message is on its way. We'll be in touch shortly.</span>
+  </p>
+  <p class="one-cf__error one-cf__fail" role="alert" data-fail hidden>
+    We could not send that just now. Please try again, or use the chat.
   </p>
 </form>
 
@@ -272,6 +285,19 @@ const f = id
     color: var(--color-destructive);
     margin: 0;
     display: none;
+  }
+
+  .one-cf__hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* A failed real send (data-action set) — shown until the next submit. */
+  .one-cf__fail:not([hidden]) {
+    display: block;
   }
 
   /* ── Error state — set on the field wrapper via [data-invalid] ───── */
@@ -520,6 +546,7 @@ const f = id
     const minMessage = Number(form.dataset.minMessage || '0')
     const submit = form.querySelector<HTMLButtonElement>('.one-cf__submit')!
     const status = form.querySelector<HTMLElement>('[data-status]')!
+    const fail = form.querySelector<HTMLElement>('[data-fail]')
     const fields = Array.from(
       form.querySelectorAll<FieldEl>('[data-validate]'),
     )
@@ -581,9 +608,7 @@ const f = id
         return
       }
 
-      // ── Simulate a send — no network. ──────────────────────────────
-      submit.setAttribute('aria-busy', 'true')
-      window.setTimeout(() => {
+      const done = (): void => {
         submit.removeAttribute('aria-busy')
         status.hidden = false
         form.reset()
@@ -594,7 +619,26 @@ const f = id
           wrap?.removeAttribute('data-invalid')
           el.removeAttribute('aria-invalid')
         }
-      }, 1100)
+      }
+      submit.setAttribute('aria-busy', 'true')
+      if (fail) fail.hidden = true
+      const action = form.dataset.action
+      if (!action) {
+        // ── Simulated send (demo) — no network. ──────────────────────
+        window.setTimeout(done, 1100)
+        return
+      }
+      // ── A real send: thanks only when the server filed it. ─────────
+      const body: Record<string, string> = {}
+      new FormData(form).forEach((v, k) => { if (typeof v === 'string') body[k] = v })
+      fetch(action, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+        .then((r) => r.json().then((j: { ok?: boolean }) => (r.ok && j.ok === true)))
+        .catch(() => false)
+        .then((ok) => {
+          if (ok) return done()
+          submit.removeAttribute('aria-busy')
+          if (fail) fail.hidden = false
+        })
     })
   }
 

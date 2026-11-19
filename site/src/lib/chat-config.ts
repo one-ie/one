@@ -1,5 +1,7 @@
-// The chat widget's layout default — single source of truth for both the
-// plugin registration (one.config.ts) and the widget mount (Layout.astro).
+// The front desk's settings — the ONE switch for the chat embed (Layout.astro),
+// the plugin registration (one.config.ts), the lead form (/api/lead) and the
+// newsletter route. `oneie create site <name> --ws <slug>` rewrites the values
+// below for a client; nothing else in the site names the workspace.
 //
 // This lives in its OWN module, separate from one.config.ts, on purpose:
 // one.config.ts's `export default defineOne({...})` runs the full plugin
@@ -12,10 +14,21 @@
 // version did import one.config.ts here and broke `astro build` this way.
 // This module has zero side effects — just a plain object — so it's safe
 // to import from anywhere, including prerendered routes.
-const ws = 'template' // workspace slug — funded via world:create-workspace credit grants
+//
+//   ws      the client's workspace on ONE: chat bills to it, leads land in it
+//   agent   the agent the embed opens (the same default /settings/embed prints)
+//   page    the page in that workspace lead:capture files this site's form under
+//   enabled the front desk on or off — off in the bare template, which is ONE's own
+const ws = 'template'
+const agent = 'ceo'
+const page = 'template-site'
+const enabled = false
 
 export const chatConfig = {
   ws,
+  agent,
+  page,
+  enabled,
   view: 'icon' as const,
   position: 'right' as const,
 }
