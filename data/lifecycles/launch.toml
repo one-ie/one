@@ -1,0 +1,35 @@
+# The launch spine — the path the site's chat (ai/agents/guide.md) walks every
+# visitor along: make my key → add your website → sell my product. One stage per
+# thing the visitor walks away owning, in the visitor's own words.
+#
+# Stages advance by hand (`entity:tag`) — the guide moves the contact when a
+# stage's check passes. `one push` sets enter_when to null for TOML-declared
+# lifecycles, so nothing here auto-advances from events. The compiler fills
+# `slot` + `subSteps` per stage; don't add them here.
+#
+# Stage ids are the bare words the guide tags with. Rename a label freely;
+# renaming an id breaks contacts already standing on it.
+
+id    = "launch"
+label = "Launch"
+
+[[stages]]
+id        = "key"
+label     = "Make my key"
+goal      = "The visitor holds a ONE_API_KEY for their own workspace"
+principle = "One command, no form — `one onboard` mints the key and never mints a second"
+levers    = ["agent:guide"]
+
+[[stages]]
+id        = "website"
+label     = "Add your website"
+goal      = "The visitor's site is live on their own Cloudflare account, wired to their workspace"
+principle = "A deployed URL is the check — a site that only runs on localhost is still on this stage"
+levers    = ["agent:guide"]
+
+[[stages]]
+id        = "sell"
+label     = "Sell my product"
+goal      = "The visitor's site can take money for a product they named, into addresses they own"
+principle = "A payment link that opens is the check — a price is never quoted that the server did not resolve"
+levers    = ["page:/payments"]
