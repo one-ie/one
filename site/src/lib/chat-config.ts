@@ -18,17 +18,25 @@
 //   ws      the client's workspace on ONE: chat bills to it, leads land in it
 //   agent   the agent the embed opens (the same default /settings/embed prints)
 //   page    the page in that workspace lead:capture files this site's form under
-//   enabled the front desk on or off — off in the bare template, which is ONE's own
+//   enabled the front desk on or off
+//   greeting the line the widget shows before the visitor types; '' shows none
+//
+// ONE's own site runs the guide (ai/agents/guide.md, published as
+// template--guide), which walks every visitor along data/lifecycles/launch.toml:
+// make my key → add your website → sell my product. `oneie create site`
+// rewrites ws/agent/page/enabled for a client and clears the greeting.
 const ws = 'template'
-const agent = 'ceo'
+const agent = 'template--guide'
 const page = 'template-site'
-const enabled = false
+const enabled = true
+const greeting = 'Hi! Three steps to selling: make your key, add your website, sell your product. Which one are you on?'
 
 export const chatConfig = {
   ws,
   agent,
   page,
   enabled,
+  greeting,
   view: 'icon' as const,
   position: 'right' as const,
 }
