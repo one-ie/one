@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro'
 import { subscribeToAudience } from '@oneie/plugin-newsletter'
 import { getEnv } from '../../../lib/cf-env'
 import { one } from '../../../lib/one'
+import { chatConfig } from '../../../lib/chat-config'
 
 export const prerender = false
 
@@ -28,7 +29,8 @@ export const POST: APIRoute = async ({ request }) => {
   if (!client) return Response.json({ error: 'backend_not_connected' }, { status: 503 })
 
   const env = await getEnv()
-  const workspace = env.AGENCY_SLUG || 'template'
+  // The site's own workspace (chat-config.ts); AGENCY_SLUG still wins where an older deploy set it.
+  const workspace = env.AGENCY_SLUG || chatConfig.ws
 
   try {
     await subscribeToAudience(client, { workspace, address, list: 'newsletter', ref: 'footer' })

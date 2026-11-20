@@ -1,0 +1,55 @@
+---
+export const prerender = false
+import Layout from '@/layouts/Layout.astro'
+import Footer from '@/components/blocks/Footer.astro'
+import { SITE } from '@/lib/seo-site'
+import { chatConfig } from '@/lib/chat-config'
+import { readCatalogue } from '@/lib/front-desk'
+import { one } from '@/lib/one'
+
+// What the front desk quotes from: the workspace's own products, read live from
+// ONE's products:list — the same read the desk's chat tool makes — so the page
+// and the desk never quote two prices. No key, or a failed read: an empty list,
+// said as such.
+const client = await one()
+const ask = client ? (receiver: string, data: Record<string, unknown>) => client.ask(receiver, data) as Promise<{ kind: string; result?: unknown }> : null
+const items = await readCatalogue(ask, chatConfig)
+---
+
+<Layout title={`Catalogue — ${SITE.name}`} description={`What ${SITE.name} offers, with prices.`}>
+  <section class="catalogue">
+    <div class="container">
+      <h1>What we offer</h1>
+      {items.length === 0 ? (
+        <p class="empty">The catalogue is not published yet. <a href="/contact">Ask us</a> for a price.</p>
+      ) : (
+        <ul class="items">
+          {items.map((i) => (
+            <li class="item">
+              <div class="row">
+                <h2>{i.name}</h2>
+                <span class="price">{i.quote ?? 'Price on request'}</span>
+              </div>
+              {i.description && <p>{i.description}</p>}
+            </li>
+          ))}
+        </ul>
+      )}
+      <p class="ask"><a href="/contact">Ask for a quote</a></p>
+    </div>
+  </section>
+  <Footer />
+</Layout>
+
+<style>
+  .catalogue { padding: 6rem 0 4rem; }
+  .container { max-width: 48rem; margin: 0 auto; padding: 0 1.25rem; }
+  h1 { font-size: 2rem; margin: 0 0 1.5rem; color: var(--color-font); }
+  .items { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .item { padding: 1rem 1.25rem; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+  .row { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+  h2 { font-size: 1.1rem; margin: 0; color: var(--color-font); }
+  .price { font-weight: 600; color: var(--color-primary); }
+  .item p, .empty { margin: 0.5rem 0 0; color: var(--color-muted); }
+  .ask { margin-top: 2rem; }
+</style>
