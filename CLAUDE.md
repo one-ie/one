@@ -134,7 +134,7 @@ export default defineOne({
 
 6 tokens rebrand the entire site. Tokens are **space-separated HSL, never hex** — `hook:design-check` blocks hex literals and raw `hsl()`/`rgb()` calls in `src/**/*.{tsx,astro,css}` (`Layout.astro`, the token source, is allowlisted). A plugin mounts only if it is both installed (`bun add @oneie/plugin-x`) and listed in `plugins:` — `ONE_API_KEY` alone mounts nothing. Paid plugins are served from `one.ie/x/` — zero bundle cost.
 
-`site/src/lib/chat-config.ts` holds your workspace slug (`const ws = '…'`), the front desk's agent, the page your lead form files under, and the front desk's on/off switch (`enabled`, on in the bare template, opening on the `template--guide` agent that walks visitors key → website → sell). It is the second file to edit; `npx oneie create site --ws <slug>` writes it for a client (`site/AGENTS.md` § The front desk). It exists as its own side-effect-free module on purpose: `Layout.astro` needs the slug on prerendered pages, and importing `one.config.ts` there runs the whole plugin graph during Cloudflare's prerender pass and breaks `astro build`. Don't merge the two.
+`site/src/lib/chat-config.ts` holds your workspace slug (`const ws = '…'`), the front desk's agent, the page your lead form files under, and the front desk's on/off switch (`enabled`, on in the bare template). It is the second file to edit; `npx oneie create site --ws <slug>` writes it for a client (`site/AGENTS.md` § The front desk). It exists as its own side-effect-free module on purpose: `Layout.astro` needs the slug on prerendered pages, and importing `one.config.ts` there runs the whole plugin graph during Cloudflare's prerender pass and breaks `astro build`. Don't merge the two.
 
 ## What you cannot do from here
 
